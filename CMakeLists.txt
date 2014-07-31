@@ -1,9 +1,13 @@
 cmake_minimum_required (VERSION 3.0)
 PROJECT(TREMPPI)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMake_SOURCE_DIR}/bin)
+# build to bin and lib
+file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/lib)
+file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
+set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
 
 # 3rd party libaries are by default linked from the project repository
-include_directories(${CMake_SOURCE_DIR})
+include_directories(${TREMPPI_SOURCE_DIR})
 
 # Boost
 find_package(Boost 1.55.0)

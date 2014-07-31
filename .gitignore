@@ -1,1 +1,18 @@
+# build files
 bin/*
+lib/*
+
+# CMame files
+CMakeFiles*
+*CMake*.bin
+*CMake*.cmake
+CMakeCache.txt
+
+# Visual Studio files
+Win32*
+*.dir
+*.vcxproj*
+*.opensdf
+*.sdf
+*.sln
+*.suo
