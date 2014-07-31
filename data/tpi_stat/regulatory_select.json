@@ -1,0 +1,66 @@
+{
+   "elements" : {
+      "edges" : [
+         {
+            "data" : {
+               "frequency" : 0.6250,
+               "pearson" : 1.910906329005702e-018,
+               "source" : "A",
+               "target" : "B"
+            }
+         },
+         {
+            "data" : {
+               "frequency" : 0.6250,
+               "pearson" : 1.910906329005702e-018,
+               "source" : "B",
+               "target" : "B"
+            }
+         },
+         {
+            "data" : {
+               "frequency" : 0.72656250,
+               "pearson" : -1.287490079826537e-019,
+               "source" : "A",
+               "target" : "C"
+            }
+         },
+         {
+            "data" : {
+               "frequency" : 0.72656250,
+               "pearson" : -4.161303463270927e-017,
+               "source" : "B",
+               "target" : "C"
+            }
+         },
+         {
+            "data" : {
+               "frequency" : 0.72656250,
+               "pearson" : 1.016439536705160e-019,
+               "source" : "C",
+               "target" : "C"
+            }
+         }
+      ],
+      "nodes" : [
+         {
+            "data" : {
+               "id" : "A",
+               "name" : "A"
+            }
+         },
+         {
+            "data" : {
+               "id" : "B",
+               "name" : "B"
+            }
+         },
+         {
+            "data" : {
+               "id" : "C",
+               "name" : "C"
+            }
+         }
+      ]
+   }
+}

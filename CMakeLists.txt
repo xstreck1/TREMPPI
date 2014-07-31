@@ -6,7 +6,6 @@ file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
 
-
 # configure a header file 
 configure_file (
   "${PROJECT_SOURCE_DIR}/tpi_common/configure.h.in"
@@ -36,5 +35,8 @@ ADD_LIBRARY(jsonccp  json/json_reader.cpp json/json_value.cpp json/json_writer.c
 # tpi_stat
 set(STAT_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_stat)
 FILE(GLOB_RECURSE STAT_HEADERS ${STAT_FOLDER}/*.hpp)
+SOURCE_GROUP("Header Files\\io" ${STAT_FOLDER}/io/.*hpp)
+SOURCE_GROUP("Header Files\\data" ${STAT_FOLDER}/data/.*hpp)
+SOURCE_GROUP("Header Files\\analysis" ${STAT_FOLDER}/analysis/.*hpp)
 ADD_EXECUTABLE(tpi_stat ${STAT_FOLDER}/tpi_stat.cpp ${STAT_HEADERS})
 target_link_libraries(tpi_stat ${Boost_LIBRARIES} jsonccp sqlite3 sqlite3pp)

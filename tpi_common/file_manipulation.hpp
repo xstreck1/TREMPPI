@@ -29,28 +29,4 @@ namespace FileManipulation {
 			}
 		}
 	}
-
-	//
-	void copyReport(const bfs::path & input_path) {
-		// Copy the data from "../Files/Standine_report"
-		bfs::path report_dir = input_path.parent_path() /= (input_path.stem().string() + "_Standinet");
-		if (bfs::exists(report_dir))
-			bfs::remove_all(report_dir);
-		copyDir(bfs::path{ "../Files/Standinet_report" }, report_dir);
-
-		// Delete the original models
-		vector<string> to_delete = { "data.js", "configure.json", "regulatory_select.json", "regulatory_differ.json", "regulatory_compare.json" };
-		for_each(WHOLE(to_delete), [&report_dir](const string & filename) {
-			bfs::remove(report_dir /= bfs::path{ filename });
-		});
-	}
-
-	//
-	ofstream fileOutput(const bfs::path & input_path, const string & name) {
-		bfs::path output_path = input_path.parent_path() /= bfs::path{ input_path.stem().string() + "_Standinet" } /= name;
-		ofstream file = ofstream(output_path.string(), ios::out);
-		if (!file)
-			throw runtime_error("Could not open " + output_path.string());
-		return file;
-	}
 }

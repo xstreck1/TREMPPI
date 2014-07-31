@@ -28,9 +28,8 @@ namespace ProgramOptions {
 		bpo::store(bpo::command_line_parser(argc, argv).options(all).positional(pos_decr).run(), result);
 
 		if (result.count("help")) {
-			cout << "FunctionGrapher filename.sqlite [filter1,...]" << endl;
+			cout << "tpi_stat filename.sqlite " << endl;
 			cout << "   filename.sqlite: a database with parametrizations." << endl;
-			cout << "   [filter1,...]: a list of filters for the SQLite SELECT query." << endl;
 			cout << visible;
 			exit(0);
 		}

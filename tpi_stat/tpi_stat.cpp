@@ -19,8 +19,8 @@ void exceptionMessage(const exception & e, const int err_no) {
 
 //
 int main(int argc, char ** argv) {
-	Logging::init("Standinet.log");
-	BOOST_LOG_TRIVIAL(info) << "Standinet started.";
+	Logging::init("tpi_stat.log");
+	BOOST_LOG_TRIVIAL(info) << "TREMPPI Statistical Analysis of Parametrization Space (tpi_stat) started.";
 
 	map<string, Json::Value> out;
 	out["setup"]["date"] = Output::getTime();
@@ -39,7 +39,7 @@ int main(int argc, char ** argv) {
 		input_path = ProgramOptions::getDatabasePath(po);
 
 		// Copy the directory data
-		FileManipulation::copyReport(input_path);
+		Output::copyReport(input_path);
 
 		// Get database
 		out["setup"]["name"] = input_path.stem().string();
@@ -149,12 +149,12 @@ int main(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-		ofstream data_file = FileManipulation::fileOutput(input_path, "data.js");
+		ofstream data_file = Output::fileOutput(input_path, "data.js");
 		for (const auto & file_data : out) {
-			ofstream own_file = FileManipulation::fileOutput(input_path, file_data.first + ".json");
+			ofstream own_file = Output::fileOutput(input_path, file_data.first + ".json");
 			string data = writer.write(file_data.second);
 			own_file << data;
-			data_file << "Standinet." << file_data.first << " = " << data << ";" << endl;
+			data_file << "tpi_stat." << file_data.first << " = " << data << ";" << endl;
 		}
 	}
 	catch (exception & e) {
@@ -162,6 +162,6 @@ int main(int argc, char ** argv) {
 	}
 
 
-	BOOST_LOG_TRIVIAL(info) << "Standinet finished succesfully.";
+	BOOST_LOG_TRIVIAL(info) << "tpi_stat finished succesfully.";
 	return 0;
 }

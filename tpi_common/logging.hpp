@@ -11,7 +11,7 @@ namespace Logging {
 	const size_t MAX_PHASES = 99;
 	const size_t MAX_WIDHT = 60; // Maximal lenght of the message
 
-	void init(const string LOGFILE = "logfile.log", const size_t phase_count = MAX_PHASES) {
+	void init(const string LOGFILE = "logfile.log") {
 		blg::register_simple_formatter_factory< blg::trivial::severity_level, char >("Severity");
 		blg::add_common_attributes();
 

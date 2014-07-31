@@ -19,3 +19,10 @@ Win32*
 *.sdf
 *.sln
 *.suo
+
+# NetBeans
+*nbproject*
+
+#projects
+proj/*
+
