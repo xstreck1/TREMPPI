@@ -1,3 +1,6 @@
+# configuration files
+tpi_common/configure.h
+
 # build files
 bin/*
 lib/*
