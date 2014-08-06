@@ -21,17 +21,6 @@ namespace Output {
 		return "\"" + source + "\"";
 	}
 
-	string getTime() {
-		string result;
-
-		chrono::system_clock::time_point today = chrono::system_clock::now();
-		time_t tt = chrono::system_clock::to_time_t(today);
-		result = ctime(&tt);
-		result.resize(result.size() - 1); // Remove newline
-
-		return result;
-	}
-
 	//
 	/*void updateDatabase(const Par & par, SQLAdapter & database) {
 		database.safeExec("BEGIN TRANSACTION;");

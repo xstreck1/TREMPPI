@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-tpi_stat.Helpers = {
+tpi_report.Helpers = {
     getBound: function(edges, param, fun, signed) {
         if (signed)
             var result = 0;
@@ -67,7 +67,7 @@ tpi_stat.Helpers = {
                 max: this.getBound(graph.edges, "pearson", "max", type === "differ")}};
     },
     assignPositions: function(config, analysis, tag) {
-        if (tpi_stat.setup.comparative) {
+        if (tpi_report.setup.comparative) {
             $('#' + analysis + '_' + tag + '_select').css('width', '33%').css('left', '0%');
             $('#' + analysis + '_' + tag + '_differ').css('width', '33%').css('left', '33.5%');
             $('#' + analysis + '_' + tag + '_compare').css('width', '33%').css('left', '67%');
@@ -77,7 +77,7 @@ tpi_stat.Helpers = {
         ;
     },
     deactivateUnused: function(config, analysis, tag) {
-        if (!tpi_stat.setup.comparative) {
+        if (!tpi_report.setup.comparative) {
             $('#' + analysis + '_' + tag + '_differ').html("");
             $('#' + analysis + '_' + tag + '_compare').html("");
         }

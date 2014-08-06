@@ -34,6 +34,8 @@
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 
+#include "configure.h"
+
 using namespace std;
 
 const string VERSION("1.0.3.0");
@@ -86,6 +88,7 @@ const string OUTPUT_SUFFIX = ".out";
 const string PLA_SUFFIX = ".pla";
 const string GRAPH_SUFFIX = ".json";
 const string FILTER_SUFFIX = ".filter";
+const string JSON_SUFFIX = ".json";
 
 const string COMPONENTS_TABLE = "Components";
 const string REGULATIONS_TABLE = "Regulations";

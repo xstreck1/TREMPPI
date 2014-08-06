@@ -1,6 +1,7 @@
 #pragma once
 
 #include "data_types.hpp"
+#include "data_info.hpp"
 
 #define NO_COPY(TypeName) \
 	TypeName() = default;  \

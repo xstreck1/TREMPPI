@@ -1,0 +1,32 @@
+{
+   "elements" : {
+      "edges" : [
+         {
+            "data" : {
+               "source" : "A",
+               "target" : "B"
+            }
+         },
+         {
+            "data" : {
+               "source" : "B",
+               "target" : "B"
+            }
+         }
+      ],
+      "nodes" : [
+         {
+            "data" : {
+               "id" : "A",
+			   "max" : 1
+            }
+         },
+		 {
+            "data" : {
+               "id" : "B",
+			   "max" : 1
+            }
+         }
+      ]
+   }
+}

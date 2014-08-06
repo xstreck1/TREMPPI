@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-tpi_stat.Graph = {
+tpi_report.Graph = {
     // Synchronization in between the graphs
     synchronize: function(config, labelRefresh) {
         var cys = [];
@@ -133,7 +133,7 @@ tpi_stat.Graph = {
 
         for (var i = 0; i < config.types.length; i++) {
             setLabels(config.types[i]);
-            tpi_stat.Labels.addQtip($('#reg_graph_' + config.types[i]).cytoscape('get'), config.types[i]);
+            tpi_report.Labels.addQtip($('#reg_graph_' + config.types[i]).cytoscape('get'), config.types[i]);
         }
     }
 };

@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-tpi_stat.Page = {
+tpi_report.Page = {
     loadData: function(config) {
         // Set the types used
         config = {};
-        if (tpi_stat.setup.comparative) {
+        if (tpi_report.setup.comparative) {
             config.types = ['select', 'differ', 'compare'];
         } else {
             config.types = ['select'];
@@ -18,45 +18,45 @@ tpi_stat.Page = {
         var loadGraph = function(config, type)
         {
             var name = "reg_graph_" + type;
-            var graph = tpi_stat.Regulatory[type];
-            tpi_stat.Helpers.configure(config, graph.elements, type);
-            tpi_stat.Graph.makeGraph(graph.elements, type);
+            var graph = tpi_report.Regulatory[type];
+            tpi_report.Helpers.configure(config, graph.elements, type);
+            tpi_report.Graph.makeGraph(graph.elements, type);
             $('#' + name).cytoscape('get').load(graph.elements);
         };
         for (var i = 0; i < config.types.length; i++) {
             loadGraph(config, config.types[i]);
         }
         var bg_color = '#888888';
-        tpi_stat.Helpers.assignPositions(config, "reg", "graph");
-        tpi_stat.Helpers.deactivateUnused(config, "reg", "graph");
+        tpi_report.Helpers.assignPositions(config, "reg", "graph");
+        tpi_report.Helpers.deactivateUnused(config, "reg", "graph");
         $('#regulatory_container').css('padding-bottom', '50%');
         for (var i = 0; i < config.types.length; i++) {
             $('#reg_graph_' + config.types[i]).css('border-style', 'solid').css('border-width', '1').css('background-color', bg_color).css('padding-left', '1');
         }
 
         // compute and display lables
-        tpi_stat.Regulatory.relative = false;
-        tpi_stat.Graph.labelSwitch(config, tpi_stat.Regulatory.relative);
-        tpi_stat.Helpers.assignPositions(config, "reg", "label");
-        tpi_stat.Helpers.deactivateUnused(config, "reg", "label");
+        tpi_report.Regulatory.relative = false;
+        tpi_report.Graph.labelSwitch(config, tpi_report.Regulatory.relative);
+        tpi_report.Helpers.assignPositions(config, "reg", "label");
+        tpi_report.Helpers.deactivateUnused(config, "reg", "label");
         $('#regulatory_labels').css('padding-bottom', '45px');
         labelRefresh = function() {
-            tpi_stat.Labels.loadLabels(config, tpi_stat.Regulatory.relative);
+            tpi_report.Labels.loadLabels(config, tpi_report.Regulatory.relative);
         };
         $(window).resize(labelRefresh);
-        tpi_stat.Graph.synchronize(config, labelRefresh);
+        tpi_report.Graph.synchronize(config, labelRefresh);
 
         // display captions
-        tpi_stat.Helpers.assignPositions(config, "reg", "caption");
-        tpi_stat.Helpers.deactivateUnused(config, "reg", "caption");
+        tpi_report.Helpers.assignPositions(config, "reg", "caption");
+        tpi_report.Helpers.deactivateUnused(config, "reg", "caption");
         $('#regulatory_caption').css('padding-bottom', '40px');
 
         // Create the control buttons functions
         $("#relative_button").click(function() {
-            tpi_stat.Regulatory.relative = !tpi_stat.Regulatory.relative;
-            tpi_stat.Graph.labelSwitch(config, tpi_stat.Regulatory.relative);
-            tpi_stat.Labels.loadLabels(config, tpi_stat.Regulatory.relative);
-            this.innerHTML = tpi_stat.Regulatory.relative ? "Absolute" : "Relative";
+            tpi_report.Regulatory.relative = !tpi_report.Regulatory.relative;
+            tpi_report.Graph.labelSwitch(config, tpi_report.Regulatory.relative);
+            tpi_report.Labels.loadLabels(config, tpi_report.Regulatory.relative);
+            this.innerHTML = tpi_report.Regulatory.relative ? "Absolute" : "Relative";
         });
         var resizeViews = function(change) {
             var height = $('#regulatory_container').css('padding-bottom');
@@ -68,17 +68,17 @@ tpi_stat.Page = {
             }
         };
         $("#reset_button").click(function() {
-            if (tpi_stat.setup.comparative) {
+            if (tpi_report.setup.comparative) {
                 $('#reg_graph_differ').cytoscape('get').reset();
                 $('#reg_graph_compare').cytoscape('get').reset();
             }
             $('#reg_graph_select').cytoscape('get').reset();
         });
 
-        $("#regulatory_description").html(((tpi_stat.setup.comparative) ? tpi_stat.Values.reg_caption_c : tpi_stat.Values.reg_caption_nonc) + tpi_stat.Values.reg_caption_common);
+        $("#regulatory_description").html(((tpi_report.setup.comparative) ? tpi_report.Values.reg_caption_c : tpi_report.Values.reg_caption_nonc) + tpi_report.Values.reg_caption_common);
 
         // Replace text content
-        var setup = tpi_stat.setup;
+        var setup = tpi_report.setup;
         $("title").html(setup.name + " statistical analysis report");
         $("#analysis_date").html(setup.date);
         $("#model_name").html(setup.name);

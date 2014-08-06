@@ -1,6 +1,8 @@
 #pragma once
 #include <tpi_common/common_functions.hpp>
 
+const string PROGRAM_NAME = "tpi_report";
+
 namespace ProgramOptions {
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
@@ -28,7 +30,7 @@ namespace ProgramOptions {
 		bpo::store(bpo::command_line_parser(argc, argv).options(all).positional(pos_decr).run(), result);
 
 		if (result.count("help")) {
-			cout << "tpi_stat filename.sqlite " << endl;
+			cout << PROGRAM_NAME << " filename.sqlite " << endl;
 			cout << "   filename.sqlite: a database with parametrizations." << endl;
 			cout << visible;
 			exit(0);

@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-var tpi_stat = {};
-tpi_stat.Regulatory = {};
-tpi_stat.Values = {
+var tpi_report = {};
+tpi_report.Regulatory = {};
+tpi_report.Values = {
     reg_caption_c: "a) statistical properties of the selected parametrizations set, c) properties of the compared parametrizations set, b) difference between the two. ",
     reg_caption_nonc: "a) statistical properties of the selected parametrizations set. ",
     reg_caption_common: "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "

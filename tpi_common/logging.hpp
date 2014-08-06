@@ -17,7 +17,7 @@ namespace Logging {
 
 		blg::add_file_log
 			(
-			kwd::file_name = LOGFILE,
+			kwd::file_name = string(TREMPPI_PATH) + "/logs/" + LOGFILE,
 			kwd::auto_flush = true,
 			kwd::open_mode = (std::ios::out),
 			kwd::format = "[%TimeStamp%] (%LineID%) <%Severity%>: %Message%"
@@ -28,7 +28,7 @@ namespace Logging {
 			blg::trivial::severity >= blg::trivial::info
 			);
 
-#if (_MSC_VER == 1800)
+#ifdef _MFC_VER
 		setvbuf(stdout, 0, _IOLBF, 4096);
 #endif
 		if (phase_count > MAX_PHASES)
@@ -52,5 +52,11 @@ namespace Logging {
 			<< right 
 			<< fixed << setw(7) << setprecision(3) << (step_no * 100.) / step_count << "%.";
 		step_no++;
+	}
+
+	// 
+	void exceptionMessage(const exception & e, const int err_no) {
+		BOOST_LOG_TRIVIAL(error) << "Top level exception: " << e.what();
+		exit(err_no);
 	}
 }

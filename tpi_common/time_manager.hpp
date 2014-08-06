@@ -77,4 +77,15 @@ namespace TimeManager {
 		writeClock(name);
 		killClock(name);
 	}
+
+	string getTime() {
+		string result;
+
+		chrono::system_clock::time_point today = chrono::system_clock::now();
+		time_t tt = chrono::system_clock::to_time_t(today);
+		result = ctime(&tt);
+		result.resize(result.size() - 1); // Remove newline
+
+		return result;
+	}
 };

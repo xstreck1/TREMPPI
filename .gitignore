@@ -23,6 +23,9 @@ Win32*
 # NetBeans
 *nbproject*
 
-#projects
+# projects
 proj/*
 
+# created files
+*.sqlite
+*.log

@@ -19,11 +19,11 @@ void exceptionMessage(const exception & e, const int err_no) {
 
 // TODO: disable regulatory if not -r
 int main(int argc, char ** argv) {
-	Logging::init("tpi_stat.log");
-	BOOST_LOG_TRIVIAL(info) << "TREMPPI Statistical Analysis of Parametrization Space (tpi_stat) started.";
+	Logging::init(PROGRAM_NAME + ".log");
+	BOOST_LOG_TRIVIAL(info) << "TREMPPI Statistical Analysis of Parametrization Space (" << PROGRAM_NAME << ") started.";
 
 	map<string, Json::Value> out;
-	out["setup"]["date"] = Output::getTime();
+	out["setup"]["date"] = TimeManager::getTime();
 
 	bpo::variables_map po;
 	bfs::path input_path;
@@ -154,7 +154,7 @@ int main(int argc, char ** argv) {
 			ofstream own_file = Output::fileOutput(input_path, file_data.first + ".json");
 			string data = writer.write(file_data.second);
 			own_file << data;
-			data_file << "tpi_stat." << file_data.first << " = " << data << ";" << endl;
+			data_file << PROGRAM_NAME << "." << file_data.first << " = " << data << ";" << endl;
 		}
 	}
 	catch (exception & e) {
@@ -162,6 +162,6 @@ int main(int argc, char ** argv) {
 	}
 
 
-	BOOST_LOG_TRIVIAL(info) << "tpi_stat finished succesfully.";
+	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished succesfully.";
 	return 0;
 }

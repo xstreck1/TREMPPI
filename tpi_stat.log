@@ -1,6 +1,0 @@
-[2014-Jul-31 18:04:21.133405] (1) <info>: TREMPPI Statistical Analysis of Parametrization Space (tpi_stat) started.
-[2014-Jul-31 18:04:21.138406] (2) <info>: Parsing data file.
-[2014-Jul-31 18:04:21.502426] (3) <info>: Computing regulatory graph data.
-[2014-Jul-31 18:04:21.863447] (4) <info>: Building the JSON files.
-[2014-Jul-31 18:04:21.877448] (5) <info>: Writing output.
-[2014-Jul-31 18:04:21.891449] (6) <info>: tpi_stat finished succesfully.
