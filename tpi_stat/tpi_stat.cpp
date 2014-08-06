@@ -17,7 +17,7 @@ void exceptionMessage(const exception & e, const int err_no) {
 	exit(err_no);
 }
 
-//
+// TODO: disable regulatory if not -r
 int main(int argc, char ** argv) {
 	Logging::init("tpi_stat.log");
 	BOOST_LOG_TRIVIAL(info) << "TREMPPI Statistical Analysis of Parametrization Space (tpi_stat) started.";
