@@ -4,13 +4,15 @@
          {
             "data" : {
                "source" : "A",
-               "target" : "B"
+               "target" : "B",
+			   "Threshold" : 1
             }
          },
          {
             "data" : {
                "source" : "B",
-               "target" : "B"
+               "target" : "B",
+			   "Threshold" : 1
             }
          }
       ],
@@ -18,13 +20,13 @@
          {
             "data" : {
                "id" : "A",
-			   "max" : 1
+			   "MaxActivity" : 1
             }
          },
 		 {
             "data" : {
                "id" : "B",
-			   "max" : 1
+			   "MaxActivity" : 1
             }
          }
       ]

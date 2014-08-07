@@ -160,11 +160,22 @@ namespace Common {
 
 	template<typename T>
 	string quote(const T & content) {
-		return "\"" + lexical_cast<string, T>(content) + "\"";
+		return "\"" + lexical_cast<string, T>(content)+"\"";
 	}
 
 	inline string tab(const int tab_count) {
 		return string(tab_count, '\t');
+	}
+
+	/**
+	* @brief Control if the map has the given key
+	* @param[in] dictionary the input map
+	* @param[in] key	the key to find
+	* @return	true if the key is present
+	*/
+	template <typename KeyT, typename ValT>
+	inline bool hasKey(const map<KeyT, ValT> & dictionary, const KeyT & key) {
+		return (dictionary.find(key) != dictionary.end());
 	}
 } using namespace Common;
 
