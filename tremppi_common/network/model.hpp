@@ -11,23 +11,22 @@
 /// Rest of the code can access the data only via constant getters - once the data are parse, model remains constant.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct Model {
-   NO_COPY(Model)
+	NO_COPY(Model)
 
-   struct Regulation {
-      StateID source; ///< Regulator specie ID.
-      ActLevel threshold; ///< Level of the regulator required for the regulation to be active.
-      string name; ///< Name of the regulator.
-   };
-   typedef vector<Regulation> Regulations;
+	struct Regulation {
+		ActLevel threshold; ///< Level of the regulator required for the regulation to be active.
+		CompID source; ///< Index of the regulator in the list of species
+	};
+	typedef vector<Regulation> Regulations;
 
-   /// Structure that holds data about a single specie. Most of the data is equal to that in the model file.
-   struct ModelSpecie {
-      string name; ///< Actuall name of the specie.
-      ActLevel max_value; ///< Maximal activation level of the specie.
-	  vector<string> par_cons;  ///< Constraints on the parameters.
+	/// Structure that holds data about a single specie. Most of the data is equal to that in the model file.
+	struct ModelSpecie {
+		CompID ID; ///< Numerical ID of the component
+		string name; ///< Actuall name of the specie.
+		ActLevel max_activity; ///< Maximal activation level of the specie.
 
-      Regulations regulations; ///< Regulations of the specie (activations or inhibitions by other species).
-   };
+		Regulations regulations; ///< Regulations of the specie (activations or inhibitions by other species).
+	};
 
-   vector<ModelSpecie> species; ///< vector of all species of the model
+	vector<ModelSpecie> species; ///< vector of all species of the model
 };

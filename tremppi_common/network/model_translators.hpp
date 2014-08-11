@@ -8,14 +8,15 @@
 
 #pragma once
 
+#include "definitions.hpp"
 #include "model.hpp"
 
 namespace ModelTranslators {
 	/**
 	 * @brief findID  obtain ID of the specie.
 	 */
-	SpecieID findID(const Model & model, const string & name) {
-		for (const SpecieID ID : cscope(model.species))
+	CompID findID(const Model & model, const string & name) {
+		for (const CompID ID : cscope(model.species))
 			if (model.species[ID].name == name)
 				return ID;
 		return INF;
@@ -24,18 +25,18 @@ namespace ModelTranslators {
 	/**
 	 * @return	unique IDs of regulators of the specie
 	 */
-	vector<SpecieID> getRegulatorsIDs(const Model & model, const SpecieID ID) {
-		set<SpecieID> IDs;
+	vector<CompID> getRegulatorsIDs(const Model & model, const CompID ID) {
+		set<CompID> IDs;
 		for (auto regul : model.species[ID].regulations) {
 			IDs.insert(regul.source);
 		}
-		return vector<SpecieID>(IDs.begin(), IDs.end());
+		return vector<CompID>(IDs.begin(), IDs.end());
 	}
 
 	/**
 	 * @return	names of the regulators of the specie
 	 */
-	vector<string> getRegulatorsNames(const Model & model, const SpecieID ID) {
+	vector<string> getRegulatorsNames(const Model & model, const CompID ID) {
 		auto regulators = getRegulatorsIDs(model, ID);
 		vector<string> names;
 		for (auto reg : regulators) {
@@ -59,8 +60,8 @@ namespace ModelTranslators {
 	 * @param ID
 	 * @return
 	 */
-	map<SpecieID, Levels > getThresholds(const Model & model, const SpecieID ID) {
-		map<SpecieID, Levels > thresholds;
+	map<CompID, Levels > getThresholds(const Model & model, const CompID ID) {
+		map<CompID, Levels> thresholds;
 		for (auto reg : model.species[ID].regulations) {
 			auto key = thresholds.find(reg.source);
 			if (key == thresholds.end()) {
@@ -82,7 +83,7 @@ namespace ModelTranslators {
 	 * @brief getThreshold  For a given regulator, find out what it's threshold in the given context is.
 	 * @return  threshold value in the given context
 	 */
-	ActLevel getThreshold(const Model & model, const string & context, const SpecieID t_ID, const string & name, const size_t pos) {
+	ActLevel getThreshold(const Model & model, const string & context, const CompID t_ID, const string & name, const size_t pos) {
 		// Regulator not present.
 		if (pos == context.npos)
 			return 0;
@@ -123,7 +124,7 @@ namespace ModelTranslators {
 	 * @param context any valid context form as a string
 	 * @return canonic context form
 	 */
-	static string makeCanonic(const Model & model, const string & context, const SpecieID t_ID) {
+	static string makeCanonic(const Model & model, const string & context, const CompID t_ID) {
 		string new_context; // new canonic form
 		const auto names = getRegulatorsNames(model, t_ID);
 
@@ -148,7 +149,7 @@ namespace ModelTranslators {
 	}
 
 	// @return regulation with given parameters
-	const Model::Regulation & findRegulation(const Model & model, const SpecieID t_ID, const SpecieID s_ID, const ActLevel threshold) {
+	const Model::Regulation & findRegulation(const Model & model, const CompID t_ID, const CompID s_ID, const ActLevel threshold) {
 		const auto & reguls = model.species[t_ID].regulations;
 		for (const Model::Regulation & regul : reguls)
 			if (regul.source == s_ID && regul.threshold == threshold)
@@ -159,52 +160,36 @@ namespace ModelTranslators {
 	// @return the maximal level in between the species
 	const ActLevel getMaxLevel(const Model & model) {
 		return rng::max_element(model.species, [](const Model::ModelSpecie & A, const Model::ModelSpecie & B) {
-			return A.max_value < B.max_value;
+			return A.max_activity < B.max_activity;
 		})->max_value;
 	}
-	
-	   // @return canonic form of the label
-   string readLabel(const string & label) {
-      string formula;
 
-      // Find the constrain and return its valuation
-      if (label.compare(Label::Activating) == 0)
-         formula = "+";
-      else if (label.compare(Label::ActivatingOnly) == 0)
-         formula = "(+ & !-)";
-      else if (label.compare(Label::Inhibiting) == 0)
-         formula = "-";
-      else if (label.compare(Label::InhibitingOnly) == 0)
-         formula = "(- & !+)";
-      else if (label.compare(Label::NotActivating) == 0)
-         formula = "!+";
-      else if (label.compare(Label::NotInhibiting) == 0)
-         formula = "!-";
-      else if (label.compare(Label::Observable) == 0)
-         formula = "(+ | -)";
-      else if (label.compare(Label::NotObservable) == 0)
-         formula = "(!+ & !-)";
-      else if (label.compare(Label::Free) == 0)
-         formula = "tt";
-      else
-         formula = label;
+	// @return canonic form of the label
+	string readLabel(const string & label) {
+		string formula;
 
-	  return formula;
-   }
+		// Find the constrain and return its valuation
+		if (label.compare(Label::Activating) == 0)
+			formula = "+";
+		else if (label.compare(Label::ActivatingOnly) == 0)
+			formula = "(+ & !-)";
+		else if (label.compare(Label::Inhibiting) == 0)
+			formula = "-";
+		else if (label.compare(Label::InhibitingOnly) == 0)
+			formula = "(- & !+)";
+		else if (label.compare(Label::NotActivating) == 0)
+			formula = "!+";
+		else if (label.compare(Label::NotInhibiting) == 0)
+			formula = "!-";
+		else if (label.compare(Label::Observable) == 0)
+			formula = "(+ | -)";
+		else if (label.compare(Label::NotObservable) == 0)
+			formula = "(!+ & !-)";
+		else if (label.compare(Label::Free) == 0)
+			formula = "tt";
+		else
+			formula = label;
 
-   // @bounds on component values after propagatin the experiment
-   pair<Levels, Levels> getBounds(const Model & model, const PropertyAutomaton & property) {
-	   ConstraintParser * cons_pars = new ConstraintParser(model.species.size(), ModelTranslators::getMaxLevel(model));
-
-	   // Impose constraints
-	   Levels maxes;
-	   rng::transform(model.species, back_inserter(maxes), [](const Model::ModelSpecie & specie){ return specie.max_value; });
-	   cons_pars->addBoundaries(maxes, true);
-	   cons_pars->applyFormula(ModelTranslators::getAllNames(model), property.getExperiment());
-
-	   // Propagate
-	   cons_pars->status();
-
-	   return pair<Levels, Levels>{ cons_pars->getBounds(false), cons_pars->getBounds(true) };
-   }
+		return formula;
+	}
 }

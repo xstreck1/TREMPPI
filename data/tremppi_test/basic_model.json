@@ -3,16 +3,16 @@
       "edges" : [
          {
             "data" : {
-               "source" : "A",
-               "target" : "B",
+               "source" : "0",
+               "target" : "1",
 			   "Threshold" : 1,
 			   "Label" : "ActivatingOnly"
             }
          },
          {
             "data" : {
-               "source" : "B",
-               "target" : "B",
+               "source" : "1",
+               "target" : "1",
 			   "Threshold" : 1,
 			   "Label" : "Free"
             }
@@ -21,13 +21,15 @@
       "nodes" : [
          {
             "data" : {
-               "id" : "A",
+               "id" : "0",
+			   "Name" : "A",
 			   "MaxActivity" : 1
             }
          },
 		 {
             "data" : {
-               "id" : "B",
+               "id" : "1",
+			   "Name" : "B",
 			   "MaxActivity" : 1
             }
          }

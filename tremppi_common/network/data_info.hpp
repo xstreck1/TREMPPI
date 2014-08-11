@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../header.h"
+#include "definitions.hpp"
 #include <json/json.h>
 
 namespace DataInfo {
@@ -15,11 +16,11 @@ namespace DataInfo {
 	}
 
 	// Obtain components and their max levels
-	map<string, ActLevel> getComponents(const Json::Value & nodes) {
-		map<string, ActLevel> components;
+	vector<pair<string, ActLevel> > getComponents(const Json::Value & nodes) {
+		vector<pair<string, ActLevel> > components;
 
 		for (const Json::Value node : nodes)
-			components.insert(make_pair(node["data"]["id"].asString(), node["data"]["MaxActivity"].asInt()));
+			components.emplace_back(make_pair(node["data"]["Name"].asString(), node["data"]["MaxActivity"].asInt()));
 
 		return components;
 	}
