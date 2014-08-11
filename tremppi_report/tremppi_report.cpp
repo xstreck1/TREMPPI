@@ -1,9 +1,9 @@
 #include <json/json.h>
-#include <tpi_common/database/database_reader.hpp>
-#include <tpi_common/database/sqlite3pp_func.hpp>
-#include <tpi_common/general/file_manipulation.hpp>
-#include <tpi_common/general/logging.hpp>
-#include <tpi_common/general/time_manager.hpp>
+#include <tremppi_common/database/database_reader.hpp>
+#include <tremppi_common/database/sqlite3pp_func.hpp>
+#include <tremppi_common/general/file_manipulation.hpp>
+#include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/time_manager.hpp>
 #include "analysis/statistical_analysis.hpp"
 #include "analysis/lattice_builder.hpp"
 #include "analysis/regulatory_graph.hpp"

@@ -1,7 +1,7 @@
 #pragma once
-#include <tpi_common/general/common_functions.hpp>
-#include <tpi_common/network/data_info.hpp>
-#include <tpi_common/network/definitions.hpp>
+#include <tremppi_common/general/common_functions.hpp>
+#include <tremppi_common/network/data_info.hpp>
+#include <tremppi_common/network/definitions.hpp>
 #include <json/json.h>
 
 namespace SyntaxChecker {

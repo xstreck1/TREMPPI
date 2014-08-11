@@ -1,4 +1,4 @@
-#include <tpi_common/general/logging.hpp>
+#include <tremppi_common/general/logging.hpp>
 #include "io/constraint_parser.hpp"
 #include "io/program_options.hpp"
 #include "io/syntax_checker.hpp"
@@ -6,7 +6,7 @@
 // TODO: disable regulatory if not -r
 int main(int argc, char ** argv) {
 	Logging::init(PROGRAM_NAME + ".log");
-	BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (tpi_stat) started.";
+	BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (tremppi_stat) started.";
 
 	bpo::variables_map po; // program options provided on the command line
 	bfs::path input_path; // an input pah

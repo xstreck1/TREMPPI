@@ -9,8 +9,8 @@ set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
 
 # configure a header file 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/tpi_common/configure.h.in"
-  "${PROJECT_BINARY_DIR}/tpi_common/configure.h"
+  "${PROJECT_SOURCE_DIR}/tremppi_common/configure.h.in"
+  "${PROJECT_BINARY_DIR}/tremppi_common/configure.h"
 )
 
 # Boost
@@ -26,47 +26,47 @@ ADD_LIBRARY(sqlite3pp sqlite3pp/sqlite3pp.cpp sqlite3pp/sqlite3ppext.cpp)
 # Jsoncpp
 ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cpp)
 
-# tpi_common
-set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_common)
+# tremppi_common
+set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_common)
 FILE(GLOB_RECURSE COMMON_HEADERS ${COMMON_FOLDER}/*.hpp)
-SOURCE_GROUP("Header Files\\tpi_common\\database" ${COMMON_FOLDER}/database/.*hpp)
-SOURCE_GROUP("Header Files\\tpi_common\\general" ${COMMON_FOLDER}/general/.*hpp)
-SOURCE_GROUP("Header Files\\tpi_common\\network" ${COMMON_FOLDER}/network/.*hpp)
-ADD_LIBRARY(tpi_common tpi_common/tpi_common.cpp tpi_common/header.h tpi_common/configure.h ${COMMON_HEADERS})
+SOURCE_GROUP("Header Files\\tremppi_common\\database" ${COMMON_FOLDER}/database/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_common\\general" ${COMMON_FOLDER}/general/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*hpp)
+ADD_LIBRARY(tremppi_common tremppi_common/tremppi_common.cpp tremppi_common/header.h tremppi_common/configure.h ${COMMON_HEADERS})
 
 # Gecode
 add_subdirectory (gecode-4.2.1)
 include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.2.1)
 
-# tpi_spawn
-set(SPAWN_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_spawn)
+# tremppi_spawn
+set(SPAWN_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_spawn)
 FILE(GLOB_RECURSE SPAWN_HEADERS ${SPAWN_FOLDER}/*.hpp)
-SOURCE_GROUP("Header Files\\tpi_spawn\\compute" ${SPAWN_FOLDER}/compute/.*hpp)
-SOURCE_GROUP("Header Files\\tpi_spawn\\data" ${SPAWN_FOLDER}/data/.*hpp)
-SOURCE_GROUP("Header Files\\tpi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
-ADD_EXECUTABLE(tpi_spawn ${SPAWN_FOLDER}/tpi_spawn.cpp ${SPAWN_HEADERS})
-target_link_libraries(tpi_spawn gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+SOURCE_GROUP("Header Files\\tremppi_spawn\\compute" ${SPAWN_FOLDER}/compute/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_spawn\\data" ${SPAWN_FOLDER}/data/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
+ADD_EXECUTABLE(tremppi_spawn ${SPAWN_FOLDER}/tremppi_spawn.cpp ${SPAWN_HEADERS})
+target_link_libraries(tremppi_spawn gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
 
-# tpi_report
-set(REPORT_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_report)
+# tremppi_report
+set(REPORT_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_report)
 FILE(GLOB_RECURSE REPORT_HEADERS ${REPORT_FOLDER}/*.hpp)
-SOURCE_GROUP("Header Files\\tpi_report\\analysis" ${REPORT_FOLDER}/analysis/.*hpp)
-SOURCE_GROUP("Header Files\\tpi_report\\data" ${REPORT_FOLDER}/data/.*hpp)
-SOURCE_GROUP("Header Files\\tpi_report\\io" ${REPORT_FOLDER}/io/.*hpp)
-ADD_EXECUTABLE(tpi_report ${REPORT_FOLDER}/tpi_report.cpp ${REPORT_HEADERS})
-target_link_libraries(tpi_report jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+SOURCE_GROUP("Header Files\\tremppi_report\\analysis" ${REPORT_FOLDER}/analysis/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_report\\data" ${REPORT_FOLDER}/data/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_report\\io" ${REPORT_FOLDER}/io/.*hpp)
+ADD_EXECUTABLE(tremppi_report ${REPORT_FOLDER}/tremppi_report.cpp ${REPORT_HEADERS})
+target_link_libraries(tremppi_report jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
 
-# tpi_test
+# tremppi_test
 find_package(GTEST)
 if (GTEST_FOUND)
 	include_directories(${GTEST_INCLUDE_DIR})
-	set(TEST_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_test)
+	set(TEST_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_test)
 	FILE(GLOB_RECURSE TEST_HEADERS ${TEST_FOLDER}/*.hpp)
 	SOURCE_GROUP("Header Files\\common_tests" ${TEST_FOLDER}/common_tests/.*hpp)
 	SOURCE_GROUP("Header Files\\report_tests" ${TEST_FOLDER}/report_tests/.*hpp)
 	SOURCE_GROUP("Header Files\\spawn_tests" ${TEST_FOLDER}/spawn_tests/.*hpp)
-	ADD_EXECUTABLE(tpi_test ${TEST_FOLDER}/tpi_test.cpp ${TEST_HEADERS})
-	target_link_libraries(tpi_test jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES} ${GTEST_LIBRARY_DEBUG} ${GTEST_MAIN_LIBRARY_DEBUG})
+	ADD_EXECUTABLE(tremppi_test ${TEST_FOLDER}/tremppi_test.cpp ${TEST_HEADERS})
+	target_link_libraries(tremppi_test jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES} ${GTEST_LIBRARY_DEBUG} ${GTEST_MAIN_LIBRARY_DEBUG})
 else (GTEST_FOUND)
 	message ("GTest not found. The tests will not be available.")
 endif (GTEST_FOUND)

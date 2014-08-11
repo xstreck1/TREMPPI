@@ -1,8 +1,8 @@
 #pragma once
 
-#include <tpi_common/header.hpp>
+#include <tremppi_common/header.h>
 
-const string PROGRAM_NAME = "tpi_report";
+const string PROGRAM_NAME = "tremppi_report";
 
 namespace ProgramOptions {
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */

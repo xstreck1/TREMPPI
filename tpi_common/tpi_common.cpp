@@ -1,3 +1,0 @@
-namespace tpi_common {
-	
-}

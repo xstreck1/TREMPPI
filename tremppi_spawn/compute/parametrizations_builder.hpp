@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include <tpi_common/data_info.hpp>
-#include <tpi_common/common_functions.hpp>
-#include <tpi_common/data_types.hpp>
+#include <tremppi_common/data_info.hpp>
+#include <tremppi_common/common_functions.hpp>
+#include <tremppi_common/data_types.hpp>
 
 #include "../io/constraint_parser.hpp"
 

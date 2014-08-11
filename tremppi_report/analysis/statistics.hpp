@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tpi_common/header.h>
+#include <tremppi_common/header.h>
 
 // Some basic statistical functions templates
 namespace Statistics{

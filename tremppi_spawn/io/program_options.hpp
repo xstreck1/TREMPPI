@@ -1,7 +1,7 @@
 #pragma once
-#include <tpi_common/general/common_functions.hpp>
+#include <tremppi_common/general/common_functions.hpp>
 
-const string PROGRAM_NAME = "tpi_spawn";
+const string PROGRAM_NAME = "tremppi_spawn";
 
 namespace ProgramOptions {
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
@@ -24,7 +24,7 @@ namespace ProgramOptions {
 		bpo::store(bpo::command_line_parser(argc, argv).options(all).positional(pos_decr).run(), result);
 
 		if (result.count("help")) {
-			cout << "tpi_stat filename.json " << endl;
+			cout << "tremppi_stat filename.json " << endl;
 			cout << "   filename.json: a regulatory network file" << endl;
 			cout << visible;
 			exit(0);
