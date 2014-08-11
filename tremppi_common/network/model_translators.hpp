@@ -161,7 +161,7 @@ namespace ModelTranslators {
 	const ActLevel getMaxLevel(const Model & model) {
 		return rng::max_element(model.species, [](const Model::ModelSpecie & A, const Model::ModelSpecie & B) {
 			return A.max_activity < B.max_activity;
-		})->max_value;
+		})->max_activity;
 	}
 
 	// @return canonic form of the label

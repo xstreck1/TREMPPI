@@ -9,7 +9,7 @@
 #ifndef PARSYBONE_CONSTRAINT_READER_INCLUDED
 #define PARSYBONE_CONSTRAINT_READER_INCLUDED
 
-#include "../model/model_translators.hpp"
+#include <tremppi_common/network/model_translators.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Parses contrints as specified in the model and return a formula built from these constraints.
@@ -30,7 +30,7 @@ class ConstraintReader {
 	}
 
 	/* Take the original constraint and replace contexts specified with their canonic version. */
-	static string formatConstraint(string original, const Model & model, const SpecieID ID) {
+	static string formatConstraint(string original, const Model & model, const CompID ID) {
 		string result;
 
 		// Copy all the characters, replace contexts for canonic versions
@@ -65,7 +65,7 @@ class ConstraintReader {
 	}
 public:
 
-	static string consToFormula(const Model & model, const SpecieID ID) {
+	static string consToFormula(const Model & model, const CompID ID) {
 		string formula; // Resulting formula specifying all the constraints
 		
 		formula = "tt";

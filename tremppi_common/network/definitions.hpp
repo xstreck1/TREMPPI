@@ -49,7 +49,7 @@ typedef size_t StateID;
 typedef size_t CompID; 
 
 /// Activity level of a specie.
-typedef short ActLevel;
+typedef unsigned short ActLevel;
 
 /// Vector of activation levels of species used for labelling of states of KS.
 typedef vector<ActLevel> Levels;

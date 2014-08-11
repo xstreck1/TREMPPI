@@ -8,14 +8,15 @@
 
 #pragma once
 
-#include "../auxiliary/common_functions.hpp"
-#include "../auxiliary/output_streamer.hpp"
+#include <tremppi_common/network/model.hpp>
 
 struct Kinetics {
+	NO_COPY(Kinetics)
+
 	struct Param {
 		string context; ///< String representation of the context.
 		Levels targets; ///< Towards which level this context may regulate.
-		map<SpecieID, Levels> requirements; ///< Levels of the source species this param is relevant to, the levels are sorted.
+		map<CompID, Levels> requirements; ///< Levels of the source species this param is relevant to, the levels are sorted.
 	
 		Levels target_in_subcolor; ///< List of values from different subparametrizations for this specie, share indices between params.
 		bool functional; ///< True if the param is permitted to occur by the experiment 

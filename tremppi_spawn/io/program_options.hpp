@@ -13,6 +13,7 @@ namespace ProgramOptions {
 		visible.add_options()
 			("help,h", "display help")
 			("version,v", "display version")
+			("check-only,c", "do not create a database and only verify the file syntax")
 			;
 		bpo::options_description invisible;
 		invisible.add_options()

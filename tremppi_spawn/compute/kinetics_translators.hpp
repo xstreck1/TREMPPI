@@ -8,8 +8,7 @@
 
 #pragma once
 
-#include "../model/model.hpp"
-#include "../kinetics/kinetics.hpp"
+#include "kinetics.hpp"
 
 namespace KineticsTranslators {
 	// @return the number of parametrizations

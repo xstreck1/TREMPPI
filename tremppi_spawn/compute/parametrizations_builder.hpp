@@ -1,18 +1,10 @@
-/*
-* Copyright (C) 2012-2013 - Adam Streck
-* This file is a part of the ParSyBoNe (Parameter Synthetizer for Boolean Networks) verification tool.
-* ParSyBoNe is a free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.
-* ParSyBoNe is released without any warranty. See the GNU General Public License for more details. <http://www.gnu.org/licenses/>.
-* For affiliations see <http://www.mi.fu-berlin.de/en/math/groups/dibimath> and <http://sybila.fi.muni.cz/>.
-*/
-
 #pragma once
 
-#include <tremppi_common/data_info.hpp>
-#include <tremppi_common/common_functions.hpp>
-#include <tremppi_common/data_types.hpp>
+#include <tremppi_common/general/common_functions.hpp>
 
 #include "../io/constraint_parser.hpp"
+#include "constraint_reader.hpp"
+#include "kinetics.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that computes feasible parametrizations for each specie from
@@ -25,9 +17,9 @@ class ParametrizationsBuilder {
 	/**
 	* @brief isSubordinate returns true if the current context is the same as the compared context only with a higher activity value in specificed regulator.
 	*/
-	bool isSubordinate(const vector<Model::Regulation> &reguls, const Kinetics::Param &current, const Kinetics::Param &compare, const SpecieID source_ID) {
+	static bool isSubordinate(const vector<Model::Regulation> &reguls, const Kinetics::Param &current, const Kinetics::Param &compare, const CompID source_ID) {
 		for (const Model::Regulation & regul : reguls) {
-			const SpecieID regul_ID = regul.source;
+			const CompID regul_ID = regul.source;
 			// All the regulations must have the same requirements, except for the one with the specified source, which must connect on the value.
 			if (regul_ID != source_ID) {
 				if (current.requirements.find(regul_ID)->second.back() != compare.requirements.find(regul_ID)->second.back()) {
@@ -45,7 +37,7 @@ class ParametrizationsBuilder {
 	/**
 	* Return true if the given parameter's context is dependent on the given regulation.
 	*/
-	bool containsRegulation(const Kinetics::Param &param_data, const Model::Regulation &regul) {
+	static bool containsRegulation(const Kinetics::Param &param_data, const Model::Regulation &regul) {
 		return param_data.requirements.find(regul.source)->second.front() == regul.threshold;
 	}
 
@@ -106,7 +98,7 @@ class ParametrizationsBuilder {
 			createEdgeCons(reguls, params, regul, plus, minus);
 			addParenthesis(plus);
 			addParenthesis(minus);
-			label = ModelHelper::readLabel(regul.label);
+			label = ModelTranslators::readLabel(regul.label);
 			label = replaceInLabel(label, plus, minus);
 			addParenthesis(label);
 			result += " & " + label;
@@ -167,43 +159,34 @@ public:
 	/**
 	* Entry function of parsing, tests and stores subcolors for all the species.
 	*/
-	static void buildParametrizations(const Model &model, Kinetics & kinetics) {
+	static void build(const Model &model, Kinetics & kinetics) {
 		ParamNo step_size = 1; // Variable necessary for encoding of colors
 
 		// Cycle through species
-		for (SpecieID ind = model.species.size(); ind > 0; --ind) {
-			output_streamer.output(verbose_str, "Testing edge constraints for Specie: " + to_string(ind) + "/"
-				+ to_string(model.species.size()) + ".", OutputStreamer::no_newl | OutputStreamer::rewrite_ln);
+		for (CompID ind = model.species.size(); ind > 0; --ind) {
 
-			SpecieID ID = ind - 1;
+			CompID ID = ind - 1;
 			kinetics.species[ID].step_size = step_size;
 
-			if (model.species[ID].spec_type == Model::Input) {
-				kinetics.species[ID].col_count = 1;
-			}
-			else {
 
-				// Solve the parametrizations
-				string formula = createFormula(model.species[ID].regulations, kinetics.species[ID].params) + " & " + ConstraintReader::consToFormula(model, ID);
-				Configurations subcolors = createPartCol(kinetics.species[ID].params, formula, model.species[ID].max_value);
-				// add_irrelevant(kinetics.species[ID].params, subcolors);
-				// sort(WHOLE(subcolors));
-				// remove_redundant(kinetics.species[ID].params, subcolors);
+			// Solve the parametrizations
+			string formula = createFormula(model.species[ID].regulations, kinetics.species[ID].params) + " & " + ConstraintReader::consToFormula(model, ID);
+			Configurations subcolors = createPartCol(kinetics.species[ID].params, formula, model.species[ID].max_value);
+			// add_irrelevant(kinetics.species[ID].params, subcolors);
+			// sort(WHOLE(subcolors));
+			// remove_redundant(kinetics.species[ID].params, subcolors);
 
-				// Copy the data
-				auto & params = kinetics.species[ID].params;
-				for (const Levels & subcolor : subcolors)
-					for (const size_t param_no : cscope(subcolor))
-						// if (params[param_no].functional)
-						params[param_no].target_in_subcolor.emplace_back(subcolor[param_no]);
+			// Copy the data
+			auto & params = kinetics.species[ID].params;
+			for (const Levels & subcolor : subcolors)
+				for (const size_t param_no : cscope(subcolor))
+					// if (params[param_no].functional)
+					params[param_no].target_in_subcolor.emplace_back(subcolor[param_no]);
 
 
-				kinetics.species[ID].col_count = subcolors.size();
-				step_size *= subcolors.size();
-			}
+			kinetics.species[ID].col_count = subcolors.size();
+			step_size *= subcolors.size();
 		}
 
-		output_streamer.clear_line(verbose_str);
-		output_streamer.output(verbose_str, "", OutputStreamer::no_out | OutputStreamer::rewrite_ln | OutputStreamer::no_newl);
 	}
 };

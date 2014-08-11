@@ -21,7 +21,7 @@ struct Model {
 
 	/// Structure that holds data about a single specie. Most of the data is equal to that in the model file.
 	struct ModelSpecie {
-		CompID ID; ///< Numerical ID of the component
+		CompID id; ///< Numerical ID of the component
 		string name; ///< Actuall name of the specie.
 		ActLevel max_activity; ///< Maximal activation level of the specie.
 

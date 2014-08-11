@@ -12,14 +12,17 @@ namespace ModelReader {
 		for (const Json::Value node : elements["nodes"]) {
 			Model::ModelSpecie specie;
 
+			string id = node["data"]["id"].asString();
+			specie.id = lexical_cast<CompID, string>(id);
 			specie.name = node["data"]["Name"].asString();
-			specie.max_value = node["data"]["MaxActivity"].asInt();
+			specie.max_activity = node["data"]["MaxActivity"].asInt();
 
 			for (const Json::Value edge : elements["edges"]) {
-				if (edge["data"]["target"].asString() == specie.name) {
+				if (edge["data"]["target"].asString() == id) {
 					Model::Regulation regulation;
 
-					regulation.source = edge["data"]["source"].asString();
+					string source = edge["data"]["source"].asString();
+					regulation.source = lexical_cast<CompID, string>(source);
 					regulation.threshold = edge["data"]["treshold"].asInt();
 
 					specie.regulations.emplace_back(move(regulation));
