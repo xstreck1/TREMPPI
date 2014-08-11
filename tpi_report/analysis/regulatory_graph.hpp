@@ -1,7 +1,7 @@
 #pragma once
-#include <tpi_common/database_reader.hpp>
-#include <tpi_common/logging.hpp>
-#include <tpi_common/data_conv.hpp>
+
+#include <tpi_common/network/definitions.hpp>
+
 #include "../analysis/statistics.hpp"
 #include "../data/data_storage.hpp"
 

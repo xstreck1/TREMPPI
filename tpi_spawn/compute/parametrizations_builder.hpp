@@ -12,7 +12,7 @@
 #include <tpi_common/common_functions.hpp>
 #include <tpi_common/data_types.hpp>
 
-#include "io/constraint_parser.hpp"
+#include "../io/constraint_parser.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that computes feasible parametrizations for each specie from

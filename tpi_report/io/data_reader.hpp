@@ -1,5 +1,7 @@
 #pragma once
-#include <tpi_common/database_reader.hpp>
+
+#include <tpi_common/header.hpp>
+
 #include "../data/data_storage.hpp"
 
 namespace DataReader {

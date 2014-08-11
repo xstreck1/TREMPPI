@@ -1,11 +1,7 @@
-#include <tpi_common/database_reader.hpp>
-#include <tpi_common/file_manipulation.hpp>
-#include <tpi_common/logging.hpp>
-#include <tpi_common/sqlite3pp_func.hpp>
-#include <tpi_common/time_manager.hpp>
+#include <tpi_common/general/logging.hpp>
 #include "io/constraint_parser.hpp"
 #include "io/program_options.hpp"
-#include "io/model_reader.hpp"
+#include "io/syntax_checker.hpp"
 
 // TODO: disable regulatory if not -r
 int main(int argc, char ** argv) {
@@ -25,9 +21,9 @@ int main(int argc, char ** argv) {
 		ifstream network_file(input_path.string(), ios::in);
 		if (!network_file)
 			throw runtime_error("Could not open the file " + input_path.string() + " for reading.");
-		root = ModelReader::readFile(network_file);
+		root = SyntaxChecker::readFile(network_file);
 
-		ModelReader::controlSemantics(root["elements"]);
+		SyntaxChecker::controlSemantics(root["elements"]);
 	}
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 1);

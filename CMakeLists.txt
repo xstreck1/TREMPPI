@@ -29,7 +29,10 @@ ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cp
 # tpi_common
 set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_common)
 FILE(GLOB_RECURSE COMMON_HEADERS ${COMMON_FOLDER}/*.hpp)
-ADD_LIBRARY(tpi_common tpi_common/tpi_common.cpp tpi_common/configure.h ${COMMON_HEADERS})
+SOURCE_GROUP("Header Files\\tpi_common\\database" ${COMMON_FOLDER}/database/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_common\\general" ${COMMON_FOLDER}/general/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_common\\network" ${COMMON_FOLDER}/network/.*hpp)
+ADD_LIBRARY(tpi_common tpi_common/tpi_common.cpp tpi_common/header.h tpi_common/configure.h ${COMMON_HEADERS})
 
 # Gecode
 add_subdirectory (gecode-4.2.1)
@@ -38,17 +41,18 @@ include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.2.1)
 # tpi_spawn
 set(SPAWN_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_spawn)
 FILE(GLOB_RECURSE SPAWN_HEADERS ${SPAWN_FOLDER}/*.hpp)
-SOURCE_GROUP("Header Files\\io" ${SPAWN_FOLDER}/io/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_spawn\\compute" ${SPAWN_FOLDER}/compute/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_spawn\\data" ${SPAWN_FOLDER}/data/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
 ADD_EXECUTABLE(tpi_spawn ${SPAWN_FOLDER}/tpi_spawn.cpp ${SPAWN_HEADERS})
 target_link_libraries(tpi_spawn gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
-
 
 # tpi_report
 set(REPORT_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_report)
 FILE(GLOB_RECURSE REPORT_HEADERS ${REPORT_FOLDER}/*.hpp)
-SOURCE_GROUP("Header Files\\io" ${REPORT_FOLDER}/io/.*hpp)
-SOURCE_GROUP("Header Files\\data" ${REPORT_FOLDER}/data/.*hpp)
-SOURCE_GROUP("Header Files\\analysis" ${REPORT_FOLDER}/analysis/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_report\\analysis" ${REPORT_FOLDER}/analysis/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_report\\data" ${REPORT_FOLDER}/data/.*hpp)
+SOURCE_GROUP("Header Files\\tpi_report\\io" ${REPORT_FOLDER}/io/.*hpp)
 ADD_EXECUTABLE(tpi_report ${REPORT_FOLDER}/tpi_report.cpp ${REPORT_HEADERS})
 target_link_libraries(tpi_report jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
 

@@ -1,10 +1,10 @@
 #pragma once
-#include <tpi_common/data_info.hpp>
-#include <tpi_common/common_functions.hpp>
-#include <tpi_common/data_types.hpp>
+#include <tpi_common/general/common_functions.hpp>
+#include <tpi_common/network/data_info.hpp>
+#include <tpi_common/network/definitions.hpp>
 #include <json/json.h>
 
-namespace ModelReader {
+namespace SyntaxChecker {
 	// Read the JSON file
 	Json::Value readFile(ifstream & file) {
 		Json::Value root;

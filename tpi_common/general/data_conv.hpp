@@ -1,5 +1,6 @@
 #pragma once
-#include "data_types.hpp"
+
+#include "../header.h"
 #include "common_functions.hpp"
 
 namespace DataConv {

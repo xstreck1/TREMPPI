@@ -1,6 +1,7 @@
 #pragma once
 
-#include "data_conv.hpp"
+#include "../network/definitions.hpp"
+#include "../general/data_conv.hpp"
 #include "sqlite3pp_func.hpp"
 
 // Regulatory graph info, stored by a component

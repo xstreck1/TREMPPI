@@ -1,7 +1,6 @@
 #pragma once
 
-#include "data_types.hpp"
-#include "common_functions.hpp"
+#include "../header.h"
 #include <json/json.h>
 
 namespace DataInfo {

@@ -1,5 +1,6 @@
 #pragma once
-#include <tpi_common/common_functions.hpp>
+
+#include <tpi_common/header.hpp>
 
 const string PROGRAM_NAME = "tpi_report";
 

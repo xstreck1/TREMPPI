@@ -1,7 +1,7 @@
 #pragma once
 
-#include <tpi_common/data_types.hpp>
-#include <tpi_common/common_functions.hpp>
+#include <tpi_common/general/common_functions.hpp>
+#include <tpi_common/network/definitions.hpp>
 
 #include <gecode/kernel.hh>
 #include <gecode/int.hh>

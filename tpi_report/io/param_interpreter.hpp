@@ -1,5 +1,6 @@
 #pragma once
-#include <tpi_common/common_functions.hpp>
+
+#include <tpi_common/network/definitions.hpp>
 
 namespace PInterpreter {
 	// Obtain maximal activity levels in each of the functions

@@ -1,5 +1,5 @@
 #pragma once
-#include <tpi_common/common_functions.hpp>
+#include <tpi_common/general/common_functions.hpp>
 
 const string PROGRAM_NAME = "tpi_spawn";
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../header.h"
 #include "common_functions.hpp"
 
 namespace FileManipulation {

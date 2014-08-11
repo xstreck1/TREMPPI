@@ -1,6 +1,7 @@
 #pragma once
-#include <json/json.h>
-#include <tpi_common/configure.h>
+
+#include <tpi_common/header.hpp>
+
 #include "../data/data_storage.hpp"
 
 namespace Output {

@@ -1,5 +1,7 @@
 #pragma once
-#include <tpi_common/common_functions.hpp>
+
+#include <tpi_common/header.hpp>
+
 
 // The information for the regulatory network
 struct RegData {

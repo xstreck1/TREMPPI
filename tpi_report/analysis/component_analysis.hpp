@@ -1,4 +1,7 @@
 #pragma once
+
+#include <tpi_common/network/definitions.hpp>
+
 #include "../data/data_storage.hpp"
 
 // TODO: Does not work for MV
