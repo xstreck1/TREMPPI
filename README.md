@@ -7,9 +7,10 @@ NOT WORKING AS OF NOW. For working version use http://esther.fi.muni.cz .
 
 3rd C++ libraries included (see the directory for the specific licence): 
 
+* Gecode: http://www.gecode.org/
 * sqlite3: http://www.sqlite.org/ 
 * sqlite3pp: https://code.google.com/p/sqlite3pp/ 
-* json (JsonCPP): http://sourceforge.net/projects/jsoncpp/ <
+* json (JsonCPP): http://sourceforge.net/projects/jsoncpp/ 
 
 3rd JS libraries included (open-source)
 

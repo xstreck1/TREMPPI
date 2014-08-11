@@ -31,12 +31,17 @@ set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_common)
 FILE(GLOB_RECURSE COMMON_HEADERS ${COMMON_FOLDER}/*.hpp)
 ADD_LIBRARY(tpi_common tpi_common/tpi_common.cpp tpi_common/configure.h ${COMMON_HEADERS})
 
+# Gecode
+add_subdirectory (gecode-4.2.1)
+include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.2.1)
+
 # tpi_spawn
 set(SPAWN_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_spawn)
 FILE(GLOB_RECURSE SPAWN_HEADERS ${SPAWN_FOLDER}/*.hpp)
 SOURCE_GROUP("Header Files\\io" ${SPAWN_FOLDER}/io/.*hpp)
 ADD_EXECUTABLE(tpi_spawn ${SPAWN_FOLDER}/tpi_spawn.cpp ${SPAWN_HEADERS})
-target_link_libraries(tpi_spawn jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+target_link_libraries(tpi_spawn gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+
 
 # tpi_report
 set(REPORT_FOLDER ${TREMPPI_SOURCE_DIR}/tpi_report)

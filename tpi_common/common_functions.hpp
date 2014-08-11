@@ -1,7 +1,13 @@
 #pragma once
 
-#include "data_types.hpp"
-#include "data_info.hpp"
+#include <vector>
+#include <regex>
+#include <string>
+#include <map>
+
+#include <boost/lexical_cast.hpp>
+#include <boost/range/algorithm.hpp>
+#include <boost/range/counting_range.hpp>
 
 #define NO_COPY(TypeName) \
 	TypeName() = default;  \
@@ -19,9 +25,6 @@
 	TypeName& operator=(TypeName && ) = default; 
 
 #define WHOLE(Container) begin(Container),end(Container)
-
-const int CURR_COUNTER = __COUNTER__;
-#define ERR_NO (__COUNTER__ - CURR_COUNTER)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file A handful of handy functions.
@@ -130,8 +133,8 @@ namespace Common {
 	* @return	ref to A
 	*/
 	template<typename T>
-	vector<T> operator+(const vector<T> & A, const vector<T> & B) {
-		vector<T> result = A;
+	std::vector<T> operator+(const std::vector<T> & A, const std::vector<T> & B) {
+		std::vector<T> result = A;
 		result.insert(result.end(), WHOLE(B));
 		return result;
 	}
@@ -143,12 +146,12 @@ namespace Common {
 	* @param[in] n	number of the match to use (0 for the whole string, 1-n for the i-th parenthesis
 	* @return	vector of all the matches
 	*/
-	vector<string> getAllMatches(const string & control_regex, const string & original, const int n = 0) {
-		vector<string> result;
+	std::vector<std::string> getAllMatches(const std::string & control_regex, const std::string & original, const int n = 0) {
+		std::vector<std::string> result;
 
-		string source = original;
-		smatch matches;
-		while (regex_search(source, matches, regex(control_regex))) {
+		std::string source = original;
+		std::smatch matches;
+		while (std::regex_search(source, matches, std::regex(control_regex))) {
 			if ((matches[n]).str().empty())
 				throw ("no match found to " + control_regex + " in " + original);
 			result.emplace_back(matches[n]); // Capture the first (and only) submatch that holds the whole number only
@@ -158,13 +161,14 @@ namespace Common {
 		return result;
 	}
 
+	/**
+	* @brife return a string quoting the provided data
+	* @param[in] content	value to quote
+	* @return	string with the quoted data
+	*/
 	template<typename T>
-	string quote(const T & content) {
-		return "\"" + lexical_cast<string, T>(content)+"\"";
-	}
-
-	inline string tab(const int tab_count) {
-		return string(tab_count, '\t');
+	std::string quote(const T & content) {
+		return "\"" + boost::lexical_cast<std::string, T>(content)+"\"";
 	}
 
 	/**
@@ -174,9 +178,26 @@ namespace Common {
 	* @return	true if the key is present
 	*/
 	template <typename KeyT, typename ValT>
-	inline bool hasKey(const map<KeyT, ValT> & dictionary, const KeyT & key) {
+	inline bool hasKey(const std::map<KeyT, ValT> & dictionary, const KeyT & key) {
 		return (dictionary.find(key) != dictionary.end());
 	}
-} using namespace Common;
+
+	/**
+	* @brief returns a zero-initiated index of value in the vector data
+	* @param[in] data	the vector with elements
+	* @param[in] val	the value that is searched for
+	* @return	a zero-initiated index of "val" in "data" or maximal size_t value if not found
+	*/
+	template <typename T>
+	inline std::size_t getIndex(const std::vector <T> & data, const T & val) {
+		auto it = std::find(WHOLE(data), val);
+		if (it != std::end(data))
+			return std::distance(std::begin(data), it);
+		else
+			return std::numeric_limits<std::size_t>::max();
+	}
+};
+
+using namespace Common;
 
 

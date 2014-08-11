@@ -5,14 +5,16 @@
             "data" : {
                "source" : "A",
                "target" : "B",
-			   "Threshold" : 1
+			   "Threshold" : 1,
+			   "Label" : "ActivatingOnly"
             }
          },
          {
             "data" : {
                "source" : "B",
                "target" : "B",
-			   "Threshold" : 1
+			   "Threshold" : 1,
+			   "Label" : "Free"
             }
          }
       ],

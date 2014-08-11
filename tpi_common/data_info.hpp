@@ -1,5 +1,8 @@
 #pragma once
+
+#include "data_types.hpp"
 #include "common_functions.hpp"
+#include <json/json.h>
 
 namespace DataInfo {
 	// Controls if the names is formed as [a-zA-Z][a-zA-Z0-9_]*
@@ -10,5 +13,15 @@ namespace DataInfo {
 		for (char ch : spec_name)
 			valid &= isalnum(ch) || ch == '_';
 		return valid;
+	}
+
+	// Obtain components and their max levels
+	map<string, ActLevel> getComponents(const Json::Value & nodes) {
+		map<string, ActLevel> components;
+
+		for (const Json::Value node : nodes)
+			components.insert(make_pair(node["data"]["id"].asString(), node["data"]["MaxActivity"].asInt()));
+
+		return components;
 	}
 }

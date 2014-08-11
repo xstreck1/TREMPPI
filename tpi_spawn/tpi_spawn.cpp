@@ -3,6 +3,7 @@
 #include <tpi_common/logging.hpp>
 #include <tpi_common/sqlite3pp_func.hpp>
 #include <tpi_common/time_manager.hpp>
+#include "io/constraint_parser.hpp"
 #include "io/program_options.hpp"
 #include "io/model_reader.hpp"
 
@@ -11,9 +12,9 @@ int main(int argc, char ** argv) {
 	Logging::init(PROGRAM_NAME + ".log");
 	BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (tpi_stat) started.";
 
-	bpo::variables_map po;
-	bfs::path input_path;
-	Json::Value root;   // root of the network
+	bpo::variables_map po; // program options provided on the command line
+	bfs::path input_path; // an input pah
+	Json::Value root; // root of the network
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing network file.";
@@ -32,6 +33,6 @@ int main(int argc, char ** argv) {
 		Logging::exceptionMessage(e, 1);
 	}
 
-	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished succesfully.";
+	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished successfully.";
 	return 0;
 }

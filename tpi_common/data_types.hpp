@@ -38,7 +38,7 @@
 
 using namespace std;
 
-const string VERSION("1.0.3.0");
+const std::string VERSION("1.0.3.0");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file This file holds specifications of data types (typedefs and 3rd party classes) used by multiple classes throughout the computation.
@@ -66,34 +66,35 @@ namespace kwd = boost::log::keywords;
 enum StreamType {error_str, results_str, verbose_str};
 
 /// Symbol that separates values of a single parametrizations on output.
-const string separator = ":";
+const std::string separator = ":";
 
 /// Definition of naming abbreviations for edge labels:
 namespace Label {
-   const string Activating = "Activating";
-   const string ActivatingOnly = "ActivatingOnly";
-   const string Inhibiting = "Inhibiting";
-   const string InhibitingOnly = "InhibitingOnly";
-   const string NotActivating = "NotActivating";
-   const string NotInhibiting = "NotInhibiting";
-   const string Observable = "Observable";
-   const string NotObservable = "NotObservable";
-   const string Free = "Free";
+   const std::string Activating = "Activating";
+   const std::string ActivatingOnly = "ActivatingOnly";
+   const std::string Inhibiting = "Inhibiting";
+   const std::string InhibitingOnly = "InhibitingOnly";
+   const std::string NotActivating = "NotActivating";
+   const std::string NotInhibiting = "NotInhibiting";
+   const std::string Observable = "Observable";
+   const std::string NotObservable = "NotObservable";
+   const std::string Free = "Free";
+   const vector<std::string> All = { Activating, ActivatingOnly, Inhibiting, InhibitingOnly, NotActivating, NotInhibiting, Observable, NotObservable, Free };
 }
 
-const string MODEL_SUFFIX = ".pmf";
-const string PROPERTY_SUFFIX = ".ppf";
-const string DATABASE_SUFFIX = ".sqlite";
-const string OUTPUT_SUFFIX = ".out";
-const string PLA_SUFFIX = ".pla";
-const string GRAPH_SUFFIX = ".json";
-const string FILTER_SUFFIX = ".filter";
-const string JSON_SUFFIX = ".json";
+const std::string MODEL_SUFFIX = ".pmf";
+const std::string PROPERTY_SUFFIX = ".ppf";
+const std::string DATABASE_SUFFIX = ".sqlite";
+const std::string OUTPUT_SUFFIX = ".out";
+const std::string PLA_SUFFIX = ".pla";
+const std::string GRAPH_SUFFIX = ".json";
+const std::string FILTER_SUFFIX = ".filter";
+const std::string JSON_SUFFIX = ".json";
 
-const string COMPONENTS_TABLE = "Components";
-const string REGULATIONS_TABLE = "Regulations";
-const string PARAMETRIZATIONS_TABLE = "Parametrizations";
-const vector<string> SOURCE_TYPES = { "select", "differ", "compare" };
+const std::string COMPONENTS_TABLE = "Components";
+const std::string REGULATIONS_TABLE = "Regulations";
+const std::string PARAMETRIZATIONS_TABLE = "Parametrizations";
+const vector<std::string> SOURCE_TYPES = { "select", "differ", "compare" };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
@@ -106,7 +107,7 @@ typedef size_t CompID;
 
 /// Activity level of a specie.
 typedef short ActLevel;
-#define stoal(X) boost::lexical_cast<ActLevel, string>(X)
+#define stoal(X) boost::lexical_cast<ActLevel, std::string>(X)
 
 /// Vector of activation levels of species used for labelling of states of KS.
 typedef vector<ActLevel> Levels;
@@ -133,3 +134,4 @@ using PLit = vector<PVal>; ///< Post's algebra literal
 using PMin = vector<PLit>; ///< Post's algebra minterm
 using PDNF = vector<PMin>; ///< Post's algebra disjunctive normal form
 
+using namespace std;
