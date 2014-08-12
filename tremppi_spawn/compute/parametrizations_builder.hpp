@@ -2,9 +2,9 @@
 
 #include <tremppi_common/general/common_functions.hpp>
 
+#include "../data/kinetics.hpp"
 #include "../io/constraint_parser.hpp"
 #include "constraint_reader.hpp"
-#include "kinetics.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that computes feasible parametrizations for each specie from
@@ -142,49 +142,33 @@ class ParametrizationsBuilder {
 		return result;
 	}
 
-	static void add_irrelevant(Kinetics::Params & params, Configurations & subcolors) {
-		for_each(WHOLE(subcolors), [&params](Levels & subcolor){
-			for (const size_t param_no : cscope(params))
-				if (!params[param_no].functional)
-					subcolor[param_no] = -1;
-		});
-	}
-
-	static void remove_redundant(Kinetics::Params & params, Configurations & subcolors) {
-		auto new_end = unique(begin(subcolors), end(subcolors));
-		subcolors.resize(distance(begin(subcolors), new_end));
-	}
-
 public:
 	/**
-	* Entry function of parsing, tests and stores subcolors for all the species.
+	* Entry function of parsing, tests and stores subcolors for all the components.
 	*/
 	static void build(const Model &model, Kinetics & kinetics) {
 		ParamNo step_size = 1; // Variable necessary for encoding of colors
 
-		// Cycle through species
-		for (CompID ind = model.species.size(); ind > 0; --ind) {
+		// Cycle through components
+		for (CompID ind = model.components.size(); ind > 0; --ind) {
 
 			CompID ID = ind - 1;
-			kinetics.species[ID].step_size = step_size;
+			kinetics.components[ID].step_size = step_size;
 
 
 			// Solve the parametrizations
-			string formula = createFormula(model.species[ID].regulations, kinetics.species[ID].params) + " & " + ConstraintReader::consToFormula(model, ID);
-			Configurations subcolors = createPartCol(kinetics.species[ID].params, formula, model.species[ID].max_value);
-			// add_irrelevant(kinetics.species[ID].params, subcolors);
-			// sort(WHOLE(subcolors));
-			// remove_redundant(kinetics.species[ID].params, subcolors);
+			string formula = createFormula(model.components[ID].regulations, kinetics.components[ID].params) + " & " + ConstraintReader::consToFormula(model, ID);
+			Configurations subcolors = createPartCol(kinetics.components[ID].params, formula, model.components[ID].max_activity);
 
 			// Copy the data
-			auto & params = kinetics.species[ID].params;
+			auto & params = kinetics.components[ID].params;
 			for (const Levels & subcolor : subcolors)
 				for (const size_t param_no : cscope(subcolor))
 					// if (params[param_no].functional)
 					params[param_no].target_in_subcolor.emplace_back(subcolor[param_no]);
 
 
-			kinetics.species[ID].col_count = subcolors.size();
+			kinetics.components[ID].col_count = subcolors.size();
 			step_size *= subcolors.size();
 		}
 

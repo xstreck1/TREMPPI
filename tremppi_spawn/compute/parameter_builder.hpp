@@ -1,16 +1,8 @@
-/*
-* Copyright (C) 2012-2013 - Adam Streck
-* This file is a part of the ParSyBoNe (Parameter Synthetizer for Boolean Networks) verification tool.
-* ParSyBoNe is a free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.
-* ParSyBoNe is released without any warranty. See the GNU General Public License for more details. <http://www.gnu.org/licenses/>.
-* For affiliations see <http://www.mi.fu-berlin.de/en/math/groups/dibimath> and <http://sybila.fi.muni.cz/>.
-*/
-
 #pragma once
 
 #include <tremppi_common/network/model_translators.hpp>
 
-#include "kinetics.hpp"
+#include "../data/kinetics.hpp"
 
 class ParameterBuilder {
 	/**
@@ -18,14 +10,14 @@ class ParameterBuilder {
 	* @param autoreg index of the regulation that goes from itself
 	*/
 	static Levels getTargetValues(const Model & model, const map<CompID, Levels> & all_thrs, const Levels & thrs_comb, const size_t autoreg, const CompID t_ID) {
-		Levels targets = vrange<ActLevel>(0u, model.species[t_ID].max_activity + 1u);
+		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
 
 		// If there is the loop restriction
 		if (false && autoreg != INF) {
 			ActLevel self_thrs = thrs_comb[autoreg];
 			Levels thresholds = (all_thrs.find(t_ID))->second;
 			ActLevel bottom_border = 0u < self_thrs ? thresholds[self_thrs - 1] : 0u;
-			ActLevel top_border = thresholds.size() > self_thrs ? thresholds[self_thrs] : model.species[t_ID].max_activity + 1;
+			ActLevel top_border = thresholds.size() > self_thrs ? thresholds[self_thrs] : model.components[t_ID].max_activity + 1;
 			Levels new_targets;
 
 			// Add levels that are between the thresholds and one below/above if corresponds to the original.
@@ -68,7 +60,7 @@ class ParameterBuilder {
 			context += regulation_name + ",";
 
 			// Find in which levels the specie must be for the regulation to occur.
-			ActLevel next_th = (thrs_comb[source_num] == thresholds.size()) ? model.species[s_ID].max_activity + 1 : thresholds[thrs_comb[source_num]];
+			ActLevel next_th = (thrs_comb[source_num] == thresholds.size()) ? model.components[s_ID].max_activity + 1 : thresholds[thrs_comb[source_num]];
 
 			requirements.insert(make_pair(s_ID, vrange(threshold, next_th)));
 		}
@@ -76,7 +68,7 @@ class ParameterBuilder {
 		rng::for_each(requirements, [](pair<const StateID, Levels> & req){ rng::sort(req.second); });
 		if (!context.empty())
 			context.resize(context.length() - 1);
-		return Kinetics::Param{ context, getTargetValues(model, all_thrs, thrs_comb, autoreg_ID, t_ID), move(requirements), Levels(), true };
+		return Kinetics::Param{ context, getTargetValues(model, all_thrs, thrs_comb, autoreg_ID, t_ID), move(requirements), Levels() };
 	}
 
 	// @brief createParameters Creates a description of kinetic parameters.
@@ -105,12 +97,12 @@ class ParameterBuilder {
 
 public:
 	// @brief fillParameters   fill idividual parameter values based on user specifications.
-	static vector<Kinetics::Specie> build(const Model & model) {
-		vector<Kinetics::Specie> result;
+	static vector<Kinetics::Component> build(const Model & model) {
+		vector<Kinetics::Component> result;
 
 		// Create params for the non-input nodes
-		for (const CompID ID : crange(model.species.size()))
-			result.emplace_back(Kinetics::Specie{ model.species[ID].name, createParameters(model, ID), 0, 0 });
+		for (const CompID ID : crange(model.components.size()))
+			result.emplace_back(Kinetics::Component{ model.components[ID].name, createParameters(model, ID), 0, 0 });
 
 		return result;
 	}

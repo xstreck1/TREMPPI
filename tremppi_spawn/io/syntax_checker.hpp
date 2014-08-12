@@ -1,22 +1,11 @@
 #pragma once
+
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/network/data_info.hpp>
 #include <tremppi_common/network/definitions.hpp>
 #include <json/json.h>
 
 namespace SyntaxChecker {
-	// Read the JSON file
-	Json::Value readFile(ifstream & file) {
-		Json::Value root;
-
-		Json::Reader reader;
-		bool parsingSuccessful = reader.parse(file, root);
-		if (!parsingSuccessful)
-			throw runtime_error("Failed to parse configuration. " + reader.getFormattedErrorMessages());
-
-		return root;
-	}
-
 	namespace {
 		// Guarantees that the maximal values are integers and that they are convertible to int
 		void checkMaxes(const Json::Value & nodes) {

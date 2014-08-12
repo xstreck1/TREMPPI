@@ -1,4 +1,5 @@
 #pragma once
+
 #include <tremppi_common/general/common_functions.hpp>
 
 const string PROGRAM_NAME = "tremppi_spawn";

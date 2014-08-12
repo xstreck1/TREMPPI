@@ -1,13 +1,4 @@
-/*
-* Copyright (C) 2012-2013 - Adam Streck
-* This file is a part of the ParSyBoNe (Parameter Synthetizer for Boolean Networks) verification tool.
-* ParSyBoNe is a free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.
-* ParSyBoNe is released without any warranty. See the GNU General Public License for more details. <http://www.gnu.org/licenses/>.
-* For affiliations see <http://www.mi.fu-berlin.de/en/math/groups/dibimath> and <http://sybila.fi.muni.cz/>.
-*/
-
-#ifndef PARSYBONE_CONSTRAINT_READER_INCLUDED
-#define PARSYBONE_CONSTRAINT_READER_INCLUDED
+#pragma once
 
 #include <tremppi_common/network/model_translators.hpp>
 
@@ -65,16 +56,16 @@ class ConstraintReader {
 	}
 public:
 
+	// Reformulate explicit user constraint so it matches the format of the constraint parser
 	static string consToFormula(const Model & model, const CompID ID) {
 		string formula; // Resulting formula specifying all the constraints
 		
 		formula = "tt";
 
-		for (const string constraint : model.species[ID].par_cons) {
+		for (const string constraint : model.components[ID].constraints) {
 			formula.append(" & " + addParenthesis(formatConstraint(constraint, model, ID)));
 		}
 		
 		return addParenthesis(formula);
 	}
 };
-#endif // PARSYBONE_CONSTRAINT_READER_INCLUDED

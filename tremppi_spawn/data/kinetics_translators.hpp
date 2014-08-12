@@ -1,11 +1,3 @@
-/*
-* Copyright (C) 2012-2013 - Adam Streck
-* This file is a part of the ParSyBoNe (Parameter Synthetizer for Boolean Networks) verification tool.
-* ParSyBoNe is a free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.
-* ParSyBoNe is released without any warranty. See the GNU General Public License for more details. <http://www.gnu.org/licenses/>.
-* For affiliations see <http://www.mi.fu-berlin.de/en/math/groups/dibimath> and <http://sybila.fi.muni.cz/>.
-*/
-
 #pragma once
 
 #include "kinetics.hpp"
@@ -13,7 +5,7 @@
 namespace KineticsTranslators {
 	// @return the number of parametrizations
 	inline ParamNo getSpaceSize(const Kinetics & kinetics) {
-		return accumulate(begin(kinetics.species), end(kinetics.species), static_cast<ParamNo>(1), [](const ParamNo A, const Kinetics::Specie & B) -> ParamNo {
+		return accumulate(begin(kinetics.components), end(kinetics.components), static_cast<ParamNo>(1), [](const ParamNo A, const Kinetics::Component & B) -> ParamNo {
 			return A * B.col_count;
 		});
 	}
@@ -21,12 +13,12 @@ namespace KineticsTranslators {
 	// @return 
 	Levels getSpecieVals(const Kinetics & kinetics, ParamNo param_no) {
 		// Prepare storage vector
-		Levels specie_vals(kinetics.species.size());
+		Levels specie_vals(kinetics.components.size());
 		auto spec_it = specie_vals.begin();
 
 		// Go through colors backwards
 		ParamNo divisor = getSpaceSize(kinetics);
-		for (auto kin_it = kinetics.species.begin(); kin_it != kinetics.species.end(); kin_it++, spec_it++) {
+		for (auto kin_it = kinetics.components.begin(); kin_it != kinetics.components.end(); kin_it++, spec_it++) {
 			// lower divisor value
 			divisor /= kin_it->col_count;
 			// pick a number for current specie
@@ -44,13 +36,9 @@ namespace KineticsTranslators {
 		// compute numbers of partial parametrizations for each component
 		const Levels color_parts = getSpecieVals(kinetics, param_no);
 
-		for (const SpecieID ID : cscope(kinetics.species)) {
-			for (auto & param : kinetics.species[ID].params) {
-				// There may be more contexts than values due to the fact that some are not functional. These are assigned the value -1.
-				if (param.functional)
-					result.emplace_back(param.target_in_subcolor[color_parts[ID]]);
-				else
-					result.emplace_back(-1);
+		for (const CompID ID : cscope(kinetics.components)) {
+			for (auto & param : kinetics.components[ID].params) {
+				result.emplace_back(param.target_in_subcolor[color_parts[ID]]);
 			}
 		}
 
@@ -84,14 +72,14 @@ namespace KineticsTranslators {
 		set<ParamNo> result;
 
 
-		// Test subparametrizations for all species.
+		// Test subparametrizations for all components.
 		size_t begin = 0;
-		for (const SpecieID ID : cscope(kinetics.species)) {
+		for (const CompID ID : cscope(kinetics.components)) {
 			vector<ParamNo> submatch;
-			auto & params = kinetics.species[ID].params;
+			auto & params = kinetics.components[ID].params;
 
 			// Try to match all the subcolors for the current specie
-			for (const size_t subolor_no : crange(kinetics.species[ID].col_count)) {
+			for (const size_t subolor_no : crange(kinetics.components[ID].col_count)) {
 				bool valid = true;
 				for (const size_t param_no : cscope(params)) {
 					if (param_vals[param_no + begin] != -1 && param_vals[param_no + begin] != params[param_no].target_in_subcolor[subolor_no]) {
@@ -99,7 +87,7 @@ namespace KineticsTranslators {
 						break;
 					}
 				}
-				if (valid) submatch.push_back(subolor_no * kinetics.species[ID].step_size);
+				if (valid) submatch.push_back(subolor_no * kinetics.components[ID].step_size);
 			}
 
 			// At least one subparametrization must be found for each specie, if not end.
@@ -123,9 +111,9 @@ namespace KineticsTranslators {
 	/**
 	* @return  the parameter that has the given context
 
-	const Kinetics::Param & matchContext(const Model & model, const Kinetics & kinetics, const string & context, const SpecieID t_ID) {
+	const Kinetics::Param & matchContext(const Model & model, const Kinetics & kinetics, const string & context, const CompID t_ID) {
 	const string canonic = ModelTranslators::makeCanonic(model, context, t_ID);
-	for (auto & param : kinetics.species[t_ID].params)
+	for (auto & param : kinetics.components[t_ID].params)
 	if (param.context.compare(canonic) == 0)
 	return param;
 	throw runtime_error("Failed to match the context " + context + " for the specie " + to_string(t_ID));

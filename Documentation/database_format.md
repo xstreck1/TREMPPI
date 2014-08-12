@@ -19,7 +19,7 @@ TABLE Regulations
 This table stores regulations (edges) of the regulatory graph
 
 1. `Target TEXT` - a name of a target of a regulation
-2. `Regulator TEXT` - a name of a source of a regulation
+2. `Source TEXT` - a name of a source of a regulation
 3. `Threshold INTEGER` - a threshold value. **Required:** must be in the range  [1, `MaxActivity` of the `Regulator`]
 
 The table is required to by in a lexicographic ascending ordered by `Target`, then by `Regulator`, then by `Threshold`.

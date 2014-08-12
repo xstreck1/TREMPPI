@@ -16,8 +16,8 @@ namespace ModelTranslators {
 	 * @brief findID  obtain ID of the specie.
 	 */
 	CompID findID(const Model & model, const string & name) {
-		for (const CompID ID : cscope(model.species))
-			if (model.species[ID].name == name)
+		for (const CompID ID : cscope(model.components))
+			if (model.components[ID].name == name)
 				return ID;
 		return INF;
 	}
@@ -27,7 +27,7 @@ namespace ModelTranslators {
 	 */
 	vector<CompID> getRegulatorsIDs(const Model & model, const CompID ID) {
 		set<CompID> IDs;
-		for (auto regul : model.species[ID].regulations) {
+		for (auto regul : model.components[ID].regulations) {
 			IDs.insert(regul.source);
 		}
 		return vector<CompID>(IDs.begin(), IDs.end());
@@ -40,17 +40,17 @@ namespace ModelTranslators {
 		auto regulators = getRegulatorsIDs(model, ID);
 		vector<string> names;
 		for (auto reg : regulators) {
-			names.push_back(model.species[reg].name);
+			names.push_back(model.components[reg].name);
 		}
 		return names;
 	}
 
 	/**
-	* @return	names of all the species
+	* @return	names of all the components
 	*/
 	vector<string> getAllNames(const Model & model) {
 		vector<string> names;
-		for (const Model::ModelSpecie & specie : model.species)
+		for (const Model::ModelComp & specie : model.components)
 			names.push_back(specie.name);
 		return names;
 	}
@@ -62,7 +62,7 @@ namespace ModelTranslators {
 	 */
 	map<CompID, Levels > getThresholds(const Model & model, const CompID ID) {
 		map<CompID, Levels> thresholds;
-		for (auto reg : model.species[ID].regulations) {
+		for (auto reg : model.components[ID].regulations) {
 			auto key = thresholds.find(reg.source);
 			if (key == thresholds.end()) {
 				thresholds.insert(make_pair(reg.source, Levels(1, reg.threshold)));
@@ -150,16 +150,16 @@ namespace ModelTranslators {
 
 	// @return regulation with given parameters
 	const Model::Regulation & findRegulation(const Model & model, const CompID t_ID, const CompID s_ID, const ActLevel threshold) {
-		const auto & reguls = model.species[t_ID].regulations;
+		const auto & reguls = model.components[t_ID].regulations;
 		for (const Model::Regulation & regul : reguls)
 			if (regul.source == s_ID && regul.threshold == threshold)
 				return regul;
 		throw runtime_error("Failed to match the regulation " + to_string(s_ID) + " -" + to_string(threshold) + "-> " + to_string(t_ID));
 	}
 
-	// @return the maximal level in between the species
+	// @return the maximal level in between the components
 	const ActLevel getMaxLevel(const Model & model) {
-		return rng::max_element(model.species, [](const Model::ModelSpecie & A, const Model::ModelSpecie & B) {
+		return rng::max_element(model.components, [](const Model::ModelComp & A, const Model::ModelComp & B) {
 			return A.max_activity < B.max_activity;
 		})->max_activity;
 	}

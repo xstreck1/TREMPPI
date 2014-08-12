@@ -10,7 +10,7 @@ namespace ModelReader {
 		Model model;
 
 		for (const Json::Value node : elements["nodes"]) {
-			Model::ModelSpecie specie;
+			Model::ModelComp specie;
 
 			string id = node["data"]["id"].asString();
 			specie.id = lexical_cast<CompID, string>(id);
@@ -23,15 +23,28 @@ namespace ModelReader {
 
 					string source = edge["data"]["source"].asString();
 					regulation.source = lexical_cast<CompID, string>(source);
-					regulation.threshold = edge["data"]["treshold"].asInt();
+					regulation.threshold = edge["data"]["Threshold"].asInt();
+					regulation.label = edge["data"]["Label"].asString();
 
 					specie.regulations.emplace_back(move(regulation));
 				}
 			}
 
-			model.species.emplace_back(move(specie));
+			model.components.emplace_back(move(specie));
 		}
 
 		return model;
+	}
+
+	// Read the JSON file
+	Json::Value readFile(ifstream & file) {
+		Json::Value root;
+
+		Json::Reader reader;
+		bool parsingSuccessful = reader.parse(file, root);
+		if (!parsingSuccessful)
+			throw runtime_error("Failed to parse configuration. " + reader.getFormattedErrorMessages());
+
+		return root;
 	}
 }

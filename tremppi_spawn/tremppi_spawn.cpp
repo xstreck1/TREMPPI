@@ -4,11 +4,13 @@
 #include "compute/parametrizations_builder.hpp"
 #include "data/model_reader.hpp"
 #include "io/constraint_parser.hpp"
+#include "io/database_filler.hpp"
 #include "io/program_options.hpp"
 #include "io/syntax_checker.hpp"
 
 int main(int argc, char ** argv) {
 	Logging::init(PROGRAM_NAME + ".log");
+	Logging::phase_count = 1;
 	BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (" + PROGRAM_NAME + ") started.";
 
 	// Parse the options
@@ -32,7 +34,7 @@ int main(int argc, char ** argv) {
 		ifstream network_file(input_path.string(), ios::in);
 		if (!network_file)
 			throw runtime_error("Could not open the file " + input_path.string() + " for reading.");
-		root = SyntaxChecker::readFile(network_file);
+		root = ModelReader::readFile(network_file);
 
 		SyntaxChecker::controlSemantics(root["elements"]);
 	}
@@ -51,6 +53,7 @@ int main(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Parsing the network.";
 
 		model = ModelReader::jsonToModel(root["elements"]);
+		model.name = input_path.filename().stem().string();
 	}
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 3);
@@ -61,12 +64,38 @@ int main(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Obtaining kinetics.";
 
-		kinetics.species = ParameterBuilder::build(model);
+		kinetics.components = ParameterBuilder::build(model);
 		ParametrizationsBuilder::build(model, kinetics);
 	}
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 4);
 	}
+
+	// Output the data
+	try {
+		BOOST_LOG_TRIVIAL(info) << "Creating the database file.";
+		bfs::path database_file = input_path.parent_path() /= bfs::path{ model.name + DATABASE_SUFFIX };
+		if (bfs::exists(database_file)) 
+			BOOST_LOG_TRIVIAL(warning) << "Database file " << database_file.string() << " already exists, erasing.";
+		bfs::remove(database_file);
+		
+		DatabaseFiller database_filler(model, kinetics, database_file.string());
+		database_filler.creteTables();
+		database_filler.startOutput();
+
+		Logging::newPhase(KineticsTranslators::getSpaceSize(kinetics), "writing parametrization");
+		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++) {
+			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);
+			database_filler.addParametrization(parametrization);
+			Logging::step();
+		}
+
+		database_filler.finishOutpout();
+	}
+	catch (exception & e) {
+		Logging::exceptionMessage(e, 5);
+	}
+
 
 	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished successfully.";
 	return 0;
