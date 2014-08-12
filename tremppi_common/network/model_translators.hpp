@@ -16,10 +16,10 @@ namespace ModelTranslators {
 	 * @brief findID  obtain ID of the specie.
 	 */
 	CompID findID(const Model & model, const string & name) {
-		for (const CompID ID : cscope(model.components))
-			if (model.components[ID].name == name)
-				return ID;
-		return INF;
+		auto comp_it = find_if(WHOLE(model.components), [&name](const Model::ModelComp & component){
+			return name == component.name;
+		});
+		return comp_it->id;
 	}
 
 	/**
@@ -28,7 +28,7 @@ namespace ModelTranslators {
 	vector<CompID> getRegulatorsIDs(const Model & model, const CompID ID) {
 		set<CompID> IDs;
 		for (auto regul : model.components[ID].regulations) {
-			IDs.insert(regul.source);
+			IDs.insert(regul.source.id);
 		}
 		return vector<CompID>(IDs.begin(), IDs.end());
 	}
@@ -63,9 +63,9 @@ namespace ModelTranslators {
 	map<CompID, Levels > getThresholds(const Model & model, const CompID ID) {
 		map<CompID, Levels> thresholds;
 		for (auto reg : model.components[ID].regulations) {
-			auto key = thresholds.find(reg.source);
+			auto key = thresholds.find(reg.source.id);
 			if (key == thresholds.end()) {
-				thresholds.insert(make_pair(reg.source, Levels(1, reg.threshold)));
+				thresholds.insert(make_pair(reg.source.id, Levels(1, reg.threshold)));
 			}
 			else {
 				key->second.push_back(reg.threshold);
@@ -152,7 +152,7 @@ namespace ModelTranslators {
 	const Model::Regulation & findRegulation(const Model & model, const CompID t_ID, const CompID s_ID, const ActLevel threshold) {
 		const auto & reguls = model.components[t_ID].regulations;
 		for (const Model::Regulation & regul : reguls)
-			if (regul.source == s_ID && regul.threshold == threshold)
+			if (regul.source.id == s_ID && regul.threshold == threshold)
 				return regul;
 		throw runtime_error("Failed to match the regulation " + to_string(s_ID) + " -" + to_string(threshold) + "-> " + to_string(t_ID));
 	}

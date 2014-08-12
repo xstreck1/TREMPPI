@@ -32,7 +32,7 @@ const std::string OUTPUT_SUFFIX = ".out";
 const std::string PLA_SUFFIX = ".pla";
 const std::string GRAPH_SUFFIX = ".json";
 const std::string FILTER_SUFFIX = ".filter";
-const std::string JSON_SUFFIX = ".json";
+const std::string NETWORK_SUFFIX = ".js";
 
 const std::string COMPONENTS_TABLE = "Components";
 const std::string REGULATIONS_TABLE = "Regulations";

@@ -1,36 +1,34 @@
-{
+var model = {
    "elements" : {
       "edges" : [
          {
             "data" : {
-               "source" : "0",
-               "target" : "1",
+               "source" : "A",
+               "target" : "B",
 			   "Threshold" : 1,
 			   "Label" : "ActivatingOnly"
             }
          },
          {
             "data" : {
-               "source" : "1",
-               "target" : "1",
-			   "Threshold" : 1,
+               "source" : "B",
+               "target" : "B",
+			   "Threshold" : 2,
 			   "Label" : "Free"
             }
          }
       ],
       "nodes" : [
-         {
+		 {
             "data" : {
-               "id" : "0",
 			   "Name" : "A",
 			   "MaxActivity" : 1
             }
          },
-		 {
+         {
             "data" : {
-               "id" : "1",
 			   "Name" : "B",
-			   "MaxActivity" : 1
+			   "MaxActivity" : 2
             }
          }
       ]

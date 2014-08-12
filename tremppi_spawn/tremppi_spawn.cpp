@@ -2,7 +2,7 @@
 
 #include "compute/parameter_builder.hpp"
 #include "compute/parametrizations_builder.hpp"
-#include "data/model_reader.hpp"
+#include "io/model_reader.hpp"
 #include "io/constraint_parser.hpp"
 #include "io/database_filler.hpp"
 #include "io/program_options.hpp"
@@ -31,10 +31,7 @@ int main(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		ifstream network_file(input_path.string(), ios::in);
-		if (!network_file)
-			throw runtime_error("Could not open the file " + input_path.string() + " for reading.");
-		root = ModelReader::readFile(network_file);
+		root = ModelReader::readFile(input_path);
 
 		SyntaxChecker::controlSemantics(root["elements"]);
 	}

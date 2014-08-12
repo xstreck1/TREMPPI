@@ -16,11 +16,11 @@ namespace DataInfo {
 	}
 
 	// Obtain components and their max levels
-	vector<pair<string, ActLevel> > getComponents(const Json::Value & nodes) {
-		vector<pair<string, ActLevel> > components;
+	map<string, ActLevel> getComponents(const Json::Value & nodes) {
+		map<string, ActLevel>components;
 
 		for (const Json::Value node : nodes)
-			components.emplace_back(make_pair(node["data"]["Name"].asString(), node["data"]["MaxActivity"].asInt()));
+			components.insert(make_pair(node["data"]["Name"].asString(), node["data"]["MaxActivity"].asInt()));
 
 		return components;
 	}

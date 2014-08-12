@@ -38,49 +38,25 @@ namespace SyntaxChecker {
 			}
 		}
 
-		// Constrol that Ids are numeric and ordered
-		void checkIDs(const Json::Value & nodes, const vector<string> & names) {
-			for (const Json::Value node : nodes) {
-				CompID ID;
-				try {
-					string ID_string = node["data"]["id"].asString();
-					ID = static_cast<CompID>(boost::lexical_cast<CompID, string>(ID_string));
-				}
-				catch (exception & e) {
-					throw runtime_error("Could not obtain and convert id for " + quote(node["data"]["Name"].asString()) + " to integer. " + e.what());
-				}
-				CompID computed_id = getIndex(names, node["data"]["Name"].asString());
-				if (ID != computed_id)
-					throw runtime_error("Component " + quote(node["data"]["Name"].asString()) + " has an id out of order. The ids must be assigned in a lexicographical order of names.");
-
-			}
-		}
-
 		// Control one endpoint of an edge
-		void checkEdgeEnd(const Json::Value & edge, const string & type, const size_t node_count) {
+		void checkEdgeEnd(const Json::Value & edge, const string & type, const map<string, ActLevel> & components) {
 			string name;
-			CompID ID;
 			try {
 				name = edge["data"][type].asString();
 			}
 			catch (exception & e) {
 				throw runtime_error(string("Could not obtain a " + type + " of an edge.Did you remember to add parenthesis ? ") + e.what());
 			}
-			try {
-				ID = lexical_cast<CompID, string>(name);
+			if (!hasKey(components, name)) {
+				throw runtime_error("The " + type + " " + name + " does not exists");
 			}
-			catch (exception & e) {
-				throw runtime_error("The ID " + quote(name) + " is not convertible to int. " + e.what());
-			}
-			if (ID >= node_count)
-				throw runtime_error("The ID " + quote(ID) + " is not a valid ID. ");
 		}
 
 		// Control if the edges have their ids in the component list
-		void checkEdges(const Json::Value & edges, const size_t node_count) {
+		void checkEdges(const Json::Value & edges, const map<string, ActLevel> & components) {
 			for (const Json::Value edge : edges) {
-				checkEdgeEnd(edge, string("source"), node_count);
-				checkEdgeEnd(edge, string("target"), node_count);
+				checkEdgeEnd(edge, string("source"), components);
+				checkEdgeEnd(edge, string("target"), components);
 			}
 		}
 
@@ -89,19 +65,19 @@ namespace SyntaxChecker {
 		}
 
 		// Control if the thresholds are in the range of their source
-		void checkThresholds(const Json::Value & edges, const vector<pair<string, ActLevel> > & components) {
+		void checkThresholds(const Json::Value & edges, const map<string, ActLevel> & components) {
 			for (const Json::Value edge : edges) {
 				int threshold;
-				CompID source = lexical_cast<CompID, string>(edge["data"]["source"].asString());
+				string source = edge["data"]["source"].asString();
 				try {
 					threshold = edge["data"]["Threshold"].asInt();
 				}
 				catch (exception & e) {
 					throw runtime_error("Could not convert treshold for " + getEdgeName(edge) + " to integer." + e.what());
 				}
-				if (threshold < 1 || threshold > components[source].second)
+				if (threshold < 1 || threshold > components.at(source))
 					throw runtime_error(getEdgeName(edge) + " has a Threshold of " + to_string(threshold) +
-					".Only[1" + ", " + to_string(components[source].second) + "] is allowed.");
+					". Only[1" + ", " + to_string(components.at(source)) + "] is allowed.");
 			}
 		}
 
@@ -125,14 +101,9 @@ namespace SyntaxChecker {
 	// Control that the values are not missing and are of the right form
 	void controlSemantics(const Json::Value & elements) {
 		checkNames(elements["nodes"]);
-		vector<string> names;
-		for (auto node : elements["nodes"]) 
-			names.emplace_back(node["data"]["Name"].asString());
-		sort(WHOLE(names));
-		checkIDs(elements["nodes"], names);
 		checkMaxes(elements["nodes"]);
-		vector<pair<string, ActLevel>> components = DataInfo::getComponents(elements["nodes"]);
-		checkEdges(elements["edges"], components.size());
+		map<string, ActLevel> components = DataInfo::getComponents(elements["nodes"]);
+		checkEdges(elements["edges"], components);
 		checkThresholds(elements["edges"], components);
 		checkLabels(elements["edges"]);
 	}

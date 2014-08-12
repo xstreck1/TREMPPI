@@ -13,16 +13,18 @@
 struct Model {
 	NO_COPY(Model)
 
+	struct ModelComp;
+
 	struct Regulation {
+		ModelComp & source; ///< A reference to the source component.
 		ActLevel threshold; ///< Level of the regulator required for the regulation to be active.
-		CompID source; ///< Index of the regulator in the list of components.
 		string label; ///< An edge semantics label, if provided.
 	};
 	typedef vector<Regulation> Regulations;
 
 	/// Structure that holds data about a single component. Most of the data is equal to that in the model file.
 	struct ModelComp {
-		CompID id; ///< Numerical ID of the component.
+		CompID id; ///< Numerical id, lexicographically ordered.
 		string name; ///< Actuall name of the specie.
 		ActLevel max_activity; ///< Maximal activation level of the specie.
 

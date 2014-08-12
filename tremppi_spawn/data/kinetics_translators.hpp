@@ -106,16 +106,4 @@ namespace KineticsTranslators {
 		}
 		return result;
 	}
-
-
-	/**
-	* @return  the parameter that has the given context
-
-	const Kinetics::Param & matchContext(const Model & model, const Kinetics & kinetics, const string & context, const CompID t_ID) {
-	const string canonic = ModelTranslators::makeCanonic(model, context, t_ID);
-	for (auto & param : kinetics.components[t_ID].params)
-	if (param.context.compare(canonic) == 0)
-	return param;
-	throw runtime_error("Failed to match the context " + context + " for the specie " + to_string(t_ID));
-	}*/
 }
