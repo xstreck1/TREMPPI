@@ -11,7 +11,6 @@ NOT WORKING AS OF NOW. For working version use http://esther.fi.muni.cz .
 * sqlite3: http://www.sqlite.org/ 
 * sqlite3pp: https://code.google.com/p/sqlite3pp/ 
 * json (JsonCPP): http://sourceforge.net/projects/jsoncpp/ 
-* Boost Process: http://www.highscore.de/boost/process0.5/
 
 3rd JS libraries included (open-source)
 
