@@ -1,7 +1,7 @@
+#pragma once
+
 #include <sqlite3pp/sqlite3ppext.hpp>
 #include "../header.h"
-
-#pragma once
 
 namespace sqlite3pp {
 	namespace func {

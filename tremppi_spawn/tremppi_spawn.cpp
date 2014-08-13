@@ -1,13 +1,18 @@
 #include <tremppi_common/general/logging.hpp>
 
+#include "compute/constraint_parser.hpp"
 #include "compute/parameter_builder.hpp"
 #include "compute/parametrizations_builder.hpp"
 #include "io/model_reader.hpp"
-#include "io/constraint_parser.hpp"
 #include "io/database_filler.hpp"
 #include "io/program_options.hpp"
 #include "io/syntax_checker.hpp"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file Entry point of tremppi_spawn.
+/// - Checks for correctness of a model.
+/// - Produces a database of parametrizations based on the model.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char ** argv) {
 	Logging::init(PROGRAM_NAME + ".log");
 	Logging::phase_count = 1;
@@ -39,11 +44,6 @@ int main(int argc, char ** argv) {
 		Logging::exceptionMessage(e, 2);
 	}
 
-	if (po.count("check-only") > 0) {
-		BOOST_LOG_TRIVIAL(info) << "Check-only specified, skipping the enumeration.";
-		return 0;
-	}
-
 	// Parse the model 
 	Model model;
 	try {
@@ -51,9 +51,17 @@ int main(int argc, char ** argv) {
 
 		model = ModelReader::jsonToModel(root["elements"]);
 		model.name = input_path.filename().stem().string();
+		for (CompID ID : cscope(model.components))
+			ConstraintFomatter::consToFormula(model, ID);
 	}
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 3);
+	}
+
+	// Skip further execution if only conducting a check
+	if (po.count("check-only") > 0) {
+		BOOST_LOG_TRIVIAL(info) << "Check-only specified, skipping the enumeration.";
+		return 0;
 	}
 
 	// Obtain the kinetics
@@ -92,7 +100,6 @@ int main(int argc, char ** argv) {
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 5);
 	}
-
 
 	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished successfully.";
 	return 0;

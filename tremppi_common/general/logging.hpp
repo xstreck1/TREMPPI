@@ -3,6 +3,8 @@
 #include "../header.h"
 #include "common_functions.hpp"
 
+string TREMPPI_PATH;
+
 namespace Logging {
 	size_t phase_no;
 	size_t phase_count;
@@ -13,6 +15,9 @@ namespace Logging {
 	const size_t MAX_WIDHT = 60; // Maximal lenght of the message
 
 	void init(const string LOGFILE = "logfile.log") {
+		char* home_path = getenv("TREMPPI_HOME");
+		TREMPPI_PATH = (home_path == NULL) ? TREMPPI_BUILD_PATH : home_path;
+
 		blg::register_simple_formatter_factory< blg::trivial::severity_level, char >("Severity");
 		blg::add_common_attributes();
 

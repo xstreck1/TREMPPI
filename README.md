@@ -19,3 +19,24 @@ NOT WORKING AS OF NOW. For working version use http://esther.fi.muni.cz .
 * cytoscapeJS (http://cytoscape.github.io/cytoscape.js/)
 * qTip2 (http://qtip2.com/)
 * paper.js (http://paperjs.org/)
+
+BUILDING
+--------
+
+Requirements:
+
+* CMake 3.0 (or higher)
+* GCC 4.9.0 (or higher) or Visual Studio compiler November 2013 (or higher)
+* Boost libraries 1.54.0 (or higher)
+Optional:
+
+* Qt5 libraries (or higher) 
+* GTest 1.7.0 (or higher) - only for testing
+
+USAGE
+=====
+
+Spawn
+-----
+Spawn creates a database with the name being equal to the name of the file it was used to create it.
+The file will have the ".sqlite" extension and it is a Sqlite3 database.

@@ -4,6 +4,9 @@
 
 #include <json/json.h>
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Functions that read a JSON file into a model.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ModelReader {
 	// Konvert model in JSON to Model object
 	Model jsonToModel(const Json::Value & elements) {
@@ -15,11 +18,17 @@ namespace ModelReader {
 			Model::ModelComp specie;
 
 			specie.id = id++;
+
 			specie.name = node["data"]["Name"].asString();
 			if (last_name > specie.name)
 				throw runtime_error("Components must be ordered lexicographically, " + quote(last_name) + ">" + quote(specie.name));
 			last_name = specie.name;
+
 			specie.max_activity = node["data"]["MaxActivity"].asInt();
+
+			for (const Json::Value constraint : node["data"]["Constraints"]) {
+				specie.constraints.emplace_back(constraint.asString());
+			}
 
 			model.components.emplace_back(move(specie));
 		}

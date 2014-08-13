@@ -5,6 +5,9 @@
 
 const string PROGRAM_NAME = "tremppi_spawn";
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief User options interpretation
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProgramOptions {
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
@@ -43,7 +46,7 @@ namespace ProgramOptions {
 		return result;
 	}
 
-	//
+	// Obtain the path to the input file
 	bfs::path getNetworkPath(const bpo::variables_map & po) {
 		bfs::path input_path = { po["network"].as<string>() };
 

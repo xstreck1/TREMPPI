@@ -5,18 +5,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Parses contrints as specified in the model and return a formula built from these constraints.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ConstraintReader {
-	/* Specie can start with a letter or with _ */
-	static bool initiatesContext(const char ch) {
-		return isalpha(ch) != 0 || ch == '_';
-	}
-
+class ConstraintFomatter {
 	/* Context may contain specie-characters or number or colon or comma*/
 	static bool belongsToContext(const char ch) {
-		return initiatesContext(ch) || isdigit(ch) != 0 || ch == ':' || ch == ',';
+		return isalpha(ch) || isdigit(ch) != 0 || ch == ':' || ch == ',';
 	}
 
-	static string addParenthesis(string expr) {
+	static string addBrackets(string expr) {
 		return string("(" + expr + ")");
 	}
 
@@ -28,7 +23,7 @@ class ConstraintReader {
 		size_t start = INF;
 		for (const size_t pos : cscope(original)) {
 			if (start == INF) {
-				if (initiatesContext(original[pos])) {
+				if (isalpha(original[pos])) {
 					start = pos;
 				}
 				else {
@@ -63,9 +58,14 @@ public:
 		formula = "tt";
 
 		for (const string constraint : model.components[ID].constraints) {
-			formula.append(" & " + addParenthesis(formatConstraint(constraint, model, ID)));
+			try {
+				formula.append(" & " + addBrackets(formatConstraint(constraint, model, ID)));
+			}
+			catch (exception & e) {
+				throw runtime_error("Error while parsing the constraint: " + quote(constraint) + ". " + e.what());
+			}
 		}
 		
-		return addParenthesis(formula);
+		return addBrackets(formula);
 	}
 };

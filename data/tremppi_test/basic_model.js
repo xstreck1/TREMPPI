@@ -28,7 +28,10 @@ var model = {
          {
             "data" : {
 			   "Name" : "B",
-			   "MaxActivity" : 2
+			   "MaxActivity" : 2,
+			   "Constraints" : [
+					"B:2<2"
+			   ]
             }
          }
       ]

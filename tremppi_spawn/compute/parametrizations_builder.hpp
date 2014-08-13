@@ -3,15 +3,14 @@
 #include <tremppi_common/general/common_functions.hpp>
 
 #include "../data/kinetics.hpp"
-#include "../io/constraint_parser.hpp"
-#include "constraint_reader.hpp"
+#include "../io/constraint_formatter.hpp"
+#include "constraint_parser.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that computes feasible parametrizations for each specie from
 /// the edge constrains and stores them in a ParametrizationHolder object.
 ///
-/// This construction may be optimized by including the warm-start constraint
-/// satisfaction.
+/// This construction may be optimized by including the warm-start constraint satisfaction.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ParametrizationsBuilder {
 	/**
@@ -85,7 +84,7 @@ class ParametrizationsBuilder {
 		}
 	}
 
-	static void addParenthesis(string & formula) {
+	static void addBrackets(string & formula) {
 		formula = "(" + formula + ")";
 	}
 
@@ -96,11 +95,11 @@ class ParametrizationsBuilder {
 		for (auto & regul : reguls) {
 			string plus, minus, label;
 			createEdgeCons(reguls, params, regul, plus, minus);
-			addParenthesis(plus);
-			addParenthesis(minus);
+			addBrackets(plus);
+			addBrackets(minus);
 			label = ModelTranslators::readLabel(regul.label);
 			label = replaceInLabel(label, plus, minus);
-			addParenthesis(label);
+			addBrackets(label);
 			result += " & " + label;
 		}
 
@@ -108,7 +107,7 @@ class ParametrizationsBuilder {
 		for (auto & param : params) {
 			string allowed;
 			allowed = addAllowed(param.targets, param.context);
-			addParenthesis(allowed);
+			addBrackets(allowed);
 			result += " & " + allowed;
 		}
 
@@ -154,23 +153,24 @@ public:
 
 			CompID ID = ind - 1;
 			kinetics.components[ID].step_size = step_size;
+			kinetics.components[ID].col_count = 1;
 
+			if (kinetics.components[ID].params.empty())
+				continue;
 
 			// Solve the parametrizations
-			string formula = createFormula(model.components[ID].regulations, kinetics.components[ID].params) + " & " + ConstraintReader::consToFormula(model, ID);
+			string formula = createFormula(model.components[ID].regulations, kinetics.components[ID].params) + " & " + ConstraintFomatter::consToFormula(model, ID);
 			Configurations subcolors = createPartCol(kinetics.components[ID].params, formula, model.components[ID].max_activity);
 
 			// Copy the data
 			auto & params = kinetics.components[ID].params;
 			for (const Levels & subcolor : subcolors)
 				for (const size_t param_no : cscope(subcolor))
-					// if (params[param_no].functional)
 					params[param_no].target_in_subcolor.emplace_back(subcolor[param_no]);
 
 
 			kinetics.components[ID].col_count = subcolors.size();
 			step_size *= subcolors.size();
 		}
-
 	}
 };

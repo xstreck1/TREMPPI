@@ -4,42 +4,15 @@
 
 #include "../data/kinetics.hpp"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Builds the kinetic parameters
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ParameterBuilder {
-	/**
-	* @brief getTargetValues  computes exact target values possible in given context.
-	* @param autoreg index of the regulation that goes from itself
-	*/
-	static Levels getTargetValues(const Model & model, const map<CompID, Levels> & all_thrs, const Levels & thrs_comb, const size_t autoreg, const CompID t_ID) {
-		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
-
-		// If there is the loop restriction
-		if (false && autoreg != INF) {
-			ActLevel self_thrs = thrs_comb[autoreg];
-			Levels thresholds = (all_thrs.find(t_ID))->second;
-			ActLevel bottom_border = 0u < self_thrs ? thresholds[self_thrs - 1] : 0u;
-			ActLevel top_border = thresholds.size() > self_thrs ? thresholds[self_thrs] : model.components[t_ID].max_activity + 1;
-			Levels new_targets;
-
-			// Add levels that are between the thresholds and one below/above if corresponds to the original.
-			if (targets.front() < bottom_border)
-				new_targets.push_back(bottom_border - 1);
-			for (const auto target : targets)
-				if (target >= bottom_border && target < top_border)
-					new_targets.push_back(target);
-			if (targets.back() >= top_border)
-				new_targets.push_back(top_border);
-
-			return new_targets;
-		}
-
-		return targets;
-	}
-
 	/**
 	* @brief getSingleParam creates a parameter for a single context.
 	* @return
 	*/
-	static Kinetics::Param addSingleParam(const Model & model, const map<CompID, Levels> & all_thrs, const Levels & thrs_comb, const CompID t_ID, const size_t autoreg_ID) {
+	static Kinetics::Param addSingleParam(const Model & model, const map<CompID, Levels> & all_thrs, const Levels & thrs_comb, const CompID t_ID) {
 		string context;
 		map<StateID, Levels> requirements;
 
@@ -68,7 +41,9 @@ class ParameterBuilder {
 		rng::for_each(requirements, [](pair<const StateID, Levels> & req){ rng::sort(req.second); });
 		if (!context.empty())
 			context.resize(context.length() - 1);
-		return Kinetics::Param{ context, getTargetValues(model, all_thrs, thrs_comb, autoreg_ID, t_ID), move(requirements), Levels() };
+
+		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
+		return Kinetics::Param{ context, targets, move(requirements), Levels() };
 	}
 
 	// @brief createParameters Creates a description of kinetic parameters.
@@ -76,22 +51,23 @@ class ParameterBuilder {
 		Kinetics::Params result;
 
 		auto all_thrs = ModelTranslators::getThresholds(model, t_ID);
-		Levels bottom, thrs_comb, top;
-		size_t autoreg{ INF };
+		if (all_thrs.empty())
+			return result;
 
 		// These containers hold number of thresholds per regulator.
+		Levels bottom, thrs_comb, top;
 		for (auto & source_thresholds : all_thrs) {
-			bottom.push_back(0); thrs_comb.push_back(0); top.push_back(source_thresholds.second.size());
-			if (source_thresholds.first == t_ID)
-				autoreg = thrs_comb.size() - 1;
+			bottom.push_back(0); 
+			thrs_comb.push_back(0); 
+			top.push_back(source_thresholds.second.size());
 		}
 
 		// Loop over all the contexts.
 		do {
-			result.emplace_back(addSingleParam(model, all_thrs, thrs_comb, t_ID, autoreg));
+			result.emplace_back(addSingleParam(model, all_thrs, thrs_comb, t_ID));
 		} while (iterate(top, bottom, thrs_comb));
 
-		rng::sort(result, [](const Kinetics::Param & A, const Kinetics::Param & B){return A.context < B.context; });
+		sort(WHOLE(result), [](const Kinetics::Param & A, const Kinetics::Param & B){return A.context < B.context; });
 		return result;
 	}
 

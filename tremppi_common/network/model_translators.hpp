@@ -13,17 +13,17 @@
 
 namespace ModelTranslators {
 	/**
-	 * @brief findID  obtain ID of the specie.
+	 * @brief findID  obtain ID of the component.
 	 */
 	CompID findID(const Model & model, const string & name) {
 		auto comp_it = find_if(WHOLE(model.components), [&name](const Model::ModelComp & component){
 			return name == component.name;
 		});
-		return comp_it->id;
+		return (comp_it != end(model.components)) ? comp_it->id : INF;
 	}
 
 	/**
-	 * @return	unique IDs of regulators of the specie
+	 * @return	unique IDs of regulators of the component
 	 */
 	vector<CompID> getRegulatorsIDs(const Model & model, const CompID ID) {
 		set<CompID> IDs;
@@ -34,7 +34,7 @@ namespace ModelTranslators {
 	}
 
 	/**
-	 * @return	names of the regulators of the specie
+	 * @return	names of the regulators of the component
 	 */
 	vector<string> getRegulatorsNames(const Model & model, const CompID ID) {
 		auto regulators = getRegulatorsIDs(model, ID);
@@ -50,8 +50,8 @@ namespace ModelTranslators {
 	*/
 	vector<string> getAllNames(const Model & model) {
 		vector<string> names;
-		for (const Model::ModelComp & specie : model.components)
-			names.push_back(specie.name);
+		for (const Model::ModelComp & component : model.components)
+			names.push_back(component.name);
 		return names;
 	}
 
@@ -94,14 +94,14 @@ namespace ModelTranslators {
 		if (context[COLON_POS] != ':') {
 			// Control if the context is unambiguous.
 			if (thresholds.size() > 1)
-				throw runtime_error("Ambiguous context \"" + context + "\" - no threshold specified for a regulator " + name + " that has multiple regulations.");
+				throw runtime_error("Ambiguous context " + quote(context) + " - no threshold specified for a regulator " + quote(name) + " that has multiple regulations.");
 			// If valid, add the threshold 1.
 			return thresholds[0];
 		}
 
 		// There is not a threshold given after double colon.
 		if (context[COLON_POS] == ':' && (COLON_POS == (context.npos - 1) || !isdigit(context[COLON_POS + 1])))
-			throw runtime_error("No threshold given after colon in the context \"" + context + "\" of the regulator " + name);
+			throw runtime_error("No threshold given after colon in the context " + quote(context) + " of the regulator " + name);
 
 		// Add a threshold if uniquely specified.
 		string to_return;
@@ -114,7 +114,7 @@ namespace ModelTranslators {
 		// Check if the threshold is valid
 		size_t thrs = boost::lexical_cast<size_t>(to_return);
 		if (thrs != 0 && find(thresholds.begin(), thresholds.end(), thrs) == thresholds.end())
-			throw runtime_error("The threshold value \"" + to_return + "\" is not valid for the context \"" + context + "\".");
+			throw runtime_error("The threshold value \"" + to_return + "\" is not valid for the context " + quote(context) + ".");
 
 		return thrs;
 	}
@@ -132,12 +132,12 @@ namespace ModelTranslators {
 		vector<string> reguls;
 		split(reguls, context, is_any_of(","));
 		for (const string regul : reguls) {
-			string spec_name = regul.substr(0, min(regul.find(':'), regul.size()));
-			if (find(names.begin(), names.end(), spec_name) == names.end())
-				throw runtime_error("Unrecognized specie \"" + spec_name + "\" in the context \"" + context + "\".");
+			string comp_name = regul.substr(0, min(regul.find(':'), regul.size()));
+			if (find(names.begin(), names.end(), comp_name) == names.end())
+				throw runtime_error("The component " + quote(comp_name) + " is not a regulator of " + quote(model.components[t_ID].name));
 		}
 
-		// For each of the regulator of the specie.
+		// For each of the regulator of the component.
 		for (const auto & name : names) {
 			auto pos = context.find(name);
 			ActLevel threshold = getThreshold(model, context, t_ID, name, pos);
