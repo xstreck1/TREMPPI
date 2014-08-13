@@ -26,7 +26,7 @@ BUILDING
 Requirements:
 
 * CMake 3.0 (or higher)
-* GCC 4.9.0 (or higher) or Visual Studio compiler November 2013 (or higher)
+* GCC 4.9.0 (or higher) or Visual Studio compiler November 2013 (or higher) or Clang 3.4.2 (or higher)
 * Boost libraries 1.54.0 (or higher)
 Optional:
 
@@ -38,5 +38,9 @@ USAGE
 
 Spawn
 -----
-Spawn creates a database with the name being equal to the name of the file it was used to create it.
-The file will have the ".sqlite" extension and it is a Sqlite3 database.
+Spawn creates a database based on a network file. 
+The database will have the ".sqlite" extension and it is a Sqlite3 database. The database file is created in the same folder as is the network and has the same name.
+
+The data file format is described in the file "Documentation/database_format.md".
+
+The network file format is described in the file "Documentation/network_format.js".

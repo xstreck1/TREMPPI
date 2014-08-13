@@ -1,4 +1,4 @@
-var model = {
+var network = {
    "elements" : {
       "edges" : [
          {
@@ -21,13 +21,13 @@ var model = {
       "nodes" : [
 		 {
             "data" : {
-			   "Name" : "A",
+			   "id" : "A",
 			   "MaxActivity" : 1
             }
          },
          {
             "data" : {
-			   "Name" : "B",
+			   "id" : "B",
 			   "MaxActivity" : 2,
 			   "Constraints" : [
 					"B:2<2"

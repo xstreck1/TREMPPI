@@ -19,7 +19,7 @@ namespace ModelReader {
 
 			specie.id = id++;
 
-			specie.name = node["data"]["Name"].asString();
+			specie.name = node["data"]["id"].asString();
 			if (last_name > specie.name)
 				throw runtime_error("Components must be ordered lexicographically, " + quote(last_name) + ">" + quote(specie.name));
 			last_name = specie.name;

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="[An example of getting started with Cytoscape.js]" />
+        <script src="./vendor/jquery.min.js"></script>
+        <script src="./vendor/cytoscape.min.js"></script>
+        <script src="./local/cytoscape_init.js"></script>
+        <link rel="stylesheet" type="text/css" href="./local/css.css">
+
+        <script src="basic_model.js"></script>
+        <meta charset=utf-8 />
+        <title>Game tree</title>
+    </head>
+    <body > 
+        <script>
+            var cw = $('body').width();
+            $('body').css({'height': cw + 'px'});
+            $(window).resize(function() {
+                location.reload();
+            });
+        </script>
+        <div id="graph_container" class="container">
+            <div id="graph_object" class="my_block" >
+            </div>
+        </div>
+    </body>
+</html>

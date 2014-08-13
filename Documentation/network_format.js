@@ -2,7 +2,7 @@
  * This file provide a structure description of a model.
  * Also it serves as a model of a simple loop
  */  
-var model = {
+var network = {
    "elements" : {
 		"nodes" : [ // Comma separated list of nodes
 			{

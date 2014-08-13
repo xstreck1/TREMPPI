@@ -18,10 +18,10 @@ namespace SyntaxChecker {
 					act_level = node["data"]["MaxActivity"].asInt();
 				}
 				catch (exception & e) {
-					throw runtime_error("Could not convert max for " + quote(node["data"]["Name"].asString()) + " to integer. " + e.what());
+					throw runtime_error("Could not convert max for " + quote(node["data"]["id"].asString()) + " to integer. " + e.what());
 				}
 				if (act_level < 1 || act_level > 9)
-					throw runtime_error(quote(node["data"]["Name"].asString()) + " has declared maximal activity level " + node["data"]["MaxActivity"].asString() + ".Only [1,9] is allowed.");
+					throw runtime_error(quote(node["data"]["id"].asString()) + " has declared maximal activity level " + node["data"]["MaxActivity"].asString() + ".Only [1,9] is allowed.");
 
 			}
 		}
@@ -31,7 +31,7 @@ namespace SyntaxChecker {
 			for (const Json::Value node : nodes) {
 				string name;
 				try {
-					name = node["data"]["Name"].asString();
+					name = node["data"]["id"].asString();
 				}
 				catch (exception & e) {
 					throw runtime_error(string("Could not obtain a specie Name. Did you remember to add parenthesis? ") + e.what());
