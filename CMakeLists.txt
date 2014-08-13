@@ -47,6 +47,15 @@ SOURCE_GROUP("Header Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
 ADD_EXECUTABLE(tremppi_spawn ${SPAWN_FOLDER}/tremppi_spawn.cpp ${SPAWN_HEADERS})
 target_link_libraries(tremppi_spawn gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
 
+# tremppi_express
+set(EXPRESS_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_express)
+FILE(GLOB_RECURSE EXPRESS_HEADERS ${EXPRESS_FOLDER}/*.hpp)
+SOURCE_GROUP("Header Files\\tremppi_express\\compute" ${EXPRESS_FOLDER}/compute/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_express\\data" ${EXPRESS_FOLDER}/data/.*hpp)
+SOURCE_GROUP("Header Files\\tremppi_express\\io" ${EXPRESS_FOLDER}/io/.*hpp)
+ADD_EXECUTABLE(tremppi_express ${EXPRESS_FOLDER}/tremppi_express.cpp ${EXPRESS_HEADERS})
+target_link_libraries(tremppi_express sqlite3 sqlite3pp ${Boost_LIBRARIES})
+
 # tremppi_report
 set(REPORT_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_report)
 FILE(GLOB_RECURSE REPORT_HEADERS ${REPORT_FOLDER}/*.hpp)
