@@ -1,18 +1,19 @@
 #pragma once
 
 #include <tremppi_common/database/sqlite3pp_func.hpp>
+#include <tremppi_common/database/database_reader.hpp>
 
 #include "../data/data.hpp"
 
 namespace Output {
-	// 
-	void addColumns(const RegFuncs & reg_funcs, SQLAdapter & database) {
+	// Add a function column for each component 
+	void addColumns(const RegFuncs & reg_funcs, sqlite3pp::database & db) {
 		for (const RegFunc & reg_func : reg_funcs) {
-			database.prepareColumn(PARAMETRIZATIONS_TABLE, "F_" + reg_func.name, "STRING");
+			sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, "F_" + reg_func.info.name, "STRING", db);
 		}
 	}
 
-	//
+	// 
 	string plitToFormula(const pair<string, Levels> & reg, const PLit & plit, const ActLevel max) {
 		string result;
 		// Skip completely if the literal contains all the thresholds
@@ -53,12 +54,12 @@ namespace Output {
 		string result;
 
 		// Add front value in case the component is not boolean
-		if (reg_func.max > 1)
+		if (reg_func.info.max > 1)
 			result += to_string(target_val) + "&";
 
 		// Add values of all the regulators
 		size_t reg_i = 0;
-		for (auto regulation : reg_func.regulators) {
+		for (auto regulation : reg_func.info.regulators) {
 			string lit_form = plitToFormula(regulation, pmin[reg_i], maxes.at(regulation.first.c_str()));
 			if (!lit_form.empty())
 				result += lit_form + "&";
@@ -69,6 +70,7 @@ namespace Output {
 		return result;
 	}
 
+	//
 	string pdnfToFormula(const map<string, ActLevel> & maxes, const RegFunc & reg_func, const vector<PDNF> & pdnfs) {
 		string result;
 

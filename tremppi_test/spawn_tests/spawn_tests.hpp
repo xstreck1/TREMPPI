@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtest/gtest.h>
+#include <tremppi_common/general/logging.hpp>
 
 #include <tremppi_spawn/io/model_reader.hpp>
 #include <tremppi_spawn/io/syntax_checker.hpp>

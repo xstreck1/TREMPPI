@@ -12,14 +12,15 @@ struct RegInfo {
 	pair<size_t, size_t> columns_range;
 	map<string, Levels> regulators;
 };
+using RegInfos = vector<RegInfo>;
 
 /// Reads parametrizations form given file
 namespace DatabaseReader {
 	const string NAMES_COLUMN = "Name";
 	const string MAX_LEVEL_COLUMN = "MaxActivity";
-	const string REGULATOR_COLUMN = "Regulator";
+	const string REGULATOR_COLUMN = "Source";
 	const string TARGET_COLUMN = "Target";
-	const string THRESHOLDS_COLUMN = "Thresholds";
+	const string THRESHOLD_COLUMN = "Threshold";
 
 	// Obtain maximal levels for the individual components
 	ActLevel getMaxLevel(const string & name, sqlite3pp::database & db) {
@@ -39,18 +40,13 @@ namespace DatabaseReader {
 	map<string, Levels> obtainRegulators(const string & component, sqlite3pp::database & db) {
 		map<string, Levels>  result;
 
-		sqlite3pp::query qry(db, ("SELECT " + REGULATOR_COLUMN + ", " + TARGET_COLUMN + ", " + THRESHOLDS_COLUMN + " FROM " + REGULATIONS_TABLE).c_str());
+		sqlite3pp::query qry(db, ("SELECT * FROM " + REGULATIONS_TABLE).c_str());
 		for (auto row : qry) {
-			string source, target, thresholds;
-			row.getter() >> source >> target >> thresholds;
+			string source, target;
+			ActLevel threshold;
+			row.getter() >> target >> source >> threshold;
 			if (target == component) {
-				// Convert the string to values
-				vector<string> treshs_str;
-				split(treshs_str, thresholds, is_any_of(","));
-				Levels treshs_act(treshs_str.size());
-				transform(WHOLE(treshs_str), begin(treshs_act), lexical_cast<ActLevel, string>);
-				// Assign
-				result[source] = treshs_act;
+				result[source].emplace_back(threshold);
 			}
 		}
 
@@ -83,8 +79,20 @@ namespace DatabaseReader {
 	// Read headers for all the regulatory functions
 	RegInfo readRegInfo(const string & name, sqlite3pp::database & db) {
 		ActLevel max = getMaxLevel(name, db);
-		auto columns = func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("K_" + name + ".*"), db);
-		pair<size_t, size_t> columns_range = DataConv::indices2range(columns);
+		auto columns = func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("K_" + name + "_.*"), db);
+		size_t prev_index = 0;
+		for (const auto & column : columns) {
+			if (column.second < prev_index) {
+				throw runtime_error("Database format critical error. The columns for parameters are not in lexicographical order.");
+			}
+			prev_index = column.second;
+		}
+
+		pair<size_t, size_t> columns_range;
+		if (columns.empty())
+			columns_range = make_pair(0, 0);
+		else
+			columns_range = DataConv::indices2range(columns);
 		auto regulators = obtainRegulators(name, db);
 
 		return RegInfo{ name, max, move(columns), move(columns_range), move(regulators) };
@@ -94,5 +102,10 @@ namespace DatabaseReader {
 		string columns_list = alg::join(DataConv::columns2list(columns), ", ");
 		string where_clause = selection.empty() ? "" : " WHERE " + selection;
 		return query(db, ("SELECT " + columns_list + " FROM " + PARAMETRIZATIONS_TABLE + where_clause).c_str());
+	}
+
+	query selectionIDs(const string & selection, sqlite3pp::database & db) {
+		string where_clause = selection.empty() ? "" : " WHERE " + selection;
+		return query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + where_clause).c_str());
 	}
 };

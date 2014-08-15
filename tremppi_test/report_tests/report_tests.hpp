@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(Basic, BasicTest) {
+TEST(Report, BasicTest) {
 	EXPECT_TRUE(true);
 }
 

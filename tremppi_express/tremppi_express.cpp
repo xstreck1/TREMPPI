@@ -1,7 +1,6 @@
 #include <tremppi_common/general/logging.hpp>
 #include "compute/MVQMC.hpp"
 #include "io/program_options.hpp"
-#include "io/data_reader.hpp"
 #include "io/output.hpp"
 
 using namespace std;
@@ -16,31 +15,42 @@ void exceptionMessage(const exception & e, const int err_no) {
 int main(int argc, char ** argv) {
 	Logging::init(PROGRAM_NAME + ".log");
 	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " has started.";
-	return 0;
 
 	bpo::variables_map po;
-	sqlite3pp::database db;
 	bfs::path input_path;
-	RegFuncs reg_funcs;
-	map<string, ActLevel> maxes;
+	string select;
 
-	// parse input
+	map<string, ActLevel> maxes;
+	RegFuncs functions;
+	sqlite3pp::database db;
+	
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
-		po = parseProgramOptions(argc, argv);
+		// Get user options
+		po = ProgramOptions::parseProgramOptions(argc, argv);
+		input_path = ProgramOptions::getDatabasePath(po);
 
 		// Get database
-		input_path = DatabaseReader::getDatabasePath(po);
-		db.setDatabase(po["database"].as<string>());
-		reg_funcs = DataReader::readRegInfo(db);
+		db = move(database(po["database"].as<string>().c_str()));
 
-		for (RegFunc & reg_func : reg_funcs) {
-			for (const string & context : reg_func.columns_name)  {
-				reg_func.columns_minterm.emplace_back(DatabaseReader::getThrsFromContext(context));
-			}
-			maxes[reg_func.name] = reg_func.max;
+		// Read filter conditions
+		if (po.count("select") > 0)
+			select = ProgramOptions::getFilter(po["select"].as<string>());
+
+		// Read regulatory information
+		query qry(db, ("SELECT * FROM " + COMPONENTS_TABLE).c_str());
+
+		// Obtain the components data
+		for (auto row : qry) {
+			string name; ActLevel max;
+			row.getter() >> name >> max;
+			maxes.insert(make_pair(name, max));
+			RegInfo info = DatabaseReader::readRegInfo(name, db);
+			Configurations minterms;
+			for (const pair<string, size_t> column : info.columns)
+				minterms.emplace_back(DatabaseReader::getThrsFromContext(column.first));
+			functions.emplace_back(RegFunc{ move(info), move(minterms) });
 		}
-
 	}
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 1);
@@ -48,36 +58,44 @@ int main(int argc, char ** argv) {
 
 	// Convert and output
 	try {
-		Output::addColumns(reg_funcs, db);
-		db.safeExec("BEGIN TRANSACTION;");
+		Output::addColumns(functions, db);
 
-		for (const RegFunc & reg_func : reg_funcs) {
-			db.accessTable(PARAMETRIZATIONS_TABLE);
-			Levels params = db.getRow<ActLevel>(reg_func.columns_ID);
+		for (const RegFunc & reg_func : functions) {
+			// For an input function
+			if (reg_func.info.regulators.empty()){
+				db.execute(("UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + quote("const")).c_str());
+				continue;
+			}
+
+			query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
+			query sel_IDs = DatabaseReader::selectionIDs(select, db);
+			sqlite3pp::query::iterator sel_it = sel_qry.begin();
+
 			// Go through parametrizations
-			for (size_t ID = 1; !params.empty(); ID++, params = db.getRow<ActLevel>(reg_func.columns_ID)) {
-
-				vector<vector<PMin>> config_values(reg_func.max + 1);
+			for (auto & sel_ID : sel_IDs) {
+				vector<vector<PMin>> config_values(reg_func.info.max + 1);
+				Levels params = sqlite3pp::func::getRow<ActLevel>(sel_it, sel_qry.column_count());
+				
 				// Convert the contexts 
 				for (const size_t context_id : cscope(params)) {
-					PMin minterm(reg_func.columns_minterm[context_id].size());
-					transform(WHOLE(reg_func.columns_minterm[context_id]), begin(minterm), [](ActLevel act_level){return PLit{ act_level }; });
+					PMin minterm(reg_func.minterms[context_id].size());
+					transform(WHOLE(reg_func.minterms[context_id]), begin(minterm), [](ActLevel act_level){return PLit{ act_level }; });
 					config_values[params[context_id]].emplace_back(minterm);
 				}
 
 				// Minimize for all values
 				vector<PDNF> pdnfs(1);
-				for (ActLevel target_val = 1; target_val < (reg_func.max + 1); target_val++) {
+				for (ActLevel target_val = 1; target_val < (reg_func.info.max + 1); target_val++) {
 					pdnfs.emplace_back(MVQMC::compactize(config_values[target_val]));
 				}
 				
 				string formula = "\"" + Output::pdnfToFormula(maxes, reg_func, pdnfs) + "\"";
-				db.updateColumn(PARAMETRIZATIONS_TABLE, "F_" + reg_func.name, formula, ID);
+				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + formula + " WHERE ROWID=" + to_string(sel_ID.get<int>(0));
+				db.execute(update.c_str());
+
+				sel_it++;
 			}
-
-
 		}
-		db.safeExec("END TRANSACTION;");
 	}
 	catch (exception & e) {
 		Logging::exceptionMessage(e, 2);

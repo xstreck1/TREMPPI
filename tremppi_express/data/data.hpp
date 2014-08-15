@@ -1,17 +1,12 @@
 #pragma once
 
 #include <tremppi_common/general/common_functions.hpp>
+#include <tremppi_common/database/database_reader.hpp>
 
 // Common to all the sets of regulatory functions
 struct RegFunc {
-	// Read from the database
-	CompID ID;
-	string name;
-	ActLevel max;
-	map<string, Levels > regulators;
-	vector<string> columns_name;
-	vector<size_t> columns_ID;
-	vector<Levels> columns_minterm;
+	const RegInfo info;
+	Configurations minterms;
 };
 using RegFuncs = vector<RegFunc>;
 
