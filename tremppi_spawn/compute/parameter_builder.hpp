@@ -51,8 +51,6 @@ class ParameterBuilder {
 		Kinetics::Params result;
 
 		auto all_thrs = ModelTranslators::getThresholds(model, t_ID);
-		if (all_thrs.empty())
-			return result;
 
 		// These containers hold number of thresholds per regulator.
 		Levels bottom, thrs_comb, top;

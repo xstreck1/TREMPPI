@@ -3,33 +3,34 @@
 #include "io/program_options.hpp"
 #include "io/output.hpp"
 
-using namespace std;
-
-// 
-void exceptionMessage(const exception & e, const int err_no) {
-	BOOST_LOG_TRIVIAL(error) << "Top level exception: " << e.what();
-	exit(err_no);
-}
-
 //
 int main(int argc, char ** argv) {
-	Logging::init(PROGRAM_NAME + ".log");
-	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " has started.";
+	bpo::variables_map po; // program options provided on the command line
+	bfs::path input_path; // an input path
 
-	bpo::variables_map po;
-	bfs::path input_path;
-	string select;
-
-	map<string, ActLevel> maxes;
-	RegFuncs functions;
-	sqlite3pp::database db;
-	
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
-		// Get user options
+		if (argc < 1)
+			throw runtime_error("No parameters.");
+
 		po = ProgramOptions::parseProgramOptions(argc, argv);
 		input_path = ProgramOptions::getDatabasePath(po);
 
+		tremppi_system.set("tremppi_express", argv[0], input_path.parent_path());
+		Logging::phase_count = 1;
+		Logging::init(tremppi_system.PROGRAM_NAME + ".log");
+		BOOST_LOG_TRIVIAL(info) << "TREMPPI expression minimizer (" << tremppi_system.PROGRAM_NAME << ") started.";
+	}
+	catch (exception & e) {
+		cerr << e.what();
+		return 1;
+	}
+
+
+	string select;
+	map<string, ActLevel> maxes;
+	RegFuncs functions;
+	sqlite3pp::database db;
+	try {
 		// Get database
 		db = move(database(po["database"].as<string>().c_str()));
 
@@ -61,16 +62,12 @@ int main(int argc, char ** argv) {
 		Output::addColumns(functions, db);
 
 		for (const RegFunc & reg_func : functions) {
-			// For an input function
-			if (reg_func.info.regulators.empty()){
-				db.execute(("UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + quote("const")).c_str());
-				continue;
-			}
-
+			// Select parametrizations and IDs
 			query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
 			query sel_IDs = DatabaseReader::selectionIDs(select, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
+			db.execute("BEGIN TRANSACTION");
 			// Go through parametrizations
 			for (auto & sel_ID : sel_IDs) {
 				vector<vector<PMin>> config_values(reg_func.info.max + 1);
@@ -95,6 +92,7 @@ int main(int argc, char ** argv) {
 
 				sel_it++;
 			}
+			db.execute("END");
 		}
 	}
 	catch (exception & e) {

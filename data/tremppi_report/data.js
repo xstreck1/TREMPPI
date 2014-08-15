@@ -1,4 +1,4 @@
-tpi_report.setup = {
+tremppi_report.setup = {
    "comparative" : true,
    "compare" : "(NOT (Rosen AND Rosen AND RosenB AND Triv_Fixpoint AND CycAttractor_MAPK AND CycAttractor_mTor AND  Mut_FP))",
    "compared" : 12986,
@@ -8,7 +8,7 @@ tpi_report.setup = {
    "select" : "(Rosen AND Rosen AND RosenB AND Triv_Fixpoint AND CycAttractor_MAPK AND CycAttractor_mTor AND  Mut_FP)",
    "selected" : 280
 };
-tpi_report.Regulatory.select = {
+tremppi_report.Regulatory.select = {
    "elements" : {
       "edges" : [
          {
@@ -184,7 +184,7 @@ tpi_report.Regulatory.select = {
       ]
    }
 };
-tpi_report.Regulatory.differ = {
+tremppi_report.Regulatory.differ = {
    "elements" : {
       "edges" : [
          {
@@ -360,7 +360,7 @@ tpi_report.Regulatory.differ = {
       ]
    }
 };
-tpi_report.Regulatory.compare = {
+tremppi_report.Regulatory.compare = {
    "elements" : {
       "edges" : [
          {

@@ -53,8 +53,8 @@ namespace Output {
 	string pminToFormula(const map<string, ActLevel> & maxes, const RegFunc & reg_func, const PMin & pmin, const ActLevel target_val) {
 		string result;
 
-		// Add front value in case the component is not boolean
-		if (reg_func.info.max > 1)
+		// Add front value in case the component is not boolean or has no regulators (constant)
+		if (reg_func.info.max > 1 || reg_func.info.regulators.empty())
 			result += to_string(target_val) + "&";
 
 		// Add values of all the regulators
@@ -66,7 +66,8 @@ namespace Output {
 			reg_i++;
 		}
 
-		result.resize(result.size() - 1);
+		if (!result.empty() && result.back() == '&')
+			result.resize(result.size() - 1);
 		return result;
 	}
 
@@ -78,13 +79,14 @@ namespace Output {
 			for (const PMin & pmin : pdnfs[target_val]) {
 				string min_form = pminToFormula(maxes, reg_func, pmin, target_val);
 
-				// If all the terms do not cover the whole option space
-				if (min_form.size() != 1) {
-					result += min_form + "|";
-				}
+				result += min_form + "|";
 			}
 		}
-		result.resize(result.size() - 1);
+
+		if (result.empty())
+			result = "0";
+		if (result.back() == '|')
+			result.resize(result.size() - 1);
 		return result;
 	}
 }

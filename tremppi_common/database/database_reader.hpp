@@ -89,10 +89,7 @@ namespace DatabaseReader {
 		}
 
 		pair<size_t, size_t> columns_range;
-		if (columns.empty())
-			columns_range = make_pair(0, 0);
-		else
-			columns_range = DataConv::indices2range(columns);
+		columns_range = DataConv::indices2range(columns);
 		auto regulators = obtainRegulators(name, db);
 
 		return RegInfo{ name, max, move(columns), move(columns_range), move(regulators) };

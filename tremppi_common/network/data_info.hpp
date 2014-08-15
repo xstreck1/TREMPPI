@@ -20,7 +20,7 @@ namespace DataInfo {
 		map<string, ActLevel>components;
 
 		for (const Json::Value node : nodes)
-			components.insert(make_pair(node["data"]["Name"].asString(), node["data"]["MaxActivity"].asInt()));
+			components.insert(make_pair(node["data"]["id"].asString(), node["data"]["MaxActivity"].asInt()));
 
 		return components;
 	}

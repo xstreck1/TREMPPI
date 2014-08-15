@@ -14,21 +14,24 @@
 /// - Produces a database of parametrizations based on the model.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char ** argv) {
-	Logging::init(PROGRAM_NAME + ".log");
-	Logging::phase_count = 1;
-	BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (" + PROGRAM_NAME + ") started.";
-
-	// Parse the options
 	bpo::variables_map po; // program options provided on the command line
 	bfs::path input_path; // an input path
+
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Checking the network file.";
+		if (argc < 1)
+			throw runtime_error("No parameters.");
 
 		po = ProgramOptions::parseProgramOptions(argc, argv);
 		input_path = ProgramOptions::getNetworkPath(po);
+
+		tremppi_system.set("tremppi_spawn", argv[0], input_path.parent_path());
+		Logging::phase_count = 1;
+		Logging::init(tremppi_system.PROGRAM_NAME + ".log");
+		BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (" << tremppi_system.PROGRAM_NAME << ") started.";
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 1);
+		cerr << e.what();
+		return 1;
 	}
 
 	// Check the file
@@ -101,6 +104,6 @@ int main(int argc, char ** argv) {
 		Logging::exceptionMessage(e, 5);
 	}
 
-	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished successfully.";
+	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";
 	return 0;
 }

@@ -1,0 +1,10 @@
+{
+   "comparative" : true,
+   "compare" : "(NOT (Rosen AND Rosen AND RosenB AND Triv_Fixpoint AND CycAttractor_MAPK AND CycAttractor_mTor AND  Mut_FP))",
+   "compared" : 12986,
+   "date" : "Thu Jul 03 12:07:36 2014",
+   "name" : "crossfunc",
+   "pool_size" : 13266,
+   "select" : "(Rosen AND Rosen AND RosenB AND Triv_Fixpoint AND CycAttractor_MAPK AND CycAttractor_mTor AND  Mut_FP)",
+   "selected" : 280
+}

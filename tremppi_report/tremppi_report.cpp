@@ -19,18 +19,30 @@ void exceptionMessage(const exception & e, const int err_no) {
 
 // TODO: disable regulatory if not -r
 int main(int argc, char ** argv) {
-	Logging::init(PROGRAM_NAME + ".log");
-	BOOST_LOG_TRIVIAL(info) << "TREMPPI Statistical Analysis of Parametrization Space (" << PROGRAM_NAME << ") started.";
+	bpo::variables_map po; // program options provided on the command line
+	bfs::path input_path; // an input path
+
+	try {
+		if (argc < 1)
+			throw runtime_error("No parameters.");
+
+		po = ProgramOptions::parseProgramOptions(argc, argv);
+		input_path = ProgramOptions::getDatabasePath(po);
+
+		tremppi_system.set("tremppi_report", argv[0], input_path.parent_path());
+		Logging::phase_count = 1;
+		Logging::init(tremppi_system.PROGRAM_NAME + ".log");
+		BOOST_LOG_TRIVIAL(info) << "TREMPPI statical analysis reporter (" << tremppi_system.PROGRAM_NAME << ") started.";
+	}
+	catch (exception & e) {
+		cerr << e.what();
+		return 1;
+	}
 
 	map<string, Json::Value> out;
 	out["setup"]["date"] = TimeManager::getTime();
-
-	bpo::variables_map po;
-	bfs::path input_path;
-
 	vector<RegInfo> source_data;
 	database db;
-
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Get user options
@@ -59,7 +71,7 @@ int main(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 1);
+		exceptionMessage(e, 2);
 	}
 
 	map<string, RegsData> reg_data_types;
@@ -127,7 +139,7 @@ int main(int argc, char ** argv) {
 		}*/
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 2);
+		exceptionMessage(e, 3);
 	}
 
 	try {
@@ -142,7 +154,7 @@ int main(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 3);
+		exceptionMessage(e, 4);
 	}
 
 	try {
@@ -154,14 +166,14 @@ int main(int argc, char ** argv) {
 			ofstream own_file = Output::fileOutput(input_path, file_data.first + ".json");
 			string data = writer.write(file_data.second);
 			own_file << data;
-			data_file << PROGRAM_NAME << "." << file_data.first << " = " << data << ";" << endl;
+			data_file << tremppi_system.PROGRAM_NAME << "." << file_data.first << " = " << data << ";" << endl;
 		}
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 4);
+		exceptionMessage(e, 5);
 	}
 
 
-	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished succesfully.";
+	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished succesfully.";
 	return 0;
 }

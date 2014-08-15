@@ -18,6 +18,11 @@ find_package(Boost 1.55.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
   
+# Python
+FIND_PACKAGE(PythonLibs REQUIRED)
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
+link_directories(${PYTHON_LIBRARY_DIRS})
+  
 # some 3rd party libraries are by linked from the project repository
 include_directories(${TREMPPI_SOURCE_DIR})
 # Sqlite
@@ -26,13 +31,18 @@ ADD_LIBRARY(sqlite3pp sqlite3pp/sqlite3pp.cpp sqlite3pp/sqlite3ppext.cpp)
 # Jsoncpp
 ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cpp)
 
-# tremppi_common
+# tremppi_common - code only, no binary
 set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_common)
 FILE(GLOB_RECURSE COMMON_HEADERS ${COMMON_FOLDER}/*.hpp)
 SOURCE_GROUP("Header Files\\tremppi_common\\database" ${COMMON_FOLDER}/database/.*hpp)
 SOURCE_GROUP("Header Files\\tremppi_common\\general" ${COMMON_FOLDER}/general/.*hpp)
 SOURCE_GROUP("Header Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*hpp)
 ADD_LIBRARY(tremppi_common tremppi_common/tremppi_common.cpp tremppi_common/header.h tremppi_common/configure.h ${COMMON_HEADERS})
+
+# tremppi core
+set(CORE_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi)
+ADD_EXECUTABLE(tremppi ${PYTHON_LIBRARIES} ${Boost_LIBRARIES} ${CORE_FOLDER}/tremppi.cpp)
+target_link_libraries(tremppi ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 
 # Gecode
 add_subdirectory (gecode-4.2.1)

@@ -143,7 +143,7 @@ namespace Common {
 	* @brief Obtain all matches to the regex in the source string
 	* @param[in] control_regex	regular expression describing the match
 	* @param[in] original	a string to search in
-	* @param[in] n	number of the match to use (0 for the whole string, 1-n for the i-th parenthesis
+	* @param[in] n	number of the match to use (0 for the whole string, 1-n for the i-th parenthesis)
 	* @return	vector of all the matches
 	*/
 	std::vector<std::string> getAllMatches(const std::string & control_regex, const std::string & original, const int n = 0) {
@@ -152,8 +152,6 @@ namespace Common {
 		std::string source = original;
 		std::smatch matches;
 		while (std::regex_search(source, matches, std::regex(control_regex))) {
-			if ((matches[n]).str().empty())
-				throw ("no match found to " + control_regex + " in " + original);
 			result.emplace_back(matches[n]); // Capture the first (and only) submatch that holds the whole number only
 			source = matches.suffix().str();
 		}
