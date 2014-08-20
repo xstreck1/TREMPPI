@@ -63,9 +63,12 @@ namespace kwd = boost::log::keywords;
 // The global setup for Tremppi apps - mainly sets paths to the executables and data
 class TremppiSystem {
 public:
-	string PROGRAM_NAME;
-	bfs::path HOME_PATH;
-	bfs::path WORK_PATH;
+	string PROGRAM_NAME; // Name of the program running
+	bfs::path HOME_PATH; // The path to the home of tremppi
+	bfs::path WORK_PATH; // The directory in which tremppi works currently
+	bfs::path EXEC_PATH; // The path from where the program was executed
+	bfs::path BIN_PATH; // The path to the executed binary
+	bool standalone; // True if executing the standalone application instead of the main launcher
 
 	/*
 	*/

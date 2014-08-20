@@ -41,7 +41,7 @@ tremppi_report.setup = {
    "comparative" : false,
    "compare" : null,
    "compared" : 48,
-   "date" : "Fri Aug 15 15:41:58 2014",
+   "date" : "Wed Aug 20 17:51:30 2014",
    "name" : "basic_model",
    "pool_size" : 48,
    "select" : null,

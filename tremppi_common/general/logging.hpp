@@ -13,12 +13,15 @@ public:
 	const size_t MAX_PHASES = 99;
 	const size_t MAX_WIDHT = 60; // Maximal lenght of the message
 
+	Logging();
+
 	//
-	void init(const string LOGFILE = "logfile.log");
+	void init(const size_t _phase_count);
 
 	// 
 	void newPhase(const size_t _step_count, const string & _desc);
 
+	//
 	void step();
 
 	// 

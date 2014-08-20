@@ -3,14 +3,22 @@
 #include <gtest/gtest.h>
 #include <tremppi_common/general/logging.hpp>
 
-#include <tremppi_spawn/io/model_reader.hpp>
-#include <tremppi_spawn/io/syntax_checker.hpp>
+int tremppi_spawn(int, char**);
 
 TEST(Spawn, ExampleModel) {
+	const int argc = 2;
+	char * argv[argc];
+
 	bfs::path example_model_path(bfs::path{ tremppi_system.HOME_PATH } /= bfs::path{ "data/tremppi_test/basic_model.js" });
-	EXPECT_TRUE(bfs::exists(example_model_path)) << "File " << example_model_path.string() << " does not exist.";
-	Json::Value root;
-	EXPECT_NO_THROW(root = ModelReader::readFile(example_model_path.string()));
-	EXPECT_NO_THROW(SyntaxChecker::controlSemantics(root["elements"]));
+	argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];
+	strcpy(argv[0], tremppi_system.BIN_PATH.string().c_str());
+	argv[1] = new char[example_model_path.string().size() + 1];
+	strcpy(argv[1], example_model_path.string().c_str());
+
+	ASSERT_EQ(0, tremppi_spawn(argc, argv));
+
+	for (int i = 0; i < argc; i++) {
+		delete[] argv[i];
+	}
 }
 

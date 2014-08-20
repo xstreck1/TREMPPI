@@ -27,8 +27,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		input_path = ProgramOptions::getNetworkPath(po);
 
 		tremppi_system.set("tremppi_spawn", argv[0], input_path.parent_path());
-		logging.phase_count = 1;
-		logging.init(tremppi_system.PROGRAM_NAME + ".log");
+		logging.init(1);
 		BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (" << tremppi_system.PROGRAM_NAME << ") started.";
 	}
 	catch (exception & e) {

@@ -1,6 +1,9 @@
 // standalone launcher
-int tremppi_test(int argc, char** argv);
+#include <tremppi_common/header.h>
 
-int main(int argc, char** argv) {
+int tremppi_test(int argc, char ** argv);
+
+int main(int argc, char ** argv) {
+	tremppi_system.standalone = false;
 	return tremppi_test(argc, argv);
 }

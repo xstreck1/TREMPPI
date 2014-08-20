@@ -19,8 +19,7 @@ int tremppi_validate(int argc, char ** argv) {
 		input_path = ProgramOptions::getDatabasePath(po);
 
 		tremppi_system.set("tremppi_validate", argv[0], input_path.parent_path());
-		logging.phase_count = 1;
-		logging.init(tremppi_system.PROGRAM_NAME + ".log");
+		logging.init(1);
 		BOOST_LOG_TRIVIAL(info) << "TREMPPI efficient paremetrization validation by LTL properties (" << tremppi_system.PROGRAM_NAME << ") started.";
 	}
 	catch (exception & e) {
