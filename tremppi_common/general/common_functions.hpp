@@ -97,13 +97,6 @@ namespace Common {
 	void increase(typename std::vector<IntegralType>::reference val) { val++; }
 
 	/**
-	* @brief Sets boolean value to true.
-	* @param[in,out] val  reference to value that will be increased
-	*/
-	template<>
-	void increase<bool>(std::vector<bool>::reference val) { val = true; }
-
-	/**
 	* @brief Iterates values from left to right if it is possible. If so, return true, otherwise return false.
 	* @param[in] top    vector of maximal values each component can reach
 	* @param[in] bottom vector   of minimal values each component can reach
@@ -146,18 +139,7 @@ namespace Common {
 	* @param[in] n	number of the match to use (0 for the whole string, 1-n for the i-th parenthesis)
 	* @return	vector of all the matches
 	*/
-	std::vector<std::string> getAllMatches(const std::string & control_regex, const std::string & original, const int n = 0) {
-		std::vector<std::string> result;
-
-		std::string source = original;
-		std::smatch matches;
-		while (std::regex_search(source, matches, std::regex(control_regex))) {
-			result.emplace_back(matches[n]); // Capture the first (and only) submatch that holds the whole number only
-			source = matches.suffix().str();
-		}
-
-		return result;
-	}
+	std::vector<std::string> getAllMatches(const std::string & control_regex, const std::string & original, const int n = 0);
 
 	/**
 	* @brife return a string quoting the provided data

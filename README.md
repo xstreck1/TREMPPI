@@ -28,6 +28,8 @@ Requirements:
 * CMake 3.0 (or higher)
 * GCC 4.9.0 (or higher) or Visual Studio compiler November 2013 (or higher) or Clang 3.4.2 (or higher)
 * Boost libraries 1.54.0 (or higher)
+* Python 2.8.6 (or python 2.8.x of higher version, however not Python 3.x.x), compiled for the same architecture (so 32-bit if you compile 32-bit target and 64-bit if you compile 64-bit target)
+
 Optional:
 
 * Qt5 libraries (or higher) 

@@ -8,12 +8,14 @@
 #include "io/program_options.hpp"
 #include "io/syntax_checker.hpp"
 
+using namespace TremppiSpawn;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_spawn.
 /// - Checks for correctness of a model.
 /// - Produces a database of parametrizations based on the model.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int main(int argc, char ** argv) {
+int tremppi_spawn(int argc, char ** argv) {
 	bpo::variables_map po; // program options provided on the command line
 	bfs::path input_path; // an input path
 
@@ -25,8 +27,8 @@ int main(int argc, char ** argv) {
 		input_path = ProgramOptions::getNetworkPath(po);
 
 		tremppi_system.set("tremppi_spawn", argv[0], input_path.parent_path());
-		Logging::phase_count = 1;
-		Logging::init(tremppi_system.PROGRAM_NAME + ".log");
+		logging.phase_count = 1;
+		logging.init(tremppi_system.PROGRAM_NAME + ".log");
 		BOOST_LOG_TRIVIAL(info) << "TREMPPI Parametrization database builder (" << tremppi_system.PROGRAM_NAME << ") started.";
 	}
 	catch (exception & e) {
@@ -44,7 +46,7 @@ int main(int argc, char ** argv) {
 		SyntaxChecker::controlSemantics(root["elements"]);
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 2);
 	}
 
 	// Parse the model 
@@ -58,7 +60,7 @@ int main(int argc, char ** argv) {
 			ConstraintFomatter::consToFormula(model, ID);
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 3);
+		logging.exceptionMessage(e, 3);
 	}
 
 	// Skip further execution if only conducting a check
@@ -76,7 +78,7 @@ int main(int argc, char ** argv) {
 		ParametrizationsBuilder::build(model, kinetics);
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 4);
+		logging.exceptionMessage(e, 4);
 	}
 
 	// Output the data
@@ -91,17 +93,17 @@ int main(int argc, char ** argv) {
 		database_filler.creteTables();
 		database_filler.startOutput();
 
-		Logging::newPhase(KineticsTranslators::getSpaceSize(kinetics), "writing parametrization");
+		logging.newPhase(KineticsTranslators::getSpaceSize(kinetics), "writing parametrization");
 		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++) {
 			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);
 			database_filler.addParametrization(parametrization);
-			Logging::step();
+			logging.step();
 		}
 
 		database_filler.finishOutpout();
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 5);
+		logging.exceptionMessage(e, 5);
 	}
 
 	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";

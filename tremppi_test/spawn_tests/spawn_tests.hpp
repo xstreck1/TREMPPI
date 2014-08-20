@@ -7,7 +7,7 @@
 #include <tremppi_spawn/io/syntax_checker.hpp>
 
 TEST(Spawn, ExampleModel) {
-	bfs::path example_model_path(bfs::path{ TREMPPI_PATH } /= bfs::path{ "data/tremppi_test/basic_model.js" });
+	bfs::path example_model_path(bfs::path{ tremppi_system.HOME_PATH } /= bfs::path{ "data/tremppi_test/basic_model.js" });
 	EXPECT_TRUE(bfs::exists(example_model_path)) << "File " << example_model_path.string() << " does not exist.";
 	Json::Value root;
 	EXPECT_NO_THROW(root = ModelReader::readFile(example_model_path.string()));

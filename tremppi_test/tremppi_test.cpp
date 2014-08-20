@@ -2,7 +2,7 @@
 #include "report_tests/report_tests.hpp"
 #include "spawn_tests/spawn_tests.hpp"
 
-int main(int argc, char* argv[]) {
+int tremppi_test(int argc, char** argv) {
     ::testing::InitGoogleTest( &argc, argv );
 	int result = RUN_ALL_TESTS();
 

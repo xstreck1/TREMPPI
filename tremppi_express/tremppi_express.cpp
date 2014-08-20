@@ -3,8 +3,10 @@
 #include "io/program_options.hpp"
 #include "io/output.hpp"
 
+using namespace TremppiExpress;
+
 //
-int main(int argc, char ** argv) {
+int tremppi_express(int argc, char ** argv) {
 	bpo::variables_map po; // program options provided on the command line
 	bfs::path input_path; // an input path
 
@@ -16,8 +18,8 @@ int main(int argc, char ** argv) {
 		input_path = ProgramOptions::getDatabasePath(po);
 
 		tremppi_system.set("tremppi_express", argv[0], input_path.parent_path());
-		Logging::phase_count = 1;
-		Logging::init(tremppi_system.PROGRAM_NAME + ".log");
+		logging.phase_count = 1;
+		logging.init(tremppi_system.PROGRAM_NAME + ".log");
 		BOOST_LOG_TRIVIAL(info) << "TREMPPI expression minimizer (" << tremppi_system.PROGRAM_NAME << ") started.";
 	}
 	catch (exception & e) {
@@ -25,21 +27,20 @@ int main(int argc, char ** argv) {
 		return 1;
 	}
 
-
 	string select;
 	map<string, ActLevel> maxes;
 	RegFuncs functions;
 	sqlite3pp::database db;
 	try {
 		// Get database
-		db = move(database(po["database"].as<string>().c_str()));
+		db = move(sqlite3pp::database(po["database"].as<string>().c_str()));
 
 		// Read filter conditions
 		if (po.count("select") > 0)
 			select = ProgramOptions::getFilter(po["select"].as<string>());
 
 		// Read regulatory information
-		query qry(db, ("SELECT * FROM " + COMPONENTS_TABLE).c_str());
+		sqlite3pp::query qry(db, ("SELECT * FROM " + COMPONENTS_TABLE).c_str());
 
 		// Obtain the components data
 		for (auto row : qry) {
@@ -54,7 +55,7 @@ int main(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 1);
+		logging.exceptionMessage(e, 1);
 	}
 
 	// Convert and output
@@ -63,8 +64,8 @@ int main(int argc, char ** argv) {
 
 		for (const RegFunc & reg_func : functions) {
 			// Select parametrizations and IDs
-			query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
-			query sel_IDs = DatabaseReader::selectionIDs(select, db);
+			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
+			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
 			db.execute("BEGIN TRANSACTION");
@@ -96,9 +97,9 @@ int main(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		Logging::exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 2);
 	}
 
-	BOOST_LOG_TRIVIAL(info) << PROGRAM_NAME << " finished successfully.";
+	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";
 	return 0;
 }

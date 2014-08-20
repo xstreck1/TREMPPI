@@ -3,7 +3,7 @@
 #include <tremppi_common/header.h>
 #include <tremppi_common/network/definitions.hpp>
 
-namespace TremppiExpress {
+namespace TremppiValidate {
 	namespace ProgramOptions {
 		/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 		bpo::variables_map parseProgramOptions(int argc, char ** argv) {
@@ -77,4 +77,3 @@ namespace TremppiExpress {
 		}
 	}
 }
-

@@ -11,14 +11,10 @@
 #include "io/output.hpp"
 #include "io/program_options.hpp"
 
-// 
-void exceptionMessage(const exception & e, const int err_no) {
-	BOOST_LOG_TRIVIAL(error) << "Top level exception: " << e.what();
-	exit(err_no);
-}
+using namespace TremppiReport;
 
 // TODO: disable regulatory if not -r
-int main(int argc, char ** argv) {
+int tremppi_report(int argc, char ** argv) {
 	bpo::variables_map po; // program options provided on the command line
 	bfs::path input_path; // an input path
 
@@ -30,8 +26,8 @@ int main(int argc, char ** argv) {
 		input_path = ProgramOptions::getDatabasePath(po);
 
 		tremppi_system.set("tremppi_report", argv[0], input_path.parent_path());
-		Logging::phase_count = 1;
-		Logging::init(tremppi_system.PROGRAM_NAME + ".log");
+		logging.phase_count = 1;
+		logging.init(tremppi_system.PROGRAM_NAME + ".log");
 		BOOST_LOG_TRIVIAL(info) << "TREMPPI statical analysis reporter (" << tremppi_system.PROGRAM_NAME << ") started.";
 	}
 	catch (exception & e) {
@@ -42,7 +38,7 @@ int main(int argc, char ** argv) {
 	map<string, Json::Value> out;
 	out["setup"]["date"] = TimeManager::getTime();
 	vector<RegInfo> source_data;
-	database db;
+	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Get user options
@@ -55,7 +51,7 @@ int main(int argc, char ** argv) {
 
 		// Get database
 		out["setup"]["name"] = input_path.stem().string();
-		db = move(database(po["database"].as<string>().c_str()));
+		db = move(sqlite3pp::database(po["database"].as<string>().c_str()));
 
 		// Read filter conditions
 		if (po.count("select") > 0)
@@ -64,28 +60,28 @@ int main(int argc, char ** argv) {
 			out["setup"]["compare"] = ProgramOptions::getFilter(po["compare"].as<string>());
 
 		// Read regulatory information
-		query qry(db, ("SELECT " + DatabaseReader::NAMES_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());
+		sqlite3pp::query qry(db, ("SELECT " + DatabaseReader::NAMES_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());
 		for (auto row : qry) {
 			string name = row.get<const char*>(0);
 			source_data.push_back(DatabaseReader::readRegInfo(name, db));
 		}
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 2);
 	}
 
 	map<string, RegsData> reg_data_types;
 	map<string, FunsData> fun_data_types;
 	try {
-		out["setup"]["pool_size"] = begin(query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()))->get<int>(0);
+		out["setup"]["pool_size"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()))->get<int>(0);
 		if (out["setup"]["select"].asString().empty())
 			out["setup"]["selected"] = out["setup"]["pool_size"];
 		else
-			out["setup"]["selected"] = begin(query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()))->get<int>(0);
+			out["setup"]["selected"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()))->get<int>(0);
 		if (out["setup"]["compare"].asString().empty())
 			out["setup"]["compared"] = out["setup"]["pool_size"];
 		else
-			out["setup"]["compared"] = begin(query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()))->get<int>(0);
+			out["setup"]["compared"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()))->get<int>(0);
 
 		if (po.count("functions") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory functions data.";
@@ -96,11 +92,11 @@ int main(int argc, char ** argv) {
 			}
 			// Get function statistics for all the regulators
 			for (const RegInfo & reg_info : source_data) {
-				query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
+				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				fun_data_types["select"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection
 				if (po.count("compare") > 0) {
-					query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
+					sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
 					fun_data_types["compare"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 				}
 			}
@@ -117,11 +113,11 @@ int main(int argc, char ** argv) {
 				reg_data_types["differ"] = RegsData();
 			}
 			for (const RegInfo & reg_info : source_data) {
-				query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
+				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				reg_data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection
 				if (po.count("compare") > 0) {
-					query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
+					sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
 					reg_data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 				}
 			}
@@ -139,7 +135,7 @@ int main(int argc, char ** argv) {
 		}*/
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 3);
+		logging.exceptionMessage(e, 3);
 	}
 
 	try {
@@ -154,7 +150,7 @@ int main(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 4);
+		logging.exceptionMessage(e, 4);
 	}
 
 	try {
@@ -170,7 +166,7 @@ int main(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		exceptionMessage(e, 5);
+		logging.exceptionMessage(e, 5);
 	}
 
 

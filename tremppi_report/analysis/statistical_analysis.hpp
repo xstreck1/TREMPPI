@@ -23,7 +23,7 @@ namespace StatisticalAnalysis {
 	}*/
 
 	namespace {
-		double mean_val(const int step_count, query & selection) {
+		double mean_val(const int step_count, sqlite3pp::query & selection) {
 			double result = 0;
 			for (const auto & row : selection) {
 				Levels params;
@@ -34,7 +34,7 @@ namespace StatisticalAnalysis {
 			return result / step_count;
 		}
 
-		double std_dev_val(const int step_count, const double mean, query & selection) {
+		double std_dev_val(const int step_count, const double mean, sqlite3pp::query & selection) {
 			double result = 0;
 			for (const auto & row : selection) {
 				Levels params;
@@ -73,7 +73,7 @@ namespace StatisticalAnalysis {
 		return dif;
 	}
 
-	FunData build(const RegInfo & info, const int step_count, query & qry) {
+	FunData build(const RegInfo & info, const int step_count, sqlite3pp::query & qry) {
 		FunData result = { info };
 		result.mean = mean_val(step_count, qry);
 		qry.reset();

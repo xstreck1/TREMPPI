@@ -7,7 +7,7 @@
 
 namespace RegulatoryGraph {
 	// computes the correlation of the regulatiors to the regulated component for each component
-	RegData build(const RegInfo & info, const int step_count, query & qry) {
+	RegData build(const RegInfo & info, const int step_count, sqlite3pp::query & qry) {
 		RegData result = { info };
 		result.reg_corr = result.reg_freq = vector<double>(info.regulators.size());
 
@@ -20,7 +20,7 @@ namespace RegulatoryGraph {
 		}
 
 		// Compute relation to each regulation of this component
-		Logging::newPhase(step_count, "Graph build");
+		logging.newPhase(step_count, "Graph build");
 		for (const auto & row : qry) {
 			// Obtain the data
 			vector<ActLevel> param(qry.column_count());
@@ -34,7 +34,7 @@ namespace RegulatoryGraph {
 				result.reg_corr[reg_i] += correlation;
 				result.reg_freq[reg_i] += (correlation != 0.);
 			}
-			Logging::step();
+			logging.step();
 		}
 
 		// Normalize by the number of parametrizations

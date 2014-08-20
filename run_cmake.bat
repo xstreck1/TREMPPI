@@ -1,0 +1,1 @@
+cmake CMakeLists.txt -T "CTP_Nov2013" -DBUILD_TEST:BOOL=ON
