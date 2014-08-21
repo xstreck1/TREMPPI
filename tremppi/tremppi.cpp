@@ -4,17 +4,12 @@
 #include <tremppi_common/header.h>
 using namespace std;
 
-int tremppi_spawn(int argc, char ** argv);
-int tremppi_express(int argc, char ** argv);
-int tremppi_report(int argc, char ** argv);
-int tremppi_validate(int argc, char ** argv);
+int tremppi_python(const string command, int argc, char ** argv) {
+	Py_SetProgramName(argv[0]); 
 
-int tremppi_python(int argc, char ** argv) {
-	/* Py_SetProgramName(argv[0]); 
-	tremppi_system.set("tremppi", argv[0], bfs::path{ "." });
-
-	string program_name = argv[1];
-	bfs::path file_path = tremppi_system.HOME_PATH / bfs::path{ "tremppi_init" } / bfs::path{ "init.py" };
+	bfs::path file_path = tremppi_system.HOME_PATH / bfs::path{ "tremppi_python" } / bfs::path{ command + ".py" };
+	if (!bfs::exists(file_path))
+		throw runtime_error(file_path.string() + " is called, but does not exist.");
 
 	FILE* file;
 	int passed_argc;
@@ -29,20 +24,36 @@ int tremppi_python(int argc, char ** argv) {
 	Py_Initialize();
 	PySys_SetArgv(passed_argc, passed_argv);
 
+	PyObject* globals = Py_BuildValue("{s:i,s:i}", "abc", 123, "def", 456);
 	PyObject* PyFileObject = PyFile_FromString(passed_argv[0], "r");
 	PyRun_SimpleFileEx(PyFile_AsFile(PyFileObject), passed_argv[0], 1);
 
-	Py_Finalize(); */
+	Py_Finalize(); 
 
 	return 0;
 }
 
+int tremppi_spawn(int argc, char ** argv);
+int tremppi_express(int argc, char ** argv);
+int tremppi_report(int argc, char ** argv);
+int tremppi_validate(int argc, char ** argv);
+
+int tremppi_init(int argc, char ** argv) {
+	try{
+		tremppi_system.set("tremppi", argv[0], bfs::path{ "." });
+		return tremppi_python("init", argc, argv);
+	}
+	catch (exception & e) {
+		return 1;
+	}
+}
+
 map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
-		{ "python", { tremppi_python, "python" } },
 		{ "spawn", { tremppi_spawn, "spawn" } },
 		{ "express", { tremppi_express, "express" } },
 		{ "report", { tremppi_report, "report" } },
-		{ "valdiate", { tremppi_report, "valdiate" } }
+		{ "valdiate", { tremppi_validate, "valdiate" } },
+		{ "init", { tremppi_init, "init" } }
 };
 
 void printHelp() {
