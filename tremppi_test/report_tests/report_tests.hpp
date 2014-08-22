@@ -9,7 +9,7 @@ TEST(Report, ExampleModel) {
 	int argc = 3;
 	char * argv[3];
 
-	bfs::path example_model_path(bfs::path{ tremppi_system.HOME_PATH } /= bfs::path{ "data/tremppi_test/basic_model.sqlite" });
+	bfs::path example_model_path(bfs::path{ tremppi_system.HOME_PATH } /= bfs::path{ "proj/test/test.sqlite" });
 	argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];
 	strcpy(argv[0], tremppi_system.BIN_PATH.string().c_str());
 	argv[1] = new char[example_model_path.string().size() + 1];

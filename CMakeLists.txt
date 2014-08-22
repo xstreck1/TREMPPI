@@ -50,6 +50,9 @@ SOURCE_GROUP("Header Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*
 SOURCE_GROUP("Source Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*cpp)
 ADD_LIBRARY(tremppi_common_lib tremppi_common/tremppi_common.cpp tremppi_common/header.h tremppi_common/configure.h ${COMMON_FILES})
 
+# tremppi_python - code only, no binary
+ADD_LIBRARY(tremppi_python_lib tremppi_python/tremppi_python.cpp)
+
 # tremppi_spawn
 set(SPAWN_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_spawn)
 FILE(GLOB_RECURSE SPAWN_HEADERS ${SPAWN_FOLDER}/*.hpp)
@@ -109,7 +112,7 @@ if (BUILD_TEST)
 		SOURCE_GROUP("Header Files\\report_tests" ${TEST_FOLDER}/report_tests/.*hpp)
 		SOURCE_GROUP("Header Files\\spawn_tests" ${TEST_FOLDER}/spawn_tests/.*hpp)
 		ADD_EXECUTABLE(tremppi_test ${TEST_FOLDER}/tremppi_test.cpp ${TEST_FOLDER}/main.cpp ${TEST_HEADERS})
-		target_link_libraries(tremppi_test tremppi_common_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES} ${GTEST_LIBRARY_DEBUG} ${GTEST_MAIN_LIBRARY_DEBUG})
+		target_link_libraries(tremppi_test tremppi_common_lib tremppi_python_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES} ${GTEST_LIBRARY_DEBUG} ${GTEST_MAIN_LIBRARY_DEBUG})
 	else (GTEST_FOUND)
 		message ("GTest not found. The tests will not be available.")
 	endif (GTEST_FOUND)
@@ -118,4 +121,4 @@ endif (BUILD_TEST)
 # tremppi core
 set(CORE_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi)
 ADD_EXECUTABLE(tremppi ${PYTHON_LIBRARIES} ${Boost_LIBRARIES} ${CORE_FOLDER}/tremppi.cpp)
-target_link_libraries(tremppi tremppi_common_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(tremppi tremppi_common_lib tremppi_python_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})

@@ -1,4 +1,4 @@
-var network = {
+var elements = {
         "edges": [
             {
                 "data": {

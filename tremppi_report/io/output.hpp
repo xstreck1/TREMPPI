@@ -148,7 +148,7 @@ namespace Output {
 		bfs::path report_dir = input_path.parent_path() / (input_path.stem().string() + "_report");
 		if (bfs::exists(report_dir))
 			bfs::remove_all(report_dir);
-		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "data" } / bfs::path{ "tremppi_report" }, report_dir);
+		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" }, report_dir);
 
 		// Delete the original models
 		vector<string> to_delete = { "data.js", "configure.json", "regulatory_select.json", "regulatory_differ.json", "regulatory_compare.json" };

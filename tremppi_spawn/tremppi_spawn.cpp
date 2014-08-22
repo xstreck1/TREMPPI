@@ -42,7 +42,7 @@ int tremppi_spawn(int argc, char ** argv) {
 
 		root = ModelReader::readFile(input_path);
 
-		SyntaxChecker::controlSemantics(root["elements"]);
+		SyntaxChecker::controlSemantics(root);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 2);
@@ -53,10 +53,12 @@ int tremppi_spawn(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing the network.";
 
-		model = ModelReader::jsonToModel(root["elements"]);
+		model = ModelReader::jsonToModel(root);
 		model.name = input_path.filename().stem().string();
 		for (CompID ID : cscope(model.components))
 			ConstraintFomatter::consToFormula(model, ID);
+		if (model.components.empty())
+			throw runtime_error("No components found in the model.");
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
