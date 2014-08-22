@@ -7,7 +7,7 @@
 
 int tremppi_init(int, char**);
 
-TEST(Python, InitExampleModel) {
+int basic_init_test() {
 	const int argc = 4;
 	char * argv[argc];
 
@@ -21,10 +21,12 @@ TEST(Python, InitExampleModel) {
 	argv[3] = new char[5];
 	strcpy(argv[3], "test");
 
-	ASSERT_EQ(0, tremppi_init(argc, argv));
+	int result = (tremppi_init(argc, argv));
 
 	for (int i = 0; i < argc; i++) {
 		delete[] argv[i];
 	}
+
+	return result;
 }
 

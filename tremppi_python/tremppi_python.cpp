@@ -5,30 +5,30 @@
 using namespace std;
 
 int tremppi_python(const string command, int argc, char ** argv) {
-	Py_SetProgramName(argv[0]); 
-
+	// Check if the script exists
 	bfs::path file_path = tremppi_system.HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
 	if (!bfs::exists(file_path)) {
 		cerr << file_path.string() << " is called, but does not exist.";
 		return 1;
 	}
+	// Copy the script path to the first argument
+	char * program_name = new char[file_path.string().size() + 1];
+	strcpy(program_name, file_path.string().c_str());
+	swap(program_name, argv[0]);
 
-	int passed_argc;
-	char * passed_argv[3];
-
-	passed_argc = 2;
-	passed_argv[0] = new char[file_path.string().size() + 1];
-	strcpy(passed_argv[0], file_path.string().c_str());
-
-	Py_SetProgramName(argv[0]);
+	// Initialize Python interpreter, the intepreter gets the name of this binary as the argv[0]
+	Py_SetProgramName(program_name);
 	Py_Initialize();
-	PySys_SetArgv(passed_argc, passed_argv);
+	PySys_SetArgv(argc, argv);
 
-	PyObject* PyFileObject = PyFile_FromString(passed_argv[0], "r");
-	PyRun_SimpleFileEx(PyFile_AsFile(PyFileObject), passed_argv[0], 1);
+	// Run python
+	PyObject* PyFileObject = PyFile_FromString(argv[0], "r");
+	PyRun_SimpleFileEx(PyFile_AsFile(PyFileObject), argv[0], 1);
 
 	Py_Finalize(); 
 
+	swap(program_name, argv[0]);
+	delete[] program_name;
 	return 0;
 }
 

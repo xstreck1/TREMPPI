@@ -5,7 +5,7 @@
 
 int tremppi_report(int, char**);
 
-TEST(Report, ExampleModel) {
+int basic_report_test() {
 	int argc = 3;
 	char * argv[3];
 
@@ -17,9 +17,11 @@ TEST(Report, ExampleModel) {
 	argv[2] = new char [3];
 	strcpy(argv[2], "-r");
 
-	ASSERT_EQ(0, tremppi_report(argc, argv));
+	int result = (tremppi_report(argc, argv));
 
 	for (int i = 0; i < argc; i++) {
 		delete[] argv[i];
 	}
+
+	return result;
 }

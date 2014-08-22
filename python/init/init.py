@@ -34,6 +34,7 @@ parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--dest', help='specify the location where the file gets created.')
 parser.add_argument('name', help='name of the newly created model')
 args = parser.parse_args()
+print(sys.argv[0])
 
 # find paths
 EXEC_PATH = os.path.dirname(os.path.abspath(sys.argv[0]))

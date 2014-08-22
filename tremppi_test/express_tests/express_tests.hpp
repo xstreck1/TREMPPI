@@ -6,7 +6,7 @@
 
 int tremppi_express(int, char**);
 
-TEST(Express, ExampleModel) {
+int basic_express_test() {
 	const int argc = 2;
 	char * argv[argc];
 
@@ -16,10 +16,12 @@ TEST(Express, ExampleModel) {
 	argv[1] = new char[example_model_path.string().size() + 1];
 	strcpy(argv[1], example_model_path.string().c_str());
 
-	ASSERT_EQ(0, tremppi_express(argc, argv));
+	int result = (tremppi_express(argc, argv));
 
 	for (int i = 0; i < argc; i++) {
 		delete[] argv[i];
 	}
+
+	return result;
 }
 

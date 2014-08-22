@@ -12,14 +12,14 @@ void TremppiSystem::set(const char * name, const char * arg, const bfs::path & _
 	if (home_path != NULL)
 		HOME_PATH = bfs::path{ home_path };
 	else {
-		// Test for ../data to exist
+		// Test for ../tremppi to exist
 		bfs::path test_path = BIN_PATH / bfs::path{ ".." };
-		if (bfs::exists(test_path / bfs::path{ "data" }))
+		if (bfs::exists(test_path / bfs::path{ "tremppi" }))
 			HOME_PATH = test_path;
-		// Test for ../../data to exist - Windows only
+		// Test for ../../tremppi to exist - Windows only
 		else {
 			test_path = test_path /= bfs::path{ ".." };
-			if (bfs::exists(test_path / bfs::path{ "data" }))
+			if (bfs::exists(test_path / bfs::path{ "tremppi" }))
 				HOME_PATH = test_path;
 		}
 	}

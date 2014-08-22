@@ -6,7 +6,7 @@
 
 int tremppi_validate(int, char**);
 
-TEST(Validate, ExampleModel) {
+int basic_validate_test()  {
 	const int argc = 2;
 	char * argv[argc];
 
@@ -16,10 +16,12 @@ TEST(Validate, ExampleModel) {
 	argv[1] = new char[example_model_path.string().size() + 1];
 	strcpy(argv[1], example_model_path.string().c_str());
 
-	ASSERT_EQ(0, tremppi_validate(argc, argv));
+	int result = (tremppi_validate(argc, argv));
 
 	for (int i = 0; i < argc; i++) {
 		delete[] argv[i];
 	}
+
+	return result;
 }
 
