@@ -1,6 +1,0 @@
-<SERIES experiment="(B=1|A=1)&C=1" >
-	<EXPR values="A = 0" />
-	<EXPR values="(A=0 & B =0) | (A > 0 & B=1)" />        
-	<EXPR values="A=1 & B=0" />
-</SERIES>
-
