@@ -1,6 +1,6 @@
 #include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/network/constraint_parser.hpp>
 
-#include "compute/constraint_parser.hpp"
 #include "compute/parameter_builder.hpp"
 #include "compute/parametrizations_builder.hpp"
 #include "io/model_reader.hpp"

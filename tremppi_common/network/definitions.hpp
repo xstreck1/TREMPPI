@@ -45,6 +45,9 @@ const vector<std::string> SOURCE_TYPES = { "select", "differ", "compare" };
 /// ID of a graph/automaton state.
 typedef size_t StateID; 
 
+/// A single transition between two states.
+typedef pair<StateID, StateID> StateTransition;
+
 /// ID of a graph component
 typedef size_t CompID; 
 
@@ -56,6 +59,12 @@ typedef vector<ActLevel> Levels;
 
 /// Transitional values in a state of BA.
 typedef vector<Levels> Configurations;
+
+/// What properties may be examined.
+enum PropType { LTL, TimeSeries };
+
+/// Types of automata possible for using.
+enum AutType { BA_finite, BA_weak, BA_standard };
 
 /// Index of the color - may be a big number.
 typedef size_t ParamNo;

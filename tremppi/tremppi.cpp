@@ -10,19 +10,19 @@ int tremppi_validate(int argc, char ** argv);
 int tremppi_init(int argc, char ** argv);
 
 map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
-		{ "spawn", { tremppi_spawn, "spawn" } },
-		{ "express", { tremppi_express, "express" } },
-		{ "report", { tremppi_report, "report" } },
-		{ "valdiate", { tremppi_validate, "valdiate" } },
-		{ "init", { tremppi_init, "init" } }
+		{ "spawn", { tremppi_spawn, "read a model and create a database of parametrizations based on the model" } },
+		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
+		{ "report", { tremppi_report, "create a report from statistical analysis of a database" } },
+		{ "valdiate", { tremppi_validate, "conduct a model checking to validate parametrizations agaings LTL properties" } },
+		{ "init", { tremppi_init, "create a new model with a model viewer" } }
 };
 
 void printHelp() {
-	cout << "tremppi function_name [options]" << endl;
+	cout << "tremppi command [options]" << endl;
 	for (const auto option : tremppi_functions) {
 		cout << "\t" << option.first << ": " << option.second.second << endl;
 	}
-	cout << "\thelp: display this dialog\n";
+	cout << "\t--help,-h: display help for the specified command or display this dialog if no command is given\n";
 }
 
 //
@@ -36,7 +36,7 @@ int main(int argc, char ** argv) {
 		return 1;
 	}
 	string command = argv[1];
-	if (command == "help") {
+	if (command == "--help" || command == "-h") {
 		printHelp();
 		return 0;
 	}

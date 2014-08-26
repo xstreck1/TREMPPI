@@ -2,8 +2,7 @@
 
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/network/model_translators.hpp>
-
-#include "../data/kinetics_translators.hpp"
+#include <tremppi_common/network/kinetics_translators.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief A class that creates and fills a database with parametrizations.

@@ -1,10 +1,9 @@
 #pragma once
 
-#include <tremppi_common/general/common_functions.hpp>
-
-#include "../data/kinetics.hpp"
+#include <tremppi_common/network/constraint_parser.hpp>
+#include <tremppi_common/network/kinetics.hpp>
 #include "../io/constraint_formatter.hpp"
-#include "constraint_parser.hpp"
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that computes feasible parametrizations for each specie from
@@ -129,7 +128,7 @@ class ParametrizationsBuilder {
 		cons_pars->applyFormula(names, formula);
 
 		// Conduct search
-		DFS<ConstraintParser> search(cons_pars);
+		Gecode::DFS<ConstraintParser> search(cons_pars);
 		delete cons_pars;
 		while (ConstraintParser *match = search.next()) {
 			Levels solution = match->getSolution();
