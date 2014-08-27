@@ -36,6 +36,7 @@ int tremppi_validate(int argc, char ** argv) {
 
 	model.components.emplace_back(Model::ModelComp{ 0, "A", 1, Model::Regulations{}, vector < string > {} });
 	model.components.emplace_back(Model::ModelComp{ 0, "B", 3, Model::Regulations{}, vector < string > {} });
+	model.components[1].regulations.emplace_back(Model::Regulation{ 0, 1, "" });
 	property = PropertyAutomaton();
 	property.addState("ser0", false);
 	property.addState("ser1", false);
@@ -44,9 +45,32 @@ int tremppi_validate(int argc, char ** argv) {
 	property.addEdge(1, 1, { "tt" });
 	property.addEdge(1, 2, { "(A=1|B=3)" });
 	property.addEdge(2, 2, { "ff" });
+	kinetics.components.emplace_back(Kinetics::Component{ 0, Kinetics::Params{}, 1, 1 });
+	kinetics.components.emplace_back(Kinetics::Component{ 1, Kinetics::Params{}, 1, 1 });
+	map < CompID, Levels > requirements = map < CompID, Levels >{};
+	kinetics.components[0].params.push_back(Kinetics::Param{
+		"",
+		Levels{ 0, 1 },
+		move(requirements),
+		Levels{ 1 } }
+	);
+	requirements = map < CompID, Levels >{ { 0, Levels{ 0 } } };
+	kinetics.components[1].params.push_back(Kinetics::Param{
+		"A:0",
+		Levels{ 0, 1 },
+		move(requirements),
+		Levels{ 1 } }
+	);
+	requirements = map < CompID, Levels >{ { 0, Levels{ 1 } } };
+	kinetics.components[1].params.push_back(Kinetics::Param{
+		"A:1",
+		Levels{ 0, 1 },
+		move(requirements),
+		Levels{ 3 } }
+	);
 
 	// Construction of data structures
-	/*try {
+	try {
 		product = ConstructionManager::construct(model, property, kinetics);
 	}
 	catch (std::exception & e) {
@@ -63,7 +87,7 @@ int tremppi_validate(int argc, char ** argv) {
 		output.outputForm();
 
 		// Do the computation for all the rounds
-		for (ParamNo param_ID = 0; param_ID < KineticsTranslators::getSpaceSize(kinetics); param_ID++) {
+		for (ParamNo param_ID = 0; param_ID < param_count; param_ID++) {
 			output.outputRoundNo(param_ID + 1, param_count);
 
 			vector<StateTransition> witness_trans;
@@ -96,7 +120,7 @@ int tremppi_validate(int argc, char ** argv) {
 	catch (std::exception & e) {
 		output_streamer.output(error_str, string("Error occured while syntetizing the parametrizations: \"" + string(e.what()) + "\".\n Contact support for details."));
 		return 5;
-	}*/
+	}
 
 	return 0;
 }

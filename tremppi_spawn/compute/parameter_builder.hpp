@@ -13,7 +13,7 @@ class ParameterBuilder {
 	*/
 	static Kinetics::Param addSingleParam(const Model & model, const map<CompID, Levels> & all_thrs, const Levels & thrs_comb, const CompID t_ID) {
 		string context;
-		map<StateID, Levels> requirements;
+		map<CompID, Levels> requirements;
 
 		// Loop over all the sources.
 		for (auto source_num : crange(thrs_comb.size())) {
@@ -42,7 +42,7 @@ class ParameterBuilder {
 			context.resize(context.length() - 1);
 
 		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
-		return Kinetics::Param{ context, targets, move(requirements), Levels() };
+		return Kinetics::Param{ context, targets, requirements, Levels() };
 	}
 
 	// @brief createParameters Creates a description of kinetic parameters.
@@ -75,7 +75,7 @@ public:
 
 		// Create params for the non-input nodes
 		for (const CompID ID : crange(model.components.size()))
-			result.emplace_back(Kinetics::Component{ model.components[ID].name, createParameters(model, ID), 0, 0 });
+			result.emplace_back(Kinetics::Component{ ID, createParameters(model, ID), 0, 0 });
 
 		return result;
 	}

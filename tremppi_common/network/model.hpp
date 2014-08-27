@@ -16,7 +16,7 @@ struct Model {
 	struct ModelComp;
 
 	struct Regulation {
-		ModelComp & source; ///< A reference to the source component.
+		CompID s_ID; ///< A reference to the source component.
 		ActLevel threshold; ///< Level of the regulator required for the regulation to be active.
 		string label; ///< An edge semantics label, if provided.
 	};
@@ -24,7 +24,7 @@ struct Model {
 
 	/// Structure that holds data about a single component. Most of the data is equal to that in the model file.
 	struct ModelComp {
-		CompID id; ///< Numerical id, lexicographically ordered.
+		CompID ID; ///< Numerical id, lexicographically ordered.
 		string name; ///< Actuall name of the specie.
 		ActLevel max_activity; ///< Maximal activation level of the specie.
 

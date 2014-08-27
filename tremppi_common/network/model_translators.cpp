@@ -4,13 +4,13 @@ CompID ModelTranslators::findID(const Model & model, const string & name) {
 	auto comp_it = find_if(WHOLE(model.components), [&name](const Model::ModelComp & component){
 		return name == component.name;
 	});
-	return (comp_it != end(model.components)) ? comp_it->id : INF;
+	return (comp_it != end(model.components)) ? comp_it->ID : INF;
 }
 
 vector<CompID> ModelTranslators::getRegulatorsIDs(const Model & model, const CompID ID) {
 	set<CompID> IDs;
 	for (auto regul : model.components[ID].regulations) {
-		IDs.insert(regul.source.id);
+		IDs.insert(regul.s_ID);
 	}
 	return vector<CompID>(IDs.begin(), IDs.end());
 }
@@ -34,9 +34,9 @@ vector<string> ModelTranslators::getAllNames(const Model & model) {
 map<CompID, Levels > ModelTranslators::getThresholds(const Model & model, const CompID ID) {
 	map<CompID, Levels> thresholds;
 	for (auto reg : model.components[ID].regulations) {
-		auto key = thresholds.find(reg.source.id);
+		auto key = thresholds.find(reg.s_ID);
 		if (key == thresholds.end()) {
-			thresholds.insert(make_pair(reg.source.id, Levels(1, reg.threshold)));
+			thresholds.insert(make_pair(reg.s_ID, Levels(1, reg.threshold)));
 		}
 		else {
 			key->second.push_back(reg.threshold);
@@ -113,7 +113,7 @@ string ModelTranslators::makeCanonic(const Model & model, const string & context
 const Model::Regulation & ModelTranslators::findRegulation(const Model & model, const CompID t_ID, const CompID s_ID, const ActLevel threshold) {
 	const auto & reguls = model.components[t_ID].regulations;
 	for (const Model::Regulation & regul : reguls)
-		if (regul.source.id == s_ID && regul.threshold == threshold)
+		if (regul.s_ID == s_ID && regul.threshold == threshold)
 			return regul;
 	throw runtime_error("Failed to match the regulation " + to_string(s_ID) + " -" + to_string(threshold) + "-> " + to_string(t_ID));
 }

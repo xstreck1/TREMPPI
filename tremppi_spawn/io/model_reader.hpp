@@ -12,12 +12,12 @@ namespace ModelReader {
 	Model jsonToModel(const Json::Value & elements) {
 		Model model;
 
-		CompID id = 0;
+		CompID ID = 0;
 		string last_name = "";
 		for (const Json::Value node : elements["nodes"]) {
 			Model::ModelComp specie;
 
-			specie.id = id++;
+			specie.ID = ID++;
 
 			specie.name = node["data"]["id"].asString();
 			if (last_name > specie.name)
@@ -38,7 +38,7 @@ namespace ModelReader {
 			const CompID target_id = ModelTranslators::findID(model, edge["data"]["target"].asString());
 
 			Model::Regulation regulation{
-				model.components[source_id],
+				source_id,
 				edge["data"]["Threshold"].asInt(),
 				edge["data"]["Label"].asString()
 			};

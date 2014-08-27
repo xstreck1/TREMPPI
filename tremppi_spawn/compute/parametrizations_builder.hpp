@@ -17,14 +17,13 @@ class ParametrizationsBuilder {
 	*/
 	static bool isSubordinate(const vector<Model::Regulation> &reguls, const Kinetics::Param &current, const Kinetics::Param &compare, const CompID source_ID) {
 		for (const Model::Regulation & regul : reguls) {
-			const CompID regul_ID = regul.source.id;
 			// All the regulations must have the same requirements, except for the one with the specified source, which must connect on the value.
-			if (regul_ID != source_ID) {
-				if (current.requirements.find(regul_ID)->second.back() != compare.requirements.find(regul_ID)->second.back()) {
+			if (regul.s_ID != source_ID) {
+				if (current.requirements.find(regul.s_ID)->second.back() != compare.requirements.find(regul.s_ID)->second.back()) {
 					return false;
 				}
 			}
-			else if (current.requirements.find(regul_ID)->second.front() != compare.requirements.find(regul_ID)->second.back() + 1) {
+			else if (current.requirements.find(regul.s_ID)->second.front() != compare.requirements.find(regul.s_ID)->second.back() + 1) {
 				return false;
 			}
 
@@ -36,7 +35,7 @@ class ParametrizationsBuilder {
 	* Return true if the given parameter's context is dependent on the given regulation.
 	*/
 	static bool containsRegulation(const Kinetics::Param &param_data, const Model::Regulation &regul) {
-		return param_data.requirements.find(regul.source.id)->second.front() == regul.threshold;
+		return param_data.requirements.find(regul.s_ID)->second.front() == regul.threshold;
 	}
 
 	/* initial constraining of the values to the predefined ones */
@@ -74,7 +73,7 @@ class ParametrizationsBuilder {
 		for (const auto param : params) {
 			if (containsRegulation(param, regul)) {
 				for (const auto compare : params) {
-					if (isSubordinate(reguls, param, compare, regul.source.id)) {
+					if (isSubordinate(reguls, param, compare, regul.s_ID)) {
 						plus += " | " + param.context + " > " + compare.context;
 						minus += " | " + param.context + " < " + compare.context;
 					}

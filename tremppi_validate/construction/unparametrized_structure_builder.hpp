@@ -76,9 +76,13 @@ class UnparametrizedStructureBuilder {
 	/**
 	 * Test wheather the current state corresponds to the requirements put on values of the specified species.
 	 */
-	bool testRegulators(const map<StateID, Levels> requirements, const Levels & state_levels) {
+	bool testRegulators(const map<CompID, Levels> & requirements, const Levels & state_levels) {
+		// Const function
+		if (requirements.empty())
+			return true;
+
 		// List throught regulating species of the function
-		for (auto regul : requirements)
+		for (auto & regul : requirements)
 			if (count(regul.second.begin(), regul.second.end(), state_levels[regul.first]) == 0)
 				return false;
 

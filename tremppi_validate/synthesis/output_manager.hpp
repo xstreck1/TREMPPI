@@ -43,7 +43,7 @@ public:
 		string format_desc = "#:(";
 
 		for (CompID ID : crange(model.components.size())) {
-			for (auto param : kinetics.components[ID].params) {
+			for (const auto & param : kinetics.components[ID].params) {
 				format_desc += model.components[ID].name + "{" + param.context + "},";
 			}
 		}
