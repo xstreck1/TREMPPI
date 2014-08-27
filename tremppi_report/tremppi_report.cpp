@@ -11,8 +11,6 @@
 #include "io/output.hpp"
 #include "io/program_options.hpp"
 
-using namespace TremppiReport;
-
 // TODO: disable regulatory if not -r
 int tremppi_report(int argc, char ** argv) {
 	bpo::variables_map po; // program options provided on the command line
@@ -22,8 +20,8 @@ int tremppi_report(int argc, char ** argv) {
 		if (argc < 1)
 			throw runtime_error("No parameters.");
 
-		po = ProgramOptions::parseProgramOptions(argc, argv);
-		input_path = ProgramOptions::getDatabasePath(po);
+		po = ReportOptions::parseProgramOptions(argc, argv);
+		input_path = ReportOptions::getDatabasePath(po);
 
 		tremppi_system.set("tremppi_report", argv[0], input_path.parent_path());
 		logging.init(1);
@@ -41,9 +39,9 @@ int tremppi_report(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Get user options
-		po = ProgramOptions::parseProgramOptions(argc, argv);
+		po = ReportOptions::parseProgramOptions(argc, argv);
 		out["setup"]["comparative"] = po.count("compare") > 0;
-		input_path = ProgramOptions::getDatabasePath(po);
+		input_path = ReportOptions::getDatabasePath(po);
 
 		// Copy the directory data
 		Output::copyReport(input_path);
@@ -54,9 +52,9 @@ int tremppi_report(int argc, char ** argv) {
 
 		// Read filter conditions
 		if (po.count("select") > 0)
-			out["setup"]["select"] = ProgramOptions::getFilter(po["select"].as<string>());
+			out["setup"]["select"] = ReportOptions::getFilter(po["select"].as<string>());
 		if (po.count("compare") > 0)
-			out["setup"]["compare"] = ProgramOptions::getFilter(po["compare"].as<string>());
+			out["setup"]["compare"] = ReportOptions::getFilter(po["compare"].as<string>());
 
 		// Read regulatory information
 		sqlite3pp::query qry(db, ("SELECT " + DatabaseReader::NAMES_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());

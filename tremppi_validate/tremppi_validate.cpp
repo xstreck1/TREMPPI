@@ -2,33 +2,32 @@
 
 #include "io/program_options.hpp"
 #include "auxiliary/output_streamer.hpp"
-#include "auxiliary/user_options.hpp"
 #include "construction/construction_manager.hpp"
 #include "construction/product_builder.hpp"
 #include "synthesis/synthesis_manager.hpp"
-
-/**
- * @brief checkDepthBound see if there is not a new BFS depth bound
- */
-void checkDepthBound(const bool minimalize_cost, const size_t depth, ParamNo & param_ID, OutputManager & output, size_t & BFS_bound, ParamNo & valid_param_count) {
-	if (depth < BFS_bound && minimalize_cost) {
-		// Reset the outputs if better was found.
-		output_streamer.clear_line(verbose_str);
-		param_ID = 0;
-		output.eraseData();
-		output_streamer.output(verbose_str, "New lowest bound on Cost has been found. Restarting the computation. The current Cost is: " + to_string(depth));
-		valid_param_count = 0;
-		BFS_bound = depth;
-	}
-}
-
-using namespace TremppiValidate;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
-	UserOptions user_options;
+	bpo::variables_map po; // program options provided on the command line
+	bfs::path input_path; // an input path
+	try {
+		if (argc < 1)
+			throw runtime_error("No parameters.");
+
+		po = ValidateOptions::parseProgramOptions(argc, argv);
+		input_path = ValidateOptions::getDatabasePath(po);
+
+		tremppi_system.set("tremppi_validate", argv[0], input_path.parent_path());
+		logging.init(1);
+		BOOST_LOG_TRIVIAL(info) << "TREMPPI validation by LTL model checking (" << tremppi_system.PROGRAM_NAME << ") started.";
+	}
+	catch (exception & e) {
+		cerr << e.what();
+		return 1;
+	}
+
 	Model model;
 	PropertyAutomaton property;
 	Kinetics kinetics;
@@ -80,10 +79,10 @@ int tremppi_validate(int argc, char ** argv) {
 
 	// Synthesis of parametrizations
 	try {
-		OutputManager output(user_options, property, model, kinetics);
+		OutputManager output(po, property, model, kinetics);
 		SynthesisManager synthesis_manager(product);
 		ParamNo param_count = KineticsTranslators::getSpaceSize(kinetics);
-		size_t BFS_bound = user_options.bound_size; ///< Maximal cost on the verified property.
+		size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified property.
 		output.outputForm();
 
 		// Do the computation for all the rounds
@@ -97,21 +96,18 @@ int tremppi_validate(int argc, char ** argv) {
 			// Call synthesis procedure based on the type of the property.
 			switch (product.getMyType()) {
 			case BA_finite:
-				cost = synthesis_manager.checkFinite(witness_trans, robustness_val, param_ID, BFS_bound,
-					user_options.compute_wintess, user_options.compute_robustness, property.getMinAcc(), property.getMaxAcc());
+				cost = synthesis_manager.checkFinite(po, witness_trans, robustness_val, param_ID);
 				break;
 			case BA_standard:
-				cost = synthesis_manager.checkFull(witness_trans, robustness_val, param_ID, BFS_bound,
-					user_options.compute_wintess, user_options.compute_robustness);
+				cost = synthesis_manager.checkFull(po, witness_trans, robustness_val, param_ID);
 				break;
 			default:
 				throw runtime_error("Unsupported Buchi automaton type.");
 			}
 
 			// Parametrization was considered satisfying.
-			if ((cost != INF) ^ (user_options.produce_negative)) {
-				checkDepthBound(user_options.minimalize_cost, cost, param_ID, output, BFS_bound, param_count);
-				string witness_path = WitnessSearcher::getOutput(user_options.use_long_witnesses, product, witness_trans);
+			if ((cost != INF)) {
+				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, witness_trans);
 				output.outputRound(param_ID, cost, robustness_val, witness_path);
 				param_count++;
 			}

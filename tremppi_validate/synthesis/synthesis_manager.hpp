@@ -28,20 +28,19 @@ class SynthesisManager {
    /**
     * @brief analyseLasso Parametrization is know to be satisfiable, make analysis of it.
     */
-   void analyseLasso(const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no, double & robust, const bool robustness) {
+   void analyseLasso(const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no, double & robust) {
       SynthesisResults results;
       CheckerSettings settings;
       // First find the coloring from the initial states to the given final.
       settings.final_states = {final.first};
-      settings.minimize_cost = settings.mark_initals = true;
+	  settings.bound_type = BoundType::min;
+	  settings.mark_initals = true;
       settings.param_no = param_no;
       results = model_checker->conductCheck(settings);
       searcher->findWitnesses(results, settings);
       trans = searcher->getTransitions();
-      if (robustness) {
-         computer->compute(results, searcher->getTransitions(), settings);
-         robust = computer->getRobustness();
-      }
+      computer->compute(results, searcher->getTransitions(), settings);
+      robust = computer->getRobustness();
 
       // Second find a cycle on the final state.
       settings.mark_initals = false;
@@ -50,26 +49,25 @@ class SynthesisManager {
       searcher->findWitnesses(results, settings);
       const vector<StateTransition> & trans_ref = searcher->getTransitions();
       trans.insert(trans.begin(), trans_ref.begin(), trans_ref.end());
-      if (robustness) {
-         computer->compute(results, searcher->getTransitions(), settings);
-         robust *= computer->getRobustness();
-      }
+      computer->compute(results, searcher->getTransitions(), settings);
+      robust *= computer->getRobustness();
    }
 
    /**
     * @brief computeLasso parametrization is know to reach a final state, test that state for a bounded loop.
     */
-   size_t computeLasso(const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no,  double & robust, const size_t BFS_bound, const bool witnesses, const bool robustness) {
+   size_t computeLasso(const bpo::variables_map & po, const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no, double & robust) {
       CheckerSettings settings;
-      settings.minimize_cost = true;
+	  settings.bound_type = BoundType::min;
       settings.param_no = param_no;
       settings.initial_states = settings.final_states = {final.first};
-      settings.bfs_bound = BFS_bound == INF ? BFS_bound : (BFS_bound - final.second);
+	  const size_t BFS_bound = ValidateOptions::getBound(po);
+	  settings.bfs_bound = BFS_bound == INF ? BFS_bound : (BFS_bound - final.second);
 
       SynthesisResults results = model_checker->conductCheck(settings);
       const size_t cost = results.getLowerBound() == INF ? INF : results.getLowerBound() + final.second;
-      if (results.isAccepting() && (witnesses || robustness))
-         analyseLasso(final, trans, param_no, robust, robustness);
+	  if (results.isAccepting() && ValidateOptions::getTracteType(po) != TraceType::none)
+         analyseLasso(final, trans, param_no, robust);
 
       return cost;
    }
@@ -97,19 +95,21 @@ public:
     * @param robustness should compute robustness
     * @return the Cost value for this parametrization
     */
-   size_t checkFull(vector<StateTransition> & trans, double & robustness_val, const ParamNo param_no, const size_t BFS_bound, const bool witnesses, const bool robustness) {
+   size_t checkFull(const bpo::variables_map & po, vector<StateTransition> & trans, double & robustness_val, const ParamNo param_no) {
       CheckerSettings settings;
-      settings.bfs_bound = BFS_bound;
+      settings.bfs_bound = ValidateOptions::getBound(po);
+	  settings.bound_type = ValidateOptions::getBoundType(po);
       settings.param_no = param_no;
       settings.mark_initals = true;
       SynthesisResults results = model_checker->conductCheck(settings);
 
       size_t cost = INF;
       map<StateID, size_t> finals = results.found_depth;
+	  TraceType trace_type = ValidateOptions::getTracteType(po);
       for (const pair<StateID, size_t> & final : finals) {
          vector<StateTransition> trans_temp;
          double robust_temp = 0.;
-         size_t new_cost = computeLasso(final, trans_temp, param_no, robust_temp, BFS_bound, witnesses, robustness);
+		 size_t new_cost = computeLasso(po, final, trans_temp, param_no, robust_temp);
          // Clear data if the new path is shorter than the others.
          if (new_cost < cost) {
             cost = new_cost;
@@ -136,25 +136,23 @@ public:
     * @param robustness should compute robustness
     * @return  the Cost value for this parametrization
     */
-   size_t checkFinite(vector<StateTransition> & trans, double & robustness_val, const ParamNo param_no,
-                      const size_t BFS_bound, const bool witnesses, const bool robustness, const size_t min_acc, const size_t max_acc) {
+   size_t checkFinite(const bpo::variables_map & po, vector<StateTransition> & trans, double & robustness_val, const ParamNo param_no) {
       CheckerSettings settings;
       settings.param_no = param_no;
-      settings.bfs_bound = BFS_bound;
-      settings.minimize_cost = true;
+	  settings.bfs_bound = ValidateOptions::getBound(po);
+	  settings.bound_type = BoundType::min;
       settings.mark_initals = true;
-	  settings.minimal_count = min_acc;
       SynthesisResults results = model_checker->conductCheck(settings);
 
-      if ((witnesses || robustness) && results.isAccepting(min_acc, max_acc)) {
+	  TraceType trace_type = ValidateOptions::getTracteType(po);
+	  if (trace_type != TraceType::none) {
          searcher->findWitnesses(results, settings);
-         if (robustness)
-            computer->compute(results, searcher->getTransitions(), settings);
-         robustness_val = robustness ? computer->getRobustness() : 0.;
-         if (witnesses)
+		 computer->compute(results, searcher->getTransitions(), settings);
+         robustness_val = computer->getRobustness() ;
+		 if (trace_type != TraceType::wit)
             trans = searcher->getTransitions();
       }
 
-      return results.isAccepting(min_acc, max_acc) ? results.getLowerBound() : INF;
+      return results.isAccepting() ? results.getLowerBound() : INF;
    }
 };

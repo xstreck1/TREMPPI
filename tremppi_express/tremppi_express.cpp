@@ -3,8 +3,6 @@
 #include "io/program_options.hpp"
 #include "io/output.hpp"
 
-using namespace TremppiExpress;
-
 //
 int tremppi_express(int argc, char ** argv) {
 	bpo::variables_map po; // program options provided on the command line
@@ -14,8 +12,8 @@ int tremppi_express(int argc, char ** argv) {
 		if (argc < 1)
 			throw runtime_error("No parameters.");
 
-		po = ProgramOptions::parseProgramOptions(argc, argv);
-		input_path = ProgramOptions::getDatabasePath(po);
+		po = ExpressOptions::parseProgramOptions(argc, argv);
+		input_path = ExpressOptions::getDatabasePath(po);
 
 		tremppi_system.set("tremppi_express", argv[0], input_path.parent_path());
 		logging.init(1);
@@ -36,7 +34,7 @@ int tremppi_express(int argc, char ** argv) {
 
 		// Read filter conditions
 		if (po.count("select") > 0)
-			select = ProgramOptions::getFilter(po["select"].as<string>());
+			select = ExpressOptions::getFilter(po["select"].as<string>());
 
 		// Read regulatory information
 		sqlite3pp::query qry(db, ("SELECT * FROM " + COMPONENTS_TABLE).c_str());

@@ -67,7 +67,8 @@ class ModelChecker {
 
       // If there this round is finished, but there are still paths to find
       if (updates.empty() && (BFS_level < settings.getBound())) {
-		  if (settings.mimizeCost() && results.isAccepting(settings.minimal_count, INF))
+		  // Stop in case of using the minimal count
+		  if (settings.bound_type == BoundType::min && results.isAccepting())
 			  return;
          updates = move(next_updates);
          BFS_level++; // Increase level

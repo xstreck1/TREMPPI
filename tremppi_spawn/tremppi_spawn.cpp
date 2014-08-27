@@ -8,8 +8,6 @@
 #include "io/program_options.hpp"
 #include "io/syntax_checker.hpp"
 
-using namespace TremppiSpawn;
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_spawn.
 /// - Checks for correctness of a model.
@@ -23,8 +21,8 @@ int tremppi_spawn(int argc, char ** argv) {
 		if (argc < 1)
 			throw runtime_error("No parameters.");
 
-		po = ProgramOptions::parseProgramOptions(argc, argv);
-		input_path = ProgramOptions::getNetworkPath(po);
+		po = SpawnOptions::parseProgramOptions(argc, argv);
+		input_path = SpawnOptions::getNetworkPath(po);
 
 		tremppi_system.set("tremppi_spawn", argv[0], input_path.parent_path());
 		logging.init(1);

@@ -11,7 +11,7 @@
 /// \brief Class that outputs formatted resulting data.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class OutputManager {
-	const UserOptions & user_options; ///< User can influence the format of the output.
+	const bpo::variables_map & user_options; ///< User can influence the format of the output.
 	const PropertyAutomaton & property; ///< Property automaton.
 	const Model & model; ///< Reference to the model itself.
 	const Kinetics & kinetics; ///< Kinetics data for the model
@@ -19,23 +19,10 @@ class OutputManager {
 public:
 	NO_COPY(OutputManager)
 
-	OutputManager(const UserOptions & _user_options, const PropertyAutomaton & _property, const Model & _model, const Kinetics & _kinetics)
+	OutputManager(const bpo::variables_map  & _user_options, const PropertyAutomaton & _property, const Model & _model, const Kinetics & _kinetics)
 		: user_options(_user_options), property(_property), model(_model), kinetics(_kinetics) {}
 
 public:
-	/**
-	 * @brief eraseData
-	 */
-	void eraseData() {
-		if (user_options.use_textfile) {
-			output_streamer.createStreamFile(results_str, user_options.datatext_file);
-		}
-		if (user_options.use_database) {
-
-		}
-		outputForm();
-	}
-
 	/**
 	 * @brief outputForm
 	 */
@@ -92,8 +79,6 @@ public:
 		update += "\"" + witness + "\")";
 
 		size_t traits = 0;
-		if (user_options.output_console && user_options.be_verbose)
-			output_streamer.clear_line(verbose_str);
 		output_streamer.output(results_str, line, traits);
 	}
 };

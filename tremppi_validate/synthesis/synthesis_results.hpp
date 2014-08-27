@@ -8,20 +8,13 @@ struct SynthesisResults {
 
 
    inline bool isAccepting() {
-      return isAccepting(1, INF);
-   }
-
-
-   inline bool isAccepting(const size_t min_acc, const size_t max_acc) {
-      return (min_acc <= found_depth.size()) && (max_acc >= found_depth.size());
+	   return  !found_depth.empty();
    }
 
    /**
     * @brief derive  information from stored final states
     */
    void derive() {
-
-
       for (const pair<StateID, size_t> & state : found_depth) {
          auto it = depths.find(state.second);
          if (it != depths.end()) {

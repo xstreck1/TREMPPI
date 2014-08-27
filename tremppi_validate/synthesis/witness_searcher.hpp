@@ -71,7 +71,7 @@ class WitnessSearcher {
 
 
          for (const StateID & succ: transports) {
-            last_branch = min(DFS(succ, depth + 1, last_branch), depth); // Recursive descent with parametrizations passed from the predecessor.
+            last_branch = std::min(DFS(succ, depth + 1, last_branch), depth); // Recursive descent with parametrizations passed from the predecessor.
          }
       }
       return last_branch;
@@ -117,18 +117,15 @@ public:
     * Re-formes the transitions computed during the round into strings.
     * @return  strings with all transitions for each acceptable parametrization
     */
-   const static string getOutput(const bool use_long_witnesses, const ProductStructure & product, const vector<StateTransition> & transitions) {
+   const static string getOutput(const TraceType trace_type, const ProductStructure & product, const vector<StateTransition> & transitions) {
       string acceptable_paths; // Vector fo actuall data
       // Cycle throught the parametrizations
       if (!transitions.empty()) { // Test for emptyness of the set of transitions
          acceptable_paths = "{";
          // Reformes based on the user request
          for (const StateTransition & trans:transitions){
-            if (!use_long_witnesses) {
-               acceptable_paths.append(to_string(trans.first)).append(">").append(to_string(trans.second)).append(",");
-            } else {
-               acceptable_paths.append(product.getString(trans.first)).append(">").append(product.getString(trans.second)).append(",");
-            }
+            acceptable_paths.append(to_string(trans.first)).append(">").append(to_string(trans.second)).append(",");
+            // acceptable_paths.append(product.getString(trans.first)).append(">").append(product.getString(trans.second)).append(",");
          }
          acceptable_paths.back() = '}';
       }
