@@ -16,6 +16,13 @@
 	TypeName(const TypeName & ) = delete; \
 	TypeName& operator=(const TypeName & ) = delete; 
 
+#define GROUNDED(TypeName) \
+	TypeName() = default;  \
+	TypeName(TypeName && ) = delete;  \
+	TypeName& operator=(TypeName && ) = delete; \
+	TypeName(const TypeName & ) = delete; \
+	TypeName& operator=(const TypeName & ) = delete; 
+
 #define NO_COPY_SHORT(TypeName) \
 	TypeName(const TypeName & ) = delete; \
 	TypeName& operator=(const TypeName & ) = delete; 

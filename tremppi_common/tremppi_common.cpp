@@ -1,6 +1,6 @@
 #include "header.h"
 
-void TremppiSystem::set(const char * name, const char * arg, const bfs::path & _WORK_PATH) {
+void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) {
 	PROGRAM_NAME = name;
 	WORK_PATH = _WORK_PATH;
 	BIN_PATH = bfs::path{ arg };

@@ -1,28 +1,13 @@
 #include <tremppi_common/general/logging.hpp>
 #include "compute/MVQMC.hpp"
-#include "io/program_options.hpp"
+#include "io/express_options.hpp"
 #include "io/output.hpp"
 
 //
 int tremppi_express(int argc, char ** argv) {
-	bpo::variables_map po; // program options provided on the command line
-	bfs::path input_path; // an input path
-
-	try {
-		if (argc < 1)
-			throw runtime_error("No parameters.");
-
-		po = ExpressOptions::parseProgramOptions(argc, argv);
-		input_path = ExpressOptions::getDatabasePath(po);
-
-		tremppi_system.set("tremppi_express", argv[0], input_path.parent_path());
-		logging.init(1);
-		BOOST_LOG_TRIVIAL(info) << "TREMPPI expression minimizer (" << tremppi_system.PROGRAM_NAME << ") started.";
-	}
-	catch (exception & e) {
-		cerr << e.what();
-		return 1;
-	}
+	bpo::variables_map po = tremppi_system.initiate<ExpressOptions>("tremppi_express", argc, argv);
+	bfs::path input_path = ExpressOptions::getPath(po, DATABASE_FILENAME);
+	bfs::path database_path = input_path / DATABASE_FILENAME;
 
 	string select;
 	map<string, ActLevel> maxes;
@@ -30,7 +15,7 @@ int tremppi_express(int argc, char ** argv) {
 	sqlite3pp::database db;
 	try {
 		// Get database
-		db = move(sqlite3pp::database(po["database"].as<string>().c_str()));
+		db = move(sqlite3pp::database(database_path.string().c_str() ));
 
 		// Read filter conditions
 		if (po.count("select") > 0)
@@ -52,7 +37,7 @@ int tremppi_express(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 1);
+		logging.exceptionMessage(e, 2);
 	}
 
 	// Convert and output
@@ -94,7 +79,7 @@ int tremppi_express(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 3);
 	}
 
 	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";

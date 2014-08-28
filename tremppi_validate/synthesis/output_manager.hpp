@@ -36,25 +36,6 @@ public:
 		}
 		format_desc.back() = ')';
 		format_desc += ":Cost:Robust:Witness";
-		output_streamer.output(results_str, format_desc);
-	}
-
-	/**
-	 * Output summary after the computation.
-	 *
-	 * @param total_count	number of all feasible colors
-	 */
-	void outputSummary(const ParamNo accepting, const ParamNo total) {
-		output_streamer.output(verbose_str, "Total number of parametrizations: " + to_string(accepting) + "/" + to_string(total) + ".");
-	}
-
-	/**
-	 * Outputs round number - if there are no data within, then erase the line each round.
-	 */
-	void outputRoundNo(const ParamNo round_no, const ParamNo round_count) const {
-		// output numbers
-		OutputStreamer::Trait trait = OutputStreamer::no_newl | OutputStreamer::rewrite_ln;
-		output_streamer.output(verbose_str, "Round: " + to_string(round_no) + "/" + to_string(round_count) + ".", trait);
 	}
 
 	/**
@@ -79,6 +60,5 @@ public:
 		update += "\"" + witness + "\")";
 
 		size_t traits = 0;
-		output_streamer.output(results_str, line, traits);
 	}
 };

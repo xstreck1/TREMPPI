@@ -2,7 +2,6 @@
 
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
-#include "../auxiliary/output_streamer.hpp"
 #include "automaton_interface.hpp"
 
 /// Single labelled transition from one state to another.

@@ -87,18 +87,12 @@ public:
 
 		// Creates states and their transitions
 		for (size_t BA_ID = 0; BA_ID < product.getAutomaton().getStateCount(); BA_ID++) {
-			output_streamer.output(verbose_str, "Building product subspace: " + to_string(BA_ID + 1) + "/" 
-				+ to_string(product.getAutomaton().getStateCount()) + ".", OutputStreamer::no_newl | OutputStreamer::rewrite_ln);
-
 			// Create that what relates to this BA state
 			createSubspace(BA_ID, product);
 			for (const size_t trans_no : crange(product.getAutomaton().getTransitionCount(BA_ID))) 
 				addSubspaceTransitions(BA_ID, trans_no, product);
 			relabel(BA_ID, product);
 		}
-
-		output_streamer.clear_line(verbose_str);
-
 		return product;
 	}
 };

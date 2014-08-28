@@ -20,7 +20,7 @@ namespace RegulatoryGraph {
 		}
 
 		// Compute relation to each regulation of this component
-		logging.newPhase(step_count, "Graph build");
+		logging.newPhase("Graph build", step_count);
 		for (const auto & row : qry) {
 			// Obtain the data
 			vector<ActLevel> param(qry.column_count());

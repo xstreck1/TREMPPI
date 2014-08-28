@@ -33,6 +33,6 @@ int tremppi_python(const string command, int argc, char ** argv) {
 }
 
 int tremppi_init(int argc, char ** argv) {
-	tremppi_system.set("tremppi", argv[0], bfs::path{ "." });
+	tremppi_system.set("tremppi", argv[0], "." );
 	return tremppi_python("init", argc, argv);
 }

@@ -31,7 +31,7 @@ $(function() { // on dom ready
                     'opacity': 0.25,
                     'text-opacity': 0
                 }),
-        elements: addIDs(elements),
+        elements: addIDs(networks[0]),
         layout: {
             name: 'breadthfirst',
             fit: false, // whether to fit the viewport to the graph

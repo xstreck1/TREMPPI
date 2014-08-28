@@ -101,13 +101,11 @@ public:
 
 		// List throught all the automaton states
 		for (StateID ID = 0; ID < property.getStatesCount(); ID++) {
-			output_streamer.output(verbose_str, "Building automaton state: " + to_string(++state_no) + "/" + to_string(state_count) + ".", OutputStreamer::no_newl | OutputStreamer::rewrite_ln);
 			// Fill auxiliary data
 			automaton.addState(ID, property.isFinal(ID));
 			// Add transitions for this state
 			addTransitions(automaton, ID);
 		}
-		output_streamer.clear_line(verbose_str);
 
 		return automaton;
 	}

@@ -1,7 +1,6 @@
 #include <tremppi_common/general/logging.hpp>
 
-#include "io/program_options.hpp"
-#include "auxiliary/output_streamer.hpp"
+#include "io/validate_options.hpp"
 #include "construction/construction_manager.hpp"
 #include "construction/product_builder.hpp"
 #include "synthesis/synthesis_manager.hpp"
@@ -10,23 +9,8 @@
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
-	bpo::variables_map po; // program options provided on the command line
-	bfs::path input_path; // an input path
-	try {
-		if (argc < 1)
-			throw runtime_error("No parameters.");
-
-		po = ValidateOptions::parseProgramOptions(argc, argv);
-		input_path = ValidateOptions::getDatabasePath(po);
-
-		tremppi_system.set("tremppi_validate", argv[0], input_path.parent_path());
-		logging.init(1);
-		BOOST_LOG_TRIVIAL(info) << "TREMPPI validation by LTL model checking (" << tremppi_system.PROGRAM_NAME << ") started.";
-	}
-	catch (exception & e) {
-		cerr << e.what();
-		return 1;
-	}
+	bpo::variables_map po = tremppi_system.initiate<ValidateOptions>("tremppi_validate", argc, argv);
+	bfs::path input_path = ValidateOptions::getPath(po, DATABASE_FILENAME);
 
 	Model model;
 	PropertyAutomaton property;
@@ -73,22 +57,17 @@ int tremppi_validate(int argc, char ** argv) {
 		product = ConstructionManager::construct(model, property, kinetics);
 	}
 	catch (std::exception & e) {
-		output_streamer.output(error_str, string("Error occured while building the data structures: \"" + string(e.what()) + "\". \n Contact support for details."));
-		return 4;
+		logging.exceptionMessage(e, 3);
 	}
 
 	// Synthesis of parametrizations
 	try {
-		OutputManager output(po, property, model, kinetics);
 		SynthesisManager synthesis_manager(product);
 		ParamNo param_count = KineticsTranslators::getSpaceSize(kinetics);
 		size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified property.
-		output.outputForm();
 
 		// Do the computation for all the rounds
 		for (ParamNo param_ID = 0; param_ID < param_count; param_ID++) {
-			output.outputRoundNo(param_ID + 1, param_count);
-
 			vector<StateTransition> witness_trans;
 			double robustness_val = 0.;
 			size_t cost = INF;
@@ -108,14 +87,12 @@ int tremppi_validate(int argc, char ** argv) {
 			// Parametrization was considered satisfying.
 			if ((cost != INF)) {
 				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, witness_trans);
-				output.outputRound(param_ID, cost, robustness_val, witness_path);
 				param_count++;
 			}
 		}
 	}
 	catch (std::exception & e) {
-		output_streamer.output(error_str, string("Error occured while syntetizing the parametrizations: \"" + string(e.what()) + "\".\n Contact support for details."));
-		return 5;
+		logging.exceptionMessage(e, 4);
 	}
 
 	return 0;

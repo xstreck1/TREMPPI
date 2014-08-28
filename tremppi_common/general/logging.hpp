@@ -4,22 +4,25 @@
 #include "common_functions.hpp"
 
 class Logging {
-public:
-	size_t phase_no;
-	size_t phase_count;
 	size_t step_count;
 	size_t step_no;
-	string desc;
-	const size_t MAX_PHASES = 99;
-	const size_t MAX_WIDHT = 60; // Maximal lenght of the message
+	string phase_desc;
+	string subphase_desc;
+	const size_t MAX_WIDHT = 35; // Maximal lenght of the message
 
-	Logging();
+	Logging(const Logging & o) = delete;
+	Logging& operator=(const Logging & o) = delete;
 
+public:
+	Logging() = default;
 	//
-	void init(const size_t _phase_count);
+	void init();
 
 	// 
-	void newPhase(const size_t _step_count, const string & _desc);
+	void Logging::newPhase(const string & _desc, const size_t _step_count = 0);
+
+	// 
+	void Logging::newSubPhase(const string & _desc, const size_t _step_count = 0);
 
 	//
 	void step();

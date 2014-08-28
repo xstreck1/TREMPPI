@@ -25,15 +25,6 @@ namespace Label {
    const vector<std::string> All = { Activating, ActivatingOnly, Inhibiting, InhibitingOnly, NotActivating, NotInhibiting, Observable, NotObservable, Free };
 }
 
-const std::string MODEL_SUFFIX = ".pmf";
-const std::string PROPERTY_SUFFIX = ".ppf";
-const std::string DATABASE_SUFFIX = ".sqlite";
-const std::string OUTPUT_SUFFIX = ".out";
-const std::string PLA_SUFFIX = ".pla";
-const std::string GRAPH_SUFFIX = ".json";
-const std::string FILTER_SUFFIX = ".filter";
-const std::string NETWORK_SUFFIX = ".js";
-
 const std::string COMPONENTS_TABLE = "Components";
 const std::string REGULATIONS_TABLE = "Regulations";
 const std::string PARAMETRIZATIONS_TABLE = "Parametrizations";

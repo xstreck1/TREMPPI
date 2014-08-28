@@ -11,10 +11,11 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_express_test());
 	ASSERT_EQ(0, basic_report_test());
 	ASSERT_EQ(0, basic_validate_test());
+	cout << endl;
 }
 
 int tremppi_test(int argc, char** argv) {
-	tremppi_system.set("tremppi_test", argv[0], bfs::current_path());
+	tremppi_system.set("tremppi_test", argv[0], bfs::current_path().string());
     ::testing::InitGoogleTest( &argc, argv );
 	int result = RUN_ALL_TESTS();
 

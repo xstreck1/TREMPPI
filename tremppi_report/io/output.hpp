@@ -145,7 +145,7 @@ namespace Output {
 	//
 	void copyReport(const bfs::path & input_path) {
 		// Copy the data from "../Files/Standine_report"
-		bfs::path report_dir = input_path.parent_path() / (input_path.stem().string() + "_report");
+		bfs::path report_dir = input_path / "report";
 		if (bfs::exists(report_dir))
 			bfs::remove_all(report_dir);
 		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" }, report_dir);
@@ -159,7 +159,7 @@ namespace Output {
 
 	//
 	ofstream fileOutput(const bfs::path & input_path, const string & name) {
-		bfs::path output_path = input_path.parent_path() /= bfs::path{ input_path.stem().string() + "_report" } /= name;
+		bfs::path output_path = input_path / bfs::path{ "report" } / name;
 		ofstream file = ofstream(output_path.string(), ios::out);
 		if (!file)
 			throw runtime_error("Could not open " + output_path.string());

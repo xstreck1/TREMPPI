@@ -175,8 +175,6 @@ public:
 		const size_t state_count = solveConstrains(structure);
 		Levels levels(structure.mins);
 		do {
-			output_streamer.output(verbose_str, "Creating transitions for state: " + to_string(state_no) + "/" + to_string(state_count) + ".",
-				OutputStreamer::no_newl | OutputStreamer::rewrite_ln);
 			// Fill the structure with the state
 			if (allowed_states[state_no]) {
 				structure.addState(state_no, levels);
@@ -187,8 +185,6 @@ public:
 			}
 			state_no++;
 		} while (iterate(structure.maxes, structure.mins, levels));
-
-		output_streamer.clear_line(verbose_str);
 
 		return structure;
 	}

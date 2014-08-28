@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../auxiliary/output_streamer.hpp"
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/network/definitions.hpp>
 #include "transition_system_interface.hpp"

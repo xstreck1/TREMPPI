@@ -9,28 +9,12 @@
 #include "analysis/regulatory_graph.hpp"
 #include "io/data_reader.hpp"
 #include "io/output.hpp"
-#include "io/program_options.hpp"
+#include "io/report_options.hpp"
 
 // TODO: disable regulatory if not -r
 int tremppi_report(int argc, char ** argv) {
-	bpo::variables_map po; // program options provided on the command line
-	bfs::path input_path; // an input path
-
-	try {
-		if (argc < 1)
-			throw runtime_error("No parameters.");
-
-		po = ReportOptions::parseProgramOptions(argc, argv);
-		input_path = ReportOptions::getDatabasePath(po);
-
-		tremppi_system.set("tremppi_report", argv[0], input_path.parent_path());
-		logging.init(1);
-		BOOST_LOG_TRIVIAL(info) << "TREMPPI statical analysis reporter (" << tremppi_system.PROGRAM_NAME << ") started.";
-	}
-	catch (exception & e) {
-		cerr << e.what();
-		return 1;
-	}
+	bpo::variables_map po = tremppi_system.initiate<ReportOptions>("tremppi_report", argc, argv);
+	bfs::path input_path = ReportOptions::getPath(po, DATABASE_FILENAME);
 
 	map<string, Json::Value> out;
 	out["setup"]["date"] = TimeManager::getTime();
@@ -39,16 +23,14 @@ int tremppi_report(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Get user options
-		po = ReportOptions::parseProgramOptions(argc, argv);
 		out["setup"]["comparative"] = po.count("compare") > 0;
-		input_path = ReportOptions::getDatabasePath(po);
 
 		// Copy the directory data
 		Output::copyReport(input_path);
 
 		// Get database
-		out["setup"]["name"] = input_path.stem().string();
-		db = move(sqlite3pp::database(po["database"].as<string>().c_str()));
+		out["setup"]["name"] = "no name assigned";
+		db = move(sqlite3pp::database((input_path / DATABASE_FILENAME).string().c_str()));
 
 		// Read filter conditions
 		if (po.count("select") > 0)

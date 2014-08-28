@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../auxiliary/output_streamer.hpp"
 #include "../construction/automaton_structure.hpp"
 #include "../construction/unparametrized_structure.hpp"
 #include "transition_system_interface.hpp"

@@ -60,6 +60,10 @@ namespace src = boost::log::sources;
 namespace snk = boost::log::sinks;
 namespace kwd = boost::log::keywords;
 
+const string NETWORKS_FILENAME = "networks.js";
+const string DATABASE_FILENAME = "database.sqlite";
+const string FORMULAS_FILENAME = "formulas.js";
+
 // The global setup for Tremppi apps - mainly sets paths to the executables and data
 class TremppiSystem {
 public:
@@ -70,9 +74,32 @@ public:
 	bfs::path BIN_PATH; // The path to the executed binary
 	bool standalone; // True if executing the standalone application instead of the main launcher
 
-	/*
-	*/
-	void set(const char * name, const char * arg, const bfs::path & _WORK_PATH);
+	//
+	void set(const char * name, const char * arg, const string & _WORK_PATH);
+
+	//
+	template<typename OptionsT>
+	bpo::variables_map TremppiSystem::initiate(const string & name, int argc, char **argv) {
+		bpo::variables_map po;
+
+		try {
+			if (argc < 1)
+				throw runtime_error("No parameters.");
+			OptionsT options;
+			po = options.parseProgramOptions(argc, argv);
+
+			tremppi_system.set(name.c_str(), argv[0], po["path"].as<string>());
+			logging.init();
+			BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " started.";
+		}
+		catch (exception & e) {
+			cerr << e.what();
+			exit(1);
+		}
+
+		return po;
+	}
 };
 
 extern TremppiSystem tremppi_system;
+
