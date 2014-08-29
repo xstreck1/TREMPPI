@@ -1,7 +1,7 @@
 #include <tremppi_common/network/kinetics.hpp>
 
 #include "unparametrized_structure.hpp"
-#include "../kinetics/parameter_helper.hpp"
+#include "../data/parameter_helper.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Creates a UnparametrizedStructure as a composition of a BasicStructure and ParametrizationsHolder.
@@ -12,11 +12,11 @@
 /// This expects semantically correct data from BasicStructure and FunctionsStructure.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class UnparametrizedStructureBuilder {
-	const Model & model;
+	const RegInfos & reg_infos;
 	const PropertyAutomaton & property;
 	const Kinetics & kinetics;
 
-	vector<size_t> index_jumps; ///< Holds index differences between two neighbour states in each direction for each specie.
+	vector<size_t> index_jumps; ///< Holds index differences between two neighbour states in each direction for each ID.
 	vector<bool> allowed_states; ///< Masking the states (by IDs) that are allowed by the current experiment
 
 	/**
@@ -41,34 +41,34 @@ class UnparametrizedStructureBuilder {
 	/**
 	 * @brief addTransition add a transition if feasible
 	 */
-	void addTransition(const StateID ID, const StateID target, const CompID specie, const bool direction, const Levels & state_levels, UnparametrizedStructure & structure) {
+	void addTransition(const StateID source, const StateID target, const CompID ID, const bool direction, const Levels & state_levels, UnparametrizedStructure & structure) {
 		// Find out which function is currently active
-		const size_t fun_no = getActiveFunction(specie, state_levels);
+		const size_t fun_no = getActiveFunction(ID, state_levels);
 		// Fill the step size
-		const ParamNo step_size = kinetics.components[specie].step_size;
+		const ParamNo step_size = kinetics.components[ID].step_size;
 		// Reference target values
-		const Levels & parameter_vals = kinetics.components[specie].params[fun_no].target_in_subcolor;
+		const Levels & parameter_vals = kinetics.components[ID].params[fun_no].target_in_subcolor;
 
-		if (isFeasible(parameter_vals, direction, state_levels[specie]))
-			structure.addTransition(ID, target, step_size, direction, state_levels[specie], parameter_vals);
+		if (isFeasible(parameter_vals, direction, state_levels[ID]))
+			structure.addTransition(source, target, step_size, direction, state_levels[ID], parameter_vals);
 	}
 
 	/**
-	 * @brief addTransitions   add all transitions for the given specie
+	 * @brief addTransitions   add all transitions for the given ID
 	 */
-	void addTransitions(const StateID ID, const Levels & state_levels, UnparametrizedStructure & structure) {
-		for (size_t specie = 0; specie < model.components.size(); specie++) {
+	void addTransitions(const StateID trans_ID, const Levels & state_levels, UnparametrizedStructure & structure) {
+		for (const CompID ID : cscope(reg_infos)) {
 			// If this value is not the lowest one, add neighbour with lower
-			if (state_levels[specie] > structure.mins[specie]) {
-				const StateID target_ID = ID - index_jumps[specie];
+			if (state_levels[ID] > structure.mins[ID]) {
+				const StateID target_ID = trans_ID - index_jumps[ID];
 				if (allowed_states[target_ID])
-					addTransition(ID, target_ID, specie, false, state_levels, structure);
+					addTransition(trans_ID, target_ID, ID, false, state_levels, structure);
 			}
 			// If this value is not the highest one, add neighbour with higher
-			if (state_levels[specie] < structure.maxes[specie]) {
-				const StateID target_ID = ID + index_jumps[specie];
+			if (state_levels[ID] < structure.maxes[ID]) {
+				const StateID target_ID = trans_ID + index_jumps[ID];
 				if (allowed_states[target_ID])
-					addTransition(ID, target_ID, specie, true, state_levels, structure);
+					addTransition(trans_ID, target_ID, ID, true, state_levels, structure);
 			}
 		}
 	}
@@ -110,11 +110,11 @@ class UnparametrizedStructureBuilder {
 	 * Differences are caused by the way the states are generated.
 	 */
 	void computeJumps(const Levels & range_size) {
-		index_jumps.reserve(model.components.size());
+		index_jumps.reserve(reg_infos.size());
 		// How many far away are two neighbour in the vector
 		size_t jump_lenght = 1;
 		// Species with higher index cause bigger differences
-		for (size_t specie_no : cscope(model.components)) {
+		for (size_t specie_no : cscope(reg_infos)) {
 			index_jumps.emplace_back(jump_lenght);
 			jump_lenght *= (range_size[specie_no]);
 		}
@@ -130,14 +130,14 @@ class UnparametrizedStructureBuilder {
 
 	// Label, as allowed, those states that satisfy the experiment
 	size_t solveConstrains(UnparametrizedStructure & structure) {
-		pair<Levels, Levels> bounds = ParameterHelper::getBounds(model, property);
+		pair<Levels, Levels> bounds = ParameterHelper::getBounds(reg_infos, property);
 		structure.mins = bounds.first; structure.maxes = bounds.second;
 		rng::transform(structure.maxes, structure.mins, back_inserter(structure.range_size), [](const ActLevel max, const ActLevel min) {return max - min + 1;});
 
-		ConstraintParser * cons_pars = new ConstraintParser(model.components.size(), ModelTranslators::getMaxLevel(model));
+		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
 		cons_pars->addBoundaries(bounds.first, false);
 		cons_pars->addBoundaries(bounds.second, true);
-		cons_pars->applyFormula(ModelTranslators::getAllNames(model), property.getExperiment());
+		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.getExperiment());
 		// Compute distances between neighbours
 		computeJumps(structure.range_size);
 
@@ -161,8 +161,8 @@ class UnparametrizedStructureBuilder {
 	}
 
 public:
-	UnparametrizedStructureBuilder(const Model & _model, const PropertyAutomaton & _property, const Kinetics & _kinetics)
-		: model(_model), property(_property), kinetics(_kinetics) {}
+	UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property, const Kinetics & _kinetics)
+		: reg_infos(_reg_infos), property(_property), kinetics(_kinetics) {}
 
 	/**
 	 * Create the states from the model and fill the structure with them.

@@ -29,7 +29,7 @@ int tremppi_express(int argc, char ** argv) {
 			string name; ActLevel max;
 			row.getter() >> name >> max;
 			maxes.insert(make_pair(name, max));
-			RegInfo info = DatabaseReader::readRegInfo(name, db);
+			RegInfo info = DatabaseReader::readRegInfo(functions.size(), name, db);
 			Configurations minterms;
 			for (const pair<string, size_t> column : info.columns)
 				minterms.emplace_back(DatabaseReader::getThrsFromContext(column.first));
@@ -53,7 +53,7 @@ int tremppi_express(int argc, char ** argv) {
 			db.execute("BEGIN TRANSACTION");
 			// Go through parametrizations
 			for (auto & sel_ID : sel_IDs) {
-				vector<vector<PMin>> config_values(reg_func.info.max + 1);
+				vector<vector<PMin>> config_values(reg_func.info.max_activity + 1);
 				Levels params = sqlite3pp::func::getRow<ActLevel>(sel_it, sel_qry.column_count());
 				
 				// Convert the contexts 
@@ -65,7 +65,7 @@ int tremppi_express(int argc, char ** argv) {
 
 				// Minimize for all values
 				vector<PDNF> pdnfs(1);
-				for (ActLevel target_val = 1; target_val < (reg_func.info.max + 1); target_val++) {
+				for (ActLevel target_val = 1; target_val < (reg_func.info.max_activity + 1); target_val++) {
 					pdnfs.emplace_back(MVQMC::compactize(config_values[target_val]));
 				}
 				

@@ -18,7 +18,7 @@ int tremppi_report(int argc, char ** argv) {
 
 	map<string, Json::Value> out;
 	out["setup"]["date"] = TimeManager::getTime();
-	vector<RegInfo> source_data;
+	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
@@ -42,7 +42,7 @@ int tremppi_report(int argc, char ** argv) {
 		sqlite3pp::query qry(db, ("SELECT " + DatabaseReader::NAMES_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());
 		for (auto row : qry) {
 			string name = row.get<const char*>(0);
-			source_data.push_back(DatabaseReader::readRegInfo(name, db));
+			reg_infos.push_back(DatabaseReader::readRegInfo(reg_infos.size(), name, db));
 		}
 	}
 	catch (exception & e) {
@@ -70,7 +70,7 @@ int tremppi_report(int argc, char ** argv) {
 				fun_data_types["differ"] = FunsData();
 			}
 			// Get function statistics for all the regulators
-			for (const RegInfo & reg_info : source_data) {
+			for (const RegInfo & reg_info : reg_infos) {
 				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				fun_data_types["select"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection
@@ -91,7 +91,7 @@ int tremppi_report(int argc, char ** argv) {
 				reg_data_types["compare"] = RegsData(); 
 				reg_data_types["differ"] = RegsData();
 			}
-			for (const RegInfo & reg_info : source_data) {
+			for (const RegInfo & reg_info : reg_infos) {
 				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				reg_data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection

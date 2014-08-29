@@ -60,9 +60,9 @@ namespace src = boost::log::sources;
 namespace snk = boost::log::sinks;
 namespace kwd = boost::log::keywords;
 
-const string NETWORKS_FILENAME = "networks.js";
+const string NETWORK_FILENAME = "network.js";
 const string DATABASE_FILENAME = "database.sqlite";
-const string FORMULAS_FILENAME = "formulas.js";
+const string PROPERTIES_FILENAME = "properties.js";
 
 // The global setup for Tremppi apps - mainly sets paths to the executables and data
 class TremppiSystem {

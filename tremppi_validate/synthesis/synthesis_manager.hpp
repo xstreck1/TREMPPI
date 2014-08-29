@@ -1,7 +1,7 @@
 #pragma once
 
 #include <tremppi_common/network/model.hpp>
-#include "../model/property_automaton.hpp"
+#include "../data/property_automaton.hpp"
 
 #include "witness_searcher.hpp"
 #include "output_manager.hpp"

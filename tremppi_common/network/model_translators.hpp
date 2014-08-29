@@ -28,11 +28,6 @@ namespace ModelTranslators {
 	vector<string> getRegulatorsNames(const Model & model, const CompID ID);
 
 	/**
-	* @return	names of all the components
-	*/
-	vector<string> getAllNames(const Model & model);
-
-	/**
 	 * @brief getThresholds Finds a list of thresholds for each regulator of a given component.
 	 * @param ID
 	 * @return
@@ -54,9 +49,6 @@ namespace ModelTranslators {
 
 	// @return regulation with given parameters
 	const Model::Regulation & findRegulation(const Model & model, const CompID t_ID, const CompID s_ID, const ActLevel threshold);
-
-	// @return the maximal level in between the components
-	const ActLevel getMaxLevel(const Model & model);
 
 	// @return canonic form of the label
 	string readLabel(const string & label);

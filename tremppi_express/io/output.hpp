@@ -54,7 +54,7 @@ namespace Output {
 		string result;
 
 		// Add front value in case the component is not boolean or has no regulators (constant)
-		if (reg_func.info.max > 1 || reg_func.info.regulators.empty())
+		if (reg_func.info.max_activity > 1 || reg_func.info.regulators.empty())
 			result += to_string(target_val) + "&";
 
 		// Add values of all the regulators

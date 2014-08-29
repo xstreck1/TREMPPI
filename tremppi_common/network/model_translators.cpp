@@ -24,13 +24,6 @@ vector<string> ModelTranslators::getRegulatorsNames(const Model & model, const C
 	return names;
 }
 
-vector<string> ModelTranslators::getAllNames(const Model & model) {
-	 vector<string> names;
-	 for (const Model::ModelComp & component : model.components)
-		 names.push_back(component.name);
-	 return names;
- }
-
 map<CompID, Levels > ModelTranslators::getThresholds(const Model & model, const CompID ID) {
 	map<CompID, Levels> thresholds;
 	for (auto reg : model.components[ID].regulations) {
@@ -116,12 +109,6 @@ const Model::Regulation & ModelTranslators::findRegulation(const Model & model, 
 		if (regul.s_ID == s_ID && regul.threshold == threshold)
 			return regul;
 	throw runtime_error("Failed to match the regulation " + to_string(s_ID) + " -" + to_string(threshold) + "-> " + to_string(t_ID));
-}
-
-const ActLevel ModelTranslators::getMaxLevel(const Model & model) {
-	return rng::max_element(model.components, [](const Model::ModelComp & A, const Model::ModelComp & B) {
-		return A.max_activity < B.max_activity;
-	})->max_activity;
 }
 
 string ModelTranslators::readLabel(const string & label) {

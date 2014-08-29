@@ -1,4 +1,5 @@
 var elements = {
+        "name": "test",
         "edges": [
             {
                 "data": {

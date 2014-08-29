@@ -113,7 +113,7 @@ class ParametrizationsBuilder {
 	}
 
 	/* Create constraint space on parametrizations for the given specie and enumerate and store all the solutions. */
-	static Configurations  createPartCol(const Kinetics::Params & params, const string formula, const size_t max_value) {
+	static Configurations  createPartCol(const bool check_only, const Kinetics::Params & params, const string formula, const size_t max_value) {
 		Configurations result;
 
 		// Build the space
@@ -126,14 +126,17 @@ class ParametrizationsBuilder {
 		// Impose constraints
 		cons_pars->applyFormula(names, formula);
 
-		// Conduct search
-		Gecode::DFS<ConstraintParser> search(cons_pars);
-		delete cons_pars;
-		while (ConstraintParser *match = search.next()) {
-			Levels solution = match->getSolution();
-			Levels shortened;
-			result.push_back(solution);
-			delete match;
+		// Enumerate if not check only
+		if (!check_only) {
+			// Conduct search
+			Gecode::DFS<ConstraintParser> search(cons_pars);
+			delete cons_pars;
+			while (ConstraintParser *match = search.next()) {
+				Levels solution = match->getSolution();
+				Levels shortened;
+				result.push_back(solution);
+				delete match;
+			}
 		}
 
 		return result;
@@ -143,7 +146,7 @@ public:
 	/**
 	* Entry function of parsing, tests and stores subcolors for all the components.
 	*/
-	static void build(const Model &model, Kinetics & kinetics) {
+	static void build(const bool check_only, const Model &model, Kinetics & kinetics) {
 		ParamNo step_size = 1; // Variable necessary for encoding of colors
 
 		// Cycle through components
@@ -158,14 +161,13 @@ public:
 
 			// Solve the parametrizations
 			string formula = createFormula(model.components[ID].regulations, kinetics.components[ID].params) + " & " + ConstraintFomatter::consToFormula(model, ID);
-			Configurations subcolors = createPartCol(kinetics.components[ID].params, formula, model.components[ID].max_activity);
+			Configurations subcolors = createPartCol(check_only, kinetics.components[ID].params, formula, model.components[ID].max_activity);
 
 			// Copy the data
 			auto & params = kinetics.components[ID].params;
 			for (const Levels & subcolor : subcolors)
 				for (const size_t param_no : cscope(subcolor))
 					params[param_no].target_in_subcolor.emplace_back(subcolor[param_no]);
-
 
 			kinetics.components[ID].col_count = subcolors.size();
 			step_size *= subcolors.size();

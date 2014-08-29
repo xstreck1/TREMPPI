@@ -17,3 +17,16 @@ map<string, ActLevel> DataInfo::getComponents(const Json::Value & nodes) {
 
 	return components;
 }
+
+vector<string> DataInfo::getAllNames(const RegInfos & reg_infos) {
+	vector<string> names;
+	for (const RegInfo & reg_info : reg_infos)
+		names.push_back(reg_info.name);
+	return names;
+}
+
+ActLevel DataInfo::getMaxLevel(const RegInfos & reg_infos) {
+	return rng::max_element(reg_infos, [](const RegInfo & A, const RegInfo & B) {
+		return A.max_activity < B.max_activity;
+	})->max_activity;
+}

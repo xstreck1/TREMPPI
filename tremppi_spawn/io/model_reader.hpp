@@ -48,35 +48,4 @@ namespace ModelReader {
 
 		return model;
 	}
-
-	// Read the JSON file
-	Json::Value readFile(const bfs::path & input_path) {
-		Json::Value root;
-
-		// Open file
-		ifstream file(input_path.string(), ios::in);
-		if (!file)
-			throw runtime_error("Could not open the file " + input_path.string() + " for reading.");
-
-		// Remove JS additions
-		std::stringstream buffer;
-		char ch = static_cast<char>(0);
-		while (ch != '{') {
-			file.get(ch);
-		}
-		do {
-			buffer.put(ch);
-			file.get(ch);
-		} while (ch != ';' && file.good());
-
-		file.close();
-
-		// Parse JSON
-		Json::Reader reader;
-		bool parsingSuccessful = reader.parse(buffer, root);
-		if (!parsingSuccessful)
-			throw runtime_error("Failed to parse configuration. " + reader.getFormattedErrorMessages());
-
-		return root;
-	}
 }

@@ -16,7 +16,7 @@ namespace sqlite3pp {
 
 		// @return data references by indices specified in the columns vector
 		template <typename DataType>
-		vector<DataType> sqlite3pp::func::getRow(const sqlite3pp::query::iterator & i, const size_t column_count) {
+		vector<DataType> getRow(const sqlite3pp::query::iterator & i, const size_t column_count) {
 			vector<DataType> data;
 
 			for (const size_t column_i : crange(column_count)) {

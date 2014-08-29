@@ -6,8 +6,8 @@
  * For affiliations see <http://www.mi.fu-berlin.de/en/math/groups/dibimath> and <http://sybila.fi.muni.cz/>.
  */
 
-#include <tremppi_common/network/model_translators.hpp>
-#include "../model/property_automaton.hpp"
+#include <tremppi_common/network/data_info.hpp>
+#include "../data/property_automaton.hpp"
 #include "automaton_structure.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@
 /// Automaton is provided with string labels on the edges that are parsed and resolved for the graph.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AutomatonBuilder {
-	const Model & model; ///< Model that holds the data.
+	const RegInfos & reg_infos; ///< Model that holds the data.
 	const PropertyAutomaton & property;
 
 	vector<string> names; ///< Name of the i-th specie.
@@ -30,17 +30,17 @@ class AutomatonBuilder {
 	 */
 	void computeBoundaries() {
 		// Compute naive bounds.
-		for (const CompID ID : cscope(model.components)) {
+		for (const CompID ID : cscope(reg_infos)) {
 			// Maximal values of species
-			names.push_back(model.components[ID].name);
-			maxes.push_back(model.components[ID].max_activity);
+			names.push_back(reg_infos[ID].name);
+			maxes.push_back(reg_infos[ID].max_activity);
 			mins.push_back(0);
 		}
 
 		// Add experiment constraints.
-		ConstraintParser * cons_pars = new ConstraintParser(model.components.size(), ModelTranslators::getMaxLevel(model));
+		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
 		cons_pars->addBoundaries(maxes, true);
-		cons_pars->applyFormula(ModelTranslators::getAllNames(model), property.getExperiment());
+		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.getExperiment());
 		cons_pars->status();
 
 		// Compute refined boundaries.
@@ -86,7 +86,7 @@ class AutomatonBuilder {
 	}
 
 public:
-	AutomatonBuilder(const Model & _model, const PropertyAutomaton & _property) : model(_model), property(_property) {
+	AutomatonBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property) : reg_infos(_reg_infos), property(_property) {
 		computeBoundaries();
 	}
 

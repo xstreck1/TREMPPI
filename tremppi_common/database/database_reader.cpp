@@ -50,7 +50,7 @@ Levels DatabaseReader::getThrsFromContext(const string & column_name) {
 	return result;
 }
 
-RegInfo DatabaseReader::readRegInfo(const string & name, sqlite3pp::database & db) {
+RegInfo DatabaseReader::readRegInfo(const CompID ID, const string & name, sqlite3pp::database & db) {
 	ActLevel max = getMaxLevel(name, db);
 	auto columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("K_" + name + "_.*"), db);
 	size_t prev_index = 0;
@@ -65,7 +65,7 @@ RegInfo DatabaseReader::readRegInfo(const string & name, sqlite3pp::database & d
 	columns_range = DataConv::indices2range(columns);
 	auto regulators = obtainRegulators(name, db);
 
-	return RegInfo{ name, max, move(columns), move(columns_range), move(regulators) };
+	return RegInfo{ ID, name, max, move(columns), move(columns_range), move(regulators) };
 }
 
 sqlite3pp::query DatabaseReader::selectionFilter(const map<string, size_t> & columns, const string & selection, sqlite3pp::database & db) {

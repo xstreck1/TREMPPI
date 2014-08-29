@@ -1,4 +1,5 @@
 #include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
 
 #include "compute/parameter_builder.hpp"
@@ -15,7 +16,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_spawn(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<SpawnOptions>("tremppi_spawn", argc, argv);
-	bfs::path input_path = SpawnOptions::getPath(po, NETWORKS_FILENAME);
+	bfs::path input_path = SpawnOptions::getPath(po, NETWORK_FILENAME);
 	bfs::path database_file = input_path / DATABASE_FILENAME;
 
 	// Check the file
@@ -23,7 +24,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = ModelReader::readFile(input_path / NETWORKS_FILENAME );
+		root = FileManipulation::readJSasJSON(input_path / NETWORK_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}
@@ -46,19 +47,27 @@ int tremppi_spawn(int argc, char ** argv) {
 		logging.exceptionMessage(e, 3);
 	}
 
-	// Skip further execution if only conducting a check
-	if (po.count("check-only") > 0) {
-		BOOST_LOG_TRIVIAL(info) << "Check-only specified, skipping the enumeration.";
-		return 0;
-	}
-
 	// Obtain the kinetics
 	Kinetics kinetics;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Obtaining kinetics.";
 
 		kinetics.components = ParameterBuilder::build(model);
-		ParametrizationsBuilder::build(model, kinetics);
+		// First build-check
+		ParametrizationsBuilder::build(true, model, kinetics);
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 4);
+	}
+
+	// Skip further execution if only conducting a check
+	if (po.count("check-only") > 0) {
+		BOOST_LOG_TRIVIAL(info) << "Check-only specified, skipping the enumeration.";
+		return 0;
+	}
+
+	try {
+		ParametrizationsBuilder::build(false, model, kinetics);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 4);
