@@ -1,10 +1,12 @@
-var properties = [
+var TremmpiProperties = {
+ "properties" : [
 	{
-		"name": "",
+		"name": "test_property",
 		"type": "TimeSeries",
 		"measurements": [
 			"A=0&B=0",
-			"A=1&B=1"
-		]
+			"A=0&B=2"
+		],
+		"experiment": "tt"
 	}
-]
+]}

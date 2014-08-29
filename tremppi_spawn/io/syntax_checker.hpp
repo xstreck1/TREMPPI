@@ -36,7 +36,7 @@ namespace SyntaxChecker {
 				catch (exception & e) {
 					throw runtime_error(string("Could not obtain a specie Name. Did you remember to add parenthesis? ") + e.what());
 				}
-				if (!DataInfo::isValidSpecName(name))
+				if (!DataInfo::isValidName(name))
 					throw runtime_error(quote(name) + " is an invalid specie Name. ID must start with a letter and only letters, numbers and underscore are allowed.");
 			}
 		}

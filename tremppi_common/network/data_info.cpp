@@ -1,6 +1,6 @@
 #include "data_info.hpp"
 
-bool DataInfo::isValidSpecName(const string & spec_name) {
+bool DataInfo::isValidName(const string & spec_name) {
 	if (spec_name.empty())
 		return false;
 	bool valid = isalpha(spec_name[0]) || spec_name[0] == '_';

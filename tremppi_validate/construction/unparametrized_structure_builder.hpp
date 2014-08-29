@@ -122,8 +122,8 @@ class UnparametrizedStructureBuilder {
 
 	/* Prepare the data structure that stores IDs of allowed states. */
 	void prepareAllowed(const UnparametrizedStructure & structure, const size_t state_count, const bool init) {
-		if (state_count * property.getStatesCount() > structure.states.max_size())
-			throw runtime_error("The number of states of the product (" + to_string(state_count * property.getStatesCount()) +
+		if (state_count * property.states.size() > structure.states.max_size())
+			throw runtime_error("The number of states of the product (" + to_string(state_count * property.states.size()) +
 			" is bigger than the maximum of " + to_string(structure.states.max_size()));
 		allowed_states.resize(state_count, init);
 	}
@@ -137,13 +137,13 @@ class UnparametrizedStructureBuilder {
 		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
 		cons_pars->addBoundaries(bounds.first, false);
 		cons_pars->addBoundaries(bounds.second, true);
-		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.getExperiment());
+		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.experiment);
 		// Compute distances between neighbours
 		computeJumps(structure.range_size);
 
 		// Mark allowed states
 		size_t state_count = accumulate(structure.range_size.begin(), structure.range_size.end(), 1, multiplies<size_t>());
-		bool all_states = property.getExperiment() == "tt";
+		bool all_states = property.experiment == "tt";
 		prepareAllowed(structure, state_count, all_states);
 
 		// Conduct search

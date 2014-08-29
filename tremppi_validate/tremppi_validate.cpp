@@ -36,7 +36,7 @@ int tremppi_validate(int argc, char ** argv) {
 	}
 
 	// Check the file
-	Json::Value root; // root of the network
+	Json::Value root; // root of the properties
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
@@ -45,21 +45,21 @@ int tremppi_validate(int argc, char ** argv) {
 		PropertiesReader::checkSemantics(root);
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 3);
 	}
 
-	vector<PropertyAutomaton> automata(1);
-	Kinetics kinetics;
-	ProductStructure product;
+	// Parse the properties
+	vector<PropertyAutomaton> automata;
+	try {
+		BOOST_LOG_TRIVIAL(info) << "Parsing the properties.";
 
-	automata[0] = PropertyAutomaton();
-	automata[0].addState("ser0", false);
-	automata[0].addState("ser1", false);
-	automata[0].addState("ser2", true);
-	automata[0].addEdge(0, 1, { "(A=0|B=0)" });
-	automata[0].addEdge(1, 1, { "tt" });
-	automata[0].addEdge(1, 2, { "(A=1|B=2)" });
-	automata[0].addEdge(2, 2, { "ff" });
+		automata = PropertiesReader::jsonToProperties(root);
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 4);
+	}
+
+	Kinetics kinetics;
 	kinetics.components.emplace_back(Kinetics::Component{ 0, Kinetics::Params{}, 1, 1 });
 	kinetics.components.emplace_back(Kinetics::Component{ 1, Kinetics::Params{}, 1, 1 });
 	map < CompID, Levels > requirements = map < CompID, Levels >{};
@@ -84,12 +84,14 @@ int tremppi_validate(int argc, char ** argv) {
 		Levels{ 2 } }
 	);
 
+
+	ProductStructure product;
 	// Construction of data structures
 	try {
 		product = ConstructionManager::construct(reg_infos, automata[0], kinetics);
 	}
 	catch (std::exception & e) {
-		logging.exceptionMessage(e, 3);
+		logging.exceptionMessage(e, 5);
 	}
 
 	// Synthesis of parametrizations
@@ -123,7 +125,7 @@ int tremppi_validate(int argc, char ** argv) {
 		}
 	}
 	catch (std::exception & e) {
-		logging.exceptionMessage(e, 4);
+		logging.exceptionMessage(e, 6);
 	}
 
 	return 0;

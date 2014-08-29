@@ -7,8 +7,6 @@
 /// Single labelled transition from one state to another.
 struct AutTransitionion : public TransitionProperty {
 	mutable ConstraintParser * trans_constr; ///< Allowed values of species for this transition.
-	bool require_transient; ///< True if the state must be transient.
-	bool require_stable; ///< True if the state must be stable.
 
 	~AutTransitionion() {
 		if (trans_constr != nullptr)
@@ -18,16 +16,13 @@ struct AutTransitionion : public TransitionProperty {
 	AutTransitionion(AutTransitionion && other) : TransitionProperty(other.target_ID) {
 		trans_constr = other.trans_constr;
 		other.trans_constr = nullptr;
-		require_transient = other.require_transient;
-		require_stable = other.require_stable;
-		other.require_transient = other.require_stable = 0;
 	}
 	AutTransitionion& operator=(AutTransitionion &&) = delete;
 	AutTransitionion(const AutTransitionion &) = delete;
 	AutTransitionion& operator=(const AutTransitionion &) = delete;
 
-	AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr, const bool _require_transient, const bool _require_stable)
-		: TransitionProperty(target_ID), trans_constr(_trans_constr), require_transient(_require_transient), require_stable(_require_stable) {}
+	AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr)
+		: TransitionProperty(target_ID), trans_constr(_trans_constr) {}
 };
 
 /// Storing a single state of the Buchi automaton. This state is extended with a value saying wheter the states is final.
@@ -73,16 +68,9 @@ public:
 			final_states.push_back(ID);
 	}
 
+	//
 	void addTransition(const StateID ID, AutTransitionion transition) {
 		states[ID].transitions.push_back(move(transition));
-	}
-
-	bool isStableRequired(const StateID ID, const size_t trans_no) const {
-		return states[ID].transitions[trans_no].require_stable;
-	}
-
-	bool isTransientRequired(const StateID ID, const size_t trans_no) const {
-		return states[ID].transitions[trans_no].require_transient;
 	}
 
 	// Gecode accepts only a raw pointer for the searcher.

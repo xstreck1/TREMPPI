@@ -22,13 +22,13 @@ namespace Label {
    const std::string Observable = "Observable";
    const std::string NotObservable = "NotObservable";
    const std::string Free = "Free";
-   const vector<std::string> All = { Activating, ActivatingOnly, Inhibiting, InhibitingOnly, NotActivating, NotInhibiting, Observable, NotObservable, Free };
+   const std::vector<std::string> All = { Activating, ActivatingOnly, Inhibiting, InhibitingOnly, NotActivating, NotInhibiting, Observable, NotObservable, Free };
 }
 
 const std::string COMPONENTS_TABLE = "Components";
 const std::string REGULATIONS_TABLE = "Regulations";
 const std::string PARAMETRIZATIONS_TABLE = "Parametrizations";
-const vector<std::string> SOURCE_TYPES = { "select", "differ", "compare" };
+const std::vector<const std::string> SOURCE_TYPES = { "select", "differ", "compare" };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
@@ -52,7 +52,7 @@ typedef vector<ActLevel> Levels;
 typedef vector<Levels> Configurations;
 
 /// What properties may be examined.
-enum PropType { LTL, TimeSeries };
+const std::vector<const std::string> PropType = { "TimeSeries" };
 
 /// Types of automata possible for using.
 enum AutType { BA_finite, BA_weak, BA_standard };

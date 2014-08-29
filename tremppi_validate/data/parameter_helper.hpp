@@ -14,7 +14,7 @@ namespace ParameterHelper {
 		Levels maxes;
 		rng::transform(reg_infos, back_inserter(maxes), [](const RegInfo & reg_info){ return reg_info.max_activity; });
 		cons_pars->addBoundaries(maxes, true);
-		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.getExperiment());
+		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.experiment);
 
 		// Propagate
 		cons_pars->status();

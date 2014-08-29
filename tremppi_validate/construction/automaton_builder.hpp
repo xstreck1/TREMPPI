@@ -40,7 +40,7 @@ class AutomatonBuilder {
 		// Add experiment constraints.
 		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
 		cons_pars->addBoundaries(maxes, true);
-		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.getExperiment());
+		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.experiment);
 		cons_pars->status();
 
 		// Compute refined boundaries.
@@ -55,17 +55,17 @@ class AutomatonBuilder {
 	 * Creates transitions from labelled edges of BA and passes them to the automaton structure.
 	 */
 	void addTransitions(AutomatonStructure & automaton, const StateID ID) const {
-		const PropertyAutomaton::Edges & edges = property.getEdges(ID);
+		const PropertyAutomaton::Edges & edges = property.states[ID].edges;
 
 		// Transform each edge into transition and pass it to the automaton
 		for (const PropertyAutomaton::Edge & edge : edges) {
 			// Compute allowed values from string of constrains
 			ConstraintParser * parser = new ConstraintParser(maxes.size(), *max_element(maxes.begin(), maxes.end()));
-			parser->applyFormula(names, edge.cons.values);
+			parser->applyFormula(names, edge.constraint);
 			parser->addBoundaries(maxes, true);
 			parser->addBoundaries(mins, false);
 
-			automaton.addTransition(ID, { edge.target_ID, parser, edge.cons.transient, edge.cons.stable });
+			automaton.addTransition(ID, { edge.target_ID, parser });
 		}
 	}
 
@@ -73,16 +73,10 @@ class AutomatonBuilder {
 	 * @brief setAutType sets type of the automaton based on the type of the property
 	 */
 	void setAutType(AutomatonStructure & automaton) {
-		switch (property.getPropType()) {
-		case LTL:
-			automaton.my_type = BA_standard;
-			break;
-		case TimeSeries:
+		if (property.prop_type == "TimeSeries")
 			automaton.my_type = BA_finite;
-			break;
-		default:
+		else
 			throw runtime_error("Type of the verification automaton is not known.");
-		}
 	}
 
 public:
@@ -96,13 +90,13 @@ public:
 	AutomatonStructure buildAutomaton() {
 		AutomatonStructure automaton;
 		setAutType(automaton);
-		const size_t state_count = property.getStatesCount();
+		const size_t state_count = property.states.size();
 		size_t state_no = 0;
 
 		// List throught all the automaton states
-		for (StateID ID = 0; ID < property.getStatesCount(); ID++) {
+		for (StateID ID : cscope(property.states)) {
 			// Fill auxiliary data
-			automaton.addState(ID, property.isFinal(ID));
+			automaton.addState(ID, property.states[ID].final);
 			// Add transitions for this state
 			addTransitions(automaton, ID);
 		}

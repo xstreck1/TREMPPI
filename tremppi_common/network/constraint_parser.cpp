@@ -160,7 +160,7 @@ void ConstraintParser::addBoundaries(const Levels & boundaries, const bool is_up
 void ConstraintParser::applyFormula(const vector<string> & names, string formula) {
 	// Remove spaces
 	formula.erase(remove_if(formula.begin(), formula.end(), (int(*)(int))isspace), formula.end());
-	Gecode::BoolExpr expr = resolveFormula(names, formula);
+	Gecode::BoolExpr expr = resolveFormula(names, formula.empty() ? "tt" : formula);
 	rel(*this, expr);
 }
 

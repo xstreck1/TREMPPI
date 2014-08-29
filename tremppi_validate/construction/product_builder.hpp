@@ -19,8 +19,8 @@ class ProductBuilder {
 	}
 
 	/**
-	 * Label, as initial, only those states that have any outgoing transition (from all possible initials). 
-	 * In the same way, label, as accepting, under the condition that it's not a terminal automaton, the accepting states. 
+	 * Label, as initial, only those states that have any outgoing transition (from all possible initials).
+	 * In the same way, label, as accepting, under the condition that it's not a terminal automaton, the accepting states.
 	 */
 	void relabel(const StateID BA_ID, ProductStructure & product) const {
 		if (product.getAutomaton().isInitial(BA_ID)) {
@@ -62,16 +62,13 @@ class ProductBuilder {
 			StateID ID = product.getProductID(KS_ID, BA_ID);
 
 			// Add all the trasient combinations for the kripke structure
-			if (!automaton.isStableRequired(BA_ID, trans_no)) {
-				for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
-					const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
-					const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
-					product.states[ID].transitions.push_back({ product.getProductID(KS_target, BA_target), trans_const });
-				}
+			for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
+				const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
+				const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
+				product.states[ID].transitions.push_back({ product.getProductID(KS_target, BA_target), trans_const });
 			}
 			// Add a self-loop
-			if (!automaton.isTransientRequired(BA_ID, trans_no)) 
-				product.states[ID].loops.push_back(product.getProductID(KS_ID, BA_target));
+			product.states[ID].loops.push_back(product.getProductID(KS_ID, BA_target));
 
 			delete result;
 		}
@@ -89,7 +86,7 @@ public:
 		for (size_t BA_ID = 0; BA_ID < product.getAutomaton().getStateCount(); BA_ID++) {
 			// Create that what relates to this BA state
 			createSubspace(BA_ID, product);
-			for (const size_t trans_no : crange(product.getAutomaton().getTransitionCount(BA_ID))) 
+			for (const size_t trans_no : crange(product.getAutomaton().getTransitionCount(BA_ID)))
 				addSubspaceTransitions(BA_ID, trans_no, product);
 			relabel(BA_ID, product);
 		}
