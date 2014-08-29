@@ -1,11 +1,12 @@
 #pragma once
 
-#include <tremppi_common/network/kinetics_translators.hpp>
-#include <tremppi_common/network/model_translators.hpp>
+#include <tremppi_common/network/data_info.hpp>
 
 #include "synthesis_manager.hpp"
 #include "witness_searcher.hpp"
 #include "robustness_compute.hpp"
+
+#include "../data/kinetics_translators.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that outputs formatted resulting data.
@@ -13,14 +14,14 @@
 class OutputManager {
 	const bpo::variables_map & user_options; ///< User can influence the format of the output.
 	const PropertyAutomaton & property; ///< Property automaton.
-	const Model & model; ///< Reference to the model itself.
+	const RegInfos & reg_infos; ///< Reference to the model itself.
 	const Kinetics & kinetics; ///< Kinetics data for the model
 
 public:
 	NO_COPY(OutputManager)
 
-	OutputManager(const bpo::variables_map  & _user_options, const PropertyAutomaton & _property, const Model & _model, const Kinetics & _kinetics)
-		: user_options(_user_options), property(_property), model(_model), kinetics(_kinetics) {}
+	OutputManager(const bpo::variables_map  & _user_options, const PropertyAutomaton & _property, const RegInfos & _reg_infos, const Kinetics & _kinetics)
+	: user_options(_user_options), property(_property), reg_infos(_reg_infos), kinetics(_kinetics) {}
 
 public:
 	/**
@@ -29,9 +30,9 @@ public:
 	void outputForm() {
 		string format_desc = "#:(";
 
-		for (CompID ID : crange(model.components.size())) {
+		for (CompID ID : crange(reg_infos.size())) {
 			for (const auto & param : kinetics.components[ID].params) {
-				format_desc += model.components[ID].name + "{" + param.context + "},";
+				format_desc += reg_infos[ID].name + "{" + param.context + "},";
 			}
 		}
 		format_desc.back() = ')';

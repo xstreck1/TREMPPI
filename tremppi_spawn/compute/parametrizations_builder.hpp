@@ -1,7 +1,8 @@
 #pragma once
 
 #include <tremppi_common/network/constraint_parser.hpp>
-#include <tremppi_common/network/kinetics.hpp>
+
+#include "../data/kinetics_translators.hpp"
 #include "../io/constraint_formatter.hpp"
 
 
@@ -147,30 +148,17 @@ public:
 	* Entry function of parsing, tests and stores subcolors for all the components.
 	*/
 	static void build(const bool check_only, const Model &model, Kinetics & kinetics) {
-		ParamNo step_size = 1; // Variable necessary for encoding of colors
-
 		// Cycle through components
 		for (CompID ind = model.components.size(); ind > 0; --ind) {
 
 			CompID ID = ind - 1;
-			kinetics.components[ID].step_size = step_size;
-			kinetics.components[ID].col_count = 1;
 
 			if (kinetics.components[ID].params.empty())
 				continue;
 
 			// Solve the parametrizations
 			string formula = createFormula(model.components[ID].regulations, kinetics.components[ID].params) + " & " + ConstraintFomatter::consToFormula(model, ID);
-			Configurations subcolors = createPartCol(check_only, kinetics.components[ID].params, formula, model.components[ID].max_activity);
-
-			// Copy the data
-			auto & params = kinetics.components[ID].params;
-			for (const Levels & subcolor : subcolors)
-				for (const size_t param_no : cscope(subcolor))
-					params[param_no].target_in_subcolor.emplace_back(subcolor[param_no]);
-
-			kinetics.components[ID].col_count = subcolors.size();
-			step_size *= subcolors.size();
+			kinetics.components[ID].subcolors = createPartCol(check_only, kinetics.components[ID].params, formula, model.components[ID].max_activity);
 		}
 	}
 };

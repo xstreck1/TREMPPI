@@ -1,7 +1,7 @@
 #pragma once
 
-#include "definitions.hpp"
-#include "../general/common_functions.hpp"
+#include <tremppi_common/general/common_functions.hpp>
+#include <tremppi_common/network/definitions.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Storage for data parsed from the model.

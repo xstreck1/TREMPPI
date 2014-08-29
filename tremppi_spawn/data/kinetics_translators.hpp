@@ -9,11 +9,11 @@ namespace KineticsTranslators {
 	// @return the number of parametrizations
 	inline ParamNo getSpaceSize(const Kinetics & kinetics);
 
-	// @return 
-	Levels getSpecieVals(const Kinetics & kinetics, ParamNo param_no);
-
 	// @return parametrization vector from its number
 	Levels createParamVector(const Kinetics & kinetics, const ParamNo param_no);
+
+	// @return 
+	Levels getSpecieVals(const Kinetics & kinetics, ParamNo param_no);
 
 	// @return parametrizations string in the form "(val_1,...,val_n)".
 	string createParamString(const Kinetics & kinetics, const ParamNo param_no);

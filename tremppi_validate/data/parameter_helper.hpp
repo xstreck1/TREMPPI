@@ -1,8 +1,8 @@
 #pragma once
 
-#include <tremppi_common/network/kinetics_translators.hpp>
 #include <tremppi_common/network/data_info.hpp>
 
+#include "../data/kinetics_translators.hpp"
 #include "../data/property_automaton.hpp"
 
 namespace ParameterHelper {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tremppi_common/network/model_translators.hpp>
+#include "../data/model_translators.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Parses contrints as specified in the model and return a formula built from these constraints.

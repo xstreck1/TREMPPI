@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "definitions.hpp"
 #include "model.hpp"
 
 namespace ModelTranslators {

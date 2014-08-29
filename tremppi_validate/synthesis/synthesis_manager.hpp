@@ -1,6 +1,5 @@
 #pragma once
 
-#include <tremppi_common/network/model.hpp>
 #include "../data/property_automaton.hpp"
 
 #include "witness_searcher.hpp"

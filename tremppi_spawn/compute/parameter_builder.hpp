@@ -1,7 +1,7 @@
 #pragma once
 
-#include <tremppi_common/network/kinetics_translators.hpp>
-#include <tremppi_common/network/model_translators.hpp>
+#include "../data/model_translators.hpp"
+#include "../data/kinetics_translators.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Builds the kinetic parameters
@@ -42,7 +42,7 @@ class ParameterBuilder {
 			context.resize(context.length() - 1);
 
 		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
-		return Kinetics::Param{ context, targets, requirements, Levels() };
+		return Kinetics::Param{ context, targets, requirements };
 	}
 
 	// @brief createParameters Creates a description of kinetic parameters.
@@ -75,7 +75,7 @@ public:
 
 		// Create params for the non-input nodes
 		for (const CompID ID : crange(model.components.size()))
-			result.emplace_back(Kinetics::Component{ ID, createParameters(model, ID), 0, 0 });
+			result.emplace_back(Kinetics::Component{ ID, createParameters(model, ID), Configurations() });
 
 		return result;
 	}
