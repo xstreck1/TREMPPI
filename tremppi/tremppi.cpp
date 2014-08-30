@@ -28,7 +28,7 @@ void printHelp() {
 //
 int main(int argc, char ** argv) {
 	tremppi_system.standalone = false;
-	tremppi_system.set("tremppi_test", argv[0], bfs::current_path());
+	tremppi_system.set("tremppi_test", argv[0], bfs::current_path().string());
 
 	if (argc < 2) {
 		cerr << "Fatal error: No program given on the input. Usage:\n";

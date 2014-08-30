@@ -93,7 +93,7 @@ public:
 			BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " started.";
 		}
 		catch (exception & e) {
-			cerr << e.what();
+			cerr << e.what() << endl;
 			exit(1);
 		}
 

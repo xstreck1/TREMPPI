@@ -15,7 +15,13 @@ TEST(CoreTest, AllPrograms) {
 }
 
 int tremppi_test(int argc, char** argv) {
-	tremppi_system.set("tremppi_test", argv[0], bfs::current_path().string());
+	try {
+		tremppi_system.set("tremppi_test", argv[0], bfs::current_path().string());
+	}
+	catch (exception & e) {
+		cerr << e.what() << endl;
+		exit(1);
+	}
     ::testing::InitGoogleTest( &argc, argv );
 	int result = RUN_ALL_TESTS();
 

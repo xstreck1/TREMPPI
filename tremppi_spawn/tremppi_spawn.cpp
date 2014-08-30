@@ -70,7 +70,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		ParametrizationsBuilder::build(false, model, kinetics);
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 4);
+		logging.exceptionMessage(e, 5);
 	}
 
 	// Output the data
@@ -94,7 +94,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		database_filler.finishOutpout();
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 5);
+		logging.exceptionMessage(e, 6);
 	}
 
 	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";
