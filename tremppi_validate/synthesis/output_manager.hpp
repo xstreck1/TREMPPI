@@ -6,8 +6,6 @@
 #include "witness_searcher.hpp"
 #include "robustness_compute.hpp"
 
-#include "../data/kinetics_translators.hpp"
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that outputs formatted resulting data.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +41,7 @@ public:
 	 * Output parametrizations from this round together with additional data, if requested.
 	 */
 	void outputRound(const size_t param_ID, const size_t & cost, const double robustness_val, const string & witness) {
-		string param_vals = MyKineticsTranslators::createParamString(kinetics, param_ID);
+		string param_vals = "TODO param_vals";
 		string line = to_string(param_ID) + separator + param_vals + separator;
 		string update = param_vals.insert(1, to_string(param_ID) + ",");
 		update.back() = ','; // must remove closing bracket, it will be added by database manager

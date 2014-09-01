@@ -28,5 +28,8 @@ namespace DataInfo {
 
 	//
 	ActLevel getMaxLevel(const RegInfos & reg_infos);
+
+	//
+	vector<string> getAllContexts(const RegInfos & reg_infos);
 }
 

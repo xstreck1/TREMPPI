@@ -5,6 +5,7 @@
 
 #include "io/validate_options.hpp"
 #include "io/properties_reader.hpp"
+#include "io/parametrization_reader.hpp"
 #include "construction/construction_manager.hpp"
 #include "construction/product_builder.hpp"
 #include "synthesis/synthesis_manager.hpp"
@@ -14,9 +15,21 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ValidateOptions>("tremppi_validate", argc, argv);
-	bfs::path input_path = ValidateOptions::getPath(po, DATABASE_FILENAME);
+	bfs::path input_path;
+	string select;
+	try {
+		input_path = ValidateOptions::getPath(po, DATABASE_FILENAME);
+		if (po.count("select") > 0)
+			select = ValidateOptions::getFilter(po["select"].as<string>());
+		else
+			select = "1";
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 2);
+	}
 
 	RegInfos reg_infos;
+	ParametrizationReader par_reader;
 	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
@@ -30,9 +43,12 @@ int tremppi_validate(int argc, char ** argv) {
 			string name = row.get<const char*>(0);
 			reg_infos.push_back(DatabaseReader::readRegInfo(reg_infos.size(), name, db));
 		}
+
+		// Initiate the parametrizations
+		par_reader.select(reg_infos, select, db);
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 1);
 	}
 
 	// Check the file
@@ -97,11 +113,10 @@ int tremppi_validate(int argc, char ** argv) {
 	// Synthesis of parametrizations
 	try {
 		SynthesisManager synthesis_manager(product);
-		ParamNo param_count = MyKineticsTranslators::getSpaceSize(kinetics);
 		size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified automata[0].
 
 		// Do the computation for all the rounds
-		for (ParamNo param_ID = 0; param_ID < param_count; param_ID++) {
+		while (par_reader.next()) {
 			vector<StateTransition> witness_trans;
 			double robustness_val = 0.;
 			size_t cost = INF;
@@ -109,10 +124,10 @@ int tremppi_validate(int argc, char ** argv) {
 			// Call synthesis procedure based on the type of the automata[0].
 			switch (product.getMyType()) {
 			case BA_finite:
-				cost = synthesis_manager.checkFinite(po, witness_trans, robustness_val, param_ID);
+				cost = synthesis_manager.checkFinite(po, witness_trans, robustness_val, par_reader.getRowID());
 				break;
 			case BA_standard:
-				cost = synthesis_manager.checkFull(po, witness_trans, robustness_val, param_ID);
+				cost = synthesis_manager.checkFull(po, witness_trans, robustness_val, par_reader.getRowID());
 				break;
 			default:
 				throw runtime_error("Unsupported Buchi automaton type.");

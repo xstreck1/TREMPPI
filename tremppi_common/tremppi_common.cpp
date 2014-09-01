@@ -3,7 +3,7 @@
 void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) {
 	PROGRAM_NAME = name;
 	WORK_PATH = _WORK_PATH;
-	BIN_PATH = bfs::path{ arg };
+	BIN_PATH = bfs::absolute(bfs::path{ arg });
 	EXEC_PATH = bfs::current_path();
 
 	// Set the home

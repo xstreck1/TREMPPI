@@ -30,3 +30,12 @@ ActLevel DataInfo::getMaxLevel(const RegInfos & reg_infos) {
 		return A.max_activity < B.max_activity;
 	})->max_activity;
 }
+
+
+vector<string> DataInfo::getAllContexts(const RegInfos & reg_infos) {
+	vector<string> result;
+	for (const RegInfo & reg_info : reg_infos)
+		for (const auto & column : reg_info.columns)
+			result.push_back(column.second);
+	return result;
+}

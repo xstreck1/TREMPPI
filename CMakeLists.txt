@@ -61,7 +61,7 @@ SOURCE_GROUP("Source Files\\tremppi_spawn\\compute" ${SPAWN_FOLDER}/compute/.*cp
 SOURCE_GROUP("Header Files\\tremppi_spawn\\data" ${SPAWN_FOLDER}/data/.*hpp)
 SOURCE_GROUP("Source Files\\tremppi_spawn\\data" ${SPAWN_FOLDER}/data/.*cpp)
 SOURCE_GROUP("Header Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
-SOURCE_GROUP("Source Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
+SOURCE_GROUP("Source Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*cpp)
 ADD_LIBRARY(tremppi_spawn_lib ${SPAWN_FOLDER}/tremppi_spawn.cpp ${SPAWN_HEADERS})
 if(BUILD_STANDALONE)
 	ADD_EXECUTABLE(tremppi_spawn ${SPAWN_FOLDER}/main.cpp ${SPAWN_FOLDER}/tremppi_spawn.cpp ${SPAWN_HEADERS})

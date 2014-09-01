@@ -43,7 +43,7 @@ typedef pair<StateID, StateID> StateTransition;
 typedef size_t CompID; 
 
 /// Activity level of a specie.
-typedef unsigned short ActLevel;
+typedef uint16_t ActLevel;
 
 /// Vector of activation levels of species used for labelling of states of KS.
 typedef vector<ActLevel> Levels;

@@ -62,7 +62,7 @@ void Logging::step() {
 
 void Logging::exceptionMessage(const exception & e, const int err_no) {
 	BOOST_LOG_TRIVIAL(error) << "Top level exception: " << e.what();
-	cerr << "ERROR: " << e.what();
+	cerr << "\nERROR: " << e.what();
 	exit(err_no);
 }
 

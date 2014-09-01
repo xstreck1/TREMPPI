@@ -12,7 +12,7 @@ public:
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
 		visible.add_options()
-			("select", bpo::value<string>()->default_value("1"), "selection of the set of interest")
+			("select", bpo::value<string>(), "selection of the set of interest")
 			("trace", bpo::value<string>()->default_value("none"), "what form of trace analysis should be applied, one of {none, rob, wit}")
 			("bound", bpo::value<string>()->default_value("inf"), "what bound is placed on the search, one of {inf, min, N} where N is a non-zero positive integer")
 			;
