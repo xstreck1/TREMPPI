@@ -2,6 +2,7 @@
 
 #include "../header.h"
 #include "definitions.hpp"
+#include "../general/common_functions.hpp"
 #include <json/json.h>
 
 // Regulatory graph info, stored by a component
@@ -9,9 +10,9 @@ struct RegInfo {
 	CompID ID;
 	string name;
 	ActLevel max_activity;
-	map<string, size_t> columns;
-	pair<size_t, size_t> columns_range;
+	map<size_t, string> columns;
 	map<string, Levels> regulators;
+	vector < map<string, Levels> > contexts;
 };
 using RegInfos = vector<RegInfo>;
 

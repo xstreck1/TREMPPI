@@ -28,7 +28,9 @@ namespace DatabaseReader {
 	// Read headers for all the regulatory functions
 	RegInfo readRegInfo(const CompID ID, const string & name, sqlite3pp::database & db);
 
-	sqlite3pp::query selectionFilter(const map<string, size_t> & columns, const string & selection, sqlite3pp::database & db);
+	// 
+	sqlite3pp::query selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db);
 
+	//
 	sqlite3pp::query selectionIDs(const string & selection, sqlite3pp::database & db);
 };

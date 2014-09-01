@@ -31,8 +31,8 @@ int tremppi_express(int argc, char ** argv) {
 			maxes.insert(make_pair(name, max));
 			RegInfo info = DatabaseReader::readRegInfo(functions.size(), name, db);
 			Configurations minterms;
-			for (const pair<string, size_t> column : info.columns)
-				minterms.emplace_back(DatabaseReader::getThrsFromContext(column.first));
+			for (const pair<size_t, string> column : info.columns)
+				minterms.emplace_back(DatabaseReader::getThrsFromContext(column.second));
 			functions.emplace_back(RegFunc{ move(info), move(minterms) });
 		}
 	}

@@ -15,7 +15,7 @@ namespace ConstructionManager {
 	/**
 	 * Function that constructs all the data in a cascade of temporal builders.
 	 */
-		ProductStructure construct(const RegInfos & reg_infos, const PropertyAutomaton & property, const Kinetics & kinetics) {
+		ProductStructure construct(const RegInfos & reg_infos, const PropertyAutomaton & property, const MyKinetics & kinetics) {
 		// Create the UKS
 		UnparametrizedStructureBuilder unparametrized_structure_builder(reg_infos, property, kinetics);
 		UnparametrizedStructure unparametrized_structure = unparametrized_structure_builder.buildStructure();

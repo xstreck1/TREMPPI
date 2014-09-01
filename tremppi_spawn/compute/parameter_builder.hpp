@@ -42,7 +42,8 @@ class ParameterBuilder {
 			context.resize(context.length() - 1);
 
 		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
-		return Kinetics::Param{ context, targets, requirements };
+		Kinetics::Param result = { context, targets, requirements };
+		return result;
 	}
 
 	// @brief createParameters Creates a description of kinetic parameters.
@@ -61,7 +62,8 @@ class ParameterBuilder {
 
 		// Loop over all the contexts.
 		do {
-			result.emplace_back(addSingleParam(model, all_thrs, thrs_comb, t_ID));
+			auto param = addSingleParam(model, all_thrs, thrs_comb, t_ID);
+			result.emplace_back(move(param));
 		} while (iterate(top, bottom, thrs_comb));
 
 		sort(WHOLE(result), [](const Kinetics::Param & A, const Kinetics::Param & B){return A.context < B.context; });

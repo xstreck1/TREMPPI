@@ -71,9 +71,9 @@ class ParametrizationsBuilder {
 	/* For each regulation create a constraint corresponding to its label */
 	static void createEdgeCons(const vector<Model::Regulation> & reguls, const Kinetics::Params & params, const Model::Regulation & regul, string & plus, string & minus) {
 		plus = minus = "ff ";
-		for (const auto param : params) {
+		for (const auto & param : params) {
 			if (containsRegulation(param, regul)) {
-				for (const auto compare : params) {
+				for (const auto & compare : params) {
 					if (isSubordinate(reguls, param, compare, regul.s_ID)) {
 						plus += " | " + param.context + " > " + compare.context;
 						minus += " | " + param.context + " < " + compare.context;

@@ -15,12 +15,12 @@ class OutputManager {
 	const bpo::variables_map & user_options; ///< User can influence the format of the output.
 	const PropertyAutomaton & property; ///< Property automaton.
 	const RegInfos & reg_infos; ///< Reference to the model itself.
-	const Kinetics & kinetics; ///< Kinetics data for the model
+	const MyKinetics & kinetics; ///< MyKinetics data for the model
 
 public:
 	NO_COPY(OutputManager)
 
-	OutputManager(const bpo::variables_map  & _user_options, const PropertyAutomaton & _property, const RegInfos & _reg_infos, const Kinetics & _kinetics)
+	OutputManager(const bpo::variables_map  & _user_options, const PropertyAutomaton & _property, const RegInfos & _reg_infos, const MyKinetics & _kinetics)
 	: user_options(_user_options), property(_property), reg_infos(_reg_infos), kinetics(_kinetics) {}
 
 public:
@@ -43,7 +43,7 @@ public:
 	 * Output parametrizations from this round together with additional data, if requested.
 	 */
 	void outputRound(const size_t param_ID, const size_t & cost, const double robustness_val, const string & witness) {
-		string param_vals = KineticsTranslators::createParamString(kinetics, param_ID);
+		string param_vals = MyKineticsTranslators::createParamString(kinetics, param_ID);
 		string line = to_string(param_ID) + separator + param_vals + separator;
 		string update = param_vals.insert(1, to_string(param_ID) + ",");
 		update.back() = ','; // must remove closing bracket, it will be added by database manager

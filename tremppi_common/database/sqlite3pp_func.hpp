@@ -6,7 +6,7 @@
 namespace sqlite3pp {
 	namespace func {
 		// @return	a dictionary with keys being the columns that match the expression and values are their indeces
-		map<string, size_t> matchingColumns(const string & table_name, const regex & control_expression, database & db);
+		map<size_t, string> matchingColumns(const string & table_name, const regex & control_expression, database & db);
 
 		// @return  true if a colum of the given name exists
 		bool hasColumn(const string & table_name, const string & column_name, sqlite3pp::database & db);

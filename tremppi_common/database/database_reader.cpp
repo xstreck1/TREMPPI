@@ -55,20 +55,17 @@ RegInfo DatabaseReader::readRegInfo(const CompID ID, const string & name, sqlite
 	auto columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("K_" + name + "_.*"), db);
 	size_t prev_index = 0;
 	for (const auto & column : columns) {
-		if (column.second < prev_index) {
+		if (column.first < prev_index) {
 			throw runtime_error("Database format critical error. The columns for parameters are not in lexicographical order.");
 		}
-		prev_index = column.second;
+		prev_index = column.first;
 	}
-
-	pair<size_t, size_t> columns_range;
-	columns_range = DataConv::indices2range(columns);
 	auto regulators = obtainRegulators(name, db);
 
-	return RegInfo{ ID, name, max, move(columns), move(columns_range), move(regulators) };
+	return RegInfo{ ID, name, max, move(columns), move(regulators) };
 }
 
-sqlite3pp::query DatabaseReader::selectionFilter(const map<string, size_t> & columns, const string & selection, sqlite3pp::database & db) {
+sqlite3pp::query DatabaseReader::selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db) {
 	string columns_list = alg::join(DataConv::columns2list(columns), ", ");
 	string where_clause = selection.empty() ? "" : " WHERE " + selection;
 	return sqlite3pp::query(db, ("SELECT " + columns_list + " FROM " + PARAMETRIZATIONS_TABLE + where_clause).c_str());

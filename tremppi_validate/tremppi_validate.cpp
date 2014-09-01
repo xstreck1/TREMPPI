@@ -59,25 +59,25 @@ int tremppi_validate(int argc, char ** argv) {
 		logging.exceptionMessage(e, 4);
 	}
 
-	Kinetics kinetics;
-	kinetics.components.emplace_back(Kinetics::Component{ 0, Kinetics::Params{}, 1, 1 });
-	kinetics.components.emplace_back(Kinetics::Component{ 1, Kinetics::Params{}, 1, 1 });
+	MyKinetics kinetics;
+	kinetics.components.emplace_back(MyKinetics::Component{ 0, MyKinetics::Params{}, 1, 1 });
+	kinetics.components.emplace_back(MyKinetics::Component{ 1, MyKinetics::Params{}, 1, 1 });
 	map < CompID, Levels > requirements = map < CompID, Levels >{};
-	kinetics.components[0].params.push_back(Kinetics::Param{
+	kinetics.components[0].params.push_back(MyKinetics::Param{
 		"",
 		Levels{ 0, 1 },
 		move(requirements),
 		Levels{ 1 } }
 	);
 	requirements = map < CompID, Levels >{ { 0, Levels{ 0 } } };
-	kinetics.components[1].params.push_back(Kinetics::Param{
+	kinetics.components[1].params.push_back(MyKinetics::Param{
 		"A:0",
 		Levels{ 0, 1 },
 		move(requirements),
 		Levels{ 1 } }
 	);
 	requirements = map < CompID, Levels >{ { 0, Levels{ 1 } } };
-	kinetics.components[1].params.push_back(Kinetics::Param{
+	kinetics.components[1].params.push_back(MyKinetics::Param{
 		"A:1",
 		Levels{ 0, 1 },
 		move(requirements),
@@ -97,7 +97,7 @@ int tremppi_validate(int argc, char ** argv) {
 	// Synthesis of parametrizations
 	try {
 		SynthesisManager synthesis_manager(product);
-		ParamNo param_count = KineticsTranslators::getSpaceSize(kinetics);
+		ParamNo param_count = MyKineticsTranslators::getSpaceSize(kinetics);
 		size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified automata[0].
 
 		// Do the computation for all the rounds

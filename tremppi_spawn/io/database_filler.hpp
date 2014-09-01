@@ -59,7 +59,7 @@ class DatabaseFiller {
 	string getContexts() const {
 		string contexts = "";
 		for (CompID t_ID : crange(model.components.size()))
-			for (auto param : kinetics.components[t_ID].params)
+			for (auto & param : kinetics.components[t_ID].params)
 				contexts += KineticsTranslators::makeConcise(param, model.components[t_ID].name) + " INTEGER, ";
 		contexts.resize(contexts.size() - 2); // Remove ", " at the end
 		return contexts;

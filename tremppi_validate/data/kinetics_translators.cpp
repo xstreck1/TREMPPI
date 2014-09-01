@@ -1,12 +1,12 @@
 #include "kinetics_translators.hpp"
 
-inline ParamNo KineticsTranslators::getSpaceSize(const Kinetics & kinetics) {
-	return accumulate(begin(kinetics.components), end(kinetics.components), static_cast<ParamNo>(1), [](const ParamNo A, const Kinetics::Component & B) -> ParamNo {
+inline ParamNo MyKineticsTranslators::getSpaceSize(const MyKinetics & kinetics) {
+	return accumulate(begin(kinetics.components), end(kinetics.components), static_cast<ParamNo>(1), [](const ParamNo A, const MyKinetics::Component & B) -> ParamNo {
 		return A * B.col_count;
 	});
 }
 
-Levels KineticsTranslators::getSpecieVals(const Kinetics & kinetics, ParamNo param_no) {
+Levels MyKineticsTranslators::getSpecieVals(const MyKinetics & kinetics, ParamNo param_no) {
 	// Prepare storage vector
 	Levels specie_vals(kinetics.components.size());
 	auto spec_it = specie_vals.begin();
@@ -25,7 +25,7 @@ Levels KineticsTranslators::getSpecieVals(const Kinetics & kinetics, ParamNo par
 	return specie_vals;
 }
 
-Levels KineticsTranslators::createParamVector(const Kinetics & kinetics, const ParamNo param_no) {
+Levels MyKineticsTranslators::createParamVector(const MyKinetics & kinetics, const ParamNo param_no) {
 	Levels result;
 	// compute numbers of partial parametrizations for each component
 	const Levels color_parts = getSpecieVals(kinetics, param_no);
@@ -40,7 +40,7 @@ Levels KineticsTranslators::createParamVector(const Kinetics & kinetics, const P
 	return result;
 }
 
-string KineticsTranslators::createParamString(const Kinetics & kinetics, const ParamNo param_no) {
+string MyKineticsTranslators::createParamString(const MyKinetics & kinetics, const ParamNo param_no) {
 	string result = "(";
 	// Compute numbers of partial parametrizations for each component.
 	Levels params = createParamVector(kinetics, param_no);
@@ -52,14 +52,14 @@ string KineticsTranslators::createParamString(const Kinetics & kinetics, const P
 	return result;
 }
 
-string KineticsTranslators::makeConcise(const Kinetics::Param & param, const string target_name) {
+string MyKineticsTranslators::makeConcise(const MyKinetics::Param & param, const string target_name) {
 	string context = "K_" + target_name + "_";
 	for (auto values : param.requirements)
 		context += to_string(values.second.front());
 	return context;
 }
 
-set<ParamNo> KineticsTranslators::findMatching(const Kinetics & kinetics, const Levels & param_vals) {
+set<ParamNo> MyKineticsTranslators::findMatching(const MyKinetics & kinetics, const Levels & param_vals) {
 	set<ParamNo> result;
 
 	// Test subparametrizations for all components.

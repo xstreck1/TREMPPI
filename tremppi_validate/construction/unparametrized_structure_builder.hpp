@@ -15,7 +15,7 @@
 class UnparametrizedStructureBuilder {
 	const RegInfos & reg_infos;
 	const PropertyAutomaton & property;
-	const Kinetics & kinetics;
+	const MyKinetics & kinetics;
 
 	vector<size_t> index_jumps; ///< Holds index differences between two neighbour states in each direction for each ID.
 	vector<bool> allowed_states; ///< Masking the states (by IDs) that are allowed by the current experiment
@@ -162,7 +162,7 @@ class UnparametrizedStructureBuilder {
 	}
 
 public:
-	UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property, const Kinetics & _kinetics)
+	UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property, const MyKinetics & _kinetics)
 		: reg_infos(_reg_infos), property(_property), kinetics(_kinetics) {}
 
 	/**

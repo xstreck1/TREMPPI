@@ -112,6 +112,8 @@ namespace Common {
 	*/
 	template<typename IntegralType>
 	bool iterate(const std::vector<IntegralType> & top, const std::vector<IntegralType> & bottom, std::vector<IntegralType> & iterated) {
+		if (iterated.empty())
+			return false;
 		for (size_t val_num = 0; val_num <= iterated.size(); val_num++) {
 			if (val_num == iterated.size())
 				return false;

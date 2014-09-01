@@ -1,12 +1,12 @@
 #include "sqlite3pp_func.hpp"
 
-map<string, size_t> sqlite3pp::func::matchingColumns(const string & table_name, const regex & control_expression, database & db) {
-	map<string, size_t> result;
+map<size_t, string> sqlite3pp::func::matchingColumns(const string & table_name, const regex & control_expression, database & db) {
+	map<size_t, string> result;
 
 	sqlite3pp::query qry(db, ("SELECT * FROM " + table_name).c_str());
 	for (int i = 0; i < qry.column_count(); ++i)
 		if (regex_match(qry.column_name(i), control_expression))
-			result.insert(make_pair(qry.column_name(i), i));
+			result.insert(make_pair(i, qry.column_name(i)));
 
 	return result;
 }
