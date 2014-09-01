@@ -12,7 +12,7 @@ struct RegInfo {
 	ActLevel max_activity;
 	map<size_t, string> columns;
 	map<string, Levels> regulators;
-	vector < map<string, Levels> > contexts;
+	map<size_t, map<string, Levels> > requirements; // To each collumn assign the values of the reugulators that fall into the context
 };
 using RegInfos = vector<RegInfo>;
 
@@ -23,9 +23,7 @@ namespace DataInfo {
 	// Obtain components and their max levels
 	map<string, ActLevel> getComponents(const Json::Value & nodes);
 
-	/**
-	* @return	names of all the components
-	*/
+	// @return	names of all the components
 	vector<string> getAllNames(const RegInfos & reg_infos);
 
 	//

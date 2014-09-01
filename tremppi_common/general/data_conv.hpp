@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../header.h"
+#include "../network/definitions.hpp"
 #include "common_functions.hpp"
 
 namespace DataConv {
@@ -9,6 +10,12 @@ namespace DataConv {
 
 	//
 	vector<string> columns2list(const map<size_t, string> & columns);
+
+	//
+	Levels getThrFromContexts(const vector<string> & columns_name, const size_t regul_i);
+
+	//
+	Levels getThrsFromContext(const string & column_name);
 }
 
 

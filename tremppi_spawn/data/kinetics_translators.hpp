@@ -20,7 +20,4 @@ namespace KineticsTranslators {
 
 	// @return representation of the parametrization used by the database
 	string makeConcise(const Kinetics::Param & param, const string target_name);
-
-	// @Obtain all the parametrizations ID for the given levels string
-	set<ParamNo> findMatching(const Kinetics & kinetics, const Levels & param_vals);
 }

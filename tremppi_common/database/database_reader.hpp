@@ -19,12 +19,6 @@ namespace DatabaseReader {
 	// Get regulators of the given component
 	map<string, Levels> obtainRegulators(const string & component, sqlite3pp::database & db);
 
-	//
-	Levels getThrFromContexts(const vector<string> & columns_name, const size_t regul_i);
-
-	//
-	Levels getThrsFromContext(const string & column_name); 
-
 	// Read headers for all the regulatory functions
 	RegInfo readRegInfo(const CompID ID, const string & name, sqlite3pp::database & db);
 
@@ -33,4 +27,7 @@ namespace DatabaseReader {
 
 	//
 	sqlite3pp::query selectionIDs(const string & selection, sqlite3pp::database & db);
+
+	//
+	map<string, Levels> obtainRequirements(const string & context, const map<string, Levels> & regulators, sqlite3pp::database & db);
 };

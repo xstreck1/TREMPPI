@@ -16,3 +16,24 @@ vector<string> DataConv::columns2list(const map<size_t, string> & columns) {
 	transform(WHOLE(columns), begin(columns_list), [](const pair<size_t, string>  column) {return column.second; });
 	return columns_list;
 }
+
+Levels DataConv::getThrFromContexts(const vector<string> & columns_name, const size_t regul_i) {
+	Levels result;
+
+	for (const size_t context_i : cscope(columns_name)) {
+		string digits = getAllMatches("_(\\d*)\\b", columns_name[context_i], 1).front();
+		result.emplace_back(lexical_cast<ActLevel>(digits[regul_i]));
+	}
+
+	return result;
+}
+
+Levels DataConv::getThrsFromContext(const string & column_name) {
+	Levels result;
+
+	string digits = getAllMatches("_(\\d*)\\b", column_name, 1).front();
+	result.resize(digits.size());
+	transform(WHOLE(digits), begin(result), lexical_cast<ActLevel, char>);
+
+	return result;
+}

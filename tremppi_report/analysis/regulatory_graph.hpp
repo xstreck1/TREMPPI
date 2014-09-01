@@ -16,7 +16,7 @@ namespace RegulatoryGraph {
 		vector<string> columns_list = DataConv::columns2list(info.columns);
 		for (const auto & regulator : info.regulators) {
 			size_t reg_no = distance(begin(info.regulators), info.regulators.find(regulator.first));
-			reg_values.emplace_back(DatabaseReader::getThrFromContexts(columns_list, reg_no));
+			reg_values.emplace_back(DataConv::getThrFromContexts(columns_list, reg_no));
 		}
 
 		// Compute relation to each regulation of this component

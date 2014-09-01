@@ -32,7 +32,7 @@ int tremppi_express(int argc, char ** argv) {
 			RegInfo info = DatabaseReader::readRegInfo(functions.size(), name, db);
 			Configurations minterms;
 			for (const pair<size_t, string> column : info.columns)
-				minterms.emplace_back(DatabaseReader::getThrsFromContext(column.second));
+				minterms.emplace_back(DataConv::getThrsFromContext(column.second));
 			functions.emplace_back(RegFunc{ move(info), move(minterms) });
 		}
 	}
