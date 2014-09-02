@@ -39,11 +39,8 @@ int tremppi_report(int argc, char ** argv) {
 			out["setup"]["compare"] = ReportOptions::getFilter(po["compare"].as<string>());
 
 		// Read regulatory information
-		sqlite3pp::query qry(db, ("SELECT " + DatabaseReader::NAMES_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());
-		for (auto row : qry) {
-			string name = row.get<const char*>(0);
-			reg_infos.push_back(DatabaseReader::readRegInfo(reg_infos.size(), name, db));
-		}
+		DatabaseReader reader;
+		RegInfos infos = reader.readRegInfos(db);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 2);

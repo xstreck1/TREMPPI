@@ -4,18 +4,17 @@
 
 /// Structure with constraints on a transition within a TS
 struct TransConst {
-   ParamNo step_size; ///< How many bits of a parameter space bitset is needed to get from one targe value to another.
-   bool req_dir; ///< true for increase, false for decrease
-   ActLevel comp_value; ///< value of the specie that's being questioned
-   const Levels & targets; ///< Values of the targets for different parameters for this specie.
+   uint16_t param_no : 15; ///< id of the parameter
+   bool req_dir : 1; ///< true for increase, false for decrease
+   ActLevel req_value; ///< value of the specie that's being questioned
 };
 
 /// Storing a single transition to neighbour state together with its transition function.
 struct TSTransitionProperty : public TransitionProperty {
    TransConst trans_const;
 
-   TSTransitionProperty(const StateID target_ID, const ParamNo _step_size, const bool _req_op, const ActLevel _req_comp, const Levels & _targets)
-      : TransitionProperty(target_ID), trans_const({_step_size, _req_op, _req_comp, _targets}) {}
+   TSTransitionProperty(const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_value)
+	   : TransitionProperty(target_ID), trans_const({ param_no, req_dir, req_value }) {}
 };
 
 /// State having specie levels attached.

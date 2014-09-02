@@ -11,8 +11,8 @@ struct RegInfo {
 	string name;
 	ActLevel max_activity;
 	map<size_t, string> columns;
-	map<string, Levels> regulators;
-	map<size_t, map<string, Levels> > requirements; // To each collumn assign the values of the reugulators that fall into the context
+	map<CompID, Levels> regulators;
+	map<size_t, vector<Levels> > requirements; // To each collumn assign the values of the reugulators that fall into the context
 };
 using RegInfos = vector<RegInfo>;
 
@@ -31,5 +31,11 @@ namespace DataInfo {
 
 	//
 	vector<string> getAllContexts(const RegInfos & reg_infos);
+
+	//
+	CompID getCompID(const RegInfos & reg_infos, const string & name);
+
+	//
+	CompID getCompID(const map<string, CompID> & components, const string & name);
 }
 

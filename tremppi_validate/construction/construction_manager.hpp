@@ -15,9 +15,9 @@ namespace ConstructionManager {
 	/**
 	 * Function that constructs all the data in a cascade of temporal builders.
 	 */
-		ProductStructure construct(const RegInfos & reg_infos, const PropertyAutomaton & property, const MyKinetics & kinetics) {
+	ProductStructure construct(const RegInfos & reg_infos, const PropertyAutomaton & property) {
 		// Create the UKS
-		UnparametrizedStructureBuilder unparametrized_structure_builder(reg_infos, property, kinetics);
+		UnparametrizedStructureBuilder unparametrized_structure_builder(reg_infos, property);
 		UnparametrizedStructure unparametrized_structure = unparametrized_structure_builder.buildStructure();
 
 		// Create the Buchi automaton

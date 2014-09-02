@@ -38,11 +38,8 @@ int tremppi_validate(int argc, char ** argv) {
 		db = move(sqlite3pp::database((input_path / DATABASE_FILENAME).string().c_str()));
 
 		// Read regulatory information
-		sqlite3pp::query qry(db, ("SELECT " + DatabaseReader::NAMES_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());
-		for (auto row : qry) {
-			string name = row.get<const char*>(0);
-			reg_infos.push_back(DatabaseReader::readRegInfo(reg_infos.size(), name, db));
-		}
+		DatabaseReader reader;
+		reg_infos = reader.readRegInfos(db);
 
 		// Initiate the parametrizations
 		par_reader.select(reg_infos, select, db);
@@ -75,36 +72,10 @@ int tremppi_validate(int argc, char ** argv) {
 		logging.exceptionMessage(e, 4);
 	}
 
-	MyKinetics kinetics;
-	kinetics.components.emplace_back(MyKinetics::Component{ 0, MyKinetics::Params{}, 1, 1 });
-	kinetics.components.emplace_back(MyKinetics::Component{ 1, MyKinetics::Params{}, 1, 1 });
-	map < CompID, Levels > requirements = map < CompID, Levels >{};
-	kinetics.components[0].params.push_back(MyKinetics::Param{
-		"",
-		Levels{ 0, 1 },
-		move(requirements),
-		Levels{ 1 } }
-	);
-	requirements = map < CompID, Levels >{ { 0, Levels{ 0 } } };
-	kinetics.components[1].params.push_back(MyKinetics::Param{
-		"A:0",
-		Levels{ 0, 1 },
-		move(requirements),
-		Levels{ 1 } }
-	);
-	requirements = map < CompID, Levels >{ { 0, Levels{ 1 } } };
-	kinetics.components[1].params.push_back(MyKinetics::Param{
-		"A:1",
-		Levels{ 0, 1 },
-		move(requirements),
-		Levels{ 2 } }
-	);
-
-
 	ProductStructure product;
 	// Construction of data structures
 	try {
-		product = ConstructionManager::construct(reg_infos, automata[0], kinetics);
+		product = ConstructionManager::construct(reg_infos, automata[0]);
 	}
 	catch (std::exception & e) {
 		logging.exceptionMessage(e, 5);
@@ -124,11 +95,11 @@ int tremppi_validate(int argc, char ** argv) {
 			// Call synthesis procedure based on the type of the automata[0].
 			switch (product.getMyType()) {
 			case BA_finite:
-				cost = synthesis_manager.checkFinite(po, witness_trans, robustness_val, par_reader.getRowID());
+				cost = synthesis_manager.checkFinite(po, par_reader.getParametrization(), witness_trans, robustness_val);
 				break;
-			case BA_standard:
-				cost = synthesis_manager.checkFull(po, witness_trans, robustness_val, par_reader.getRowID());
-				break;
+			/*case BA_standard:
+				cost = synthesis_manager.checkFull(po, par_reader.getParametrization(), witness_trans, robustness_val);
+				break;*/
 			default:
 				throw runtime_error("Unsupported Buchi automaton type.");
 			}

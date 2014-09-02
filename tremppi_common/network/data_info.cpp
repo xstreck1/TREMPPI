@@ -39,3 +39,22 @@ vector<string> DataInfo::getAllContexts(const RegInfos & reg_infos) {
 			result.push_back(column.second);
 	return result;
 }
+
+
+CompID DataInfo::getCompID(const RegInfos & reg_infos, const string & name) {
+	auto reg_info_it = find_if(WHOLE(reg_infos), [&name](const RegInfo & reg_info){ return reg_info.name == name;  });
+	if (reg_info_it == end(reg_infos)) {
+		throw runtime_error("Component " + name + " not found");
+		return INF;
+	}
+	else {
+		return reg_info_it->ID;
+	}
+}
+
+CompID DataInfo::getCompID(const map<string, CompID> & components, const string & name) {
+	if (components.count(name) < 1)
+		throw runtime_error("Component " + name + " not found");
+	else
+		return components.at(name);
+}

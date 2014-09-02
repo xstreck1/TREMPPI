@@ -16,8 +16,8 @@
 
 class UnparametrizedStructure : public TSInterface<TSStateProperty> {
 	friend class UnparametrizedStructureBuilder;
-	Levels maxes; ///< Maximal activity levels of the species.
-	Levels mins; ///< Minimal activity levels of the species.
+	Levels maxes; ///< Maximal activity levels of the components.
+	Levels mins; ///< Minimal activity levels of the components.
 	Levels range_size; ///< Differences between the two.
 
 public:
@@ -42,8 +42,8 @@ public:
 	 * @param ID	add data to the state with this IS
 	 * Add a new transition to the source specie, containg necessary edge labels for the CMC
 	 */
-	inline void addTransition(const StateID ID, const StateID target_ID, const ParamNo step_size, const bool _dir, const ActLevel level, const Levels & targets) {
-		GraphInterface<TSStateProperty>::states[ID].transitions.push_back(TSTransitionProperty(target_ID, step_size, _dir, level, targets));
+	inline void addTransition(const StateID ID, const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_level) {
+		GraphInterface<TSStateProperty>::states[ID].transitions.push_back(TSTransitionProperty(target_ID, param_no, req_dir, req_level));
 	}
 
 	inline StateID getID(const Levels & levels) const {

@@ -9,7 +9,7 @@
 enum StreamType {error_str, results_str, verbose_str};
 
 /// Symbol that separates values of a single parametrizations on output.
-const std::string separator = ":";
+const char separator = ':';
 
 /// Definition of naming abbreviations for edge labels:
 namespace Label {

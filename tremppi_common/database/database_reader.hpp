@@ -6,28 +6,35 @@
 #include "sqlite3pp_func.hpp"
 
 /// Reads parametrizations form given file
-namespace DatabaseReader {
+class DatabaseReader {
 	const string NAMES_COLUMN = "Name";
 	const string MAX_LEVEL_COLUMN = "MaxActivity";
 	const string REGULATOR_COLUMN = "Source";
 	const string TARGET_COLUMN = "Target";
 	const string THRESHOLD_COLUMN = "Threshold";
+	map<string, CompID> components_dict;
+	vector<string> components;
+	map<string, ActLevel> maxes_dict;
+	vector<ActLevel> maxes;
 
-	// Obtain maximal levels for the individual components
-	ActLevel getMaxLevel(const string & name, sqlite3pp::database & db);
+	// Obtain components and their ids
+	void readComponents(sqlite3pp::database & db);
 
+	// Obtain maximal levels 
+    void readMaxes(sqlite3pp::database & db);
+
+	//
+	vector<Levels> obtainRequirements(const string & context, const map<CompID, Levels> & regulators, sqlite3pp::database & db);
 	// Get regulators of the given component
-	map<string, Levels> obtainRegulators(const string & component, sqlite3pp::database & db);
+	map<CompID, Levels> readRegulators(const string & name, sqlite3pp::database & db);
 
+public:
 	// Read headers for all the regulatory functions
-	RegInfo readRegInfo(const CompID ID, const string & name, sqlite3pp::database & db);
+	RegInfos readRegInfos(sqlite3pp::database & db);
 
 	// 
-	sqlite3pp::query selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db);
+	static sqlite3pp::query selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db);
 
 	//
-	sqlite3pp::query selectionIDs(const string & selection, sqlite3pp::database & db);
-
-	//
-	map<string, Levels> obtainRequirements(const string & context, const map<string, Levels> & regulators, sqlite3pp::database & db);
+	static sqlite3pp::query selectionIDs(const string & selection, sqlite3pp::database & db);
 };

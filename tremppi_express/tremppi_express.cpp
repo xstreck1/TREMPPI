@@ -21,15 +21,11 @@ int tremppi_express(int argc, char ** argv) {
 		if (po.count("select") > 0)
 			select = ExpressOptions::getFilter(po["select"].as<string>());
 
-		// Read regulatory information
-		sqlite3pp::query qry(db, ("SELECT * FROM " + COMPONENTS_TABLE).c_str());
+		DatabaseReader reader;
+		RegInfos infos = reader.readRegInfos(db);
 
 		// Obtain the components data
-		for (auto row : qry) {
-			string name; ActLevel max;
-			row.getter() >> name >> max;
-			maxes.insert(make_pair(name, max));
-			RegInfo info = DatabaseReader::readRegInfo(functions.size(), name, db);
+		for (auto & info : infos) {
 			Configurations minterms;
 			for (const pair<size_t, string> column : info.columns)
 				minterms.emplace_back(DataConv::getThrsFromContext(column.second));
@@ -69,7 +65,7 @@ int tremppi_express(int argc, char ** argv) {
 					pdnfs.emplace_back(MVQMC::compactize(config_values[target_val]));
 				}
 				
-				string formula = "\"" + Output::pdnfToFormula(maxes, reg_func, pdnfs) + "\"";
+				string formula = "\"" + Output::pdnfToFormula(functions, reg_func, pdnfs) + "\"";
 				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + formula + " WHERE ROWID=" + to_string(sel_ID.get<int>(0));
 				db.execute(update.c_str());
 

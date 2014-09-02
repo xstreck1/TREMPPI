@@ -14,21 +14,21 @@ namespace Output {
 	}
 
 	// 
-	string plitToFormula(const pair<string, Levels> & reg, const PLit & plit, const ActLevel max) {
+	string plitToFormula(const string & component, const Levels & trhs, const PLit & plit, const ActLevel max) {
 		string result;
 		// Skip completely if the literal contains all the thresholds
-		if (plit.size() == reg.second.size())
+		if (plit.size() == trhs.size())
 
 		// If multivalued, use Post literal
 		if (max > 1) {
 			// Build the thresholds for this regultion
-			Levels thresholds = reg.second;
+			Levels thresholds = trhs;
 			thresholds.insert(begin(thresholds), 0);
 			thresholds.push_back(max + 1);
 			auto trhs_it = begin(thresholds);
 
 			// Build the literal
-			result += reg.first + "{";
+			result += component + "{";
 			for (int pval : plit) {
 				while (*trhs_it < pval)
 					trhs_it++;
@@ -43,14 +43,14 @@ namespace Output {
 		else {
 			if (plit[0] == 0)
 				result = "!";
-			result += reg.first;
+			result += component;
 		}
 
 		return result;
 	}
 
 	//
-	string pminToFormula(const map<string, ActLevel> & maxes, const RegFunc & reg_func, const PMin & pmin, const ActLevel target_val) {
+	string pminToFormula(const RegFuncs & funcs, const RegFunc & reg_func, const PMin & pmin, const ActLevel target_val) {
 		string result;
 
 		// Add front value in case the component is not boolean or has no regulators (constant)
@@ -60,7 +60,7 @@ namespace Output {
 		// Add values of all the regulators
 		size_t reg_i = 0;
 		for (auto regulation : reg_func.info.regulators) {
-			string lit_form = plitToFormula(regulation, pmin[reg_i], maxes.at(regulation.first.c_str()));
+			string lit_form = plitToFormula(reg_func.info.name, regulation.second, pmin[reg_i], funcs[regulation.first].info.max_activity);
 			if (!lit_form.empty())
 				result += lit_form + "&";
 			reg_i++;
@@ -72,12 +72,12 @@ namespace Output {
 	}
 
 	//
-	string pdnfToFormula(const map<string, ActLevel> & maxes, const RegFunc & reg_func, const vector<PDNF> & pdnfs) {
+	string pdnfToFormula(const RegFuncs & funcs, const RegFunc & reg_func, const vector<PDNF> & pdnfs) {
 		string result;
 
 		for (const ActLevel target_val : cscope(pdnfs)) {
 			for (const PMin & pmin : pdnfs[target_val]) {
-				string min_form = pminToFormula(maxes, reg_func, pmin, target_val);
+				string min_form = pminToFormula(funcs, reg_func, pmin, target_val);
 
 				result += min_form + "|";
 			}

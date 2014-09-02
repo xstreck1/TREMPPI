@@ -13,6 +13,7 @@ class RobustnessCompute {
    const ProductStructure & product; ///< Product reference for state properties.
    const ColorStorage & storage; ///< Constant storage with the actuall data.
    CheckerSettings settings; ///< Setup for the process.
+   Levels parametrization;
 
    /// This structure holds values used in the iterative process of robustness computation.
    vector<size_t> exits; ///< A number of transitions this state can be left through under given parametrization.
@@ -29,7 +30,7 @@ class RobustnessCompute {
          if (exits[tran.first] != 0)
             continue;
 
-         const vector<StateID> transports = ColoringFunc::broadcastParameters(settings.getParamNo(), product.getStructure(), product.getKSID(tran.first));
+         const vector<StateID> transports = ColoringFunc::broadcastParameters(parametrization, product.getStructure(), product.getKSID(tran.first));
 
          // If there are no transports, we have a loop - even if multiple loops are possible, consider only one.
          exits[tran.first] = max(static_cast<size_t>(1), transports.size());
@@ -70,8 +71,9 @@ public:
    /**
     * Function that computes robustness values for each parametrization.
     */
-   void compute(const SynthesisResults & results, const vector<pair<StateID,StateID> > & transitions, const CheckerSettings & _settings) {
+   void compute(const SynthesisResults & results, const vector<pair<StateID, StateID> > & transitions, const CheckerSettings & _settings, const Levels & _parametrization) {
       settings = _settings;
+	  parametrization = _parametrization;
       initiate();
       computeExits(transitions);
 
