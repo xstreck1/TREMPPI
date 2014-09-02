@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tremppi_common/network/data_info.hpp>
+#include <tremppi_common/network/constraint_parser.hpp>
 
 #include "../data/property_automaton.hpp"
 

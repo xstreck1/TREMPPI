@@ -1,8 +1,6 @@
 #pragma once
 
-#include <gtest/gtest.h>
-
-#include <tremppi_common/header.h>
+#include "validate_tests_data.hpp"
 
 int tremppi_validate(int, char**);
 
@@ -27,3 +25,6 @@ int basic_validate_test()  {
 	return result;
 }
 
+TEST_F(ValidateTest, Construction) {
+	ProductStructure p_negative_loop_A_cycle_on_a = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
+}

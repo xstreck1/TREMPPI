@@ -6,8 +6,8 @@
 #include "io/validate_options.hpp"
 #include "io/properties_reader.hpp"
 #include "io/parametrization_reader.hpp"
+#include "io/output_manager.hpp"
 #include "construction/construction_manager.hpp"
-#include "construction/product_builder.hpp"
 #include "synthesis/synthesis_manager.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +84,7 @@ int tremppi_validate(int argc, char ** argv) {
 	// Synthesis of parametrizations
 	try {
 		SynthesisManager synthesis_manager(product);
+		OutputManager output(po, reg_infos);
 		size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified automata[0].
 
 		// Do the computation for all the rounds
@@ -105,9 +106,9 @@ int tremppi_validate(int argc, char ** argv) {
 			}
 
 			// Parametrization was considered satisfying.
-			if ((cost != INF)) {
-				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, witness_trans);
-			}
+			string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, witness_trans);
+		
+			output.outputRound(cost, robustness_val, witness_path, par_reader.getParametrization(), par_reader.getRowID());
 		}
 	}
 	catch (std::exception & e) {

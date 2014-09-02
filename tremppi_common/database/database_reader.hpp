@@ -25,6 +25,7 @@ class DatabaseReader {
 
 	//
 	vector<Levels> obtainRequirements(const string & context, const map<CompID, Levels> & regulators, sqlite3pp::database & db);
+	
 	// Get regulators of the given component
 	map<CompID, Levels> readRegulators(const string & name, sqlite3pp::database & db);
 

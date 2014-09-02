@@ -3,7 +3,6 @@
 #include "../data/property_automaton.hpp"
 
 #include "witness_searcher.hpp"
-#include "output_manager.hpp"
 #include "color_storage.hpp"
 #include "model_checker.hpp"
 #include "robustness_compute.hpp"

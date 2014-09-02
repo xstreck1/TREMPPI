@@ -1,6 +1,5 @@
 #pragma once
-#include <tremppi_common/general/common_functions.hpp>
-#include <tremppi_common/network/definitions.hpp>
+#include "common_functions.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief An RAII object for searching Gecode solutions.
@@ -39,7 +38,7 @@ public:
 		if (dfs != nullptr) // Deleted before any search even started
 			delete dfs;
 	}
-	
+
 	// Provides access to the space, space functions can be called this way
 	// @return pointer to the space that's being held.
 	SpaceType * operator->() const {
@@ -53,7 +52,7 @@ public:
 		vector<VarType> result;
 
 		// Initialize the search in the first call
-		if (dfs == nullptr) 
+		if (dfs == nullptr)
 			dfs = new DFS<SpaceType>(space);
 
 		// Obtain the new space
@@ -61,13 +60,13 @@ public:
 		space = dfs->next();
 
 		// C to C++ representation
-		if (space == NULL) 
+		if (space == NULL)
 			space = nullptr;
-		
+
 		// Get the result if there's any
 		if (space != nullptr)
 			result = space->getSolution();
-	
+
 		return result;
 	}
 };
