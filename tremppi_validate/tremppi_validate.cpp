@@ -89,14 +89,12 @@ int tremppi_validate(int argc, char ** argv) {
 
 		// Do the computation for all the rounds
 		while (par_reader.next()) {
-			vector<StateTransition> witness_trans;
-			double robustness_val = 0.;
-			size_t cost = INF;
+			tuple<size_t, double, vector<StateTransition> > result;
 
 			// Call synthesis procedure based on the type of the automata[0].
 			switch (product.getMyType()) {
 			case BA_finite:
-				cost = synthesis_manager.checkFinite(po, par_reader.getParametrization(), witness_trans, robustness_val);
+				result = synthesis_manager.checkFinite(po, par_reader.getParametrization());
 				break;
 			/*case BA_standard:
 				cost = synthesis_manager.checkFull(po, par_reader.getParametrization(), witness_trans, robustness_val);
@@ -106,9 +104,9 @@ int tremppi_validate(int argc, char ** argv) {
 			}
 
 			// Parametrization was considered satisfying.
-			string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, witness_trans);
+			string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<2>(result));
 		
-			output.outputRound(cost, robustness_val, witness_path, par_reader.getParametrization(), par_reader.getRowID());
+			output.outputRound(get<0>(result), get<1>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 		}
 	}
 	catch (std::exception & e) {

@@ -132,22 +132,25 @@ public:
 	 * @param BFS_bound current bound on depth
 	 * @return  the Cost value for this parametrization
 	 */
-	size_t checkFinite(const bpo::variables_map & po, const Levels & parametrization, vector<StateTransition> & trans, double & robustness_val) {
+	tuple<size_t, double, vector<StateTransition> >  checkFinite(const bpo::variables_map & po, const Levels & parametrization) {
+		tuple<size_t, double, vector<StateTransition> > result;
+		
 		CheckerSettings settings;
 		settings.bfs_bound = ValidateOptions::getBound(po);
 		settings.bound_type = BoundType::min;
 		settings.mark_initals = true;
-		SynthesisResults results = model_checker->conductCheck(settings, parametrization);
+		SynthesisResults s_results = model_checker->conductCheck(settings, parametrization);
 
 		TraceType trace_type = ValidateOptions::getTracteType(po);
 		if (trace_type != TraceType::none) {
-			searcher->findWitnesses(results, settings, parametrization);
-			computer->compute(results, searcher->getTransitions(), settings, parametrization);
-			robustness_val = computer->getRobustness();
+			searcher->findWitnesses(s_results, settings, parametrization);
+			computer->compute(s_results, searcher->getTransitions(), settings, parametrization);
+			get<1>(result) = computer->getRobustness();
 			if (trace_type != TraceType::wit)
-				trans = searcher->getTransitions();
+				get<2>(result) = searcher->getTransitions();
 		}
 
-		return results.isAccepting() ? results.getLowerBound() : INF;
+		get<0>(result) = s_results.isAccepting() ? s_results.getLowerBound() : INF;
+		return result;
 	}
 };
