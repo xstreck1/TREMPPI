@@ -1,5 +1,7 @@
 #include "unparametrized_structure_builder.hpp"
 
+#include <tremppi_common/network/constraint_parser.hpp>
+
 void UnparametrizedStructureBuilder::addTransition(const StateID source, const StateID target, const CompID ID, const bool direction, const Levels & state_levels, UnparametrizedStructure & structure) {
 	// Find out which function is currently active
 	const size_t fun_no = getActiveFunction(ID, state_levels);
@@ -69,7 +71,7 @@ void UnparametrizedStructureBuilder::prepareAllowed(const UnparametrizedStructur
 }
 
 size_t UnparametrizedStructureBuilder::solveConstrains(UnparametrizedStructure & structure) {
-	pair<Levels, Levels> bounds = ParameterHelper::getBounds(reg_infos, property);
+	pair<Levels, Levels> bounds = PropertyHelper::getBounds(reg_infos, property);
 	structure.mins = bounds.first; structure.maxes = bounds.second;
 	rng::transform(structure.maxes, structure.mins, back_inserter(structure.range_size), [](const ActLevel max, const ActLevel min) {return max - min + 1; });
 

@@ -1,7 +1,9 @@
 #pragma once
 
+#include <tremppi_common/network/data_info.hpp>
+
+#include "../data/property_automaton.hpp"
 #include "unparametrized_structure.hpp"
-#include "../data/parameter_helper.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Creates a UnparametrizedStructure as a composition of a BasicStructure and ParametrizationsHolder.

@@ -1,22 +1,11 @@
-/*
- * Copyright (C) 2012-2013 - Adam Streck
- * This file is a part of the ParSyBoNe (Parameter Synthetizer for Boolean Networks) verification tool.
- * ParSyBoNe is a free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.
- * ParSyBoNe is released without any warranty. See the GNU General Public License for more details. <http://www.gnu.org/licenses/>.
- * For affiliations see <http://www.mi.fu-berlin.de/en/math/groups/dibimath> and <http://sybila.fi.muni.cz/>.
- */
-
-#ifndef PROPERTY_AUTOMATON_HPP
-#define PROPERTY_AUTOMATON_HPP
-
+#pragma once
 #include <tremppi_common/general/common_functions.hpp>
-#include <tremppi_common/network/definitions.hpp>
+#include <tremppi_common/network/data_info.hpp>
 
-class PropertyAutomaton {
-public:
+struct PropertyAutomaton {
 	NO_COPY(PropertyAutomaton)
 
-	/// Edge in Buchi Automaton
+		/// Edge in Buchi Automaton
 	struct Edge {
 		StateID target_ID;
 		string constraint;
@@ -35,18 +24,16 @@ public:
 	string prop_type; ///< What property does this automaton hold.
 	vector<State> states; ///< vector of all states of the controlling Buchi automaton
 	string experiment;
+};
 
+namespace PropertyHelper {
 	/**
 	 * Finds ordinal number of the BA state based on its name or number string.
 	 * @return	number of the state with the specified name if there is such, otherwise INF
 	 */
-	CompID findID(const string & name) const {
-		for (const State & state : states)
-		if (state.name.compare(name) == 0)
-			return state.ID;
+	CompID findID(const string & name, const PropertyAutomaton & property);
 
-		return INF;
-	}
-};
+	// @bounds on component values after propagatin the experiment
+	pair<Levels, Levels> getBounds(const RegInfos & reg_infos, const PropertyAutomaton & property);
+}
 
-#endif // PROPERTY_AUTOMATON_HPP
