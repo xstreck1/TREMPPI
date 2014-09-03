@@ -2,7 +2,7 @@
 
 void Logging::init() {
 	// Set values
-	step_count = step_no = 0;
+	step_count = step_no = substep_count = substep_no = 0;
 
 	// Find the logifile name
 	string logfile = (tremppi_system.standalone ? tremppi_system.PROGRAM_NAME : "tremppi") + ".log";
@@ -36,28 +36,34 @@ void Logging::newPhase(const string & _desc, const size_t _step_count) {
 	step_no = 1;
 }
 
-void Logging::newSubPhase(const string & _desc, const size_t _step_count) {
+void Logging::newSubPhase(const string & _desc, const size_t _substep_count) {
 	if (_desc.size() > MAX_WIDHT)
 		throw runtime_error("Description of a subphase " + quote(_desc) + "is longer that maximum " + to_string(MAX_WIDHT) + ".");
-	step_count = _step_count;
+	substep_count = _substep_count;
 	subphase_desc = _desc;
-	step_no = 1;
+	substep_no = 1;
+}
+
+void Logging::uniStep(bool is_sub) {
+	cout << left << "\r" << setw(MAX_WIDHT * 2);
+	string line;
+	line += "[" + phase_desc + "]";
+	if (is_sub)
+		line += "[" + subphase_desc + "]";
+	cout << line;
+
+	size_t & s_no = is_sub ? substep_no : step_no;
+	cout << right << fixed << setw(7) << setprecision(3)
+		<< (s_no * 100.) / (is_sub ? substep_count : step_count) << "%.";
+	s_no++;
 }
 
 void Logging::step() {
-	cout << left << "\r" << setw(MAX_WIDHT * 2);
-	string line;
-	if (!phase_desc.empty()) {
-		line += "[" + phase_desc + "]";
-		if (!subphase_desc.empty())
-			line += "[" + subphase_desc + "]";
-	}
-	cout << line;
-	if (step_count != 0) {
-		cout << right
-			<< fixed << setw(7) << setprecision(3) << (step_no * 100.) / step_count << "%.";
-		step_no++;
-	}
+	uniStep(false);
+}
+
+void Logging::subStep() {
+	uniStep(true);
 }
 
 void Logging::exceptionMessage(const exception & e, const int err_no) {

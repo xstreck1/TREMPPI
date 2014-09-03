@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../validate_tests/validate_tests_data.hpp"
-#include <tremppi_validate/construction/construction_manager.hpp>
+#include <tremppi_validate/data/construction_manager.hpp>
 
 
 class ValidateTest : public CommonTest {

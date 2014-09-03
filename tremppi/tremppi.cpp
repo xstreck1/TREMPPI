@@ -13,7 +13,7 @@ map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
 		{ "spawn", { tremppi_spawn, "read a model and create a database of parametrizations based on the model" } },
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
 		{ "report", { tremppi_report, "create a report from statistical analysis of a database" } },
-		{ "valdiate", { tremppi_validate, "conduct a model checking to validate parametrizations agaings LTL properties" } },
+		{ "validate", { tremppi_validate, "conduct a model checking to validate parametrizations agaings LTL properties" } },
 		{ "init", { tremppi_init, "create a new model with a model viewer" } }
 };
 
@@ -50,8 +50,6 @@ int main(int argc, char ** argv) {
 		tremppi_system.standalone = false;
 		// Move the program name to the second position instead of the command, which is forgotten 
 		argv[1] = argv[0];
-		tremppi_functions.at(command).first(argc - 1, argv + 1);
+		return tremppi_functions.at(command).first(argc - 1, argv + 1);
 	}
-
-	return 0;
 }

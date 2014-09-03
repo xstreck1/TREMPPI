@@ -9,16 +9,16 @@ NOT WORKING AS OF NOW. For working version use http://esther.fi.muni.cz .
 
 * Gecode: http://www.gecode.org/
 * sqlite3: http://www.sqlite.org/ 
-* sqlite3pp: https://code.google.com/p/sqlite3pp/ 
+* sqlite3pp: https://github.com/iwongu/sqlite3pp/
 * json (JsonCPP): http://sourceforge.net/projects/jsoncpp/ 
 
 3rd JS libraries included (open-source)
 
-* jQuery (http://jqueryui.com/)
-* jQueryUI (http://jqueryui.com/)
-* cytoscapeJS (http://cytoscape.github.io/cytoscape.js/)
-* qTip2 (http://qtip2.com/)
-* paper.js (http://paperjs.org/)
+* jQuery: http://jqueryui.com/
+* jQueryUI: http://jqueryui.com/
+* cytoscapeJS: http://cytoscape.github.io/cytoscape.js/
+* qTip2: http://qtip2.com/
+* paper.js: http://paperjs.org/
 
 BUILDING
 --------

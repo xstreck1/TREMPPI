@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../construction/product_structure.hpp"
+#include "../data/product_structure.hpp"
 
 class CheckerSettings {
 public:

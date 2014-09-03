@@ -1,59 +1,47 @@
 #pragma once
 
 #include <tremppi_common/network/data_info.hpp>
+#include <tremppi_common/database/sqlite3pp_func.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class that outputs formatted resulting data.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class OutputManager {
-	const bpo::variables_map & user_options; ///< User can influence the format of the output.
+	const bpo::variables_map & po; ///< User can influence the format of the output.
 	const RegInfos & reg_infos; ///< Reference to the model itself.
+	const string & name; ///< Name of the property
+	sqlite3pp::database & db;
+	map<string, string> new_columns; ///< (column name, column type)
 
 public:
 	NO_COPY(OutputManager)
 
-	OutputManager(const bpo::variables_map  & _user_options, const RegInfos & _reg_infos)
-	: user_options(_user_options), reg_infos(_reg_infos) {}
-
-public:
-	/**
-	 * @brief outputForm
-	 */
-	void outputForm() {
-		string format_desc = "#:(";
-
-		for (CompID ID : crange(reg_infos.size())) {
-			for (const auto & column : reg_infos[ID].columns) {
-				format_desc += reg_infos[ID].name + "{" + column.second + "},";
-			}
-		}
-		format_desc.back() = ')';
-		format_desc += ":Cost:Robust:Witness";
+	// Store the names of the columns to be used
+	OutputManager(const bpo::variables_map  & _po, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db)
+		: po(_po), reg_infos(_reg_infos), name(_name), db(_db) 
+	{
+		new_columns.insert({ "C_" + name, "INTEGER" });
+		if (po.at("trace").as<string>() == "rob" || po.at("trace").as<string>() == "wit")
+			new_columns.insert({ "R_" + name, "REAL" });
+		if ( po.at("trace").as<string>() == "wit")
+			new_columns.insert({ "W_" + name, "TEXT" });
 	}
 
-	/**
-	 * Output parametrizations from this round together with additional data, if requested.
-	 */
+	// Write the new columns to the database
+	void outputForm() {
+		for (const pair<string, string> & column : new_columns)
+			sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, column.first, column.second, db);
+	}
+
+	// Output parametrizations from this round together with additional data, if requested.
 	void outputRound(const size_t cost, const double robustness_val, const string & witness, const Levels & parametrization, const ParamNo & rowid) {
-		string line;
-		for (const ActLevel param_val : parametrization)
-			line += to_string(param_val) + ",";
-
-		if (cost != INF) 
-			line += "1,"  + to_string(cost) + ",";
-		else 
-			line += "0,NULL,";
-
-		if (robustness_val > 0.)
-			line += to_string(robustness_val) + ",";
-		else
-			line += "NULL,";
-
-		if (!witness.empty())
-			line += witness + ",";
-		else
-			line += "NULL,";
-
-		cout << line << endl;
+		string command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET ";
+		command += "C_" + name + "=" + (cost == INF ? "NULL" : to_string(cost));
+		if (po.at("trace").as<string>() == "rob" || po.at("trace").as<string>() == "wit")
+			command += ", R_" + name + "=" + to_string(robustness_val);
+		if (po.at("trace").as<string>() == "wit")
+			command += ", W_" + name + "=" + witness;
+		command += " WHERE rowid=" + to_string(rowid);
+		db.execute(command.c_str());
 	}
 };

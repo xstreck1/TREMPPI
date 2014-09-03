@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../construction/automaton_structure.hpp"
-#include "../construction/unparametrized_structure.hpp"
+#include "automaton_structure.hpp"
+#include "unparametrized_structure.hpp"
 #include "transition_system_interface.hpp"
 
 /// Storing a single transition to neighbour state together with its transition function.

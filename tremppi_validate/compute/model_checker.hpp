@@ -32,7 +32,7 @@ class ModelChecker {
 	 * @param ID	ID of the source state in the product
 	 * @param parameters	parameters that will be distributed
 	 */
-	void transferUpdates(const Levels & parametrization, const StateID ID) {
+	void transferUpdates(const StateID ID) {
 		// Get passed colors, unique for each sucessor
 		vector<StateID> transports;
 
@@ -56,7 +56,7 @@ class ModelChecker {
 	 * Main coloring function - passes parametrizations from newly colored states to their neighbours.
 	 * Executed as an BFS - in rounds.
 	 */
-	void doColoring(const Levels & parametrization) {
+	void doColoring() {
 		StateID ID = updates.back();
 		updates.pop_back();
 
@@ -64,7 +64,7 @@ class ModelChecker {
 		if (settings.isFinal(ID, product) && storage.getColor(ID))
 			results.found_depth.insert({ ID, BFS_level });
 
-		transferUpdates(parametrization, ID);
+		transferUpdates(ID);
 
 		// If there this round is finished, but there are still paths to find
 		if (updates.empty() && (BFS_level < settings.getBound())) {
@@ -111,7 +111,7 @@ public:
 
 		// While there are updates, pass them to succesing vertices
 		do  {
-			doColoring(parametrization);
+			doColoring();
 		} while (!updates.empty());
 
 		results.derive();
