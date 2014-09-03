@@ -28,7 +28,7 @@ namespace Label {
 const std::string COMPONENTS_TABLE = "Components";
 const std::string REGULATIONS_TABLE = "Regulations";
 const std::string PARAMETRIZATIONS_TABLE = "Parametrizations";
-const std::vector<const std::string> SOURCE_TYPES = { "select", "differ", "compare" };
+const std::vector<std::string> SOURCE_TYPES = { "select", "differ", "compare" };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
@@ -52,7 +52,7 @@ typedef vector<ActLevel> Levels;
 typedef vector<Levels> Configurations;
 
 /// What properties may be examined.
-const std::vector<const std::string> PropType = { "TimeSeries" };
+const std::vector<std::string> PropType = { "TimeSeries" };
 
 /// Types of automata possible for using.
 enum AutType { BA_finite, BA_weak, BA_standard };

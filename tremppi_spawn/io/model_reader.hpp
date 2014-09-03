@@ -39,7 +39,7 @@ namespace ModelReader {
 
 			Model::Regulation regulation{
 				source_id,
-				edge["data"]["Threshold"].asInt(),
+				static_cast<ActLevel>(edge["data"]["Threshold"].asInt()),
 				edge["data"]["Label"].asString()
 			};
 

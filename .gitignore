@@ -10,6 +10,7 @@ CMakeFiles*
 *CMake*.bin
 *CMake*.cmake
 CMakeCache.txt
+*Makefile
 
 # Visual Studio files
 Win32*
