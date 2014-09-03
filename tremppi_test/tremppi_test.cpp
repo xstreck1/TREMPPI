@@ -6,10 +6,10 @@
 #include "report_tests/report_tests.hpp"
 
 TEST(CoreTest, AllPrograms) {
-	ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";
-	ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
-	ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";
-	ASSERT_EQ(0, basic_report_test()) << "Basic content test report failed.";
+	//ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";
+	//ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
+	//ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";
+	//ASSERT_EQ(0, basic_report_test()) << "Basic content test report failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";
 	cout << endl;
 }

@@ -29,7 +29,6 @@ int tremppi_validate(int argc, char ** argv) {
 	}
 
 	RegInfos reg_infos;
-	ParametrizationReader par_reader;
 	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
@@ -40,9 +39,6 @@ int tremppi_validate(int argc, char ** argv) {
 		// Read regulatory information
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
-
-		// Initiate the parametrizations
-		par_reader.select(reg_infos, select, db);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 1);
@@ -86,6 +82,8 @@ int tremppi_validate(int argc, char ** argv) {
 		}
 
 		// Synthesis of parametrizations
+		ParametrizationReader par_reader;
+		par_reader.select(reg_infos, select, db);
 		try {
 			BOOST_LOG_TRIVIAL(info) << "Validating for an automaton: " << automaton.name;
 			
