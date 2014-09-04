@@ -6,14 +6,20 @@
         <script src="./report/vendor/paper-full.min.js"></script>
         <script src="./report/vendor/jquery-ui.min.js"></script>
         <script src="./report/vendor/jquery.qtip.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./report/vendor/jquery.qtip.min.css">
+        
+        <script src="./report/common/common.js"></script>       
+        <link rel="stylesheet" type="text/css" href="./report/common/common.css">
+        
         <script src="./report/local/values.js"></script>
-        <script src="./report/data.js"></script>
         <script src="./report/local/helpers.js"></script>
         <script src="./report/local/page.js"></script>
         <script src="./report/local/graph.js"></script>
         <script src="./report/local/labels.js"></script>
-        <link rel="stylesheet" type="text/css" href="./report/vendor/jquery.qtip.min.css">
         <link rel="stylesheet" type="text/css" href="./report/local/css.css">
+        
+        
+        <script src="./report/data.js"></script>
         <script>
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
@@ -22,7 +28,7 @@
         <title >empty title</title>
     </head>
     <body style="margin: 0; margin: 0% 5%" > 
-        <div style="font-size: 40pt; text-align: center;" >tremppi_report</div>
+        <div class="title">tremppi_report</div>
         <br />
         <div class="decription"><span class="desc_title">Date:</span> <span class="desc_content" id="analysis_date">analysis_date</span></div>
         <div class="decription"><span class="desc_title">Model:</span> <span class="desc_content" id="model_name">model_name</span></div>

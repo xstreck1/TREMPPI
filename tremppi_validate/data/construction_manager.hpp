@@ -16,4 +16,8 @@ namespace ConstructionManager {
 	 * Function that constructs all the data in a cascade of temporal builders.
 	 */
 	ProductStructure construct(const RegInfos & reg_infos, const PropertyAutomaton & property);
+
+
+	// Tests whether the objects are constructible
+	void test(const RegInfos & reg_infos, const PropertyAutomaton & property);
 }

@@ -63,12 +63,19 @@ int tremppi_validate(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Parsing the properties.";
 
 		automata = PropertiesReader::jsonToProperties(root);
+
+		// Just checks if it is possible to construct (parse) the automata
+		for (const PropertyAutomaton & automaton : automata)
+			ConstructionManager::test(reg_infos, automaton);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 4);
 	}
-	 
 
+	if (po.count("check_only") > 0)
+		return 0;
+
+	// Conduct the check for each of the properties
 	logging.newPhase("Checking properties", automata.size());
 	for (const PropertyAutomaton & automaton : automata) {
 		ProductStructure product;
@@ -86,7 +93,7 @@ int tremppi_validate(int argc, char ** argv) {
 		par_reader.select(reg_infos, select, db);
 		try {
 			BOOST_LOG_TRIVIAL(info) << "Validating for an automaton: " << automaton.name;
-			
+
 			SynthesisManager synthesis_manager(product);
 			OutputManager output(po, reg_infos, automaton.name, db);
 			output.outputForm();
