@@ -19,6 +19,7 @@ NOT WORKING AS OF NOW. For working version use http://esther.fi.muni.cz .
 * cytoscapeJS: http://cytoscape.github.io/cytoscape.js/
 * qTip2: http://qtip2.com/
 * paper.js: http://paperjs.org/
+* EditableGrid: http://www.editablegrid.net/
 
 BUILDING
 --------

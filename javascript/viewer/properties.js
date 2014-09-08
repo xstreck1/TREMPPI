@@ -2,7 +2,7 @@ var properties = [
     {
         "desc": [
             {
-                "id": 1,
+                "id": 0,
                 "values": {
                     "id": "test",
                     "type": "ts",
@@ -12,15 +12,15 @@ var properties = [
         ],
         "data": [
             {
-                "id": 1,
+                "id": 0,
                 "values": {
                     "measurements": "A>0"
                 }
             },
             {
-                "id": 2,
+                "id": 1,
                 "values": {
-                    "measurements": "A>0"
+                    "measurements": "asd0"
                 }
             }
         ]

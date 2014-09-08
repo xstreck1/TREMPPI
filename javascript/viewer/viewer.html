@@ -5,9 +5,9 @@
         <link rel="stylesheet" href="./viewer/vendor/editablegrid-2.0.1.css" type="text/css" media="screen">
 
         <style>
-
             table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 100%; }
             table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
+            table.testgrid tr { height: 25px; }
             table.testgrid th { background: #E5E5E5; text-align: left; }
             input.invalid { background: red; color: #FDFDFD; }
         </style>
@@ -19,6 +19,11 @@
         <script src="./viewer/common/common.js"></script>       
         <link rel="stylesheet" type="text/css" href="./viewer/common/common.css">
 
+        <script>
+            tremppi_viewer = {};
+        </script>
+        <script src="./viewer/local/graph_manipulation.js"></script>
+        <script src="./viewer/local/property_manipulation.js"></script>
         <script src="./viewer/local/cytoscape_init.js"></script>
         <script src="./viewer/local/properties_init.js"></script>
         <link rel="stylesheet" type="text/css" href="./viewer/local/css.css">
@@ -39,9 +44,7 @@
         <div class="title" >tremppi_viewer</div>
         <div class="subtitle" >regulatory network</div>
         <br />
-        <div id="graph_container" class="container">
-            <div id="graph_object" class="my_block" >
-            </div>
+        <div id="graph_object" >
         </div>
         <div class="controls">
             <button onclick='tremppi_common.promptWithContent("elements")'>Copy to clipboard</button>
@@ -50,6 +53,7 @@
         <div id="properties_container">
         </div>
         <div class="controls">
+            <button onclick='tremppi_viewer.add()'>New property</button>
             <button onclick='tremppi_common.promptWithContent("properties")'>Copy to clipboard</button>
         </div>
     </body>
