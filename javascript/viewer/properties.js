@@ -1,12 +1,28 @@
-var properties = {
- "properties" : [
-	{
-		"name": "test_property",
-		"type": "TimeSeries",
-		"measurements": [
-			"A=0&B=0",
-			"A=0&C=2"
-		],
-		"experiment": "tt"
-	}
-]};
+var properties = [
+    {
+        "desc": [
+            {
+                "id": 1,
+                "values": {
+                    "id": "test",
+                    "type": "ts",
+                    "experiment": "tt"
+                }
+            }
+        ],
+        "data": [
+            {
+                "id": 1,
+                "values": {
+                    "measurements": "A>0"
+                }
+            },
+            {
+                "id": 2,
+                "values": {
+                    "measurements": "A>0"
+                }
+            }
+        ]
+    }
+];

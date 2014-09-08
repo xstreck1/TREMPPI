@@ -1,6 +1,11 @@
-
 div.title {
     font-family: serif; 
     font-size: 30pt; 
+    text-align: center; 
+}
+
+div.subtitle {
+    font-family: serif; 
+    font-size: 20pt; 
     text-align: center; 
 }
