@@ -1,9 +1,4 @@
 $(function() { // on dom ready
-    var addIDs = function(network) {
-
-        return network;
-    };
-
     $('#graph_object').cytoscape({
         style: cytoscape.stylesheet()
                 .selector('node')
@@ -24,20 +19,31 @@ $(function() { // on dom ready
                     'line-color': 'black',
                     'width': 2.5
                 }),
-        elements: addIDs(elements),
+        elements: elements,
         ready: function() {
-            for (var i = 0; i < elements.nodes.length; i++) {
-                var pos = {};
-                if (elements.nodes[i].x)
-                    pos.x = elements.nodes[i].x;
-                if (elements.nodes[i].y)
-                    pos.y = elements.nodes[i].y;
-                var filter = 'node[id = "' + elements.nodes[i].data.id + '"]'
-                var selected = this.filter(filter);
-                selected.position(pos);
-            }
+            tremppi_viewer.positionNodes(this);
             var PADDING = 15;
             this.fit(this.filter('node'), PADDING);
         }
     });
+
+    var graph = $("#graph_object").cytoscape('get');
+    var nodes = graph.elements("node");
+
+    // Sets all nodes with the id to the position given by graph
+    var moveFunction = function(event) {
+        var target = event.cyTarget;
+        var id = target.id();
+        if (target.isNode()) {
+            var elem = tremppi_viewer.getByID("nodes", id);
+            elem.x = target.position('x');
+            elem.y = target.position('y');
+        }
+    };
+
+    // Set node drag reactions to all
+    for (var j = 0; j < nodes.length; j++) {
+        var id = '#' + nodes[j].id();
+        graph.$(id).on('drag', moveFunction);
+    }
 }); // on dom ready
