@@ -19,32 +19,40 @@ tremppi_viewer.getByID = function(type, id) {
     }
 };
 
-tremppi_viewer.setControlScheme = function(scheme_type) {
+tremppi_viewer.setButtonControl = function() {
     $("#graph_control").html("");
-    if (scheme_type === "default") {
-        $("#graph_control").append('<button id="new_component">New Component</button>');
-        $("#new_component").click(function(event) {
-            tremppi_viewer.activity_type = "new_component";
-        });
-        $("#graph_control").append('<button id="new_regulation">New Regulation</button>');
-        $("#new_component").click(function(event) {
-            tremppi_viewer.activity_type = "new_regulation";
-        });
-    } else if (scheme_type === "selection") {
-        $("#graph_control").append("id: " + tremppi_viewer.current_selection.name + ", type: " + tremppi_viewer.current_selection.type);
-    }
+
+    $("#graph_control").append('<button id="new_component">New Component</button>');
+    $("#new_component").click(function(event) {
+        tremppi_viewer.activity_type = "new_component";
+    });
+    $("#graph_control").append('<button id="new_regulation">New Regulation</button>');
+    $("#new_component").click(function(event) {
+        tremppi_viewer.activity_type = "new_regulation";
+    });
+}
+
+tremppi_viewer.setSelectionScheme = function(graph) {
+    $("#graph_control").html("");
+    $("#graph_control").append('<div id="selection_grid"></div>');
+    var element = graph.$("#" + tremppi_viewer.current_selection.name);
+    var data = [{id: "0", values: element.data()}];
+    var selection = new EditableGrid("selection_" + tremppi_viewer.current_selection.name);
+    selection.load({"metadata": tremppi_viewer.metadata[tremppi_viewer.current_selection.type], "data": data});
+    selection.renderGrid("selection_grid", "testgrid");
+    // selection.modelChanged = tremppi_viewer.modelChanged;
 };
 
 tremppi_viewer.tapFunction = function(event) {
     if (event.cy == event.cyTarget) {
-        tremppi_viewer.current_selection.type = "graph";
-        tremppi_viewer.current_selection.name = "regulatory";
+        tremppi_viewer.setButtonControl();
     } else if (event.cyTarget.isEdge()) {
         tremppi_viewer.current_selection.type = "edge";
         tremppi_viewer.current_selection.name = event.cyTarget.id();
+        tremppi_viewer.setSelectionScheme(event.cy);
     } else if (event.cyTarget.isNode()) {
         tremppi_viewer.current_selection.type = "node";
         tremppi_viewer.current_selection.name = event.cyTarget.id();
+        tremppi_viewer.setSelectionScheme(event.cy);
     }
-    tremppi_viewer.setControlScheme("selection");
 }

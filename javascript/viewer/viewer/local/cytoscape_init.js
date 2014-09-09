@@ -1,6 +1,6 @@
 $(function() { // on dom ready
     var selected_col = '#5555BB';
-    
+
     $('#graph_object').cytoscape({
         style: cytoscape.stylesheet()
                 .selector('node')
@@ -61,12 +61,22 @@ $(function() { // on dom ready
         var selector = '#' + nodes[j].id();
         graph.$(selector).on('tapdrag', moveFunction);
     }
-    
+
     graph.on('tap', tremppi_viewer.tapFunction);
 
     tremppi_viewer.activity_type = "selection";
     tremppi_viewer.current_selection = {type: "graph", name: "regulatory"};
 
     // Set the control scheme
-    tremppi_viewer.setControlScheme("default");
+    tremppi_viewer.setButtonControl();
+
+    // Create metadata for selections
+    tremppi_viewer.metadata.edge = [];
+    tremppi_viewer.metadata.edge.push({name: "id", label: "ID", datatype: "string", editable: true});
+    tremppi_viewer.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "int", editable: true});
+    tremppi_viewer.metadata.edge.push({name: "Label", label: "Label", datatype: "string", editable: true});
+
+    tremppi_viewer.metadata.node = [];
+    tremppi_viewer.metadata.node.push({name: "id", label: "ID", datatype: "string", editable: true});
+    tremppi_viewer.metadata.node.push({name: "MaxActivity", label: "MAX ACTIVITY", datatype: "int", editable: true});
 }); // on dom ready
