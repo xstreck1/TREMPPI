@@ -1,4 +1,6 @@
 $(function() { // on dom ready
+    var selected_col = '#5555BB';
+    
     $('#graph_object').cytoscape({
         style: cytoscape.stylesheet()
                 .selector('node')
@@ -18,6 +20,11 @@ $(function() { // on dom ready
                     'target-arrow-color': 'black',
                     'line-color': 'black',
                     'width': 2.5
+                }).selector(':selected')
+                .css({
+                    'border-color': selected_col,
+                    'line-color': selected_col,
+                    'target-arrow-color': selected_col
                 }),
         elements: elements,
         ready: function() {
@@ -29,6 +36,7 @@ $(function() { // on dom ready
 
     var graph = $("#graph_object").cytoscape('get');
     var nodes = graph.elements("node");
+    var edges = graph.elements("edge");
 
     // Sets all nodes with the id to the position given by graph
     var moveFunction = function(event) {
@@ -41,9 +49,24 @@ $(function() { // on dom ready
         }
     };
 
+    var clickFunction = function(type, id) {
+        return function() {
+            tremppi_viewer.current_selection = {type: type, name: id};
+            tremppi_viewer.setControlScheme("selection");
+        };
+    };
+
     // Set node drag reactions to all
     for (var j = 0; j < nodes.length; j++) {
-        var id = '#' + nodes[j].id();
-        graph.$(id).on('drag', moveFunction);
+        var selector = '#' + nodes[j].id();
+        graph.$(selector).on('tapdrag', moveFunction);
     }
+    
+    graph.on('tap', tremppi_viewer.tapFunction);
+
+    tremppi_viewer.activity_type = "selection";
+    tremppi_viewer.current_selection = {type: "graph", name: "regulatory"};
+
+    // Set the control scheme
+    tremppi_viewer.setControlScheme("default");
 }); // on dom ready
