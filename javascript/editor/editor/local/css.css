@@ -27,3 +27,9 @@ div.controls {
 button {
     font-size: 14pt; 
 }
+
+table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 100%; }
+table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
+table.testgrid tr { height: 25px; }
+table.testgrid th { background: #E5E5E5; text-align: left; }
+input.invalid { background: red; color: #FDFDFD; }

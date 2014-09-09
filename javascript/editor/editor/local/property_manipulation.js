@@ -1,11 +1,11 @@
-tremppi_viewer.remove = function(index) {
+tremppi_editor.remove = function(index) {
     $("#property_" + index).html("");
     properties.splice(index, 1);
-    tremppi_viewer.createPropertyList();
+    tremppi_editor.createPropertyList();
 };
 
 // Add new property
-tremppi_viewer.add = function() {
+tremppi_editor.add = function() {
     properties.push({
         "desc": [
             {
@@ -26,11 +26,11 @@ tremppi_viewer.add = function() {
             }
         ]
     });
-    tremppi_viewer.createPropertyList();
+    tremppi_editor.createPropertyList();
 };
 
 // test is a row is not empty
-tremppi_viewer.isEmpty = function(columns) {
+tremppi_editor.isEmpty = function(columns) {
     for (var i = 0; i < columns.length; i++) {
         if (columns[i] !== "")
             return false;
@@ -39,7 +39,7 @@ tremppi_viewer.isEmpty = function(columns) {
 };
 
 // Called if the data change
-tremppi_viewer.modelChanged = function(row_id, colum_id, old_val, new_val, row) {
+tremppi_editor.modelChanged = function(row_id, colum_id, old_val, new_val, row) {
     var type = this.name.split("_")[0];
     var index = this.name.split("_")[1];
     var column_name = this.columns[colum_id].name;
@@ -48,9 +48,9 @@ tremppi_viewer.modelChanged = function(row_id, colum_id, old_val, new_val, row) 
     if (type === "data") {
         var columns = this.data[row_id].columns;
         // If is not last and is empty
-        if (tremppi_viewer.isEmpty(columns) && row_id !== (this.data.length - 1)) {
+        if (tremppi_editor.isEmpty(columns) && row_id !== (this.data.length - 1)) {
             this.remove(row_id);
-        } else if (!tremppi_viewer.isEmpty(columns) && row_id === (this.data.length - 1)) {
+        } else if (!tremppi_editor.isEmpty(columns) && row_id === (this.data.length - 1)) {
             this.append(this.data.length, new Array(this.columns.length));
         }
     }
@@ -69,7 +69,7 @@ tremppi_viewer.modelChanged = function(row_id, colum_id, old_val, new_val, row) 
     }
 };
 
-tremppi_viewer.createPropertyList = function() {
+tremppi_editor.createPropertyList = function() {
     // Create the holders
     $("#properties_container").html("");
     grids = [];
@@ -79,22 +79,22 @@ tremppi_viewer.createPropertyList = function() {
         $("#" + property_name).append('<div id="desc_' + i + '"></div>');
         $("#" + property_name).append('<div id="data_' + i + '"></div>');
         $("#" + property_name).append('<button id="remove_' + i + '">remove</div>');
-        $("#remove_" + i).click(tremppi_viewer.remove.bind(this, i));
+        $("#remove_" + i).click(tremppi_editor.remove.bind(this, i));
     }
 
     // Fill the tables
     for (var i = 0; i < properties.length; i++) {
         grids.push(new EditableGrid("desc_" + i));
-        grids[i * 2].load({"metadata": tremppi_viewer.metadata["header"], "data": properties[i].desc});
+        grids[i * 2].load({"metadata": tremppi_editor.metadata["header"], "data": properties[i].desc});
         grids[i * 2].renderGrid("desc_" + i, "testgrid");
-        grids[i * 2].modelChanged = tremppi_viewer.modelChanged;
+        grids[i * 2].modelChanged = tremppi_editor.modelChanged;
 
         grids.push(new EditableGrid("data_" + i));
-        grids[i * 2 + 1].load({"metadata": tremppi_viewer.metadata["time_series"], "data": properties[i].data});
+        grids[i * 2 + 1].load({"metadata": tremppi_editor.metadata["time_series"], "data": properties[i].data});
         grids[i * 2 + 1].renderGrid("data_" + i, "testgrid");
-        grids[i * 2 + 1].modelChanged = tremppi_viewer.modelChanged;
+        grids[i * 2 + 1].modelChanged = tremppi_editor.modelChanged;
         // Add empty row if the last is not empty (only on creation of the new one, must be present due to a EditGraph bug)
-        if (!tremppi_viewer.isEmpty(grids[i * 2 + 1].data[grids[i * 2 + 1].data.length - 1].columns))
+        if (!tremppi_editor.isEmpty(grids[i * 2 + 1].data[grids[i * 2 + 1].data.length - 1].columns))
             grids[i * 2 + 1].append(grids[i * 2 + 1].data.length, new Array(grids[i * 2 + 1].columns.lenght));
     }
 };

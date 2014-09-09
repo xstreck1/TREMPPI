@@ -1,4 +1,4 @@
-tremppi_viewer.cytoscape_init = function() { // on dom ready
+tremppi_editor.cytoscape_init = function() { // on dom ready
     var selected_col = '#5555BB';
 
     $('#graph_object').cytoscape({
@@ -37,14 +37,14 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
     });
 
     var graph = $("#graph_object").cytoscape('get');
-    tremppi_viewer.graph = graph;
+    tremppi_editor.graph = graph;
     var nodes = graph.elements("node");
     var edges = graph.elements("edge");
 
     var clickFunction = function(type, id) {
         return function() {
-            tremppi_viewer.current_selection = {type: type, name: id};
-            tremppi_viewer.setControlScheme("selection");
+            tremppi_editor.current_selection = {type: type, name: id};
+            tremppi_editor.setControlScheme("selection");
         };
     };
 
@@ -53,24 +53,24 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
         var selector = '#' + nodes[j].id();
     }
 
-    graph.on('tap', tremppi_viewer.tapFunction);
+    graph.on('tap', tremppi_editor.tapFunction);
 
-    tremppi_viewer.activity_type = "selection";
-    tremppi_viewer.current_selection = {type: "graph", name: "regulatory"};
+    tremppi_editor.activity_type = "selection";
+    tremppi_editor.current_selection = {type: "graph", name: "regulatory"};
 
     // Set the control scheme
-    tremppi_viewer.setButtonControl();
+    tremppi_editor.setButtonControl();
 
     // Create metadata for selections
-    tremppi_viewer.metadata.node = [];
-    tremppi_viewer.metadata.node.push({name: "Name", label: "NAME", datatype: "string", editable: true});
-    tremppi_viewer.metadata.node.push({name: "MaxActivity", label: "MAX ACTIVITY", datatype: "integer", editable: true});
-    tremppi_viewer.metadata.node.push({name: "Constraint", label: "CONSTRAINT", datatype: "string", editable: true});  
+    tremppi_editor.metadata.node = [];
+    tremppi_editor.metadata.node.push({name: "Name", label: "NAME", datatype: "string", editable: true});
+    tremppi_editor.metadata.node.push({name: "MaxActivity", label: "MAX ACTIVITY", datatype: "integer", editable: true});
+    tremppi_editor.metadata.node.push({name: "Constraint", label: "CONSTRAINT", datatype: "string", editable: true});  
     
-    tremppi_viewer.metadata.edge = [];
-    tremppi_viewer.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "int", editable: true});
-    tremppi_viewer.metadata.edge.push({name: "Label", label: "LABEL", datatype: "string", editable: true});
-    tremppi_viewer.metadata.edge[1].values = {
+    tremppi_editor.metadata.edge = [];
+    tremppi_editor.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "int", editable: true});
+    tremppi_editor.metadata.edge.push({name: "Label", label: "LABEL", datatype: "string", editable: true});
+    tremppi_editor.metadata.edge[1].values = {
         "+": "Activating", 
         "+&!-": "Activating Only",
         "!-": "Not Inhibiting",
