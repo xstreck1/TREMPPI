@@ -9,3 +9,11 @@ div.subtitle {
     font-size: 20pt; 
     text-align: center; 
 }
+
+div.help { 
+    text-align: center; 
+    font-family: serif; 
+    font-size: 14pt; 
+    font-style: italic; 
+    padding: 5pt;
+}

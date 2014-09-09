@@ -20,7 +20,7 @@
         <link rel="stylesheet" type="text/css" href="./viewer/common/common.css">
 
         <script>
-            tremppi_viewer = {metadata : {}};
+            tremppi_viewer = {metadata: {}};
             $(window).ready(function() {
                 tremppi_viewer.cytoscape_init();
                 tremppi_viewer.properties_init();
@@ -40,12 +40,18 @@
     <body > 
         <div class="title" >tremppi_viewer</div>
         <div class="subtitle" >regulatory network</div>
-        <div id="graph_panel">
+        <div id="graph_panel" style="min-height: 65px" >
         </div>
         <div id="graph_object" >
         </div>
         <div class="controls">
-            <button onclick='tremppi_common.promptWithContent("elements")'>Copy to clipboard</button>
+            <button id="copy_graph">Copy to clipboard</button>
+            <script>
+            $("#copy_graph").click(function() {
+                elements = tremppi_viewer.graph.json().elements;
+                tremppi_common.promptWithContent("elements");
+            });
+            </script>
         </div>
         <div class="subtitle" >properties</div>
         <div id="properties_container">

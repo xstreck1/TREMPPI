@@ -21,5 +21,9 @@ td {
 
 div.controls { 
     text-align: center; 
-    padding: 5pt 
+    padding: 5pt;
+}
+
+button {
+    font-size: 14pt; 
 }

@@ -31,7 +31,6 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
         },
         elements: elements,
         ready: function() {
-            tremppi_viewer.positionNodes(this);
             var PADDING = 15;
             this.fit(this.filter('node'), PADDING);
         }
@@ -41,16 +40,6 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
     tremppi_viewer.graph = graph;
     var nodes = graph.elements("node");
     var edges = graph.elements("edge");
-
-    // Sets all nodes with the id to the position given by graph
-    var moveFunction = function(event) {
-        var target = event.cyTarget;
-        var id = target.id();
-        if (target.isNode()) {
-            var elem = tremppi_viewer.getByID("nodes", id);
-            elem.position = target.position();
-        }
-    };
 
     var clickFunction = function(type, id) {
         return function() {
@@ -62,7 +51,6 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
     // Set node drag reactions to all
     for (var j = 0; j < nodes.length; j++) {
         var selector = '#' + nodes[j].id();
-        graph.$(selector).on('tapdrag', moveFunction);
     }
 
     graph.on('tap', tremppi_viewer.tapFunction);
