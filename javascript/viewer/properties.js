@@ -12,15 +12,15 @@ var properties = [
         ],
         "data": [
             {
-                "id": 0,
+                "id": 2,
                 "values": {
-                    "measurements": "A>0"
+                    "measurements": "C>0"
                 }
             },
             {
-                "id": 1,
+                "id": 0,
                 "values": {
-                    "measurements": "asd0"
+                    "measurements": "A>0"
                 }
             }
         ]

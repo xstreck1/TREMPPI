@@ -5,7 +5,7 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
         style: cytoscape.stylesheet()
                 .selector('node')
                 .css({
-                    'content': 'data(id)',
+                    'content': 'data(Name)',
                     'text-valign': 'center',
                     'background-color': 'white',
                     'border-color': 'black',
@@ -26,6 +26,9 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
                     'line-color': selected_col,
                     'target-arrow-color': selected_col
                 }),
+        layout: {
+            name: 'preset',
+        },
         elements: elements,
         ready: function() {
             tremppi_viewer.positionNodes(this);
@@ -35,6 +38,7 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
     });
 
     var graph = $("#graph_object").cytoscape('get');
+    tremppi_viewer.graph = graph;
     var nodes = graph.elements("node");
     var edges = graph.elements("edge");
 
@@ -44,8 +48,7 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
         var id = target.id();
         if (target.isNode()) {
             var elem = tremppi_viewer.getByID("nodes", id);
-            elem.x = target.position('x');
-            elem.y = target.position('y');
+            elem.position = target.position();
         }
     };
 
@@ -71,12 +74,26 @@ tremppi_viewer.cytoscape_init = function() { // on dom ready
     tremppi_viewer.setButtonControl();
 
     // Create metadata for selections
-    tremppi_viewer.metadata.edge = [];
-    tremppi_viewer.metadata.edge.push({name: "id", label: "ID", datatype: "string", editable: true});
-    tremppi_viewer.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "int", editable: true});
-    tremppi_viewer.metadata.edge.push({name: "Label", label: "Label", datatype: "string", editable: true});
-
     tremppi_viewer.metadata.node = [];
-    tremppi_viewer.metadata.node.push({name: "id", label: "ID", datatype: "string", editable: true});
-    tremppi_viewer.metadata.node.push({name: "MaxActivity", label: "MAX ACTIVITY", datatype: "int", editable: true});
+    tremppi_viewer.metadata.node.push({name: "Name", label: "NAME", datatype: "string", editable: true});
+    tremppi_viewer.metadata.node.push({name: "MaxActivity", label: "MAX ACTIVITY", datatype: "integer", editable: true});
+    tremppi_viewer.metadata.node.push({name: "Constraint", label: "CONSTRAINT", datatype: "string", editable: true});  
+    
+    tremppi_viewer.metadata.edge = [];
+    tremppi_viewer.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "int", editable: true});
+    tremppi_viewer.metadata.edge.push({name: "Label", label: "LABEL", datatype: "string", editable: true});
+    tremppi_viewer.metadata.edge[1].values = {
+        "+": "Activating", 
+        "+&!-": "Activating Only",
+        "!-": "Not Inhibiting",
+        "-": "Inhibiting", 
+        "-&!+": "Inhibiting Only",
+        "!+": "Not Activating",
+        "+|-": "Observable",
+        "(!-&!+)": "Not Observable",
+        "!(-&+)": "Monotone",
+        "-&+": "Not Monotone",
+        "(-&!+)|(+&!-)": "Monotone Observable",
+        "tt": "Free"
+    };
 };
