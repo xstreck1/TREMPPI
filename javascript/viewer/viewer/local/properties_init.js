@@ -1,4 +1,4 @@
-$(function() { // on dom ready    
+tremppi_viewer.properties_init = function() { // on dom ready    
     tremppi_viewer.metadata.header = [];
     tremppi_viewer.metadata["header"].push({name: "id", label: "ID", datatype: "string", editable: true});
     tremppi_viewer.metadata["header"].push({name: "type", label: "TYPE", datatype: "string", editable: true});
@@ -9,4 +9,4 @@ $(function() { // on dom ready
     tremppi_viewer.metadata["time_series"].push({name: "measurements", label: "MEASUREMENTS", datatype: "string", editable: true});
     
     tremppi_viewer.createPropertyList();
-}); // on dom ready
+};

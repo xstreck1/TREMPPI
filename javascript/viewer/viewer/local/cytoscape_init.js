@@ -1,4 +1,4 @@
-$(function() { // on dom ready
+tremppi_viewer.cytoscape_init = function() { // on dom ready
     var selected_col = '#5555BB';
 
     $('#graph_object').cytoscape({
@@ -79,4 +79,4 @@ $(function() { // on dom ready
     tremppi_viewer.metadata.node = [];
     tremppi_viewer.metadata.node.push({name: "id", label: "ID", datatype: "string", editable: true});
     tremppi_viewer.metadata.node.push({name: "MaxActivity", label: "MAX ACTIVITY", datatype: "int", editable: true});
-}); // on dom ready
+};

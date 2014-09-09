@@ -20,8 +20,8 @@ tremppi_viewer.getByID = function(type, id) {
 };
 
 tremppi_viewer.setButtonControl = function() {
-    $("#graph_control").html("");
-
+    $("#graph_panel").html("");
+    $("#graph_panel").append('<div id="graph_control" class="controls"></div>');
     $("#graph_control").append('<button id="new_component">New Component</button>');
     $("#new_component").click(function(event) {
         tremppi_viewer.activity_type = "new_component";
@@ -33,13 +33,13 @@ tremppi_viewer.setButtonControl = function() {
 }
 
 tremppi_viewer.setSelectionScheme = function(graph) {
-    $("#graph_control").html("");
-    $("#graph_control").append('<div id="selection_grid"></div>');
+    $("#graph_panel").html("");
     var element = graph.$("#" + tremppi_viewer.current_selection.name);
     var data = [{id: "0", values: element.data()}];
     var selection = new EditableGrid("selection_" + tremppi_viewer.current_selection.name);
     selection.load({"metadata": tremppi_viewer.metadata[tremppi_viewer.current_selection.type], "data": data});
-    selection.renderGrid("selection_grid", "testgrid");
+    selection.renderGrid("graph_panel", "testgrid");
+    $("#graph_panel").append('<br />');
     // selection.modelChanged = tremppi_viewer.modelChanged;
 };
 

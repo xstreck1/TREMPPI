@@ -21,6 +21,10 @@
 
         <script>
             tremppi_viewer = {metadata : {}};
+            $(window).ready(function() {
+                tremppi_viewer.cytoscape_init();
+                tremppi_viewer.properties_init();
+            });
         </script>
         <script src="./viewer/local/graph_manipulation.js"></script>
         <script src="./viewer/local/property_manipulation.js"></script>
@@ -34,16 +38,9 @@
         <title>TREMPPI network viewer</title>
     </head>
     <body > 
-        <script>
-            var cw = $('body').width();
-            $('body').css({'height': cw + 'px'});
-            $(window).resize(function() {
-                location.reload();
-            });
-        </script>
         <div class="title" >tremppi_viewer</div>
         <div class="subtitle" >regulatory network</div>
-        <div class="controls" id="graph_control">
+        <div id="graph_panel">
         </div>
         <div id="graph_object" >
         </div>
