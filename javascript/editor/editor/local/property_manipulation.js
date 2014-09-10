@@ -11,9 +11,9 @@ tremppi_editor.add = function() {
             {
                 "id": 0,
                 "values": {
-                    "id": "property " + properties.length,
-                    "type": "ts",
-                    "experiment": ""
+                    "Name": "property " + properties.length,
+                    "Type": "TimeSeries",
+                    "Experiment": ""
                 }
             }
         ],
@@ -21,7 +21,7 @@ tremppi_editor.add = function() {
             {
                 "id": 0,
                 "values": {
-                    "measurements": "",
+                    "Measurement": "",
                 }
             }
         ]
@@ -51,7 +51,7 @@ tremppi_editor.modelChanged = function(row_id, colum_id, old_val, new_val, row) 
         if (tremppi_editor.isEmpty(columns) && row_id !== (this.data.length - 1)) {
             this.remove(row_id);
         } else if (!tremppi_editor.isEmpty(columns) && row_id === (this.data.length - 1)) {
-            this.append(this.data.length, new Array(this.columns.length));
+            this.append(this.data.length, new Array(this.columns.length), true, true);
         }
     }
 
@@ -89,7 +89,7 @@ tremppi_editor.createPropertyList = function() {
         grids[i * 2].renderGrid("desc_" + i, "testgrid");
         grids[i * 2].modelChanged = tremppi_editor.modelChanged;
 
-        grids.push(new EditableGrid("data_" + i));
+        grids.push(new EditableGrid("data_" + i, {enableSort: false}));
         grids[i * 2 + 1].load({"metadata": tremppi_editor.metadata["time_series"], "data": properties[i].data});
         grids[i * 2 + 1].renderGrid("data_" + i, "testgrid");
         grids[i * 2 + 1].modelChanged = tremppi_editor.modelChanged;

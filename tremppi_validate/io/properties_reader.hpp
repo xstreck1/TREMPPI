@@ -12,21 +12,21 @@ namespace PropertiesReader {
 	// Konvert model in (almost) JSON to Model object
 	vector<PropertyAutomaton> jsonToProperties(const Json::Value & root) {
 		vector<PropertyAutomaton> automata;
-		for (const Json::Value & property : root["properties"]) {
+		for (const Json::Value & property : root) {
 			PropertyAutomaton automaton;
 
 			StateID ID = 0;
-			for (const Json::Value & measurement : property["measurements"]) {
-				string constraint = measurement.asString();
+			for (const Json::Value & measurement : property["data"]) {
+				string constraint = measurement["values"]["Measurement"].asString();
 				string negation = "!(" + constraint + ")";
 				PropertyAutomaton::Edges edges = { { ID, negation }, { ID + 1, constraint } };
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, edges });
 				ID++;
 			}
 
-			automaton.name = property["name"].asString();
-			automaton.prop_type = property["type"].asString();
-			automaton.experiment = property["experiment"].asString();
+			automaton.name = property["desc"][0]["values"]["Name"].asString();
+			automaton.prop_type = property["desc"][0]["values"]["Type"].asString();
+			automaton.experiment = property["desc"][0]["values"]["Experiment"].asString();
 			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, PropertyAutomaton::Edges ()});
 			automata.emplace_back(move(automaton));
 		}
@@ -40,11 +40,11 @@ namespace PropertiesReader {
 	}
 
 	void checkSemantics(const Json::Value & root) {
-		for (const Json::Value & property : root["properties"]) {
+		for (const Json::Value & property : root) {
 			// Check name
-			DataInfo::isValidName(property["name"].asString());
+			DataInfo::isValidName(property["desc"][0]["Name"].asString());
 			// Check prop type
-			const string PROP_TYPE = property["type"].asString();
+			const string PROP_TYPE = property["desc"][0]["values"]["Type"].asString();
 			if (find(WHOLE(PropType), PROP_TYPE) == end(PropType))
 				throw runtime_error("Unknown property type: " + PROP_TYPE);
 			// Check property specific

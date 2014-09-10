@@ -25,7 +25,7 @@ int tremppi_validate(int argc, char ** argv) {
 			select = "1";
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 2);
+		logging.exceptionMessage(e, 1);
 	}
 
 	RegInfos reg_infos;
@@ -41,7 +41,7 @@ int tremppi_validate(int argc, char ** argv) {
 		reg_infos = reader.readRegInfos(db);
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 1);
+		logging.exceptionMessage(e, 2);
 	}
 
 	// Check the file

@@ -60,7 +60,7 @@ namespace src = boost::log::sources;
 namespace snk = boost::log::sinks;
 namespace kwd = boost::log::keywords;
 
-const string NETWORK_FILENAME = "network.js";
+const string NETWORK_FILENAME = "elements.js";
 const string DATABASE_FILENAME = "database.sqlite";
 const string PROPERTIES_FILENAME = "properties.js";
 

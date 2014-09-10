@@ -39,7 +39,7 @@ Json::Value FileManipulation::readJSasJSON(const bfs::path & input_path) {
 	// Remove JS additions
 	std::stringstream buffer;
 	char ch = static_cast<char>(0);
-	while (ch != '{' && ch != EOF) {
+	while (ch != '{' && ch != '[' && ch != EOF) {
 		file.get(ch);
 	}
 	do {

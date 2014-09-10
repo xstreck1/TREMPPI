@@ -4,11 +4,33 @@
 
 int tremppi_validate(int, char**);
 
+// Print the basic model
+void createProperties(const bfs::path & example_model_path) {
+	Json::Value root;
+	root.resize(1);
+	root[0]["desc"].resize(1);
+	root[0]["desc"][0]["id"] = 0;
+	root[0]["desc"][0]["values"]["Name"] = "test";
+	root[0]["desc"][0]["values"]["Type"] = "TimeSeries";
+	root[0]["desc"][0]["values"]["Experiment"] = "";
+	root[0]["data"].resize(2);
+	root[0]["data"][0]["id"] = "0";
+	root[0]["data"][0]["values"]["Measurement"] = "B>0";
+	root[0]["data"][1]["id"] = "1";
+	root[0]["data"][1]["values"]["Measurement"] = "A>0&B>1";
+
+	Json::StyledWriter writer;
+	ofstream data_file((example_model_path / bfs::path{ PROPERTIES_FILENAME }).string(), ios::out);
+	string data = writer.write(root);
+	data_file << "var properties = " << data << ";";
+}
+
 int basic_validate_test()  {
 	const int argc = 3;
 	char * argv[argc];
 
 	bfs::path example_model_path(bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "proj" / "test"));
+	createProperties(example_model_path);
 	argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];
 	strcpy(argv[0], tremppi_system.BIN_PATH.string().c_str());
 	argv[1] = new char[7];
