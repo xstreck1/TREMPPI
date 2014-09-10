@@ -18,11 +18,26 @@ namespace SyntaxChecker {
 					act_level = node["data"]["MaxActivity"].asInt();
 				}
 				catch (exception & e) {
-					throw runtime_error("Could not convert max for " + quote(node["data"]["id"].asString()) + " to integer. " + e.what());
+					throw runtime_error("Could not convert max for " + quote(node["data"]["Name"].asString()) + " to integer. " + e.what());
 				}
 				if (act_level < 1 || act_level > 9)
-					throw runtime_error(quote(node["data"]["id"].asString()) + " has declared maximal activity level " + node["data"]["MaxActivity"].asString() + ".Only [1,9] is allowed.");
+					throw runtime_error(quote(node["data"]["Name"].asString()) + " has declared maximal activity level " + node["data"]["MaxActivity"].asString() + ".Only [1,9] is allowed.");
 
+			}
+		}
+
+		// Guarantees that the IDs in nodes meet the requirements for an ID and are readable
+		void checkIDs(const Json::Value & nodes) {
+			for (const Json::Value node : nodes) {
+				string name;
+				try {
+					name = node["data"]["id"].asString();
+				}
+				catch (exception & e) {
+					throw runtime_error(string("Could not obtain a specie ID. Did you remember to add parenthesis? ") + e.what());
+				}
+				if (!DataInfo::isValidName(name))
+					throw runtime_error(quote(name) + " is an invalid specie ID. ID must start with a letter and only letters, numbers and underscore are allowed.");
 			}
 		}
 
@@ -31,13 +46,13 @@ namespace SyntaxChecker {
 			for (const Json::Value node : nodes) {
 				string name;
 				try {
-					name = node["data"]["id"].asString();
+					name = node["data"]["Name"].asString();
 				}
 				catch (exception & e) {
 					throw runtime_error(string("Could not obtain a specie Name. Did you remember to add parenthesis? ") + e.what());
 				}
 				if (!DataInfo::isValidName(name))
-					throw runtime_error(quote(name) + " is an invalid specie Name. ID must start with a letter and only letters, numbers and underscore are allowed.");
+					throw runtime_error(quote(name) + " is an invalid specie Name. Name must start with a letter and only letters, numbers and underscore are allowed.");
 			}
 		}
 
@@ -94,15 +109,13 @@ namespace SyntaxChecker {
 				catch (exception & e) {
 					throw runtime_error("Could not obtain a label of an edge " + getEdgeName(edge) + ". Did you remember to add parenthesis ? " + e.what());
 				}
-				// Check if the label belongs to the list
-				if (getIndex(Label::All, label) == INF)
-					throw runtime_error(getEdgeName(edge) + " has the label " + quote(label) + "which is not a known label");
 			}
 		}
 	}
 
 	// Control that the values are not missing and are of the right form
 	void controlSemantics(const Json::Value & elements) {
+		checkIDs(elements["nodes"]);
 		checkNames(elements["nodes"]);
 		checkMaxes(elements["nodes"]);
 		map<string, ActLevel> components = DataInfo::getComponents(elements["nodes"]);

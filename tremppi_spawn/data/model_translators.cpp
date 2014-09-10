@@ -110,31 +110,3 @@ const Model::Regulation & ModelTranslators::findRegulation(const Model & model, 
 			return regul;
 	throw runtime_error("Failed to match the regulation " + to_string(s_ID) + " -" + to_string(threshold) + "-> " + to_string(t_ID));
 }
-
-string ModelTranslators::readLabel(const string & label) {
-	string formula;
-
-	// Find the constrain and return its valuation
-	if (label.compare(Label::Activating) == 0)
-		formula = "+";
-	else if (label.compare(Label::ActivatingOnly) == 0)
-		formula = "(+ & !-)";
-	else if (label.compare(Label::Inhibiting) == 0)
-		formula = "-";
-	else if (label.compare(Label::InhibitingOnly) == 0)
-		formula = "(- & !+)";
-	else if (label.compare(Label::NotActivating) == 0)
-		formula = "!+";
-	else if (label.compare(Label::NotInhibiting) == 0)
-		formula = "!-";
-	else if (label.compare(Label::Observable) == 0)
-		formula = "(+ | -)";
-	else if (label.compare(Label::NotObservable) == 0)
-		formula = "(!+ & !-)";
-	else if (label.compare(Label::Free) == 0)
-		formula = "tt";
-	else
-		formula = label;
-
-	return formula;
-}

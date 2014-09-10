@@ -11,20 +11,6 @@ enum StreamType {error_str, results_str, verbose_str};
 /// Symbol that separates values of a single parametrizations on output.
 const char separator = ':';
 
-/// Definition of naming abbreviations for edge labels:
-namespace Label {
-   const std::string Activating = "Activating";
-   const std::string ActivatingOnly = "ActivatingOnly";
-   const std::string Inhibiting = "Inhibiting";
-   const std::string InhibitingOnly = "InhibitingOnly";
-   const std::string NotActivating = "NotActivating";
-   const std::string NotInhibiting = "NotInhibiting";
-   const std::string Observable = "Observable";
-   const std::string NotObservable = "NotObservable";
-   const std::string Free = "Free";
-   const std::vector<std::string> All = { Activating, ActivatingOnly, Inhibiting, InhibitingOnly, NotActivating, NotInhibiting, Observable, NotObservable, Free };
-}
-
 const std::string COMPONENTS_TABLE = "Components";
 const std::string REGULATIONS_TABLE = "Regulations";
 const std::string PARAMETRIZATIONS_TABLE = "Parametrizations";

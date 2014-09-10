@@ -96,8 +96,7 @@ class ParametrizationsBuilder {
 			createEdgeCons(reguls, params, regul, plus, minus);
 			addBrackets(plus);
 			addBrackets(minus);
-			label = ModelTranslators::readLabel(regul.label);
-			label = replaceInLabel(label, plus, minus);
+			label = replaceInLabel(regul.label, plus, minus);
 			addBrackets(label);
 			result += " & " + label;
 		}

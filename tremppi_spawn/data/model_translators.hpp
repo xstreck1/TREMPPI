@@ -48,7 +48,4 @@ namespace ModelTranslators {
 
 	// @return regulation with given parameters
 	const Model::Regulation & findRegulation(const Model & model, const CompID t_ID, const CompID s_ID, const ActLevel threshold);
-
-	// @return canonic form of the label
-	string readLabel(const string & label);
 }

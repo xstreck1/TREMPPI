@@ -14,12 +14,14 @@ namespace ModelReader {
 
 		CompID ID = 0;
 		string last_name = "";
+		map<string, string> id_to_name;
 		for (const Json::Value node : elements["nodes"]) {
 			Model::ModelComp specie;
 
 			specie.ID = ID++;
 
-			specie.name = node["data"]["id"].asString();
+			specie.name = node["data"]["Name"].asString();
+			id_to_name.insert({ node["data"]["id"].asString(), specie.name });
 			if (last_name > specie.name)
 				throw runtime_error("Components must be ordered lexicographically, " + quote(last_name) + ">" + quote(specie.name));
 			last_name = specie.name;
@@ -34,8 +36,8 @@ namespace ModelReader {
 		}
 
 		for (const Json::Value edge : elements["edges"]) {
-			const CompID source_id = ModelTranslators::findID(model, edge["data"]["source"].asString());
-			const CompID target_id = ModelTranslators::findID(model, edge["data"]["target"].asString());
+			const CompID source_id = ModelTranslators::findID(model, id_to_name[edge["data"]["source"].asString()]);
+			const CompID target_id = ModelTranslators::findID(model, id_to_name[edge["data"]["target"].asString()]);
 
 			Model::Regulation regulation{
 				source_id,
