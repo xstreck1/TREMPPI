@@ -28,7 +28,6 @@ namespace RegulatoryGraph {
 				param[i] = row.get<ActLevel>(i);
 
 			// Compute the correlation
-			size_t reg_i = 0;
 			for (const size_t reg_i : cscope(info.regulators)) {
 				double correlation = Statistics::correlation(reg_values[reg_i], param);
 				result.reg_corr[reg_i] += correlation;

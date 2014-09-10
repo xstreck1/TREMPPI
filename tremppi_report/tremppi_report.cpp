@@ -15,7 +15,7 @@
 int tremppi_report(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ReportOptions>("tremppi_report", argc, argv);
 
-	map<string, Json::Value> out;
+	Json::Value out;
 	out["setup"]["date"] = TimeManager::getTime();
 	string time_stamp = TimeManager::getTimeStamp();
 	bfs::path report_path = tremppi_system.WORK_PATH / ("report_" + time_stamp);
@@ -120,10 +120,10 @@ int tremppi_report(int argc, char ** argv) {
 
 		// For each graph create the graph data and add configuration details
 		for (auto & regs : reg_data_types) {
-			out[string("Regulatory")][regs.first] = Output::regulatoryGraph(reg_infos, regs);
+			out["Regulatory"][regs.first] = Output::regulatoryGraph(reg_infos, regs);
 		}
 		for (auto & funs : fun_data_types) {
-			out[string("Functional")][funs.first] = Output::functionalData(funs);
+			out["Functional"][funs.first] = Output::functionalData(funs);
 		}
 	}
 	catch (exception & e) {
@@ -134,11 +134,9 @@ int tremppi_report(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-		ofstream data_file = Output::fileOutput(report_path, "data.js");
-		for (const auto & file_data : out) {
-			string data = writer.write(file_data.second);
-			data_file << tremppi_system.PROGRAM_NAME << "." << file_data.first << " = " << data << ";" << endl;
-		}
+		ofstream data_file = Output::fileOutput(report_path, "report_data.js");
+		string data = writer.write(out);
+		data_file << "var report_data = " << data << ";" << endl;
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

@@ -7,19 +7,19 @@
         <script src="./report/vendor/jquery-ui.min.js"></script>
         <script src="./report/vendor/jquery.qtip.min.js"></script>
         <link rel="stylesheet" type="text/css" href="./report/vendor/jquery.qtip.min.css">
-        
+
         <script src="./report/common/common.js"></script>       
         <link rel="stylesheet" type="text/css" href="./report/common/common.css">
-        
+
         <script src="./report/local/values.js"></script>
         <script src="./report/local/helpers.js"></script>
         <script src="./report/local/page.js"></script>
         <script src="./report/local/graph.js"></script>
         <script src="./report/local/labels.js"></script>
         <link rel="stylesheet" type="text/css" href="./report/local/css.css">
-        
-        
-        <script src="./report/data.js"></script>
+
+
+        <script src="./report/report_data.js"></script>
         <script>
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
@@ -69,7 +69,7 @@
             </div>
             <div class="controls">
                 <button id="relative_button" >Relative</button>
-                <button id="reset_button" >Reset View</button>
+                <button id="copy_graph">Copy to clipboard</button>
             </div>
             <div class="figure_desc" id="regulatory_description">
                 regulatory graph label

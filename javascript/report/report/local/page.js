@@ -1,14 +1,8 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 tremppi_report.Page = {
     loadData: function(config) {
         // Set the types used
         config = {};
-        if (tremppi_report.setup.comparative) {
+        if (report_data.setup.comparative) {
             config.types = ['select', 'differ', 'compare'];
         } else {
             config.types = ['select'];
@@ -18,7 +12,7 @@ tremppi_report.Page = {
         var loadGraph = function(config, type)
         {
             var name = "reg_graph_" + type;
-            var graph = tremppi_report.Regulatory[type];
+            var graph = report_data.Regulatory[type];
             tremppi_report.Helpers.configure(config, graph.elements, type);
             tremppi_report.Graph.makeGraph(graph.elements, type);
             $('#' + name).cytoscape('get').load(graph.elements);
@@ -67,18 +61,21 @@ tremppi_report.Page = {
                 $('#reg_graph_' + config.types[i]).cytoscape('get').resize();
             }
         };
-        $("#reset_button").click(function() {
-            if (tremppi_report.setup.comparative) {
-                $('#reg_graph_differ').cytoscape('get').reset();
-                $('#reg_graph_compare').cytoscape('get').reset();
+
+        $("#copy_graph").click(function() {
+            for (var i = 0; i < config.types.length; i++) {
+                var cy = $('#reg_graph_' + config.types[i]).cytoscape('get');
+                report_data.Regulatory[config.types[i]] = cy.json();
             }
-            $('#reg_graph_select').cytoscape('get').reset();
+            tremppi_common.promptWithContent("report_data");
         });
 
-        $("#regulatory_description").html(((tremppi_report.setup.comparative) ? tremppi_report.Values.reg_caption_c : tremppi_report.Values.reg_caption_nonc) + tremppi_report.Values.reg_caption_common);
+        $("#regulatory_description").html((
+                (report_data.setup.comparative) ? tremppi_report.Values.reg_caption_c : tremppi_report.Values.reg_caption_nonc)
+                + tremppi_report.Values.reg_caption_common);
 
         // Replace text content
-        var setup = tremppi_report.setup;
+        var setup = report_data.setup;
         $("title").html(setup.name + " statistical analysis report");
         $("#analysis_date").html(setup.date);
         $("#model_name").html(setup.name);
@@ -104,6 +101,6 @@ tremppi_report.Page = {
         }, function() {
             $(this).css('cursor', 'auto');
         });
-        
+
     }
 };

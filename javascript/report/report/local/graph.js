@@ -16,7 +16,7 @@ tremppi_report.Graph = {
         // Sets all nodes with the id to the position given by graph
         var moveFunction = function(graph, id) {
             return function(evt) {
-                for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < config.types.length; i++) {
                     cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
                 }
             };
@@ -83,7 +83,10 @@ tremppi_report.Graph = {
                         'target-arrow-color': 'black',
                         'target-arrow-shape': 'data(target_arrow_shape)',
                         'line-style': 'data(line_style)'
-                    })
+                    }), 
+            layout: {
+                name: tremppi_common.hasAllPositions(graph.nodes) ? 'preset' : 'grid',
+            }
         });
 
         for (var edge_no = 0; edge_no < graph.edges.length; edge_no++) {
@@ -104,6 +107,7 @@ tremppi_report.Graph = {
             else
                 data.target_arrow_shape = data.pearson >= 0 ? 'triangle' : 'tee';
         }
+
     },
     // Change between relative and absolute values
     labelSwitch: function(config, relative) {
