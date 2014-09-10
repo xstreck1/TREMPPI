@@ -1,5 +1,7 @@
 #include "file_manipulation.hpp"
 
+#include "../general/time_manager.hpp"
+
 void FileManipulation::copyDir(bfs::path const & source, bfs::path const & destination)
 {
 	// Check whether the function call is valid
@@ -27,7 +29,6 @@ void FileManipulation::copyDir(bfs::path const & source, bfs::path const & desti
 	}
 }
 
-// Read the (almost) JSON file
 Json::Value FileManipulation::readJSasJSON(const bfs::path & input_path) {
 	Json::Value root;
 
@@ -56,4 +57,23 @@ Json::Value FileManipulation::readJSasJSON(const bfs::path & input_path) {
 		throw runtime_error("Failed to parse configuration. " + reader.getFormattedErrorMessages());
 
 	return root;
+}
+
+
+void FileManipulation::replaceInFile(bfs::path const & file, const string & original, const string & replacement) {
+	bfs::path out_file = file;
+	out_file.replace_extension(TimeManager::getTimeStamp());
+	fstream fin(file.string(), ios::in);
+	fstream fout(out_file.string(), ios::out);
+
+	string line;
+	while (getline(fin, line)) {
+		replaceAll(original, replacement, line);
+		fout << line << endl;
+	}
+
+	fout.close(); fin.close();
+	bfs::remove(file);
+	bfs::copy(out_file, file);
+	bfs::remove(out_file);
 }

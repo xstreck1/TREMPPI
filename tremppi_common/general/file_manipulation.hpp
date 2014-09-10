@@ -11,4 +11,7 @@ namespace FileManipulation {
 
 	//
 	Json::Value readJSasJSON(const bfs::path & input_path);
+
+	//
+	void replaceInFile(bfs::path const & file, const string & original, const string & replacement);
 }

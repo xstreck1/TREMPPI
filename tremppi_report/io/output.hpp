@@ -80,7 +80,7 @@ namespace Output {
 		file << "</graphml> \n";
 		}*/
 
-	Json::Value regulatoryGraph(const pair<string, RegsData> & regs) {
+	Json::Value regulatoryGraph(const RegInfos & reg_infos, const pair<string, RegsData> & regs) {
 		Json::Value graph;
 
 		// Write the nodes
@@ -101,7 +101,7 @@ namespace Output {
 				if (abs(reg.reg_freq[reg_i]) != 0 || regs.first == "differ") {
 					Json::Value edge, data;
 
-					data["source"] = regul.first;
+					data["source"] = reg_infos[regul.first].name;
 					data["target"] = reg.info.name;
 					data["pearson"] = reg.reg_corr[reg_i];
 					data["frequency"] = reg.reg_freq[reg_i];
@@ -143,23 +143,18 @@ namespace Output {
 		}*/
 
 	//
-	void copyReport(const bfs::path & input_path) {
-		// Copy the data from "../Files/Standine_report"
-		bfs::path report_dir = input_path / "report";
-		if (bfs::exists(report_dir))
-			bfs::remove_all(report_dir);
-		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" }, report_dir);
-
-		// Delete the original models
-		vector<string> to_delete = { "data.js", "configure.json", "regulatory_select.json", "regulatory_differ.json", "regulatory_compare.json" };
-		for_each(WHOLE(to_delete), [&report_dir](const string & filename) {
-			bfs::remove(report_dir / bfs::path{ filename });
-		});
+	void copyReport(const bfs::path & report_path) {
+		// Copy the data from "home/javascript/report"
+		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" } / bfs::path{ "report" }, report_path);
+		bfs::path report_html = report_path;
+		report_html.replace_extension("html");
+		bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" } / bfs::path{ "report.html" }, report_html);
+		FileManipulation::replaceInFile(report_html, "/report/", "/" + report_path.stem().string() + "/");
 	}
 
 	//
-	ofstream fileOutput(const bfs::path & input_path, const string & name) {
-		bfs::path output_path = input_path / bfs::path{ "report" } / name;
+	ofstream fileOutput(const bfs::path & report_path, const string & name) {
+		bfs::path output_path = report_path / name;
 		ofstream file = ofstream(output_path.string(), ios::out);
 		if (!file)
 			throw runtime_error("Could not open " + output_path.string());

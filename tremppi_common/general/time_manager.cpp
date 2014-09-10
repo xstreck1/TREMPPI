@@ -41,3 +41,25 @@ string TimeManager::getTime() {
 
 	return result;
 }
+
+string TimeManager::getTimeStamp() {
+	string result;
+
+	auto makeTwoDigit = [](int val) {
+		string result = to_string(val);
+		if (result.size() > 2)
+			return result.substr(2, 2);
+		else if (result.size() < 2)
+			return "0" + result;
+		else
+			return result;
+	};
+
+	chrono::system_clock::time_point today = chrono::system_clock::now();
+	time_t tt = chrono::system_clock::to_time_t(today);
+	tm* time = gmtime(&tt);
+	result = makeTwoDigit(time->tm_year + 1900) + makeTwoDigit(time->tm_mon + 1) + makeTwoDigit(time->tm_mday)
+		+ makeTwoDigit(time->tm_hour) + makeTwoDigit(time->tm_min) + makeTwoDigit(time->tm_sec);
+
+	return result;
+}

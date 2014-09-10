@@ -101,7 +101,9 @@ namespace Common {
 	* @param[in,out] val  reference to value that will be increased
 	*/
 	template<typename IntegralType>
-	void increase(typename std::vector<IntegralType>::reference val) { val++; }
+	void increase(typename std::vector<IntegralType>::reference val) { 
+		val++; 
+	}
 
 	/**
 	* @brief Iterates values from left to right if it is possible. If so, return true, otherwise return false.
@@ -149,6 +151,14 @@ namespace Common {
 	* @return	vector of all the matches
 	*/
 	std::vector<std::string> getAllMatches(const std::string & control_regex, const std::string & original, const int n = 0);
+
+	/**
+	* @brief replace in the given string all the occurences of "from" to "to"
+	* @param[in] from	original string
+	* @param[in] to	replacement string
+	* @param[in, out] str	string to replace in
+	*/
+	void replaceAll(const std::string & from, const std::string & to, std::string & str);
 
 	/**
 	* @brife return a string quoting the provided data

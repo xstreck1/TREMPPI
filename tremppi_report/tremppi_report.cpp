@@ -14,10 +14,11 @@
 // TODO: disable regulatory if not -r
 int tremppi_report(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ReportOptions>("tremppi_report", argc, argv);
-	bfs::path input_path = ReportOptions::getPath(po, DATABASE_FILENAME);
 
 	map<string, Json::Value> out;
 	out["setup"]["date"] = TimeManager::getTime();
+	string time_stamp = TimeManager::getTimeStamp();
+	bfs::path report_path = tremppi_system.WORK_PATH / ("report_" + time_stamp);
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
@@ -26,11 +27,11 @@ int tremppi_report(int argc, char ** argv) {
 		out["setup"]["comparative"] = po.count("compare") > 0;
 
 		// Copy the directory data
-		Output::copyReport(input_path);
+		Output::copyReport(report_path);
 
 		// Get database
-		out["setup"]["name"] = "no name assigned";
-		db = move(sqlite3pp::database((input_path / DATABASE_FILENAME).string().c_str()));
+		out["setup"]["name"] = tremppi_system.WORK_PATH.stem().string();
+		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read filter conditions
 		if (po.count("select") > 0)
@@ -40,7 +41,7 @@ int tremppi_report(int argc, char ** argv) {
 
 		// Read regulatory information
 		DatabaseReader reader;
-		RegInfos infos = reader.readRegInfos(db);
+		reg_infos = reader.readRegInfos(db);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 2);
@@ -119,7 +120,7 @@ int tremppi_report(int argc, char ** argv) {
 
 		// For each graph create the graph data and add configuration details
 		for (auto & regs : reg_data_types) {
-			out[string("Regulatory")][regs.first] = Output::regulatoryGraph(regs);
+			out[string("Regulatory")][regs.first] = Output::regulatoryGraph(reg_infos, regs);
 		}
 		for (auto & funs : fun_data_types) {
 			out[string("Functional")][funs.first] = Output::functionalData(funs);
@@ -133,11 +134,9 @@ int tremppi_report(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-		ofstream data_file = Output::fileOutput(input_path, "data.js");
+		ofstream data_file = Output::fileOutput(report_path, "data.js");
 		for (const auto & file_data : out) {
-			ofstream own_file = Output::fileOutput(input_path, file_data.first + ".json");
 			string data = writer.write(file_data.second);
-			own_file << data;
 			data_file << tremppi_system.PROGRAM_NAME << "." << file_data.first << " = " << data << ";" << endl;
 		}
 	}

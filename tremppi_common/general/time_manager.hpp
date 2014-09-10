@@ -44,7 +44,9 @@ namespace TimeManager {
 	/**
 	 * @return	the current time as a string
 	 */
-	string getTime();
+	 string getTime();
+
+	 string getTimeStamp();
 
 	/**
 	* Starts the given function, measures and outputs its time.
