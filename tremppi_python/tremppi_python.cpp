@@ -11,24 +11,39 @@ int tremppi_python(const string command, int argc, char ** argv) {
 		cerr << file_path.string() << " is called, but does not exist.";
 		return 1;
 	}
+
+	const char * text = "test\\";
+	wchar_t * wtext = new wchar_t[strlen(text) + 1];
+	mbstowcs(wtext, text, strlen(text) + 1);
+	delete wtext;
+
+	wchar_t ** wargv = new wchar_t*[argc];
+	for (int i : crange(argc)) {
+		wargv[i] = new wchar_t[strlen(argv[i]) +1]; 
+		mbstowcs(wargv[i], argv[i], strlen(argv[i]) + 1);
+	}
+
 	// Copy the script path to the first argument
-	char * program_name = new char[file_path.string().size() + 1];
-	strcpy(program_name, file_path.string().c_str());
-	swap(program_name, argv[0]);
+	string path_text = file_path.string();
+	wchar_t * program_name = new wchar_t[strlen(path_text.c_str()) + 1];
+	mbstowcs(program_name, path_text.c_str(), strlen(path_text.c_str()) + 1);
+	swap(program_name, wargv[0]);
 
 	// Initialize Python interpreter, the intepreter gets the name of this binary as the argv[0]
 	Py_SetProgramName(program_name);
+	
 	Py_Initialize();
-	PySys_SetArgv(argc, argv);
+	PySys_SetArgv(argc, wargv);
 
 	// Run python
-	PyObject* PyFileObject = PyFile_FromString(argv[0], "r");
-	PyRun_SimpleFileEx(PyFile_AsFile(PyFileObject), argv[0], 1);
+	std::ifstream fin(file_path.string().c_str());
+	std::string contents((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
+	PyRun_SimpleString(contents.c_str());
 
-	Py_Finalize(); 
-
-	swap(program_name, argv[0]);
 	delete[] program_name;
+	for (int i : crange(argc)) 
+		delete[] wargv[i];
+	delete[] wargv;
 	return 0;
 }
 

@@ -56,3 +56,5 @@ copyanything(SRC_PATH, os.path.join(DEST_PATH, os.path.normpath("./")))
 
 MODEL_NAME = os.path.split(DEST_PATH)[1];
 replace(os.path.join(DEST_PATH, "editor.html"), "dummy_model_name",  MODEL_NAME);
+
+print(sys.version_info)
