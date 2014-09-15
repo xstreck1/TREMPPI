@@ -51,3 +51,8 @@ int tremppi_init(int argc, char ** argv) {
 	tremppi_system.set("tremppi", argv[0], "." );
 	return tremppi_python("init", argc, argv);
 }
+
+int tremppi_browse(int argc, char ** argv) {
+	tremppi_system.set("tremppi", argv[0], ".");
+	return tremppi_python("browse", argc, argv);
+}
