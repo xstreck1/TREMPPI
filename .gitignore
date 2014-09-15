@@ -24,6 +24,9 @@ Win32*
 # NetBeans
 *nbproject*
 
+# IDEA
+*.idea
+
 # projects
 proj/*
 
