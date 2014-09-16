@@ -1,7 +1,13 @@
 var tremppi_common = {
-    promptWithContent: function(var_name) {
+    save: function(var_name) {
         var content = "var " + var_name + " = " + JSON.stringify(window[var_name], null, '\t') + ";";
-        prompt("Press ctrl+C to copy, then paste to " + var_name + ".js", content);
+        var url = tremppi_common.server_address + "?" + tremppi_common.data_path + var_name + ".js";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: content,
+			success: function(res) {}
+        });
     },
     hasAllPositions: function(nodes) {
         for (var i = 0; i < nodes.length; i++) {
@@ -11,5 +17,17 @@ var tremppi_common = {
                 return false;
         }
         return true;
+    },
+    addServerContent: function(content_function) {
+        $.ajax(
+                {url: tremppi_common.server_address,
+                    success: function(result) {
+                        content_function();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log("Server not available");
+                    }
+                }
+        );
     }
 }

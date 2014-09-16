@@ -2,7 +2,7 @@ import sys
 import os
 import argparse
 import shutil
-from os.path import join as pjoin
+from os.path import join as pjoin, dirname
 
 # define options
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
@@ -11,7 +11,7 @@ parser.add_argument('name', help='name of the newly created model')
 args = parser.parse_args()
 
 # find paths
-sys.path.append(os.path.abspath(pjoin(sys.argv[0], "../../")))
+sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
 from tremppi_common.file_manipulation import normal_paths, copyanything, replace
 EXEC_PATH, BIN_PATH, HOME_PATH = normal_paths(sys.argv[0])
 if args.dest is not None:

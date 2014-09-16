@@ -16,15 +16,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_spawn(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<SpawnOptions>("tremppi_spawn", argc, argv);
-	bfs::path input_path = SpawnOptions::getPath(po, NETWORK_FILENAME);
-	bfs::path database_file = input_path / DATABASE_FILENAME;
+	bfs::path database_file = tremppi_system.WORK_PATH / DATABASE_FILENAME;
 
 	// Check the file
 	Json::Value root; // root of the network
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::readJSasJSON(input_path / NETWORK_FILENAME);
+		root = FileManipulation::readJSasJSON(tremppi_system.WORK_PATH / "editor" / NETWORK_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}

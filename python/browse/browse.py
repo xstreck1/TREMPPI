@@ -6,8 +6,7 @@ import os
 import argparse
 from urllib.parse import urlparse
 from os import curdir, listdir
-from os.path import join as pjoin
-from os.path import splitext
+from os.path import splitext, dirname, join as pjoin
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from shutil import copyfile
 
@@ -29,13 +28,17 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(self.get_files().encode())
         elif parsed_path.path != "":
             store_path = "." + parsed_path.path
-            fileName, fileExtension = splitext(store_path)
-            fileExtension = fileExtension[1:]
-            if (fileExtension == "js"):
-                fileExtension = "javascript"
+            file_name, file_extension = splitext(store_path)
+            file_extension = file_extension[1:]
+            if file_extension == "js":
+                mime_type = "text/javascript"
+            elif file_extension == "png":
+                mime_type = "image/png"
+            else:
+                mime_type = "text/" + file_extension
             with open(store_path) as fh:
                 self.send_response(200)
-                self.send_header('Content-type', 'text/' + fileExtension)
+                self.send_header('Content-type', mime_type)
                 self.end_headers()
                 self.wfile.write(fh.read().encode())
         elif parsed_path.query != "":
@@ -46,16 +49,18 @@ class StoreHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(fh.read().encode())
 
+    def do_POST(self):
+        length = self.headers['content-length']
+        data = self.rfile.read(int(length))
+        parsed_path = urlparse(self.path)
+        store_path = pjoin(curdir, parsed_path.query)
+        with open(store_path, 'w') as fh:
+            fh.write(data.decode())
+            self.send_header('Content-type', 'text')
+            self.end_headers()
+            self.wfile.write("".encode())
 
-def do_POST(self):
-    length = self.headers['content-length']
-    data = self.rfile.read(int(length))
-    parsed_path = urlparse(self.path)
-    store_path = pjoin(curdir, parsed_path.query)
-    with open(store_path, 'w') as fh:
-        fh.write(data.decode())
-
-    self.send_response(200)
+        self.send_response(200)
 
 # define options
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
@@ -63,7 +68,7 @@ parser.add_argument('--dest', help='specify the location where the file gets cre
 args = parser.parse_args()
 
 # find paths
-sys.path.append(os.path.abspath(pjoin(sys.argv[0], "../..")))
+sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
 from tremppi_common.file_manipulation import normal_paths, copyanything
 EXEC_PATH, BIN_PATH, HOME_PATH = normal_paths(sys.argv[0])
 

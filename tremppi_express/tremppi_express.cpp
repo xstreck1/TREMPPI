@@ -6,8 +6,7 @@
 //
 int tremppi_express(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ExpressOptions>("tremppi_express", argc, argv);
-	bfs::path input_path = ExpressOptions::getPath(po, DATABASE_FILENAME);
-	bfs::path database_path = input_path / DATABASE_FILENAME;
+	bfs::path database_path = tremppi_system.WORK_PATH / DATABASE_FILENAME;
 
 	string select;
 	map<string, ActLevel> maxes;

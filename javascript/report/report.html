@@ -16,13 +16,16 @@
         <script src="./report/local/page.js"></script>
         <script src="./report/local/graph.js"></script>
         <script src="./report/local/labels.js"></script>
+        <script src="./report/local/server.js"></script>
         <link rel="stylesheet" type="text/css" href="./report/local/css.css">
-
 
         <script src="./report/report_data.js"></script>
         <script>
+            tremppi_common.data_path = "report/";
+            tremppi_common.server_address = "http://localhost:8080/";
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
+                tremppi_common.addServerContent(tremppi_editor.createServerButtons);
             };
         </script>
         <title >empty title</title>
@@ -67,9 +70,8 @@
                     <canvas id="reg_freq_compare" class="legend" ></canvas>
                 </div>
             </div>
-            <div class="controls">
+            <div class="controls" id="graph_controls">
                 <button id="relative_button" >Relative</button>
-                <button id="copy_graph">Copy to clipboard</button>
             </div>
             <div class="figure_desc" id="regulatory_description">
                 regulatory graph label
