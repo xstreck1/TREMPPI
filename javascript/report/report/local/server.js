@@ -5,7 +5,7 @@
  */
 
 
-tremppi_editor.createServerButtons = function() {
+tremppi_report.createServerButtons = function() {
     $("#graph_controls").append('<button id="save_graph">Save</button>');
     $("#save_graph").click(function() {
         tremppi_common.save("report_data");

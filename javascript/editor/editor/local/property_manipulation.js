@@ -11,7 +11,7 @@ tremppi_editor.add = function() {
             {
                 "id": 0,
                 "values": {
-                    "Name": "property " + properties.length,
+                    "Name": "property_" + properties.length,
                     "Type": "TimeSeries",
                     "Experiment": ""
                 }
