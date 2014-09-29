@@ -28,7 +28,7 @@ namespace SyntaxChecker {
 
 		// Guarantees that the IDs in nodes meet the requirements for an ID and are readable
 		void checkIDs(const Json::Value & nodes) {
-			for (const Json::Value node : nodes) {
+			for (const Json::Value & node : nodes) {
 				string name;
 				try {
 					name = node["data"]["id"].asString();
@@ -43,7 +43,7 @@ namespace SyntaxChecker {
 
 		// Guarantees that the names in nodes meet the requirements for an ID and are readable
 		void checkNames(const Json::Value & nodes) {
-			for (const Json::Value node : nodes) {
+			for (const Json::Value & node : nodes) {
 				string name;
 				try {
 					name = node["data"]["Name"].asString();
@@ -54,6 +54,16 @@ namespace SyntaxChecker {
 				if (!DataInfo::isValidName(name))
 					throw runtime_error(quote(name) + " is an invalid specie Name. Name must start with a letter and only letters, numbers and underscore are allowed.");
 			}
+		}
+
+		// Provides the id_to_name map
+		map<string, string> idsToNames(const Json::Value & nodes) {
+			map<string, string> result;
+
+			for (const Json::Value & node : nodes)
+				result.insert({ node["data"]["id"].asString(), node["data"]["Name"].asString() });
+
+			return result;
 		}
 
 		// Control one endpoint of an edge
@@ -72,42 +82,42 @@ namespace SyntaxChecker {
 
 		// Control if the edges have their ids in the component list
 		void checkEdges(const Json::Value & edges, const map<string, ActLevel> & components) {
-			for (const Json::Value edge : edges) {
+			for (const Json::Value & edge : edges) {
 				checkEdgeEnd(edge, string("source"), components);
 				checkEdgeEnd(edge, string("target"), components);
 			}
 		}
 
-		const inline string getEdgeName(const Json::Value & edge) {
-			return(quote("(" + edge["data"]["source"].asString() + "," + edge["data"]["target"].asString() + ")"));
+		const inline string getEdgeName(const Json::Value & edge, const map<string, string> & ids_to_names) {
+			return(quote("(" + ids_to_names.at(edge["data"]["source"].asString()) + "," + ids_to_names.at(edge["data"]["target"].asString()) + ")"));
 		}
 
 		// Control if the thresholds are in the range of their source
-		void checkThresholds(const Json::Value & edges, const map<string, ActLevel> & components) {
-			for (const Json::Value edge : edges) {
+		void checkThresholds(const Json::Value & edges, const map<string, ActLevel> & components, const map<string, string> & ids_to_names) {
+			for (const Json::Value & edge : edges) {
 				int threshold;
 				string source = edge["data"]["source"].asString();
 				try {
 					threshold = edge["data"]["Threshold"].asInt();
 				}
 				catch (exception & e) {
-					throw runtime_error("Could not convert treshold for " + getEdgeName(edge) + " to integer." + e.what());
+					throw runtime_error("Could not convert treshold for " + getEdgeName(edge, ids_to_names) + " to integer." + e.what());
 				}
 				if (threshold < 1 || threshold > components.at(source))
-					throw runtime_error(getEdgeName(edge) + " has a Threshold of " + to_string(threshold) +
+					throw runtime_error(getEdgeName(edge, ids_to_names) + " has a Threshold of " + to_string(threshold) +
 					". Only[1" + ", " + to_string(components.at(source)) + "] is allowed.");
 			}
 		}
 
 		// Checks if all the edge labels are correct
-		void checkLabels(const Json::Value & edges) {
-			for (const Json::Value edge : edges) {
+		void checkLabels(const Json::Value & edges, const map<string, string> & ids_to_names) {
+			for (const Json::Value & edge : edges) {
 				string label;
 				try {
 					label = edge["data"]["Label"].asString();
 				}
 				catch (exception & e) {
-					throw runtime_error("Could not obtain a label of an edge " + getEdgeName(edge) + ". Did you remember to add parenthesis ? " + e.what());
+					throw runtime_error("Could not obtain a label of an edge " + getEdgeName(edge, ids_to_names) + ". Did you remember to add parenthesis ? " + e.what());
 				}
 			}
 		}
@@ -117,10 +127,11 @@ namespace SyntaxChecker {
 	void controlSemantics(const Json::Value & elements) {
 		checkIDs(elements["nodes"]);
 		checkNames(elements["nodes"]);
+		auto ids_to_names = idsToNames(elements["nodes"]);
 		checkMaxes(elements["nodes"]);
 		map<string, ActLevel> components = DataInfo::getComponents(elements["nodes"]);
 		checkEdges(elements["edges"], components);
-		checkThresholds(elements["edges"], components);
-		checkLabels(elements["edges"]);
+		checkThresholds(elements["edges"], components, ids_to_names);
+		checkLabels(elements["edges"], ids_to_names);
 	}
 }

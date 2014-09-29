@@ -68,7 +68,7 @@ tremppi_editor.cytoscape_init = function() { // on dom ready
     tremppi_editor.metadata.node.push({name: "Constraint", label: "CONSTRAINT", datatype: "string", editable: true});  
     
     tremppi_editor.metadata.edge = [];
-    tremppi_editor.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "int", editable: true});
+    tremppi_editor.metadata.edge.push({name: "Threshold", label: "THRESHOLD", datatype: "integer", editable: true});
     tremppi_editor.metadata.edge.push({name: "Label", label: "LABEL", datatype: "string", editable: true});
     tremppi_editor.metadata.edge[1].values = {
         "+": "Activating", 

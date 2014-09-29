@@ -36,8 +36,8 @@ map<CompID, Levels > ModelTranslators::getThresholds(const Model & model, const 
 		}
 	}
 
-	for (auto ths : thresholds) {
-		sort(ths.second.begin(), ths.second.end());
+	for (auto & ths : thresholds) {
+		std::sort(WHOLE(ths.second));
 	}
 
 	return thresholds;

@@ -9,7 +9,7 @@ tremppi_editor.getByID = function(type, id) {
 tremppi_editor.setHelp = function(text) {
     $("#graph_panel").html("");
     $("#graph_panel").append('<div id="graph_help" class="help">' + text + '</div>');
-}
+};
 
 tremppi_editor.setButtonControl = function() {
     $("#graph_panel").html("");
@@ -24,7 +24,7 @@ tremppi_editor.setButtonControl = function() {
         tremppi_editor.activity_type = "delete";
         tremppi_editor.setHelp("Click on a COMPONENT or a REGULATION to delele it.");
     });
-}
+};
 
 tremppi_editor.elementChanged = function(row_id, column_id, old_val, new_val, row) {
     var element = tremppi_editor.graph.$("#" + tremppi_editor.current_selection.id);
@@ -43,6 +43,7 @@ tremppi_editor.setSelectionScheme = function() {
 };
 
 tremppi_editor.tapFunction = function(event) {
+    // Click outside of all components
     if (event.cy == event.cyTarget) {
         // Create new component
         if (tremppi_editor.activity_type === "create") {
@@ -114,4 +115,4 @@ tremppi_editor.tapFunction = function(event) {
             tremppi_editor.setSelectionScheme();
         }
     }
-}
+};
