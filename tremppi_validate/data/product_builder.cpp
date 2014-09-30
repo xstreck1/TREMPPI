@@ -39,17 +39,24 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 	// List through the states that are allowed by the constraint
 	Gecode::DFS<ConstraintParser> search(automaton.getTransitionConstraint(BA_ID, trans_no));
 	while (ConstraintParser *result = search.next()) {
-		StateID KS_ID = structure.getID(result->getSolution());
+		auto solution = result->getSolution();
+		bool is_ss = static_cast<bool>(solution[solution.size() - 1]);
+		solution.resize(solution.size() - 1);
+		StateID KS_ID = structure.getID(solution);
 		StateID ID = product.getProductID(KS_ID, BA_ID);
 
-		// Add all the trasient combinations for the kripke structure
-		for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
-			const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
-			const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
-			product.states[ID].transitions.push_back({ product.getProductID(KS_target, BA_target), trans_const });
+		if (is_ss) {
+			// Add all the trasient combinations for the kripke structure
+			for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
+				const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
+				const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
+				product.states[ID].transitions.push_back({ product.getProductID(KS_target, BA_target), trans_const });
+			}
 		}
-		// Add a self-loop
-		product.states[ID].loops.push_back(product.getProductID(KS_ID, BA_target));
+		else {
+			// Add a self-loop
+			product.states[ID].loops.push_back(product.getProductID(KS_ID, BA_target));
+		}
 
 		delete result;
 	}

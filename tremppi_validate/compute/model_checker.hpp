@@ -14,7 +14,7 @@
 class ModelChecker {
 	// Information
 	const ProductStructure & product; ///< Product on which the computation will be conducted.
-	CheckerSettings settings; ///< Setup for the process.
+	CheckerSetting settings; ///< Setup for the process.
 	Levels parametrization;
 
 	// Coloring storage
@@ -103,7 +103,7 @@ public:
 	/**
 	 * Start a new coloring round for cycle detection from a single state.
 	 */
-	SynthesisResults conductCheck(const CheckerSettings & _settings, const Levels & _parametrization) {
+	SynthesisResults conductCheck(const CheckerSetting & _settings, const Levels & _parametrization) {
 		settings = _settings;
 		parametrization = _parametrization;
 		prepareObjects();

@@ -36,9 +36,13 @@ class AutomatonBuilder {
 			maxes.push_back(reg_infos[ID].max_activity);
 			mins.push_back(0);
 		}
+		// Add the steady state constraint
+		names.push_back("#ss");
+		maxes.push_back(1);
+		mins.push_back(0);
 
 		// Add experiment constraints.
-		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
+		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size() + 1, DataInfo::getMaxLevel(reg_infos));
 		cons_pars->addBoundaries(maxes, true);
 		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.experiment);
 		cons_pars->status();

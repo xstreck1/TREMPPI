@@ -132,16 +132,15 @@ public:
 	 * @param BFS_bound current bound on depth
 	 * @return  the Cost value for this parametrization
 	 */
-	tuple<size_t, double, vector<StateTransition> >  checkFinite(const bpo::variables_map & po, const Levels & parametrization) {
+	tuple<size_t, double, vector<StateTransition> >  checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
 		tuple<size_t, double, vector<StateTransition> > result;
 		
-		CheckerSettings settings;
-		settings.bfs_bound = ValidateOptions::getBound(po);
+		CheckerSetting settings;
+		settings.bfs_bound = bfs_bound;
 		settings.bound_type = BoundType::min;
 		settings.mark_initals = true;
 		SynthesisResults s_results = model_checker->conductCheck(settings, parametrization);
 
-		TraceType trace_type = ValidateOptions::getTracteType(po);
 		if (trace_type != TraceType::none) {
 			searcher->findWitnesses(s_results, settings, parametrization);
 			computer->compute(s_results, searcher->getTransitions(), settings, parametrization);

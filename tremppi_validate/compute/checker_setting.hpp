@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../data/product_structure.hpp"
+#include "../io/validate_options.hpp"
 
-class CheckerSettings {
+class CheckerSetting {
 public:
    vector<StateID> initial_states;
    vector<StateID> final_states;
@@ -12,7 +13,7 @@ public:
    bool mark_initals;
    size_t minimal_count;
 
-   CheckerSettings() : bound_type(BoundType::inf), trace_type(TraceType::none), bfs_bound(INF), mark_initals(false), minimal_count(1) { }
+   CheckerSetting() : bound_type(BoundType::inf), trace_type(TraceType::none), bfs_bound(INF), mark_initals(false), minimal_count(1) { }
 
    inline bool isInitial(const StateID ID, const ProductStructure & product) const {
       if (initial_states.empty())

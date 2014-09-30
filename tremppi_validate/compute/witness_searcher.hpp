@@ -16,7 +16,7 @@
 class WitnessSearcher {
 	const ProductStructure & product; ///< Product reference for state properties.
 	const ColorStorage & storage; ///< Constant storage with the actuall data.
-	CheckerSettings settings; ///< Setup for the process.
+	CheckerSetting settings; ///< Setup for the process.
 	Levels parametrization;
 
 	vector<StateTransition>  transitions; ///< Acutall storage of the transitions found - transitions are stored by parametrizations numbers in the form (source, traget).
@@ -89,7 +89,7 @@ public:
 	/**
 	 * Function that executes the whole searching process
 	 */
-	void findWitnesses(const SynthesisResults & results, const CheckerSettings & _settings, const Levels & _parametrization) {
+	void findWitnesses(const SynthesisResults & results, const CheckerSetting & _settings, const Levels & _parametrization) {
 		// Preparation
 		settings = _settings;
 		parametrization = _parametrization;

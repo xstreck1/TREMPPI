@@ -106,7 +106,7 @@ int tremppi_validate(int argc, char ** argv) {
 				// Call synthesis procedure based on the type of the automaton.
 				switch (product.getMyType()) {
 				case BA_finite:
-					result = synthesis_manager.checkFinite(po, par_reader.getParametrization());
+					result = synthesis_manager.checkFinite(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
 					break;
 					/*case BA_standard:
 						cost = synthesis_manager.checkFull(po, par_reader.getParametrization(), witness_trans, robustness_val);

@@ -12,7 +12,7 @@
 class RobustnessCompute {
    const ProductStructure & product; ///< Product reference for state properties.
    const ColorStorage & storage; ///< Constant storage with the actuall data.
-   CheckerSettings settings; ///< Setup for the process.
+   CheckerSetting settings; ///< Setup for the process.
    Levels parametrization;
 
    /// This structure holds values used in the iterative process of robustness computation.
@@ -71,7 +71,7 @@ public:
    /**
     * Function that computes robustness values for each parametrization.
     */
-   void compute(const SynthesisResults & results, const vector<pair<StateID, StateID> > & transitions, const CheckerSettings & _settings, const Levels & _parametrization) {
+   void compute(const SynthesisResults & results, const vector<pair<StateID, StateID> > & transitions, const CheckerSetting & _settings, const Levels & _parametrization) {
       settings = _settings;
 	  parametrization = _parametrization;
       initiate();
