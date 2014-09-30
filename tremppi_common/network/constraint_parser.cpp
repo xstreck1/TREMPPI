@@ -28,7 +28,7 @@ Gecode::LinIntRel ConstraintParser::applyOperator(const vector<string> & names, 
 }
 
 Gecode::BoolExpr ConstraintParser::convertAtom(const vector<string> & names, const string & atom) {
-	if (atom.compare("tt") == 0)
+	if ((atom.compare("tt") == 0) || atom.empty())
 		return Gecode::BoolExpr(allowed_vals[0] == allowed_vals[0]);
 	else if (atom.compare("ff") == 0)
 		return Gecode::BoolExpr(allowed_vals[0] != allowed_vals[0]);

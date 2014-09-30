@@ -152,9 +152,6 @@ public:
 
 			CompID ID = ind - 1;
 
-			if (kinetics.components[ID].params.empty())
-				continue;
-
 			// Solve the parametrizations
 			string formula = createFormula(model.components[ID].regulations, kinetics.components[ID].params) + " & " + ConstraintFomatter::consToFormula(model, ID);
 			kinetics.components[ID].subcolors = createPartCol(check_only, kinetics.components[ID].params, formula, model.components[ID].max_activity);

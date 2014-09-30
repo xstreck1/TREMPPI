@@ -28,9 +28,7 @@ namespace ModelReader {
 
 			specie.max_activity = node["data"]["MaxActivity"].asInt();
 
-			for (const Json::Value constraint : node["data"]["Constraints"]) {
-				specie.constraints.emplace_back(constraint.asString());
-			}
+			specie.constraints.emplace_back(node["data"]["Constraint"].asString());
 
 			model.components.emplace_back(move(specie));
 		}

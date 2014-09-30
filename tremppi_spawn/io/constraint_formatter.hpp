@@ -8,7 +8,7 @@
 class ConstraintFomatter {
 	/* Context may contain specie-characters or number or colon or comma*/
 	static bool belongsToContext(const char ch) {
-		return isalpha(ch) || isdigit(ch) != 0 || ch == ':' || ch == ',';
+		return isalpha(ch) || isdigit(ch) != 0 || ch == ':' || ch == ',' || ch == '_';
 	}
 
 	static string addBrackets(string expr) {
