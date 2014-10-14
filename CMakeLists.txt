@@ -23,7 +23,7 @@ include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
   
 # Python
-FIND_PACKAGE(PythonLibs 3 REQUIRED)
+FIND_PACKAGE(PythonLibs 3.2 REQUIRED)
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 link_directories(${PYTHON_LIBRARY_DIRS})
   
@@ -36,8 +36,8 @@ ADD_LIBRARY(sqlite3pp sqlite3pp/sqlite3pp.cpp sqlite3pp/sqlite3ppext.cpp)
 ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cpp)
 
 # Gecode
-add_subdirectory (gecode-4.2.1)
-include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.2.1)
+add_subdirectory (gecode-4.3.0)
+include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.3.0)
 
 # tremppi_common - code only, no binary
 set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_common)

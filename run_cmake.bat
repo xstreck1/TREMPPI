@@ -1,1 +1,1 @@
-cmake CMakeLists.txt -DBUILD_TEST:BOOL=ON
+cmake CMakeLists.txt -DBUILD_TEST:BOOL=ON -DBOOST_ROOT=C:\Libs\boost_1_56_0 -DGTEST_ROOT=C:\Libs\gtest-1.7.0

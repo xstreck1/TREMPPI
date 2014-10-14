@@ -45,7 +45,7 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 		StateID KS_ID = structure.getID(solution);
 		StateID ID = product.getProductID(KS_ID, BA_ID);
 
-		if (is_ss) {
+		if (!is_ss) {
 			// Add all the trasient combinations for the kripke structure
 			for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
 				const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
