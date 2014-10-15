@@ -14,11 +14,7 @@ args = parser.parse_args()
 sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
 from tremppi_common.file_manipulation import copyanything, replace, normal_paths
 
-EXEC_PATH, BIN_PATH, HOME_PATH = normal_paths(sys.argv[0])
-if args.dest is not None:
-    DEST_PATH = join(os.path.normpath(args.dest), args.name)
-else:
-    DEST_PATH = join(os.getcwd(), args.name)
+EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 # delete original if present
 DEST_CONTENT = join(DEST_PATH, os.path.normpath("./"))

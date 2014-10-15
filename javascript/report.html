@@ -6,7 +6,7 @@
         <script src="./common/paper-full.min.js"></script>
         <script src="./common/jquery-ui.min.js"></script>
         <script src="./common/jquery.qtip.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="./report/vendor/jquery.qtip.min.css">
+        <link rel="stylesheet" type="text/css" href="./common/jquery.qtip.min.css">
 
         <script src="./common/common.js"></script>       
         <link rel="stylesheet" type="text/css" href="./common/css.css">
@@ -25,7 +25,7 @@
             tremppi_common.server_address = "http://localhost:8080/";
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
-                tremppi_common.addServerContent(tremppi_editor.createServerButtons);
+                tremppi_common.addServerContent(tremppi_report.createServerButtons);
             };
         </script>
         <title >empty title</title>

@@ -1,4 +1,5 @@
 var tremppi_common = {
+    // Saves the variable to the respective file
     save: function(var_name) {
         var content = "var " + var_name + " = " + JSON.stringify(window[var_name], null, '\t') + ";";
         var url = tremppi_common.server_address + "?" + tremppi_common.data_path + var_name + ".js";
@@ -18,6 +19,7 @@ var tremppi_common = {
         }
         return true;
     },
+    // Executes the provided function in the case the server is running
     addServerContent: function(content_function) {
         $.ajax(
                 {url: tremppi_common.server_address,

@@ -1,16 +1,14 @@
 ﻿import webbrowser
-import pathlib
 import re
 import sys
-import os
 import argparse
 from urllib.parse import urlparse
-from os import curdir, listdir
-from os.path import splitext, dirname, join
+from os import curdir, listdir, remove
+from os.path import splitext, dirname, join, abspath, exists
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from shutil import copyfile, rmtree
 
-
+# Tremppi server that communicates between HTML reports and the filesystem
 class StoreHandler(BaseHTTPRequestHandler):
     # return current files with the .html suffix
     def get_files(self):
@@ -85,31 +83,23 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write("".encode())
         self.send_response(200)
 
-# define options
+# options and system setup
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--dest', help='specify the browsing location.')
 args = parser.parse_args()
-
-# find paths
-sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
+sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi_common.file_manipulation import copyanything, normal_paths
-
-EXEC_PATH, BIN_PATH, HOME_PATH = normal_paths(sys.argv[0])
-
-if args.dest != None:
-    DEST_PATH = os.path.normpath(args.dest)
-else:
-    DEST_PATH = os.getcwd()
-JAVASCRIPT_SOURCE = join(HOME_PATH, os.path.normpath("javascript"))
+EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 # refresh data if in editor
 if listdir("..")[0] == ".idea":
-    if os.path.exists(join(DEST_PATH, "browse.html")):
+    JAVASCRIPT_SOURCE = join(HOME_PATH, os.path.normpath("javascript"))
+    if exists(join(DEST_PATH, "browse.html")):
         rmtree(join(DEST_PATH, "browse"))
-        os.remove(join(DEST_PATH, "browse.html"))
+        remove(join(DEST_PATH, "browse.html"))
     copyanything(join(JAVASCRIPT_SOURCE, "browse"), join(DEST_PATH, "browse"))
     copyfile(join(JAVASCRIPT_SOURCE, "browse.html"), join(DEST_PATH, "browse.html"))
 
-webbrowser.open("http://localhost:8080/browse.html")
 server = HTTPServer(('', 8080), StoreHandler)
+webbrowser.open("http://localhost:8080/browse.html")
 server.serve_forever()

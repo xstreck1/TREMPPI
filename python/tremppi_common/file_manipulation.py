@@ -3,14 +3,18 @@ import errno
 
 from tempfile import mkstemp
 from shutil import move
-from os import remove, close
+from os import remove, close, getcwd
 from os.path import dirname, abspath, normpath, join
 
-def normal_paths(exec_path):
+def normal_paths(exec_path, args):
     EXEC_PATH = dirname(abspath(exec_path))
     BIN_PATH = abspath(join(EXEC_PATH, normpath("./../../bin")))
     HOME_PATH = abspath(join(EXEC_PATH, normpath("./../../")))
-    return (EXEC_PATH, BIN_PATH, HOME_PATH)
+    if args.dest != None:
+        DEST_PATH = normpath(args.dest)
+    else:
+        DEST_PATH = getcwd()
+    return (EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH)
 
 def replace(file_path, pattern, subst):
     #Create temp file
