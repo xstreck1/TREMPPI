@@ -1,9 +1,10 @@
-﻿import webbrowser
+import webbrowser
 import re
 import sys
 import argparse
+import codecs
 from urllib.parse import urlparse
-from os import curdir, listdir, remove
+from os import curdir, listdir, remove, chdir
 from os.path import splitext, dirname, join, abspath, exists
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from shutil import copyfile, rmtree
@@ -25,13 +26,20 @@ class StoreHandler(BaseHTTPRequestHandler):
             mime_type = "text/javascript"
         elif file_extension == "png":
             mime_type = "image/png"
+        elif file_extension == "ico":
+            mime_type = "image/x-icon"
+            self.success_response(mime_type, codecs.open(store_path, encoding="base64").read())
+            return
         else:
             mime_type = "text/" + file_extension
         with open(store_path) as fh:
-            self.send_response(200)
-            self.send_header('Content-type', mime_type)
-            self.end_headers()
-            self.wfile.write(fh.read().encode())
+            self.success_response(mime_type, fh.read().encode())
+
+    def success_response(self, type, data):
+        self.send_response(200)
+        self.send_header('Content-type', type)
+        self.end_headers()
+        self.wfile.write(data)
 
     # respond to the GET request
     def do_GET(self):
@@ -39,34 +47,22 @@ class StoreHandler(BaseHTTPRequestHandler):
         print(parsed_path.path)
         if parsed_path.query == "":
             if parsed_path.path == "/":
-                self.send_response(200)
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
-                self.wfile.write("tremmpi browse is running".encode())
+                self.success_response('text/plain', "tremmpi browse is running".encode())
             else:
                 store_path = "." + parsed_path.path
                 self.provide_content(store_path)
         else:
             # get list of HTML files in the topmost directory
             if parsed_path.query == "files":
-                self.send_response(200)
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
-                self.wfile.write(self.get_files().encode())
+                self.success_response('text/plain', self.get_files().encode())
             # read content of a file under given url - used for loading models
             if parsed_path.query == "content":
                 store_path = join(curdir, parsed_path.query)
                 with open(store_path) as fh:
-                    self.send_response(200)
-                    self.send_header('Content-type', 'text/js')
-                    self.end_headers()
-                    self.wfile.write(fh.read().encode())
+                    self.success_response('text/js', fh.read().encode())
             # obtain columns of the database
             elif parsed_path.query == "columns":
-                self.send_response(200)
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
-                self.wfile.write("obtain columns")
+                self.success_response('text/plain', "obtain columns".encode())
 
 
     # respond to the post request
@@ -89,17 +85,11 @@ parser.add_argument('--dest', help='specify the browsing location.')
 args = parser.parse_args()
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi_common.file_manipulation import copyanything, normal_paths
+
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
-# refresh data if in editor
-if listdir("..")[0] == ".idea":
-    JAVASCRIPT_SOURCE = join(HOME_PATH, os.path.normpath("javascript"))
-    if exists(join(DEST_PATH, "browse.html")):
-        rmtree(join(DEST_PATH, "browse"))
-        remove(join(DEST_PATH, "browse.html"))
-    copyanything(join(JAVASCRIPT_SOURCE, "browse"), join(DEST_PATH, "browse"))
-    copyfile(join(JAVASCRIPT_SOURCE, "browse.html"), join(DEST_PATH, "browse.html"))
-
+# start the server and open the webpage
+chdir(DEST_PATH)
 server = HTTPServer(('', 8080), StoreHandler)
 webbrowser.open("http://localhost:8080/browse.html")
 server.serve_forever()
