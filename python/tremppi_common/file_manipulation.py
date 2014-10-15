@@ -1,10 +1,16 @@
 import shutil
 import errno
-import os
 
 from tempfile import mkstemp
 from shutil import move
 from os import remove, close
+from os.path import dirname, abspath, normpath, join
+
+def normal_paths(exec_path):
+    EXEC_PATH = dirname(abspath(exec_path))
+    BIN_PATH = abspath(join(EXEC_PATH, normpath("./../../bin")))
+    HOME_PATH = abspath(join(EXEC_PATH, normpath("./../../")))
+    return (EXEC_PATH, BIN_PATH, HOME_PATH)
 
 def replace(file_path, pattern, subst):
     #Create temp file
@@ -25,14 +31,9 @@ def replace(file_path, pattern, subst):
 def copyanything(src, dst):
     try:
         shutil.copytree(src, dst)
-    except OSError as exc: # python >2.5
+    except OSError as exc:
         if exc.errno == errno.ENOTDIR:
             shutil.copy(src, dst)
         else:
             raise
 
-def normal_paths(exec_path):
-    EXEC_PATH = os.path.dirname(os.path.abspath(exec_path))
-    BIN_PATH = os.path.abspath(os.path.join(EXEC_PATH, os.path.normpath("./../../bin")))
-    HOME_PATH = os.path.abspath(os.path.join(EXEC_PATH, os.path.normpath("./../../")))
-    return (EXEC_PATH, BIN_PATH, HOME_PATH)

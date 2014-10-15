@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./common/jquery.min.js"></script>
+        <script src="./common/cytoscape.min.js"></script>
+        <script src="./common/paper-full.min.js"></script>
+        <script src="./common/jquery-ui.min.js"></script>
+        <script src="./common/jquery.qtip.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./report/vendor/jquery.qtip.min.css">
+
+        <script src="./common/common.js"></script>       
+        <link rel="stylesheet" type="text/css" href="./common/css.css">
+
+        <script src="./report/values.js"></script>
+        <script src="./report/helpers.js"></script>
+        <script src="./report/page.js"></script>
+        <script src="./report/graph.js"></script>
+        <script src="./report/labels.js"></script>
+        <script src="./report/server.js"></script>
+        <link rel="stylesheet" type="text/css" href="./report/css.css">
+
+        <script src="./report/report_data.js"></script>
+        <script>
+            tremppi_common.data_path = "report/";
+            tremppi_common.server_address = "http://localhost:8080/";
+            onload = function() {
+                success: tremppi_report.Page.loadData(tremppi_report.Config);
+                tremppi_common.addServerContent(tremppi_editor.createServerButtons);
+            };
+        </script>
+        <title >empty title</title>
+    </head>
+    <body style="margin: 0; margin: 0% 5%" > 
+        <div class="title">tremppi_report</div>
+        <br />
+        <div class="decription"><span class="desc_title">Date:</span> <span class="desc_content" id="analysis_date">analysis_date</span></div>
+        <div class="decription"><span class="desc_title">Model:</span> <span class="desc_content" id="model_name">model_name</span></div>
+        <div class="decription"><span class="desc_title">Size:</span> <span class="desc_content" id="pool_size">pool_size</span></div>
+        <div class="decription"><span class="desc_title">Select:</span> <span class="desc_content" id="select_statement">select_statement</span></div>
+        <div class="decription"><span class="desc_title">Selected:</span> <span class="desc_content" id="selected">selected</span></div>
+        <div class="decription"><span class="desc_title">Compare:</span> <span class="desc_content" id="compare_statement">compare_statement</span></div>
+        <div class="decription"><span class="desc_title">Compared:</span> <span class="desc_content" id="compared">compared</span></div>
+        <br />
+        <div id="regulatory_analysis">
+            <div id="regulatory_caption" class="container">
+                <div id="reg_caption_select" class="my_block"  >
+                    <div class="reg_caption">a) selected</div>
+                </div>
+                <div id="reg_caption_differ" class="my_block" >
+                    <div class="reg_caption">b) difference</div>
+                </div>
+                <div id="reg_caption_compare" class="my_block" >
+                    <div class="reg_caption">c) compared</div>
+                </div>
+            </div>
+            <div id="regulatory_container" class="container">
+                <div id="reg_graph_select" class="my_block" ></div>
+                <div id="reg_graph_differ" class="my_block" ></div>
+                <div id="reg_graph_compare" class="my_block" ></div>
+            </div>
+            <div id="regulatory_labels" class="container">
+                <div id="reg_label_select" class="my_block" >
+                    <canvas id="reg_freq_select" class="legend" ></canvas>
+                </div>
+                <div id="reg_label_differ" class="my_block" >
+                    <canvas id="reg_freq_differ" class="legend" ></canvas>
+
+                </div>
+                <div id="reg_label_compare" class="my_block" >
+                    <canvas id="reg_freq_compare" class="legend" ></canvas>
+                </div>
+            </div>
+            <div class="controls" id="graph_controls">
+                <button id="relative_button" >Relative</button>
+            </div>
+            <div class="figure_desc" id="regulatory_description">
+                regulatory graph label
+            </div>
+            <div id="regulatory_dragger" style="display: block; text-align:center; background-color: black; color: white; font-style: italic" >
+                drag to resize
+            </div>
+        </div>
+    </body>
+</html>
