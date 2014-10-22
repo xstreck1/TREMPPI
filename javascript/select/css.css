@@ -1,0 +1,43 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16-Oct-2014, 14:34:41
+    Author     : adams_000
+*/
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+
+#table_holder {
+    overflow: auto;
+    width: 100%;
+    height: 400px;
+}
+
+#param_table {
+    margin: auto;
+}
+
+table.selections { 
+    border-collapse: collapse; 
+    border: 1px solid #CCB; 
+    width: 100%; 
+}
+
+table.selections th { 
+    background-color:  #E0E0E0; 
+}
+table.selections tr { 
+    height: 30px;
+}
+table.selections td { 
+    
+}

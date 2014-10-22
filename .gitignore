@@ -26,6 +26,7 @@ Win32*
 
 # IDEA
 *.idea
+*__pycache__
 
 # projects
 proj/*

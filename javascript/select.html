@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>        
+        <title>Tremmpi select</title>
+        <meta charset="UTF-8">
+        <script src="./common/jquery.min.js"></script>
+        <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
+        <script src="./common/editablegrid-2.0.1.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/common.js"></script>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
+
+        <link rel="stylesheet" type="text/css" href="select/css.css">
+        <script>
+            var tremppi_select = {metadata: {}};
+            tremppi_common.data_path = "select/";
+            tremppi_common.server_address = "http://localhost:8080/";
+
+            onload = function () {
+                tremppi_select.set_table();
+                tremppi_select.properties_init();
+                tremppi_common.addServerContent(tremppi_select.createServerButtons);
+            };
+        </script>
+        <script src="./select/param_table.js"></script>        
+        <script src="./select/selections.js"></script>       
+        <script src="./select/selection_init.js"></script>  
+        <script src="./select/selection_manipulation.js"></script>
+        <script src="./select/server.js"></script>
+    </head>
+    <body>
+        <div class="title">parametrization list and selector</div>
+        <br />
+        <div id="table_holder">
+            param table holder
+        </div>
+        <div class="subtitle" >selection</div>
+        <div id="selection_holder">
+            selection holder
+        </div>
+        <div class="controls" id="selection_controls">
+        </div>
+    </body>
+</html>

@@ -29,15 +29,6 @@ tremppi_editor.add = function() {
     tremppi_editor.createPropertyList();
 };
 
-// test is a row is not empty
-tremppi_editor.isEmpty = function(columns) {
-    for (var i = 0; i < columns.length; i++) {
-        if (columns[i] !== "")
-            return false;
-    }
-    return true;
-};
-
 // Called if the data change
 tremppi_editor.modelChanged = function(row_id, colum_id, old_val, new_val, row) {
     var type = this.name.split("_")[0];
@@ -48,9 +39,9 @@ tremppi_editor.modelChanged = function(row_id, colum_id, old_val, new_val, row) 
     if (type === "data") {
         var columns = this.data[row_id].columns;
         // If is not last and is empty
-        if (tremppi_editor.isEmpty(columns) && row_id !== (this.data.length - 1)) {
+        if (tremppi_common.isEmpty(columns) && row_id !== (this.data.length - 1)) {
             this.remove(row_id);
-        } else if (!tremppi_editor.isEmpty(columns) && row_id === (this.data.length - 1)) {
+        } else if (!tremppi_common.isEmpty(columns) && row_id === (this.data.length - 1)) {
             this.append(this.data.length, new Array(this.columns.length), true, true);
         }
     }
@@ -94,7 +85,7 @@ tremppi_editor.createPropertyList = function() {
         grids[i * 2 + 1].renderGrid("data_" + i, "testgrid");
         grids[i * 2 + 1].modelChanged = tremppi_editor.modelChanged;
         // Add empty row if the last is not empty (only on creation of the new one, must be present due to a EditGraph bug)
-        if (!tremppi_editor.isEmpty(grids[i * 2 + 1].data[grids[i * 2 + 1].data.length - 1].columns))
+        if (!tremppi_common.isEmpty(grids[i * 2 + 1].data[grids[i * 2 + 1].data.length - 1].columns))
             grids[i * 2 + 1].append(grids[i * 2 + 1].data.length, new Array(grids[i * 2 + 1].columns.lenght));
     }
 };

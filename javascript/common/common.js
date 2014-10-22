@@ -1,16 +1,17 @@
 var tremppi_common = {
     // Saves the variable to the respective file
-    save: function(var_name) {
+    save: function (var_name) {
         var content = "var " + var_name + " = " + JSON.stringify(window[var_name], null, '\t') + ";";
         var url = tremppi_common.server_address + "?" + tremppi_common.data_path + var_name + ".js";
         $.ajax({
             type: "POST",
             url: url,
             data: content,
-			success: function(res) {}
+            success: function (res) {
+            }
         });
     },
-    hasAllPositions: function(nodes) {
+    hasAllPositions: function (nodes) {
         for (var i = 0; i < nodes.length; i++) {
             if (!nodes[i].position)
                 return false;
@@ -20,16 +21,24 @@ var tremppi_common = {
         return true;
     },
     // Executes the provided function in the case the server is running
-    addServerContent: function(content_function) {
+    addServerContent: function (content_function) {
         $.ajax(
                 {url: tremppi_common.server_address,
-                    success: function(result) {
+                    success: function (result) {
                         content_function();
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Server not available");
                     }
                 }
         );
+    },
+    // test is a row is not empty
+    isEmpty: function (columns) {
+        for (var i = 0; i < columns.length; i++) {
+            if (columns[i] !== "")
+                return false;
+        }
+        return true;
     }
 };

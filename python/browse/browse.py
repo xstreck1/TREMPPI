@@ -1,40 +1,16 @@
 import webbrowser
-import re
 import sys
 import argparse
 import codecs
 from urllib.parse import urlparse
 from os import curdir, listdir, remove, chdir
 from os.path import splitext, dirname, join, abspath, exists
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from shutil import copyfile, rmtree
+from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler
+import base64
+import content_functions
 
 # Tremppi server that communicates between HTML reports and the filesystem
-class StoreHandler(BaseHTTPRequestHandler):
-    # return current files with the .html suffix
-    def get_files(self):
-        files = listdir(".")
-        files = [value for value in files if re.match("^((?!browse).)*html", value)]
-        print(files)
-        return "\n".join(files)
-
-    # obtain content files (standard browsing)
-    def provide_content(self, store_path):
-        file_name, file_extension = splitext(store_path)
-        file_extension = file_extension[1:]
-        if file_extension == "js":
-            mime_type = "text/javascript"
-        elif file_extension == "png":
-            mime_type = "image/png"
-        elif file_extension == "ico":
-            mime_type = "image/x-icon"
-            self.success_response(mime_type, codecs.open(store_path, encoding="base64").read())
-            return
-        else:
-            mime_type = "text/" + file_extension
-        with open(store_path) as fh:
-            self.success_response(mime_type, fh.read().encode())
-
+class StoreHandler(SimpleHTTPRequestHandler):
     def success_response(self, type, data):
         self.send_response(200)
         self.send_header('Content-type', type)
@@ -49,12 +25,11 @@ class StoreHandler(BaseHTTPRequestHandler):
             if parsed_path.path == "/":
                 self.success_response('text/plain', "tremmpi browse is running".encode())
             else:
-                store_path = "." + parsed_path.path
-                self.provide_content(store_path)
+                return SimpleHTTPRequestHandler.do_GET(self)
         else:
             # get list of HTML files in the topmost directory
             if parsed_path.query == "files":
-                self.success_response('text/plain', self.get_files().encode())
+                self.success_response('text/plain', content_functions.get_files().encode())
             # read content of a file under given url - used for loading models
             if parsed_path.query == "content":
                 store_path = join(curdir, parsed_path.query)
@@ -62,7 +37,14 @@ class StoreHandler(BaseHTTPRequestHandler):
                     self.success_response('text/js', fh.read().encode())
             # obtain columns of the database
             elif parsed_path.query == "columns":
-                self.success_response('text/plain', "obtain columns".encode())
+                if not exists('database.sqlite'): # send no content if the database is missing
+                    self.send_response(204)
+                else:
+                    self.success_response('text/plain', content_functions.get_columns_names().encode())
+            # obtain database rows
+            elif parsed_path.query == "rows":
+                self.success_response('text/plain', content_functions.get_rows().encode())
+
 
 
     # respond to the post request

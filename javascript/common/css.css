@@ -2,12 +2,14 @@ div.title {
     font-family: serif; 
     font-size: 30pt; 
     text-align: center; 
+    text-transform: uppercase;
 }
 
 div.subtitle {
     font-family: serif; 
     font-size: 20pt; 
     text-align: center; 
+    text-transform: uppercase;
 }
 
 div.help { 
@@ -16,4 +18,13 @@ div.help {
     font-size: 14pt; 
     font-style: italic; 
     padding: 5pt;
+}
+
+div.controls { 
+    text-align: center; 
+    padding: 5pt;
+}
+
+button {
+    font-size: 14pt; 
 }
