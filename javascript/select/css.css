@@ -19,10 +19,9 @@ th, td {
 #table_holder {
     overflow: auto;
     width: 100%;
-    height: 400px;
 }
 
-#param_table {
+#Select_table, #Compare_table {
     margin: auto;
 }
 

@@ -36,7 +36,7 @@ var tremppi_common = {
     // test is a row is not empty
     isEmpty: function (columns) {
         for (var i = 0; i < columns.length; i++) {
-            if (columns[i] !== "")
+            if (columns[i] !== "" && columns[i] !== false)
                 return false;
         }
         return true;

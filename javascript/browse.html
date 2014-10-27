@@ -36,7 +36,7 @@ and open the template in the editor.
                                 $("#files").empty();
                                 if (!result)
                                     return;
-                                var res = result.split("\n");
+                                var res = result.split(",");
                                 for (var i = 0; i < res.length; i++) {
                                     res[i] = res[i].slice(0, -5);
                                     $("#files").append(

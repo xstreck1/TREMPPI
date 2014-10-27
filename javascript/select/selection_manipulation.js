@@ -1,12 +1,32 @@
 tremppi_select.loadSelections = function () {
     $("#selection_holder").empty();
     var selections_grid = new EditableGrid("selections");
+    
+    if (selections.length === 0) {
+        selections = [{
+            id: 0,
+            values: {
+                Name: "",
+                Selection: "",
+                Select: false,
+                Compare: false
+            }
+        }];
+    }
+
     selections_grid.load({"metadata": tremppi_select.metadata["selections"], "data": selections});
     selections_grid.renderGrid("selection_holder", "selections");
     selections_grid.modelChanged = tremppi_select.selectionChanged;
-    
-    if (!tremppi_common.isEmpty(selections_grid.data[selections_grid.data.length - 1].columns))
-        selections_grid.append(selections_grid.data.length, new Array(selections_grid.columns.lenght));
+
+    if (selections_grid.data.length === 0 || !tremppi_common.isEmpty(selections_grid.data[selections_grid.data.length - 1].columns))
+        selections_grid.append(selections_grid.data.length, {
+            values: {
+                Name: "",
+                Selection: "",
+                Select: false,
+                Compare: false
+            }
+        });
 };
 
 // Called if the data change
@@ -24,7 +44,8 @@ tremppi_select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
         this.append(this.data.length, new Array(this.columns.length), true, true);
 
     // Store the data
-    var row_count = this.data.length;;
+    var row_count = this.data.length;
+    ;
     selections = new Array(row_count);
     for (var row_i = 0; row_i < row_count; row_i++) {
         selections[row_i] = {};

@@ -1,12 +1,10 @@
 import webbrowser
 import sys
 import argparse
-import codecs
-from urllib.parse import urlparse
-from os import curdir, listdir, remove, chdir
-from os.path import splitext, dirname, join, abspath, exists
-from http.server import BaseHTTPRequestHandler, HTTPServer, SimpleHTTPRequestHandler
-import base64
+from urllib.parse import urlparse, parse_qs
+from os import curdir, chdir
+from os.path import dirname, join, abspath, exists
+from http.server import  HTTPServer, SimpleHTTPRequestHandler
 import content_functions
 
 # Tremppi server that communicates between HTML reports and the filesystem
@@ -27,23 +25,29 @@ class StoreHandler(SimpleHTTPRequestHandler):
             else:
                 return SimpleHTTPRequestHandler.do_GET(self)
         else:
+            query = parse_qs(parsed_path.query)
+            command = query["command"][0]
             # get list of HTML files in the topmost directory
-            if parsed_path.query == "files":
+            if command == "files":
                 self.success_response('text/plain', content_functions.get_files().encode())
             # read content of a file under given url - used for loading models
-            if parsed_path.query == "content":
+            if command == "content":
                 store_path = join(curdir, parsed_path.query)
                 with open(store_path) as fh:
                     self.success_response('text/js', fh.read().encode())
             # obtain columns of the database
-            elif parsed_path.query == "columns":
+
+            elif command == "database":
                 if not exists('database.sqlite'): # send no content if the database is missing
                     self.send_response(204)
                 else:
-                    self.success_response('text/plain', content_functions.get_columns_names().encode())
-            # obtain database rows
-            elif parsed_path.query == "rows":
-                self.success_response('text/plain', content_functions.get_rows().encode())
+                    self.success_response('text/plain', "database is present".encode())
+            elif command == "columns":
+                self.success_response('text/plain', content_functions.get_columns_names(query).encode())
+            elif command == "rows":
+                self.success_response('text/plain', content_functions.get_rows(query).encode())
+            elif command == "counts":
+                self.success_response('text/plain', content_functions.get_counts(query).encode())
 
 
 
@@ -73,5 +77,5 @@ EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 # start the server and open the webpage
 chdir(DEST_PATH)
 server = HTTPServer(('', 8080), StoreHandler)
-webbrowser.open("http://localhost:8080/browse.html")
+# webbrowser.open("http://localhost:8080/browse.html")
 server.serve_forever()
