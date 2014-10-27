@@ -31,7 +31,7 @@ and open the template in the editor.
 
             var readFiles = function() {
                 $.ajax(
-                        {url: tremppi_common.server_address + "?files",
+                        {url: tremppi_common.server_address + "?command=files",
                             success: function(result) {
                                 $("#files").empty();
                                 if (!result)

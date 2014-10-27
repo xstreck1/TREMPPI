@@ -18,6 +18,7 @@ tremppi_report.Graph = {
             return function(evt) {
                 for (var i = 0; i < config.types.length; i++) {
                     cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
+                    tremppi_common.save("report_data");
                 }
             };
         };

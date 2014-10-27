@@ -30,7 +30,13 @@ tremppi_editor.elementChanged = function(row_id, column_id, old_val, new_val, ro
     var element = tremppi_editor.graph.$("#" + tremppi_editor.current_selection.id);
     var val_name = tremppi_editor.metadata[tremppi_editor.current_selection.type][column_id].name;
     element.data(val_name, new_val);
+    tremppi_editor.saveGraph();
 };
+
+tremppi_editor.saveGraph = function() {
+    elements = tremppi_editor.graph.json().elements;
+    tremppi_common.save("elements");
+}
 
 tremppi_editor.setSelectionScheme = function() {
     $("#graph_panel").html("");
@@ -56,6 +62,7 @@ tremppi_editor.tapFunction = function(event) {
                 position: event.cyPosition
             };
             var new_node = tremppi_editor.graph.add(new_node);
+            tremppi_editor.saveGraph();
             tremppi_editor.current_selection.type = "node";
             tremppi_editor.current_selection.id = new_node.id();
             tremppi_editor.setButtonControl();
@@ -71,6 +78,7 @@ tremppi_editor.tapFunction = function(event) {
         // delete edge
         if (tremppi_editor.activity_type === "delete") {
             tremppi_editor.graph.remove(tremppi_editor.graph.$("#" + event.cyTarget.id()));
+            tremppi_editor.saveGraph();
             tremppi_editor.setButtonControl();
             tremppi_editor.current_selection.type = "";
             tremppi_editor.current_selection.id = "";
@@ -100,12 +108,14 @@ tremppi_editor.tapFunction = function(event) {
                     Threshold: 1,
                     Label: "tt"}
             });
+            tremppi_editor.saveGraph();
             tremppi_editor.activity_type = "selection";
             tremppi_editor.setButtonControl();
         }
         // delete node
         if (tremppi_editor.activity_type === "delete") {
             tremppi_editor.graph.remove(tremppi_editor.graph.$("#" + event.cyTarget.id()));
+            tremppi_editor.saveGraph();
             tremppi_editor.setButtonControl();
             tremppi_editor.current_selection.type = "";
             tremppi_editor.current_selection.id = "";

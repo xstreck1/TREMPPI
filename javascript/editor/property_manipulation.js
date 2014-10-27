@@ -58,6 +58,8 @@ tremppi_editor.modelChanged = function(row_id, colum_id, old_val, new_val, row) 
             properties[index][type][row_i].values[column_name] = this.data[row_i].columns[column_i];
         }
     }
+    
+    tremppi_common.save("properties");
 };
 
 tremppi_editor.createPropertyList = function() {

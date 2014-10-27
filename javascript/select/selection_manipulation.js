@@ -45,7 +45,7 @@ tremppi_select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
 
     // Store the data
     var row_count = this.data.length;
-    ;
+
     selections = new Array(row_count);
     for (var row_i = 0; row_i < row_count; row_i++) {
         selections[row_i] = {};
@@ -56,4 +56,7 @@ tremppi_select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
             selections[row_i].values[column_name] = this.data[row_i].columns[column_i];
         }
     }
+    
+    
+    tremppi_common.save("selections");
 };
