@@ -67,9 +67,8 @@ tremppi_editor.tapFunction = function(event) {
             };
             var new_node = tremppi_editor.graph.add(new_node);
             tremppi_editor.saveGraph();
-            tremppi_editor.current_selection.type = "node";
-            tremppi_editor.current_selection.id = new_node.id();
-            tremppi_editor.setButtonControl();
+            tremppi_editor.current_selection.type = "";
+            tremppi_editor.current_selection.id = "";
         }
         // Deselect
         else {
@@ -77,13 +76,11 @@ tremppi_editor.tapFunction = function(event) {
             tremppi_editor.current_selection.id = "";
             tremppi_editor.setButtonControl();
         }
-        tremppi_editor.activity_type = "selection";
     } else if (event.cyTarget.isEdge()) {
         // delete edge
         if (tremppi_editor.activity_type === "delete") {
             tremppi_editor.graph.remove(tremppi_editor.graph.$("#" + event.cyTarget.id()));
             tremppi_editor.saveGraph();
-            tremppi_editor.setButtonControl();
             tremppi_editor.current_selection.type = "";
             tremppi_editor.current_selection.id = "";
         }
@@ -113,14 +110,11 @@ tremppi_editor.tapFunction = function(event) {
                     Label: "tt"}
             });
             tremppi_editor.saveGraph();
-            tremppi_editor.activity_type = "selection";
-            tremppi_editor.setButtonControl();
         }
         // delete node
         if (tremppi_editor.activity_type === "delete") {
             tremppi_editor.graph.remove(tremppi_editor.graph.$("#" + event.cyTarget.id()));
             tremppi_editor.saveGraph();
-            tremppi_editor.setButtonControl();
             tremppi_editor.current_selection.type = "";
             tremppi_editor.current_selection.id = "";
         }
