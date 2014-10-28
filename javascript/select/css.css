@@ -16,6 +16,10 @@ th, td {
     padding: 5px;
 }
 
+th.header {
+    background-color:  #E0E0E0; 
+}
+
 #table_holder {
     overflow: auto;
     width: 100%;
@@ -37,6 +41,7 @@ table.selections th {
 table.selections tr { 
     height: 30px;
 }
+
 table.selections td { 
     
 }

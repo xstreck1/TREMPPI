@@ -13,14 +13,14 @@
 
         <link rel="stylesheet" type="text/css" href="select/css.css">
         <script>
-            var tremppi_select = {metadata: {}, table_rows : 10};
+            var tremppi_select = {metadata: {}, row_count : 5};
             tremppi_common.data_path = "select/";
             tremppi_common.server_address = "http://localhost:8080/";
 
             onload = function () {
-                tremppi_select.set_table();
+                tremppi_common.addServerContent(tremppi_select.set_table);
                 tremppi_select.properties_init();
-                tremppi_common.addServerContent(tremppi_select.createServerButtons);
+                tremppi_common.addServerContent(tremppi_select.createControls);
             };
         </script>
         <script src="./select/param_table.js"></script>        
@@ -29,18 +29,25 @@
         <script src="./select/selection_manipulation.js"></script>
         <script src="./select/server.js"></script>
     </head>
-    <body>
+    <body class="interface">
         <div class="title">parametrization list and selector</div>
-        <br />
+            
         <div id="table_holder">
-            param table holder
+            lists of selected and compared parametrizations, available only with server
         </div>
-        <br />
-        <div class="subtitle" >selection</div>
+        <br/>
         <div id="selection_holder">
             selection holder
         </div>
-        <div class="controls" id="selection_controls">
+        <div id="selection_desc" class="figure_desc">
+            The above table contains possible conditions for execution of additional tools, in case they have the select and/or compare functionality. 
+            Effect of chosen selections can be viewed in the tables above.
+            The WHERE field describes the condition that must be met for a row to be selected. 
+            The condition may consist of atoms built using any of {<, <=, >, >=, =, !=}, logical connectives {AND, OR, NOT} and braces.
+        </div>
+        <div id="control_pad"></div>
+        <div id="control_panel">
+            SERVER IS NOT AVAILABLE! ANY CHANGES TO THIS DOCUMENT WILL NOT BE SAVED
         </div>
     </body>
 </html>

@@ -4,7 +4,6 @@ from os.path import join
 from os import listdir
 import json
 
-ROW_COUNT = 10 # How many rows are fetched
 SELECTION_FILE = "select/selections.js"
 
 def get_columns_names(arguments):
@@ -23,7 +22,7 @@ def read_conditions(arguments):
         data = selectionFile.read()
         data = js_to_json(data)
         selections = json.loads(data)
-        select_term = ""
+        select_term = "1 AND"
         for selection in selections:
             if selection["values"][arguments["pick"][0]]:
                 select_term += "(" + str(selection["values"]["Selection"]) + ") AND "
@@ -39,7 +38,7 @@ def get_rows(arguments):
     data = ""
     for row in cursor:
         row_no += 1
-        if row_no > ROW_COUNT:
+        if row_no > int(arguments["count"][0]):
             break
         for val in row:
             data += str(val) + ","
@@ -51,12 +50,9 @@ def get_counts(arguments):
     conditions = read_conditions(arguments)
     counts = []
     for column in columns.split(","):
-        if not conditions:
-            counts.append("0")
-        else:
-            conn = sqlite3.connect('database.sqlite')
-            cursor = conn.execute('SELECT COUNT(*) FROM Parametrizations WHERE ' + column + ' IS NOT NULL' + ' AND ' + conditions)
-            counts.append(str(cursor.fetchone()[0]))
+        conn = sqlite3.connect('database.sqlite')
+        cursor = conn.execute('SELECT COUNT(*) FROM Parametrizations WHERE ' + column + ' IS NOT NULL' + ' AND ' + conditions)
+        counts.append(str(cursor.fetchone()[0]))
     return ",".join(counts)
 
 # return current files with the .html suffix

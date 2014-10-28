@@ -20,7 +20,7 @@ tremppi_select.set_table = function () {
     // Adds data to the tables
     var set_rows = function (type) {
         $.ajax({
-            url: tremppi_common.server_address + "?command=rows&pick=" + type,
+            url: tremppi_common.server_address + "?command=rows&pick=" + type + "&count=" + tremppi_select.row_count,
             success: function (result) {
                 if (result !== "") {
                     var rows = result.split("\n");
@@ -48,7 +48,7 @@ tremppi_select.set_table = function () {
             url: tremppi_common.server_address + "?command=columns&pick=" + type,
             success: function (result) {
                 var col_names = result.split(",");
-                var table_content = '<tr><th colspan="' + (col_names.length + 1) + '">' + type + "</th></tr>";
+                var table_content = '<tr ><th class="header" colspan="' + (col_names.length + 1) + '">' + type + "</th></tr>";
                 table_content += "<tr><th></th>";
 
                 for (var i = 0; i < col_names.length; i++)
