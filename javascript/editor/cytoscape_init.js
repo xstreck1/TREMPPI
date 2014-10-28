@@ -27,7 +27,7 @@ tremppi_editor.cytoscape_init = function() { // on dom ready
                     'target-arrow-color': selected_col
                 }),
         layout: {
-            name: tremppi_common.hasAllPositions(elements.nodes) ? 'preset' : 'grid',
+            name: tremppi_common.hasAllPositions(elements.nodes) ? 'preset' : 'grid'
         },
         elements: elements,
         ready: function() {

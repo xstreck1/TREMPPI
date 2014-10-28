@@ -26,7 +26,7 @@
             tremppi_common.server_address = "http://localhost:8080/";
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
-                tremppi_common.addServerContent(tremppi_report.createServerButtons);
+                tremppi_common.addServerContent(tremppi_report.createControls);
             };
         </script>
         <title >empty title</title>
@@ -80,6 +80,10 @@
             <div id="regulatory_dragger" style="display: block; text-align:center; background-color: black; color: white; font-style: italic" >
                 drag to resize
             </div>
+        </div>
+        <div id="control_pad"></div>
+        <div id="control_panel">
+            SERVER IS NOT AVAILABLE! ANY CHANGES TO THIS DOCUMENT WILL NOT BE SAVED
         </div>
     </body>
 </html>

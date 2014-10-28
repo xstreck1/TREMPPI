@@ -7,6 +7,8 @@ div.title {
     top: 0px; left: 0pt;
     position: fixed;
     width: 100%;
+    z-index: 1;
+    padding: 2pt;
 }
 
 div.subtitle {
@@ -35,6 +37,7 @@ div.help {
     padding: 4pt;
     font-family: monospace;
     font-size: 16pt; 
+    z-index: 1;
 }
 
 div.controls { 
@@ -52,5 +55,5 @@ button {
 }
 
 body.interface {
-    margin: 32pt 5pt 0pt 5pt;
+    margin: 40pt 5pt 0pt 5pt;
 }

@@ -13,12 +13,8 @@ canvas.legend {
 }
 
 div.decription { 
-    font-size: 20pt; 
+    font-size: 16pt; 
     font-family:monospace 
-}
-
-div.figure_desc { 
-    font-style:italic;  
 }
 
 div.reg_caption {

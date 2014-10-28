@@ -35,8 +35,12 @@ tremppi_editor.elementChanged = function(row_id, column_id, old_val, new_val, ro
 
 tremppi_editor.saveGraph = function() {
     elements = tremppi_editor.graph.json().elements;
+    if (tremppi_editor.graph.elements("node").length === 0)
+        elements.nodes = [];
+    if (tremppi_editor.graph.elements("edge").length === 0)
+        elements.edges = [];
     tremppi_common.save("elements");
-}
+};
 
 tremppi_editor.setSelectionScheme = function() {
     $("#graph_panel").html("");

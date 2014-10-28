@@ -12,6 +12,8 @@ var tremppi_common = {
         });
     },
     hasAllPositions: function (nodes) {
+        if (typeof nodes === 'undefined')
+            return true;
         for (var i = 0; i < nodes.length; i++) {
             if (!nodes[i].position)
                 return false;
