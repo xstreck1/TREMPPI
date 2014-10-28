@@ -1,13 +1,14 @@
 import sqlite3
 import re
-from os.path import join
+from os.path import exists
 from os import listdir
 import json
 
+DATABASE_FILE = "database.sqlite"
 SELECTION_FILE = "select/selections.js"
 
 def get_columns_names(arguments):
-    conn = sqlite3.connect('database.sqlite')
+    conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.execute('select * from Parametrizations')
     names = list(map(lambda x: x[0], cursor.description))
     return "rowid," + ",".join(names)
@@ -32,7 +33,7 @@ def get_rows(arguments):
     conditions = read_conditions(arguments)
     if not conditions:
         return ""
-    conn = sqlite3.connect('database.sqlite')
+    conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.execute('SELECT rowid,* FROM Parametrizations WHERE ' + conditions)
     row_no = 0
     data = ""
@@ -50,14 +51,17 @@ def get_counts(arguments):
     conditions = read_conditions(arguments)
     counts = []
     for column in columns.split(","):
-        conn = sqlite3.connect('database.sqlite')
+        conn = sqlite3.connect(DATABASE_FILE)
         cursor = conn.execute('SELECT COUNT(*) FROM Parametrizations WHERE ' + column + ' IS NOT NULL' + ' AND ' + conditions)
         counts.append(str(cursor.fetchone()[0]))
     return ",".join(counts)
 
 # return current files with the .html suffix
 def get_files():
-    files = listdir(".")
-    files = [value for value in files if re.match("^((?!browse).)*html", value)]
-    print(files)
-    return ",".join(files)
+    if exists(DATABASE_FILE):
+        files = listdir(".")
+        files = [value for value in files if re.match("^((?!browse).)*html", value)]
+        print(files)
+        return ",".join(files)
+    else:
+        return "editor.html"

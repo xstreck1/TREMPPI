@@ -785,8 +785,8 @@ var report_data = {
 							"name": "Tsc"
 						},
 						"position": {
-							"x": 68.25,
-							"y": 362.25
+							"x": 66.833984375,
+							"y": 364.3740234375
 						},
 						"group": "nodes",
 						"removed": false,

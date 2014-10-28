@@ -1,1 +1,4 @@
-var elements = {};
+var elements = {
+	"nodes": [],
+	"edges": []
+};

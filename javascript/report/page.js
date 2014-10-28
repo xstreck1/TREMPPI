@@ -23,9 +23,9 @@ tremppi_report.Page = {
         var bg_color = '#888888';
         tremppi_report.Helpers.assignPositions(config, "reg", "graph");
         tremppi_report.Helpers.deactivateUnused(config, "reg", "graph");
-        $('#regulatory_container').css('padding-bottom', '50%');
+        $('#regulatory_container').css('padding-bottom', '30%');
         for (var i = 0; i < config.types.length; i++) {
-            $('#reg_graph_' + config.types[i]).css('border-style', 'solid').css('border-width', '1').css('background-color', bg_color).css('padding-left', '1');
+            $('#reg_graph_' + config.types[i]).css('background-color', bg_color);
         }
 
         // compute and display lables
@@ -43,14 +43,13 @@ tremppi_report.Page = {
         // display captions
         tremppi_report.Helpers.assignPositions(config, "reg", "caption");
         tremppi_report.Helpers.deactivateUnused(config, "reg", "caption");
-        $('#regulatory_caption').css('padding-bottom', '40px');
 
         // Create the control buttons functions
         $("#relative_button").click(function() {
             tremppi_report.Regulatory.relative = !tremppi_report.Regulatory.relative;
             tremppi_report.Graph.labelSwitch(config, tremppi_report.Regulatory.relative);
             tremppi_report.Labels.loadLabels(config, tremppi_report.Regulatory.relative);
-            this.innerHTML = tremppi_report.Regulatory.relative ? "Absolute" : "Relative";
+            this.innerHTML = tremppi_report.Regulatory.relative ? "absolute" : "relative";
         });
         var resizeViews = function(change) {
             var height = $('#regulatory_container').css('padding-bottom');
