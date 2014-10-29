@@ -37,7 +37,7 @@ var report_data = {
 							"name": "Erk"
 						},
 						"position": {
-							"x": 205.5,
+							"x": 209.64637415665072,
 							"y": 51.75
 						},
 						"group": "nodes",

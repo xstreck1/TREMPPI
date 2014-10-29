@@ -84,4 +84,8 @@ tremppi_editor.cytoscape_init = function() { // on dom ready
         "(-&!+)|(+&!-)": "Monotone Observable",
         "tt": "Free"
     };
+    
+    tremppi_editor.metadata.graph = [];
+    tremppi_editor.metadata.graph.push({name: "Nodes", label: "NODES", datatype: "integer", editable: true});
+    tremppi_editor.metadata.graph.push({name: "Edges", label: "EDGES", datatype: "integer", editable: true});
 };

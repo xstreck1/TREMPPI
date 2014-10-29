@@ -7,19 +7,19 @@ tremppi_editor.getByID = function(type, id) {
 };
 
 tremppi_editor.setHelp = function(text) {
-    $("#graph_panel").html("");
-    $("#graph_panel").append('<div id="graph_help" class="help">' + text + '</div>');
+    $("#control_panel").html("");
+    $("#control_panel").append('<div id="graph_help" class="help">' + text + '</div>');
 };
 
 tremppi_editor.setButtonControl = function() {
-    $("#graph_panel").html("");
-    $("#graph_panel").append('<div id="graph_control" class="controls"></div>');
-    $("#graph_control").append('<button id="create">Create</button>');
+    $("#control_panel").html("");
+    $("#control_panel").append('<div id="graph_control" ></div>');
+    $("#graph_control").append('<button id="create">Create</button> ELEMENT / ');
     $("#create").click(function(event) {
         tremppi_editor.activity_type = "create";
         tremppi_editor.setHelp("Click on empty space to create a COMPONENT. Click on a component to put a source of a REGULATION.");
     });
-    $("#graph_control").append('<button id="delete">Delete</button>');
+    $("#graph_control").append('<button id="delete">Delete</button> ELEMENTS');
     $("#delete").click(function(event) {
         tremppi_editor.activity_type = "delete";
         tremppi_editor.setHelp("Click on a COMPONENT or a REGULATION to delele it.");
@@ -43,12 +43,16 @@ tremppi_editor.saveGraph = function() {
 };
 
 tremppi_editor.setSelectionScheme = function() {
-    $("#graph_panel").html("");
-    var element = tremppi_editor.graph.$("#" + tremppi_editor.current_selection.id);
-    var data = [{id: "0", values: element.data()}];
+    $("#graph_selection").html("");
+    if (tremppi_editor.current_selection.type === "graph") {
+        var data = [{id: "0", values: { Edges: tremppi_editor.graph.edges.length, Nodes: tremppi_editor.graph.nodes.length } }];
+    } else {
+        var element = tremppi_editor.graph.$("#" + tremppi_editor.current_selection.id);
+        var data = [{id: "0", values: element.data()}];
+    }
     var selection = new EditableGrid("selection_" + tremppi_editor.current_selection.id);
     selection.load({"metadata": tremppi_editor.metadata[tremppi_editor.current_selection.type], "data": data});
-    selection.renderGrid("graph_panel", "testgrid");
+    selection.renderGrid("graph_selection", "selection");
     selection.modelChanged = tremppi_editor.elementChanged;
 };
 
@@ -66,16 +70,19 @@ tremppi_editor.tapFunction = function(event) {
                 position: event.cyPosition
             };
             var new_node = tremppi_editor.graph.add(new_node);
+            tremppi_editor.graph.$("#" + new_node.id()).select();
             tremppi_editor.saveGraph();
-            tremppi_editor.current_selection.type = "";
-            tremppi_editor.current_selection.id = "";
+            tremppi_editor.current_selection.type = "node";
+            tremppi_editor.current_selection.id = new_node.id();
         }
         // Deselect
         else {
-            tremppi_editor.current_selection.type = "";
+            tremppi_editor.current_selection.type = "graph";
             tremppi_editor.current_selection.id = "";
-            tremppi_editor.setButtonControl();
         }
+        tremppi_editor.activity_type = "selection";
+        tremppi_editor.setButtonControl();
+        tremppi_editor.setSelectionScheme();
     } else if (event.cyTarget.isEdge()) {
         // delete edge
         if (tremppi_editor.activity_type === "delete") {
@@ -110,6 +117,7 @@ tremppi_editor.tapFunction = function(event) {
                     Label: "tt"}
             });
             tremppi_editor.saveGraph();
+            tremppi_editor.setButtonControl();
         }
         // delete node
         if (tremppi_editor.activity_type === "delete") {
