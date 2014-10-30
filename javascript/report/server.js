@@ -1,3 +1,3 @@
 tremppi_report.createControls = function () {
-    $("#control_pad").height($("#control_panel").height() + 10);
+    $("#control_pad").height($("#control_panel").height() + 15);
 };

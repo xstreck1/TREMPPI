@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
         <script src="./common/editablegrid-2.0.1.js"></script>
         <script src="./common/jquery.min.js"></script>
-        <script src="./common/cytoscape.min.js"></script>
+        <script src="./common/cytoscape.js"></script>
 
         <link rel="stylesheet" type="text/css" href="./common/css.css">
         <script src="./common/common.js"></script>
@@ -12,9 +12,9 @@
 
         <script>
             tremppi_editor = {metadata: {}, model_name: "dummy_model_name"};
-            tremppi_common.data_path = "editor/";  
+            tremppi_common.data_path = "editor/";
             tremppi_common.server_address = "http://localhost:8080/";
-            $(window).ready(function() {
+            $(window).ready(function () {
                 tremppi_editor.cytoscape_init();
                 tremppi_common.addServerContent(tremppi_editor.createControls);
             });
@@ -22,7 +22,7 @@
 
         <link rel="stylesheet" type="text/css" href="editor/css.css">
         <script src="./editor/graph_manipulation.js"></script>
-        <script src="./editor/cytoscape_init.js"></script>
+        <script src="./editor/graph_init.js"></script>
         <script src="./editor/server.js"></script>
 
         <script src="./editor/elements.js"></script>
@@ -30,12 +30,13 @@
         <title>TREMPPI network editor</title>
     </head>
     <body class="interface"> 
-        <div class="title" >
+        <div class="title" id="title" >
             <script type="text/javascript">document.write(tremppi_editor.model_name);</script> network 
         </div>
         <div id="graph_object" >
         </div>
         <div id="graph_selection">
+            selection
         </div>
         <div id="control_pad"></div>
         <div id="control_panel">
