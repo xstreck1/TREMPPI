@@ -13,7 +13,8 @@ tremppi_properties.add = function () {
                 "values": {
                     "Name": "property_" + properties.length,
                     "Type": "TimeSeries",
-                    "Experiment": ""
+                    "Experiment": "",
+                    "Verify": "true"
                 }
             }
         ],

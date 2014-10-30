@@ -12,7 +12,7 @@ var selections = [
 		"values": {
 			"Selection": "C_test=2",
 			"Select": false,
-			"Compare": true
+			"Compare": false
 		}
 	},
 	{

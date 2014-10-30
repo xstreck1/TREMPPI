@@ -4,9 +4,10 @@ var properties = [
 			{
 				"id": 0,
 				"values": {
-					"Name": "asdf",
+					"Name": "sds",
 					"Type": "TimeSeries",
-					"Experiment": ""
+					"Experiment": "true",
+					"Verify": true
 				}
 			}
 		],

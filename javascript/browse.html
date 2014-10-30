@@ -24,6 +24,7 @@ and open the template in the editor.
             var sourceSetter = function(name) {
                 return function() {
                     $("#frame").attr("src", name + ".html");
+                    $("#frame").reload();
                 };
             };
 
