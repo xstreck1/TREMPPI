@@ -30,6 +30,8 @@ tremppi_editor.setControl = function () {
     } else if (tremppi_editor.activity_type === "end_regulation") {
         setHelp("Click on a component to put a target of a REGULATION.");
     }
+    
+    $("#control_pad").height(($("#control_panel").height() + 20) + "px");
 };
 
 tremppi_editor.elementChanged = function (row_id, column_id, old_val, new_val, row) {

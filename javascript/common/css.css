@@ -38,6 +38,7 @@ div.help {
     font-family: monospace;
     font-size: 16pt; 
     z-index: 1;
+    text-align: center;
 }
 
 div.controls { 

@@ -19,8 +19,8 @@ td {
     border-width: 1px; 
 }
 
-table.testgrid { border-collapse: collapse; border: 1px solid #CCB; width: 100%; }
-table.testgrid td, table.testgrid th { padding: 5px; border: 1px solid #E0E0E0; }
-table.testgrid tr { height: 25px; }
-table.testgrid th { background: #E5E5E5; text-align: left; }
+table.property { border-collapse: collapse; border: 1px solid #CCB; width: 100%; }
+table.property td, table.property th { padding: 5px; border: 1px solid #E0E0E0; }
+table.property tr { height: 25px; }
+table.property th { background: #E5E5E5; text-align: left; }
 input.invalid { background: red; color: #FDFDFD; }

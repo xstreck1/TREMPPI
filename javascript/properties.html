@@ -11,35 +11,29 @@
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
         <script>
-            tremppi_editor = {metadata: {}};
+            tremppi_properties = {metadata: {}};
             tremppi_common.data_path = "properties/";  
             tremppi_common.server_address = "http://localhost:8080/";
             $(window).ready(function() {
-                tremppi_editor.properties_init();
-                tremppi_common.addServerContent(tremppi_editor.createServerButtons);
+                tremppi_properties.properties_init();
+                tremppi_common.addServerContent(tremppi_properties.createControls);
             });
         </script>
 
-        <link rel="stylesheet" type="text/css" href="editor/css.css">
-        <script src="./editor/graph_manipulation.js"></script>
-        <script src="./editor/property_manipulation.js"></script>
-        <script src="./editor/cytoscape_init.js"></script>
-        <script src="./editor/properties_init.js"></script>
-        <script src="./editor/server.js"></script>
+        <link rel="stylesheet" type="text/css" href="properties/css.css">
+        <script src="./properties/property_manipulation.js"></script>
+        <script src="./properties/properties_init.js"></script>
+        <script src="./properties/server.js"></script>
 
-        <script src="./editor/elements.js"></script>
-        <script src="./editor/properties.js"></script>
+        <script src="./properties/properties.js"></script>
         <meta charset=utf-8 />
-        <title>TREMPPI network editor</title>
+        <title>TREMPPI properties</title>
     </head>
     <body class="interface"> 
         <div class="title" >
             Model checking properties 
         </div>
         <div id="properties_container">
-        </div>
-        <div class="controls" id="properties_controls">
-            <button onclick='tremppi_editor.add()'>New property</button>
         </div>
         <div id="control_pad"></div>
         <div id="control_panel">

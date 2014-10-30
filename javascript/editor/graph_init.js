@@ -1,4 +1,4 @@
-tremppi_editor.cytoscape_init = function() { // on dom ready
+tremppi_editor.graph_init = function() { // on dom ready
     var selected_col = '#5555BB';
 
     $('#graph_object').cytoscape({
@@ -86,10 +86,4 @@ tremppi_editor.cytoscape_init = function() { // on dom ready
     tremppi_editor.metadata.graph = [];
     tremppi_editor.metadata.graph.push({name: "Nodes", label: "NODES", datatype: "integer", editable: false});
     tremppi_editor.metadata.graph.push({name: "Edges", label: "EDGES", datatype: "integer", editable: false});
-
-        
-
-    // Set the control scheme
-    tremppi_editor.setSelectionScheme();
-    tremppi_editor.setControl();
 };
