@@ -145,10 +145,10 @@ namespace Output {
 	//
 	void copyReport(const bfs::path & report_path) {
 		// Copy the data from "home/javascript/report"
-		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" } / bfs::path{ "report" }, report_path);
+		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" }, report_path);
 		bfs::path report_html = report_path;
 		report_html.replace_extension("html");
-		bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" } / bfs::path{ "report.html" }, report_html);
+		bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report.html" }, report_html);
 		FileManipulation::replaceInFile(report_html, "report/", report_path.stem().string() + "/");
 	}
 

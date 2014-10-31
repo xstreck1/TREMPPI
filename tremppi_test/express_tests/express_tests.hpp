@@ -10,7 +10,7 @@ int basic_express_test() {
 	const int argc = 3;
 	char * argv[argc];
 
-	bfs::path example_model_path(bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "proj" / "test"));
+	bfs::path example_model_path(bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj"));
 	argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];
 	strcpy(argv[0], tremppi_system.BIN_PATH.string().c_str());
 	argv[1] = new char[7];

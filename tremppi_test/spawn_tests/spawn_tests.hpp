@@ -35,7 +35,7 @@ int basic_spawn_test() {
 	const int argc = 3;
 	char * argv[argc];
 
-	bfs::path example_model_path(bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "proj" / "test"));
+	bfs::path example_model_path(bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj"));
 	createModel(example_model_path);
 
 	argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];

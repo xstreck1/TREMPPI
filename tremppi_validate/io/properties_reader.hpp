@@ -15,6 +15,14 @@ namespace PropertiesReader {
 		for (const Json::Value & property : root) {
 			PropertyAutomaton automaton;
 
+			// Skip those that are not in use
+			if (!property["desc"][0]["values"]["Verify"].asBool())
+				continue;
+
+			automaton.name = property["desc"][0]["values"]["Name"].asString();
+			automaton.prop_type = property["desc"][0]["values"]["Type"].asString();
+			automaton.experiment = property["desc"][0]["values"]["Experiment"].asString();
+
 			StateID ID = 0;
 			for (const Json::Value & measurement : property["data"]) {
 				string constraint = measurement["values"]["Measurement"].asString();
@@ -24,9 +32,6 @@ namespace PropertiesReader {
 				ID++;
 			}
 
-			automaton.name = property["desc"][0]["values"]["Name"].asString();
-			automaton.prop_type = property["desc"][0]["values"]["Type"].asString();
-			automaton.experiment = property["desc"][0]["values"]["Experiment"].asString();
 			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, PropertyAutomaton::Edges ()});
 			automata.emplace_back(move(automaton));
 		}

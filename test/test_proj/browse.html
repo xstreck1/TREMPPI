@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Tremmpi browse</title>
+        <meta charset="UTF-8">
+        <script src="./common/jquery.min.js"></script>
+        
+        <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/common.js"></script>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
+        
+        <link rel="stylesheet" type="text/css" href="browse/css.css">
+
+        <script>
+            var tremmpi_browse = {};
+            tremppi_common.data_path = "browse/";  
+            tremppi_common.server_address = "http://localhost:8080/";
+
+            var sourceSetter = function(name) {
+                return function() {
+                    $("#frame").attr("src", name + ".html");
+                    $("#frame").reload();
+                };
+            };
+
+            var readFiles = function() {
+                $.ajax(
+                        {url: tremppi_common.server_address + "?command=files",
+                            success: function(result) {
+                                $("#files").empty();
+                                if (!result)
+                                    return;
+                                var res = result.split(",");
+                                for (var i = 0; i < res.length; i++) {
+                                    res[i] = res[i].slice(0, -5);
+                                    $("#files").append(
+                                            '<div class="page_content" id="' + res[i] + '">' + res[i] + '</div>'
+                                            );
+                                    $("#" + res[i]).click(sourceSetter(res[i]));
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                $("#files").html('ERROR: could not load the files. TREMPPI browser must be executed through the "tremppi browse" command');
+                            }
+                        }
+                );
+            };
+
+            // Read the files, repeat every second
+            readFiles();
+            setInterval(function() {
+                readFiles();
+            }, 1000);
+        </script>
+
+    </head>
+    <body>
+        <div id="files" class="filelist" >
+            no files loaded
+        </div>
+        <div class="frameholder" >
+            <iframe id="frame"></iframe>
+        </div>
+    </body>
+</html>
