@@ -36,10 +36,9 @@ class ModelChecker {
 		// Get passed colors, unique for each sucessor
 		vector<StateID> transports;
 
-		if (ColoringFunc::broadcastParameters(parametrization, product.getStructure(), product.getKSID(ID)).empty())
+		transports = ColoringFunc::broadcastParameters(parametrization, product, ID);
+		if (transports.empty())
 			transports = product.getLoops(ID);
-		else
-			transports = ColoringFunc::broadcastParameters(parametrization, product, ID);
 
 		// For all passed values make update on target
 		for (const StateID trans : transports) {

@@ -33,10 +33,10 @@ namespace Output {
 				while (*trhs_it < pval)
 					trhs_it++;
 				while (pval < *(trhs_it + 1)) {
-					result += to_string(pval++) + ",";
+					result += to_string(pval++);
 				}
 			}
-			result.back() = '}';
+			result += "}";
 			
 		}
 		// Otherwise use boolean literal
@@ -60,7 +60,7 @@ namespace Output {
 		// Add values of all the regulators
 		size_t reg_i = 0;
 		for (auto regulation : reg_func.info.regulators) {
-			string lit_form = plitToFormula(reg_func.info.name, regulation.second, pmin[reg_i], funcs[regulation.first].info.max_activity);
+			string lit_form = plitToFormula(funcs[regulation.first].info.name, regulation.second, pmin[reg_i], funcs[regulation.first].info.max_activity);
 			if (!lit_form.empty())
 				result += lit_form + "&";
 			reg_i++;

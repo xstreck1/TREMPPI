@@ -7,6 +7,8 @@ from os.path import dirname, join, abspath, exists
 from http.server import  HTTPServer, SimpleHTTPRequestHandler
 import content_functions
 
+DEFAULT_PORT = "8080"
+
 # Tremppi server that communicates between HTML reports and the filesystem
 class StoreHandler(SimpleHTTPRequestHandler):
     def success_response(self, type, data):
@@ -68,6 +70,7 @@ class StoreHandler(SimpleHTTPRequestHandler):
 # options and system setup
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--dest', help='specify the browsing location.')
+parser.add_argument('--port', help='number of the port to run the browser on')
 args = parser.parse_args()
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi_common.file_manipulation import copyanything, normal_paths
@@ -76,6 +79,10 @@ EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 # start the server and open the webpage
 chdir(DEST_PATH)
-server = HTTPServer(('', 8080), StoreHandler)
-# webbrowser.open("http://localhost:8080/browse.html")
+if (args.port != None):
+    port = args.port
+else:
+    port = DEFAULT_PORT
+server = HTTPServer(('', int(port)), StoreHandler)
+webbrowser.open("http://localhost:" + port + "/browse.html")
 server.serve_forever()

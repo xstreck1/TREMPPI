@@ -6,7 +6,7 @@ bpo::variables_map ProgramOptions::parseProgramOptions(int argc, char ** argv){
 	// Declare the supbported options.
 	visible.add_options()
 		("version,v", "display version")
-		("path", bpo::value<string>()->default_value(bfs::current_path().string()), "if not using the current execution folder, specifies path to the networks.js file")
+		("path", bpo::value<string>()->default_value(bfs::current_path().string()), "if not using the current execution folder, specifies the project folder.")
 		("help,h", "display help");
 		;
 	all.add(visible).add(invisible);
