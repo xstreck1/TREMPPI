@@ -24,7 +24,7 @@ int tremppi_report(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Get user options
-		out["setup"]["comparative"] = po.count("compare") > 0;
+		out["setup"]["comparative"] = po.count("select-only") == 0;
 
 		// Copy the directory data
 		Output::copyReport(report_path);
@@ -34,10 +34,9 @@ int tremppi_report(int argc, char ** argv) {
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read filter conditions
-		if (po.count("select") > 0)
-			out["setup"]["select"] = ReportOptions::getFilter(po["select"].as<string>());
-		if (po.count("compare") > 0)
-			out["setup"]["compare"] = ReportOptions::getFilter(po["compare"].as<string>());
+		out["setup"]["select"] = po.count("all") > 0 ? "1" : DatabaseReader::getSelectionTerm("Select");
+		if (po.count("select-only") == 0)
+			out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -51,19 +50,16 @@ int tremppi_report(int argc, char ** argv) {
 	map<string, FunsData> fun_data_types;
 	try {
 		out["setup"]["pool_size"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()))->get<int>(0);
-		if (out["setup"]["select"].asString().empty())
-			out["setup"]["selected"] = out["setup"]["pool_size"];
-		else
-			out["setup"]["selected"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()))->get<int>(0);
-		if (out["setup"]["compare"].asString().empty())
-			out["setup"]["compared"] = out["setup"]["pool_size"];
-		else
+		out["setup"]["selected"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()))->get<int>(0);
+		if (po.count("select-only") == 0)
 			out["setup"]["compared"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()))->get<int>(0);
+		else
+			out["setup"]["compared"] = out["setup"]["pool_size"];
 
 		if (po.count("functions") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory functions data.";
 			fun_data_types["select"] = FunsData(); 
-			if (po.count("compare") > 0) {
+			if (po.count("select-only") == 0) {
 				fun_data_types["compare"] = FunsData();
 				fun_data_types["differ"] = FunsData();
 			}
@@ -72,20 +68,20 @@ int tremppi_report(int argc, char ** argv) {
 				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				fun_data_types["select"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection
-				if (po.count("compare") > 0) {
+				if (po.count("select-only") == 0){
 					sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
 					fun_data_types["compare"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 				}
 			}
 			// Compute difference
-			if (po.count("compare") > 0)
+			if (po.count("select-only") == 0)
 				fun_data_types["differ"] = move(StatisticalAnalysis::diff(fun_data_types["select"], fun_data_types["compare"]));
 		}
 
 		if (po.count("regulations") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory graph data.";
 			reg_data_types["select"] = RegsData(); 
-			if (po.count("compare") > 0) {
+			if (po.count("select-only") == 0) {
 				reg_data_types["compare"] = RegsData(); 
 				reg_data_types["differ"] = RegsData();
 			}
@@ -93,13 +89,13 @@ int tremppi_report(int argc, char ** argv) {
 				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				reg_data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection
-				if (po.count("compare") > 0) {
+				if (po.count("select-only") == 0) {
 					sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
 					reg_data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 				}
 			}
 			// Compute difference
-			if (po.count("compare") > 0)
+			if (po.count("select-only") == 0)
 				reg_data_types["differ"] = move(RegulatoryGraph::diff(reg_data_types["select"], reg_data_types["compare"]));
 		}
 

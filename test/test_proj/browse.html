@@ -9,29 +9,29 @@ and open the template in the editor.
         <title>Tremmpi browse</title>
         <meta charset="UTF-8">
         <script src="./common/jquery.min.js"></script>
-        
+
         <link rel="stylesheet" type="text/css" href="./common/css.css">
         <script src="./common/common.js"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
-        
+
         <link rel="stylesheet" type="text/css" href="browse/css.css">
 
         <script>
             var tremmpi_browse = {};
-            tremppi_common.data_path = "browse/";  
+            tremppi_common.data_path = "browse/";
             tremppi_common.server_address = "http://localhost:8080/";
 
-            var sourceSetter = function(name) {
-                return function() {
+            var sourceSetter = function (name) {
+                return function () {
                     $("#frame").attr("src", name + ".html");
-                    $("#frame").reload();
+                    // document.getElementById('frame').contentWindow.location.reload();
                 };
             };
 
-            var readFiles = function() {
+            var readFiles = function () {
                 $.ajax(
                         {url: tremppi_common.server_address + "?command=files",
-                            success: function(result) {
+                            success: function (result) {
                                 $("#files").empty();
                                 if (!result)
                                     return;
@@ -44,7 +44,7 @@ and open the template in the editor.
                                     $("#" + res[i]).click(sourceSetter(res[i]));
                                 }
                             },
-                            error: function(jqXHR, textStatus, errorThrown) {
+                            error: function (jqXHR, textStatus, errorThrown) {
                                 $("#files").html('ERROR: could not load the files. TREMPPI browser must be executed through the "tremppi browse" command');
                             }
                         }
@@ -53,7 +53,7 @@ and open the template in the editor.
 
             // Read the files, repeat every second
             readFiles();
-            setInterval(function() {
+            setInterval(function () {
                 readFiles();
             }, 1000);
         </script>

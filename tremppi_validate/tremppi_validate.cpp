@@ -10,26 +10,23 @@
 #include "data/construction_manager.hpp"
 #include "compute/synthesis_manager.hpp"
 
+// TODO: Check if the transition generation is correct for all three components (w.r.t. the transition system used)
+// TODO: Components still required to be ordered...
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ValidateOptions>("tremppi_validate", argc, argv);
 	string select;
-	try {
-		if (po.count("select") > 0)
-			select = ValidateOptions::getFilter(po["select"].as<string>());
-		else
-			select = "1";
-	}
-	catch (exception & e) {
-		logging.exceptionMessage(e, 1);
-	}
 
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
+
+		// Get selection		
+		select = po.count("all") > 0 ? "1" : DatabaseReader::getSelectionTerm("Select");
 
 		// Get database
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
@@ -47,7 +44,7 @@ int tremppi_validate(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::readJSasJSON(tremppi_system.WORK_PATH / "properties" / PROPERTIES_FILENAME);
+		root = FileManipulation::readJSasJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
 
 		PropertiesReader::checkSemantics(root);
 	}

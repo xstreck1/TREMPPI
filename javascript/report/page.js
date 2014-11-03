@@ -78,7 +78,7 @@ tremppi_report.Page = {
         $("#analysis_date").html(setup.date);
         $("#model_name").html(setup.name);
         $("#pool_size").html(setup.pool_size);
-        var select_stmt = setup.select_statement ? setup.select_statement : "all";
+        var select_stmt = setup.select ? setup.select : "all";
         $("#select_statement").html(select_stmt);
         $("#selected").html(setup.selected + ' ' + '(' + (setup.selected / setup.pool_size * 100).toFixed(2) + '%)');
         var compare_stmt = setup.compare ? setup.compare : "all";

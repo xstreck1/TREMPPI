@@ -14,8 +14,4 @@ public:
 	GROUNDED(ProgramOptions)
 	//
 	virtual bpo::variables_map parseProgramOptions(int argc, char ** argv);
-	// Obtain the path to the input file
-	static bfs::path getPath(const bpo::variables_map & po, const string & filename);
-	//
-	static string ProgramOptions::getFilter(const bfs::path & filter_path);
 };

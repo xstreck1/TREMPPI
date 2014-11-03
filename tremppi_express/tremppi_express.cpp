@@ -16,9 +16,7 @@ int tremppi_express(int argc, char ** argv) {
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str() ));
 
-		// Read filter conditions
-		if (po.count("select") > 0)
-			select = ExpressOptions::getFilter(po["select"].as<string>());
+		select = po.count("all") > 0 ? "1" : DatabaseReader::getSelectionTerm("Select");
 
 		DatabaseReader reader;
 		RegInfos infos = reader.readRegInfos(db);

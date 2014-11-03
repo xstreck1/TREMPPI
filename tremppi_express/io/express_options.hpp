@@ -9,7 +9,7 @@ public:
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
 		visible.add_options()
-			("select", bpo::value<string>(), "selection of the set of interest")
+			("all,a", "do not consider the select clause and apply to all parametrizations")
 			;
 
 		return ProgramOptions::parseProgramOptions(argc, argv);

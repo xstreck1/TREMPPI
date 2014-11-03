@@ -26,7 +26,7 @@ void createModel(const bfs::path & example_model_path) {
 	root["edges"][1]["data"]["Label"] = "+";
 
 	Json::StyledWriter writer;
-	ofstream data_file((example_model_path / "editor" / bfs::path{ NETWORK_FILENAME }).string(), ios::out);
+	ofstream data_file((example_model_path / bfs::path{ NETWORK_FILENAME }).string(), ios::out);
 	string data = writer.write(root);
 	data_file << "var elements = " << data << ";";
 }

@@ -23,7 +23,7 @@ void createProperties(const bfs::path & example_model_path) {
 	root[0]["data"][1]["values"]["Measurement"] = "A>0&B>1";
 
 	Json::StyledWriter writer;
-	ofstream data_file((example_model_path / "editor" / bfs::path{ PROPERTIES_FILENAME }).string(), ios::out);
+	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
 	string data = writer.write(root);
 	data_file << "var properties = " << data << ";";
 }

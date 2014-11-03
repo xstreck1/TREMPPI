@@ -1,4 +1,5 @@
 #include "database_reader.hpp"
+#include "../general/file_manipulation.hpp"
 
 map<CompID, Levels> DatabaseReader::readRegulators(const string & component, sqlite3pp::database & db) {
 	map<CompID, Levels>  result;
@@ -100,4 +101,16 @@ sqlite3pp::query DatabaseReader::selectionFilter(const map<size_t, string> & col
 sqlite3pp::query DatabaseReader::selectionIDs(const string & selection, sqlite3pp::database & db) {
 	string where_clause = selection.empty() ? "" : " WHERE " + selection;
 	return sqlite3pp::query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + where_clause).c_str());
+}
+
+string DatabaseReader::getSelectionTerm(const string & type) {
+	string select = "1 AND";
+
+	Json::Value selections = FileManipulation::readJSasJSON(tremppi_system.WORK_PATH / SELECTION_FILENAME);
+	for (const Json::Value & selection : selections)
+		if (selection["values"][type].asBool())
+			select += "(" + selection["values"]["Selection"].asString() + ") AND ";
+	select.resize(select.size() - 4);
+
+	return select;
 }
