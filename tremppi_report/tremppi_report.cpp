@@ -56,7 +56,7 @@ int tremppi_report(int argc, char ** argv) {
 		else
 			out["setup"]["compared"] = out["setup"]["pool_size"];
 
-		if (po.count("functions") > 0) {
+		/*if (po.count("functions") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory functions data.";
 			fun_data_types["select"] = FunsData(); 
 			if (po.count("select-only") == 0) {
@@ -76,7 +76,7 @@ int tremppi_report(int argc, char ** argv) {
 			// Compute difference
 			if (po.count("select-only") == 0)
 				fun_data_types["differ"] = move(StatisticalAnalysis::diff(fun_data_types["select"], fun_data_types["compare"]));
-		}
+		}*/
 
 		if (po.count("regulations") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory graph data.";
@@ -118,9 +118,9 @@ int tremppi_report(int argc, char ** argv) {
 		for (auto & regs : reg_data_types) {
 			out["Regulatory"][regs.first] = Output::regulatoryGraph(reg_infos, regs);
 		}
-		for (auto & funs : fun_data_types) {
+		/*for (auto & funs : fun_data_types) {
 			out["Functional"][funs.first] = Output::functionalData(funs);
-		}
+		}*/
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 4);

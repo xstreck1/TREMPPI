@@ -18,8 +18,9 @@ tremppi_report.Graph = {
             return function (evt) {
                 for (var i = 0; i < config.types.length; i++) {
                     cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
-                    tremppi_common.save("report_data");
+                    report_data["Regulatory"][config.types[i]]["elements"] = cys[i].json().elements;
                 }
+                tremppi_common.save("report_data");
             };
         };
 
@@ -106,7 +107,7 @@ tremppi_report.Graph = {
                         'line-style': 'data(line_style)'
                     }),
             layout: {
-                name: tremppi_common.hasAllPositions(graph.nodes) ? 'preset' : 'grid',
+                name: tremppi_common.hasAllPositions(graph.nodes) ? 'preset' : 'grid'
             },
             elements: graph
         });
