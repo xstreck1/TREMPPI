@@ -13,17 +13,20 @@ namespace ModelReader {
 		Model model;
 
 		CompID ID = 0;
+		vector<string> names;
+		for (const Json::Value node : elements["nodes"])
+			names.emplace_back(node["data"]["Name"].asString());
+		sort(WHOLE(names));
+
 		string last_name = "";
 		map<string, string> id_to_name;
 		for (const Json::Value node : elements["nodes"]) {
 			Model::ModelComp specie;
-
-			specie.ID = ID++;
-
+			
 			specie.name = node["data"]["Name"].asString();
+			specie.ID = distance(begin(names), find(WHOLE(names), specie.name));
+
 			id_to_name.insert({ node["data"]["id"].asString(), specie.name });
-			if (last_name > specie.name)
-				throw runtime_error("Components must be ordered lexicographically, " + quote(last_name) + ">" + quote(specie.name));
 			last_name = specie.name;
 
 			specie.max_activity = node["data"]["MaxActivity"].asInt();
@@ -32,6 +35,9 @@ namespace ModelReader {
 
 			model.components.emplace_back(move(specie));
 		}
+		sort(WHOLE(model.components), [](const Model::ModelComp & A, const Model::ModelComp & B) {
+			return A.ID < B.ID;
+		});
 
 		for (const Json::Value edge : elements["edges"]) {
 			const CompID source_id = ModelTranslators::findID(model, id_to_name[edge["data"]["source"].asString()]);

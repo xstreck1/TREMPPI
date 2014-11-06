@@ -19,8 +19,8 @@ var report_data = {
 							"name": "Akt"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 51.75
+							"x": 58.69690940300688,
+							"y": 240.89780357188323
 						},
 						"group": "nodes",
 						"removed": false,
@@ -37,8 +37,8 @@ var report_data = {
 							"name": "Erk"
 						},
 						"position": {
-							"x": 209.64637415665072,
-							"y": 51.75
+							"x": 283.93077739944744,
+							"y": 168.29966715680177
 						},
 						"group": "nodes",
 						"removed": false,
@@ -55,8 +55,8 @@ var report_data = {
 							"name": "Mek"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 155.25
+							"x": 201.6996196077733,
+							"y": 358.89172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -73,8 +73,8 @@ var report_data = {
 							"name": "PI3K"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 155.25
+							"x": 338.69961960777346,
+							"y": 358.89172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -91,8 +91,8 @@ var report_data = {
 							"name": "RTK"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 258.75
+							"x": 201.6996196077733,
+							"y": 462.39172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -109,15 +109,15 @@ var report_data = {
 							"name": "Raf"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 258.75
+							"x": 530.9942722580196,
+							"y": 525.3966706845358
 						},
 						"group": "nodes",
 						"removed": false,
-						"selected": false,
+						"selected": true,
 						"selectable": true,
 						"locked": false,
-						"grabbed": false,
+						"grabbed": true,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -127,8 +127,8 @@ var report_data = {
 							"name": "Tsc"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 362.25
+							"x": 201.6996196077733,
+							"y": 565.8917261311152
 						},
 						"group": "nodes",
 						"removed": false,
@@ -145,8 +145,8 @@ var report_data = {
 							"name": "mTor"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 362.25
+							"x": 338.69961960777346,
+							"y": 565.8917261311152
 						},
 						"group": "nodes",
 						"removed": false,
@@ -677,8 +677,8 @@ var report_data = {
 							"name": "Akt"
 						},
 						"position": {
-							"x": 68.25,
-							"y": 51.75
+							"x": 58.69690940300688,
+							"y": 240.89780357188323
 						},
 						"group": "nodes",
 						"removed": false,
@@ -695,8 +695,8 @@ var report_data = {
 							"name": "Erk"
 						},
 						"position": {
-							"x": 204.75,
-							"y": 51.75
+							"x": 283.93077739944744,
+							"y": 168.29966715680177
 						},
 						"group": "nodes",
 						"removed": false,
@@ -713,8 +713,8 @@ var report_data = {
 							"name": "Mek"
 						},
 						"position": {
-							"x": 68.25,
-							"y": 155.25
+							"x": 201.6996196077733,
+							"y": 358.89172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -731,8 +731,8 @@ var report_data = {
 							"name": "PI3K"
 						},
 						"position": {
-							"x": 204.75,
-							"y": 155.25
+							"x": 338.69961960777346,
+							"y": 358.89172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -749,8 +749,8 @@ var report_data = {
 							"name": "RTK"
 						},
 						"position": {
-							"x": 68.25,
-							"y": 258.75
+							"x": 201.6996196077733,
+							"y": 462.39172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -767,8 +767,8 @@ var report_data = {
 							"name": "Raf"
 						},
 						"position": {
-							"x": 204.75,
-							"y": 258.75
+							"x": 530.9942722580196,
+							"y": 525.3966706845358
 						},
 						"group": "nodes",
 						"removed": false,
@@ -785,8 +785,8 @@ var report_data = {
 							"name": "Tsc"
 						},
 						"position": {
-							"x": 66.833984375,
-							"y": 364.3740234375
+							"x": 201.6996196077733,
+							"y": 565.8917261311152
 						},
 						"group": "nodes",
 						"removed": false,
@@ -803,8 +803,8 @@ var report_data = {
 							"name": "mTor"
 						},
 						"position": {
-							"x": 204.75,
-							"y": 362.25
+							"x": 338.69961960777346,
+							"y": 565.8917261311152
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1356,8 +1356,8 @@ var report_data = {
 							"name": "Akt"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 51.75
+							"x": 58.69690940300688,
+							"y": 240.89780357188323
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1374,8 +1374,8 @@ var report_data = {
 							"name": "Erk"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 51.75
+							"x": 283.93077739944744,
+							"y": 168.29966715680177
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1392,8 +1392,8 @@ var report_data = {
 							"name": "Mek"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 155.25
+							"x": 201.6996196077733,
+							"y": 358.89172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1410,8 +1410,8 @@ var report_data = {
 							"name": "PI3K"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 155.25
+							"x": 338.69961960777346,
+							"y": 358.89172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1428,8 +1428,8 @@ var report_data = {
 							"name": "RTK"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 258.75
+							"x": 201.6996196077733,
+							"y": 462.39172613111515
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1446,8 +1446,8 @@ var report_data = {
 							"name": "Raf"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 258.75
+							"x": 530.9942722580196,
+							"y": 525.3966706845358
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1464,8 +1464,8 @@ var report_data = {
 							"name": "Tsc"
 						},
 						"position": {
-							"x": 68.5,
-							"y": 362.25
+							"x": 201.6996196077733,
+							"y": 565.8917261311152
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1482,8 +1482,8 @@ var report_data = {
 							"name": "mTor"
 						},
 						"position": {
-							"x": 205.5,
-							"y": 362.25
+							"x": 338.69961960777346,
+							"y": 565.8917261311152
 						},
 						"group": "nodes",
 						"removed": false,

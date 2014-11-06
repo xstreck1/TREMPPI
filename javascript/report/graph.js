@@ -87,7 +87,8 @@ tremppi_report.Graph = {
             else
                 data.target_arrow_shape = data.pearson >= 0 ? 'triangle' : 'tee';
         }
-
+        
+        var selected_col = '#5555BB';
         $('#' + name).cytoscape({
             style: cytoscape.stylesheet()
                     .selector('node')
@@ -105,6 +106,11 @@ tremppi_report.Graph = {
                         'target-arrow-color': 'black',
                         'target-arrow-shape': 'data(target_arrow_shape)',
                         'line-style': 'data(line_style)'
+                    }).selector(':selected')
+                    .css({
+                        'border-color': selected_col,
+                        'line-color': selected_col,
+                        'target-arrow-color': selected_col
                     }),
             layout: {
                 name: tremppi_common.hasAllPositions(graph.nodes) ? 'preset' : 'grid'
