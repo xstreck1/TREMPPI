@@ -1,26 +1,16 @@
 var report_data = {
-	"setup": {
-		"comparative": true,
-		"compare": "(NOT (Rosen AND Rosen AND RosenB AND Triv_Fixpoint AND CycAttractor_MAPK AND CycAttractor_mTor AND  Mut_FP))",
-		"compared": 12986,
-		"date": "Thu Jul 03 12:07:36 2014",
-		"name": "crossfunc",
-		"pool_size": 13266,
-		"select": "(Rosen AND Rosen AND RosenB AND Triv_Fixpoint AND CycAttractor_MAPK AND CycAttractor_mTor AND  Mut_FP)",
-		"selected": 280
-	},
 	"Regulatory": {
-		"select": {
+		"compare": {
 			"elements": {
 				"nodes": [
 					{
 						"data": {
-							"id": "Akt",
-							"name": "Akt"
+							"id": "C_di_GMP",
+							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 58.69690940300688,
-							"y": 240.89780357188323
+							"x": 254.28192145725535,
+							"y": 147.88275985826033
 						},
 						"group": "nodes",
 						"removed": false,
@@ -33,12 +23,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Erk",
-							"name": "Erk"
+							"id": "MlrA",
+							"name": "MlrA"
 						},
 						"position": {
-							"x": 283.93077739944744,
-							"y": 168.29966715680177
+							"x": 258.43310259279355,
+							"y": 332.67983690269364
 						},
 						"group": "nodes",
 						"removed": false,
@@ -51,12 +41,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Mek",
-							"name": "Mek"
+							"id": "YciR",
+							"name": "YciR"
 						},
 						"position": {
-							"x": 201.6996196077733,
-							"y": 358.89172613111515
+							"x": 366.19999014244524,
+							"y": 248.2763682703655
 						},
 						"group": "nodes",
 						"removed": false,
@@ -69,12 +59,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "PI3K",
-							"name": "PI3K"
+							"id": "YdaM",
+							"name": "YdaM"
 						},
 						"position": {
-							"x": 338.69961960777346,
-							"y": 358.89172613111515
+							"x": 132.00567309613172,
+							"y": 252.17745569363854
 						},
 						"group": "nodes",
 						"removed": false,
@@ -87,12 +77,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "RTK",
-							"name": "RTK"
+							"id": "YegE",
+							"name": "YegE"
 						},
 						"position": {
-							"x": 201.6996196077733,
-							"y": 462.39172613111515
+							"x": 376.9606477021118,
+							"y": 73.90817236808853
 						},
 						"group": "nodes",
 						"removed": false,
@@ -105,48 +95,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Raf",
-							"name": "Raf"
+							"id": "YhjH",
+							"name": "YhjH"
 						},
 						"position": {
-							"x": 530.9942722580196,
-							"y": 525.3966706845358
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": true,
-						"selectable": true,
-						"locked": false,
-						"grabbed": true,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "Tsc",
-							"name": "Tsc"
-						},
-						"position": {
-							"x": 201.6996196077733,
-							"y": 565.8917261311152
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "mTor",
-							"name": "mTor"
-						},
-						"position": {
-							"x": 338.69961960777346,
-							"y": 565.8917261311152
+							"x": 138.76979850410368,
+							"y": 78.79722265001901
 						},
 						"group": "nodes",
 						"removed": false,
@@ -162,13 +116,160 @@ var report_data = {
 					{
 						"data": {
 							"frequency": 1,
+							"pearson": -0.3565959680736834,
+							"source": "YciR",
+							"target": "C_di_GMP",
+							"color_mapper": 0.3565959680736834,
+							"width_mapper": 1,
+							"target_arrow_shape": "tee",
+							"id": "e20"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0.3565959680736832,
+							"source": "YdaM",
+							"target": "C_di_GMP",
+							"color_mapper": 0.3565959680736832,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e21"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0.3565959680736832,
+							"source": "YegE",
+							"target": "C_di_GMP",
+							"color_mapper": 0.3565959680736832,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e22"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": -0.356595968073683,
+							"source": "YhjH",
+							"target": "C_di_GMP",
+							"color_mapper": 0.356595968073683,
+							"width_mapper": 1,
+							"target_arrow_shape": "tee",
+							"id": "e23"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0,
+							"source": "YciR",
+							"target": "MlrA",
+							"color_mapper": 0,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e24"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0.5771601883432547,
+							"source": "YdaM",
+							"target": "MlrA",
+							"color_mapper": 0.5771601883432547,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e25"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
 							"pearson": 1,
-							"source": "PI3K",
-							"target": "Akt",
+							"source": "C_di_GMP",
+							"target": "YciR",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e0"
+							"id": "e26"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 0,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e27"
 						},
 						"position": {},
 						"group": "edges",
@@ -184,12 +285,12 @@ var report_data = {
 						"data": {
 							"frequency": 1,
 							"pearson": 1,
-							"source": "Mek",
-							"target": "Erk",
+							"source": "YegE",
+							"target": "YegE",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e1"
+							"id": "e28"
 						},
 						"position": {},
 						"group": "edges",
@@ -205,264 +306,12 @@ var report_data = {
 						"data": {
 							"frequency": 1,
 							"pearson": 1,
-							"source": "Raf",
-							"target": "Mek",
+							"source": "YhjH",
+							"target": "YhjH",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e2"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.8181818181818182,
-							"pearson": -0.3489016221354863,
-							"source": "Erk",
-							"target": "PI3K",
-							"color_mapper": 0.3489016221354863,
-							"width_mapper": 0.8181818181818182,
-							"target_arrow_shape": "tee",
-							"id": "e3"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0.4538743983518276,
-							"source": "RTK",
-							"target": "PI3K",
-							"color_mapper": 0.4538743983518276,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e4"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.4538743983518208,
-							"source": "mTor",
-							"target": "PI3K",
-							"color_mapper": 0.4538743983518208,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e5"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 1,
-							"source": "RTK",
-							"target": "RTK",
-							"color_mapper": 1,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e6"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.926829268292683,
-							"pearson": -0.3442451657755377,
-							"source": "Akt",
-							"target": "Raf",
-							"color_mapper": 0.3442451657755377,
-							"width_mapper": 0.926829268292683,
-							"target_arrow_shape": "tee",
-							"id": "e7"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.3796634992642713,
-							"source": "Erk",
-							"target": "Raf",
-							"color_mapper": 0.3796634992642713,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e8"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.9105691056910569,
-							"pearson": 0.3102120148567476,
-							"source": "PI3K",
-							"target": "Raf",
-							"color_mapper": 0.3102120148567476,
-							"width_mapper": 0.9105691056910569,
-							"target_arrow_shape": "triangle",
-							"id": "e9"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0.3796634992642704,
-							"source": "RTK",
-							"target": "Raf",
-							"color_mapper": 0.3796634992642704,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e10"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.7182335127931944,
-							"source": "Akt",
-							"target": "Tsc",
-							"color_mapper": 0.7182335127931944,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e11"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.6666666666666666,
-							"pearson": -0.3849001794597454,
-							"source": "Erk",
-							"target": "Tsc",
-							"color_mapper": 0.3849001794597454,
-							"width_mapper": 0.6666666666666666,
-							"target_arrow_shape": "tee",
-							"id": "e12"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.6666666666666666,
-							"pearson": 0.3849001794597454,
-							"source": "Erk",
-							"target": "mTor",
-							"color_mapper": 0.3849001794597454,
-							"width_mapper": 0.6666666666666666,
-							"target_arrow_shape": "triangle",
-							"id": "e13"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.7182335127931944,
-							"source": "Tsc",
-							"target": "mTor",
-							"color_mapper": 0.7182335127931944,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e14"
+							"id": "e29"
 						},
 						"position": {},
 						"group": "edges",
@@ -475,210 +324,19 @@ var report_data = {
 						"classes": ""
 					}
 				]
-			},
-			"style": [
-				{
-					"selector": "node, edge",
-					"css": {
-						"text-valign": "top",
-						"text-halign": "center",
-						"color": "#000",
-						"content": "",
-						"text-outline-color": "#000",
-						"text-outline-width": "0px",
-						"text-outline-opacity": "1",
-						"text-opacity": "1",
-						"text-decoration": "none",
-						"text-transform": "none",
-						"font-family": "Helvetica",
-						"font-style": "normal",
-						"font-variant": "normal",
-						"font-weight": "normal",
-						"font-size": "16px",
-						"min-zoomed-font-size": "0px",
-						"display": "element",
-						"visibility": "visible",
-						"opacity": "1",
-						"z-index": "0",
-						"overlay-padding": "10px",
-						"overlay-color": "#000",
-						"overlay-opacity": "0",
-						"transition-property": "none",
-						"transition-duration": "0s",
-						"transition-delay": "0s",
-						"background-blacken": "0",
-						"background-color": "#888",
-						"background-opacity": "1",
-						"background-image": "none",
-						"background-position-x": "50%",
-						"background-position-y": "50%",
-						"background-repeat": "no-repeat",
-						"background-fit": "none",
-						"background-clip": "node",
-						"pie-size": "100%",
-						"pie-1-background-color": "black",
-						"pie-2-background-color": "black",
-						"pie-3-background-color": "black",
-						"pie-4-background-color": "black",
-						"pie-5-background-color": "black",
-						"pie-6-background-color": "black",
-						"pie-7-background-color": "black",
-						"pie-8-background-color": "black",
-						"pie-9-background-color": "black",
-						"pie-10-background-color": "black",
-						"pie-11-background-color": "black",
-						"pie-12-background-color": "black",
-						"pie-13-background-color": "black",
-						"pie-14-background-color": "black",
-						"pie-15-background-color": "black",
-						"pie-16-background-color": "black",
-						"pie-1-background-size": "0%",
-						"pie-2-background-size": "0%",
-						"pie-3-background-size": "0%",
-						"pie-4-background-size": "0%",
-						"pie-5-background-size": "0%",
-						"pie-6-background-size": "0%",
-						"pie-7-background-size": "0%",
-						"pie-8-background-size": "0%",
-						"pie-9-background-size": "0%",
-						"pie-10-background-size": "0%",
-						"pie-11-background-size": "0%",
-						"pie-12-background-size": "0%",
-						"pie-13-background-size": "0%",
-						"pie-14-background-size": "0%",
-						"pie-15-background-size": "0%",
-						"pie-16-background-size": "0%",
-						"border-color": "#000",
-						"border-opacity": "1",
-						"border-width": "0px",
-						"border-style": "solid",
-						"height": "30px",
-						"width": "30px",
-						"padding-left": "0px",
-						"padding-right": "0px",
-						"padding-top": "0px",
-						"padding-bottom": "0px",
-						"shape": "ellipse",
-						"source-arrow-shape": "none",
-						"target-arrow-shape": "none",
-						"source-arrow-color": "#bbb",
-						"target-arrow-color": "#bbb",
-						"source-arrow-fill": "filled",
-						"target-arrow-fill": "filled",
-						"line-style": "solid",
-						"line-color": "#bbb",
-						"control-point-step-size": "40px",
-						"control-point-weight": "0.5",
-						"curve-style": "bezier"
-					}
-				},
-				{
-					"selector": "node > node",
-					"css": {
-						"background-opacity": "0.5",
-						"height": "auto",
-						"width": "auto",
-						"padding-left": "10px",
-						"padding-right": "10px",
-						"padding-top": "10px",
-						"padding-bottom": "10px",
-						"shape": "rectangle"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"width": "1px"
-					}
-				},
-				{
-					"selector": ":active",
-					"css": {
-						"overlay-padding": "10px",
-						"overlay-color": "black",
-						"overlay-opacity": "0.25"
-					}
-				},
-				{
-					"selector": "core",
-					"css": {
-						"selection-box-color": "#ddd",
-						"selection-box-opacity": "0.65",
-						"selection-box-border-color": "#aaa",
-						"selection-box-border-width": "1px",
-						"panning-cursor": "grabbing",
-						"active-bg-color": "black",
-						"active-bg-opacity": "0.15",
-						"active-bg-size": "15px",
-						"outside-texture-bg-color": "#000",
-						"outside-texture-bg-opacity": "0.125"
-					}
-				},
-				{
-					"selector": "node",
-					"css": {
-						"text-valign": "center",
-						"content": "data(name)",
-						"background-color": "white",
-						"border-color": "black",
-						"border-width": "2px",
-						"height": "50px",
-						"width": "50px"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"target-arrow-shape": "data(target_arrow_shape)",
-						"target-arrow-color": "black",
-						"line-style": "data(line_style)"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"width": "mapData(width_mapper, 0, 1, 1, 10)"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"line-color": "mapData(color_mapper, 0, 1, yellow, green)"
-					}
-				}
-			],
-			"scratch": {},
-			"zoomingEnabled": true,
-			"userZoomingEnabled": true,
-			"zoom": 0.9289219756347901,
-			"minZoom": 1e-50,
-			"maxZoom": 1e+50,
-			"panningEnabled": true,
-			"userPanningEnabled": true,
-			"pan": {
-				"x": 28.4858126405461,
-				"y": 14.939713543598458
-			},
-			"boxSelectionEnabled": true,
-			"layout": {
-				"name": "grid"
-			},
-			"renderer": {
-				"name": "canvas"
-			},
-			"hideEdgesOnViewport": false
+			}
 		},
 		"differ": {
 			"elements": {
 				"nodes": [
 					{
 						"data": {
-							"id": "Akt",
-							"name": "Akt"
+							"id": "C_di_GMP",
+							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 58.69690940300688,
-							"y": 240.89780357188323
+							"x": 254.28192145725535,
+							"y": 147.88275985826033
 						},
 						"group": "nodes",
 						"removed": false,
@@ -691,12 +349,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Erk",
-							"name": "Erk"
+							"id": "MlrA",
+							"name": "MlrA"
 						},
 						"position": {
-							"x": 283.93077739944744,
-							"y": 168.29966715680177
+							"x": 258.43310259279355,
+							"y": 332.67983690269364
 						},
 						"group": "nodes",
 						"removed": false,
@@ -709,12 +367,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Mek",
-							"name": "Mek"
+							"id": "YciR",
+							"name": "YciR"
 						},
 						"position": {
-							"x": 201.6996196077733,
-							"y": 358.89172613111515
+							"x": 366.19999014244524,
+							"y": 248.2763682703655
 						},
 						"group": "nodes",
 						"removed": false,
@@ -727,12 +385,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "PI3K",
-							"name": "PI3K"
+							"id": "YdaM",
+							"name": "YdaM"
 						},
 						"position": {
-							"x": 338.69961960777346,
-							"y": 358.89172613111515
+							"x": 132.00567309613172,
+							"y": 252.17745569363854
 						},
 						"group": "nodes",
 						"removed": false,
@@ -745,16 +403,16 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "RTK",
-							"name": "RTK"
+							"id": "YegE",
+							"name": "YegE"
 						},
 						"position": {
-							"x": 201.6996196077733,
-							"y": 462.39172613111515
+							"x": 376.9606477021118,
+							"y": 73.90817236808853
 						},
 						"group": "nodes",
 						"removed": false,
-						"selected": false,
+						"selected": true,
 						"selectable": true,
 						"locked": false,
 						"grabbed": false,
@@ -763,48 +421,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Raf",
-							"name": "Raf"
+							"id": "YhjH",
+							"name": "YhjH"
 						},
 						"position": {
-							"x": 530.9942722580196,
-							"y": 525.3966706845358
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "Tsc",
-							"name": "Tsc"
-						},
-						"position": {
-							"x": 201.6996196077733,
-							"y": 565.8917261311152
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "mTor",
-							"name": "mTor"
-						},
-						"position": {
-							"x": 338.69961960777346,
-							"y": 565.8917261311152
+							"x": 138.76979850410368,
+							"y": 78.79722265001901
 						},
 						"group": "nodes",
 						"removed": false,
@@ -820,14 +442,80 @@ var report_data = {
 					{
 						"data": {
 							"frequency": 0,
-							"pearson": 0,
-							"source": "PI3K",
-							"target": "Akt",
-							"color_mapper": 0,
+							"pearson": 0.2058054419378895,
+							"source": "YciR",
+							"target": "C_di_GMP",
+							"color_mapper": 0.2058054419378895,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
-							"id": "e15"
+							"id": "e10"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "positive"
+					},
+					{
+						"data": {
+							"frequency": 0,
+							"pearson": 0.3981471887410803,
+							"source": "YdaM",
+							"target": "C_di_GMP",
+							"color_mapper": 0.3981471887410803,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e11"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "positive"
+					},
+					{
+						"data": {
+							"frequency": 0,
+							"pearson": -0.1050149158020953,
+							"source": "YegE",
+							"target": "C_di_GMP",
+							"color_mapper": 0.1050149158020953,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e12"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "negative"
+					},
+					{
+						"data": {
+							"frequency": 0,
+							"pearson": 0.1050149158020952,
+							"source": "YhjH",
+							"target": "C_di_GMP",
+							"color_mapper": 0.1050149158020952,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e13"
 						},
 						"position": {},
 						"group": "edges",
@@ -843,8 +531,52 @@ var report_data = {
 						"data": {
 							"frequency": 0,
 							"pearson": 0,
-							"source": "Mek",
-							"target": "Erk",
+							"source": "YciR",
+							"target": "MlrA",
+							"color_mapper": 0,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e14"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "positive"
+					},
+					{
+						"data": {
+							"frequency": 0,
+							"pearson": -1.887379141862766e-15,
+							"source": "YdaM",
+							"target": "MlrA",
+							"color_mapper": 1.887379141862766e-15,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e15"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "negative"
+					},
+					{
+						"data": {
+							"frequency": 0,
+							"pearson": 0,
+							"source": "C_di_GMP",
+							"target": "YciR",
 							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
@@ -865,8 +597,8 @@ var report_data = {
 						"data": {
 							"frequency": 0,
 							"pearson": 0,
-							"source": "Raf",
-							"target": "Mek",
+							"source": "YciR",
+							"target": "YdaM",
 							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
@@ -886,10 +618,10 @@ var report_data = {
 					{
 						"data": {
 							"frequency": 0,
-							"pearson": -1.221245327087672e-15,
-							"source": "Erk",
-							"target": "PI3K",
-							"color_mapper": 1.221245327087672e-15,
+							"pearson": 0,
+							"source": "YegE",
+							"target": "YegE",
+							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -903,15 +635,15 @@ var report_data = {
 						"locked": false,
 						"grabbed": false,
 						"grabbable": true,
-						"classes": "negative"
+						"classes": "positive"
 					},
 					{
 						"data": {
 							"frequency": 0,
-							"pearson": 1.493249968120836e-14,
-							"source": "RTK",
-							"target": "PI3K",
-							"color_mapper": 1.493249968120836e-14,
+							"pearson": 0,
+							"source": "YhjH",
+							"target": "YhjH",
+							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -926,438 +658,21 @@ var report_data = {
 						"grabbed": false,
 						"grabbable": true,
 						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": -1.48769885299771e-14,
-							"source": "mTor",
-							"target": "PI3K",
-							"color_mapper": 1.48769885299771e-14,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e20"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "negative"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": 0,
-							"source": "RTK",
-							"target": "RTK",
-							"color_mapper": 0,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e21"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": -0.008918820531488958,
-							"pearson": 0.01223129858231259,
-							"source": "Akt",
-							"target": "Raf",
-							"color_mapper": 0.01223129858231259,
-							"width_mapper": 0.008918820531488958,
-							"target_arrow_shape": "circle",
-							"line_style": "dashed",
-							"id": "e22"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": 0.0103912859376819,
-							"source": "Erk",
-							"target": "Raf",
-							"color_mapper": 0.0103912859376819,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e23"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0.007341342070137147,
-							"pearson": 0.02180185233647791,
-							"source": "PI3K",
-							"target": "Raf",
-							"color_mapper": 0.02180185233647791,
-							"width_mapper": 0.007341342070137147,
-							"target_arrow_shape": "circle",
-							"line_style": "solid",
-							"id": "e24"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": -0.01039128593768085,
-							"source": "RTK",
-							"target": "Raf",
-							"color_mapper": 0.01039128593768085,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e25"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "negative"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": -1.099120794378905e-14,
-							"source": "Akt",
-							"target": "Tsc",
-							"color_mapper": 1.099120794378905e-14,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e26"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "negative"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": -2.048361480433414e-14,
-							"source": "Erk",
-							"target": "Tsc",
-							"color_mapper": 2.048361480433414e-14,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e27"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "negative"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": 2.048361480433414e-14,
-							"source": "Erk",
-							"target": "mTor",
-							"color_mapper": 2.048361480433414e-14,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e28"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": -1.099120794378905e-14,
-							"source": "Tsc",
-							"target": "mTor",
-							"color_mapper": 1.099120794378905e-14,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e29"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "negative"
 					}
 				]
-			},
-			"style": [
-				{
-					"selector": "node, edge",
-					"css": {
-						"text-valign": "top",
-						"text-halign": "center",
-						"color": "#000",
-						"content": "",
-						"text-outline-color": "#000",
-						"text-outline-width": "0px",
-						"text-outline-opacity": "1",
-						"text-opacity": "1",
-						"text-decoration": "none",
-						"text-transform": "none",
-						"font-family": "Helvetica",
-						"font-style": "normal",
-						"font-variant": "normal",
-						"font-weight": "normal",
-						"font-size": "16px",
-						"min-zoomed-font-size": "0px",
-						"display": "element",
-						"visibility": "visible",
-						"opacity": "1",
-						"z-index": "0",
-						"overlay-padding": "10px",
-						"overlay-color": "#000",
-						"overlay-opacity": "0",
-						"transition-property": "none",
-						"transition-duration": "0s",
-						"transition-delay": "0s",
-						"background-blacken": "0",
-						"background-color": "#888",
-						"background-opacity": "1",
-						"background-image": "none",
-						"background-position-x": "50%",
-						"background-position-y": "50%",
-						"background-repeat": "no-repeat",
-						"background-fit": "none",
-						"background-clip": "node",
-						"pie-size": "100%",
-						"pie-1-background-color": "black",
-						"pie-2-background-color": "black",
-						"pie-3-background-color": "black",
-						"pie-4-background-color": "black",
-						"pie-5-background-color": "black",
-						"pie-6-background-color": "black",
-						"pie-7-background-color": "black",
-						"pie-8-background-color": "black",
-						"pie-9-background-color": "black",
-						"pie-10-background-color": "black",
-						"pie-11-background-color": "black",
-						"pie-12-background-color": "black",
-						"pie-13-background-color": "black",
-						"pie-14-background-color": "black",
-						"pie-15-background-color": "black",
-						"pie-16-background-color": "black",
-						"pie-1-background-size": "0%",
-						"pie-2-background-size": "0%",
-						"pie-3-background-size": "0%",
-						"pie-4-background-size": "0%",
-						"pie-5-background-size": "0%",
-						"pie-6-background-size": "0%",
-						"pie-7-background-size": "0%",
-						"pie-8-background-size": "0%",
-						"pie-9-background-size": "0%",
-						"pie-10-background-size": "0%",
-						"pie-11-background-size": "0%",
-						"pie-12-background-size": "0%",
-						"pie-13-background-size": "0%",
-						"pie-14-background-size": "0%",
-						"pie-15-background-size": "0%",
-						"pie-16-background-size": "0%",
-						"border-color": "#000",
-						"border-opacity": "1",
-						"border-width": "0px",
-						"border-style": "solid",
-						"height": "30px",
-						"width": "30px",
-						"padding-left": "0px",
-						"padding-right": "0px",
-						"padding-top": "0px",
-						"padding-bottom": "0px",
-						"shape": "ellipse",
-						"source-arrow-shape": "none",
-						"target-arrow-shape": "none",
-						"source-arrow-color": "#bbb",
-						"target-arrow-color": "#bbb",
-						"source-arrow-fill": "filled",
-						"target-arrow-fill": "filled",
-						"line-style": "solid",
-						"line-color": "#bbb",
-						"control-point-step-size": "40px",
-						"control-point-weight": "0.5",
-						"curve-style": "bezier"
-					}
-				},
-				{
-					"selector": "node > node",
-					"css": {
-						"background-opacity": "0.5",
-						"height": "auto",
-						"width": "auto",
-						"padding-left": "10px",
-						"padding-right": "10px",
-						"padding-top": "10px",
-						"padding-bottom": "10px",
-						"shape": "rectangle"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"width": "1px"
-					}
-				},
-				{
-					"selector": ":active",
-					"css": {
-						"overlay-padding": "10px",
-						"overlay-color": "black",
-						"overlay-opacity": "0.25"
-					}
-				},
-				{
-					"selector": "core",
-					"css": {
-						"selection-box-color": "#ddd",
-						"selection-box-opacity": "0.65",
-						"selection-box-border-color": "#aaa",
-						"selection-box-border-width": "1px",
-						"panning-cursor": "grabbing",
-						"active-bg-color": "black",
-						"active-bg-opacity": "0.15",
-						"active-bg-size": "15px",
-						"outside-texture-bg-color": "#000",
-						"outside-texture-bg-opacity": "0.125"
-					}
-				},
-				{
-					"selector": "node",
-					"css": {
-						"text-valign": "center",
-						"content": "data(name)",
-						"background-color": "white",
-						"border-color": "black",
-						"border-width": "2px",
-						"height": "50px",
-						"width": "50px"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"target-arrow-shape": "data(target_arrow_shape)",
-						"target-arrow-color": "black",
-						"line-style": "data(line_style)"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"width": "mapData(width_mapper, 0, 1, 1, 10)"
-					}
-				},
-				{
-					"selector": "edge.positive",
-					"css": {
-						"line-color": "mapData(color_mapper, 0, 1, yellow, green)"
-					}
-				},
-				{
-					"selector": "edge.negative",
-					"css": {
-						"line-color": "mapData(color_mapper, 0, 1, yellow, red)"
-					}
-				}
-			],
-			"scratch": {},
-			"zoomingEnabled": true,
-			"userZoomingEnabled": true,
-			"zoom": 0.9289219756347901,
-			"minZoom": 1e-50,
-			"maxZoom": 1e+50,
-			"panningEnabled": true,
-			"userPanningEnabled": true,
-			"pan": {
-				"x": 28.4858126405461,
-				"y": 14.939713543598458
-			},
-			"boxSelectionEnabled": true,
-			"layout": {
-				"name": "grid"
-			},
-			"renderer": {
-				"name": "canvas"
-			},
-			"hideEdgesOnViewport": false
+			}
 		},
-		"compare": {
+		"select": {
 			"elements": {
 				"nodes": [
 					{
 						"data": {
-							"id": "Akt",
-							"name": "Akt"
+							"id": "C_di_GMP",
+							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 58.69690940300688,
-							"y": 240.89780357188323
+							"x": 254.28192145725535,
+							"y": 147.88275985826033
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1370,12 +685,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Erk",
-							"name": "Erk"
+							"id": "MlrA",
+							"name": "MlrA"
 						},
 						"position": {
-							"x": 283.93077739944744,
-							"y": 168.29966715680177
+							"x": 258.43310259279355,
+							"y": 332.67983690269364
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1388,12 +703,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "Mek",
-							"name": "Mek"
+							"id": "YciR",
+							"name": "YciR"
 						},
 						"position": {
-							"x": 201.6996196077733,
-							"y": 358.89172613111515
+							"x": 366.19999014244524,
+							"y": 248.2763682703655
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1406,12 +721,30 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "PI3K",
-							"name": "PI3K"
+							"id": "YdaM",
+							"name": "YdaM"
 						},
 						"position": {
-							"x": 338.69961960777346,
-							"y": 358.89172613111515
+							"x": 132.00567309613172,
+							"y": 252.17745569363854
+						},
+						"group": "nodes",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": true,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"id": "YegE",
+							"name": "YegE"
+						},
+						"position": {
+							"x": 376.9606477021118,
+							"y": 73.90817236808853
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1424,66 +757,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"id": "RTK",
-							"name": "RTK"
+							"id": "YhjH",
+							"name": "YhjH"
 						},
 						"position": {
-							"x": 201.6996196077733,
-							"y": 462.39172613111515
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "Raf",
-							"name": "Raf"
-						},
-						"position": {
-							"x": 530.9942722580196,
-							"y": 525.3966706845358
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "Tsc",
-							"name": "Tsc"
-						},
-						"position": {
-							"x": 201.6996196077733,
-							"y": 565.8917261311152
-						},
-						"group": "nodes",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"id": "mTor",
-							"name": "mTor"
-						},
-						"position": {
-							"x": 338.69961960777346,
-							"y": 565.8917261311152
+							"x": 138.76979850410368,
+							"y": 78.79722265001901
 						},
 						"group": "nodes",
 						"removed": false,
@@ -1499,13 +778,160 @@ var report_data = {
 					{
 						"data": {
 							"frequency": 1,
+							"pearson": -0.1507905261357939,
+							"source": "YciR",
+							"target": "C_di_GMP",
+							"color_mapper": 0.1507905261357939,
+							"width_mapper": 1,
+							"target_arrow_shape": "tee",
+							"id": "e0"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0.7547431568147636,
+							"source": "YdaM",
+							"target": "C_di_GMP",
+							"color_mapper": 0.7547431568147636,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e1"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0.2515810522715879,
+							"source": "YegE",
+							"target": "C_di_GMP",
+							"color_mapper": 0.2515810522715879,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e2"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": -0.2515810522715879,
+							"source": "YhjH",
+							"target": "C_di_GMP",
+							"color_mapper": 0.2515810522715879,
+							"width_mapper": 1,
+							"target_arrow_shape": "tee",
+							"id": "e3"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0,
+							"source": "YciR",
+							"target": "MlrA",
+							"color_mapper": 0,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e4"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0.5771601883432528,
+							"source": "YdaM",
+							"target": "MlrA",
+							"color_mapper": 0.5771601883432528,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e5"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
 							"pearson": 1,
-							"source": "PI3K",
-							"target": "Akt",
+							"source": "C_di_GMP",
+							"target": "YciR",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e30"
+							"id": "e6"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"frequency": 1,
+							"pearson": 0,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 0,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e7"
 						},
 						"position": {},
 						"group": "edges",
@@ -1521,12 +947,12 @@ var report_data = {
 						"data": {
 							"frequency": 1,
 							"pearson": 1,
-							"source": "Mek",
-							"target": "Erk",
+							"source": "YegE",
+							"target": "YegE",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e31"
+							"id": "e8"
 						},
 						"position": {},
 						"group": "edges",
@@ -1542,264 +968,12 @@ var report_data = {
 						"data": {
 							"frequency": 1,
 							"pearson": 1,
-							"source": "Raf",
-							"target": "Mek",
+							"source": "YhjH",
+							"target": "YhjH",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e32"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.8181818181818182,
-							"pearson": -0.3489016221354863,
-							"source": "Erk",
-							"target": "PI3K",
-							"color_mapper": 0.3489016221354863,
-							"width_mapper": 0.8181818181818182,
-							"target_arrow_shape": "tee",
-							"id": "e33"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0.4538743983518276,
-							"source": "RTK",
-							"target": "PI3K",
-							"color_mapper": 0.4538743983518276,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e34"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.4538743983518208,
-							"source": "mTor",
-							"target": "PI3K",
-							"color_mapper": 0.4538743983518208,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e35"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 1,
-							"source": "RTK",
-							"target": "RTK",
-							"color_mapper": 1,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e36"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.926829268292683,
-							"pearson": -0.3442451657755377,
-							"source": "Akt",
-							"target": "Raf",
-							"color_mapper": 0.3442451657755377,
-							"width_mapper": 0.926829268292683,
-							"target_arrow_shape": "tee",
-							"id": "e37"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.3796634992642713,
-							"source": "Erk",
-							"target": "Raf",
-							"color_mapper": 0.3796634992642713,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e38"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.9105691056910569,
-							"pearson": 0.3102120148567476,
-							"source": "PI3K",
-							"target": "Raf",
-							"color_mapper": 0.3102120148567476,
-							"width_mapper": 0.9105691056910569,
-							"target_arrow_shape": "triangle",
-							"id": "e39"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0.3796634992642704,
-							"source": "RTK",
-							"target": "Raf",
-							"color_mapper": 0.3796634992642704,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e40"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.7182335127931944,
-							"source": "Akt",
-							"target": "Tsc",
-							"color_mapper": 0.7182335127931944,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e41"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.6666666666666666,
-							"pearson": -0.3849001794597454,
-							"source": "Erk",
-							"target": "Tsc",
-							"color_mapper": 0.3849001794597454,
-							"width_mapper": 0.6666666666666666,
-							"target_arrow_shape": "tee",
-							"id": "e42"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 0.6666666666666666,
-							"pearson": 0.3849001794597454,
-							"source": "Erk",
-							"target": "mTor",
-							"color_mapper": 0.3849001794597454,
-							"width_mapper": 0.6666666666666666,
-							"target_arrow_shape": "triangle",
-							"id": "e43"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.7182335127931944,
-							"source": "Tsc",
-							"target": "mTor",
-							"color_mapper": 0.7182335127931944,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e44"
+							"id": "e9"
 						},
 						"position": {},
 						"group": "edges",
@@ -1812,198 +986,17 @@ var report_data = {
 						"classes": ""
 					}
 				]
-			},
-			"style": [
-				{
-					"selector": "node, edge",
-					"css": {
-						"text-valign": "top",
-						"text-halign": "center",
-						"color": "#000",
-						"content": "",
-						"text-outline-color": "#000",
-						"text-outline-width": "0px",
-						"text-outline-opacity": "1",
-						"text-opacity": "1",
-						"text-decoration": "none",
-						"text-transform": "none",
-						"font-family": "Helvetica",
-						"font-style": "normal",
-						"font-variant": "normal",
-						"font-weight": "normal",
-						"font-size": "16px",
-						"min-zoomed-font-size": "0px",
-						"display": "element",
-						"visibility": "visible",
-						"opacity": "1",
-						"z-index": "0",
-						"overlay-padding": "10px",
-						"overlay-color": "#000",
-						"overlay-opacity": "0",
-						"transition-property": "none",
-						"transition-duration": "0s",
-						"transition-delay": "0s",
-						"background-blacken": "0",
-						"background-color": "#888",
-						"background-opacity": "1",
-						"background-image": "none",
-						"background-position-x": "50%",
-						"background-position-y": "50%",
-						"background-repeat": "no-repeat",
-						"background-fit": "none",
-						"background-clip": "node",
-						"pie-size": "100%",
-						"pie-1-background-color": "black",
-						"pie-2-background-color": "black",
-						"pie-3-background-color": "black",
-						"pie-4-background-color": "black",
-						"pie-5-background-color": "black",
-						"pie-6-background-color": "black",
-						"pie-7-background-color": "black",
-						"pie-8-background-color": "black",
-						"pie-9-background-color": "black",
-						"pie-10-background-color": "black",
-						"pie-11-background-color": "black",
-						"pie-12-background-color": "black",
-						"pie-13-background-color": "black",
-						"pie-14-background-color": "black",
-						"pie-15-background-color": "black",
-						"pie-16-background-color": "black",
-						"pie-1-background-size": "0%",
-						"pie-2-background-size": "0%",
-						"pie-3-background-size": "0%",
-						"pie-4-background-size": "0%",
-						"pie-5-background-size": "0%",
-						"pie-6-background-size": "0%",
-						"pie-7-background-size": "0%",
-						"pie-8-background-size": "0%",
-						"pie-9-background-size": "0%",
-						"pie-10-background-size": "0%",
-						"pie-11-background-size": "0%",
-						"pie-12-background-size": "0%",
-						"pie-13-background-size": "0%",
-						"pie-14-background-size": "0%",
-						"pie-15-background-size": "0%",
-						"pie-16-background-size": "0%",
-						"border-color": "#000",
-						"border-opacity": "1",
-						"border-width": "0px",
-						"border-style": "solid",
-						"height": "30px",
-						"width": "30px",
-						"padding-left": "0px",
-						"padding-right": "0px",
-						"padding-top": "0px",
-						"padding-bottom": "0px",
-						"shape": "ellipse",
-						"source-arrow-shape": "none",
-						"target-arrow-shape": "none",
-						"source-arrow-color": "#bbb",
-						"target-arrow-color": "#bbb",
-						"source-arrow-fill": "filled",
-						"target-arrow-fill": "filled",
-						"line-style": "solid",
-						"line-color": "#bbb",
-						"control-point-step-size": "40px",
-						"control-point-weight": "0.5",
-						"curve-style": "bezier"
-					}
-				},
-				{
-					"selector": "node > node",
-					"css": {
-						"background-opacity": "0.5",
-						"height": "auto",
-						"width": "auto",
-						"padding-left": "10px",
-						"padding-right": "10px",
-						"padding-top": "10px",
-						"padding-bottom": "10px",
-						"shape": "rectangle"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"width": "1px"
-					}
-				},
-				{
-					"selector": ":active",
-					"css": {
-						"overlay-padding": "10px",
-						"overlay-color": "black",
-						"overlay-opacity": "0.25"
-					}
-				},
-				{
-					"selector": "core",
-					"css": {
-						"selection-box-color": "#ddd",
-						"selection-box-opacity": "0.65",
-						"selection-box-border-color": "#aaa",
-						"selection-box-border-width": "1px",
-						"panning-cursor": "grabbing",
-						"active-bg-color": "black",
-						"active-bg-opacity": "0.15",
-						"active-bg-size": "15px",
-						"outside-texture-bg-color": "#000",
-						"outside-texture-bg-opacity": "0.125"
-					}
-				},
-				{
-					"selector": "node",
-					"css": {
-						"text-valign": "center",
-						"content": "data(name)",
-						"background-color": "white",
-						"border-color": "black",
-						"border-width": "2px",
-						"height": "50px",
-						"width": "50px"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"target-arrow-shape": "data(target_arrow_shape)",
-						"target-arrow-color": "black",
-						"line-style": "data(line_style)"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"width": "mapData(width_mapper, 0, 1, 1, 10)"
-					}
-				},
-				{
-					"selector": "edge",
-					"css": {
-						"line-color": "mapData(color_mapper, 0, 1, yellow, red)"
-					}
-				}
-			],
-			"scratch": {},
-			"zoomingEnabled": true,
-			"userZoomingEnabled": true,
-			"zoom": 0.9289219756347901,
-			"minZoom": 1e-50,
-			"maxZoom": 1e+50,
-			"panningEnabled": true,
-			"userPanningEnabled": true,
-			"pan": {
-				"x": 28.4858126405461,
-				"y": 14.939713543598458
-			},
-			"boxSelectionEnabled": true,
-			"layout": {
-				"name": "grid"
-			},
-			"renderer": {
-				"name": "canvas"
-			},
-			"hideEdgesOnViewport": false
+			}
 		}
+	},
+	"setup": {
+		"comparative": true,
+		"compare": "1",
+		"compared": 228,
+		"date": "Tue Nov  4 17:28:00 2014",
+		"name": "biofilm",
+		"pool_size": 228,
+		"select": "1 AND(C_01_stable_active AND C_02_stable_inactive AND C_03_stable_active_dYciR AND C_05_stable_active_dYhjH AND C_07_negate_active_dYdaM is null AND C_08_stable_inactive_dYdaM AND C_11_stable_active_dYhjH_dYciR AND C_15_stable_active_dYegE_dYciR AND C_17_stable_active_dYegE_dYhjH AND C_18_stable_inactive_dYegE_dYhjH  AND C_21_negate_active_dYdaM_dYegE is null AND C_22_stable_inactive_dYdaM_dYegE AND C_25_stable_active_dYhjH_dYciR_dYegE AND C_29_negate_active_dYdaM_dYegE_dYhjH is null AND C_30_stable_inactive_dYdaM_dYegE_dYhjH) ",
+		"selected": 10
 	}
 };

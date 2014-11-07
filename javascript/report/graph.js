@@ -124,12 +124,11 @@ tremppi_report.Graph = {
 
         // Create the mapper for the graph
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {
-            $('#reg_graph_' + type).cytoscape('get').style().selector(selection).css(mapper, 'mapData(' + glyph + '_mapper, ' +
-                    config[type][rel_string][glyph].min + ', ' +
-                    config[type][rel_string][glyph].max + ', ' +
-                    config[type][glyph + sign].min + ', ' +
-                    config[type][glyph + sign].max +
-                    ')').update();
+            var min = (type === "differ" && sign === "_pos") ? 0 : config[type][rel_string][glyph].min;
+            var max = (type === "differ" && sign === "_neg") ? 0 : config[type][rel_string][glyph].max;
+            $('#reg_graph_' + type).cytoscape('get').style().selector(selection).css(mapper, 
+            'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + 
+                    config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
         };
 
         var setLabels = function (type) {
