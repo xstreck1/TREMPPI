@@ -138,7 +138,6 @@ int tremppi_report(int argc, char ** argv) {
 		logging.exceptionMessage(e, 5);
 	}
 
-
 	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished succesfully.";
 	return 0;
 }

@@ -8,8 +8,8 @@ struct RegData {
 	// Info about this component
 	const RegInfo & info;
 	// Interaction graph data
-	vector<double> reg_corr;
-	vector<double> reg_freq;
+	map<CompID, vector<double> > reg_corr;
+	map<CompID, vector<double> > reg_freq;
 };
 using RegsData = vector<RegData>;
 

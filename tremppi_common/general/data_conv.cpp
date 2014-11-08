@@ -37,3 +37,31 @@ Levels DataConv::getThrsFromContext(const string & column_name) {
 
 	return result;
 }
+
+
+map<ActLevel, size_t> DataConv::getThresholdToIndex(const Levels & thresholds) {
+	map<ActLevel, size_t> result;
+
+	result.insert({ 0, 0 });
+	for (const ActLevel & threshold : thresholds) {
+		result.insert({ threshold, result.size() });
+	}
+
+	return result;
+}
+
+map<CompID, vector<vector<size_t>>> DataConv::getColumnsOfEdges(const map<CompID, vector<vector<size_t>>> & columns_of_thresholds) {
+	map<CompID, vector<vector<size_t> > > result;
+
+	for (const auto & source_columns : columns_of_thresholds) {
+		vector<vector<size_t>> edge_columns(source_columns.second.size() - 1);
+
+		for (size_t trhs_column_i = 0; trhs_column_i < edge_columns.size(); trhs_column_i++) {
+			edge_columns[trhs_column_i] = source_columns.second[trhs_column_i] + source_columns.second[trhs_column_i + 1];
+		}
+
+		result.insert({ source_columns.first, edge_columns });
+	}
+
+	return result;
+}

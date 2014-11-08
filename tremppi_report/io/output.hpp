@@ -97,19 +97,22 @@ namespace Output {
 		for (const RegData & reg : regs.second) {
 			size_t reg_i = 0;
 			for (auto & regul : reg.info.regulators) {
-				// Skip those with no occurence
-				if (abs(reg.reg_freq[reg_i]) != 0 || regs.first == "differ") {
-					Json::Value edge, data;
+				for (const size_t trh_i : cscope(regul.second)) {
+					// Skip those with no occurence
+					if (abs(reg.reg_freq.at(regul.first)[trh_i]) != 0 || regs.first == "differ") {
+						Json::Value edge, data;
 
-					data["source"] = reg_infos[regul.first].name;
-					data["target"] = reg.info.name;
-					data["pearson"] = reg.reg_corr[reg_i];
-					data["frequency"] = reg.reg_freq[reg_i];
+						data["source"] = reg_infos[regul.first].name;
+						data["target"] = reg.info.name;
+						data["pearson"] = reg.reg_corr.at(regul.first)[trh_i];
+						data["frequency"] = reg.reg_freq.at(regul.first)[trh_i];
+						data["Threshold"] = regul.second[trh_i];
 
-					edge["data"] = data;
-					graph["elements"]["edges"].append(edge);
+						edge["data"] = data;
+						graph["elements"]["edges"].append(edge);
+					}
+					++reg_i;
 				}
-				++reg_i;
 			}
 		}
 		return graph;
