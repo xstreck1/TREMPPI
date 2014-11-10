@@ -55,7 +55,7 @@ tremppi_report.Page = {
             tremppi_report.Regulatory.weighted = !tremppi_report.Regulatory.weighted;
             tremppi_report.Graph.labelSwitch(config, tremppi_report.Regulatory.relative, tremppi_report.Regulatory.weighted);
             tremppi_report.Labels.loadLabels(config, tremppi_report.Regulatory.relative, tremppi_report.Regulatory.weighted);
-            this.innerHTML = tremppi_report.Regulatory.weighted ? "weighted" : "total";
+            this.innerHTML = tremppi_report.Regulatory.weighted ? "total" : "weighted";
         });
         var resizeViews = function(change) {
             var height = $('#regulatory_container').css('padding-bottom');

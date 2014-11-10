@@ -1,8 +1,13 @@
 var tremppi_common = {
+    server_port: 80,
+    server_location: "localhost",
+    getServerAddress: function() {
+        return "http://" + tremppi_common.server_location + ":" + tremppi_common.server_port + "/";
+    },
     // Saves the variable to the respective file
     save: function (var_name) {
         var content = "var " + var_name + " = " + JSON.stringify(window[var_name], null, '\t') + ";";
-        var url = tremppi_common.server_address + "?" + tremppi_common.data_path + var_name + ".js";
+        var url = tremppi_common.getServerAddress() + "?" + tremppi_common.data_path + var_name + ".js";
         $.ajax({
             type: "POST",
             url: url,
@@ -25,7 +30,7 @@ var tremppi_common = {
     // Executes the provided function in the case the server is running
     addServerContent: function (content_function) {
         $.ajax(
-                {url: tremppi_common.server_address,
+                {url: tremppi_common.getServerAddress(),
                     success: function (result) {
                         content_function();
                     },
