@@ -71,21 +71,21 @@ tremppi_report.Graph = {
 
         for (var edge_no = 0; edge_no < graph.edges.length; edge_no++) {
             var data = graph.edges[edge_no].data;
-            data.color_mapper = Math.abs(data.pearson);
-            data.width_mapper = Math.abs(data.frequency);
+            data.color_mapper = Math.abs(data.Pearson);
+            data.width_mapper = Math.abs(data.Frequency);
             if (type === "differ") {
                 data.target_arrow_shape = 'circle';
-                graph.edges[edge_no].classes = data.pearson >= 0 ? 'positive' : 'negative';
-                if (data.frequency > 0) {
+                graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
+                if (data.Frequency > 0) {
                     data.line_style = 'solid';
-                } else if (data.frequency === 0) {
+                } else if (data.Frequency === 0) {
                     data.line_style = 'dotted';
                 } else {
                     data.line_style = 'dashed';
                 }
             }
             else
-                data.target_arrow_shape = data.pearson >= 0 ? 'triangle' : 'tee';
+                data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
         }
         
         var selected_col = '#5555BB';
@@ -124,8 +124,8 @@ tremppi_report.Graph = {
 
         // Create the mapper for the graph
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {
-            var min = (type === "differ" && sign === "_pos") ? 0 : config[type][rel_string][glyph].min;
-            var max = (type === "differ" && sign === "_neg") ? 0 : config[type][rel_string][glyph].max;
+            var min = config[type][rel_string][glyph].min;
+            var max = config[type][rel_string][glyph].max;
             $('#reg_graph_' + type).cytoscape('get').style().selector(selection).css(mapper, 
             'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + 
                     config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();

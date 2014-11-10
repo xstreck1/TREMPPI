@@ -9,8 +9,8 @@ var report_data = {
 							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 254.28192145725535,
-							"y": 147.88275985826033
+							"x": 86.33333333333333,
+							"y": 117.75
 						},
 						"group": "nodes",
 						"removed": false,
@@ -27,8 +27,8 @@ var report_data = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 258.43310259279355,
-							"y": 332.67983690269364
+							"x": 233.65671259065812,
+							"y": 184.34489398056377
 						},
 						"group": "nodes",
 						"removed": false,
@@ -45,8 +45,8 @@ var report_data = {
 							"name": "YciR"
 						},
 						"position": {
-							"x": 366.19999014244524,
-							"y": 248.2763682703655
+							"x": 431.66666666666663,
+							"y": 117.75
 						},
 						"group": "nodes",
 						"removed": false,
@@ -63,8 +63,8 @@ var report_data = {
 							"name": "YdaM"
 						},
 						"position": {
-							"x": 132.00567309613172,
-							"y": 252.17745569363854
+							"x": 86.33333333333333,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -81,8 +81,8 @@ var report_data = {
 							"name": "YegE"
 						},
 						"position": {
-							"x": 376.9606477021118,
-							"y": 73.90817236808853
+							"x": 259,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -99,8 +99,8 @@ var report_data = {
 							"name": "YhjH"
 						},
 						"position": {
-							"x": 138.76979850410368,
-							"y": 78.79722265001901
+							"x": 431.66666666666663,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -115,97 +115,15 @@ var report_data = {
 				"edges": [
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": -0.3565959680736834,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": -0.1259881576697424,
+							"Threshold": 2,
 							"source": "YciR",
 							"target": "C_di_GMP",
-							"color_mapper": 0.3565959680736834,
+							"color_mapper": 0.1259881576697424,
 							"width_mapper": 1,
 							"target_arrow_shape": "tee",
-							"id": "e20"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0.3565959680736832,
-							"source": "YdaM",
-							"target": "C_di_GMP",
-							"color_mapper": 0.3565959680736832,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e21"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0.3565959680736832,
-							"source": "YegE",
-							"target": "C_di_GMP",
-							"color_mapper": 0.3565959680736832,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
-							"id": "e22"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": -0.356595968073683,
-							"source": "YhjH",
-							"target": "C_di_GMP",
-							"color_mapper": 0.356595968073683,
-							"width_mapper": 1,
-							"target_arrow_shape": "tee",
-							"id": "e23"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": ""
-					},
-					{
-						"data": {
-							"frequency": 1,
-							"pearson": 0,
-							"source": "YciR",
-							"target": "MlrA",
-							"color_mapper": 0,
-							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
 							"id": "e24"
 						},
 						"position": {},
@@ -220,11 +138,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0.5771601883432547,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": 0.629940788348712,
+							"Threshold": 1,
 							"source": "YdaM",
-							"target": "MlrA",
-							"color_mapper": 0.5771601883432547,
+							"target": "C_di_GMP",
+							"color_mapper": 0.629940788348712,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
 							"id": "e25"
@@ -241,11 +161,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 1,
-							"source": "C_di_GMP",
-							"target": "YciR",
-							"color_mapper": 1,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": 0.3779644730092272,
+							"Threshold": 1,
+							"source": "YegE",
+							"target": "C_di_GMP",
+							"color_mapper": 0.3779644730092272,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
 							"id": "e26"
@@ -262,13 +184,15 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0,
-							"source": "YciR",
-							"target": "YdaM",
-							"color_mapper": 0,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": -0.3779644730092272,
+							"Threshold": 1,
+							"source": "YhjH",
+							"target": "C_di_GMP",
+							"color_mapper": 0.3779644730092272,
 							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
+							"target_arrow_shape": "tee",
 							"id": "e27"
 						},
 						"position": {},
@@ -283,13 +207,15 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 1,
-							"source": "YegE",
-							"target": "YegE",
-							"color_mapper": 1,
+							"ExpectedFreq": 0.25,
+							"Frequency": 1,
+							"Pearson": -0.5773502691896258,
+							"Threshold": 1,
+							"source": "YciR",
+							"target": "MlrA",
+							"color_mapper": 0.5773502691896258,
 							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
+							"target_arrow_shape": "tee",
 							"id": "e28"
 						},
 						"position": {},
@@ -304,14 +230,154 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 1,
+							"ExpectedFreq": 0.25,
+							"Frequency": 1,
+							"Pearson": 0.5773502691896258,
+							"Threshold": 2,
+							"source": "YciR",
+							"target": "MlrA",
+							"color_mapper": 0.5773502691896258,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e29"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.125,
+							"Frequency": 1,
+							"Pearson": 0.7071067811865475,
+							"Threshold": 1,
+							"source": "YdaM",
+							"target": "MlrA",
+							"color_mapper": 0.7071067811865475,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e30"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.3333333333333333,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 1,
+							"source": "C_di_GMP",
+							"target": "YciR",
+							"color_mapper": 1,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e31"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": -1,
+							"Threshold": 1,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 1,
+							"width_mapper": 1,
+							"target_arrow_shape": "tee",
+							"id": "e32"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 2,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 1,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e33"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 1,
+							"source": "YegE",
+							"target": "YegE",
+							"color_mapper": 1,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e34"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 1,
 							"source": "YhjH",
 							"target": "YhjH",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e29"
+							"id": "e35"
 						},
 						"position": {},
 						"group": "edges",
@@ -335,8 +401,8 @@ var report_data = {
 							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 254.28192145725535,
-							"y": 147.88275985826033
+							"x": 86.33333333333333,
+							"y": 117.75
 						},
 						"group": "nodes",
 						"removed": false,
@@ -353,15 +419,15 @@ var report_data = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 258.43310259279355,
-							"y": 332.67983690269364
+							"x": 233.65671259065812,
+							"y": 184.34489398056377
 						},
 						"group": "nodes",
 						"removed": false,
 						"selected": false,
 						"selectable": true,
 						"locked": false,
-						"grabbed": false,
+						"grabbed": true,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -371,8 +437,8 @@ var report_data = {
 							"name": "YciR"
 						},
 						"position": {
-							"x": 366.19999014244524,
-							"y": 248.2763682703655
+							"x": 431.66666666666663,
+							"y": 117.75
 						},
 						"group": "nodes",
 						"removed": false,
@@ -389,8 +455,8 @@ var report_data = {
 							"name": "YdaM"
 						},
 						"position": {
-							"x": 132.00567309613172,
-							"y": 252.17745569363854
+							"x": 86.33333333333333,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -407,12 +473,12 @@ var report_data = {
 							"name": "YegE"
 						},
 						"position": {
-							"x": 376.9606477021118,
-							"y": 73.90817236808853
+							"x": 259,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
-						"selected": true,
+						"selected": false,
 						"selectable": true,
 						"locked": false,
 						"grabbed": false,
@@ -425,8 +491,8 @@ var report_data = {
 							"name": "YhjH"
 						},
 						"position": {
-							"x": 138.76979850410368,
-							"y": 78.79722265001901
+							"x": 431.66666666666663,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -441,55 +507,13 @@ var report_data = {
 				"edges": [
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0.2058054419378895,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 0,
+							"Pearson": -0.02480236846605149,
+							"Threshold": 2,
 							"source": "YciR",
 							"target": "C_di_GMP",
-							"color_mapper": 0.2058054419378895,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e10"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": 0.3981471887410803,
-							"source": "YdaM",
-							"target": "C_di_GMP",
-							"color_mapper": 0.3981471887410803,
-							"width_mapper": 0,
-							"target_arrow_shape": "circle",
-							"line_style": "dotted",
-							"id": "e11"
-						},
-						"position": {},
-						"group": "edges",
-						"removed": false,
-						"selected": false,
-						"selectable": true,
-						"locked": false,
-						"grabbed": false,
-						"grabbable": true,
-						"classes": "positive"
-					},
-					{
-						"data": {
-							"frequency": 0,
-							"pearson": -0.1050149158020953,
-							"source": "YegE",
-							"target": "C_di_GMP",
-							"color_mapper": 0.1050149158020953,
+							"color_mapper": 0.02480236846605149,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -507,11 +531,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0.1050149158020952,
-							"source": "YhjH",
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 0,
+							"Pearson": 0.1248023684660515,
+							"Threshold": 1,
+							"source": "YdaM",
 							"target": "C_di_GMP",
-							"color_mapper": 0.1050149158020952,
+							"color_mapper": 0.1248023684660515,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -529,11 +555,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0,
-							"source": "YciR",
-							"target": "MlrA",
-							"color_mapper": 0,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 0,
+							"Pearson": -0.1263834207376394,
+							"Threshold": 1,
+							"source": "YegE",
+							"target": "C_di_GMP",
+							"color_mapper": 0.1263834207376394,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -547,15 +575,17 @@ var report_data = {
 						"locked": false,
 						"grabbed": false,
 						"grabbable": true,
-						"classes": "positive"
+						"classes": "negative"
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": -1.887379141862766e-15,
-							"source": "YdaM",
-							"target": "MlrA",
-							"color_mapper": 1.887379141862766e-15,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 0,
+							"Pearson": 0.1263834207376394,
+							"Threshold": 1,
+							"source": "YhjH",
+							"target": "C_di_GMP",
+							"color_mapper": 0.1263834207376394,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -569,14 +599,16 @@ var report_data = {
 						"locked": false,
 						"grabbed": false,
 						"grabbable": true,
-						"classes": "negative"
+						"classes": "positive"
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0,
-							"source": "C_di_GMP",
-							"target": "YciR",
+							"ExpectedFreq": 0.25,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 1,
+							"source": "YciR",
+							"target": "MlrA",
 							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
@@ -595,10 +627,12 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0,
+							"ExpectedFreq": 0.25,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 2,
 							"source": "YciR",
-							"target": "YdaM",
+							"target": "MlrA",
 							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
@@ -617,11 +651,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0,
-							"source": "YegE",
-							"target": "YegE",
-							"color_mapper": 0,
+							"ExpectedFreq": 0.125,
+							"Frequency": 0,
+							"Pearson": -0.2598931856865896,
+							"Threshold": 1,
+							"source": "YdaM",
+							"target": "MlrA",
+							"color_mapper": 0.2598931856865896,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
@@ -635,19 +671,117 @@ var report_data = {
 						"locked": false,
 						"grabbed": false,
 						"grabbable": true,
+						"classes": "negative"
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.3333333333333333,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 1,
+							"source": "C_di_GMP",
+							"target": "YciR",
+							"color_mapper": 0,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e19"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
 						"classes": "positive"
 					},
 					{
 						"data": {
-							"frequency": 0,
-							"pearson": 0,
+							"ExpectedFreq": 0.5,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 1,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 0,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e20"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "positive"
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 2,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 0,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e21"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "positive"
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 1,
+							"source": "YegE",
+							"target": "YegE",
+							"color_mapper": 0,
+							"width_mapper": 0,
+							"target_arrow_shape": "circle",
+							"line_style": "dotted",
+							"id": "e22"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": "positive"
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 0,
+							"Pearson": 0,
+							"Threshold": 1,
 							"source": "YhjH",
 							"target": "YhjH",
 							"color_mapper": 0,
 							"width_mapper": 0,
 							"target_arrow_shape": "circle",
 							"line_style": "dotted",
-							"id": "e19"
+							"id": "e23"
 						},
 						"position": {},
 						"group": "edges",
@@ -671,8 +805,8 @@ var report_data = {
 							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 254.28192145725535,
-							"y": 147.88275985826033
+							"x": 86.33333333333333,
+							"y": 117.75
 						},
 						"group": "nodes",
 						"removed": false,
@@ -689,8 +823,8 @@ var report_data = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 258.43310259279355,
-							"y": 332.67983690269364
+							"x": 233.65671259065812,
+							"y": 184.34489398056377
 						},
 						"group": "nodes",
 						"removed": false,
@@ -707,8 +841,8 @@ var report_data = {
 							"name": "YciR"
 						},
 						"position": {
-							"x": 366.19999014244524,
-							"y": 248.2763682703655
+							"x": 431.66666666666663,
+							"y": 117.75
 						},
 						"group": "nodes",
 						"removed": false,
@@ -725,15 +859,15 @@ var report_data = {
 							"name": "YdaM"
 						},
 						"position": {
-							"x": 132.00567309613172,
-							"y": 252.17745569363854
+							"x": 86.33333333333333,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
 						"selected": false,
 						"selectable": true,
 						"locked": false,
-						"grabbed": true,
+						"grabbed": false,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -743,8 +877,8 @@ var report_data = {
 							"name": "YegE"
 						},
 						"position": {
-							"x": 376.9606477021118,
-							"y": 73.90817236808853
+							"x": 259,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -761,8 +895,8 @@ var report_data = {
 							"name": "YhjH"
 						},
 						"position": {
-							"x": 138.76979850410368,
-							"y": 78.79722265001901
+							"x": 431.66666666666663,
+							"y": 353.25
 						},
 						"group": "nodes",
 						"removed": false,
@@ -777,8 +911,10 @@ var report_data = {
 				"edges": [
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": -0.1507905261357939,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": -0.1507905261357939,
+							"Threshold": 2,
 							"source": "YciR",
 							"target": "C_di_GMP",
 							"color_mapper": 0.1507905261357939,
@@ -798,8 +934,10 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0.7547431568147636,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": 0.7547431568147636,
+							"Threshold": 1,
 							"source": "YdaM",
 							"target": "C_di_GMP",
 							"color_mapper": 0.7547431568147636,
@@ -819,11 +957,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0.2515810522715879,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": 0.2515810522715878,
+							"Threshold": 1,
 							"source": "YegE",
 							"target": "C_di_GMP",
-							"color_mapper": 0.2515810522715879,
+							"color_mapper": 0.2515810522715878,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
 							"id": "e2"
@@ -840,11 +980,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": -0.2515810522715879,
+							"ExpectedFreq": 0.00390625,
+							"Frequency": 1,
+							"Pearson": -0.2515810522715878,
+							"Threshold": 1,
 							"source": "YhjH",
 							"target": "C_di_GMP",
-							"color_mapper": 0.2515810522715879,
+							"color_mapper": 0.2515810522715878,
 							"width_mapper": 1,
 							"target_arrow_shape": "tee",
 							"id": "e3"
@@ -861,13 +1003,15 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0,
+							"ExpectedFreq": 0.25,
+							"Frequency": 1,
+							"Pearson": -0.5773502691896258,
+							"Threshold": 1,
 							"source": "YciR",
 							"target": "MlrA",
-							"color_mapper": 0,
+							"color_mapper": 0.5773502691896258,
 							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
+							"target_arrow_shape": "tee",
 							"id": "e4"
 						},
 						"position": {},
@@ -882,11 +1026,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0.5771601883432528,
-							"source": "YdaM",
+							"ExpectedFreq": 0.25,
+							"Frequency": 1,
+							"Pearson": 0.5773502691896258,
+							"Threshold": 2,
+							"source": "YciR",
 							"target": "MlrA",
-							"color_mapper": 0.5771601883432528,
+							"color_mapper": 0.5773502691896258,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
 							"id": "e5"
@@ -903,11 +1049,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 1,
-							"source": "C_di_GMP",
-							"target": "YciR",
-							"color_mapper": 1,
+							"ExpectedFreq": 0.125,
+							"Frequency": 1,
+							"Pearson": 0.4472135954999579,
+							"Threshold": 1,
+							"source": "YdaM",
+							"target": "MlrA",
+							"color_mapper": 0.4472135954999579,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
 							"id": "e6"
@@ -924,11 +1072,13 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 0,
-							"source": "YciR",
-							"target": "YdaM",
-							"color_mapper": 0,
+							"ExpectedFreq": 0.3333333333333333,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 1,
+							"source": "C_di_GMP",
+							"target": "YciR",
+							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
 							"id": "e7"
@@ -945,13 +1095,15 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 1,
-							"source": "YegE",
-							"target": "YegE",
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": -1,
+							"Threshold": 1,
+							"source": "YciR",
+							"target": "YdaM",
 							"color_mapper": 1,
 							"width_mapper": 1,
-							"target_arrow_shape": "triangle",
+							"target_arrow_shape": "tee",
 							"id": "e8"
 						},
 						"position": {},
@@ -966,14 +1118,62 @@ var report_data = {
 					},
 					{
 						"data": {
-							"frequency": 1,
-							"pearson": 1,
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 2,
+							"source": "YciR",
+							"target": "YdaM",
+							"color_mapper": 1,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e9"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 1,
+							"source": "YegE",
+							"target": "YegE",
+							"color_mapper": 1,
+							"width_mapper": 1,
+							"target_arrow_shape": "triangle",
+							"id": "e10"
+						},
+						"position": {},
+						"group": "edges",
+						"removed": false,
+						"selected": false,
+						"selectable": true,
+						"locked": false,
+						"grabbed": false,
+						"grabbable": true,
+						"classes": ""
+					},
+					{
+						"data": {
+							"ExpectedFreq": 0.5,
+							"Frequency": 1,
+							"Pearson": 1,
+							"Threshold": 1,
 							"source": "YhjH",
 							"target": "YhjH",
 							"color_mapper": 1,
 							"width_mapper": 1,
 							"target_arrow_shape": "triangle",
-							"id": "e9"
+							"id": "e11"
 						},
 						"position": {},
 						"group": "edges",
@@ -991,12 +1191,12 @@ var report_data = {
 	},
 	"setup": {
 		"comparative": true,
-		"compare": "1",
-		"compared": 228,
-		"date": "Tue Nov  4 17:28:00 2014",
+		"compare": "1 AND(C_01_stable_active AND C_02_stable_inactive AND C_03_stable_active_dYciR AND C_05_stable_active_dYhjH AND C_07_negate_active_dYdaM is null AND C_08_stable_inactive_dYdaM AND C_11_stable_active_dYhjH_dYciR AND C_15_stable_active_dYegE_dYciR AND C_17_stable_active_dYegE_dYhjH AND C_18_stable_inactive_dYegE_dYhjH  AND C_21_negate_active_dYdaM_dYegE is null AND C_22_stable_inactive_dYdaM_dYegE AND C_25_stable_active_dYhjH_dYciR_dYegE AND C_29_negate_active_dYdaM_dYegE_dYhjH is null AND C_30_stable_inactive_dYdaM_dYegE_dYhjH) AND (C_04_negate_inactive_dYciR is null AND C_06_negate_inactive_dYhjH is null AND C_09_negate_active_dYegE is null AND C_10_stable_inactive_dYegE AND C_12_negate_inactive_dYhjH_dYciR is null AND C_13_negate_active_dYciR_dYdaM is null AND C_14_stable_inactive_dYciR_dYdaM AND C_16_negate_inactive_dYegE_dYciR is null AND C_19_negate_active_dYdaM_dYhjH is null AND C_20_stable_inactive_dYdaM_dYhjH AND C_23_negate_active_dYdaM_dYciR_dYhjH is null AND C_24_stable_inactive_dYdaM_dYegE_dYhjH AND C_26_negate_inactive_dYhjH_dYciR_dYegE is null AND C_27_negate_active_dYdaM_dYciR_dYegE is null AND C_28_stable_inactive_dYdaM_dYciR_dYegE AND C_31_negate_active_dYdaM_dYciR_dYegE_dYhjH is null AND C_32_stable_inactive_dYciR_dYdaM_dYegE_dYhjH) ",
+		"compared": 1,
+		"date": "Mon Nov 10 13:22:15 2014",
 		"name": "biofilm",
 		"pool_size": 228,
-		"select": "1 AND(C_01_stable_active AND C_02_stable_inactive AND C_03_stable_active_dYciR AND C_05_stable_active_dYhjH AND C_07_negate_active_dYdaM is null AND C_08_stable_inactive_dYdaM AND C_11_stable_active_dYhjH_dYciR AND C_15_stable_active_dYegE_dYciR AND C_17_stable_active_dYegE_dYhjH AND C_18_stable_inactive_dYegE_dYhjH  AND C_21_negate_active_dYdaM_dYegE is null AND C_22_stable_inactive_dYdaM_dYegE AND C_25_stable_active_dYhjH_dYciR_dYegE AND C_29_negate_active_dYdaM_dYegE_dYhjH is null AND C_30_stable_inactive_dYdaM_dYegE_dYhjH) ",
-		"selected": 10
+		"select": "1 AND(C_01_stable_active AND C_02_stable_inactive AND C_03_stable_active_dYciR AND C_05_stable_active_dYhjH AND C_07_negate_active_dYdaM is null AND C_08_stable_inactive_dYdaM AND C_11_stable_active_dYhjH_dYciR AND C_15_stable_active_dYegE_dYciR AND C_17_stable_active_dYegE_dYhjH AND C_18_stable_inactive_dYegE_dYhjH  AND C_21_negate_active_dYdaM_dYegE is null AND C_22_stable_inactive_dYdaM_dYegE AND C_25_stable_active_dYhjH_dYciR_dYegE AND C_29_negate_active_dYdaM_dYegE_dYhjH is null AND C_30_stable_inactive_dYdaM_dYegE_dYhjH) AND (C_32_stable_inactive_dYciR_dYdaM_dYegE_dYhjH is null) ",
+		"selected": 5
 	}
 };

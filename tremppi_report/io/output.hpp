@@ -104,8 +104,9 @@ namespace Output {
 
 						data["source"] = reg_infos[regul.first].name;
 						data["target"] = reg.info.name;
-						data["pearson"] = reg.reg_corr.at(regul.first)[trh_i];
-						data["frequency"] = reg.reg_freq.at(regul.first)[trh_i];
+						data["Pearson"] = reg.reg_corr.at(regul.first)[trh_i];
+						data["Frequency"] = reg.reg_freq.at(regul.first)[trh_i];
+						data["ExpectedFreq"] = reg.expected_freq.at(regul.first);
 						data["Threshold"] = regul.second[trh_i];
 
 						edge["data"] = data;

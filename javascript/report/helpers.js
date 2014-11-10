@@ -6,10 +6,10 @@
 
 tremppi_report.Helpers = {
     getBound: function(edges, param, fun, signed) {
-        if (signed)
-            var result = 0;
-        else
-            var result = fun === "min" ? Number.MAX_VALUE : Number.MIN_VALUE;
+        if (signed && fun === "min")
+            return 0;
+        
+        var result = fun === "min" ? Number.MAX_VALUE : Number.MIN_VALUE;
 
         var min_func = signed ? function(x, y) {
             var res = -1 * Math.max(Math.abs(x), Math.abs(y));
@@ -60,11 +60,11 @@ tremppi_report.Helpers = {
             };
         config[type].relative = {
             width: {
-                min: this.getBound(graph.edges, "frequency", "min", false),
-                max: this.getBound(graph.edges, "frequency", "max", false)},
+                min: this.getBound(graph.edges, "Frequency", "min", false),
+                max: this.getBound(graph.edges, "Frequency", "max", false)},
             color: {
-                min: this.getBound(graph.edges, "pearson", "min", type === "differ"),
-                max: this.getBound(graph.edges, "pearson", "max", type === "differ")}};
+                min: this.getBound(graph.edges, "Pearson", "min", type === "differ"),
+                max: this.getBound(graph.edges, "Pearson", "max", type === "differ")}};
     },
     assignPositions: function(config, analysis, tag) {
         if (report_data.setup.comparative) {

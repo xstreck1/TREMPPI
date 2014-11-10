@@ -26,8 +26,8 @@ tremppi_report.Labels = {
                     var my_data = eve.cyTarget.data();
                     var text = "source: " + my_data.source + "<br />"
                             + "target: " + my_data.target + "<br />"
-                            + "pearson: " + my_data.pearson.toFixed(num_of_decimals) + "<br />"
-                            + "frequency: " + my_data.frequency.toFixed(num_of_decimals) + "<br />";
+                            + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />"
+                            + "frequency: " + my_data.Frequency.toFixed(num_of_decimals) + "<br />";
 
                     api.set("content.text", text);
                     api.show();
