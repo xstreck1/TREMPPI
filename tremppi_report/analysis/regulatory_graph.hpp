@@ -6,14 +6,24 @@
 #include "../data/data_storage.hpp"
 
 namespace RegulatoryGraph {
-	// 
+	// Retrun true if the edge is functional
 	bool isEdgeFunctional(const vector<Levels> & context_values, const size_t & edge_no) { 
-		for (const size_t config_i : cscope(context_values[0])){
+		// Compare the values in this and following thesholds, should go from 0 value
+		for (const size_t config_i : cscope(context_values[0]))
 			if (context_values[edge_no][config_i] != context_values[edge_no + 1][config_i])
 				return true;
-		}
 
 		return false;
+	}
+
+	// Compute the distribution of target values
+	vector<Levels> getContextValues(const Levels & param, map<ActLevel, size_t> & my_trsh_to_index, const size_t reg_no, const vector<Levels> & reg_values) {
+		vector<Levels> context_values(my_trsh_to_index.size());
+		for (const size_t param_i : cscope(param)) {
+			ActLevel threshold = reg_values[reg_no][param_i];
+			context_values[my_trsh_to_index[threshold]].emplace_back(param[param_i]);
+		}
+		return context_values;
 	}
 
 	// computes the correlation of the regulators to the regulated component for each component
@@ -21,16 +31,15 @@ namespace RegulatoryGraph {
 		RegData result = { reg_info };
 
 		// Get the header data
-		vector<Levels> reg_values; // For each regulator holds the values of the threshold in each column
 		vector<string> columns_list = DataConv::columns2list(reg_info.columns);
-		map<CompID, map<ActLevel, size_t> > threshold_to_index;
+		vector<Levels> reg_values; // For each regulator holds the values of the threshold in each column
+		map<CompID, map<ActLevel, size_t> > threshold_to_index; // Mapper from thresholds to their order, for each regulator
 		for (const auto & regulator : reg_info.regulators) {
 			// Obtain the id of the regulator from the order in the regulator list
 			size_t reg_no = DataInfo::getRegulatorI(regulator.first, reg_info);
 			reg_values.emplace_back(DataConv::getThrFromContexts(columns_list, reg_no));
 			threshold_to_index.insert({ regulator.first, DataConv::getThresholdToIndex(regulator.second) });
 		}
-
 		auto columns_dist = DataInfo::getColumnsOfThresholds(reg_info);
 		auto edge_dist = DataConv::getColumnsOfEdges(columns_dist);
 
@@ -44,21 +53,15 @@ namespace RegulatoryGraph {
 
 			// Compute the correlation and frequency
 			for (const auto & regulator : reg_info.regulators) {
-				// Obtain the id of the regulator from the order in the regulator list
+				// Obtain the id of the regulator from the order in the regulator list and prepare the results
 				size_t reg_no = DataInfo::getRegulatorI(regulator.first, reg_info);
 				result.reg_corr.insert({ regulator.first, vector<double>(regulator.second.size(), 0.0) });
 				auto & reg_corr = result.reg_corr[regulator.first];
 				result.reg_freq.insert({ regulator.first, vector<double>(regulator.second.size(), 0.0) });
 				auto & reg_freq = result.reg_freq[regulator.first];
 
-				// Compute the distribution of target values
-				map<ActLevel, size_t> & my_trsh_to_index = threshold_to_index[regulator.first];
-				vector<Levels> context_values(my_trsh_to_index.size());
-				for (const size_t param_i : cscope(param)) {
-					ActLevel threshold = reg_values[reg_no][param_i];
-					context_values[my_trsh_to_index[threshold]].emplace_back(param[param_i]);
-				}
-
+				auto context_values = getContextValues(param, threshold_to_index[regulator.first], reg_no, reg_values);
+				
 				for (size_t edge_no = 0; edge_no < regulator.second.size(); edge_no++) {
 					double correlation = Statistics::correlation(reg_values[reg_no], param, edge_dist[regulator.first][edge_no], reg_info.columns.begin()->first);
 					reg_corr[edge_no] += correlation;
