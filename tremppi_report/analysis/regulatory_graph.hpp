@@ -63,7 +63,7 @@ namespace RegulatoryGraph {
 		double all_params = pow(reg_info.max_activity + 1, context_c);
 		double same_params = pow(reg_info.max_activity + 1, other_c) * pow(reg_info.max_activity + 1, other_c * (reg_info.regulators.at(reg_ID).size() - 1));
 
-		return same_params / all_params;
+		return 1 - (same_params / all_params);
 	}
 
 	// computes the correlation of the regulators to the regulated component for each component

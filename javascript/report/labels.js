@@ -27,7 +27,9 @@ tremppi_report.Labels = {
                     var text = "source: " + my_data.source + "<br />"
                             + "target: " + my_data.target + "<br />"
                             + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />"
-                            + "frequency: " + my_data.Frequency.toFixed(num_of_decimals) + "<br />";
+                            + "frequency: " + my_data.Frequency.toFixed(num_of_decimals) + "<br />"
+                            + "expected frequency: " + my_data.ExpectedFreq.toFixed(num_of_decimals) + "<br />";
+                    ;
 
                     api.set("content.text", text);
                     api.show();
@@ -39,10 +41,11 @@ tremppi_report.Labels = {
                 }
         );
     },
-    loadLabels: function(config, relative) {
+    loadLabels: function(config, relative, weighted) {
         var bar_left = 110;
         var num_of_decimals = 3;
         var rel_string = relative ? "relative" : "absolute";
+        var width_type = weighted ? "weight" : "width";
 
         var cys = [];
         var papers = [];
@@ -66,25 +69,25 @@ tremppi_report.Labels = {
         var addEdgeWidth = function(type, paper, width_ratio) {
             paper.activate();
             var bar_height = F_height - 10;
-            width_max = Math.max(config[type].width.max * width_ratio, width_max);
+            width_max = Math.max(config[type][width_type].max * width_ratio, width_max);
             var bar_right = paper.view.viewSize.width - 70;
 
             // Create the bar
             var bar = new paper.Path();
             bar.fillColor = 'black';
             bar.strokeWidth = 0;
-            var min_width = config[type].width.min * width_ratio;
-            var max_width = config[type].width.max * width_ratio;
+            var min_width = config[type][width_type].min * width_ratio;
+            var max_width = config[type][width_type].max * width_ratio;
             bar.add(new paper.Point(bar_right, bar_height));
             bar.add(new paper.Point(bar_left, bar_height + (max_width - min_width) / 2));
             bar.add(new paper.Point(bar_left, bar_height + (max_width + min_width) / 2));
             bar.add(new paper.Point(bar_right, bar_height + max_width));
             bar.add(new paper.Point(bar_right, bar_height));
             // Add the label
-            var min = config[type][rel_string].width.min.toFixed(num_of_decimals);
+            var min = config[type][rel_string][width_type].min.toFixed(num_of_decimals);
             min = min >= 0 ? ' ' + min : min;
-            var max = config[type][rel_string].width.max.toFixed(num_of_decimals);
-            var F_pad = (config[type].width.max * width_ratio) / 2 - 4;
+            var max = config[type][rel_string][width_type].max.toFixed(num_of_decimals);
+            var F_pad = (config[type][width_type].max * width_ratio) / 2 - 4;
             makeText('F: ', new paper.Point(10, F_height + F_pad));
             makeText(min, new paper.Point(bar_left - 75, F_height + F_pad));
             makeText(max, new paper.Point(bar_right + 5, F_height + F_pad));

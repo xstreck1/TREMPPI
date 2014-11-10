@@ -73,6 +73,7 @@ tremppi_report.Graph = {
             var data = graph.edges[edge_no].data;
             data.color_mapper = Math.abs(data.Pearson);
             data.width_mapper = Math.abs(data.Frequency);
+            data.weight_mapper = Math.abs(data.Frequency) / data.ExpectedFreq;
             if (type === "differ") {
                 data.target_arrow_shape = 'circle';
                 graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
@@ -119,8 +120,9 @@ tremppi_report.Graph = {
         });
     },
     // Change between relative and absolute values
-    labelSwitch: function (config, relative) {
+    labelSwitch: function (config, relative, weighted) {
         var rel_string = relative ? "relative" : "absolute";
+        var width_type = weighted ? "weight" : "width";
 
         // Create the mapper for the graph
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {
@@ -132,7 +134,7 @@ tremppi_report.Graph = {
         };
 
         var setLabels = function (type) {
-            createMyMapping(config, type, rel_string, '', 'edge', 'width', 'width');
+            createMyMapping(config, type, rel_string, '', 'edge', width_type, 'width');
 
             if (type === "differ") {
                 createMyMapping(config, type, rel_string, '_pos', 'edge.positive', 'color', 'line-color');

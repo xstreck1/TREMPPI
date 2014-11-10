@@ -5,68 +5,71 @@
  */
 
 tremppi_report.Helpers = {
-    getBound: function(edges, param, fun, signed) {
+    getBound: function (edges, param, fun, signed, weighted) {
         if (signed && fun === "min")
             return 0;
-        
+
         var result = fun === "min" ? Number.MAX_VALUE : Number.MIN_VALUE;
 
-        var min_func = signed ? function(x, y) {
+        var min_func = signed ? function (x, y) {
             var res = -1 * Math.max(Math.abs(x), Math.abs(y));
             return res;
-        } : function(x, y) {
+        } : function (x, y) {
             var res = Math.min(Math.abs(x), Math.abs(y));
             return res;
         };
-        var max_func = signed ? function(x, y) {
+        var max_func = signed ? function (x, y) {
             return Math.max(Math.abs(x), Math.abs(y));
-        } : function(x, y) {
+        } : function (x, y) {
             var res = Math.max(Math.abs(x), Math.abs(y));
             return res;
         };
 
         var cmp_function = fun === 'min' ? min_func : max_func;
         for (var edge_no = 0; edge_no < edges.length; edge_no++) {
-            result = cmp_function(result, edges[edge_no].data[param]);
+            var value = edges[edge_no].data[param];
+            if (weighted)
+                value /= edges[edge_no].data.ExpectedFreq;
+            result = cmp_function(result, value);
         }
         return result;
     },
-    
-    
     // gives the ranges of values and their respective mapping
-    configure: function(config, graph, type) {
+    configure: function (config, graph, type) {
         config.my_val = true;
+        config[type] = {
+            absolute: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: 0, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10}
+        };
         if (type === "select")
-            config[type] = {
-                absolute: {width: {min: 0, max: 1}, color: {min: 0, max: 1}},
-                relative: {},
-                width: {min: 1, max: 10},
-                color: {min: "yellow", max: "green"}
-            };
-        if (type === "differ")
-            config[type] = {
-                absolute: {width: {min: 0, max: 1}, color: {min: 0, max: 1}},
-                relative: {},
-                width: {min: 1, max: 10},
-                color_neg: {min: "yellow", max: "red"},
-                color_pos: {min: "yellow", max: "green"}
-            };
-        if (type === "compare")
-            config[type] = {
-                absolute: {width: {min: 0, max: 1}, color: {min: 0, max: 1}},
-                relative: {},
-                width: {min: 1, max: 10},
-                color: {min: "yellow", max: "red"}
-            };
+            config[type].color = {min: "yellow", max: "green"};
+        else if (type === "differ") {
+            config[type].color_neg = {min: "yellow", max: "red"};
+            config[type].color_pos = {min: "yellow", max: "green"};
+        }
+        else if (type === "compare")
+            config[type].color = {min: "yellow", max: "red"};
+
         config[type].relative = {
             width: {
-                min: this.getBound(graph.edges, "Frequency", "min", false),
-                max: this.getBound(graph.edges, "Frequency", "max", false)},
+                min: this.getBound(graph.edges, "Frequency", "min", false, false),
+                max: this.getBound(graph.edges, "Frequency", "max", false, false)},
+            weight: {
+                min: this.getBound(graph.edges, "Frequency", "min", false, true),
+                max: this.getBound(graph.edges, "Frequency", "max", false, true)},
             color: {
-                min: this.getBound(graph.edges, "Pearson", "min", type === "differ"),
-                max: this.getBound(graph.edges, "Pearson", "max", type === "differ")}};
+                min: this.getBound(graph.edges, "Pearson", "min", type === "differ", false),
+                max: this.getBound(graph.edges, "Pearson", "max", type === "differ", false)
+            }
+        };
     },
-    assignPositions: function(config, analysis, tag) {
+    assignPositions: function (config, analysis, tag) {
         if (report_data.setup.comparative) {
             $('#' + analysis + '_' + tag + '_select').css('width', '33%').css('left', '0%');
             $('#' + analysis + '_' + tag + '_differ').css('width', '33%').css('left', '33.5%');
@@ -76,7 +79,7 @@ tremppi_report.Helpers = {
         }
         ;
     },
-    deactivateUnused: function(config, analysis, tag) {
+    deactivateUnused: function (config, analysis, tag) {
         if (!report_data.setup.comparative) {
             $('#' + analysis + '_' + tag + '_differ').html("");
             $('#' + analysis + '_' + tag + '_compare').html("");
