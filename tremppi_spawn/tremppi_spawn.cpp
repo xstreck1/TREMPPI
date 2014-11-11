@@ -83,6 +83,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		database_filler.creteTables();
 		database_filler.startOutput();
 
+		BOOST_LOG_TRIVIAL(info) << "Writing the database file, in total " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
 		logging.newPhase("writing parametrization", KineticsTranslators::getSpaceSize(kinetics));
 		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++) {
 			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);

@@ -20,9 +20,7 @@ void Logging::init() {
 	blg::core::get()->set_filter(blg::trivial::severity >= blg::trivial::info);
 
 	// Set the output buffer size for visual studio
-#ifdef _MFC_VER
 	setvbuf(stdout, 0, _IOLBF, 4096);
-#endif
 
 	// Create the dashes in the logifile
 	BOOST_LOG_TRIVIAL(info) << (string(30, '-'));

@@ -1,5 +1,5 @@
 var tremppi_common = {
-    server_port: 80,
+    server_port: 8080,
     server_location: "localhost",
     getServerAddress: function() {
         return "http://" + tremppi_common.server_location + ":" + tremppi_common.server_port + "/";

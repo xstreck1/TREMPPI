@@ -4,7 +4,7 @@ var properties = [
 			{
 				"id": 0,
 				"values": {
-					"Name": "sds",
+					"Name": "test",
 					"Type": "TimeSeries",
 					"Experiment": "tt",
 					"Verify": true

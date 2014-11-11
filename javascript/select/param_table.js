@@ -2,7 +2,7 @@ tremppi_select.set_table = function () {
     // Adds non-zero counts of elements
     var set_counts = function (type) {
         $.ajax({
-            url: tremppi_common.server_address + "?command=counts&pick=" + type,
+            url: tremppi_common.getServerAddress() + "?command=counts&pick=" + type,
             success: function (result) {
                 var columns_counts = result.split(",");
 
@@ -20,7 +20,7 @@ tremppi_select.set_table = function () {
     // Adds data to the tables
     var set_rows = function (type) {
         $.ajax({
-            url: tremppi_common.server_address + "?command=rows&pick=" + type + "&count=" + tremppi_select.row_count,
+            url: tremppi_common.getServerAddress() + "?command=rows&pick=" + type + "&count=" + tremppi_select.row_count,
             success: function (result) {
                 if (result !== "") {
                     var rows = result.split("\n");
@@ -45,7 +45,7 @@ tremppi_select.set_table = function () {
     // Start the cascade for obtaining the table data, initialize with columns
     var make_table = function (type) {
         $.ajax({
-            url: tremppi_common.server_address + "?command=columns&pick=" + type,
+            url: tremppi_common.getServerAddress() + "?command=columns&pick=" + type,
             success: function (result) {
                 var col_names = result.split(",");
                 var table_content = '<tr ><th class="header" colspan="' + (col_names.length + 1) + '">' + type + "</th></tr>";
@@ -63,7 +63,7 @@ tremppi_select.set_table = function () {
 
     // Main building function, displays the selection tables 
     $.ajax({
-        url: tremppi_common.server_address + "?command=database",
+        url: tremppi_common.getServerAddress() + "?command=database",
         success: function (result) {
             if (!result) {
                 $("#table_holder").append("The database content is empty.");

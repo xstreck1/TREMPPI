@@ -31,6 +31,44 @@ var elements = {
 			},
 			"group": "nodes",
 			"removed": false,
+			"selected": true,
+			"selectable": true,
+			"locked": false,
+			"grabbed": true,
+			"grabbable": true,
+			"classes": ""
+		}
+	],
+	"edges": [
+		{
+			"data": {
+				"source": "n0",
+				"target": "n3",
+				"Threshold": 1,
+				"Label": "tt",
+				"id": "e0"
+			},
+			"position": {},
+			"group": "edges",
+			"removed": false,
+			"selected": false,
+			"selectable": true,
+			"locked": false,
+			"grabbed": false,
+			"grabbable": true,
+			"classes": ""
+		},
+		{
+			"data": {
+				"source": "n0",
+				"target": "n0",
+				"Threshold": 1,
+				"Label": "tt",
+				"id": "e1"
+			},
+			"position": {},
+			"group": "edges",
+			"removed": false,
 			"selected": false,
 			"selectable": true,
 			"locked": false,
@@ -38,6 +76,5 @@ var elements = {
 			"grabbable": true,
 			"classes": ""
 		}
-	],
-	"edges": []
+	]
 };
