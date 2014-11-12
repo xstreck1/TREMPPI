@@ -19,18 +19,19 @@ and open the template in the editor.
         <script>
             var tremmpi_browse = {};
             tremppi_common.data_path = "browse/";
-            tremppi_common.server_address = "http://localhost:8080/";
 
             var sourceSetter = function (name) {
                 return function () {
+                    // Force recache and reload
                     $("#frame").attr("src", name + ".html");
-                    // document.getElementById('frame').contentWindow.location.reload();
+                    document.getElementById('frame').contentWindow.location.reload(true);
+                    $("#frame").attr("src", name + ".html");
                 };
             };
 
             var readFiles = function () {
                 $.ajax(
-                        {url: tremppi_common.server_address + "?command=files",
+                        {url: tremppi_common.getServerAddress() + "?command=files",
                             success: function (result) {
                                 $("#files").empty();
                                 if (!result)
