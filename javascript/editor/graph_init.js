@@ -39,7 +39,7 @@ tremppi_editor.graph_init = function() { // on dom ready
                     'line-style': 'data(line_style)',
                     'target-arrow-shape': 'data(target_arrow_shape)',
                     'target-arrow-color': 'data(line_color)',
-                    'width': 2.5
+                    'width': 2
                 }).selector(':selected')
                 .css({
                     'border-color': selected_col,

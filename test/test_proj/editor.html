@@ -14,8 +14,6 @@
             tremppi_editor = {metadata: {}, model_name: "dev_model"};
             tremppi_common.widget = "editor";
             $(window).ready(function () {
-                if (typeof editor === 'undefined') 
-                    editor = {nodes: [], edges:[]}
                 tremppi_editor.graph_init();
                 tremppi_common.addServerContent(tremppi_editor.setControl);
                 tremppi_editor.setSelectionScheme();

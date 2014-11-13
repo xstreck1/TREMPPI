@@ -16,6 +16,7 @@ void createProperties(const bfs::path & example_model_path) {
 	root[0]["desc"][0]["values"]["Name"] = "test";
 	root[0]["desc"][0]["values"]["Type"] = "TimeSeries";
 	root[0]["desc"][0]["values"]["Experiment"] = "";
+	root[0]["desc"][0]["values"]["Verify"] = true;
 	root[0]["data"].resize(2);
 	root[0]["data"][0]["id"] = 0;
 	root[0]["data"][0]["values"]["Measurement"] = "B>0";

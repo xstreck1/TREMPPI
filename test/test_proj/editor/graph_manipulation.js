@@ -39,8 +39,7 @@ tremppi_editor.elementChanged = function (row_id, column_id, old_val, new_val, r
     var val_name = tremppi_editor.metadata[tremppi_editor.current_selection.type][column_id].name;
     element.data(val_name, new_val);
     tremppi_editor.saveGraph();
-    if (val_name === "Label")
-        tremppi_editor.changeVisuals();
+    tremppi_editor.changeVisuals();
 };
 
 tremppi_editor.changeVisuals = function() {
@@ -74,11 +73,11 @@ tremppi_editor.changeVisuals = function() {
 }
 
 tremppi_editor.saveGraph = function () {
-    elements = tremppi_editor.graph.json().elements;
+    editor = tremppi_editor.graph.json().elements;
     if (tremppi_editor.graph.elements("node").length === 0)
-        elements.nodes = [];
+        editor.nodes = [];
     if (tremppi_editor.graph.elements("edge").length === 0)
-        elements.edges = [];
+        editor.edges = [];
     tremppi_common.save("editor");
 };
 
@@ -109,7 +108,8 @@ tremppi_editor.tapFunction = function (event) {
                 group: "nodes",
                 data: {
                     Name: "New",
-                    MaxActivity: 1
+                    MaxActivity: 1,
+                    Label: "New:1"
                 },
                 position: event.cyPosition
             };
@@ -151,7 +151,11 @@ tremppi_editor.tapFunction = function (event) {
                     source: last_node,
                     target: tremppi_editor.current_selection.id,
                     Threshold: 1,
-                    Label: "tt"}
+                    Label: "tt",
+                    line_style: "dashed",
+                    line_color: "black",
+                    target_arrow_shape: "circle"
+                }
             });
             tremppi_editor.activity_type = "selection";
         }
