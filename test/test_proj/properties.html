@@ -12,7 +12,7 @@
 
         <script>
             tremppi_properties = {metadata: {}};
-            tremppi_common.data_path = "properties/";  
+            tremppi_common.widget = "properties";  
             $(window).ready(function() {
                 tremppi_properties.properties_init();
                 tremppi_common.addServerContent(tremppi_properties.createControls);
@@ -24,7 +24,7 @@
         <script src="./properties/properties_init.js"></script>
         <script src="./properties/server.js"></script>
 
-        <script src="./properties/properties.js"></script>
+        <script src="./properties.js"></script>
         <meta charset=utf-8 />
         <title>TREMPPI properties</title>
     </head>

@@ -31,6 +31,9 @@ shutil.copy(join(HOME_PATH, os.path.normpath("javascript/editor.html")), DEST_CO
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/browse.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/select.html")), DEST_CONTENT)
+# data files are not copied - create new
+open(join(DEST_CONTENT, "editor.js"), 'w').write("editor = {nodes: [], edges:[]}")
+open(join(DEST_CONTENT, "properties.js"), 'w').write("properties = []")
+open(join(DEST_CONTENT, "select.js"), 'w').write("select = []")
 
-MODEL_NAME = os.path.split(DEST_PATH)[1]
-replace(join(DEST_CONTENT, "editor.html"), "dummy_model_name", MODEL_NAME)
+replace(join(DEST_CONTENT, "editor.html"), "dummy_model_name", args.name)

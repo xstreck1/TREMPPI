@@ -11,9 +11,11 @@
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
         <script>
-            tremppi_editor = {metadata: {}, model_name: "test"};
-            tremppi_common.data_path = "editor/";
+            tremppi_editor = {metadata: {}, model_name: "dev_model"};
+            tremppi_common.widget = "editor";
             $(window).ready(function () {
+                if (typeof editor === 'undefined') 
+                    editor = {nodes: [], edges:[]}
                 tremppi_editor.graph_init();
                 tremppi_common.addServerContent(tremppi_editor.setControl);
                 tremppi_editor.setSelectionScheme();
@@ -24,7 +26,7 @@
         <script src="./editor/graph_manipulation.js"></script>
         <script src="./editor/graph_init.js"></script>
 
-        <script src="./editor/elements.js"></script>
+        <script src="./editor.js"></script>
         <meta charset=utf-8 />
         <title>TREMPPI network editor</title>
     </head>

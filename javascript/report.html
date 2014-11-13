@@ -20,9 +20,9 @@
         <script src="./report/server.js"></script>
         <link rel="stylesheet" type="text/css" href="./report/css.css">
 
-        <script src="./report/report_data.js"></script>
+        <script src="./report.js"></script>
         <script>
-            tremppi_common.data_path = "report/";
+            tremppi_common.widget = "report";
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
                 tremppi_common.addServerContent(tremppi_report.createControls);

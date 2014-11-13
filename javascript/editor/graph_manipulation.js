@@ -39,7 +39,39 @@ tremppi_editor.elementChanged = function (row_id, column_id, old_val, new_val, r
     var val_name = tremppi_editor.metadata[tremppi_editor.current_selection.type][column_id].name;
     element.data(val_name, new_val);
     tremppi_editor.saveGraph();
+    if (val_name === "Label")
+        tremppi_editor.changeVisuals();
 };
+
+tremppi_editor.changeVisuals = function() {
+    var edges = $('#graph_object').cytoscape('get').elements("edge");
+    for (var i = 0; i < edges.length; i++) {
+        var data = edges[i].data();
+        var label = data.Label;
+        if (label === "+" || label === "-" || label === "+&!-"  || label === "-&!+"
+         || label === "-|+" || label === "-&+" || label === "(-&!+)|(+&!-)")
+            data.line_style = "solid";
+        else
+            data.line_style = "dashed";
+        if (label === "!-" || label === "+&!-")
+            data.line_color = "green";
+        else if (label === "!+" || label === "-&!+")
+            data.line_color = "red";
+        else
+            data.line_color = "black";
+        if (label === "+" || label === "+&!-")
+            data.target_arrow_shape = "triangle";
+        else if (label === "-" || label === "-&!+")
+            data.target_arrow_shape = "tee";  
+        else
+            data.target_arrow_shape = "circle";
+    }
+    var nodes = $('#graph_object').cytoscape('get').elements("node");
+    for (var i = 0; i < nodes.length; i++) {
+        var node_data = nodes[i].data();
+        node_data.Label = node_data.Name + ":" + node_data.MaxActivity;
+    }
+}
 
 tremppi_editor.saveGraph = function () {
     elements = tremppi_editor.graph.json().elements;
@@ -47,7 +79,7 @@ tremppi_editor.saveGraph = function () {
         elements.nodes = [];
     if (tremppi_editor.graph.elements("edge").length === 0)
         elements.edges = [];
-    tremppi_common.save("elements");
+    tremppi_common.save("editor");
 };
 
 tremppi_editor.setSelectionScheme = function () {

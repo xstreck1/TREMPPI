@@ -11,11 +11,11 @@
         <script src="./common/common.js"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
-        
+
         <link rel="stylesheet" type="text/css" href="select/css.css">
         <script>
-            var tremppi_select = {metadata: {}, row_count : 5};
-            tremppi_common.data_path = "select/";
+            var tremppi_select = {metadata: {}, row_count: 5};
+            tremppi_common.widget = "select";
 
             onload = function () {
                 tremppi_common.addServerContent(tremppi_select.set_table);
@@ -23,11 +23,11 @@
                 tremppi_common.addServerContent(tremppi_select.createControls);
             };
         </script>
-        <script src="./select/param_table.js"></script>        
-        <script src="./select/selections.js"></script>       
+        <script src="./select/param_table.js"></script>    
         <script src="./select/selection_init.js"></script>  
         <script src="./select/selection_manipulation.js"></script>
-        <script src="./select/server.js"></script>
+        <script src="./select/server.js"></script>    
+        <script src="./select.js"></script>       
     </head>
     <body class="interface">
         <div class="title">parametrization list and selector</div>

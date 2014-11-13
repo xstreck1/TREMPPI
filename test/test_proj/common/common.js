@@ -7,7 +7,7 @@ var tremppi_common = {
     // Saves the variable to the respective file
     save: function (var_name) {
         var content = "var " + var_name + " = " + JSON.stringify(window[var_name], null, '\t') + ";";
-        var url = tremppi_common.getServerAddress() + "?" + tremppi_common.data_path + var_name + ".js";
+        var url = tremppi_common.getServerAddress() + "?" + tremppi_common.widget + ".js";
         $.ajax({
             type: "POST",
             url: url,

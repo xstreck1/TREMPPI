@@ -2,8 +2,8 @@ tremppi_select.loadSelections = function () {
     $("#selection_holder").empty();
     var selections_grid = new EditableGrid("selections");
     
-    if (selections.length === 0) {
-        selections = [{
+    if (select.length === 0) {
+        select = [{
             id: 0,
             values: {
                 Name: "",
@@ -14,7 +14,7 @@ tremppi_select.loadSelections = function () {
         }];
     }
 
-    selections_grid.load({"metadata": tremppi_select.metadata["selections"], "data": selections});
+    selections_grid.load({"metadata": tremppi_select.metadata["selections"], "data": select});
     selections_grid.renderGrid("selection_holder", "selections");
     selections_grid.modelChanged = tremppi_select.selectionChanged;
 
@@ -46,17 +46,17 @@ tremppi_select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
     // Store the data
     var row_count = this.data.length;
 
-    selections = new Array(row_count);
+    select = new Array(row_count);
     for (var row_i = 0; row_i < row_count; row_i++) {
-        selections[row_i] = {};
-        selections[row_i].id = this.data[row_i].originalIndex;
-        selections[row_i].values = {};
+        select[row_i] = {};
+        select[row_i].id = this.data[row_i].originalIndex;
+        select[row_i].values = {};
         for (var column_i = 0; column_i < this.columns.length; column_i++) {
             var column_name = this.columns[column_i].name;
-            selections[row_i].values[column_name] = this.data[row_i].columns[column_i];
+            select[row_i].values[column_name] = this.data[row_i].columns[column_i];
         }
     }
     
     
-    tremppi_common.save("selections");
+    tremppi_common.save("select");
 };

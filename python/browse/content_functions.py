@@ -5,7 +5,7 @@ from os import listdir
 import json
 
 DATABASE_FILE = "database.sqlite"
-SELECTION_FILE = "select/selections.js"
+SELECTION_FILE = "select.js"
 
 def get_columns_names(arguments):
     conn = sqlite3.connect(DATABASE_FILE)

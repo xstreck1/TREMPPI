@@ -29,7 +29,7 @@ void createProperties(const bfs::path & example_model_path) {
 }
 
 int basic_validate_test()  {
-	const int argc = 3;
+	const int argc = 5;
 	char * argv[argc];
 
 	bfs::path example_model_path(bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj"));
@@ -40,6 +40,10 @@ int basic_validate_test()  {
 	strcpy(argv[1], "--path");
 	argv[2] = new char[example_model_path.string().size() + 1];
 	strcpy(argv[2], example_model_path.string().c_str());
+	argv[3] = new char[8];
+	strcpy(argv[3], "--trace"); 
+	argv[4] = new char[4];
+	strcpy(argv[3], "wit");
 
 	int result = (tremppi_validate(argc, argv));
 
