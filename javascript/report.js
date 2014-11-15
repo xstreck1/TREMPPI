@@ -1,4 +1,4 @@
-var report_data = {
+var report = {
 	"Regulatory": {
 		"compare": {
 			"elements": {
@@ -27,8 +27,8 @@ var report_data = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 168.5085576518486,
-							"y": 38.90597102339283
+							"x": 368.4717258540129,
+							"y": 153.7657439808068
 						},
 						"group": "nodes",
 						"removed": false,
@@ -45,8 +45,8 @@ var report_data = {
 							"name": "YciR"
 						},
 						"position": {
-							"x": 431.66666666666663,
-							"y": 117.75
+							"x": 282.3110695097655,
+							"y": 32.40394448177075
 						},
 						"group": "nodes",
 						"removed": false,
@@ -431,8 +431,8 @@ var report_data = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 168.5085576518486,
-							"y": 38.90597102339283
+							"x": 368.4717258540129,
+							"y": 153.7657439808068
 						},
 						"group": "nodes",
 						"removed": false,
@@ -449,8 +449,8 @@ var report_data = {
 							"name": "YciR"
 						},
 						"position": {
-							"x": 431.66666666666663,
-							"y": 117.75
+							"x": 282.3110695097655,
+							"y": 32.40394448177075
 						},
 						"group": "nodes",
 						"removed": false,
@@ -847,8 +847,8 @@ var report_data = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 168.5085576518486,
-							"y": 38.90597102339283
+							"x": 368.4717258540129,
+							"y": 153.7657439808068
 						},
 						"group": "nodes",
 						"removed": false,
@@ -865,8 +865,8 @@ var report_data = {
 							"name": "YciR"
 						},
 						"position": {
-							"x": 431.66666666666663,
-							"y": 117.75
+							"x": 282.3110695097655,
+							"y": 32.40394448177075
 						},
 						"group": "nodes",
 						"removed": false,

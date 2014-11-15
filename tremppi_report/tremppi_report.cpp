@@ -130,7 +130,7 @@ int tremppi_report(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-		ofstream data_file = Output::fileOutput(report_path, "report_" + time_stamp + ".js");
+		ofstream data_file = Output::fileOutput(tremppi_system.WORK_PATH, "report_" + time_stamp + ".js");
 		string data = writer.write(out);
 		data_file << "var report = " << data << ";" << endl;
 	}

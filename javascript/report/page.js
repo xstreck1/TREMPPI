@@ -2,7 +2,7 @@ tremppi_report.Page = {
     loadData: function(config) {
         // Set the types used
         config = {};
-        if (report_data.setup.comparative) {
+        if (report.setup.comparative) {
             config.types = ['select', 'differ', 'compare'];
         } else {
             config.types = ['select'];
@@ -12,7 +12,7 @@ tremppi_report.Page = {
         var loadGraph = function(config, type)
         {
             var name = "reg_graph_" + type;
-            var graph = report_data.Regulatory[type];
+            var graph = report.Regulatory[type];
             tremppi_report.Helpers.configure(config, graph.elements, type);
             tremppi_report.Graph.makeGraph(graph.elements, type);
         };
@@ -70,17 +70,17 @@ tremppi_report.Page = {
         $("#copy_graph").click(function() {
             for (var i = 0; i < config.types.length; i++) {
                 var cy = $('#reg_graph_' + config.types[i]).cytoscape('get');
-                report_data.Regulatory[config.types[i]] = cy.json();
+                report.Regulatory[config.types[i]] = cy.json();
             }
-            tremppi_common.promptWithContent("report_data");
+            tremppi_common.promptWithContent("report");
         });
 
         $("#regulatory_description").html((
-                (report_data.setup.comparative) ? tremppi_report.Values.reg_caption_c : tremppi_report.Values.reg_caption_nonc)
+                (report.setup.comparative) ? tremppi_report.Values.reg_caption_c : tremppi_report.Values.reg_caption_nonc)
                 + tremppi_report.Values.reg_caption_common);
 
         // Replace text content
-        var setup = report_data.setup;
+        var setup = report.setup;
         $("title").html(setup.name + " statistical analysis report");
         $("#analysis_date").html(setup.date);
         $("#model_name").html(setup.name);

@@ -18,9 +18,9 @@ tremppi_report.Graph = {
             return function (evt) {
                 for (var i = 0; i < config.types.length; i++) {
                     cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
-                    report_data["Regulatory"][config.types[i]]["elements"] = cys[i].json().elements;
+                    report["Regulatory"][config.types[i]]["elements"] = cys[i].json().elements;
                 }
-                tremppi_common.save("report_data");
+                tremppi_common.save("report");
             };
         };
 

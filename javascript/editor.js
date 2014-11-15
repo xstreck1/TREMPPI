@@ -8,8 +8,8 @@ var editor = {
 				"Label": "A:1"
 			},
 			"position": {
-				"x": 550.7108007303402,
-				"y": 144.2789183338516
+				"x": 661.1495884571741,
+				"y": 236.834110773573
 			},
 			"group": "nodes",
 			"removed": false,
@@ -28,8 +28,8 @@ var editor = {
 				"id": "n1"
 			},
 			"position": {
-				"x": 737.0964541229931,
-				"y": 144.40360199996536
+				"x": 795.0861654708433,
+				"y": 226.9536616833755
 			},
 			"group": "nodes",
 			"removed": false,
@@ -56,7 +56,7 @@ var editor = {
 			"position": {},
 			"group": "edges",
 			"removed": false,
-			"selected": false,
+			"selected": true,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,

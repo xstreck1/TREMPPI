@@ -70,7 +70,7 @@ tremppi_report.Helpers = {
         };
     },
     assignPositions: function (config, analysis, tag) {
-        if (report_data.setup.comparative) {
+        if (report.setup.comparative) {
             $('#' + analysis + '_' + tag + '_select').css('width', '33%').css('left', '0%');
             $('#' + analysis + '_' + tag + '_differ').css('width', '33%').css('left', '33.5%');
             $('#' + analysis + '_' + tag + '_compare').css('width', '33%').css('left', '67%');
@@ -80,7 +80,7 @@ tremppi_report.Helpers = {
         ;
     },
     deactivateUnused: function (config, analysis, tag) {
-        if (!report_data.setup.comparative) {
+        if (!report.setup.comparative) {
             $('#' + analysis + '_' + tag + '_differ').html("");
             $('#' + analysis + '_' + tag + '_compare').html("");
         }

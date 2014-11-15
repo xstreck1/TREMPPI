@@ -153,7 +153,8 @@ namespace Output {
 		bfs::path report_html = report_path;
 		report_html.replace_extension("html");
 		bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report.html" }, report_html);
-		FileManipulation::replaceInFile(report_html, "report/", report_path.stem().string() + "/");
+		FileManipulation::replaceInFile(report_html, "./report", "./" +  report_path.stem().string());
+		FileManipulation::replaceInFile(report_html, "tremppi_common.widget = \"report\";", "tremppi_common.widget = \"" + report_path.stem().string() + "\";");
 	}
 
 	//
