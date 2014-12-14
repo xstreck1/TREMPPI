@@ -88,7 +88,7 @@ tremppi_report.Graph = {
             else
                 data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
         }
-        
+
         var selected_col = '#5555BB';
         $('#' + name).cytoscape({
             style: cytoscape.stylesheet()
@@ -98,15 +98,22 @@ tremppi_report.Graph = {
                         'text-valign': 'center',
                         'background-color': 'white',
                         'border-color': 'black',
-                        'border-width': 2,
-                        'width': 50,
-                        'height': 50
+                        'border-width': 1,
+                        'shape': 'rectangle',
+                        'width': 100,
+                        'height': 25,
+                        'font-size': 15
                     })
                     .selector('edge')
                     .css({
                         'target-arrow-color': 'black',
                         'target-arrow-shape': 'data(target_arrow_shape)',
-                        'line-style': 'data(line_style)'
+                        'line-style': 'data(line_style)',
+                        'content': 'data(Threshold)',
+                        'text-outline-color': 'black',
+                        'text-outline-width': 1,
+                        'color': 'white',
+                        'font-size': 25
                     }).selector(':selected')
                     .css({
                         'border-color': selected_col,
@@ -128,8 +135,8 @@ tremppi_report.Graph = {
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {
             var min = config[type][rel_string][glyph].min;
             var max = config[type][rel_string][glyph].max;
-            $('#reg_graph_' + type).cytoscape('get').style().selector(selection).css(mapper, 
-            'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + 
+            $('#reg_graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
+                    'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +
                     config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
         };
 

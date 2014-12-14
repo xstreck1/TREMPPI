@@ -9,8 +9,8 @@ var report = {
 							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 86.33333333333333,
-							"y": 117.75
+							"x": -75.62694417684777,
+							"y": 119.49150836032452
 						},
 						"group": "nodes",
 						"removed": false,
@@ -63,8 +63,8 @@ var report = {
 							"name": "YdaM"
 						},
 						"position": {
-							"x": 86.33333333333333,
-							"y": 353.25
+							"x": 39.31260760457107,
+							"y": 419.4273176923321
 						},
 						"group": "nodes",
 						"removed": false,
@@ -81,8 +81,8 @@ var report = {
 							"name": "YegE"
 						},
 						"position": {
-							"x": 259,
-							"y": 353.25
+							"x": 49.00865790487497,
+							"y": -38.14747531866229
 						},
 						"group": "nodes",
 						"removed": false,
@@ -413,8 +413,8 @@ var report = {
 							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 86.33333333333333,
-							"y": 117.75
+							"x": -75.62694417684777,
+							"y": 119.49150836032452
 						},
 						"group": "nodes",
 						"removed": false,
@@ -467,8 +467,8 @@ var report = {
 							"name": "YdaM"
 						},
 						"position": {
-							"x": 86.33333333333333,
-							"y": 353.25
+							"x": 39.31260760457107,
+							"y": 419.4273176923321
 						},
 						"group": "nodes",
 						"removed": false,
@@ -485,8 +485,8 @@ var report = {
 							"name": "YegE"
 						},
 						"position": {
-							"x": 259,
-							"y": 353.25
+							"x": 49.00865790487497,
+							"y": -38.14747531866229
 						},
 						"group": "nodes",
 						"removed": false,
@@ -829,8 +829,8 @@ var report = {
 							"name": "C_di_GMP"
 						},
 						"position": {
-							"x": 86.33333333333333,
-							"y": 117.75
+							"x": -75.62694417684777,
+							"y": 119.49150836032452
 						},
 						"group": "nodes",
 						"removed": false,
@@ -855,7 +855,7 @@ var report = {
 						"selected": false,
 						"selectable": true,
 						"locked": false,
-						"grabbed": true,
+						"grabbed": false,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -883,8 +883,8 @@ var report = {
 							"name": "YdaM"
 						},
 						"position": {
-							"x": 86.33333333333333,
-							"y": 353.25
+							"x": 39.31260760457107,
+							"y": 419.4273176923321
 						},
 						"group": "nodes",
 						"removed": false,
@@ -901,15 +901,15 @@ var report = {
 							"name": "YegE"
 						},
 						"position": {
-							"x": 259,
-							"y": 353.25
+							"x": 49.00865790487497,
+							"y": -38.14747531866229
 						},
 						"group": "nodes",
 						"removed": false,
 						"selected": false,
 						"selectable": true,
 						"locked": false,
-						"grabbed": false,
+						"grabbed": true,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -1094,7 +1094,7 @@ var report = {
 						"position": {},
 						"group": "edges",
 						"removed": false,
-						"selected": false,
+						"selected": true,
 						"selectable": true,
 						"locked": false,
 						"grabbed": false,
