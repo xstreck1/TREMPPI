@@ -50,7 +50,7 @@ class WitnessSearcher {
 	 */
 	size_t DFS(const StateID ID, const size_t depth, size_t last_branch) {
 		// If this path is no use
-		if (markings[ID].busted <= depth && markings[ID].succeeded < depth)
+		if (markings[ID].busted <= depth || markings[ID].succeeded < depth)
 			return last_branch;
 
 		// Store if the state is final or part of another path.
@@ -59,7 +59,7 @@ class WitnessSearcher {
 		path[depth] = ID;
 		if (settings.isFinal(ID, product) && depth != 0)
 			storeTransitions(depth, last_branch);
-		else if (markings[ID].succeeded >= depth && markings[ID].succeeded > 0)
+		else if (markings[ID].succeeded >= depth && markings[ID].succeeded != INF)
 			storeTransitions(depth, last_branch);
 		// Continue with the DFS otherwise.
 		else if (depth < max_depth){
@@ -98,12 +98,12 @@ public:
 		// Search paths from all the final states
 		for (const pair<size_t, size_t> depth : results.depths) {
 			path = vector<StateID>(depth.first + 1, INF); // Currently needs one more space for the transition to a final state after the last measurement.
-			markings.assign(markings.size(), { 0u, INF });
+			markings.assign(markings.size(), { INF, INF });
 			max_depth = depth.first;
 			auto inits = settings.getInitials(product);
 			settings.final_states = results.getFinalsAtDepth(max_depth);
 			for (const auto & init : inits)
-				if (storage.getColor(init))
+				if (storage.isFound(init))
 					DFS(init, 0u, 0u);
 		}
 	}

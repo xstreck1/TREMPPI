@@ -43,9 +43,7 @@ class ModelChecker {
 		// For all passed values make update on target
 		for (const StateID trans : transports) {
 			// If something new is added to the target, schedule it for an update
-			if (storage.isFound(trans)) {
-				// Determine what is necessary to update
-				storage.update(trans);
+			if (storage.update(trans, BFS_level)) {
 				next_updates.push_back(trans);
 			}
 		}
@@ -60,7 +58,7 @@ class ModelChecker {
 		updates.pop_back();
 
 		// Check if this is not the last round
-		if (settings.isFinal(ID, product) && storage.getColor(ID))
+		if (settings.isFinal(ID, product) && storage.isFound(ID))
 			results.found_depth.insert({ ID, BFS_level });
 
 		transferUpdates(ID);
@@ -92,7 +90,7 @@ class ModelChecker {
 		updates = settings.getInitials(product);
 		if (settings.markInitials())
 			for (const StateID init_ID : updates)
-				storage.update(init_ID);
+				storage.update(init_ID, 0u);
 	}
 
 public:
