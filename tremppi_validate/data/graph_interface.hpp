@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tremppi_common/general/common_functions.hpp>
+#include <tremppi_common/network/definitions.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file This file holds abstract basis for a graph with states and transitions between the states.

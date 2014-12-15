@@ -1,117 +1,56 @@
 #pragma once
 
-#include "color_storage.hpp"
-#include "coloring_func.hpp"
-#include "synthesis_results.hpp"
+#include "visit_storage.hpp"
+#include "succ_func.hpp"
 #include "checker_setting.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Main class of the computation - responsible for the CMC procedure.
 ///
-/// ModelChecker class solves the parameter synthesis problem by iterative transfer of feasible parametrizations from initial states to final ones.
+/// ModelChecker class solves the parameter analysis problem by iterative transfer of feasible parametrizations from initial states to final ones.
 /// Functions in model checker use many supporting variables and therefore are quite long, it would not make sense to split them, though.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ModelChecker {
 	// Information
 	const ProductStructure & product; ///< Product on which the computation will be conducted.
-	CheckerSetting settings; ///< Setup for the process.
-	Levels parametrization;
-
-	// Coloring storage
-	ColorStorage & storage; ///< Class that actually stores colors during the computation.
-	// ColorStorage next_round_storage; ///< Class that stores updated colors for next round (prevents multiple transitions through one BFS round).
-	vector<StateID> updates; ///< Set of states that need to spread their updates.
-	vector<StateID> next_updates; ///< Updates that are sheduled forn the next round.
-
-	// BFS boundaries
-	size_t BFS_level; ///< Number of current BFS level during coloring, starts from 0, meaning 0 transitions.
-	SynthesisResults results;
-
-	/**
-	 * From the source distribute its parameters and newly colored neighbours shedule for update.
-	 * @param ID	ID of the source state in the product
-	 * @param parameters	parameters that will be distributed
-	 */
-	void transferUpdates(const StateID ID) {
-		// Get passed colors, unique for each sucessor
-		vector<StateID> transports;
-
-		transports = ColoringFunc::broadcastParameters(parametrization, product, ID);
-		if (transports.empty())
-			transports = product.getLoops(ID);
-
-		// For all passed values make update on target
-		for (const StateID trans : transports) {
-			// If something new is added to the target, schedule it for an update
-			if (storage.update(trans, BFS_level)) {
-				next_updates.push_back(trans);
-			}
-		}
-	}
-
-	/**
-	 * Main coloring function - passes parametrizations from newly colored states to their neighbours.
-	 * Executed as an BFS - in rounds.
-	 */
-	void doColoring() {
-		StateID ID = updates.back();
-		updates.pop_back();
-
-		// Check if this is not the last round
-		if (settings.isFinal(ID, product) && storage.isFound(ID))
-			results.found_depth.insert({ ID, BFS_level });
-
-		transferUpdates(ID);
-
-		// If there this round is finished, but there are still paths to find
-		if (updates.empty() && (BFS_level < settings.getBound())) {
-			// Stop in case of using the minimal count
-			if (settings.bound_type == BoundType::min && results.isAccepting())
-				return;
-			updates = move(next_updates);
-			BFS_level++; // Increase level
-		}
-	}
-
-	/**
-	 * @brief prepareObjects   create empty space in the employed objects
-	 */
-	void prepareObjects() {
-		storage.reset();
-		next_updates.clear(); // Ensure emptiness of the next round
-		BFS_level = 0;
-		results = SynthesisResults();
-	}
-
-	/**
-	 * @brief initiateCheck initiate data for the check based on the settings
-	 */
-	void initiateCheck() {
-		updates = settings.getInitials(product);
-		if (settings.markInitials())
-			for (const StateID init_ID : updates)
-				storage.update(init_ID, 0u);
-	}
 
 public:
-	ModelChecker(const ProductStructure & _product, ColorStorage & _storage) : product(_product), storage(_storage) {
-	}
+	ModelChecker(const ProductStructure & _product) : product(_product) { }
 
-	/**
-	 * Start a new coloring round for cycle detection from a single state.
-	 */
-	SynthesisResults conductCheck(const CheckerSetting & _settings, const Levels & _parametrization) {
-		settings = _settings;
-		parametrization = _parametrization;
-		prepareObjects();
-		initiateCheck();
+	/**/
+	VisitStorage conductCheck(const CheckerSetting & _settings, const Levels & _parametrization) {
+		VisitStorage storage(product.getStateCount());
+		vector<StateID> updates = _settings.getInitials(product);
+		vector<StateID> next_updates; ///< Updates that are sheduled forn the next round.
+		bool sat = false;
 
 		// While there are updates, pass them to succesing vertices
 		do  {
-			doColoring();
+			next_updates.clear();
+
+			for (const StateID ID : updates) {
+				// Get passed states and remove those already found
+				vector<StateID> transports = SuccFunc::broadcastParameters(_parametrization, product, ID);
+				auto trans_end = remove_if(WHOLE(transports), [&storage](const StateID t_ID){return storage.isFound(t_ID); });
+				next_updates.insert(next_updates.begin(), begin(transports), trans_end);
+
+				// Don't update when looking for a loop
+				if (!(_settings.circ && storage.getCost() == 0)) {
+					storage.update(ID);
+					if (_settings.isFinal(ID, product))
+						sat = true;
+				}
+			}
+			storage.incCost();
+			if ((sat && _settings.bound_type == BoundType::min) || (_settings.bfs_bound <= storage.getCost() && _settings.bound_type == BoundType::step))
+				updates.clear();
+			else
+				updates = move(next_updates);
+
 		} while (!updates.empty());
 
-		results.derive();
-		return results;
+		if (!sat)
+			storage.notFound();
+		return storage;
 	}
 };

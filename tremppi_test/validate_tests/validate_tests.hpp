@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tremppi_validate/compute/synthesis_manager.hpp>
+#include <tremppi_validate/compute/analysis_manager.hpp>
 #include <tremppi_validate/io/validate_options.hpp>
 
 #include "validate_tests_data.hpp"
@@ -104,9 +104,9 @@ TEST_F(ValidateTest, Construction) {
 
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
-	SynthesisManager s_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::none, { 1 });
-	EXPECT_EQ(1, get<0>(results)) << "Cost in SteadyStates should be 1 since the function is constant";
+	AnalysisManager s_unreagulated_is_steady(p_unreagulated_is_steady);
+	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::none, { 2 });
+	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2 since the function is constant";
 }
 
 TEST_F(ValidateTest, Checking) {

@@ -3,7 +3,7 @@
 #include "product_structure.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Creates a final ProductStructure that is used as a template for the synthesis procedure, as a product of ParametrizedStructure and AutomatonStructure.
+/// \brief Creates a final ProductStructure that is used as a template for the analysis procedure, as a product of ParametrizedStructure and AutomatonStructure.
 ///
 /// ProductBuilder creates the an automaton corresponding to the synchronous product of BA and KS.
 /// @attention States of product are indexed as (BA_state_ID * KS_state_count + KS_state_ID) - e.g. if 4-state KS, state ((1,0)x(1)) would be at position 4*1 + 1 = 2.

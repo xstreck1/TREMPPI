@@ -10,10 +10,10 @@ public:
    BoundType bound_type;
    TraceType trace_type;
    size_t bfs_bound;
-   bool mark_initals;
+   bool circ; ///< True if we are looking for a circuit (i.e. non-trivial path from s to s)
    size_t minimal_count;
 
-   CheckerSetting() : bound_type(BoundType::inf), trace_type(TraceType::none), bfs_bound(INF), mark_initals(false), minimal_count(1) { }
+   CheckerSetting() : bound_type(BoundType::inf), trace_type(TraceType::none), bfs_bound(INF), circ(false), minimal_count(1) { }
 
    inline bool isInitial(const StateID ID, const ProductStructure & product) const {
       if (initial_states.empty())
@@ -41,18 +41,6 @@ public:
          return product.getFinalStates();
       else
          return final_states;
-   }
-
-   inline size_t getBound() const {
-      return bfs_bound;
-   }
-
-   inline bool markInitials() const {
-      return mark_initals;
-   }
-
-   inline size_t getMinCount() const {
-      return minimal_count;
    }
 };
 

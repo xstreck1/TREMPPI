@@ -10,111 +10,48 @@
 /// This is however in order since the penultimate state can undergo all the transitions and therefore the robustness just gets split in between the final states.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class RobustnessCompute {
-   const ProductStructure & product; ///< Product reference for state properties.
-   const ColorStorage & storage; ///< Constant storage with the actuall data.
-   CheckerSetting settings; ///< Setup for the process.
-   Levels parametrization;
-
-   /// This structure holds values used in the iterative process of robustness computation.
-   vector<size_t> exits; ///< A number of transitions this state can be left through under given parametrization.
-   vector<double> current_prob; ///< Current probability of reaching.
-   vector<double> next_prob; ///< Will store the probability in the next round.
-
-   /**
-    * For each state compute how many exists are under each parametrization.
-    */
-   void computeExits(const vector<StateTransition> & transitions) {
-      // If not acceptable, leave zero
-      for (const StateTransition & tran : transitions) {
-         // This one we've already counted
-         if (exits[tran.first] != 0)
-            continue;
-
-         const vector<StateID> transports = ColoringFunc::broadcastParameters(parametrization, product.getStructure(), product.getKSID(tran.first));
-
-         // If there are no transports, we have a loop - even if multiple loops are possible, consider only one.
-         exits[tran.first] = max(static_cast<size_t>(1), transports.size());
-      }
-   }
-
-   /**
-    * Set probability of each initial state to 1.0 / number of used initial states for this parametrization.
-    */
-   void initiate() {
-      exits.assign(exits.size(), 0);
-      current_prob.assign(current_prob.size(), 0.);
-      next_prob = current_prob;
-
-      setInitials();
-   }
-
-   /**
-    * @brief setInitials
-    */
-   void setInitials() {
-      const vector<StateID> & initials = settings.getInitials(product);
-
-      for (const StateID init:initials)
-         next_prob[init] = 1.0 / initials.size();
-   }
+	const ProductStructure & product; ///< Product reference for state properties.
 
 public:
-   /**
-    * Constructor ensures that data objects used within the whole computation process have appropriate size.
-    */
-   RobustnessCompute(const ProductStructure & _product, const ColorStorage & _storage) : product(_product), storage(_storage) {
-      exits.resize(product.getStateCount());
-      current_prob.resize(product.getStateCount());
-      next_prob.resize(product.getStateCount());
-   }
+	/**
+	 * Constructor ensures that data objects used within the whole computation process have appropriate size.
+	 */
+	RobustnessCompute(const ProductStructure & _product) : product(_product) {   }
 
-   /**
-    * Function that computes robustness values for each parametrization.
-    */
-   void compute(const SynthesisResults & results, const vector<pair<StateID, StateID> > & transitions, const CheckerSetting & _settings, const Levels & _parametrization) {
-      settings = _settings;
-	  parametrization = _parametrization;
-      initiate();
-      computeExits(transitions);
+	/**
+	 * Function that computes robustness values for each parametrization.
+	 */
+	double compute(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & results, const vector<StateTransition> & transitions) {
+		vector<double> prob; ///< Current probability of reaching.
+		set<StateID> updates;
+		set<StateID> next_updates;
 
-      // Assign probabilites for the initial states
-      setInitials();
+		prob = vector<double>(product.getStateCount(), 0.0);
+		const vector<StateID> & initials = _settings.getInitials(product);
+		for (const StateID init : _settings.getInitials(product))
+			prob[init] = 1.0 / initials.size();
 
-      // Cycle through the levels of the DFS procedure
-      for (size_t round_num = 0; round_num < results.getUpperBound(); round_num++) {
-         // Copy the data from the previous round.
-         current_prob = next_prob;
-         next_prob.assign(next_prob.size(), 0.);
+		// Cycle through the levels of the DFS procedure
+		for (size_t round_num = 0; round_num < results.getCost(); round_num++) {
+			next_updates.clear();
 
-         // For the parametrization cycle through transitions
-         for (const auto & trans:transitions) {
-            size_t divisor = exits[trans.first]; // Count succesor
-            // Add probabilities
-            if (divisor)
-               next_prob[trans.second] += current_prob[trans.first] / divisor ;
-         }
-      }
-   }
+			for (const StateID ID : updates) {
+				vector<StateID> transports = SuccFunc::broadcastParameters(_parametrization, product, ID);
+				double exit_prob = prob[ID] / transports.size();
 
-   /**
-    * @return the current robustness
-    */
-   double getRobustness() const {
-      double robustness = 0.;
-      for (const StateID ID:settings.getFinals(product))
-         robustness += next_prob[ID];
-      return robustness;
-   }
+				for (const StateID next : transports) {
+					next_updates.insert(next);
+					prob[next] += exit_prob;
+				}
+			}
 
-   /**
-    * @return robustness measure on each final satate
-    */
-   vector<double> getFinalMarkings() const {
-      vector<double> markings;
-      markings.reserve(settings.getFinals(product).size());
-      for (const StateID ID:settings.getFinals(product))
-         markings.push_back(next_prob[ID]);
-      return markings;
-   }
+			updates = next_updates;
+		}
+
+		double robustness = 0.0;
+		for (const StateID ID : _settings.getFinals(product))
+			robustness += prob[ID];
+		return robustness;
+	}
 };
 

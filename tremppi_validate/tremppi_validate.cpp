@@ -8,7 +8,7 @@
 #include "io/parametrization_reader.hpp"
 #include "io/output_manager.hpp"
 #include "data/construction_manager.hpp"
-#include "compute/synthesis_manager.hpp"
+#include "compute/analysis_manager.hpp"
 
 // TODO: Check if the transition generation is correct for all three components (w.r.t. the transition system used)
 // TODO: Components still required to be ordered...
@@ -83,13 +83,13 @@ int tremppi_validate(int argc, char ** argv) {
 			logging.exceptionMessage(e, 5);
 		}
 
-		// Synthesis of parametrizations
+		// Analysis of parametrizations
 		ParametrizationReader par_reader;
 		par_reader.select(reg_infos, select, db);
 		try {
 			BOOST_LOG_TRIVIAL(info) << "Validating for an automaton: " << automaton.name;
 
-			SynthesisManager synthesis_manager(product);
+			AnalysisManager analysis_manager(product);
 			OutputManager output(po, reg_infos, automaton.name, db);
 			output.outputForm();
 			size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified automaton.
@@ -98,24 +98,24 @@ int tremppi_validate(int argc, char ** argv) {
 			// Do the computation for all the rounds
 			sqlite3pp::transaction xct(db);
 			while (par_reader.next()) {
-				tuple<size_t, double, vector<StateTransition> > result;
+				tuple<size_t, vector<StateTransition>, double> result;
 
-				// Call synthesis procedure based on the type of the automaton.
+				// Call analysis procedure based on the type of the automaton.
 				switch (product.getMyType()) {
 				case BA_finite:
-					result = synthesis_manager.checkFinite(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
+					result = analysis_manager.checkFinite(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
 					break;
 					/*case BA_standard:
-						cost = synthesis_manager.checkFull(po, par_reader.getParametrization(), witness_trans, robustness_val);
+						cost = analysis_manager.checkFull(po, par_reader.getParametrization(), witness_trans, robustness_val);
 						break;*/
 				default:
 					throw runtime_error("Unsupported Buchi automaton type.");
 				}
 
 				// Parametrization was considered satisfying.
-				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<2>(result));
+				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<1>(result));
 
-				output.outputRound(get<0>(result), get<1>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
+				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 				logging.subStep();
 			}
 			xct.commit();

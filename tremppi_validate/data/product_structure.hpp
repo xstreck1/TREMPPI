@@ -75,10 +75,6 @@ public:
 		return states[ID].KS_ID;
 	}
 
-	inline const vector<StateID> & getLoops(const StateID ID) const {
-		return states[ID].loops;
-	}
-
 	const string getString(const StateID ID) const {
 		string label = "(";
 

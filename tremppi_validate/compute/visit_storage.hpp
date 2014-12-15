@@ -4,23 +4,21 @@
 #include <tremppi_common/network/definitions.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief An auxiliary class to the ProductStructure and stores colors and possibly predecessors for individual states of the product during the computation.
+/// \brief An auxiliary class to the ProductStructure
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ColorStorage {
-	vector<size_t> states; ///< Vector of states that correspond to those of Product Structure and store coloring data.
+class VisitStorage {
+	vector<size_t> states; ///< Vector of states that correspond to those of Product Structure and store visiting data.
+	size_t cost; ///< The current cost value;
 
 public:
-	/**
-	* Constructor allocates necessary memory for further usage (this memory is not supposed to be freed until endo of the computation).
-	* Every state has predecessors and succesors allocated for EVERY other state, this consumes memory but benefits the complexity of operations.
-	* @param states_count	number of states the structure the data will be saved for has
-	*/
-	ColorStorage(const ProductStructure & product) {
+	/* */
+	VisitStorage(const size_t state_count) {
 		// Create states
-		states.resize(product.getStateCount(), INF);
+		states.resize(state_count, INF);
+		cost = 0;
 	}
 
-	ColorStorage() = default; ///< Empty constructor for an empty storage.
+	VisitStorage() = default; ///< Empty constructor for an empty storage.
 
 	/**
 	 * Sets all values for all the states to zero. Allocated memory remains.
@@ -34,12 +32,12 @@ public:
 	* @param ID	index of the state
 	* @return  true if there was an actuall update
 	*/
-	inline bool update(const StateID ID, const size_t BFS_level) {
+	inline bool update(const StateID ID) {
 		// If nothing is new return false
 		if (isFound(ID))
 			return false;
 		// Add new parameters and return true
-		states[ID] = BFS_level;
+		states[ID] = cost;
 		return true;
 	}
 
@@ -49,5 +47,26 @@ public:
 	 */
 	inline bool isFound(const StateID ID) const {
 		return states[ID] != INF;
+	}
+
+	/**/
+	inline size_t getVisit(const StateID ID) const {
+		return states[ID];
+	}
+
+	inline size_t getCost() const  {
+		return cost;
+	}
+
+	inline void incCost() {
+		cost++;
+	}
+
+	inline bool succeeded() const {
+		return cost != INF;
+	}
+
+	inline void notFound() {
+		cost = INF;
 	}
 };

@@ -20,6 +20,7 @@ struct TSTransitionProperty : public TransitionProperty {
 /// State having specie levels attached.
 struct TSStateProperty : public StateProperty<TSTransitionProperty> {
    Levels levels; ///< Species_level[i] = activation level of specie i.
+   vector<StateID> loops;
 
    TSStateProperty(const StateID ID, const Levels& _species_level)
       : StateProperty<TSTransitionProperty>(ID), levels(_species_level) { } ///< Simple filler, assigns values to all the variables.
@@ -47,5 +48,9 @@ public:
     */
    virtual inline const Levels & getStateLevels(const StateID ID) const {
       return GraphInterface<StateT>::states[ID].levels;
+   }
+
+   inline const vector<StateID> & getLoops(const StateID ID) const {
+	   return states[ID].loops;
    }
 };

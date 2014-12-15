@@ -2,7 +2,7 @@
 
 #include "../data/product_structure.hpp"
 
-namespace ColoringFunc {
+namespace SuccFunc {
 	/**
 	 * @return true if this transition is open for given parametrization
 	 */
@@ -26,9 +26,12 @@ namespace ColoringFunc {
 			StateID target_ID = ts.getTargetID(ID, trans_num);
 
 			// From an update strip all the parameters that can not pass through the transition - color intersection on the transition
-			if (ColoringFunc::isOpen(parametrization, ts.getTransitionConst(ID, trans_num)))
+			if (SuccFunc::isOpen(parametrization, ts.getTransitionConst(ID, trans_num)))
 				param_updates.push_back(target_ID);
 		}
+
+		if (param_updates.empty())
+			param_updates = ts.getLoops(ID);
 
 		return param_updates;
 	}

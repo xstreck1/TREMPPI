@@ -3,7 +3,7 @@
 #include "../data/property_automaton.hpp"
 
 #include "witness_searcher.hpp"
-#include "color_storage.hpp"
+#include "visit_storage.hpp"
 #include "model_checker.hpp"
 #include "robustness_compute.hpp"
 #include "checker_setting.hpp"
@@ -11,15 +11,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief STEP 3 - Control class for the computation.
 ///
-/// Manager of the synthesis procedure - takes the reference data constructed during previous steps and computes and executes the synthesis.
-/// Synthesis is done in three steps:
+/// Manager of the analysis procedure - takes the reference data constructed during previous steps and computes and executes the analysis.
+/// Analysis is done in three steps:
 ///	-# preparation: empties data and starts a new round.
-///   -# synthesis: computes the coloring, stored in the storage object and adds data to coloring analyzer if needed.
+///   -# analysis: computes the coloring, stored in the storage object and adds data to coloring analyzer if needed.
 ///   -# conclusion: stores additional data and outputs
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class SynthesisManager {
-	unique_ptr<ModelChecker> model_checker; ///< Class for synthesis.
-	unique_ptr<ColorStorage> storage; ///< Class that holds.
+class AnalysisManager {
+	unique_ptr<ModelChecker> model_checker; ///< Class for analysis.
+	unique_ptr<VisitStorage> storage; ///< Class that holds.
 	unique_ptr<WitnessSearcher> searcher; ///< Class to build wintesses.
 	unique_ptr<RobustnessCompute> computer; ///< Class to compute robustness.
 
@@ -27,7 +27,7 @@ class SynthesisManager {
 	 * @brief analyseLasso Parametrization is know to be satisfiable, make analysis of it.
 	 */
 	/*void analyseLasso(const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no, double & robust) {
-		SynthesisResults results;
+		AnalysisResults results;
 		CheckerSettings settings;
 		// First find the coloring from the initial states to the given final.
 		settings.final_states = { final.first };
@@ -62,7 +62,7 @@ class SynthesisManager {
 		const size_t BFS_bound = ValidateOptions::getBound(po);
 		settings.bfs_bound = BFS_bound == INF ? BFS_bound : (BFS_bound - final.second);
 
-		SynthesisResults results = model_checker->conductCheck(settings);
+		AnalysisResults results = model_checker->conductCheck(settings);
 		const size_t cost = results.getLowerBound() == INF ? INF : results.getLowerBound() + final.second;
 		if (results.isAccepting() && ValidateOptions::getTracteType(po) != TraceType::none)
 			analyseLasso(final, trans, param_no, robust);
@@ -71,16 +71,16 @@ class SynthesisManager {
 	}*/
 
 public:
-	SynthesisManager() {}
+	AnalysisManager() {}
 
 	/**
 	 * Constructor builds all the data objects that are used within.
 	 */
-	SynthesisManager(const ProductStructure & product)  {
-		storage.reset(new ColorStorage(product));
-		model_checker.reset(new ModelChecker(product, *storage));
-		searcher.reset(new WitnessSearcher(product, *storage));
-		computer.reset(new RobustnessCompute(product, *storage));
+	AnalysisManager(const ProductStructure & product)  {
+		storage.reset(new VisitStorage(product.getStateCount()));
+		model_checker.reset(new ModelChecker(product));
+		searcher.reset(new WitnessSearcher(product));
+		computer.reset(new RobustnessCompute(product));
 	}
 
 	/**
@@ -99,7 +99,7 @@ public:
 	   settings.bound_type = ValidateOptions::getBoundType(po);
 	   settings.param_no = param_no;
 	   settings.mark_initals = true;
-	   SynthesisResults results = model_checker->conductCheck(settings);
+	   AnalysisResults results = model_checker->conductCheck(settings);
 
 	   size_t cost = INF;
 	   map<StateID, size_t> finals = results.found_depth;
@@ -132,24 +132,24 @@ public:
 	 * @param BFS_bound current bound on depth
 	 * @return  the Cost value for this parametrization
 	 */
-	tuple<size_t, double, vector<StateTransition> >  checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
-		tuple<size_t, double, vector<StateTransition> > result;
+	tuple<size_t, vector<StateTransition>, double >  checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
+		tuple<size_t, vector<StateTransition>, double > result;
 		
 		CheckerSetting settings;
 		settings.bfs_bound = bfs_bound;
 		settings.bound_type = BoundType::min;
-		settings.mark_initals = true;
-		SynthesisResults s_results = model_checker->conductCheck(settings, parametrization);
+		settings.circ = false;
+		VisitStorage storage = model_checker->conductCheck(settings, parametrization);
 
 		if (trace_type != TraceType::none) {
-			searcher->findWitnesses(s_results, settings, parametrization);
-			computer->compute(s_results, searcher->getTransitions(), settings, parametrization);
-			get<1>(result) = computer->getRobustness();
-			if (trace_type != TraceType::wit)
-				get<2>(result) = searcher->getTransitions();
+			auto transitions = searcher->findWitnesses(settings, parametrization, storage);
+			if (trace_type == TraceType::wit)
+				get<1>(result) = transitions;
+
+			get<2>(result) = computer->compute(settings, parametrization, storage, transitions);
 		}
 
-		get<0>(result) = s_results.isAccepting() ? s_results.getLowerBound() : INF;
+		get<0>(result) = storage.getCost();
 		return result;
 	}
 };
