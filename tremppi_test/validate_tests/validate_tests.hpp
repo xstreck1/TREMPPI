@@ -44,7 +44,7 @@ int basic_validate_test()  {
 	argv[3] = new char[8];
 	strcpy(argv[3], "--trace"); 
 	argv[4] = new char[4];
-	strcpy(argv[3], "wit");
+	strcpy(argv[4], "wit");
 
 	int result = (tremppi_validate(argc, argv));
 
@@ -105,8 +105,11 @@ TEST_F(ValidateTest, Construction) {
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
 	AnalysisManager s_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::wit, { 2 });
-	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2 since the function is constant";
+	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::wit, { 1 });
+	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2--just one loop";
+	EXPECT_EQ(1, get<1>(results).size()) << "Witness should contain exactly a single loop";
+	EXPECT_EQ(1, get<1>(results).begin()->first) << "Witness should a loop (1,1)";
+	EXPECT_DOUBLE_EQ(0.5, get<2>(results)) << "Robustnes should be half (no witness from 0)";
 }
 
 TEST_F(ValidateTest, Checking) {

@@ -141,7 +141,7 @@ public:
 		settings.circ = false;
 		VisitStorage storage = model_checker->conductCheck(settings, parametrization);
 
-		if (trace_type != TraceType::none) {
+		if (storage.succeeded() && trace_type != TraceType::none) {
 			auto transitions = searcher->findWitnesses(settings, parametrization, storage);
 			if (trace_type == TraceType::wit)
 				get<1>(result) = transitions;

@@ -40,7 +40,7 @@ public:
 		if (po.at("trace").as<string>() == "rob" || po.at("trace").as<string>() == "wit")
 			command += ", R_" + name + "=" + to_string(robustness_val);
 		if (po.at("trace").as<string>() == "wit")
-			command += ", W_" + name + "=" + witness;
+			command += ", W_" + name + "=\"" + witness + "\"";
 		command += " WHERE rowid=" + to_string(rowid);
 		db.execute(command.c_str());
 	}
