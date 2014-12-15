@@ -57,7 +57,7 @@ int basic_validate_test()  {
 
 TEST_F(ValidateTest, Construction) {
 	// Construct unparametrized structure and check if all the values are as expected
-	UnparametrizedStructureBuilder unparametrized_structure_builder(r_negative_loop, a_cycle_on_A);
+	UnparametrizedStructureBuilder unparametrized_structure_builder(r_negative_loop, a_spike_on_A);
 	UnparametrizedStructure unparametrized_structure = unparametrized_structure_builder.buildStructure();
 	ASSERT_EQ(2, unparametrized_structure.getStateCount());
 	EXPECT_EQ(Levels{ 0 }, unparametrized_structure.getStateLevels(0));
@@ -76,7 +76,7 @@ TEST_F(ValidateTest, Construction) {
 	EXPECT_EQ(1, const_2.req_value);
 
 	// Create the Buchi automaton
-	AutomatonBuilder automaton_builder(r_negative_loop, a_cycle_on_A);
+	AutomatonBuilder automaton_builder(r_negative_loop, a_spike_on_A);
 	AutomatonStructure automaton = automaton_builder.buildAutomaton();
 	ASSERT_EQ(3, automaton.getStateCount());
 	EXPECT_EQ(vector < StateID > {0}, automaton.getInitialStates());
@@ -104,14 +104,23 @@ TEST_F(ValidateTest, Construction) {
 
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
-	AnalysisManager s_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::wit, { 1 });
+	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady);
+	auto results = a_unreagulated_is_steady.checkFinite(INF, TraceType::wit, { 1 });
 	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2--just one loop";
 	EXPECT_EQ(1, get<1>(results).size()) << "Witness should contain exactly a single loop";
 	EXPECT_EQ(1, get<1>(results).begin()->first) << "Witness should a loop (1,1)";
 	EXPECT_DOUBLE_EQ(0.5, get<2>(results)) << "Robustnes should be half (no witness from 0)";
 }
 
-TEST_F(ValidateTest, Checking) {
-	ProductStructure p_negative_loop_A_cycle_on_a = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
+TEST_F(ValidateTest, BasicValidation) {
+	ProductStructure p_two_circuit_spike_on_A = ConstructionManager::construct(r_two_circuit, a_spike_on_A);
+	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A);
+	auto results = a_two_circuit_spike_on_A.checkFinite(INF, TraceType::wit, { 0, 1, 1, 0 });
+	EXPECT_EQ(3, get<0>(results)) << "Two-steps way for the spike prop.";
+	EXPECT_EQ(2, get<1>(results).size()) << "Exactly two steps are present for the spike.";
+	EXPECT_DOUBLE_EQ(1.0/4.0, get<2>(results)) << "Robustnes 1/4---deterministic path from one of the initial states.";
+}
+
+TEST_F(ValidateTest, CycleProperty) {
+	ProductStructure a_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
 }

@@ -79,6 +79,8 @@ class AutomatonBuilder {
 	void setAutType(AutomatonStructure & automaton) {
 		if (property.prop_type == "TimeSeries")
 			automaton.my_type = BA_finite;
+		else if (property.prop_type == "Cycle")
+			automaton.my_type = BA_standard;
 		else
 			throw runtime_error("Type of the verification automaton is not known.");
 	}
