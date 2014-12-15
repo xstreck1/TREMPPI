@@ -18,7 +18,7 @@ class WitnessSearcher {
 	CheckerSetting settings; 
 	Levels parametrization;
 
-	vector<StateTransition>  transitions; ///< Acutall storage of the transitions found - transitions are stored by parametrizations numbers in the form (source, traget).
+	multimap<StateID, StateID> transitions; ///< Acutall storage of the transitions found - transitions are stored by parametrizations numbers in the form (source, traget).
 	vector<StateID> path; ///< Current path of the DFS with the final vertex on 0 position.
 	size_t max_depth; ///< Maximal level of recursion that is possible (maximal Cost in this round).
 	vector<size_t> found; ///< Used for noting when a state was found (depth).
@@ -30,15 +30,15 @@ class WitnessSearcher {
 	 */
 	size_t DFS(const VisitStorage & storage, const StateID ID, const size_t depth, size_t branch) {
 		// If this path is no use
-		if (storage.getVisit(ID))
+		if (storage.getVisit(ID) < depth)
 			return branch;
 
 		path[depth] = ID;
 
 		// Store if the state is final or part of another path.
-		if (found[ID] || settings.isFinal(ID, product)) {
+		if ((found[ID] <= depth) || settings.isFinal(ID, product)) {
 			for (size_t step = branch; step < depth; step++) {
-				transitions.push_back(StateTransition(path[step], path[step + 1]));
+				transitions.insert({ path[step], path[step + 1] });
 				found[path[step]] = step; // Mark found for given parametrizations
 			}
 			branch = depth;
@@ -65,12 +65,11 @@ public:
 	/**
 	 * Function that executes the whole searching process
 	 */
-	vector<StateTransition> findWitnesses(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & storage) {
+	multimap<StateID, StateID> findWitnesses(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & storage) {
 		// Preparation
 		settings = _settings;
 		parametrization = _parametrization;
 
-		transitions = vector<StateTransition>();
 		path = vector<StateID>(storage.getCost(), INF);
 		found = vector<size_t>(product.getStateCount(), INF);
 		used = vector<bool>(product.getStateCount(), false);
@@ -80,14 +79,14 @@ public:
 			if (storage.isFound(init))
 				DFS(storage, init, 0u, 0u);
 
-		return transitions;
+		return move(transitions);
 	}
 
 	/**
 	 * Re-formes the transitions computed during the round into strings.
 	 * @return  strings with all transitions for each acceptable parametrization
 	 */
-	const static string getOutput(const TraceType trace_type, const ProductStructure & product, const vector<StateTransition> & transitions) {
+	const static string getOutput(const TraceType trace_type, const ProductStructure & product, const multimap<StateID, StateID>  & transitions) {
 		string acceptable_paths; // Vector fo actuall data
 		// Cycle throught the parametrizations
 		if (!transitions.empty()) { // Test for emptyness of the set of transitions

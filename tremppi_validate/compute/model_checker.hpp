@@ -26,8 +26,6 @@ public:
 
 		// While there are updates, pass them to succesing vertices
 		do  {
-			next_updates.clear();
-
 			for (const StateID ID : updates) {
 				// Get passed states and remove those already found
 				vector<StateID> transports = SuccFunc::broadcastParameters(_parametrization, product, ID);

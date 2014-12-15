@@ -105,7 +105,7 @@ TEST_F(ValidateTest, Construction) {
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
 	AnalysisManager s_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::none, { 2 });
+	auto results = s_unreagulated_is_steady.checkFinite(INF, TraceType::wit, { 2 });
 	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2 since the function is constant";
 }
 

@@ -21,31 +21,33 @@ public:
 	/**
 	 * Function that computes robustness values for each parametrization.
 	 */
-	double compute(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & results, const vector<StateTransition> & transitions) {
-		vector<double> prob; ///< Current probability of reaching.
-		set<StateID> updates;
-		set<StateID> next_updates;
-
-		prob = vector<double>(product.getStateCount(), 0.0);
+	double compute(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & results, const multimap<StateID, StateID> & transitions) {
 		const vector<StateID> & initials = _settings.getInitials(product);
+		
+		vector<double> prob = vector<double>(product.getStateCount(), 0.0);
 		for (const StateID init : _settings.getInitials(product))
 			prob[init] = 1.0 / initials.size();
+
+		vector<StateID> updates = initials;
+		vector<StateID> next_updates;
 
 		// Cycle through the levels of the DFS procedure
 		for (size_t round_num = 0; round_num < results.getCost(); round_num++) {
 			next_updates.clear();
 
 			for (const StateID ID : updates) {
-				vector<StateID> transports = SuccFunc::broadcastParameters(_parametrization, product, ID);
+				auto transports = SuccFunc::broadcastParameters(_parametrization, product, ID);
 				double exit_prob = prob[ID] / transports.size();
 
-				for (const StateID next : transports) {
-					next_updates.insert(next);
-					prob[next] += exit_prob;
+				for (auto it = transitions.equal_range(ID).first; it != transitions.equal_range(ID).second; it++) {
+					next_updates.push_back(it->second);
+					prob[it->second] += exit_prob;
 				}
 			}
 
-			updates = next_updates;
+			auto unique_it = unique(WHOLE(next_updates));
+			next_updates.resize(distance(begin(next_updates), unique_it));
+			updates = move(next_updates);
 		}
 
 		double robustness = 0.0;

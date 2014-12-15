@@ -132,8 +132,8 @@ public:
 	 * @param BFS_bound current bound on depth
 	 * @return  the Cost value for this parametrization
 	 */
-	tuple<size_t, vector<StateTransition>, double >  checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
-		tuple<size_t, vector<StateTransition>, double > result;
+	tuple<size_t, multimap<StateID, StateID>, double >  checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
+		tuple<size_t, multimap<StateID, StateID>, double > result;
 		
 		CheckerSetting settings;
 		settings.bfs_bound = bfs_bound;

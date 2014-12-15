@@ -98,7 +98,7 @@ int tremppi_validate(int argc, char ** argv) {
 			// Do the computation for all the rounds
 			sqlite3pp::transaction xct(db);
 			while (par_reader.next()) {
-				tuple<size_t, vector<StateTransition>, double> result;
+				tuple<size_t, multimap<StateID, StateID>, double> result;
 
 				// Call analysis procedure based on the type of the automaton.
 				switch (product.getMyType()) {
