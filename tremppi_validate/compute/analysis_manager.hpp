@@ -18,65 +18,17 @@
 ///   -# conclusion: stores additional data and outputs
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AnalysisManager {
+	const ProductStructure & product;
 	unique_ptr<ModelChecker> model_checker; ///< Class for analysis.
 	unique_ptr<VisitStorage> storage; ///< Class that holds.
 	unique_ptr<WitnessSearcher> searcher; ///< Class to build wintesses.
 	unique_ptr<RobustnessCompute> computer; ///< Class to compute robustness.
 
-	/**
-	 * @brief analyseLasso Parametrization is know to be satisfiable, make analysis of it.
-	 */
-	/*void analyseLasso(const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no, double & robust) {
-		AnalysisResults results;
-		CheckerSettings settings;
-		// First find the coloring from the initial states to the given final.
-		settings.final_states = { final.first };
-		settings.bound_type = BoundType::min;
-		settings.mark_initals = true;
-		settings.param_no = param_no;
-		results = model_checker->conductCheck(settings);
-		searcher->findWitnesses(results, settings);
-		trans = searcher->getTransitions();
-		computer->compute(results, searcher->getTransitions(), settings);
-		robust = computer->getRobustness();
-
-		// Second find a cycle on the final state.
-		settings.mark_initals = false;
-		settings.initial_states = { final.first };
-		results = model_checker->conductCheck(settings);
-		searcher->findWitnesses(results, settings);
-		const vector<StateTransition> & trans_ref = searcher->getTransitions();
-		trans.insert(trans.begin(), trans_ref.begin(), trans_ref.end());
-		computer->compute(results, searcher->getTransitions(), settings);
-		robust *= computer->getRobustness();
-	}*/
-
-	/**
-	 * @brief computeLasso parametrization is know to reach a final state, test that state for a bounded loop.
-	 */
-	/*size_t computeLasso(const bpo::variables_map & po, const pair<StateID, size_t> & final, vector<StateTransition> & trans, const ParamNo param_no, double & robust) {
-		CheckerSettings settings;
-		settings.bound_type = BoundType::min;
-		settings.param_no = param_no;
-		settings.initial_states = settings.final_states = { final.first };
-		const size_t BFS_bound = ValidateOptions::getBound(po);
-		settings.bfs_bound = BFS_bound == INF ? BFS_bound : (BFS_bound - final.second);
-
-		AnalysisResults results = model_checker->conductCheck(settings);
-		const size_t cost = results.getLowerBound() == INF ? INF : results.getLowerBound() + final.second;
-		if (results.isAccepting() && ValidateOptions::getTracteType(po) != TraceType::none)
-			analyseLasso(final, trans, param_no, robust);
-
-		return cost;
-	}*/
-
 public:
-	AnalysisManager() {}
-
 	/**
 	 * Constructor builds all the data objects that are used within.
 	 */
-	AnalysisManager(const ProductStructure & product)  {
+	AnalysisManager(const ProductStructure & _product) : product(_product) {
 		storage.reset(new VisitStorage(product.getStateCount()));
 		model_checker.reset(new ModelChecker(product));
 		searcher.reset(new WitnessSearcher(product));
@@ -84,57 +36,72 @@ public:
 	}
 
 	/**
-	 * @brief checkFull conduct model check with only reachability
-	 * @param[in] witnesses for all the shortest cycles
-	 * @param[in] robustness_val  robustness of the whole computation
-	 * @param param_no number of parametrization to test
-	 * @param BFS_bound current bound on depth
-	 * @param witnesses should compute witnesses
-	 * @param robustness should compute robustness
-	 * @return the Cost value for this parametrization
+	 * @brief checkFull conduct model check for a lasso
 	 */
-	/*size_t checkFull(const bpo::variables_map & po, const Levels & parametrization, vector<StateTransition> & trans, double & robustness_val) {
-	   CheckerSettings settings;
-	   settings.bfs_bound = ValidateOptions::getBound(po);
-	   settings.bound_type = ValidateOptions::getBoundType(po);
-	   settings.param_no = param_no;
-	   settings.mark_initals = true;
-	   AnalysisResults results = model_checker->conductCheck(settings);
+	tuple<size_t, multimap<StateID, StateID>, double >  checkFull(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
+		tuple<size_t, multimap<StateID, StateID>, double > result;
+		get<2>(result) = 0.0;
 
-	   size_t cost = INF;
-	   map<StateID, size_t> finals = results.found_depth;
-	   TraceType trace_type = ValidateOptions::getTracteType(po);
-	   for (const pair<StateID, size_t> & final : finals) {
-	   vector<StateTransition> trans_temp;
-	   double robust_temp = 0.;
-	   size_t new_cost = computeLasso(po, final, trans_temp, param_no, robust_temp);
-	   // Clear data if the new path is shorter than the others.
-	   if (new_cost < cost) {
-	   cost = new_cost;
-	   robustness_val = 0.;
-	   trans.clear();
-	   }
-	   robustness_val += robust_temp;
-	   trans.insert(trans.begin(), trans_temp.begin(), trans_temp.end());
-	   }
+		// Find the minimal cost - step 1
+		get<0>(result) = INF;
+		CheckerSetting settings;
+		settings.bfs_bound = bfs_bound - 1; // We need at least one step for the loop on the final state
+		settings.bound_type = BoundType::step;
+		settings.circ = false;
+		VisitStorage reach_storage = model_checker->conductCheck(settings, parametrization);
+		// step 2
+		settings.bound_type = BoundType::min;
+		settings.circ = true;
+		for (const StateID ID : product.getFinalStates()) {
+			if (reach_storage.isFound(ID)) {
+				settings.initial_states = settings.final_states = { ID };
+				settings.bfs_bound = bfs_bound - reach_storage.getVisit(ID);
+				VisitStorage loop_storage = model_checker->conductCheck(settings, parametrization);
+				get<0>(result) = std::min(reach_storage.getVisit(ID) + loop_storage.getCost(), get<0>(result));
+			}
+		}
 
-	   sort(trans.begin(), trans.end());
-	   trans.erase(unique(trans.begin(), trans.end()), trans.end());
+		// Compute the analysis for the lasso
+		if (get<0>(result) != INF && trace_type != TraceType::none) {
+			for (const StateID ID : product.getFinalStates()) {
+				if (reach_storage.isFound(ID)) {
+					// Get the loop visits
+					settings.initial_states = settings.final_states = { ID };
+					settings.bfs_bound = bfs_bound - reach_storage.getVisit(ID);
+					settings.circ = true;
+					VisitStorage loop_storage = model_checker->conductCheck(settings, parametrization);
 
-	   return cost;
-	   }*/
+					if (reach_storage.getVisit(ID) + loop_storage.getCost() <= get<0>(result)) {
+						// Compute reach analysis
+						settings.initial_states.clear(); // Reset initals to all
+						settings.circ = false;
+						auto reach_wit = searcher->findWitnesses(settings, parametrization, reach_storage);
+						double reach_rob = computer->compute(settings, parametrization, reach_storage, reach_wit);
+
+						// Compute loop analysis
+						settings.initial_states = { ID };
+						settings.circ = true;
+						auto loop_wit = searcher->findWitnesses(settings, parametrization, loop_storage);
+						double loop_rob = computer->compute(settings, parametrization, loop_storage, loop_wit) - 1;
+
+						// Merge
+						if (trace_type == TraceType::wit)
+							merge(WHOLE(reach_wit), WHOLE(loop_wit), inserter(get<1>(result), end(get<1>(result))));
+						get<2>(result) += reach_rob * loop_rob;
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 
 	/**
-	 * @brief checkFull conduct model check with both trying to reach and with cycle detection.
-	 * @param[in] witness of the shortest path
-	 * @param[in] robustness_val robustness of the shortest paths
-	 * @param param_no number of parametrization to test
-	 * @param BFS_bound current bound on depth
-	 * @return  the Cost value for this parametrization
+	 * @brief checkFinite conduct model check with reachability only
 	 */
-	tuple<size_t, multimap<StateID, StateID>, double >  checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
+	tuple<size_t, multimap<StateID, StateID>, double > checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
 		tuple<size_t, multimap<StateID, StateID>, double > result;
-		
+
 		CheckerSetting settings;
 		settings.bfs_bound = bfs_bound;
 		settings.bound_type = BoundType::min;

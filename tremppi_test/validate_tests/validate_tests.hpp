@@ -10,10 +10,11 @@ int tremppi_validate(int, char**);
 // Print the basic model
 void createProperties(const bfs::path & example_model_path) {
 	Json::Value root;
-	root.resize(1);
+	root.resize(2);
+	// Add time series
 	root[0]["desc"].resize(1);
 	root[0]["desc"][0]["id"] = 0;
-	root[0]["desc"][0]["values"]["Name"] = "test";
+	root[0]["desc"][0]["values"]["Name"] = "test_ts";
 	root[0]["desc"][0]["values"]["Type"] = "TimeSeries";
 	root[0]["desc"][0]["values"]["Experiment"] = "";
 	root[0]["desc"][0]["values"]["Verify"] = true;
@@ -22,6 +23,19 @@ void createProperties(const bfs::path & example_model_path) {
 	root[0]["data"][0]["values"]["Measurement"] = "B>0";
 	root[0]["data"][1]["id"] = 1;
 	root[0]["data"][1]["values"]["Measurement"] = "A>0&B>1";
+	// Add a cycle
+	root[1]["desc"].resize(1);
+	root[1]["desc"][0]["id"] = 0;
+	root[1]["desc"][0]["values"]["Name"] = "test_cycle";
+	root[1]["desc"][0]["values"]["Type"] = "Cycle";
+	root[1]["desc"][0]["values"]["Experiment"] = "";
+	root[1]["desc"][0]["values"]["Verify"] = true;
+	root[1]["data"].resize(2);
+	root[1]["data"][0]["id"] = 0;
+	root[1]["data"][0]["values"]["Measurement"] = "A=1";
+	root[1]["data"][1]["id"] = 1;
+	root[1]["data"][1]["values"]["Measurement"] = "A=0";
+
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
@@ -122,5 +136,10 @@ TEST_F(ValidateTest, BasicValidation) {
 }
 
 TEST_F(ValidateTest, CycleProperty) {
-	ProductStructure a_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
+	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
+	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady);
+	auto results = a_unreagulated_is_steady.checkFull(INF, TraceType::wit, { 1, 0 });
+	EXPECT_EQ(4, get<0>(results)) << "One step plus two-step loop.";
+	EXPECT_EQ(3, get<1>(results).size()) << "One step plus two-step loop.";
+	EXPECT_DOUBLE_EQ(1.0 / 2.0, get<2>(results)) << "Robustnes 1/2---deterministic path with two initials.";
 }

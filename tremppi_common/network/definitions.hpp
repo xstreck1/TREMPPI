@@ -38,7 +38,7 @@ typedef vector<ActLevel> Levels;
 typedef vector<Levels> Configurations;
 
 /// What properties may be examined.
-const std::vector<std::string> PropType = { "TimeSeries" };
+const std::vector<std::string> PropType = { "TimeSeries", "Cycle" };
 
 /// Types of automata possible for using.
 enum AutType { BA_finite, BA_weak, BA_standard };

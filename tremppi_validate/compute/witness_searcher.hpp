@@ -36,7 +36,7 @@ class WitnessSearcher {
 		path[depth] = ID;
 
 		// Store if the state is final or part of another path.
-		if ((found[ID] <= depth) || settings.isFinal(ID, product)) {
+		if ((found[ID] <= depth) || (settings.isFinal(ID, product) && !(settings.circ && depth == 0))) {
 			for (size_t step = branch; step < depth; step++) {
 				transitions.insert({ path[step], path[step + 1] });
 				found[path[step]] = step; // Mark found for given parametrizations
@@ -53,6 +53,7 @@ class WitnessSearcher {
 			}
 		}
 
+		used[ID] = true;
 		return branch;
 	}
 

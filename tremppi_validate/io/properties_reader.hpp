@@ -31,8 +31,14 @@ namespace PropertiesReader {
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, edges });
 				ID++;
 			}
-
-			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, PropertyAutomaton::Edges ()});
+			if (automaton.prop_type == "TimeSeries") {
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, PropertyAutomaton::Edges() });
+			}
+			// Go back to the initial
+			else if (automaton.prop_type == "Cycle") {
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, { { 0, "tt" } } });
+			}
+			
 			automata.emplace_back(move(automaton));
 		}
 		return automata;
