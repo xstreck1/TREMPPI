@@ -24,8 +24,6 @@ namespace PropertiesReader {
 			automaton.experiment = property["desc"][0]["values"]["Experiment"].asString();
 
 			StateID ID = 0;
-
-
 			for (const Json::Value & measurement : property["data"]) {
 				string constraint = measurement["values"]["Measurement"].asString();
 				string negation = "!(" + constraint + ")";
@@ -33,16 +31,12 @@ namespace PropertiesReader {
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, edges });
 				ID++;
 			}
-			// Add mirror of the first state that is not accepting.
-			if (automaton.prop_type == "Cycle") {
-				automaton.states[automaton.states.size() - 1].edges[1].target_ID = 0;
-				automaton.states.push_back(automaton.states[0]);
-				automaton.states[0].final = true;
-				automaton.states[0].edges[0].target_ID = automaton.states.size() - 1;
-				automaton.states[automaton.states.size() - 1].edges[0].target_ID = automaton.states.size() - 1;
-			}
-			else if (automaton.prop_type == "TimeSeries") {
+			if (automaton.prop_type == "TimeSeries") {
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, PropertyAutomaton::Edges() });
+			}
+			// Go back to the initial
+			else if (automaton.prop_type == "Cycle") {
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, { { 0, "tt" } } });
 			}
 			
 			automata.emplace_back(move(automaton));

@@ -45,7 +45,7 @@ class WitnessSearcher {
 		}
 
 		// Continue with the DFS otherwise.
-		else if ((depth < max_depth) && !used[ID]){
+		else if ((depth < max_depth - 1) && !used[ID]){
 			vector<StateID> transports = SuccFunc::broadcastParameters(parametrization, product, ID);
 
 			for (const StateID & succ : transports) {
@@ -91,14 +91,16 @@ public:
 		string acceptable_paths; // Vector fo actuall data
 		// Cycle throught the parametrizations
 		if (!transitions.empty()) { // Test for emptyness of the set of transitions
-			acceptable_paths = "{";
 			// Reformes based on the user request
 			for (const StateTransition & trans : transitions){
-				acceptable_paths.append(to_string(trans.first)).append(">").append(to_string(trans.second)).append(",");
-				// acceptable_paths.append(product.getString(trans.first)).append(">").append(product.getString(trans.second)).append(",");
+				// acceptable_paths.append(to_string(trans.first)).append(">").append(to_string(trans.second)).append(";");
+				acceptable_paths.append(product.getString(trans.first)).append(">").append(product.getString(trans.second)).append(";");
 			}
-			acceptable_paths.back() = '}';
 		}
+		// remove last comma
+		if (!acceptable_paths.empty())
+			acceptable_paths.resize(acceptable_paths.size() - 1);
+
 		return acceptable_paths;
 	}
 };

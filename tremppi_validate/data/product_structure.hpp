@@ -76,13 +76,12 @@ public:
 	}
 
 	const string getString(const StateID ID) const {
-		string label = "(";
+		string label;
 
 		for (const ActLevel lev : states[ID].levels)
-			label += to_string(lev) + ",";
+			label += to_string(lev);
 
-		label[label.length() - 1] = ';';
-		label += to_string(getBAID(ID)) + ")";
+		label += char(getBAID(ID) + 65);
 
 		return label;
 	}

@@ -156,14 +156,5 @@ namespace Output {
 		FileManipulation::replaceInFile(report_html, "./report", "./" +  report_path.stem().string());
 		FileManipulation::replaceInFile(report_html, "tremppi_common.widget = \"report\";", "tremppi_common.widget = \"" + report_path.stem().string() + "\";");
 	}
-
-	//
-	ofstream fileOutput(const bfs::path & report_path, const string & name) {
-		bfs::path output_path = report_path / name;
-		ofstream file = ofstream(output_path.string(), ios::out);
-		if (!file)
-			throw runtime_error("Could not open " + output_path.string());
-		return file;
-	}
 }
 

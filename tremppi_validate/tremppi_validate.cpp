@@ -106,7 +106,7 @@ int tremppi_validate(int argc, char ** argv) {
 					result = analysis_manager.checkFinite(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
 					break;
 				case BA_standard:
-					result = analysis_manager.checkFinite(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
+					result = analysis_manager.checkFull(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
 					break;
 				default:
 					throw runtime_error("Unsupported Buchi automaton type.");

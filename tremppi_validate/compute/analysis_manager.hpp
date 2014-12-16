@@ -71,7 +71,7 @@ public:
 					settings.circ = true;
 					VisitStorage loop_storage = model_checker->conductCheck(settings, parametrization);
 
-					if (reach_storage.getVisit(ID) + loop_storage.getCost() <= get<0>(result)) {
+					if (loop_storage.isFound(ID) && reach_storage.getVisit(ID) + loop_storage.getCost() <= get<0>(result)) {
 						// Compute reach analysis
 						settings.initial_states.clear(); // Reset initals to all
 						settings.circ = false;
@@ -85,8 +85,8 @@ public:
 						double loop_rob = computer->compute(settings, parametrization, loop_storage, loop_wit) - 1;
 
 						// Merge
-						if (trace_type == TraceType::wit)
-							merge(WHOLE(reach_wit), WHOLE(loop_wit), inserter(get<1>(result), end(get<1>(result))));
+						get<1>(result).insert(WHOLE(reach_wit));
+						get<1>(result).insert(WHOLE(loop_wit));
 						get<2>(result) += reach_rob * loop_rob;
 					}
 				}

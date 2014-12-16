@@ -9,15 +9,17 @@ int tremppi_spawn(int argc, char ** argv);
 int tremppi_express(int argc, char ** argv);
 int tremppi_report(int argc, char ** argv);
 int tremppi_validate(int argc, char ** argv);
+int tremppi_witness(int argc, char ** argv);
 
-map<string, pair<int(*)(int, char**), string> > tremppi_functions = { 
+map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
 		{ "init", { tremppi_init, "create a new model with a model viewer" } },
 		{ "browse", { tremppi_browse, "starts a local server to allow browsing data" } },
 		{ "spawn", { tremppi_spawn, "read a model and create a database of parametrizations based on the model" } },
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
 		{ "report", { tremppi_report, "create a report from statistical analysis of a database" } },
-		{ "validate", { tremppi_validate, "conduct a model checking to validate parametrizations agaings LTL properties" } }
-};
+		{ "validate", { tremppi_validate, "conduct a model checking to validate parametrizations agaings LTL properties" } },
+		{ "witness", { tremppi_witness, "produce a witness for the given LTL properties (needs valiation first)" } } };
+
 
 void printHelp() {
 	cout << "tremppi command [options]" << endl;
