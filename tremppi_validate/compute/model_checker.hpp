@@ -18,8 +18,9 @@ public:
 	ModelChecker(const ProductStructure & _product) : product(_product) { }
 
 	/**/
-	VisitStorage conductCheck(const CheckerSetting & _settings, const Levels & _parametrization) {
-		VisitStorage storage(product.getStateCount());
+	VisitStorage conductCheck(const CheckerSetting & _settings, const Levels & _parametrization, VisitStorage storage) {
+		storage.reset();
+
 		vector<StateID> updates = _settings.getInitials(product);
 		if (!_settings.circ) {
 			for (const StateID ID : updates) {

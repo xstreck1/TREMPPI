@@ -25,6 +25,7 @@ public:
 	 */
 	void reset() {
 		states.assign(states.size(), INF);
+		cost = 0;
 	}
 
 	/**

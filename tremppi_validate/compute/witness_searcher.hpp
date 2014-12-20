@@ -61,7 +61,10 @@ public:
 	/**
 	 * Constructor ensures that data objects used within the whole computation process have appropriate size.
 	 */
-	WitnessSearcher(const ProductStructure & _product) : product(_product) {	}
+	WitnessSearcher(const ProductStructure & _product) : product(_product) {	
+		found = vector<size_t>(product.getStateCount(), INF);
+		used = vector<bool>(product.getStateCount(), false);
+	}
 
 	/**
 	 * Function that executes the whole searching process
@@ -71,9 +74,9 @@ public:
 		settings = _settings;
 		parametrization = _parametrization;
 
+		found.assign(found.size(), INF);
+		used.assign(used.size(), false);
 		path = vector<StateID>(storage.getCost(), INF);
-		found = vector<size_t>(product.getStateCount(), INF);
-		used = vector<bool>(product.getStateCount(), false);
 		max_depth = storage.getCost();
 
 		for (const auto & init : settings.getInitials(product))

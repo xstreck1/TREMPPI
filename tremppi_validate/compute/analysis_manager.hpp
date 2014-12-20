@@ -41,14 +41,17 @@ public:
 	tuple<size_t, multimap<StateID, StateID>, double >  checkFull(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
 		tuple<size_t, multimap<StateID, StateID>, double > result;
 		get<2>(result) = 0.0;
-
-		// Find the minimal cost - step 1
 		get<0>(result) = INF;
+
 		CheckerSetting settings;
 		settings.bfs_bound = bfs_bound - 1; // We need at least one step for the loop on the final state
 		settings.bound_type = BoundType::step;
 		settings.circ = false;
-		VisitStorage reach_storage = model_checker->conductCheck(settings, parametrization);
+
+		VisitStorage reach_storage(product.getStateCount());
+		VisitStorage loop_storage(product.getStateCount());
+
+		reach_storage = model_checker->conductCheck(settings, parametrization, move(reach_storage));
 		// step 2
 		settings.bound_type = BoundType::min;
 		settings.circ = true;
@@ -56,7 +59,7 @@ public:
 			if (reach_storage.isFound(ID)) {
 				settings.initial_states = settings.final_states = { ID };
 				settings.bfs_bound = bfs_bound - reach_storage.getVisit(ID);
-				VisitStorage loop_storage = model_checker->conductCheck(settings, parametrization);
+				loop_storage = model_checker->conductCheck(settings, parametrization, move(loop_storage));
 				get<0>(result) = std::min(reach_storage.getVisit(ID) + loop_storage.getCost(), get<0>(result));
 			}
 		}
@@ -69,7 +72,7 @@ public:
 					settings.initial_states = settings.final_states = { ID };
 					settings.bfs_bound = bfs_bound - reach_storage.getVisit(ID);
 					settings.circ = true;
-					VisitStorage loop_storage = model_checker->conductCheck(settings, parametrization);
+					loop_storage = model_checker->conductCheck(settings, parametrization, move(loop_storage));
 
 					if (loop_storage.isFound(ID) && reach_storage.getVisit(ID) + loop_storage.getCost() <= get<0>(result)) {
 						// Compute reach analysis
@@ -101,12 +104,16 @@ public:
 	 */
 	tuple<size_t, multimap<StateID, StateID>, double > checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
 		tuple<size_t, multimap<StateID, StateID>, double > result;
+		get<2>(result) = 0.0;
+		get<0>(result) = INF;
 
 		CheckerSetting settings;
 		settings.bfs_bound = bfs_bound;
 		settings.bound_type = BoundType::min;
 		settings.circ = false;
-		VisitStorage storage = model_checker->conductCheck(settings, parametrization);
+
+		VisitStorage storage(product.getStateCount());
+		storage = model_checker->conductCheck(settings, parametrization, move(storage));
 
 		if (storage.succeeded() && trace_type != TraceType::none) {
 			auto transitions = searcher->findWitnesses(settings, parametrization, storage);
