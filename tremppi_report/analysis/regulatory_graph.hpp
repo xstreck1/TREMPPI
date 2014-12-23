@@ -50,7 +50,6 @@ namespace RegulatoryGraph {
 				reg_corr[edge_no] += correlation;
 				reg_freq[edge_no] += isEdgeFunctional(context_values, edge_no);
 			}
-			logging.step();
 		}
 	}
 
@@ -86,7 +85,6 @@ namespace RegulatoryGraph {
 		auto edge_dist = DataConv::getColumnsOfEdges(columns_dist);
 
 		// Compute relation to each regulation of this component, step by database rows
-		logging.newPhase("Graph build", step_count);
 		for (const auto & row : qry) 
 			compute(edge_dist, threshold_to_index, reg_values, reg_info, row, qry.column_count(), result);
 

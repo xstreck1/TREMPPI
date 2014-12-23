@@ -94,7 +94,7 @@ int tremppi_validate(int argc, char ** argv) {
 			output.outputForm();
 			size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified automaton.
 
-			logging.newSubPhase("Validating parametrizations", sqlite3pp::func::columnCount(PARAMETRIZATIONS_TABLE, select, db));
+			logging.newPhase("Validating parametrizations", sqlite3pp::func::columnCount(PARAMETRIZATIONS_TABLE, select, db));
 			// Do the computation for all the rounds
 			sqlite3pp::transaction xct(db);
 			while (par_reader.next()) {
@@ -116,10 +116,9 @@ int tremppi_validate(int argc, char ** argv) {
 				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<1>(result));
 
 				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
-				logging.subStep();
+				logging.step();
 			}
 			xct.commit();
-			logging.step();
 		}
 		catch (std::exception & e) {
 			logging.exceptionMessage(e, 6);

@@ -20,49 +20,58 @@ void Logging::init() {
 	blg::core::get()->set_filter(blg::trivial::severity >= blg::trivial::info);
 
 	// Set the output buffer size for visual studio
-	setvbuf(stdout, 0, _IOLBF, 4096);
+	// setvbuf(stdout, 0, _IOLBF, 4096);
 
 	// Create the dashes in the logifile
 	BOOST_LOG_TRIVIAL(info) << (string(30, '-'));
 }
 
 void Logging::newPhase(const string & _desc, const size_t _step_count) {
-	if (_desc.size() > MAX_WIDHT)
-		throw runtime_error("Description of a phase " + quote(_desc) + "is longer that maximum " + to_string(MAX_WIDHT) + ".");
-	step_count = _step_count;
-	phase_desc = _desc;
-	step_no = 1;
+	phases.push_back({ _step_count, 0, _desc, phases.size() });
 }
 
-void Logging::newSubPhase(const string & _desc, const size_t _substep_count) {
-	if (_desc.size() > MAX_WIDHT)
-		throw runtime_error("Description of a subphase " + quote(_desc) + "is longer that maximum " + to_string(MAX_WIDHT) + ".");
-	substep_count = _substep_count;
-	subphase_desc = _desc;
-	substep_no = 1;
-}
-
-void Logging::uniStep(bool is_sub) {
-	cout << left << "\r" << setw(MAX_WIDHT * 2);
-	string line;
-	line += "[" + phase_desc + "]";
-	if (is_sub)
-		line += "[" + subphase_desc + "]";
-	cout << line;
-
-	size_t & s_no = is_sub ? substep_no : step_no;
-	cout << right << fixed << setw(7) << setprecision(3)
-		<< (s_no * 100.) / (is_sub ? substep_count : step_count) << "%.";
-	s_no++;
+void Logging::killPhase() {
+	phases.pop_back();
 }
 
 void Logging::step() {
-	uniStep(false);
+	string output = "\r";
+
+	phases.back().step_no += 1;
+	while (phases.back().step_count <= phases.back().step_no) {
+		phases.pop_back();
+		if (!phases.empty())
+			phases.back().step_no += 1;
+		else {
+			string finished = "FINISHED";
+			output.resize(LINE_LENGTH - finished.size());
+			output += "FINISHED";
+			break;
+		}
+	}
+
+	if (!phases.empty()) {
+		phase_bit = !phase_bit;
+
+		for (const auto & phase : phases) {
+			output += "[" + phase.description + "]";
+		}
+
+		output.resize(LINE_LENGTH - (phases.size() * NUM_CHARS) - PAD, ' ');
+		const string marker = (phase_bit ? "." : "|");
+		output += " " + marker + " ";
+
+		for (const auto & phase : phases) {
+			output += "[";
+			string frac = to_string((100.0 * phase.step_no) / phase.step_count);
+			frac.resize(NUM_CHARS - PAD, '0');
+			output += frac + "%]";
+		}
+	}
+
+	cout << output;
 }
 
-void Logging::subStep() {
-	uniStep(true);
-}
 
 void Logging::exceptionMessage(const exception & e, const int err_no) {
 	BOOST_LOG_TRIVIAL(error) << "Top level exception: " << e.what();
