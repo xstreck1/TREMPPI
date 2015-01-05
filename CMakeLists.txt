@@ -1,7 +1,9 @@
 cmake_minimum_required (VERSION 3.0)
 PROJECT(TREMPPI)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+if(UNIX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif(UNIX)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # build to bin and lib
@@ -10,7 +12,6 @@ file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
 set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR})
-
 
 # Boost
 if(UNIX)
@@ -45,9 +46,11 @@ link_directories(${PYTHON_LIBRARY_DIRS})
 include_directories(${TREMPPI_SOURCE_DIR})
 # Sqlite
 ADD_LIBRARY(sqlite3 sqlite3/sqlite3.c)
-target_link_libraries(sqlite3 pthread dl)
+if(UNIX)
+	target_link_libraries(sqlite3 pthread dl)
+endif(UNIX)
 ADD_LIBRARY(sqlite3pp sqlite3pp/sqlite3pp.cpp sqlite3pp/sqlite3ppext.cpp)
-target_link_libraries(sqlite3pp sqlite3 pthread dl ${Boost_LIBRARIES})
+target_link_libraries(sqlite3pp sqlite3 ${Boost_LIBRARIES})
 # Jsoncpp
 ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cpp)
 
@@ -65,7 +68,7 @@ SOURCE_GROUP("Source Files\\tremppi_common\\general" ${COMMON_FOLDER}/general/.*
 SOURCE_GROUP("Header Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*hpp)
 SOURCE_GROUP("Source Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*cpp)
 ADD_LIBRARY(tremppi_common_lib tremppi_common/tremppi_common.cpp tremppi_common/header.h tremppi_common/configure.h ${COMMON_FILES})
-target_link_libraries(tremppi_common_lib ${PYTHON_LIBRARIES} ${Gecode_LIBRARIES} sqlite3 sqlite3pp jsonccp)
+target_link_libraries(tremppi_common_lib ${Gecode_LIBRARIES} ${Gecode_LIBRARIES_D} ${PYTHON_LIBRARIES} sqlite3 sqlite3pp jsonccp)
 
 # tremppi_python - code only, no binary
 ADD_LIBRARY(tremppi_python_lib tremppi_python/tremppi_python.cpp)
