@@ -13,18 +13,22 @@ set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR})
 
 
 # Boost
-ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
-set(Boost_USE_MULTITHREADED ON)
-find_package(Boost 1.55.0 COMPONENTS program_options system log log_setup filesystem thread python REQUIRED)
-include_directories(${Gecode_INCLUDE_DIRS})
+if(UNIX)
+	ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
+	set(Boost_USE_MULTITHREADED ON)
+	find_package(Boost 1.55.0 COMPONENTS program_options system log log_setup filesystem thread python REQUIRED)
+else(UNIX)
+	find_package(Boost 1.55.0 REQUIRED)
+endif(UNIX)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
 
 SET(BUILD_STANDALONE OFF CACHE BOOL "Build also stand-alones")
 SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
 
 # Gecode
 FIND_PACKAGE(Gecode)
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
+include_directories(${Gecode_INCLUDE_DIRS})
 
 # configure a header file 
 configure_file (
