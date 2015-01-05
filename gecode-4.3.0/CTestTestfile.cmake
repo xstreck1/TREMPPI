@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: C:/Users/adams_000/TREMPPI/gecode-4.3.0
-# Build directory: C:/Users/adams_000/TREMPPI/gecode-4.3.0
+# Source directory: /home/punyone/CODE/TREMPPI/gecode-4.3.0
+# Build directory: /home/punyone/CODE/TREMPPI/gecode-4.3.0
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

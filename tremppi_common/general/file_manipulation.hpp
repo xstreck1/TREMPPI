@@ -14,7 +14,4 @@ namespace FileManipulation {
 
 	//
 	void replaceInFile(bfs::path const & file, const string & original, const string & replacement);
-
-	//
-	ofstream fileOutput(const bfs::path & file_path, const string & name);
 }

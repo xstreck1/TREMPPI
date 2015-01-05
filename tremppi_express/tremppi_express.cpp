@@ -45,7 +45,7 @@ int tremppi_express(int argc, char ** argv) {
 
 			db.execute("BEGIN TRANSACTION");
 			// Go through parametrizations
-			for (auto & sel_ID : sel_IDs) {
+            for (auto sel_ID : sel_IDs) {
 				vector<vector<PMin>> config_values(reg_func.info.max_activity + 1);
 				Levels params = sqlite3pp::func::getRow<ActLevel>(sel_it, 0, sel_qry.column_count());
 				

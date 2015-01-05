@@ -105,6 +105,10 @@ namespace Common {
 		val++; 
 	}
 
+
+    template<>
+    void increase<bool>(std::vector<bool>::reference val);
+
 	/**
 	* @brief Iterates values from left to right if it is possible. If so, return true, otherwise return false.
 	* @param[in] top    vector of maximal values each component can reach
@@ -195,7 +199,7 @@ namespace Common {
 		else
 			return std::numeric_limits<std::size_t>::max();
 	}
-};
+}
 
 using namespace Common;
 

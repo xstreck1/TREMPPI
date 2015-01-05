@@ -42,7 +42,7 @@ class ParameterBuilder {
 			context.resize(context.length() - 1);
 
 		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
-		Kinetics::Param result = { context, targets, requirements };
+        Kinetics::Param result({ context, targets, requirements });
 		return result;
 	}
 
@@ -77,7 +77,7 @@ public:
 
 		// Create params for the non-input nodes
 		for (const CompID ID : crange(model.components.size()))
-			result.emplace_back(Kinetics::Component{ ID, createParameters(model, ID), Configurations() });
+            result.emplace_back(Kinetics::Component({ ID, createParameters(model, ID), Configurations() }));
 
 		return result;
 	}

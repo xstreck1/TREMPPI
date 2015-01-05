@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.0)
 PROJECT(TREMPPI)
 
-SET(BUILD_STANDALONE OFF CACHE BOOL "Build also stand-alones")
-SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # build to bin and lib
 file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/lib)
@@ -11,16 +11,26 @@ set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
 set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR})
 
+
+# Boost
+ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
+set(Boost_USE_MULTITHREADED ON)
+find_package(Boost 1.55.0 COMPONENTS program_options system log log_setup filesystem thread python REQUIRED)
+include_directories(${Gecode_INCLUDE_DIRS})
+
+SET(BUILD_STANDALONE OFF CACHE BOOL "Build also stand-alones")
+SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
+
+# Gecode
+FIND_PACKAGE(Gecode)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+
 # configure a header file 
 configure_file (
   "${PROJECT_SOURCE_DIR}/tremppi_common/configure.h.in"
   "${PROJECT_BINARY_DIR}/tremppi_common/configure.h"
 )
-
-# Boost
-find_package(Boost 1.55.0 REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
   
 # Python
 FIND_PACKAGE(PythonLibs 3.2 REQUIRED)
@@ -31,13 +41,15 @@ link_directories(${PYTHON_LIBRARY_DIRS})
 include_directories(${TREMPPI_SOURCE_DIR})
 # Sqlite
 ADD_LIBRARY(sqlite3 sqlite3/sqlite3.c)
+target_link_libraries(sqlite3 pthread dl)
 ADD_LIBRARY(sqlite3pp sqlite3pp/sqlite3pp.cpp sqlite3pp/sqlite3ppext.cpp)
+target_link_libraries(sqlite3pp sqlite3 pthread dl ${Boost_LIBRARIES})
 # Jsoncpp
 ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cpp)
 
 # Gecode
-add_subdirectory (gecode-4.3.0)
-include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.3.0)
+# add_subdirectory (gecode-4.3.0)
+# include_directories(${TREMPPI_SOURCE_DIR}/gecode-4.3.0)
 
 # tremppi_common - code only, no binary
 set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_common)
@@ -49,9 +61,11 @@ SOURCE_GROUP("Source Files\\tremppi_common\\general" ${COMMON_FOLDER}/general/.*
 SOURCE_GROUP("Header Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*hpp)
 SOURCE_GROUP("Source Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*cpp)
 ADD_LIBRARY(tremppi_common_lib tremppi_common/tremppi_common.cpp tremppi_common/header.h tremppi_common/configure.h ${COMMON_FILES})
+target_link_libraries(tremppi_common_lib ${PYTHON_LIBRARIES} ${Gecode_LIBRARIES} sqlite3 sqlite3pp jsonccp)
 
 # tremppi_python - code only, no binary
 ADD_LIBRARY(tremppi_python_lib tremppi_python/tremppi_python.cpp)
+target_link_libraries(tremppi_python_lib tremppi_common_lib)
 
 # tremppi_spawn
 set(SPAWN_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_spawn)
@@ -63,9 +77,10 @@ SOURCE_GROUP("Source Files\\tremppi_spawn\\data" ${SPAWN_FOLDER}/data/.*cpp)
 SOURCE_GROUP("Header Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*hpp)
 SOURCE_GROUP("Source Files\\tremppi_spawn\\io" ${SPAWN_FOLDER}/io/.*cpp)
 ADD_LIBRARY(tremppi_spawn_lib ${SPAWN_FOLDER}/tremppi_spawn.cpp ${SPAWN_HEADERS})
+target_link_libraries(tremppi_spawn_lib tremppi_common_lib)
 if(BUILD_STANDALONE)
 	ADD_EXECUTABLE(tremppi_spawn ${SPAWN_FOLDER}/main.cpp ${SPAWN_FOLDER}/tremppi_spawn.cpp ${SPAWN_HEADERS})
-	target_link_libraries(tremppi_spawn tremppi_common_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp  ${Boost_LIBRARIES})
+	target_link_libraries(tremppi_spawn tremppi_common_lib)
 endif(BUILD_STANDALONE)
 
 # tremppi_express
@@ -75,9 +90,10 @@ SOURCE_GROUP("Header Files\\tremppi_express\\compute" ${EXPRESS_FOLDER}/compute/
 SOURCE_GROUP("Header Files\\tremppi_express\\data" ${EXPRESS_FOLDER}/data/.*hpp)
 SOURCE_GROUP("Header Files\\tremppi_express\\io" ${EXPRESS_FOLDER}/io/.*hpp)
 ADD_LIBRARY(tremppi_express_lib ${EXPRESS_FOLDER}/tremppi_express.cpp ${EXPRESS_HEADERS})
+target_link_libraries(tremppi_express_lib tremppi_common_lib)
 if(BUILD_STANDALONE)
 	ADD_EXECUTABLE(tremppi_express ${EXPRESS_FOLDER}/main.cpp  ${EXPRESS_FOLDER}/tremppi_express.cpp ${EXPRESS_HEADERS})
-	target_link_libraries(tremppi_express tremppi_common_lib sqlite3 sqlite3pp  ${Boost_LIBRARIES})
+	target_link_libraries(tremppi_express tremppi_common_lib)
 endif(BUILD_STANDALONE)
 
 # tremppi_report
@@ -87,9 +103,10 @@ SOURCE_GROUP("Header Files\\tremppi_report\\analysis" ${REPORT_FOLDER}/analysis/
 SOURCE_GROUP("Header Files\\tremppi_report\\data" ${REPORT_FOLDER}/data/.*hpp)
 SOURCE_GROUP("Header Files\\tremppi_report\\io" ${REPORT_FOLDER}/io/.*hpp)
 ADD_LIBRARY(tremppi_report_lib ${REPORT_FOLDER}/tremppi_report.cpp ${REPORT_HEADERS})
+target_link_libraries(tremppi_report_lib tremppi_common_lib)
 if(BUILD_STANDALONE)
 	ADD_EXECUTABLE(tremppi_report ${REPORT_FOLDER}/main.cpp ${REPORT_FOLDER}/tremppi_report.cpp ${REPORT_HEADERS})
-	target_link_libraries(tremppi_report tremppi_common_lib jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+	target_link_libraries(tremppi_report tremppi_common_lib)
 endif(BUILD_STANDALONE)
 
 # tremppi_validate
@@ -102,9 +119,10 @@ SOURCE_GROUP("Source Files\\tremppi_validate\\data" ${VALIDATE_FOLDER}/data/.*cp
 SOURCE_GROUP("Source Files\\tremppi_validate\\io" ${VALIDATE_FOLDER}/io/.*cpp)
 SOURCE_GROUP("Source Files\\tremppi_validate\\compute" ${VALIDATE_FOLDER}/compute/.*cpp)
 ADD_LIBRARY(tremppi_validate_lib ${VALIDATE_FOLDER}/tremppi_validate.cpp ${VALIDATE_HEADERS})
+target_link_libraries(tremppi_validate_lib tremppi_common_lib)
 if(BUILD_STANDALONE)
 	ADD_EXECUTABLE(tremppi_validate ${VALIDATE_FOLDER}/main.cpp ${VALIDATE_FOLDER}/tremppi_validate.cpp ${VALIDATE_HEADERS})
-	target_link_libraries(tremppi_validate tremppi_common_lib jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+	target_link_libraries(tremppi_validate tremppi_common_lib)
 endif(BUILD_STANDALONE)
 
 # tremppi_validate
@@ -117,9 +135,10 @@ SOURCE_GROUP("Source Files\\tremppi_witness\\data" ${WITNESS_FOLDER}/data/.*cpp)
 SOURCE_GROUP("Source Files\\tremppi_witness\\io" ${WITNESS_FOLDER}/io/.*cpp)
 SOURCE_GROUP("Source Files\\tremppi_witness\\compute" ${WITNESS_FOLDER}/compute/.*cpp)
 ADD_LIBRARY(tremppi_witness_lib ${WITNESS_FOLDER}/tremppi_witness.cpp ${WITNESS_HEADERS})
+target_link_libraries(tremppi_witness_lib tremppi_common_lib)
 if(BUILD_STANDALONE)
 	ADD_EXECUTABLE(tremppi_witness ${WITNESS_FOLDER}/main.cpp ${VALIDATE_FOLDER}/tremppi_validate.cpp ${WITNESS_HEADERS})
-	target_link_libraries(tremppi_witness tremppi_common_lib jsonccp sqlite3 sqlite3pp ${Boost_LIBRARIES})
+	target_link_libraries(tremppi_witness tremppi_common_lib)
 endif(BUILD_STANDALONE)
 
 
@@ -138,7 +157,7 @@ if (BUILD_TEST)
 		SOURCE_GROUP("Header Files\\validate_tests" ${TEST_FOLDER}/validate_tests/.*hpp)
 		SOURCE_GROUP("Header Files\\witness_tests" ${TEST_FOLDER}/witness_tests/.*hpp)
 		ADD_EXECUTABLE(tremppi_test ${TEST_FOLDER}/tremppi_test.cpp ${TEST_FOLDER}/main.cpp ${TEST_HEADERS})
-		target_link_libraries(tremppi_test debug  tremppi_common_lib tremppi_python_lib tremppi_witness_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
+		target_link_libraries(tremppi_test tremppi_python_lib tremppi_witness_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
 	else (GTEST_FOUND)
 		message ("GTest not found. The tests will not be available.")
 	endif (GTEST_FOUND)
@@ -146,5 +165,5 @@ endif (BUILD_TEST)
 
 # tremppi core
 set(CORE_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi)
-ADD_EXECUTABLE(tremppi ${PYTHON_LIBRARIES} ${Boost_LIBRARIES} ${CORE_FOLDER}/tremppi.cpp)
-target_link_libraries(tremppi tremppi_common_lib tremppi_python_lib tremppi_witness_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib gecodekernel gecodeint gecodesearch gecodeminimodel jsonccp sqlite3 sqlite3pp ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+ADD_EXECUTABLE(tremppi ${CORE_FOLDER}/tremppi.cpp)
+target_link_libraries(tremppi tremppi_python_lib tremppi_witness_lib tremppi_validate_lib tremppi_spawn_lib tremppi_express_lib tremppi_report_lib)

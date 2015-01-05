@@ -59,7 +59,6 @@ Json::Value FileManipulation::readJSasJSON(const bfs::path & input_path) {
 	return root;
 }
 
-
 void FileManipulation::replaceInFile(bfs::path const & file, const string & original, const string & replacement) {
 	bfs::path out_file = file;
 	out_file.replace_extension(TimeManager::getTimeStamp());
@@ -76,14 +75,4 @@ void FileManipulation::replaceInFile(bfs::path const & file, const string & orig
 	bfs::remove(file);
 	bfs::copy(out_file, file);
 	bfs::remove(out_file);
-}
-
-
-//
-ofstream FileManipulation::fileOutput(const bfs::path & file_path, const string & name) {
-	bfs::path output_path = file_path / name;
-	ofstream file = ofstream(output_path.string(), ios::out);
-	if (!file)
-		throw runtime_error("Could not open " + output_path.string());
-	return file;
 }

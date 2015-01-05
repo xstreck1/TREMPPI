@@ -27,7 +27,10 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/counting_range.hpp>
 #include <boost/program_options.hpp>
+// Boost c++11 problem fix
+#define BOOST_NO_CXX11_SCOPED_ENUMS
 #include <boost/filesystem.hpp>
+#undef BOOST_NO_CXX11_SCOPED_ENUMS
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/log/core.hpp>
@@ -80,7 +83,7 @@ public:
 
 	//
 	template<typename OptionsT>
-	bpo::variables_map TremppiSystem::initiate(const string & name, int argc, char **argv) {
+    bpo::variables_map initiate(const string & name, int argc, char **argv) {
 		bpo::variables_map po;
 
 		try {
@@ -89,9 +92,7 @@ public:
 			OptionsT options;
 			po = options.parseProgramOptions(argc, argv);
 
-			tremppi_system.set(name.c_str(), argv[0], po["path"].as<string>());
-			logging.init();
-			BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " started.";
+            set(name.c_str(), argv[0], po["path"].as<string>());
 		}
 		catch (exception & e) {
 			cerr << e.what() << endl;

@@ -1,8 +1,5 @@
 #include "common_functions.hpp"
 
-template<>
-void Common::increase<bool>(std::vector<bool>::reference val) { val = true; }
-
 std::vector<std::string> Common::getAllMatches(const std::string & control_regex, const std::string & original, const int n) {
 	std::vector<std::string> result;
 
@@ -24,4 +21,9 @@ void Common::replaceAll(const std::string & from, const std::string & to, std::s
 		str.replace(start_pos, from.length(), to);
 		start_pos += to.length();
 	}
+}
+
+template<>
+void Common::increase<bool>(std::vector<bool>::reference val) {
+    val = true;
 }

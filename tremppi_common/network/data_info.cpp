@@ -71,7 +71,7 @@ map<CompID, vector<vector<size_t>>> DataInfo::getColumnsOfThresholds(const RegIn
 
 		// Distribute the column indices based on the value of the threshold in the specific column
 		for (auto & column : reg_info.columns) {
-			auto & trhs = DataConv::getThrsFromContext(column.second);
+            const auto & trhs = DataConv::getThrsFromContext(column.second);
 			ActLevel trh = trhs[reg_i];
 			size_t i = threshold_to_index[trh];
 			columns[i].push_back(column.first);

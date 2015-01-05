@@ -16,7 +16,7 @@
 
 
 /* Whether to include audit code */
-/* #4undef GECODE_AUDIT */
+/* #undef GECODE_AUDIT */
 
 /* User-defined prefix of dll names */
 #define GECODE_DLL_USERPREFIX ""
@@ -28,19 +28,19 @@
 #define GECODE_FLATZINC_VERSION "1.6"
 
 /* Whether gcc understands visibility attributes */
-/* #undef GECODE_GCC_HAS_CLASS_VISIBILITY */
+#define GECODE_GCC_HAS_CLASS_VISIBILITY /**/
 
 /* whether __builtin_ffsl is available */
-/* #undef GECODE_HAS_BUILTIN_FFSL */
+#define GECODE_HAS_BUILTIN_FFSL /**/
 
 /* Whether to build FLOAT variables */
 #define GECODE_HAS_FLOAT_VARS /**/
 
 /* Whether Gist is available */
-/* #undef GECODE_HAS_GIST */
+#define GECODE_HAS_GIST /**/
 
 /* Whether GNU hash_map is available */
-/* #undef GECODE_HAS_GNU_HASH_MAP */
+#define GECODE_HAS_GNU_HASH_MAP /**/
 
 /* Whether to build INT variables */
 #define GECODE_HAS_INT_VARS /**/
@@ -52,13 +52,13 @@
 /* #undef GECODE_HAS_MTRACE */
 
 /* Whether Qt is available */
-/* #undef GECODE_HAS_QT */
+#define GECODE_HAS_QT /**/
 
 /* Whether to build SET variables */
 #define GECODE_HAS_SET_VARS /**/
 
 /* Whether unistd.h is available */
-/* #undef GECODE_HAS_UNISTD_H */
+#define GECODE_HAS_UNISTD_H 1
 
 /* Gecode version */
 #define GECODE_LIBRARY_VERSION "4-3-0"
@@ -85,19 +85,19 @@
 /* #undef GECODE_THREADS_OSX */
 
 /* Whether we have posix threads */
-/* #undef GECODE_THREADS_PTHREADS */
+#define GECODE_THREADS_PTHREADS 1
 
 /* Whether we have posix spinlocks */
 /* #undef GECODE_THREADS_PTHREADS_SPINLOCK */
 
 /* Whether we have windows threads */
-#define GECODE_THREADS_WINDOWS 1
+/* #undef GECODE_THREADS_WINDOWS */
 
 /* Use clock() for time-measurement */
-#define GECODE_USE_CLOCK 1
+/* #undef GECODE_USE_CLOCK */
 
 /* Use gettimeofday for time-measurement */
-/* #undef GECODE_USE_GETTIMEOFDAY */
+#define GECODE_USE_GETTIMEOFDAY 1
 
 /* Gecode version */
 #define GECODE_VERSION "4.3.0"
@@ -106,12 +106,12 @@
 #define GECODE_VERSION_NUMBER 400300
 
 /* How to tell the compiler to really, really inline */
-#define forceinline inline
+#define forceinline inline __attribute__ ((__always_inline__))
 
 // STATISTICS: support-any
 
 /* Define to 1 if you have the `getpagesize' function. */
-/* #undef HAVE_GETPAGESIZE */
+#define HAVE_GETPAGESIZE 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
@@ -120,7 +120,7 @@
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have a working `mmap' system call. */
-/* #undef HAVE_MMAP */
+#define HAVE_MMAP 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -129,13 +129,13 @@
 #define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-/* #undef HAVE_STRINGS_H */
+#define HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the <sys/param.h> header file. */
-/* #undef HAVE_SYS_PARAM_H */
+#define HAVE_SYS_PARAM_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
@@ -144,7 +144,7 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-/* #undef HAVE_UNISTD_H */
+#define HAVE_UNISTD_H 1
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "users@gecode.org"

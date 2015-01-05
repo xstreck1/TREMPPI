@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sqlite3pp/sqlite3ppext.hpp>
+#include "../general/common_functions.hpp"
 #include "../header.h"
 
 namespace sqlite3pp {

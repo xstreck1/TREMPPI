@@ -33,10 +33,10 @@ public:
 	void init();
 
 	// 
-	void Logging::newPhase(const string & _desc, const size_t _step_count = 0);
+    void newPhase(const string & _desc, const size_t _step_count = 0);
 
 	//
-	void Logging::killPhase();
+    void killPhase();
 
 	//
 	void step();

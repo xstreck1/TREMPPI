@@ -49,10 +49,10 @@ int tremppi_report(int argc, char ** argv) {
 	map<string, RegsData> reg_data_types;
 	map<string, FunsData> fun_data_types;
 	try {
-		out["setup"]["pool_size"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()))->get<int>(0);
-		out["setup"]["selected"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()))->get<int>(0);
+        out["setup"]["pool_size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()).begin())->get<int>(0);
+        out["setup"]["selected"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()).begin())->get<int>(0);
 		if (po.count("select-only") == 0)
-			out["setup"]["compared"] = begin(sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()))->get<int>(0);
+            out["setup"]["compared"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()).begin())->get<int>(0);
 		else
 			out["setup"]["compared"] = out["setup"]["pool_size"];
 
@@ -129,8 +129,13 @@ int tremppi_report(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
-		Json::StyledWriter writer;
-		ofstream data_file = FileManipulation::fileOutput(tremppi_system.WORK_PATH, "report_" + time_stamp + ".js");
+        Json::StyledWriter writer;
+
+        bfs::path output_path = tremppi_system.WORK_PATH / ( "report_" + time_stamp + ".js");
+        fstream data_file(output_path.string(), ios::out);
+        if (!data_file)
+            throw runtime_error("Could not open " + output_path.string());
+
 		string data = writer.write(out);
 		data_file << "var report = " << data << ";" << endl;
 	}

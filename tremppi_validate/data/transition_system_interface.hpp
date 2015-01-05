@@ -51,6 +51,6 @@ public:
    }
 
    inline const vector<StateID> & getLoops(const StateID ID) const {
-	   return states[ID].loops;
+       return GraphInterface<StateT>::states[ID].loops;
    }
 };

@@ -88,7 +88,10 @@ int tremppi_witness(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-		ofstream data_file = FileManipulation::fileOutput(tremppi_system.WORK_PATH, "witness_" + time_stamp + ".js");
+        bfs::path output_path = tremppi_system.WORK_PATH / ( "witness" + time_stamp + ".js");
+        fstream data_file(output_path.string(), ios::out);
+        if (!data_file)
+            throw runtime_error("Could not open " + output_path.string());
 		string data = writer.write(out);
 		data_file << "var witness = " << data << ";" << endl;
 	}
