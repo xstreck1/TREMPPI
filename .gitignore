@@ -2,8 +2,8 @@
 tpi_common/configure.h
 
 # build files
-bin/*
-lib/*
+*bin*
+*lib*
 
 # CMame files
 CMakeFiles*
