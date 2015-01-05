@@ -42,8 +42,7 @@ class ParameterBuilder {
 			context.resize(context.length() - 1);
 
 		Levels targets = vrange<ActLevel>(0u, model.components[t_ID].max_activity + 1u);
-        Kinetics::Param result({ context, targets, requirements });
-		return result;
+		return Kinetics::Param({ context, targets, requirements });
 	}
 
 	// @brief createParameters Creates a description of kinetic parameters.
