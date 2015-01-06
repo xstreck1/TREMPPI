@@ -11,13 +11,6 @@ struct LogPhase {
 };
 
 class Logging {
-	size_t step_count;
-	size_t substep_count;
-	size_t step_no;
-	size_t substep_no;
-	string phase_desc;
-	string subphase_desc;
-
 	vector<LogPhase> phases;
 	bool phase_bit;
 
@@ -30,7 +23,7 @@ class Logging {
 public:
 	Logging() = default;
 	//
-	void init();
+	void init(const bfs::path & work_path, const string & program_name);
 
 	// 
     void newPhase(const string & _desc, const size_t _step_count = 0);

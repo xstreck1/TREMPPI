@@ -1,4 +1,5 @@
 #include "database_reader.hpp"
+#include "../general/system.hpp"
 #include "../general/file_manipulation.hpp"
 
 map<CompID, Levels> DatabaseReader::readRegulators(const string & component, sqlite3pp::database & db) {

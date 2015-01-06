@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/system.hpp>
 
 int tremppi_spawn(int, char**);
 

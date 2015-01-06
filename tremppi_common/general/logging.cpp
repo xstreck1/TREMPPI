@@ -1,18 +1,15 @@
 #include "logging.hpp"
 
-void Logging::init() {
-	// Set values
-	step_count = step_no = substep_count = substep_no = 0;
-
+void Logging::init(const bfs::path & work_path, const string & program_name) {
 	// Find the logifile name
-	string logfile = (tremppi_system.standalone ? tremppi_system.PROGRAM_NAME : "tremppi") + ".log";
+	string logfile = program_name + ".log";
 
 	// Set the formatting
 	blg::register_simple_formatter_factory< blg::trivial::severity_level, char >("Severity");
 	blg::add_common_attributes();
 	blg::add_file_log
 		(
-		kwd::file_name = (tremppi_system.WORK_PATH / bfs::path{ logfile }).string(),
+		kwd::file_name = (work_path / bfs::path{ logfile }).string(),
 		kwd::auto_flush = true,
 		kwd::open_mode = (std::ios::out | std::ios::app),
 		kwd::format = "[%TimeStamp%] (%LineID%) <%Severity%>: %Message%"

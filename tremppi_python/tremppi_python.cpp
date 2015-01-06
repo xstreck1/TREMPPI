@@ -1,6 +1,6 @@
 #include <boost/python/detail/wrap_python.hpp>
 #include <tremppi_common/general/common_functions.hpp>
-#include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/system.hpp>
 #include <tremppi_common/header.h>
 using namespace std;
 

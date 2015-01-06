@@ -1,5 +1,5 @@
 // standalone launcher
-#include <tremppi_common/header.h>
+#include <tremppi_common/general/system.hpp>
 
 int tremppi_validate(int argc, char ** argv);
 

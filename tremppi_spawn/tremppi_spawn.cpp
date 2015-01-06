@@ -1,4 +1,4 @@
-#include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
 

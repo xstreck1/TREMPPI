@@ -2,7 +2,7 @@
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
-#include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include "analysis/statistical_analysis.hpp"
 #include "analysis/lattice_builder.hpp"

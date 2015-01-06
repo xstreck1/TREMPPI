@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 #include <boost/python/detail/wrap_python.hpp>
-#include <tremppi_common/header.h>
+#include <tremppi_common/general/system.hpp>
 
 int tremppi_init(int, char**);
 

@@ -1,4 +1,4 @@
-#include <tremppi_common/general/logging.hpp>
+#include <tremppi_common/general/system.hpp>
 #include "compute/MVQMC.hpp"
 #include "io/express_options.hpp"
 #include "io/output.hpp"

@@ -1,4 +1,4 @@
-#include "header.h"
+#include "system.hpp"
 
 void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) {
 	PROGRAM_NAME = name;
