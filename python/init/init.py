@@ -6,7 +6,7 @@ from os.path import join, dirname
 
 # define options
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
-parser.add_argument('--dest', help='specify the location where the file gets created.')
+parser.add_argument('--path', help='specify the location where the file gets created.')
 parser.add_argument('name', help='name of the newly created model')
 args = parser.parse_args()
 

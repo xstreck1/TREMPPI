@@ -1,6 +1,13 @@
 #include "logging.hpp"
 
+Logging::Logging() : phase_bit(false), initiated(false) {}
+
 void Logging::init(const bfs::path & work_path, const string & program_name) {
+	if (initiated)
+		return;
+	else
+		initiated = true;
+
 	// Find the logifile name
 	string logfile = program_name + ".log";
 

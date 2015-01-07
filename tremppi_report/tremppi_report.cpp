@@ -23,8 +23,10 @@ int tremppi_report(int argc, char ** argv) {
 	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
-		// Get user options
-		out["setup"]["comparative"] = po.count("select-only") == 0;
+		// Read filter conditions
+		out["setup"]["select"] = DatabaseReader::getSelectionTerm("Select");
+		out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
+		out["setup"]["comparative"] = out["setup"]["select"].asString() == out["setup"]["compare"].asString();
 
 		// Copy the directory data
 		Output::copyReport(report_path);
@@ -32,11 +34,6 @@ int tremppi_report(int argc, char ** argv) {
 		// Get database
 		out["setup"]["name"] = tremppi_system.WORK_PATH.stem().string();
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
-
-		// Read filter conditions
-		out["setup"]["select"] = po.count("all") > 0 ? "1" : DatabaseReader::getSelectionTerm("Select");
-		if (po.count("select-only") == 0)
-			out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -51,7 +48,7 @@ int tremppi_report(int argc, char ** argv) {
 	try {
         out["setup"]["pool_size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()).begin())->get<int>(0);
         out["setup"]["selected"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()).begin())->get<int>(0);
-		if (po.count("select-only") == 0)
+		if (out["setup"]["comparative"].asBool())
             out["setup"]["compared"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()).begin())->get<int>(0);
 		else
 			out["setup"]["compared"] = out["setup"]["pool_size"];
@@ -81,7 +78,7 @@ int tremppi_report(int argc, char ** argv) {
 		if (po.count("regulations") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory graph data.";
 			reg_data_types["select"] = RegsData(); 
-			if (po.count("select-only") == 0) {
+			if (out["setup"]["comparative"].asBool()) {
 				reg_data_types["compare"] = RegsData(); 
 				reg_data_types["differ"] = RegsData();
 			}
@@ -89,13 +86,13 @@ int tremppi_report(int argc, char ** argv) {
 				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				reg_data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 				// Get the statistics for the compare selection
-				if (po.count("select-only") == 0) {
+				if (out["setup"]["comparative"].asBool()) {
 					sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
 					reg_data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 				}
 			}
 			// Compute difference
-			if (po.count("select-only") == 0)
+			if (out["setup"]["comparative"].asBool())
 				reg_data_types["differ"] = move(RegulatoryGraph::diff(reg_data_types["select"], reg_data_types["compare"]));
 		}
 

@@ -32,7 +32,6 @@ void printHelp() {
 //
 int main(int argc, char ** argv) {
 	tremppi_system.standalone = false;
-	tremppi_system.set("tremppi_test", argv[0], bfs::current_path().string());
 
 	if (argc < 2) {
 		cerr << "Fatal error: No program given on the input. Usage:\n";
@@ -51,7 +50,6 @@ int main(int argc, char ** argv) {
 	}
 	// Finally run the program
 	else {
-		tremppi_system.standalone = false;
 		// Move the program name to the second position instead of the command, which is forgotten 
 		argv[1] = argv[0];
 		return tremppi_functions.at(command).first(argc - 1, argv + 1);

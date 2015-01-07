@@ -11,6 +11,7 @@ def get_columns_names(arguments):
     conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.execute('select * from Parametrizations')
     names = list(map(lambda x: x[0], cursor.description))
+    names = [name for name in names if not name[0] == 'W']
     return "rowid," + ",".join(names)
 
 def js_to_json(data):
@@ -31,10 +32,11 @@ def read_conditions(arguments):
 
 def get_rows(arguments):
     conditions = read_conditions(arguments)
+    columns = get_columns_names(arguments)
     if not conditions:
         return ""
     conn = sqlite3.connect(DATABASE_FILE)
-    cursor = conn.execute('SELECT rowid,* FROM Parametrizations WHERE ' + conditions)
+    cursor = conn.execute('SELECT ' + columns + ' FROM Parametrizations WHERE ' + conditions)
     row_no = 0
     data = ""
     for row in cursor:

@@ -13,6 +13,7 @@ struct LogPhase {
 class Logging {
 	vector<LogPhase> phases;
 	bool phase_bit;
+	bool initiated;
 
 	static const int LINE_LENGTH = 80;
 	static const int NUM_CHARS = 8;
@@ -21,7 +22,7 @@ class Logging {
 	Logging(const Logging & o) = delete;
 	Logging& operator=(const Logging & o) = delete;
 public:
-	Logging() = default;
+	Logging();
 	//
 	void init(const bfs::path & work_path, const string & program_name);
 

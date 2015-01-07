@@ -15,7 +15,7 @@ int basic_init_test() {
 	argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];
 	strcpy(argv[0], tremppi_system.BIN_PATH.string().c_str());
 	argv[1] = new char[7];
-	strcpy(argv[1], "--dest");
+	strcpy(argv[1], "--path");
 	argv[2] = new char[test_path.string().size() + 1];
 	strcpy(argv[2], test_path.string().c_str());
 	argv[3] = new char[10];

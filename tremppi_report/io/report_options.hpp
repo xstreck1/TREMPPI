@@ -9,8 +9,6 @@ public:
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
 		visible.add_options()
-			("all,a", "do not consider the select or compare clause and apply to all parametrizations without comparison")
-			("select-only,s", "do not consider the compare clause and just analyze the selection")
 			("graph,g", "build the parametrization space graph")
 			("functions,f", "compute function analysis and outputs correlation graph")
 			("regulations,r", "outputs the overlapping regulatory graph")

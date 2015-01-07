@@ -17,13 +17,7 @@ TEST(CoreTest, AllPrograms) {
 }
 
 int tremppi_test(int argc, char** argv) {
-	try {
-		tremppi_system.set("tremppi_test", argv[0], bfs::current_path().string());
-	}
-	catch (exception & e) {
-		cerr << e.what() << endl;
-		exit(1);
-	}
+	bpo::variables_map po = tremppi_system.initiate<ProgramOptions>("tremppi_validate", argc, argv);
     ::testing::InitGoogleTest( &argc, argv );
 	int result = RUN_ALL_TESTS();
 

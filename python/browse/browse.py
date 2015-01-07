@@ -69,7 +69,7 @@ class StoreHandler(SimpleHTTPRequestHandler):
 
 # options and system setup
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
-parser.add_argument('--dest', help='specify the browsing location.')
+parser.add_argument('--path', help='specify the browsing location.')
 parser.add_argument('--port', help='number of the port to run the browser on')
 args = parser.parse_args()
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))

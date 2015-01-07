@@ -26,7 +26,7 @@ int tremppi_validate(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
 
 		// Get selection		
-		select = po.count("all") > 0 ? "1" : DatabaseReader::getSelectionTerm("Select");
+		select = DatabaseReader::getSelectionTerm("Select");
 
 		// Get database
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
