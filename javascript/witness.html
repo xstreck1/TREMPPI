@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="common/jquery.min.js"></script>
+        <script src="common/cytoscape.min.js"></script>
+
+        <meta charset=utf-8 />
+        <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/common.js"></script>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
+        <script>
+            tremppi_witness = {};
+            tremppi_common.widget = "witness";
+            onload = function () {
+                success: tremppi_witness.Witness.load();
+            };
+        </script>
+        
+        <link rel="stylesheet" type="text/css" href="./witness/witness.css">
+        <script src="./witness/graph.js"></script>
+        <script src="./witness.js"></script>
+
+        <title>Witness</title>
+    </head>
+    <body> 
+        <div id="graph_holder"></div>
+        <div id="control_pad"></div>
+        <div id="control_panel">
+        </div>
+    </body>
+</html>

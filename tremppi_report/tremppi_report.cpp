@@ -26,7 +26,7 @@ int tremppi_report(int argc, char ** argv) {
 		// Read filter conditions
 		out["setup"]["select"] = DatabaseReader::getSelectionTerm("Select");
 		out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
-		out["setup"]["comparative"] = out["setup"]["select"].asString() == out["setup"]["compare"].asString();
+		out["setup"]["comparative"] = out["setup"]["select"].asString() != out["setup"]["compare"].asString();
 
 		// Copy the directory data
 		Output::copyReport(report_path);

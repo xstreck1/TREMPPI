@@ -11,8 +11,8 @@ def normal_paths(exec_path, args):
     EXEC_PATH = dirname(abspath(exec_path))
     BIN_PATH = abspath(join(EXEC_PATH, normpath("./../../bin")))
     HOME_PATH = abspath(join(EXEC_PATH, normpath("./../../")))
-    if args.dest != None:
-        DEST_PATH = normpath(args.dest)
+    if args.path != None:
+        DEST_PATH = normpath(args.path)
     else:
         DEST_PATH = getcwd()
     return (EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH)

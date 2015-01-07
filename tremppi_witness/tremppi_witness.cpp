@@ -6,7 +6,7 @@
 
 #include "io/witness_options.hpp"
 #include "io/witness_reader.hpp"
-#include "io/output_manager.hpp"
+#include "io/witness_output.hpp"
 
 // TODO: Check if the transition generation is correct for all three components (w.r.t. the transition system used)
 // TODO: Components still required to be ordered...
@@ -29,7 +29,10 @@ int tremppi_witness(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
 
 		// Get selection		
-		select = po.count("all") > 0 ? "1" : DatabaseReader::getSelectionTerm("Select");
+		select = DatabaseReader::getSelectionTerm("Select");
+
+		// Copy the data
+		WitnessOutput::copyWitnessFiles(witness_path);
 
 		// Get database
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
@@ -48,7 +51,6 @@ int tremppi_witness(int argc, char ** argv) {
 		for (const auto & prop_column : prop_columns) {
 			WitnessReader wit_reader;
 			wit_reader.select(prop_column.second, select, db);
-			Json::Value & elements = out[prop_column.second]["elements"];
 			set<pair<string, string>> transitions;
 			
 			// Read transitions
@@ -57,6 +59,10 @@ int tremppi_witness(int argc, char ** argv) {
 				transitions.insert(WHOLE(new_transitions));
 			}
 
+			if (transitions.empty())
+				continue;
+
+			Json::Value & elements = out[prop_column.second]["elements"];
 			// Add transitions
 			Json::Value & edges = elements["edges"];
 			set<string> states;
@@ -88,7 +94,7 @@ int tremppi_witness(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-        bfs::path output_path = tremppi_system.WORK_PATH / ( "witness" + time_stamp + ".js");
+        bfs::path output_path = tremppi_system.WORK_PATH / ( "witness_" + time_stamp + ".js");
         fstream data_file(output_path.string(), ios::out);
         if (!data_file)
             throw runtime_error("Could not open " + output_path.string());
