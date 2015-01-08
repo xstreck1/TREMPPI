@@ -18,7 +18,6 @@ int tremppi_report(int argc, char ** argv) {
 	Json::Value out;
 	out["setup"]["date"] = TimeManager::getTime();
 	string time_stamp = TimeManager::getTimeStamp();
-	bfs::path report_path = tremppi_system.WORK_PATH / ("report_" + time_stamp);
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
@@ -28,8 +27,8 @@ int tremppi_report(int argc, char ** argv) {
 		out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
 		out["setup"]["comparative"] = out["setup"]["select"].asString() != out["setup"]["compare"].asString();
 
-		// Copy the directory data
-		Output::copyReport(report_path);
+		// Copy the data
+		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("report_" + time_stamp), "report");
 
 		// Get database
 		out["setup"]["name"] = tremppi_system.WORK_PATH.stem().string();
@@ -46,16 +45,16 @@ int tremppi_report(int argc, char ** argv) {
 	map<string, RegsData> reg_data_types;
 	map<string, FunsData> fun_data_types;
 	try {
-        out["setup"]["pool_size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()).begin())->get<int>(0);
-        out["setup"]["selected"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()).begin())->get<int>(0);
+		out["setup"]["pool_size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()).begin())->get<int>(0);
+		out["setup"]["selected"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()).begin())->get<int>(0);
 		if (out["setup"]["comparative"].asBool())
-            out["setup"]["compared"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()).begin())->get<int>(0);
+			out["setup"]["compared"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()).begin())->get<int>(0);
 		else
 			out["setup"]["compared"] = out["setup"]["pool_size"];
 
 		/*if (po.count("functions") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory functions data.";
-			fun_data_types["select"] = FunsData(); 
+			fun_data_types["select"] = FunsData();
 			if (po.count("select-only") == 0) {
 				fun_data_types["compare"] = FunsData();
 				fun_data_types["differ"] = FunsData();
@@ -77,9 +76,9 @@ int tremppi_report(int argc, char ** argv) {
 
 		if (po.count("regulations") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory graph data.";
-			reg_data_types["select"] = RegsData(); 
+			reg_data_types["select"] = RegsData();
 			if (out["setup"]["comparative"].asBool()) {
-				reg_data_types["compare"] = RegsData(); 
+				reg_data_types["compare"] = RegsData();
 				reg_data_types["differ"] = RegsData();
 			}
 			for (const RegInfo & reg_info : reg_infos) {
@@ -126,12 +125,12 @@ int tremppi_report(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
-        Json::StyledWriter writer;
+		Json::StyledWriter writer;
 
-        bfs::path output_path = tremppi_system.WORK_PATH / ( "report_" + time_stamp + ".js");
-        fstream data_file(output_path.string(), ios::out);
-        if (!data_file)
-            throw runtime_error("Could not open " + output_path.string());
+		bfs::path output_path = tremppi_system.WORK_PATH / ("report_" + time_stamp + ".js");
+		fstream data_file(output_path.string(), ios::out);
+		if (!data_file)
+			throw runtime_error("Could not open " + output_path.string());
 
 		string data = writer.write(out);
 		data_file << "var report = " << data << ";" << endl;

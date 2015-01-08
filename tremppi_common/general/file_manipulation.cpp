@@ -1,6 +1,7 @@
 #include "file_manipulation.hpp"
 
 #include "../general/time_manager.hpp"
+#include "../general/system.hpp"
 
 void FileManipulation::copyDir(bfs::path const & source, bfs::path const & destination)
 {
@@ -75,4 +76,14 @@ void FileManipulation::replaceInFile(bfs::path const & file, const string & orig
 	bfs::remove(file);
 	bfs::copy(out_file, file);
 	bfs::remove(out_file);
+}
+
+void FileManipulation::copyAnalysisFiles(const bfs::path & path, const string & name) {
+	FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ name }, path);
+
+	bfs::path html_file = path;
+	html_file.replace_extension("html");
+	bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ name + ".html" }, html_file);
+
+	FileManipulation::replaceInFile(html_file, "./" + name, "./" + path.stem().string());
 }

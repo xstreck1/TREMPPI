@@ -72,7 +72,7 @@ tremppi_report.Page = {
                 var cy = $('#reg_graph_' + config.types[i]).cytoscape('get');
                 report.Regulatory[config.types[i]] = cy.json();
             }
-            tremppi_common.promptWithContent("report");
+            tremppi.common.promptWithContent("report");
         });
 
         $("#regulatory_description").html((

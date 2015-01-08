@@ -18,7 +18,7 @@ tremppi_select.loadSelections = function () {
     selections_grid.renderGrid("selection_holder", "selections");
     selections_grid.modelChanged = tremppi_select.selectionChanged;
 
-    if (selections_grid.data.length === 0 || !tremppi_common.isEmpty(selections_grid.data[selections_grid.data.length - 1].columns))
+    if (selections_grid.data.length === 0 || !tremppi.common.isEmpty(selections_grid.data[selections_grid.data.length - 1].columns))
         selections_grid.append(selections_grid.data.length, {
             values: {
                 Name: "",
@@ -38,9 +38,9 @@ tremppi_select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
     // In data, update the row count, if necessary
     var columns = this.data[row_id].columns;
     // If is not last and is empty
-    if (tremppi_common.isEmpty(columns) && row_id !== (this.data.length - 1))
+    if (tremppi.common.isEmpty(columns) && row_id !== (this.data.length - 1))
         this.remove(row_id);
-    else if (!tremppi_common.isEmpty(columns) && row_id === (this.data.length - 1))
+    else if (!tremppi.common.isEmpty(columns) && row_id === (this.data.length - 1))
         this.append(this.data.length, new Array(this.columns.length), true, true);
 
     // Store the data
@@ -58,5 +58,5 @@ tremppi_select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
     }
     
     
-    tremppi_common.save("select");
+    tremppi.common.save("select");
 };

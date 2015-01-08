@@ -21,7 +21,6 @@ int tremppi_witness(int argc, char ** argv) {
 	Json::Value out;
 	out["setup"]["date"] = TimeManager::getTime();
 	string time_stamp = TimeManager::getTimeStamp();
-	bfs::path witness_path = tremppi_system.WORK_PATH / ("witness_" + time_stamp);
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	map<size_t, string> prop_columns;
@@ -32,7 +31,7 @@ int tremppi_witness(int argc, char ** argv) {
 		select = DatabaseReader::getSelectionTerm("Select");
 
 		// Copy the data
-		WitnessOutput::copyWitnessFiles(witness_path);
+		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("witness_" + time_stamp), "witness");
 
 		// Get database
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));

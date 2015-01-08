@@ -63,7 +63,6 @@ def get_files():
     if exists(DATABASE_FILE):
         files = listdir(".")
         files = [value for value in files if re.match("^((?!browse).)*html", value)]
-        print(files)
         return ",".join(files)
     else:
         return "editor.html"

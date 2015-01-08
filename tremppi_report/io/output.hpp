@@ -32,53 +32,53 @@ namespace Output {
 		database.safeExec("COMMIT;");
 		}*/
 
-	//
-	/*void correlationGraph(const Regs & regs, bfs::path original_path, const string & type) {
-		bfs::path output_path = original_path.parent_path() /= bfs::path{ original_path.stem().string() + "_functions_" + type + GRAPH_SUFFIX };
-		ofstream file(output_path.string(), ios::out);
+		//
+		/*void correlationGraph(const Regs & regs, bfs::path original_path, const string & type) {
+			bfs::path output_path = original_path.parent_path() /= bfs::path{ original_path.stem().string() + "_functions_" + type + GRAPH_SUFFIX };
+			ofstream file(output_path.string(), ios::out);
 
-		file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n"
-		<< "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
-		<< "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-		<< "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http ://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\"> \n";
+			file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n"
+			<< "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+			<< "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+			<< "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http ://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\"> \n";
 
-		file << "\t <graph id=\"" << original_path.filename().string() << "_functions\" edgedefault=\"undirected\"> \n";
-		file << "\t\t <key id=\"std_dev\" for=\"node\" attr.name=\"standard deviation\" attr.type=\"double\"/> \n";
-		file << "\t\t <key id=\"dev_sign\" for=\"node\" attr.name=\"sign of the deviation\" attr.type=\"string\"/> \n";
-		file << "\t\t <key id=\"unique\" for=\"node\" attr.name=\"number of unique parametrizations\" attr.type=\"double\"/> \n";
-		file << "\t\t <key id=\"choice\" for=\"node\" attr.name=\"proportion of options\" attr.type=\"double\"/> \n";
-		file << "\t\t <key id=\"mean\" for=\"node\" attr.name=\"mean parameter value\" attr.type=\"double\"/> \n";
-		file << "\t\t <key id=\"pearson\" for=\"edge\" attr.name=\"correlation coefficient\" attr.type=\"double\"/> \n";
+			file << "\t <graph id=\"" << original_path.filename().string() << "_functions\" edgedefault=\"undirected\"> \n";
+			file << "\t\t <key id=\"std_dev\" for=\"node\" attr.name=\"standard deviation\" attr.type=\"double\"/> \n";
+			file << "\t\t <key id=\"dev_sign\" for=\"node\" attr.name=\"sign of the deviation\" attr.type=\"string\"/> \n";
+			file << "\t\t <key id=\"unique\" for=\"node\" attr.name=\"number of unique parametrizations\" attr.type=\"double\"/> \n";
+			file << "\t\t <key id=\"choice\" for=\"node\" attr.name=\"proportion of options\" attr.type=\"double\"/> \n";
+			file << "\t\t <key id=\"mean\" for=\"node\" attr.name=\"mean parameter value\" attr.type=\"double\"/> \n";
+			file << "\t\t <key id=\"pearson\" for=\"edge\" attr.name=\"correlation coefficient\" attr.type=\"double\"/> \n";
 
-		for (const Reg & reg : regs) {
-		file << "\t\t <node id=\"" << reg.name << "\"> \n";
-		file << "\t\t\t <data key=\"mean\">" << reg.mean << "</data> \n";
-		file << "\t\t\t <data key=\"std_dev\">" << abs(reg.std_dev) << "</data> \n";
-		file << "\t\t\t <data key=\"dev_sign\">" << (signbit(reg.std_dev) ? "-" : "+") << "</data> \n";
-		double choice_norm = (reg.choice + regs.size()) / regs.size();
-		file << "\t\t\t <data key=\"unique\">" << reg.unique.size() << "</data> \n";
-		file << "\t\t\t <data key=\"choice\">" << reg.choice << "</data> \n";
-		file << "\t\t </node> \n";
-		}
+			for (const Reg & reg : regs) {
+			file << "\t\t <node id=\"" << reg.name << "\"> \n";
+			file << "\t\t\t <data key=\"mean\">" << reg.mean << "</data> \n";
+			file << "\t\t\t <data key=\"std_dev\">" << abs(reg.std_dev) << "</data> \n";
+			file << "\t\t\t <data key=\"dev_sign\">" << (signbit(reg.std_dev) ? "-" : "+") << "</data> \n";
+			double choice_norm = (reg.choice + regs.size()) / regs.size();
+			file << "\t\t\t <data key=\"unique\">" << reg.unique.size() << "</data> \n";
+			file << "\t\t\t <data key=\"choice\">" << reg.choice << "</data> \n";
+			file << "\t\t </node> \n";
+			}
 
-		for (const Reg & reg : regs) {
-		for (const size_t o_ID : crange(reg.ID)) {
-		if (abs(reg.correlations[o_ID]) == 0)
-		continue;
+			for (const Reg & reg : regs) {
+			for (const size_t o_ID : crange(reg.ID)) {
+			if (abs(reg.correlations[o_ID]) == 0)
+			continue;
 
-		file << "\t\t <edge  id=\"" << regs[o_ID].name << "_" << reg.name << "\" "
-		<< "source=\"" << regs[o_ID].name << "\" "
-		<< "target=\"" << reg.name << "\" "
-		<< ">\n";
-		file << "\t\t\t <data key=\"pearson\">" << reg.correlations[o_ID] << "</data> \n";
-		file << "\t\t </edge> \n";
-		}
-		}
+			file << "\t\t <edge  id=\"" << regs[o_ID].name << "_" << reg.name << "\" "
+			<< "source=\"" << regs[o_ID].name << "\" "
+			<< "target=\"" << reg.name << "\" "
+			<< ">\n";
+			file << "\t\t\t <data key=\"pearson\">" << reg.correlations[o_ID] << "</data> \n";
+			file << "\t\t </edge> \n";
+			}
+			}
 
-		file << "\t </graph> \n";
+			file << "\t </graph> \n";
 
-		file << "</graphml> \n";
-		}*/
+			file << "</graphml> \n";
+			}*/
 
 	Json::Value regulatoryGraph(const RegInfos & reg_infos, const pair<string, RegsData> & regs) {
 		Json::Value graph;
@@ -146,15 +146,5 @@ namespace Output {
 		}
 		}*/
 
-	//
-	void copyReport(const bfs::path & report_path) {
-		// Copy the data from "home/javascript/report"
-		FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report" }, report_path);
-		bfs::path report_html = report_path;
-		report_html.replace_extension("html");
-		bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ "report.html" }, report_html);
-		FileManipulation::replaceInFile(report_html, "./report", "./" +  report_path.stem().string());
-		FileManipulation::replaceInFile(report_html, "tremppi_common.widget = \"report\";", "tremppi_common.widget = \"" + report_path.stem().string() + "\";");
-	}
+		//
 }
-

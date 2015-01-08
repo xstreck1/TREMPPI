@@ -20,7 +20,7 @@ tremppi_report.Graph = {
                     cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
                     report["Regulatory"][config.types[i]]["elements"] = cys[i].json().elements;
                 }
-                tremppi_common.save("report");
+                tremppi.common.save("report");
             };
         };
 
@@ -121,7 +121,7 @@ tremppi_report.Graph = {
                         'target-arrow-color': selected_col
                     }),
             layout: {
-                name: tremppi_common.hasAllPositions(graph.nodes) ? 'preset' : 'grid'
+                name: tremppi.common.hasAllPositions(graph.nodes) ? 'preset' : 'grid'
             },
             elements: graph
         });

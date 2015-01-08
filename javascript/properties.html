@@ -11,11 +11,11 @@
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
         <script>
-            tremppi_properties = {metadata: {}};
-            tremppi_common.widget = "properties";  
+            tremppi.properties = {metadata: {}};
+            tremppi.common.widget = "properties";  
             $(window).ready(function() {
-                tremppi_properties.properties_init();
-                tremppi_common.addServerContent(tremppi_properties.createControls);
+                tremppi.properties.properties_init();
+                tremppi.common.addServerContent(tremppi.properties.createControls);
             });
         </script>
 

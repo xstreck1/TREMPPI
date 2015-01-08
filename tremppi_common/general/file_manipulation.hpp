@@ -14,4 +14,7 @@ namespace FileManipulation {
 
 	//
 	void replaceInFile(bfs::path const & file, const string & original, const string & replacement);
+
+	//
+	void copyAnalysisFiles(const bfs::path & path, const string & name);
 }

@@ -15,12 +15,12 @@
         <link rel="stylesheet" type="text/css" href="select/css.css">
         <script>
             var tremppi_select = {metadata: {}, row_count: 5};
-            tremppi_common.widget = "select";
+            tremppi.common.widget = "select";
 
             onload = function () {
-                tremppi_common.addServerContent(tremppi_select.set_table);
+                tremppi.common.addServerContent(tremppi_select.set_table);
                 tremppi_select.properties_init();
-                tremppi_common.addServerContent(tremppi_select.createControls);
+                tremppi.common.addServerContent(tremppi_select.createControls);
             };
         </script>
         <script src="./select/param_table.js"></script>    

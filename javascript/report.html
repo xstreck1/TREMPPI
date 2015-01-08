@@ -22,10 +22,10 @@
 
         <script src="./report.js"></script>
         <script>
-            tremppi_common.widget = "report";
+            tremppi.common.widget = "report";
             onload = function() {
                 success: tremppi_report.Page.loadData(tremppi_report.Config);
-                tremppi_common.addServerContent(tremppi_report.createControls);
+                tremppi.common.addServerContent(tremppi_report.createControls);
             };
         </script>
         <title >empty title</title>

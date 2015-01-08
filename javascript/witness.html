@@ -10,16 +10,16 @@
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
         <script>
             tremppi_witness = {};
-            tremppi_common.widget = "witness";
+            tremppi.common.widget = "./witness";
             onload = function () {
                 success: tremppi_witness.Witness.load();
             };
         </script>
-        
+
         <link rel="stylesheet" type="text/css" href="./witness/witness.css">
         <script src="./witness/graph.js"></script>
+        
         <script src="./witness.js"></script>
-
         <title>Witness</title>
     </head>
     <body> 
