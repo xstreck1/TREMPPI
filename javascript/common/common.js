@@ -7,19 +7,21 @@ var tremppi = {
             return "http://" + tremppi.common.server_location + ":" + tremppi.common.server_port + "/";
         },
         // the setup function - sets globals, obtains data and adds server content, if possible
-        set: function (widget_name, file_name) {
+        set: function () {
             var self = tremppi.common;
-            tremppi[widget_name] = {};
-            tremppi.common.widge = widget_name;
-            tremppi.common.data_file = widget_name + file_name + ".json";
+            var url = window.location.pathname;
+            var filename = url.substring(url.lastIndexOf('/')+1).slice(0, -5);
+            tremppi.common.widget =  filename.split("_")[0];
+            tremppi[tremppi.common.widget] = {};
+            tremppi.common.data_file = filename + ".json";
             $(window).ready(
                     $.getJSON(self.data_file,
                             function (data) {
                                 // load data
                                 tremppi.data = data;
-                                tremppi[widget_name].load();
+                                tremppi[tremppi.common.widget].load();
                                 // set a function that will set the server functionality
-                                self.addServerContent(tremppi[widget_name].setServer);
+                                self.addServerContent(tremppi[tremppi.common.widget].setServer);
                             }
                     )
                     );
@@ -76,3 +78,5 @@ var tremppi = {
         }
     }
 };
+// 
+tremppi.common.set();

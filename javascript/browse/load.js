@@ -4,5 +4,5 @@
  * and open the template in the editor.
  */
 
-tremppi.browse.load = function (data) {
+tremppi.browse.load = function () {
 };

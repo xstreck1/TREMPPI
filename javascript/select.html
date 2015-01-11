@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>        
-        <title>Tremmpi select</title>
+        <title>TREMPPI select</title>
         <meta charset="UTF-8">
+
         <script src="./common/jquery.min.js"></script>
         <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
         <script src="./common/editablegrid-2.0.1.js"></script>
@@ -11,23 +12,10 @@
         <script src="./common/common.js"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
-
         <link rel="stylesheet" type="text/css" href="select/css.css">
-        <script>
-            var tremppi_select = {metadata: {}, row_count: 5};
-            tremppi.common.widget = "select";
-
-            onload = function () {
-                tremppi.common.addServerContent(tremppi_select.set_table);
-                tremppi_select.properties_init();
-                tremppi.common.addServerContent(tremppi_select.createControls);
-            };
-        </script>
         <script src="./select/param_table.js"></script>    
-        <script src="./select/selection_init.js"></script>  
-        <script src="./select/selection_manipulation.js"></script>
-        <script src="./select/server.js"></script>    
-        <script src="./select.js"></script>       
+        <script src="./select/load.js"></script>
+        <script src="./select/server.js"></script>      
     </head>
     <body class="interface">
         <div class="title">parametrization list and selector</div>

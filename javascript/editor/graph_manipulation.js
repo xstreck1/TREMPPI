@@ -11,7 +11,7 @@ tremppi.editor.elementChanged = function (row_id, column_id, old_val, new_val, r
     var val_name = tremppi.editor.metadata[tremppi.editor.current_selection.type][column_id].name;
     element.data(val_name, new_val);
     tremppi.data = tremppi.editor.graph.json().elements;
-    tremppi.common.save("editor");
+    tremppi.common.save();
     tremppi.editor.changeVisuals();
 };
 

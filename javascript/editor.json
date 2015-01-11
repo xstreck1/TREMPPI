@@ -1,24 +1,24 @@
 {
-	"nodes": [
-		{
-			"data": {
-				"Name": "New",
-				"MaxActivity": 1,
-				"Label": "New:1",
-				"id": "n0"
-			},
-			"position": {
-				"x": 546.34375,
-				"y": 284.671875
-			},
-			"group": "nodes",
-			"removed": false,
-			"selected": false,
-			"selectable": true,
-			"locked": false,
-			"grabbed": false,
-			"grabbable": true,
-			"classes": ""
-		}
-	]
+    "nodes": [
+        {
+            "data": {
+                "Name": "New",
+                "MaxActivity": 1,
+                "Label": "New:1",
+                "id": "n0"
+            },
+            "position": {
+                "x": 546.34375,
+                "y": 284.671875
+            },
+            "group": "nodes",
+            "removed": false,
+            "selected": false,
+            "selectable": true,
+            "locked": false,
+            "grabbed": false,
+            "grabbable": true,
+            "classes": ""
+        }
+    ]
 }

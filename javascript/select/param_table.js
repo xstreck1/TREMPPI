@@ -1,4 +1,4 @@
-tremppi_select.set_table = function () {
+tremppi.select.set_table = function () {
     // Adds non-zero counts of elements
     var set_counts = function (type) {
         $.ajax({
@@ -20,7 +20,7 @@ tremppi_select.set_table = function () {
     // Adds data to the tables
     var set_rows = function (type) {
         $.ajax({
-            url: tremppi.common.getServerAddress() + "?command=rows&pick=" + type + "&count=" + tremppi_select.row_count,
+            url: tremppi.common.getServerAddress() + "?command=rows&pick=" + type + "&count=" + tremppi.select.row_count,
             success: function (result) {
                 if (result !== "") {
                     var rows = result.split("\n");
@@ -81,4 +81,35 @@ tremppi_select.set_table = function () {
             $("#table_holder").html('ERROR: unable to obtain the database. You must execute tremppi spawn to create it first.');
         }
     });
+};
+
+// Called if the data change
+tremppi.select.selectionChanged = function (row_id, colum_id, old_val, new_val, row) {
+    var type = this.name.split("_")[0];
+    var index = this.name.split("_")[1];
+    var column_name = this.columns[colum_id].name;
+
+    // In data, update the row count, if necessary
+    var columns = this.data[row_id].columns;
+    // If is not last and is empty
+    if (tremppi.common.isEmpty(columns) && row_id !== (this.data.length - 1))
+        this.remove(row_id);
+    else if (!tremppi.common.isEmpty(columns) && row_id === (this.data.length - 1))
+        this.append(this.data.length, new Array(this.columns.length), true, true);
+
+    // Store the data
+    var row_count = this.data.length;
+
+    select = new Array(row_count);
+    for (var row_i = 0; row_i < row_count; row_i++) {
+        select[row_i] = {};
+        select[row_i].id = this.data[row_i].originalIndex;
+        select[row_i].values = {};
+        for (var column_i = 0; column_i < this.columns.length; column_i++) {
+            var column_name = this.columns[column_i].name;
+            select[row_i].values[column_name] = this.data[row_i].columns[column_i];
+        }
+    }
+    
+    tremppi.common.save();
 };
