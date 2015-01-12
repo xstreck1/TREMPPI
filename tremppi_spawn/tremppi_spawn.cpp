@@ -23,7 +23,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::readJSasJSON(tremppi_system.WORK_PATH / NETWORK_FILENAME);
+		root = FileManipulation::parseJSON(tremppi_system.WORK_PATH / NETWORK_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}

@@ -27,6 +27,8 @@ copyanything(join(HOME_PATH, os.path.normpath("javascript/browse/")), join(DEST_
 copyanything(join(HOME_PATH, os.path.normpath("javascript/properties/")), join(DEST_CONTENT, "properties"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/editor/")), join(DEST_CONTENT, "editor"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/select/")), join(DEST_CONTENT, "select"))
+copyanything(join(HOME_PATH, os.path.normpath("javascript/witness/")), join(DEST_CONTENT, "witness"))
+copyanything(join(HOME_PATH, os.path.normpath("javascript/report/")), join(DEST_CONTENT, "report"))
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/editor.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/browse.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_CONTENT)

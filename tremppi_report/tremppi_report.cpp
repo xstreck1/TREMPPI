@@ -127,13 +127,13 @@ int tremppi_report(int argc, char ** argv) {
 		// Write the computed content
 		Json::StyledWriter writer;
 
-		bfs::path output_path = tremppi_system.WORK_PATH / ("report_" + time_stamp + ".js");
+		bfs::path output_path = tremppi_system.WORK_PATH / ("report_" + time_stamp + ".json");
 		fstream data_file(output_path.string(), ios::out);
 		if (!data_file)
 			throw runtime_error("Could not open " + output_path.string());
 
 		string data = writer.write(out);
-		data_file << "var report = " << data << ";" << endl;
+		data_file << data << endl;
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

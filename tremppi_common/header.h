@@ -63,8 +63,8 @@ namespace src = boost::log::sources;
 namespace snk = boost::log::sinks;
 namespace kwd = boost::log::keywords;
 
-const string NETWORK_FILENAME = "editor.js";
+const string NETWORK_FILENAME = "editor.json";
 const string DATABASE_FILENAME = "database.sqlite";
-const string PROPERTIES_FILENAME = "properties.js";
-const string SELECTION_FILENAME = "select.js";
+const string PROPERTIES_FILENAME = "properties.json";
+const string SELECTION_FILENAME = "select.json";
 

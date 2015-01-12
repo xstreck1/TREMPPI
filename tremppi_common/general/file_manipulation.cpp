@@ -30,7 +30,7 @@ void FileManipulation::copyDir(bfs::path const & source, bfs::path const & desti
 	}
 }
 
-Json::Value FileManipulation::readJSasJSON(const bfs::path & input_path) {
+Json::Value FileManipulation::parseJSON(const bfs::path & input_path) {
 	Json::Value root;
 
 	// Open file
@@ -38,22 +38,9 @@ Json::Value FileManipulation::readJSasJSON(const bfs::path & input_path) {
 	if (!file)
 		throw runtime_error("Could not open the file " + input_path.string() + " for reading.");
 
-	// Remove JS additions
-	std::stringstream buffer;
-	char ch = static_cast<char>(0);
-	while (ch != '{' && ch != '[' && ch != EOF) {
-		file.get(ch);
-	}
-	do {
-		buffer.put(ch);
-		file.get(ch);
-	} while (ch != ';' && file.good());
-
-	file.close();
-
 	// Parse JSON
 	Json::Reader reader;
-	bool parsingSuccessful = reader.parse(buffer, root);
+	bool parsingSuccessful = reader.parse(file, root);
 	if (!parsingSuccessful)
 		throw runtime_error("Failed to parse configuration. " + reader.getFormattedErrorMessages());
 
@@ -79,11 +66,7 @@ void FileManipulation::replaceInFile(bfs::path const & file, const string & orig
 }
 
 void FileManipulation::copyAnalysisFiles(const bfs::path & path, const string & name) {
-	FileManipulation::copyDir(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ name }, path);
-
 	bfs::path html_file = path;
 	html_file.replace_extension("html");
 	bfs::copy_file(tremppi_system.HOME_PATH / bfs::path{ "javascript" } / bfs::path{ name + ".html" }, html_file);
-
-	FileManipulation::replaceInFile(html_file, "./" + name, "./" + path.stem().string());
 }

@@ -28,7 +28,7 @@ void createModel(const bfs::path & example_model_path) {
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / bfs::path{ NETWORK_FILENAME }).string(), ios::out);
 	string data = writer.write(root);
-	data_file << "var elements = " << data << ";";
+	data_file << data;
 }
 
 int basic_spawn_test() {

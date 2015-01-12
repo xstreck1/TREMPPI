@@ -57,3 +57,7 @@ int tremppi_init(int argc, char ** argv) {
 int tremppi_browse(int argc, char ** argv) {
 	return tremppi_python("browse", argc, argv);
 }
+
+int tremppi_update(int argc, char ** argv) {
+	return tremppi_python("update", argc, argv);
+}

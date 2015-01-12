@@ -44,7 +44,7 @@ int tremppi_validate(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::readJSasJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
+		root = FileManipulation::parseJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
 
 		PropertiesReader::checkSemantics(root);
 	}

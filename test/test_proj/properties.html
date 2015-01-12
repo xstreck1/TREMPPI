@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>TREMPPI properties</title>
+        <meta charset=utf-8 />
+
         <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
         <script src="./common/editablegrid-2.0.1.js"></script>
         <script src="./common/jquery.min.js"></script>
@@ -10,23 +13,10 @@
         <script src="./common/common.js"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
-        <script>
-            tremppi_properties = {metadata: {}};
-            tremppi_common.widget = "properties";  
-            $(window).ready(function() {
-                tremppi_properties.properties_init();
-                tremppi_common.addServerContent(tremppi_properties.createControls);
-            });
-        </script>
-
         <link rel="stylesheet" type="text/css" href="properties/css.css">
         <script src="./properties/property_manipulation.js"></script>
-        <script src="./properties/properties_init.js"></script>
+        <script src="./properties/load.js"></script>
         <script src="./properties/server.js"></script>
-
-        <script src="./properties.js"></script>
-        <meta charset=utf-8 />
-        <title>TREMPPI properties</title>
     </head>
     <body class="interface"> 
         <div class="title" >

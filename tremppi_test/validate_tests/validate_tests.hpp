@@ -40,7 +40,7 @@ void createProperties(const bfs::path & example_model_path) {
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
 	string data = writer.write(root);
-	data_file << "var properties = " << data << ";";
+	data_file << data;
 }
 
 int basic_validate_test()  {
