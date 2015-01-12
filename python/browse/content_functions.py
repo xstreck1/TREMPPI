@@ -5,7 +5,7 @@ from os import listdir
 import json
 
 DATABASE_FILE = "database.sqlite"
-SELECTION_FILE = "select.js"
+SELECTION_FILE = "select.json"
 
 def get_columns_names(arguments):
     conn = sqlite3.connect(DATABASE_FILE)
@@ -22,7 +22,6 @@ def js_to_json(data):
 def read_conditions(arguments):
     with open(SELECTION_FILE, 'r') as selectionFile:
         data = selectionFile.read()
-        data = js_to_json(data)
         selections = json.loads(data)
         select_term = "1 AND"
         for selection in selections:

@@ -19,9 +19,9 @@ var tremppi = {
                             function (data) {
                                 // load data
                                 tremppi.data = data;
-                                tremppi[tremppi.common.widget].load();
+                                tremppi[self.widget].load();
                                 // set a function that will set the server functionality
-                                self.addServerContent(tremppi[tremppi.common.widget].setServer);
+                                self.addServerContent(tremppi[self.widget].setServer);
                             }
                     )
                     );

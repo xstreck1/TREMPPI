@@ -1,4 +1,4 @@
-tremppi.select.load = function () { // on dom ready    
+tremppi.select.load = function () { // on dom ready       
     tremppi.select.metadata = {};
     tremppi.select.metadata.selections = [];
     tremppi.select.metadata["selections"].push({name: "Selection", label: "WHERE", datatype: "string", editable: true});

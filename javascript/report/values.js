@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var tremppi_report = {
+tremppi.report = {
     Values: {
         reg_caption_c: "a) statistical properties of the selected parametrizations set, c) properties of the compared parametrizations set, b) difference between the two. "
                 + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "

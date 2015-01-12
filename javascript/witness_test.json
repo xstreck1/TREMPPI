@@ -1,4 +1,4 @@
-var witness = {
+{
 	"W_test_ts": {
 		"elements": {
 			"nodes": [
@@ -58,8 +58,8 @@ var witness = {
 						"id": "11C"
 					},
 					"position": {
-						"x": 322.9374999999999,
-						"y": 70.39501482165079
+						"x": 319.3433520714317,
+						"y": 210.56678403580813
 					},
 					"group": "nodes",
 					"removed": false,
@@ -669,4 +669,4 @@ var witness = {
 			]
 		}
 	}
-};
+}

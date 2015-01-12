@@ -1,4 +1,4 @@
-tremppi.select.set_table = function () {
+tremppi.select.setTable = function () {
     // Adds non-zero counts of elements
     var set_counts = function (type) {
         $.ajax({

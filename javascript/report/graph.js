@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-tremppi_report.Graph = {
+tremppi.report.Graph = {
     // Synchronization in between the graphs
     synchronize: function (config, labelRefresh) {
         var cys = [];
@@ -18,9 +18,9 @@ tremppi_report.Graph = {
             return function (evt) {
                 for (var i = 0; i < config.types.length; i++) {
                     cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
-                    report["Regulatory"][config.types[i]]["elements"] = cys[i].json().elements;
+                    tremppi.data["Regulatory"][config.types[i]]["elements"] = cys[i].json().elements;
                 }
-                tremppi.common.save("report");
+                tremppi.common.save();
             };
         };
 
@@ -154,7 +154,7 @@ tremppi_report.Graph = {
 
         for (var i = 0; i < config.types.length; i++) {
             setLabels(config.types[i]);
-            tremppi_report.Labels.addQtip($('#reg_graph_' + config.types[i]).cytoscape('get'), config.types[i]);
+            tremppi.report.Labels.addQtip($('#reg_graph_' + config.types[i]).cytoscape('get'), config.types[i]);
         }
     }
 };

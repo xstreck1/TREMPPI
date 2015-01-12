@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-tremppi_report.Labels = {
+tremppi.report.Labels = {
     // Adds reactive tip window that appears on mouseover on the edge
     addQtip: function(cys, type) {
         var num_of_decimals = 3;

@@ -1,4 +1,4 @@
-var report = {
+{
 	"Regulatory": {
 		"compare": {
 			"elements": {
@@ -27,8 +27,8 @@ var report = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 368.4717258540129,
-							"y": 153.7657439808068
+							"x": 308.57067819951095,
+							"y": -60.66633775454775
 						},
 						"group": "nodes",
 						"removed": false,
@@ -431,15 +431,15 @@ var report = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 368.4717258540129,
-							"y": 153.7657439808068
+							"x": 308.57067819951095,
+							"y": -56.49915799009714
 						},
 						"group": "nodes",
 						"removed": false,
 						"selected": false,
 						"selectable": true,
 						"locked": false,
-						"grabbed": false,
+						"grabbed": true,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -847,8 +847,8 @@ var report = {
 							"name": "MlrA"
 						},
 						"position": {
-							"x": 368.4717258540129,
-							"y": 153.7657439808068
+							"x": 308.57067819951095,
+							"y": -60.66633775454775
 						},
 						"group": "nodes",
 						"removed": false,
@@ -909,7 +909,7 @@ var report = {
 						"selected": false,
 						"selectable": true,
 						"locked": false,
-						"grabbed": true,
+						"grabbed": false,
 						"grabbable": true,
 						"classes": ""
 					},
@@ -1235,4 +1235,4 @@ var report = {
 		"select": "1 AND(C_01_stable_active AND C_02_stable_inactive AND C_03_stable_active_dYciR AND C_05_stable_active_dYhjH AND C_07_negate_active_dYdaM is null AND C_08_stable_inactive_dYdaM AND C_11_stable_active_dYhjH_dYciR AND C_15_stable_active_dYegE_dYciR AND C_17_stable_active_dYegE_dYhjH AND C_18_stable_inactive_dYegE_dYhjH  AND C_21_negate_active_dYdaM_dYegE is null AND C_22_stable_inactive_dYdaM_dYegE AND C_25_stable_active_dYhjH_dYciR_dYegE AND C_29_negate_active_dYdaM_dYegE_dYhjH is null AND C_30_stable_inactive_dYdaM_dYegE_dYhjH) AND (C_32_stable_inactive_dYciR_dYdaM_dYegE_dYhjH is null) ",
 		"selected": 5
 	}
-};
+}

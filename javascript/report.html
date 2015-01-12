@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>TREMPPI report</title>
+        <meta charset="UTF-8">
+        
         <script src="./common/jquery.min.js"></script>
         <script src="./common/cytoscape.min.js"></script>
         <script src="./common/paper-full.min.js"></script>
@@ -14,24 +17,14 @@
 
         <script src="./report/values.js"></script>
         <script src="./report/helpers.js"></script>
-        <script src="./report/page.js"></script>
+        <script src="./report/load.js"></script>
         <script src="./report/graph.js"></script>
         <script src="./report/labels.js"></script>
         <script src="./report/server.js"></script>
         <link rel="stylesheet" type="text/css" href="./report/css.css">
-
-        <script src="./report.js"></script>
-        <script>
-            tremppi.common.widget = "report";
-            onload = function() {
-                success: tremppi_report.Page.loadData(tremppi_report.Config);
-                tremppi.common.addServerContent(tremppi_report.createControls);
-            };
-        </script>
-        <title >empty title</title>
     </head>
     <body class="interface"> 
-        <div class="title">tremppi_report</div>
+        <div class="title">tremppi.report</div>
         <div class="decription"><span class="desc_title">Date:</span> <span class="desc_content" id="analysis_date">analysis_date</span></div>
         <div class="decription"><span class="desc_title">Model:</span> <span class="desc_content" id="model_name">model_name</span></div>
         <div class="decription"><span class="desc_title">Size:</span> <span class="desc_content" id="pool_size">pool_size</span></div>
