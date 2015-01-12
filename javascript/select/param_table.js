@@ -100,14 +100,14 @@ tremppi.select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
     // Store the data
     var row_count = this.data.length;
 
-    select = new Array(row_count);
+    tremppi.data = new Array(row_count);
     for (var row_i = 0; row_i < row_count; row_i++) {
-        select[row_i] = {};
-        select[row_i].id = this.data[row_i].originalIndex;
-        select[row_i].values = {};
+        tremppi.data[row_i] = {};
+        tremppi.data[row_i].id = this.data[row_i].originalIndex;
+        tremppi.data[row_i].values = {};
         for (var column_i = 0; column_i < this.columns.length; column_i++) {
             var column_name = this.columns[column_i].name;
-            select[row_i].values[column_name] = this.data[row_i].columns[column_i];
+            tremppi.data[row_i].values[column_name] = this.data[row_i].columns[column_i];
         }
     }
     

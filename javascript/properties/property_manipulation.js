@@ -6,12 +6,12 @@ tremppi.properties.remove = function (index) {
 
 // Add new property
 tremppi.properties.add = function () {
-    properties.push({
+    tremppi.data.push({
         "desc": [
             {
                 "id": 0,
                 "values": {
-                    "Name": "property_" + properties.length,
+                    "Name": "property_" + tremppi.data.length,
                     "Type": "TimeSeries",
                     "Experiment": "",
                     "Verify": "true"
@@ -64,4 +64,10 @@ tremppi.properties.modelChanged = function (row_id, colum_id, old_val, new_val, 
     if (type === "data" && this.data.length === 1)
         tremppi.properties.remove(index);
     tremppi.common.save();
+};
+
+tremppi.properties.selectAll = function (checked) {
+    for (var i = 0; i < tremppi.data.length; i++) {
+        tremppi.properties.grids[i*2].setValueAt(0, 3, checked, true);
+    }
 };

@@ -1,10 +1,10 @@
 [
-    {
-        "id": 0,
-        "values": {
-            "Selection": "",
-            "Select": false,
-            "Compare": false
-        }
-    }
+	{
+		"id": 0,
+		"values": {
+			"Selection": "",
+			"Select": false,
+			"Compare": false
+		}
+	}
 ]
