@@ -3,16 +3,15 @@ TREMPPI
 
 Toolkit for Reverse Engineering of Molecular Pathways through Parameter Identification
 
-NOT WORKING AS OF NOW. For working version use http://esther.fi.muni.cz .
+THIS IS A DEVELOPMENT VERSION. To use the release version, visit: http://esther.fi.muni.cz .
 
-3rd C++ libraries included (see the directory for the specific licence): 
+3rd party C++ libraries included (see the directory for the specific licence): 
 
-* Gecode: http://www.gecode.org/
 * sqlite3: http://www.sqlite.org/ 
 * sqlite3pp: https://github.com/iwongu/sqlite3pp/
 * json (JsonCPP): http://sourceforge.net/projects/jsoncpp/ 
 
-3rd JS libraries included (open-source)
+3rd party JS libraries included (open-source)
 
 * jQuery: http://jqueryui.com/
 * jQueryUI: http://jqueryui.com/
@@ -27,9 +26,10 @@ BUILDING
 Requirements:
 
 * CMake 3.0 (or higher)
-* GCC 4.9.0 (or higher) or Visual Studio compiler November 2013 (or higher) or Clang 3.4.2 (or higher)
+* GCC 4.9.0 (or higher) or Visual Studio compiler 2015 (or higher) or Clang 3.4.2 (or higher)
 * Boost libraries 1.54.0 (or higher)
-* Python 2.8.6 (or python 2.8.x of higher version, however not Python 3.x.x), compiled for the same architecture (so 32-bit if you compile 32-bit target and 64-bit if you compile 64-bit target)
+* Gecode 4.3.0 (or higher), get here: http://www.gecode.org/
+* Python 3.x.x (or higher), compiled for the same architecture (so 32-bit if you compile 32-bit target and 64-bit if you compile 64-bit target)
 
 Optional:
 
@@ -38,12 +38,3 @@ Optional:
 
 USAGE
 =====
-
-Spawn
------
-Spawn creates a database based on a network file. 
-The database will have the ".sqlite" extension and it is a Sqlite3 database. The database file is created in the same folder as is the network and has the same name.
-
-The data file format is described in the file "Documentation/database_format.md".
-
-The network file format is described in the file "Documentation/network_format.js".

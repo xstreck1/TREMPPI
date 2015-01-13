@@ -18,6 +18,7 @@ tremppi.properties.createPropertyList = function () {
     $("#properties_container").html("");
     tremppi.properties.grids = [];
     var grids = tremppi.properties.grids;
+    
     for (var i = 0; i < tremppi.data.length; i++) {
         var property_name = 'property_' + i;
         $("#properties_container").append('<div id="' + property_name + '"></div>');
