@@ -6,8 +6,9 @@
 //
 int tremppi_express(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ExpressOptions>("tremppi_express", argc, argv);
-	bfs::path database_path = tremppi_system.WORK_PATH / DATABASE_FILENAME;
+	Logging logging;
 
+	bfs::path database_path = tremppi_system.WORK_PATH / DATABASE_FILENAME;
 	string select;
 	map<string, ActLevel> maxes;
 	RegFuncs functions;
@@ -37,6 +38,8 @@ int tremppi_express(int argc, char ** argv) {
 	try {
 		Output::addColumns(functions, db);
 
+		logging.newPhase("Expressing component", functions.size());
+
 		for (const RegFunc & reg_func : functions) {
 			// Select parametrizations and IDs
 			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
@@ -44,6 +47,7 @@ int tremppi_express(int argc, char ** argv) {
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
 			db.execute("BEGIN TRANSACTION");
+
 			// Go through parametrizations
             for (auto sel_ID : sel_IDs) {
 				vector<vector<PMin>> config_values(reg_func.info.max_activity + 1);
@@ -69,12 +73,13 @@ int tremppi_express(int argc, char ** argv) {
 				sel_it++;
 			}
 			db.execute("END");
+
+			logging.step();
 		}
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
 	}
 
-	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";
 	return 0;
 }

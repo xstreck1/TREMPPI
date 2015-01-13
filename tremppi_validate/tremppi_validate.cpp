@@ -18,6 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ValidateOptions>("tremppi_validate", argc, argv);
+	Logging logging;
 	string select;
 
 	RegInfos reg_infos;
@@ -124,6 +125,5 @@ int tremppi_validate(int argc, char ** argv) {
 			logging.exceptionMessage(e, 6);
 		}
 	}
-
 	return 0;
 }

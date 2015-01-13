@@ -14,6 +14,7 @@
 // TODO: disable regulatory if not -r
 int tremppi_report(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<ReportOptions>("tremppi_report", argc, argv);
+	Logging logging;
 
 	Json::Value out;
 	out["setup"]["date"] = TimeManager::getTime();
@@ -81,6 +82,8 @@ int tremppi_report(int argc, char ** argv) {
 				reg_data_types["compare"] = RegsData();
 				reg_data_types["differ"] = RegsData();
 			}
+
+			logging.newPhase("Harvesting component", reg_infos.size());
 			for (const RegInfo & reg_info : reg_infos) {
 				sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
 				reg_data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
@@ -89,6 +92,7 @@ int tremppi_report(int argc, char ** argv) {
 					sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
 					reg_data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 				}
+				logging.step();
 			}
 			// Compute difference
 			if (out["setup"]["comparative"].asBool())
@@ -139,6 +143,5 @@ int tremppi_report(int argc, char ** argv) {
 		logging.exceptionMessage(e, 5);
 	}
 
-	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished succesfully.";
 	return 0;
 }

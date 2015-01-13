@@ -3,6 +3,8 @@
 #include "../common_tests/common_tests_data.hpp"
 #include <tremppi_validate/data/construction_manager.hpp>
 
+#include "../common_tests/common_tests_data.hpp"
+
 class ValidateTest : public CommonTest {
 protected:
 	PropertyAutomaton a_spike_on_A;

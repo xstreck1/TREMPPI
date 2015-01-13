@@ -1,33 +1,39 @@
 #include "logging.hpp"
+#include "system.hpp"
 
-Logging::Logging() : phase_bit(false), initiated(false) {}
-
-void Logging::init(const bfs::path & work_path, const string & program_name) {
+Logging::Logging() : phase_bit(false), initiated(false) {
 	if (initiated)
 		return;
 	else
 		initiated = true;
 
 	// Find the logifile name
-	string logfile = program_name + ".log";
+	string name = (tremppi_system.standalone) ? tremppi_system.PROGRAM_NAME : "tremppi";
+	string logfile = name + ".log";
 
 	// Set the formatting
 	blg::register_simple_formatter_factory< blg::trivial::severity_level, char >("Severity");
 	blg::add_common_attributes();
 	blg::add_file_log
 		(
-		kwd::file_name = (work_path / bfs::path{ logfile }).string(),
+		kwd::file_name = (tremppi_system.WORK_PATH / bfs::path{ logfile }).string(),
 		kwd::auto_flush = true,
 		kwd::open_mode = (std::ios::out | std::ios::app),
 		kwd::format = "[%TimeStamp%] (%LineID%) <%Severity%>: %Message%"
 		);
 	blg::core::get()->set_filter(blg::trivial::severity >= blg::trivial::info);
 
-	// Set the output buffer size for visual studio
-	// setvbuf(stdout, 0, _IOLBF, 4096);
-
+	//Set the output buffer size for visual studio
+	setvbuf(stdout, 0, _IOLBF, 4096);
+	
 	// Create the dashes in the logifile
 	BOOST_LOG_TRIVIAL(info) << (string(30, '-'));
+	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " started.";
+}
+
+Logging::~Logging() {
+	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfuly.";
+	blg::core::get()->remove_all_sinks();
 }
 
 void Logging::newPhase(const string & _desc, const size_t _step_count) {
@@ -82,5 +88,3 @@ void Logging::exceptionMessage(const exception & e, const int err_no) {
 	cerr << "\nERROR: " << e.what();
 	exit(err_no);
 }
-
-Logging logging; //< the global log

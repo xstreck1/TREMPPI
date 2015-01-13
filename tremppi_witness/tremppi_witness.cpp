@@ -8,27 +8,29 @@
 #include "io/witness_reader.hpp"
 #include "io/witness_output.hpp"
 
-// TODO: Check if the transition generation is correct for all three components (w.r.t. the transition system used)
-// TODO: Components still required to be ordered...
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_witness(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<WitnessOptions>("tremppi_witness", argc, argv);
+	Logging logging;
 	string select;
 
 	Json::Value out;
+	Json::Value properties;
 	out["setup"]["date"] = TimeManager::getTime();
 	string time_stamp = TimeManager::getTimeStamp();
 	RegInfos reg_infos;
 	sqlite3pp::database db;
-	map<size_t, string> prop_columns;
+	// Obtain data
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
+		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
 
 		// Get selection		
 		select = DatabaseReader::getSelectionTerm("Select");
+
+		// Get properties 
+		properties = FileManipulation::parseJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
 
 		// Copy the data
 		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("witness_" + time_stamp), "witness");
@@ -39,9 +41,9 @@ int tremppi_witness(int argc, char ** argv) {
 		// Read regulatory information
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
-		prop_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("W_.*"), db);
 		for (const string & comp_name : DataInfo::getAllNames(reg_infos))
 			out["setup"]["components"].append(comp_name);
+
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 2);
@@ -50,41 +52,20 @@ int tremppi_witness(int argc, char ** argv) {
 
 	// Obtain the nodes and write to the JSON
 	try {
-		for (const auto & prop_column : prop_columns) {
-			WitnessReader wit_reader;
-			wit_reader.select(prop_column.second, select, db);
-			set<pair<string, string>> transitions;
-			
-			// Read transitions
-			while (wit_reader.next()) {
-				set<pair<string, string>> new_transitions = wit_reader.getWitness();
-				transitions.insert(WHOLE(new_transitions));
-			}
+		BOOST_LOG_TRIVIAL(info) << "Storing witnesses.";
+		logging.newPhase("computing witness", properties.size());
 
-			if (transitions.empty())
-				continue;
-
-			Json::Value & elements = out[prop_column.second]["elements"];
-			// Add transitions
-			Json::Value & edges = elements["edges"];
-			set<string> states;
-			for (const pair<string, string> & transition : transitions) {
-				Json::Value edge;
-				edge["data"]["id"] = to_string(elements["edges"].size());
-				edge["data"]["source"] = transition.first;
-				edge["data"]["target"] = transition.second;
-				edges.append(edge);
-				states.insert(transition.first);
-				states.insert(transition.second);
+		for (const auto & property : properties) {
+			// If selected
+			if (property["desc"][0]["values"]["Verify"].asBool()) {
+				const string name = property["desc"][0]["values"]["Name"].asString();
+				Json::Value witness = WitnessOutput::addPropert(name, select, db);
+				// If there is even a witness
+				if (!witness.empty()) {
+					out[name]["elements"].append(witness);
+				}
 			}
-
-			// Add nodes
-			Json::Value & nodes = elements["nodes"];
-			for (const string & state : states) {
-				Json::Value node;
-				node["data"]["id"] = state;
-				nodes.append(node);
-			}
+			logging.step();
 		}
 	}
 	catch (exception & e) {

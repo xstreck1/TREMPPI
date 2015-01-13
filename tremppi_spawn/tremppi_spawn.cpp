@@ -16,6 +16,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_spawn(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<SpawnOptions>("tremppi_spawn", argc, argv);
+	Logging logging;
 	bfs::path database_file = tremppi_system.WORK_PATH / DATABASE_FILENAME;
 
 	// Check the file
@@ -97,6 +98,5 @@ int tremppi_spawn(int argc, char ** argv) {
 		logging.exceptionMessage(e, 6);
 	}
 
-	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";
 	return 0;
 }

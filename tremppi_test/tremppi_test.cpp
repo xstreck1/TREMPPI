@@ -13,11 +13,13 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_report_test()) << "Basic content test report failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";
 	ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
+	ASSERT_EQ(0, basic_update_test()) << "Basic content test update failed.";
 	cout << endl;
 }
 
 int tremppi_test(int argc, char** argv) {
-	bpo::variables_map po = tremppi_system.initiate<ProgramOptions>("tremppi_validate", argc, argv);
+	tremppi_system.initiate<ProgramOptions>("tremppi_test", argc, argv);
+
     ::testing::InitGoogleTest( &argc, argv );
 	int result = RUN_ALL_TESTS();
 

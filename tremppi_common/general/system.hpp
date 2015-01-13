@@ -27,10 +27,6 @@ public:
 			po = options.parseProgramOptions(argc, argv);
 
 			set(name.c_str(), argv[0], po["path"].as<string>());
-
-			string name = (standalone) ? PROGRAM_NAME : "tremppi";
-			logging.init(WORK_PATH, name);
-			BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " started.";
 		}
 		catch (exception & e) {
 			cerr << e.what() << endl;

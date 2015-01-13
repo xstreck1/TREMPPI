@@ -23,8 +23,7 @@ class Logging {
 	Logging& operator=(const Logging & o) = delete;
 public:
 	Logging();
-	//
-	void init(const bfs::path & work_path, const string & program_name);
+	~Logging();
 
 	// 
     void newPhase(const string & _desc, const size_t _step_count = 0);
@@ -38,5 +37,3 @@ public:
 	// 
 	void exceptionMessage(const exception & e, const int err_no);
 };
-
-extern Logging logging;

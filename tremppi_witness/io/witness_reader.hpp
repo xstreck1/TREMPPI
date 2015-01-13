@@ -6,7 +6,8 @@ class WitnessReader {
 	sqlite3pp::query::iterator sel_it;
 	set<pair<string, string>> current_witness;
 public:
-	void select(const string & column_name, const string & filter, sqlite3pp::database & db) {
+	void select(const string & prop_name, const string & filter, sqlite3pp::database & db) {
+		const string column_name = "W_" + prop_name;
 		const string qry_string = "SELECT " + column_name + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + filter + " AND NOT " + column_name + " = \"\" ";
 		selection_qry.reset(new sqlite3pp::query(db, (qry_string).c_str()));
 		sel_it = selection_qry->begin();
