@@ -6,42 +6,21 @@
 
 tremppi.report.Labels = {
     // Adds reactive tip window that appears on mouseover on the edge
-    addQtip: function(cys, type) {
+    addQtip: function (cys, type) {
         var num_of_decimals = 3;
-        
-        var api = $("#reg_graph_" + type).qtip({// Grab some elements to apply the tooltip to
-            position: {
-                target: 'mouse', // Position it where the click was...
-                adjust: {mouse: false} // ...but don't follow the mouse
-            },
-            content: {
-                text: ''
-            },
-            show: false // Do not show on mouseover of the graph
-        }).qtip('api');
-        
-        var edges = cys.filter("edge");
-        edges.on("tapdragover",
-                function(eve) {
-                    var my_data = eve.cyTarget.data();
-                    var text = "source: " + my_data.source + "<br />"
-                            + "target: " + my_data.target + "<br />"
-                            + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />"
-                            + "frequency: " + my_data.Frequency.toFixed(num_of_decimals) + "<br />"
-                            + "expected frequency: " + my_data.ExpectedFreq.toFixed(num_of_decimals) + "<br />";
-                    ;
 
-                    api.set("content.text", text);
-                    api.show();
-                }
-        );
-        edges.on("tapdragout",
-                function() {
-                    api.hide();
-                }
-        );
+        var edges = cys.filter("edge");
+        var labeller = function (my_data) {
+            return "source: " + my_data.source + "<br />"
+                    + "target: " + my_data.target + "<br />"
+                    + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />"
+                    + "frequency: " + my_data.Frequency.toFixed(num_of_decimals) + "<br />"
+                    + "expected frequency: " + my_data.ExpectedFreq.toFixed(num_of_decimals) + "<br />";
+        };
+
+        tremppi.qtip.addOnHoverLabeller("#reg_graph_" + type, edges, labeller);
     },
-    loadLabels: function(config, relative, weighted) {
+    loadLabels: function (config, relative, weighted) {
         var bar_left = 110;
         var num_of_decimals = 3;
         var rel_string = relative ? "relative" : "absolute";
@@ -57,7 +36,7 @@ tremppi.report.Labels = {
         var F_height = 40;
         var P_height = 20;
 
-        var makeText = function(content, position) {
+        var makeText = function (content, position) {
             var text = new paper.PointText(position);
             text.fillColor = 'black';
             text.fontSize = 20;
@@ -66,7 +45,7 @@ tremppi.report.Labels = {
             return text;
         };
 
-        var addEdgeWidth = function(type, paper, width_ratio) {
+        var addEdgeWidth = function (type, paper, width_ratio) {
             paper.activate();
             var bar_height = F_height - 10;
             width_max = Math.max(config[type][width_type].max * width_ratio, width_max);
@@ -94,7 +73,7 @@ tremppi.report.Labels = {
             paper.view.draw();
         };
 
-        var addGradient = function(type, paper, id) {
+        var addGradient = function (type, paper, id) {
             paper.activate();
             var bar_right = paper.view.viewSize.width - 70;
             makeText('P: ', new paper.Point(10, P_height));

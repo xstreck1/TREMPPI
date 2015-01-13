@@ -1,4 +1,6 @@
 tremppi.witness.load = function () {
+
+
     $("#graph_holder").html("");
     for (var prop_name in tremppi.data) {
         if (prop_name !== "setup") {
@@ -45,6 +47,41 @@ tremppi.witness.load = function () {
                     };
                 })(prop_name)
             });
+
+            tremppi.witness.addQtip(prop_name);
         }
     }
+};
+
+tremppi.witness.addQtip = function (div_id) {
+    var graph = $("#" + div_id).cytoscape('get');
+
+    var elements = graph.filter("");
+    var labeller = function (my_data) {
+        var text = "";
+        // Is edge
+        if (my_data.source) {
+            for (var i = 0; i < my_data.source.length - 1; i++) {
+                if (my_data.source[i] !== my_data.target[i]) {
+                    text += tremppi.data.setup.components[i];
+                    text += ": " + my_data.source[i] + " => " + my_data.target[i] + "<br />";
+                    break;
+                }
+            }
+            if (text === "")
+                text = "steady";
+        }
+        // Is node
+        else {
+            for (var i = 0; i < my_data.id.length; i++) {
+                if (i === my_data.id.length - 1)
+                    text += "auto";
+                else
+                    text += tremppi.data.setup.components[i];
+                text += ": " + my_data.id[i] + "<br />";
+            }
+        }
+        return text;
+    };
+    tremppi.qtip.addOnHoverLabeller(div_id, elements, labeller);
 };

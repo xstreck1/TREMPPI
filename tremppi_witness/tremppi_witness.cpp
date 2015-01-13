@@ -40,10 +40,13 @@ int tremppi_witness(int argc, char ** argv) {
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
 		prop_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("W_.*"), db);
+		for (const string & comp_name : DataInfo::getAllNames(reg_infos))
+			out["setup"]["components"].append(comp_name);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 2);
 	}
+
 
 	// Obtain the nodes and write to the JSON
 	try {
@@ -85,7 +88,7 @@ int tremppi_witness(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 6);
+		logging.exceptionMessage(e, 3);
 	}
 
 	// Output 
@@ -101,7 +104,7 @@ int tremppi_witness(int argc, char ** argv) {
 		data_file  << data << endl;
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 7);
+		logging.exceptionMessage(e, 4);
 	}
 
 	return 0;
