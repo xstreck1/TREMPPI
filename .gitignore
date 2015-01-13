@@ -25,7 +25,7 @@ Win32*
 *nbproject*
 
 # IDEA
-*.idea
+*.idea*
 *__pycache__
 
 # projects
