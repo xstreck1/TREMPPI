@@ -18,7 +18,7 @@ tremppi.report.Labels = {
                     + "expected frequency: " + my_data.ExpectedFreq.toFixed(num_of_decimals) + "<br />";
         };
 
-        tremppi.qtip.addOnHoverLabeller("#reg_graph_" + type, edges, labeller);
+        tremppi.qtip.addOnHoverLabeller("reg_graph_" + type, edges, labeller);
     },
     loadLabels: function (config, relative, weighted) {
         var bar_left = 110;

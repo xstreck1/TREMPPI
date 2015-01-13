@@ -27,14 +27,14 @@ tremppi.report.load = function () {
     }
 
     // compute and display lables
-    tremppi.report.Regulatory.relative = false;
-    tremppi.report.Regulatory.weighted = false;
-    tremppi.report.Graph.labelSwitch(config, tremppi.report.Regulatory.relative, tremppi.report.Regulatory.weighted);
+    tremppi.data.Regulatory.relative = false;
+    tremppi.data.Regulatory.weighted = false;
+    tremppi.report.Graph.labelSwitch(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
     tremppi.report.Helpers.assignPositions(config, "reg", "label");
     tremppi.report.Helpers.deactivateUnused(config, "reg", "label");
     $('#regulatory_labels').css('padding-bottom', '45px');
     labelRefresh = function () {
-        tremppi.report.Labels.loadLabels(config, tremppi.report.Regulatory.relative);
+        tremppi.report.Labels.loadLabels(config, tremppi.data.Regulatory.relative);
     };
     $(window).resize(labelRefresh);
     tremppi.report.Graph.synchronize(config, labelRefresh);
@@ -45,15 +45,15 @@ tremppi.report.load = function () {
 
     // Create the control buttons functions
     $("#relative_button").click(function () {
-        tremppi.report.Regulatory.relative = !tremppi.report.Regulatory.relative;
-        tremppi.report.Graph.labelSwitch(config, tremppi.report.Regulatory.relative, tremppi.report.Regulatory.weighted);
-        tremppi.report.Labels.loadLabels(config, tremppi.report.Regulatory.relative, tremppi.report.Regulatory.weighted);
+        tremppi.data.Regulatory.relative = !tremppi.data.Regulatory.relative;
+        tremppi.report.Graph.labelSwitch(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
+        tremppi.report.Labels.loadLabels(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
         this.innerHTML = tremppi.report.Regulatory.relative ? "absolute" : "relative";
     });
     $("#weighted_button").click(function () {
         tremppi.report.Regulatory.weighted = !tremppi.report.Regulatory.weighted;
-        tremppi.report.Graph.labelSwitch(config, tremppi.report.Regulatory.relative, tremppi.report.Regulatory.weighted);
-        tremppi.report.Labels.loadLabels(config, tremppi.report.Regulatory.relative, tremppi.report.Regulatory.weighted);
+        tremppi.report.Graph.labelSwitch(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
+        tremppi.report.Labels.loadLabels(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
         this.innerHTML = tremppi.report.Regulatory.weighted ? "total" : "weighted";
     });
     var resizeViews = function (change) {

@@ -1,12 +1,13 @@
 #include <boost/python/detail/wrap_python.hpp>
-#include <tremppi_common/general/common_functions.hpp>
-#include <tremppi_common/general/system.hpp>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/header.h>
+
+#include "io/python_options.hpp"
+
 using namespace std;
 
+
 int tremppi_python(const string command, int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<ProgramOptions>("tremppi_validate", argc, argv);
+	bpo::variables_map po = tremppi_system.initiate<PythonOptions>("tremppi_validate", argc, argv);
 
 	// Check if the script exists
 	bfs::path file_path = tremppi_system.HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };

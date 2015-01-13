@@ -62,7 +62,7 @@ int tremppi_witness(int argc, char ** argv) {
 				Json::Value witness = WitnessOutput::addPropert(name, select, db);
 				// If there is even a witness
 				if (!witness.empty()) {
-					out[name]["elements"].append(witness);
+					out[name]["elements"] = witness;
 				}
 			}
 			logging.step();
