@@ -85,4 +85,15 @@ public:
 
 		return label;
 	}
+
+	const string getString(const StateID ID, const size_t cost) const {
+		string label;
+
+		for (const ActLevel lev : states[ID].levels)
+			label += to_string(lev);
+
+		label += "-" + to_string(cost);
+
+		return label;
+	}
 };

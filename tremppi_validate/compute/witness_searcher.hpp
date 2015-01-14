@@ -15,7 +15,7 @@
 class WitnessSearcher {
 	const ProductStructure & product; ///< Product reference for state properties.
 
-	CheckerSetting settings; 
+	CheckerSetting settings;
 	Levels parametrization;
 
 	multimap<StateID, StateID> transitions; ///< Acutall storage of the transitions found - transitions are stored by parametrizations numbers in the form (source, traget).
@@ -45,7 +45,7 @@ class WitnessSearcher {
 		}
 
 		// Continue with the DFS otherwise.
-		else if ((depth < max_depth - 1) && !used[ID]){
+		else if ((depth < max_depth - 1) && !used[ID]) {
 			vector<StateID> transports = SuccFunc::broadcastParameters(parametrization, product, ID);
 
 			for (const StateID & succ : transports) {
@@ -61,7 +61,7 @@ public:
 	/**
 	 * Constructor ensures that data objects used within the whole computation process have appropriate size.
 	 */
-	WitnessSearcher(const ProductStructure & _product) : product(_product) {	
+	WitnessSearcher(const ProductStructure & _product) : product(_product) {
 		found = vector<size_t>(product.getStateCount(), INF);
 		used = vector<bool>(product.getStateCount(), false);
 	}
@@ -92,15 +92,29 @@ public:
 	 */
 	const static string getOutput(const TraceType trace_type, const ProductStructure & product, const multimap<StateID, StateID>  & transitions) {
 		string acceptable_paths; // Vector fo actuall data
-		// Cycle throught the parametrizations
-		if (!transitions.empty()) { // Test for emptyness of the set of transitions
-			// Reformes based on the user request
-			for (const StateTransition & trans : transitions){
-				// acceptable_paths.append(to_string(trans.first)).append(">").append(to_string(trans.second)).append(";");
-				acceptable_paths.append(product.getString(trans.first)).append(">").append(product.getString(trans.second)).append(";");
+
+		set<StateID> current_depth(WHOLE(product.getInitialStates()));
+		size_t cost = 1;
+
+		while (!current_depth.empty()) {
+			set<StateID> next_depth;
+			for (StateID ID : current_depth) {
+				auto range = transitions.equal_range(ID);
+
+				for (auto it = range.first; it != range.second; it++) {
+					acceptable_paths.append(product.getString(ID, cost))
+						.append(">")
+						.append(product.getString(it->second, cost+1))
+						.append(";");
+					next_depth.insert(it->second);
+				}
 			}
+
+			current_depth = next_depth;
+			cost++;
 		}
-		// remove last comma
+
+		// remove last semi-colon
 		if (!acceptable_paths.empty())
 			acceptable_paths.resize(acceptable_paths.size() - 1);
 

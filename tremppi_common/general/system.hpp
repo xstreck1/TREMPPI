@@ -1,6 +1,7 @@
 #pragma once
 
 #include "logging.hpp"
+#include "time_manager.hpp"
 
 // The global setup for Tremppi apps - mainly sets paths to the executables and data
 class TremppiSystem {
@@ -19,6 +20,8 @@ public:
 	template<typename OptionsT>
 	bpo::variables_map initiate(const string & name, int argc, char **argv) {
 		bpo::variables_map po;
+
+		TimeManager::setStartTime();
 
 		try {
 			if (argc < 1)

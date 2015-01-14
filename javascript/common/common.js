@@ -14,17 +14,6 @@ var tremppi = {
             tremppi.common.widget =  filename.split("_")[0];
             tremppi[tremppi.common.widget] = {};
             tremppi.common.data_file = filename + ".json";
-            $(window).ready(
-                    $.getJSON(self.data_file,
-                            function (data) {
-                                // load data
-                                tremppi.data = data;
-                                tremppi[self.widget].load();
-                                // set a function that will set the server functionality
-                                self.addServerContent(tremppi[self.widget].setServer);
-                            }
-                    )
-                    );
         },
         // Saves the variable to the respective file
         save: function () {

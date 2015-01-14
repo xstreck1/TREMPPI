@@ -4,18 +4,8 @@
 #include <tremppi_common/general/system.hpp>
 
 namespace WitnessOutput {
-	Json::Value addPropert(const string & name, const string & select, sqlite3pp::database & db) {
+	Json::Value convert(const set<pair<string, string>> & transitions) {
 		Json::Value elements;
-
-		WitnessReader wit_reader;
-		wit_reader.select(name, select, db);
-		set<pair<string, string>> transitions;
-
-		// Read transitions
-		while (wit_reader.next()) {
-			set<pair<string, string>> new_transitions = wit_reader.getWitness();
-			transitions.insert(WHOLE(new_transitions));
-		}
 
 		// Add transitions
 		Json::Value & edges = elements["edges"];

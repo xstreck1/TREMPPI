@@ -1,4 +1,9 @@
 #include "time_manager.hpp"
+#include "time_manager.hpp"
+
+void TimeManager::setStartTime() {
+	TimeManager::start_time = chrono::system_clock::now();
+}
 
 void TimeManager::startClock(const string clock_name) {
 	if (clocks.find(clock_name) != clocks.end())
@@ -34,8 +39,7 @@ void TimeManager::resetClock(const string clock_name) {
 string TimeManager::getTime() {
 	string result;
 
-	chrono::system_clock::time_point today = chrono::system_clock::now();
-	time_t tt = chrono::system_clock::to_time_t(today);
+	time_t tt = chrono::system_clock::to_time_t(start_time);
 	result = ctime(&tt);
 	result.resize(result.size() - 1); // Remove newline
 
@@ -55,8 +59,7 @@ string TimeManager::getTimeStamp() {
 			return result;
 	};
 
-	chrono::system_clock::time_point today = chrono::system_clock::now();
-	time_t tt = chrono::system_clock::to_time_t(today);
+	time_t tt = chrono::system_clock::to_time_t(start_time);
 	tm* time = gmtime(&tt);
 	result = makeTwoDigit(time->tm_year + 1900) + makeTwoDigit(time->tm_mon + 1) + makeTwoDigit(time->tm_mday)
 		+ makeTwoDigit(time->tm_hour) + makeTwoDigit(time->tm_min) + makeTwoDigit(time->tm_sec);

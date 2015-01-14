@@ -148,6 +148,18 @@ namespace Common {
 	}
 
 	/**
+	* @brief Obtain a vector that contains only the unique components of the original.
+	* @param[in] original	the source vector
+	* @return	a new vector that contains only the unique elements of the original
+	*/
+	template<typename T>
+	std::vector<T> makeUnique(std::vector<T> original) {
+		auto end_it = std::unique(WHOLE(original));
+		original.resize(std::distance(begin(original), end_it));
+		return original;
+	}
+
+	/**
 	* @brief Obtain all matches to the regex in the source string
 	* @param[in] control_regex	regular expression describing the match
 	* @param[in] original	a string to search in

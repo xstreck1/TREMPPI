@@ -9,8 +9,14 @@
 namespace TimeManager {
 	using Clock = pair<string, chrono::steady_clock::time_point>; ///< Clock - contain a start time referenced by a name of the clock.
 	static map<string, chrono::steady_clock::time_point> clocks; ///< Vector of clocks, private for each cpp file
+	static chrono::system_clock::time_point start_time;
 
-	/**
+	/*
+	* sets the starting point
+	*/
+	void setStartTime();
+
+		/**
 	 * Starts a clock with given name and, if it is requsted by user, outputs the info.
 	 *
 	 * @param clock_name	unique ID of the clock that will also be send on the output

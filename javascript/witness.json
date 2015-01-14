@@ -1,455 +1,98 @@
 {
-	"W_test_ts": {
-		"elements": {
-			"nodes": [
-				{
-					"data": {
-						"id": "02A"
-					},
-					"position": {
-						"x": 639.756671607217,
-						"y": 415.91127069632245
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "02C"
-					},
-					"position": {
-						"x": 190.375,
-						"y": 300.00000000000006
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "11A"
-					},
-					"position": {
-						"x": 469.4556183572514,
-						"y": 458.6205635891287
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "11C"
-					},
-					"position": {
-						"x": 319.3433520714317,
-						"y": 210.56678403580813
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "12A"
-					},
-					"position": {
-						"x": 322.93750000000006,
-						"y": 529.6049851783494
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "12B"
-					},
-					"position": {
-						"x": 456.5,
-						"y": 300
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": true,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "12C"
-					},
-					"position": {
-						"x": 602.4390917142723,
-						"y": 175.52384173226864
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			],
-			"edges": [
-				{
-					"data": {
-						"id": "0",
-						"source": "02A",
-						"target": "12B"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "1",
-						"source": "11A",
-						"target": "12B"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "2",
-						"source": "12A",
-						"target": "12B"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "3",
-						"source": "12B",
-						"target": "02C"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "4",
-						"source": "12B",
-						"target": "11C"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "5",
-						"source": "12B",
-						"target": "12C"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			]
-		}
-	},
-	"W_test2_ts": {
-		"elements": {
-			"nodes": [
-				{
-					"data": {
-						"id": "02A"
-					},
-					"position": {
-						"x": 720.625,
-						"y": 300
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "02C"
-					},
-					"position": {
-						"x": 190.375,
-						"y": 300.00000000000006
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "11A"
-					},
-					"position": {
-						"x": 588.0625,
-						"y": 529.6049851783494
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "11C"
-					},
-					"position": {
-						"x": 322.9374999999999,
-						"y": 70.39501482165079
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "12A"
-					},
-					"position": {
-						"x": 322.93750000000006,
-						"y": 529.6049851783494
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "12B"
-					},
-					"position": {
-						"x": 456.5,
-						"y": 300
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "12C"
-					},
-					"position": {
-						"x": 629.3952011785333,
-						"y": 176.42237871441068
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			],
-			"edges": [
-				{
-					"data": {
-						"id": "0",
-						"source": "02A",
-						"target": "12B"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "1",
-						"source": "11A",
-						"target": "12B"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "2",
-						"source": "12A",
-						"target": "12B"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "3",
-						"source": "12B",
-						"target": "02C"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "4",
-						"source": "12B",
-						"target": "11C"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "5",
-						"source": "12B",
-						"target": "12C"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			]
-		}
-	},
-	"setup": {
-		"components": [
-			"A",
-			"B"
-		],
-		"date": "Tue Jan 13 11:11:59 2015"
-	}
+   "elements" : {
+      "edges" : [
+         {
+            "data" : {
+               "id" : "0",
+               "source" : "02-1",
+               "target" : "12-2"
+            }
+         },
+         {
+            "data" : {
+               "id" : "1",
+               "source" : "11-1",
+               "target" : "12-2"
+            }
+         },
+         {
+            "data" : {
+               "id" : "2",
+               "source" : "12-1",
+               "target" : "12-2"
+            }
+         },
+         {
+            "data" : {
+               "id" : "3",
+               "source" : "12-2",
+               "target" : "02-3"
+            }
+         },
+         {
+            "data" : {
+               "id" : "4",
+               "source" : "12-2",
+               "target" : "11-3"
+            }
+         },
+         {
+            "data" : {
+               "id" : "5",
+               "source" : "12-2",
+               "target" : "12-3"
+            }
+         }
+      ],
+      "nodes" : [
+         {
+            "data" : {
+               "id" : "02-1"
+            }
+         },
+         {
+            "data" : {
+               "id" : "02-3"
+            }
+         },
+         {
+            "data" : {
+               "id" : "11-1"
+            }
+         },
+         {
+            "data" : {
+               "id" : "11-3"
+            }
+         },
+         {
+            "data" : {
+               "id" : "12-1"
+            }
+         },
+         {
+            "data" : {
+               "id" : "12-2"
+            }
+         },
+         {
+            "data" : {
+               "id" : "12-3"
+            }
+         }
+      ]
+   },
+   "setup" : {
+      "comparative" : false,
+      "compare" : "1",
+      "compared" : 26,
+      "components" : [ "A", "B" ],
+      "date" : "Wed Jan 14 14:53:11 2015",
+      "name" : "test_proj",
+      "pool_size" : 26,
+      "properties" : "test_ts,test_cycle,",
+      "select" : "1",
+      "selected" : 26
+   }
 }
+

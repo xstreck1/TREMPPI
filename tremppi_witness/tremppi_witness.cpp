@@ -3,6 +3,7 @@
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/time_manager.hpp>
+#include <tremppi_common/report/report.hpp>
 
 #include "io/witness_options.hpp"
 #include "io/witness_reader.hpp"
@@ -14,26 +15,23 @@
 int tremppi_witness(int argc, char ** argv) {
 	bpo::variables_map po = tremppi_system.initiate<WitnessOptions>("tremppi_witness", argc, argv);
 	Logging logging;
-	string select;
 
 	Json::Value out;
 	Json::Value properties;
-	out["setup"]["date"] = TimeManager::getTime();
-	string time_stamp = TimeManager::getTimeStamp();
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	// Obtain data
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
 
-		// Get selection		
-		select = DatabaseReader::getSelectionTerm("Select");
+		// Create setup
+		out = Report::createSetup();
 
 		// Get properties 
 		properties = FileManipulation::parseJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
 
 		// Copy the data
-		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("witness_" + time_stamp), "witness");
+		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("witness_" + TimeManager::getTimeStamp()), "witness");
 
 		// Get database
 		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
@@ -50,19 +48,24 @@ int tremppi_witness(int argc, char ** argv) {
 	}
 
 
-	// Obtain the nodes and write to the JSON
+	// Obtain the nodes and write to the the set
+	set<pair<string, string>> transitions;
+	WitnessReader wit_reader;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Storing witnesses.";
+		BOOST_LOG_TRIVIAL(info) << "Loading witnesses.";
 		logging.newPhase("computing witness", properties.size());
 
 		for (const auto & property : properties) {
 			// If selected
 			if (property["desc"][0]["values"]["Verify"].asBool()) {
 				const string name = property["desc"][0]["values"]["Name"].asString();
-				Json::Value witness = WitnessOutput::addPropert(name, select, db);
-				// If there is even a witness
-				if (!witness.empty()) {
-					out[name]["elements"] = witness;
+				out["setup"]["properties"] = out["setup"]["properties"].asString() + name + ",";
+
+				wit_reader.select(name, out["setup"]["select"].asString(), db);
+				// Read transitions
+				while (wit_reader.next()) {
+					set<pair<string, string>> new_transitions = wit_reader.getWitness();
+					transitions.insert(WHOLE(new_transitions));
 				}
 			}
 			logging.step();
@@ -72,12 +75,21 @@ int tremppi_witness(int argc, char ** argv) {
 		logging.exceptionMessage(e, 3);
 	}
 
+	try {
+		BOOST_LOG_TRIVIAL(info) << "Converting to JSON";
+
+		out["elements"] = WitnessOutput::convert(transitions);
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 4);
+	}
+
 	// Output 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-        bfs::path output_path = tremppi_system.WORK_PATH / ( "witness_" + time_stamp + ".json");
+        bfs::path output_path = tremppi_system.WORK_PATH / ( "witness_" + TimeManager::getTimeStamp() + ".json");
         fstream data_file(output_path.string(), ios::out);
         if (!data_file)
             throw runtime_error("Could not open " + output_path.string());
@@ -85,7 +97,7 @@ int tremppi_witness(int argc, char ** argv) {
 		data_file  << data << endl;
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 4);
+		logging.exceptionMessage(e, 5);
 	}
 
 	return 0;

@@ -4,6 +4,7 @@
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
+#include <tremppi_common/report/report.hpp>
 #include "analysis/statistical_analysis.hpp"
 #include "analysis/lattice_builder.hpp"
 #include "analysis/regulatory_graph.hpp"
@@ -17,23 +18,17 @@ int tremppi_report(int argc, char ** argv) {
 	Logging logging;
 
 	Json::Value out;
-	out["setup"]["date"] = TimeManager::getTime();
-	string time_stamp = TimeManager::getTimeStamp();
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Read filter conditions
-		out["setup"]["select"] = DatabaseReader::getSelectionTerm("Select");
-		out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
-		out["setup"]["comparative"] = out["setup"]["select"].asString() != out["setup"]["compare"].asString();
+		out = Report::createSetup();
+
+		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Copy the data
-		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("report_" + time_stamp), "report");
-
-		// Get database
-		out["setup"]["name"] = tremppi_system.WORK_PATH.stem().string();
-		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
+		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("report_" + TimeManager::getTimeStamp()), "report");
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -46,13 +41,6 @@ int tremppi_report(int argc, char ** argv) {
 	map<string, RegsData> reg_data_types;
 	map<string, FunsData> fun_data_types;
 	try {
-		out["setup"]["pool_size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()).begin())->get<int>(0);
-		out["setup"]["selected"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()).begin())->get<int>(0);
-		if (out["setup"]["comparative"].asBool())
-			out["setup"]["compared"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()).begin())->get<int>(0);
-		else
-			out["setup"]["compared"] = out["setup"]["pool_size"];
-
 		/*if (po.count("functions") > 0) {
 			BOOST_LOG_TRIVIAL(info) << "Computing regulatory functions data.";
 			fun_data_types["select"] = FunsData();
@@ -131,7 +119,7 @@ int tremppi_report(int argc, char ** argv) {
 		// Write the computed content
 		Json::StyledWriter writer;
 
-		bfs::path output_path = tremppi_system.WORK_PATH / ("report_" + time_stamp + ".json");
+		bfs::path output_path = tremppi_system.WORK_PATH / ("report_" + TimeManager::getTimeStamp() + ".json");
 		fstream data_file(output_path.string(), ios::out);
 		if (!data_file)
 			throw runtime_error("Could not open " + output_path.string());

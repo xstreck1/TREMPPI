@@ -78,19 +78,8 @@ tremppi.report.load = function () {
             (tremppi.data.setup.comparative) ? tremppi.report.Values.reg_caption_c : tremppi.report.Values.reg_caption_nonc)
             + tremppi.report.Values.reg_caption_common);
 
-    // Replace text content
-    var setup = tremppi.data.setup;
-    $("title").html(setup.name + " statistical analysis report");
-    $("#analysis_date").html(setup.date);
-    $("#model_name").html(setup.name);
-    $("#pool_size").html(setup.pool_size);
-    var select_stmt = setup.select ? setup.select : "all";
-    $("#select_statement").html(select_stmt);
-    $("#selected").html(setup.selected + ' ' + '(' + (setup.selected / setup.pool_size * 100).toFixed(2) + '%)');
-    var compare_stmt = setup.compare ? setup.compare : "all";
-    compare_stmt = setup.comparative ? compare_stmt : "Not comparing";
-    $("#compare_statement").html(compare_stmt);
-    $("#compared").html(setup.compared + ' ' + '(' + (setup.compared / setup.pool_size * 100).toFixed(2) + '%)');
+    // Add setup data
+    tremppi.report.addSetup(tremppi.data.setup);
 
     // Create the resize dragger
     var regulatory_y = $("#regulatory_dragger").offset().top;
