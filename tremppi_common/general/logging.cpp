@@ -32,7 +32,7 @@ Logging::Logging() : phase_bit(false), initiated(false) {
 }
 
 Logging::~Logging() {
-	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfuly.";
+	BOOST_LOG_TRIVIAL(info) << tremppi_system.PROGRAM_NAME << " finished successfully.";
 	blg::core::get()->remove_all_sinks();
 }
 
@@ -80,6 +80,9 @@ void Logging::step() {
 	}
 
 	cout << output;
+
+	if (phases.back().step_count < 100)
+		cout << flush;
 }
 
 

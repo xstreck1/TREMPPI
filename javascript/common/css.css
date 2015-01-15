@@ -59,3 +59,8 @@ body.interface {
     margin: 37pt 5pt 0pt 5pt;
     height: 100%;
 }
+
+div.decription { 
+    font-size: 16pt; 
+    font-family:monospace 
+}

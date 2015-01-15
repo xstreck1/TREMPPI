@@ -48,13 +48,13 @@ tremppi.report.load = function () {
         tremppi.data.Regulatory.relative = !tremppi.data.Regulatory.relative;
         tremppi.report.Graph.labelSwitch(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
         tremppi.report.Labels.loadLabels(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
-        this.innerHTML = tremppi.report.Regulatory.relative ? "absolute" : "relative";
+        this.innerHTML = tremppi.data.Regulatory.relative ? "absolute" : "relative";
     });
     $("#weighted_button").click(function () {
-        tremppi.report.Regulatory.weighted = !tremppi.report.Regulatory.weighted;
+        tremppi.data.Regulatory.weighted = !tremppi.data.Regulatory.weighted;
         tremppi.report.Graph.labelSwitch(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
         tremppi.report.Labels.loadLabels(config, tremppi.data.Regulatory.relative, tremppi.data.Regulatory.weighted);
-        this.innerHTML = tremppi.report.Regulatory.weighted ? "total" : "weighted";
+        this.innerHTML = tremppi.data.Regulatory.weighted ? "total" : "weighted";
     });
     var resizeViews = function (change) {
         var height = $('#regulatory_container').css('padding-bottom');
