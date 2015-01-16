@@ -13,7 +13,7 @@
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_witness(int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<WitnessOptions>("tremppi_witness", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<WitnessOptions>("tremppi_witness", argc, argv);
 	Logging logging;
 
 	Json::Value out;
@@ -28,13 +28,13 @@ int tremppi_witness(int argc, char ** argv) {
 		out = Report::createSetup();
 
 		// Get properties 
-		properties = FileManipulation::parseJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
+		properties = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME);
 
 		// Copy the data
-		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("witness_" + TimeManager::getTimeStamp()), "witness");
+		FileManipulation::copyAnalysisFiles(TremppiSystem::WORK_PATH / ("witness_" + TimeManager::getTimeStamp()), "witness");
 
 		// Get database
-		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
+		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -89,7 +89,7 @@ int tremppi_witness(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		// Write the computed content
 		Json::StyledWriter writer;
-        bfs::path output_path = tremppi_system.WORK_PATH / ( "witness_" + TimeManager::getTimeStamp() + ".json");
+        bfs::path output_path = TremppiSystem::WORK_PATH / ( "witness_" + TimeManager::getTimeStamp() + ".json");
         fstream data_file(output_path.string(), ios::out);
         if (!data_file)
             throw runtime_error("Could not open " + output_path.string());

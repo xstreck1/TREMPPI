@@ -14,7 +14,7 @@
 
 // TODO: disable regulatory if not -r
 int tremppi_report(int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<ReportOptions>("tremppi_report", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<ReportOptions>("tremppi_report", argc, argv);
 	Logging logging;
 
 	Json::Value out;
@@ -25,10 +25,10 @@ int tremppi_report(int argc, char ** argv) {
 		// Read filter conditions
 		out = Report::createSetup();
 
-		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
+		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Copy the data
-		FileManipulation::copyAnalysisFiles(tremppi_system.WORK_PATH / ("report_" + TimeManager::getTimeStamp()), "report");
+		FileManipulation::copyAnalysisFiles(TremppiSystem::WORK_PATH / ("report_" + TimeManager::getTimeStamp()), "report");
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -119,7 +119,7 @@ int tremppi_report(int argc, char ** argv) {
 		// Write the computed content
 		Json::StyledWriter writer;
 
-		bfs::path output_path = tremppi_system.WORK_PATH / ("report_" + TimeManager::getTimeStamp() + ".json");
+		bfs::path output_path = TremppiSystem::WORK_PATH / ("report_" + TimeManager::getTimeStamp() + ".json");
 		fstream data_file(output_path.string(), ios::out);
 		if (!data_file)
 			throw runtime_error("Could not open " + output_path.string());

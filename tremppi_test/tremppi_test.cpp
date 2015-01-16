@@ -18,7 +18,7 @@ TEST(CoreTest, AllPrograms) {
 }
 
 int tremppi_test(int argc, char** argv) {
-	tremppi_system.initiate<ProgramOptions>("tremppi_test", argc, argv);
+	TremppiSystem::initiate<ProgramOptions>("tremppi_test", argc, argv);
 
     ::testing::InitGoogleTest( &argc, argv );
 	int result = RUN_ALL_TESTS();

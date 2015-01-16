@@ -17,7 +17,7 @@
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<ValidateOptions>("tremppi_validate", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<ValidateOptions>("tremppi_validate", argc, argv);
 	Logging logging;
 	string select;
 
@@ -30,7 +30,7 @@ int tremppi_validate(int argc, char ** argv) {
 		select = DatabaseReader::getSelectionTerm("Select");
 
 		// Get database
-		db = move(sqlite3pp::database((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str()));
+		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -45,7 +45,7 @@ int tremppi_validate(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::parseJSON(tremppi_system.WORK_PATH / PROPERTIES_FILENAME);
+		root = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME);
 
 		PropertiesReader::checkSemantics(root);
 	}

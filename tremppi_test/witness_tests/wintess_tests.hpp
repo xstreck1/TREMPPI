@@ -8,7 +8,7 @@
 int tremppi_witness(int, char**);
 
 int basic_witness_test() {
-	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj").string() };
+	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string() };
 	ArgPtr arg_ptr(arguments);
 	return (tremppi_witness(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }

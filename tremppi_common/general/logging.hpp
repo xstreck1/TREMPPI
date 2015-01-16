@@ -11,9 +11,9 @@ struct LogPhase {
 };
 
 class Logging {
-	vector<LogPhase> phases;
-	bool phase_bit;
-	bool initiated;
+	static vector<LogPhase> phases;
+	static bool phase_bit;
+	static bool initiated;
 
 	static const int LINE_LENGTH = 80;
 	static const int NUM_CHARS = 8;
@@ -26,14 +26,14 @@ public:
 	~Logging();
 
 	// 
-    void newPhase(const string & _desc, const size_t _step_count = 0);
+    static void newPhase(const string & _desc, const size_t _step_count = 0);
 
 	//
-    void killPhase();
+	static void killPhase();
 
 	//
-	void step();
+	static void step();
 
 	// 
-	void exceptionMessage(const exception & e, const int err_no);
+	static void exceptionMessage(const exception & e, const int err_no);
 };

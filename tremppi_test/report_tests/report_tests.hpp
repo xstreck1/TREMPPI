@@ -8,7 +8,7 @@
 int tremppi_report(int, char**);
 
 int basic_report_test() {
-	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj").string(), "-r" };
+	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string(), "-r" };
 	ArgPtr arg_ptr(arguments);
 	return (tremppi_report(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }

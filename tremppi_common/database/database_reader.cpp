@@ -107,7 +107,7 @@ sqlite3pp::query DatabaseReader::selectionIDs(const string & selection, sqlite3p
 string DatabaseReader::getSelectionTerm(const string & type) {
 	string select = "1 AND";
 
-	Json::Value selections = FileManipulation::parseJSON(tremppi_system.WORK_PATH / SELECTION_FILENAME);
+	Json::Value selections = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / SELECTION_FILENAME);
 	for (const Json::Value & selection : selections)
 		if (selection["values"][type].asBool())
 			select += "(" + selection["values"]["Selection"].asString() + ") AND ";

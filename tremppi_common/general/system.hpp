@@ -4,17 +4,16 @@
 #include "time_manager.hpp"
 
 // The global setup for Tremppi apps - mainly sets paths to the executables and data
-class TremppiSystem {
+namespace TremppiSystem {
 	//
 	void set(const char * name, const char * arg, const string & _WORK_PATH);
 
-public:
-	string PROGRAM_NAME; // Name of the program running
-	bfs::path HOME_PATH; // The path to the home of tremppi
-	bfs::path WORK_PATH; // The directory in which tremppi works currently
-	bfs::path EXEC_PATH; // The path from where the program was executed
-	bfs::path BIN_PATH; // The path to the executed binary
-	bool standalone; // True if executing the standalone application instead of the main launcher
+	extern string PROGRAM_NAME; // Name of the program running
+	extern bfs::path HOME_PATH; // The path to the home of tremppi
+	extern bfs::path WORK_PATH; // The directory in which tremppi works currently
+	extern bfs::path EXEC_PATH; // The path from where the program was executed
+	extern bfs::path BIN_PATH; // The path to the executed binary
+	extern bool standalone; // True if executing the standalone application instead of the main launcher
 
 	//
 	template<typename OptionsT>
@@ -29,7 +28,7 @@ public:
 			OptionsT options;
 			po = options.parseProgramOptions(argc, argv);
 
-			set(name.c_str(), argv[0], po["path"].as<string>());
+			TremppiSystem::set(name.c_str(), argv[0], po["path"].as<string>());
 		}
 		catch (exception & e) {
 			cerr << e.what() << endl;
@@ -38,6 +37,4 @@ public:
 
 		return po;
 	}
-};
-
-extern TremppiSystem tremppi_system;
+}

@@ -34,7 +34,7 @@ void createModel(const bfs::path & example_model_path) {
 }
 
 int basic_spawn_test() {
-	const string path = bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj").string();
+	const string path = bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string();
 	vector<string> arguments = { "--path", path};
 	ArgPtr arg_ptr(arguments);
 	createModel(path);

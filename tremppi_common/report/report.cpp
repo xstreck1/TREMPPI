@@ -9,8 +9,8 @@ Json::Value Report::createSetup() {
 	Json::Value out;
 
 	out["setup"]["date"] = TimeManager::getTime();
-	out["setup"]["name"] = tremppi_system.WORK_PATH.stem().string();
-	sqlite3pp::database db((tremppi_system.WORK_PATH / DATABASE_FILENAME).string().c_str());
+	out["setup"]["name"] = TremppiSystem::WORK_PATH.stem().string();
+	sqlite3pp::database db((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str());
 
 	out["setup"]["select"] = DatabaseReader::getSelectionTerm("Select");
 	out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");

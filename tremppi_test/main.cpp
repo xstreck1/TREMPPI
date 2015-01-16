@@ -4,6 +4,6 @@
 int tremppi_test(int argc, char ** argv);
 
 int main(int argc, char ** argv) {
-	tremppi_system.standalone = false;
+	TremppiSystem::standalone = false;
 	return tremppi_test(argc, argv);
 }

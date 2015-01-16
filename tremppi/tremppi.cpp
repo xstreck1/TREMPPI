@@ -33,7 +33,7 @@ void printHelp() {
 
 //
 int main(int argc, char ** argv) {
-	tremppi_system.standalone = false;
+	TremppiSystem::standalone = false;
 
 	if (argc < 2) {
 		cerr << "Fatal error: No program given on the input. Usage:\n";

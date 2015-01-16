@@ -8,8 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace TimeManager {
 	using Clock = pair<string, chrono::steady_clock::time_point>; ///< Clock - contain a start time referenced by a name of the clock.
-	static map<string, chrono::steady_clock::time_point> clocks; ///< Vector of clocks, private for each cpp file
-	static chrono::system_clock::time_point start_time;
+	extern map<string, chrono::steady_clock::time_point> clocks; ///< Vector of clocks, private for each cpp file
+	extern chrono::system_clock::time_point start_time;
 
 	/*
 	* sets the starting point

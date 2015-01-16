@@ -5,10 +5,10 @@
 
 //
 int tremppi_express(int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<ExpressOptions>("tremppi_express", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<ExpressOptions>("tremppi_express", argc, argv);
 	Logging logging;
 
-	bfs::path database_path = tremppi_system.WORK_PATH / DATABASE_FILENAME;
+	bfs::path database_path = TremppiSystem::WORK_PATH / DATABASE_FILENAME;
 	string select;
 	map<string, ActLevel> maxes;
 	RegFuncs functions;

@@ -7,10 +7,10 @@ using namespace std;
 
 
 int tremppi_python(const string command, int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<PythonOptions>("tremppi_validate", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<PythonOptions>("tremppi_validate", argc, argv);
 
 	// Check if the script exists
-	bfs::path file_path = tremppi_system.HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
+	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
 	if (!bfs::exists(file_path)) {
 		cerr << file_path.string() << " is called, but does not exist.";
 		return 1;

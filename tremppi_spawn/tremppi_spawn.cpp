@@ -15,16 +15,16 @@
 /// - Produces a database of parametrizations based on the model.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_spawn(int argc, char ** argv) {
-	bpo::variables_map po = tremppi_system.initiate<SpawnOptions>("tremppi_spawn", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<SpawnOptions>("tremppi_spawn", argc, argv);
 	Logging logging;
-	bfs::path database_file = tremppi_system.WORK_PATH / DATABASE_FILENAME;
+	bfs::path database_file = TremppiSystem::WORK_PATH / DATABASE_FILENAME;
 
 	// Check the file
 	Json::Value root; // root of the network
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::parseJSON(tremppi_system.WORK_PATH / NETWORK_FILENAME);
+		root = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / NETWORK_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}

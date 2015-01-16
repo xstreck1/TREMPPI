@@ -41,8 +41,8 @@ public:
 		argv = new char*[values.size() + 1];
 
 		// Add binary name
-		argv[0] = new char[tremppi_system.BIN_PATH.string().size() + 1];
-		strcpy(argv[0], tremppi_system.BIN_PATH.string().c_str());
+		argv[0] = new char[TremppiSystem::BIN_PATH.string().size() + 1];
+		strcpy(argv[0], TremppiSystem::BIN_PATH.string().c_str());
 
 		// Copy new arguments
 		argc = 1;

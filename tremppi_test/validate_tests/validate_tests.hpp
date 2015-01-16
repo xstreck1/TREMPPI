@@ -44,7 +44,7 @@ void createProperties(const bfs::path & example_model_path) {
 }
 
 int basic_validate_test()  {
-	const string path = bfs::absolute(bfs::path{ tremppi_system.HOME_PATH } / "test" / "test_proj").string();
+	const string path = bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string();
 	vector<string> arguments = { "--path", path, "--trace", "wit" };
 	ArgPtr arg_ptr(arguments);
 	createProperties(path);

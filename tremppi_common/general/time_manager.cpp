@@ -1,6 +1,9 @@
 #include "time_manager.hpp"
 #include "time_manager.hpp"
 
+map<string, chrono::steady_clock::time_point> TimeManager::clocks; ///< Vector of clocks, private for each cpp file
+chrono::system_clock::time_point TimeManager::start_time;
+
 void TimeManager::setStartTime() {
 	TimeManager::start_time = chrono::system_clock::now();
 }
