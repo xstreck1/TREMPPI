@@ -22,8 +22,8 @@ bool sqlite3pp::func::hasColumn(const string & table_name, const string & column
 void sqlite3pp::func::addColumn(const string & table_name, const string & column_name, const string & type, sqlite3pp::database & db) {
 	if (!hasColumn(table_name, column_name, db))
 		db.execute(("ALTER TABLE " + table_name + " ADD " + column_name + " " + type + ";").c_str());
-	else
-		db.execute(("UPDATE " + table_name + " SET " + column_name + "=NULL;").c_str());
+	/*else
+		db.execute(("UPDATE " + table_name + " SET " + column_name + "=NULL;").c_str());*/
 }
 
 size_t sqlite3pp::func::columnCount(const string & table_name, const string where_clause, sqlite3pp::database & db) {
