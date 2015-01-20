@@ -25,12 +25,20 @@ namespace PropertiesReader {
 
 			StateID ID = 0;
 
-
 			for (const Json::Value & measurement : property["data"]) {
 				string constraint = measurement["values"]["Measurement"].asString();
+
 				string negation = "!(" + constraint + ")";
+
+				string stables = measurement["values"]["Stables"].asString();
+				vector<string> stables_list;
+				if (!stables.empty())
+					boost::split(stables_list, stables, boost::is_any_of(","));
+
 				PropertyAutomaton::Edges edges = { { ID, negation }, { ID + 1, constraint } };
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, edges });
+
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list), move(edges) });
+
 				ID++;
 			}
 			// Add mirror of the first state that is not accepting.
@@ -41,8 +49,9 @@ namespace PropertiesReader {
 				automaton.states[0].edges[0].target_ID = automaton.states.size() - 1;
 				automaton.states[automaton.states.size() - 1].edges[0].target_ID = automaton.states.size() - 1;
 			}
+			// Add a new state to the end that is just accepting
 			else if (automaton.prop_type == "TimeSeries") {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, PropertyAutomaton::Edges() });
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, {}, PropertyAutomaton::Edges() });
 			}
 			
 			automata.emplace_back(move(automaton));

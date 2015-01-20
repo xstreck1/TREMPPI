@@ -40,26 +40,34 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 	Gecode::DFS<ConstraintParser> search(automaton.getTransitionConstraint(BA_ID, trans_no));
 	while (ConstraintParser *result = search.next()) {
 		auto solution = result->getSolution();
-		bool is_ss = static_cast<bool>(solution[solution.size() - 1]);
-		solution.resize(solution.size() - 1);
+		// bool is_ss = static_cast<bool>(solution[solution.size() - 1]);
+		// solution.resize(solution.size() - 1);
 		StateID KS_ID = structure.getID(solution);
 		StateID ID = product.getProductID(KS_ID, BA_ID);
 
-		if (!is_ss) {
-			// Add all the trasient combinations for the kripke structure
-			for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
-				const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
-				const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
-				product.states[ID].transitions.push_back({ product.getProductID(KS_target, BA_target), trans_const });
-			}
+		// Add all the trasient combinations for the kripke structure
+		for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
+			const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
+			const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
+			// If the transition does not meet the stability requirements, add transition to hell (infty)
+			const StateID t_ID = matchesStables(structure, KS_ID, KS_target, automaton.getStables(BA_ID)) ? product.getProductID(KS_target, BA_target) : INF;
+			product.states[ID].transitions.push_back({ t_ID, trans_const });
 		}
-		else {
-			// Add a self-loop
-			product.states[ID].loops.push_back(product.getProductID(KS_ID, BA_target));
-		}
+
+		// Add a self-loop
+		product.states[ID].loops.push_back(product.getProductID(KS_ID, BA_target));
 
 		delete result;
 	}
+}
+
+bool ProductBuilder::matchesStables(const UnparametrizedStructure & structure, const CompID s_ID, const CompID t_ID, const vector<StateID>& stables) const {
+	const Levels & s_levels = structure.getStateLevels(s_ID);
+	const Levels & t_levels = structure.getStateLevels(t_ID);
+	for (const size_t stable_req : stables)
+		if (s_levels[stable_req] != t_levels[stable_req])
+			return false;
+	return true;
 }
 
 ProductStructure ProductBuilder::buildProduct(UnparametrizedStructure  _structure, AutomatonStructure  _automaton) const {

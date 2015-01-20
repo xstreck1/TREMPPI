@@ -27,10 +27,11 @@ struct AutTransitionion : public TransitionProperty {
 
 /// Storing a single state of the Buchi automaton. This state is extended with a value saying wheter the states is final.
 struct AutState : public AutomatonStateProperty<AutTransitionion> {
+	vector<CompID> stables; //< IDs of the components that must not change before the next state is reached (so not even when transiting into the next state)
 
 	/// Fills data and checks if the state has value  -> is initial
-	AutState(const StateID ID, const bool final)
-	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID) { }
+	AutState(const StateID ID, const bool final, const vector<StateID> _stables)
+	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID),  stables(move(_stables)) { }
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +61,8 @@ public:
 	/**
 	 * @param final	if true than state with index equal to the one of this vector is final
 	 */
-	void addState(const StateID ID, const bool final) {
-		states.push_back({ ID, final });
+	void addState(const StateID ID, const bool final, const vector<StateID> stables) {
+		states.push_back({ ID, final, move(stables) });
 		if (ID == 0)
 			initial_states.push_back(ID);
 		if (final)
@@ -76,6 +77,11 @@ public:
 	// Gecode accepts only a raw pointer for the searcher.
 	ConstraintParser * getTransitionConstraint(const StateID ID, const size_t trans_no) const {
 		return states[ID].transitions[trans_no].trans_constr;
+	}
+
+	// @return	the stables for the given state
+	const vector<CompID> & getStables(const StateID ID) const {
+		return states[ID].stables;
 	}
 };
 

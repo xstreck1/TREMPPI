@@ -25,6 +25,11 @@ class ProductBuilder {
 	 */
 	void addSubspaceTransitions(const StateID BA_ID, const size_t trans_no, ProductStructure & product) const;
 
+	/*
+	* @return true	iff the stables are really stable between the source and the target
+	*/
+	bool matchesStables(const UnparametrizedStructure & structure, const CompID s_ID, const CompID t_ID, const vector<StateID> & stables)  const;
+
 public:
 	/**
 	 * Create the the synchronous product of the provided BA and UKS.

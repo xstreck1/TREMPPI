@@ -16,6 +16,7 @@ struct PropertyAutomaton {
 		string name; ///< Label of the state.
 		CompID ID; ///< Numerical constant used to distinguish the state. Starts from 0!
 		bool final; ///< True if the state is final.
+		vector<string> stables_list; ///< Which states must not change its value 
 
 		Edges edges; ///< Edges in Buchi Automaton (Target ID, edge label).
 	};

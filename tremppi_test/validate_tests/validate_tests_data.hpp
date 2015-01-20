@@ -26,7 +26,8 @@ protected:
 		a_is_steady.name = "is_steady";
 		a_is_steady.prop_type = "TimeSeries";
 		a_is_steady.states.emplace_back(PropertyAutomaton::State{ "0", 0, false });
-		a_is_steady.states[0].edges = vector < PropertyAutomaton::Edge > { PropertyAutomaton::Edge{ 0, "!#ss" }, PropertyAutomaton::Edge{ 1, "#ss" }};
+		a_is_steady.states[0].stables_list = { "A" };
+		a_is_steady.states[0].edges = vector < PropertyAutomaton::Edge > { PropertyAutomaton::Edge{ 1, "tt" }};
 		a_is_steady.states.emplace_back(PropertyAutomaton::State{ "1", 1, true });
 
 

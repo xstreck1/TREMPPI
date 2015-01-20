@@ -10,12 +10,12 @@
 #include "../data/property_automaton.hpp"
 #include "automaton_structure.hpp"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///  \brief Transform graph of the automaton into a set of labeled transitions in an AutomatonStructure object.
-///
-/// This builder creates a basic automaton controlling property - this automaton is based on the AutomatonInterface.
-/// Automaton is provided with string labels on the edges that are parsed and resolved for the graph.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ///  \brief Transform graph of the automaton into a set of labeled transitions in an AutomatonStructure object.
+ ///
+ /// This builder creates a basic automaton controlling property - this automaton is based on the AutomatonInterface.
+ /// Automaton is provided with string labels on the edges that are parsed and resolved for the graph.
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AutomatonBuilder {
 	const RegInfos & reg_infos; ///< Model that holds the data.
 	const PropertyAutomaton & property;
@@ -37,12 +37,12 @@ class AutomatonBuilder {
 			mins.push_back(0);
 		}
 		// Add the steady state constraint
-		names.push_back("#ss");
-		maxes.push_back(1);
-		mins.push_back(0);
+		// names.push_back("#ss");
+		// maxes.push_back(1);
+		// mins.push_back(0);
 
 		// Add experiment constraints.
-		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size() + 1, DataInfo::getMaxLevel(reg_infos));
+		ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
 		cons_pars->addBoundaries(maxes, true);
 		cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.experiment);
 		cons_pars->status();
@@ -85,6 +85,16 @@ class AutomatonBuilder {
 			throw runtime_error("Type of the verification automaton is not known.");
 	}
 
+	vector<CompID> transformStables(const vector<string> & stable_names) {
+		vector<CompID> stables(stable_names.size());
+
+		transform(WHOLE(stable_names), begin(stables), [this](const string & stable_name) { 
+			return DataInfo::getCompID(reg_infos, stable_name); 
+		});
+
+		return stables;
+	}
+
 public:
 	AutomatonBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property) : reg_infos(_reg_infos), property(_property) {
 		computeBoundaries();
@@ -101,8 +111,16 @@ public:
 
 		// List throught all the automaton states
 		for (StateID ID : cscope(property.states)) {
+			// Convert names into IDs
+			const vector<string> & stable_names = property.states[ID].stables_list;
+			vector<CompID> stables;
+			if (stable_names.size() == 1 && stable_names[0] == "#ALL")
+				stables = transformStables(DataInfo::getAllNames(reg_infos));
+			else
+				stables = transformStables(stable_names);
+
 			// Fill auxiliary data
-			automaton.addState(ID, property.states[ID].final);
+			automaton.addState(ID, property.states[ID].final, stables);
 			// Add transitions for this state
 			addTransitions(automaton, ID);
 		}
