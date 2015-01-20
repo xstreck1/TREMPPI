@@ -78,7 +78,10 @@ class AutomatonBuilder {
 	 */
 	void setAutType(AutomatonStructure & automaton) {
 		if (property.prop_type == "TimeSeries")
-			automaton.my_type = BA_finite;
+			if (property.states.back().stables_list.empty())
+				automaton.my_type = BA_finite;
+			else // Partial stable states require full check
+				automaton.my_type = BA_standard;
 		else if (property.prop_type == "Cycle")
 			automaton.my_type = BA_standard;
 		else

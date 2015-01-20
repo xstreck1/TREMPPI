@@ -23,6 +23,7 @@ tremppi.properties.add = function () {
                 "id": 0,
                 "values": {
                     "Measurement": "tt",
+                    "Stables": ""
                 }
             }
         ]

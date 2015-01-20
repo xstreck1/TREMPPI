@@ -49,9 +49,9 @@ namespace PropertiesReader {
 				automaton.states[0].edges[0].target_ID = automaton.states.size() - 1;
 				automaton.states[automaton.states.size() - 1].edges[0].target_ID = automaton.states.size() - 1;
 			}
-			// Add a new state to the end that is just accepting
+			// Add a new state to the end that has a loop and compies the requirement for stables
 			else if (automaton.prop_type == "TimeSeries") {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, {}, PropertyAutomaton::Edges() });
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, automaton.states.back().stables_list, PropertyAutomaton::Edges({ { ID, "tt" } }) });
 			}
 			
 			automata.emplace_back(move(automaton));

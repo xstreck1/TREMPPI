@@ -9,6 +9,7 @@ tremppi.properties.load = function() { // on dom ready
 
     tremppi.properties.metadata.time_series = [];
     tremppi.properties.metadata["time_series"].push({name: "Measurement", label: "MEASUREMENTS", datatype: "string", editable: true});
+    tremppi.properties.metadata["time_series"].push({name: "Stables", label: "STABLE COMPONENTS", datatype: "string", editable: true});
     
     tremppi.properties.createPropertyList();
 };
