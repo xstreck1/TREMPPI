@@ -60,7 +60,9 @@ public:
 				settings.initial_states = settings.final_states = { ID };
 				settings.bfs_bound = bfs_bound - reach_storage.getVisit(ID);
 				loop_storage = model_checker->conductCheck(settings, parametrization, move(loop_storage));
-				get<0>(result) = std::min(reach_storage.getVisit(ID) + loop_storage.getCost(), get<0>(result));
+				if (loop_storage.isFound(ID)) {
+					get<0>(result) = std::min(reach_storage.getVisit(ID) + loop_storage.getCost(), get<0>(result));
+				}
 			}
 		}
 

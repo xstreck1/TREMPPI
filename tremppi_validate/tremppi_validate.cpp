@@ -114,7 +114,9 @@ int tremppi_validate(int argc, char ** argv) {
 				}
 
 				// Parametrization was considered satisfying.
-				string witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<1>(result));
+				string witness_path;
+				if (get<0>(result) != INF)
+					witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<0>(result), get<1>(result));
 
 				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 				logging.step();

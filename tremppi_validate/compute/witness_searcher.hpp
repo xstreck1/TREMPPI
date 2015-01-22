@@ -90,13 +90,13 @@ public:
 	 * Re-formes the transitions computed during the round into strings.
 	 * @return  strings with all transitions for each acceptable parametrization
 	 */
-	const static string getOutput(const TraceType trace_type, const ProductStructure & product, const multimap<StateID, StateID>  & transitions) {
+	const static string getOutput(const TraceType trace_type, const ProductStructure & product, const size_t max_cost, const multimap<StateID, StateID>  & transitions) {
 		string acceptable_paths; // Vector fo actuall data
 
 		set<StateID> current_depth(WHOLE(product.getInitialStates()));
 		size_t cost = 1;
 
-		while (!current_depth.empty()) {
+		while (max_cost != INF && cost <= max_cost) {
 			set<StateID> next_depth;
 			for (StateID ID : current_depth) {
 				auto range = transitions.equal_range(ID);

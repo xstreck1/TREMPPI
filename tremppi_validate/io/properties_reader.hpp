@@ -25,33 +25,29 @@ namespace PropertiesReader {
 
 			StateID ID = 0;
 
+			vector<string> stables_list;
 			for (const Json::Value & measurement : property["data"]) {
 				string constraint = measurement["values"]["Measurement"].asString();
 
 				string negation = "!(" + constraint + ")";
 
-				string stables = measurement["values"]["Stables"].asString();
-				vector<string> stables_list;
-				if (!stables.empty())
-					boost::split(stables_list, stables, boost::is_any_of(","));
-
 				PropertyAutomaton::Edges edges = { { ID, negation }, { ID + 1, constraint } };
 
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list), move(edges) });
 
+				// Stables for the next state (once the values requried here are reached)
 				ID++;
+				string stables = measurement["values"]["Stables"].asString();
+				if (!stables.empty())
+					boost::split(stables_list, stables, boost::is_any_of(","));
 			}
 			// Add mirror of the first state that is not accepting.
 			if (automaton.prop_type == "Cycle") {
-				automaton.states[automaton.states.size() - 1].edges[1].target_ID = 0;
-				automaton.states.push_back(automaton.states[0]);
-				automaton.states[0].final = true;
-				automaton.states[0].edges[0].target_ID = automaton.states.size() - 1;
-				automaton.states[automaton.states.size() - 1].edges[0].target_ID = automaton.states.size() - 1;
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, stables_list, PropertyAutomaton::Edges({ { 0, "tt" } }) });
 			}
 			// Add a new state to the end that has a loop and compies the requirement for stables
 			else if (automaton.prop_type == "TimeSeries") {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, automaton.states.back().stables_list, PropertyAutomaton::Edges({ { ID, "tt" } }) });
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, stables_list, PropertyAutomaton::Edges({ { ID, "tt" } }) });
 			}
 			
 			automata.emplace_back(move(automaton));

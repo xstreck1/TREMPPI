@@ -51,10 +51,13 @@ def get_counts(arguments):
     columns = get_columns_names(arguments)
     conditions = read_conditions(arguments)
     counts = []
+    conn = sqlite3.connect(DATABASE_FILE)
     for column in columns.split(","):
-        conn = sqlite3.connect(DATABASE_FILE)
-        cursor = conn.execute('SELECT COUNT(*) FROM Parametrizations WHERE ' + column + ' IS NOT NULL' + ' AND ' + conditions)
-        counts.append(str(cursor.fetchone()[0]))
+        if column[0] != "K"[0]:
+            cursor = conn.execute('SELECT COUNT(' + column + ') FROM Parametrizations WHERE ' + column + ' IS NOT NULL' + ' AND ' + conditions)
+            counts.append(str(cursor.fetchone()[0]))
+        else:
+            counts.append(" ")
     return ",".join(counts)
 
 # return current files with the .html suffix

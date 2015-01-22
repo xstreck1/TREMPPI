@@ -70,5 +70,7 @@ tremppi.properties.modelChanged = function (row_id, colum_id, old_val, new_val, 
 tremppi.properties.selectAll = function (checked) {
     for (var i = 0; i < tremppi.data.length; i++) {
         tremppi.properties.grids[i*2].setValueAt(0, 3, checked, true);
+        tremppi.data[i]["desc"][0].values["Verify"] = checked; 
     }
+    tremppi.common.save();
 };
