@@ -96,7 +96,7 @@ public:
 		set<StateID> current_depth(WHOLE(product.getInitialStates()));
 		size_t cost = 1;
 
-		while (max_cost != INF && cost <= max_cost) {
+		while (max_cost != INF && cost < max_cost) {
 			set<StateID> next_depth;
 			for (StateID ID : current_depth) {
 				auto range = transitions.equal_range(ID);

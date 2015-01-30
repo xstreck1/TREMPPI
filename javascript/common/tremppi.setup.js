@@ -5,6 +5,11 @@
  */
 
 var self = tremppi.common;
+// Force fresh load
+$.ajaxSetup({
+  cache:false
+});
+//
 $(window).ready(
         $.getJSON(self.data_file,
                 function (data) {

@@ -91,7 +91,6 @@ public:
 
 		for (const ActLevel lev : states[ID].levels)
 			label += to_string(lev);
-
 		label += "-" + to_string(cost);
 
 		return label;

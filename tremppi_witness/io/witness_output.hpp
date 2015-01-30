@@ -4,6 +4,14 @@
 #include <tremppi_common/general/system.hpp>
 
 namespace WitnessOutput {
+	inline string remStep(const string & state) {
+		return state.substr(0, state.find("-"));
+	}
+
+	inline string getStep(const string & state) {
+		return state.substr(state.find("-") + 1);
+	}
+
 	Json::Value convert(const set<pair<string, string>> & transitions) {
 		Json::Value elements;
 
@@ -13,11 +21,12 @@ namespace WitnessOutput {
 		for (const pair<string, string> & transition : transitions) {
 			Json::Value edge;
 			edge["data"]["id"] = to_string(elements["edges"].size());
-			edge["data"]["source"] = transition.first;
-			edge["data"]["target"] = transition.second;
+			edge["data"]["source"] = remStep(transition.first);
+			edge["data"]["target"] = remStep(transition.second);
+			edge["data"]["Step"] = getStep(transition.first);
 			edges.append(edge);
-			states.insert(transition.first);
-			states.insert(transition.second);
+			states.insert(edge["data"]["source"].asString());
+			states.insert(edge["data"]["target"].asString());
 		}
 
 		// Add nodes

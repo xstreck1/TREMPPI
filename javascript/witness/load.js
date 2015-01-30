@@ -22,6 +22,7 @@ tremppi.witness.load = function () {
                     'target-arrow-shape': 'triangle',
                     'text-outline-color': 'black',
                     'text-outline-width': 1,
+					'content': 'data(Step)',
                     'color': 'white',
                     'target-arrow-color': 'black',
                     'width': 2

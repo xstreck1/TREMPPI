@@ -34,7 +34,7 @@ shutil.copy(join(HOME_PATH, os.path.normpath("javascript/browse.html")), DEST_CO
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/select.html")), DEST_CONTENT)
 # data files are not copied - create new
-open(join(DEST_CONTENT, "editor.json"), 'w').write("{nodes: [], edges:[]}")
+open(join(DEST_CONTENT, "editor.json"), 'w').write('{"nodes": [], "edges":[]}')
 open(join(DEST_CONTENT, "properties.json"), 'w').write("[]")
 open(join(DEST_CONTENT, "select.json"), 'w').write("[]")
 open(join(DEST_CONTENT, "browse.json"), 'w').write("{}")

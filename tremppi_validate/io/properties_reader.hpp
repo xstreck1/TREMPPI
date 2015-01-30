@@ -25,6 +25,12 @@ namespace PropertiesReader {
 
 			StateID ID = 0;
 
+			// Add an accepting first state
+			if (automaton.prop_type == "Cycle") {
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, {}, PropertyAutomaton::Edges({ { 1, "tt" } }) });
+				ID++;
+			}
+
 			vector<string> stables_list;
 			for (const Json::Value & measurement : property["data"]) {
 				string constraint = measurement["values"]["Measurement"].asString();
@@ -41,13 +47,13 @@ namespace PropertiesReader {
 				if (!stables.empty())
 					boost::split(stables_list, stables, boost::is_any_of(","));
 			}
-			// Add mirror of the first state that is not accepting.
+			// Loop to the first
 			if (automaton.prop_type == "Cycle") {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, stables_list, PropertyAutomaton::Edges({ { 0, "tt" } }) });
+				automaton.states.back().edges.back().target_ID = 0;
 			}
 			// Add a new state to the end that has a loop and compies the requirement for stables
-			else if (automaton.prop_type == "TimeSeries") {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, stables_list, PropertyAutomaton::Edges({ { ID, "tt" } }) });
+			if (automaton.prop_type == "TimeSeries") {
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, {}, PropertyAutomaton::Edges({ { ID, "tt" } }) });
 			}
 			
 			automata.emplace_back(move(automaton));
