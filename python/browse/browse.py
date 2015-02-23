@@ -21,7 +21,7 @@ class StoreHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urlparse(self.path)
         # print(parsed_path.path)
-        if parsed_path.query == "":
+        if parsed_path.query == "" or parsed_path.query[0] == "_":
             if parsed_path.path == "/":
                 self.success_response('text/plain', "tremmpi browse is running".encode())
             else:

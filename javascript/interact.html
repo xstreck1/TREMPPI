@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TREMPPI interact</title>
+        <meta charset="UTF-8">
+        
+        <script src="./common/jquery.min.js"></script>
+        <script src="./common/cytoscape.min.js"></script>
+        <script src="./common/paper-full.min.js"></script>
+        <script src="./common/jquery-ui.min.js"></script>
+        <script src="./common/jquery.qtip.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./common/jquery.qtip.min.css">
+
+        <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/common.js"></script>
+        <script src="./common/tremppi.report.js"></script>
+        <script src="./common/tremppi.qtip.js"></script>
+        <link rel="icon" type="image/x-icon" href="./favicon.ico">
+
+        <script src="./interact/values.js"></script>
+        <script src="./interact/helpers.js"></script>
+        <script src="./interact/load.js"></script>
+        <script src="./interact/graph.js"></script>
+        <script src="./interact/labels.js"></script>
+        <script src="./interact/server.js"></script>
+        <link rel="stylesheet" type="text/css" href="./interact/css.css">
+        
+        <script src="./common/tremppi.setup.js"></script>
+    </head>
+    <body class="interface"> 
+        <div class="title">TREMPPI report</div>
+        <div id="analysis_setup"></div>
+        <br />
+
+            <div id="graph_container" class="container" >
+                <div id="graph_select" class="my_block" ></div>
+                <div id="graph_differ" class="my_block" ></div>
+                <div id="graph_compare" class="my_block" ></div>
+            </div>
+            <div id="graph_labels" class="container">
+                <div id="label_select" class="my_block" >
+                    <canvas id="freq_select" class="legend" ></canvas>
+                </div>
+                <div id="label_differ" class="my_block" >
+                    <canvas id="freq_differ" class="legend" ></canvas>
+
+                </div>
+                <div id="label_compare" class="my_block" >
+                    <canvas id="freq_compare" class="legend" ></canvas>
+                </div>
+            </div>
+            <div id="graph_caption" class="container">
+                <div id="caption_select" class="my_block"  >
+                    <div class="caption">a) selected</div>
+                </div>
+                <div id="caption_differ" class="my_block" >
+                    <div class="caption">b) difference</div>
+                </div>
+                <div id="caption_compare" class="my_block" >
+                    <div class="caption">c) compared</div>
+                </div>
+            </div>
+            <div class="figure_desc" id="description">
+                graph figure label
+            </div>
+            <div id="dragger" style="display: block; text-align:center; background-color: black; color: white; font-style: italic" >
+                drag to resize
+            </div>
+        <div id="control_pad"></div>
+        <div id="control_panel">
+            Plot <button id="relative_button">relative</button> values.
+            Display <button id="weighted_button">weighted</button> frequency.
+        </div>
+    </body>
+</html>
