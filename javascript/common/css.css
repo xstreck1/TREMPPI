@@ -58,11 +58,14 @@ div.decription {
     font-family:monospace 
 }
 
-div.page_content {
-    cursor: pointer; 
+a.page_content {
+    display: block;
     background:#BBBBBB; 
     margin: 5px; 
-    padding: 5px; 
+    padding: 5px;
+}
+a.page_content:link {
+    text-decoration: none;
 }
 
 #file_list {
@@ -75,6 +78,7 @@ div.page_content {
 #widget_holder {
     margin: 0px 0px 0px 200px; 
     height: 100%;
+    overflow: auto;
 }
 
 #control_panel {

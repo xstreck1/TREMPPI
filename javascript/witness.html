@@ -15,18 +15,22 @@
         <script src="./common/tremppi.report.js"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
-        <link rel="stylesheet" type="text/css" href="./witness/witness.css">
+        <link rel="stylesheet" type="text/css" href="./witness/css.css">
         <script src="./witness/load.js"></script>
+        <script src="./witness/layout.js"></script>
         <script src="./witness/server.js"></script>
 
         <script src="./common/tremppi.setup.js"></script>
     </head>
-    <body class="interface"> 
-        <div class="title">TREMPPI witness</div>
-        <div id="analysis_setup"></div>
-        <br />
-        <div id="graph_holder" class="cy"></div>
-        <div id="control_pad"></div>
-        <div id="control_panel"></div>
+    <body > 
+        <div id="file_list" >
+            no files loaded
+        </div>
+        <div id="widget_holder" >        
+            <div id="analysis_setup"></div>
+            <div id="graph_object"></div>
+        </div>
+        <div id="control_panel">
+        </div>
     </body>
 </html>

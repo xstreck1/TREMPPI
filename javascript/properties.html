@@ -15,20 +15,28 @@
 
         <link rel="stylesheet" type="text/css" href="properties/css.css">
         <script src="./properties/property_manipulation.js"></script>
+        <script src="./properties/layout.js"></script>
         <script src="./properties/load.js"></script>
         <script src="./properties/server.js"></script>
 
         <script src="./common/tremppi.setup.js"></script>
     </head>
     <body class="interface"> 
-        <div class="title" >
-            Model checking properties 
+        <div id="file_list" >
+            no files loaded
         </div>
-        <div id="properties_container">
+        <div id="widget_holder" >
+            <div id="properties_container">
+                properties container
+            </div>
         </div>
-        <div id="control_pad"></div>
         <div id="control_panel">
-            SERVER IS NOT AVAILABLE! ANY CHANGES TO THIS DOCUMENT WILL NOT BE SAVED!
+            <div id="graph_selection">
+                selection
+            </div>
+            <div id="component_manipulation">
+                manipulation
+            </div>
         </div>
     </body>
 </html>

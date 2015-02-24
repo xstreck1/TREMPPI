@@ -28,7 +28,7 @@ $(window).ready(
 tremppi.setup.layout = function() {
     tremppi.setup.basicLayout();
     tremppi[self.widget].layout();
-}
+};
 
 tremppi.setup.setServer = function () {
     tremppi.setup.readFiles();
@@ -37,7 +37,7 @@ tremppi.setup.setServer = function () {
     }, tremppi.setup.refresh_interval);
 };
 
-tremppi.setup.basicLayout = function() {    
+tremppi.setup.basicLayout = function() {  
     $("#widget_holder").height($("body").height() - $("#control_panel").height());
 };
 
@@ -79,7 +79,7 @@ tremppi.setup.readFiles = function () {
                         return;
                     var res = result.split(",");
                     for (var i = 0; i < res.length; i++) {
-                        $("#file_list").append('<div class="page_content" id="' + res[i] + '" href="' + res[i] + '" ">' + res[i].slice(0, -5) + '</div>');
+                        $("#file_list").append('<a class="page_content" id="' + res[i] + '" href="' + res[i] + '">' + res[i].slice(0, -5) + '</a>');
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {

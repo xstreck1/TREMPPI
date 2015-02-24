@@ -1,56 +1,22 @@
 [
 	{
-		"data": [
-			{
-				"id": 0,
-				"values": {
-					"Measurement": "B>0",
-					"Stables": ""
-				}
-			},
-			{
-				"id": 1,
-				"values": {
-					"Measurement": "A>0&B>1",
-					"Stables": ""
-				}
-			}
-		],
 		"desc": [
 			{
 				"id": 0,
 				"values": {
-					"Experiment": "",
-					"Name": "test_ts",
+					"Name": "property_0",
 					"Type": "TimeSeries",
-					"Verify": true
+					"Experiment": "",
+					"Verify": "true"
 				}
 			}
-		]
-	},
-	{
+		],
 		"data": [
 			{
 				"id": 0,
 				"values": {
-					"Measurement": "A=1"
-				}
-			},
-			{
-				"id": 1,
-				"values": {
-					"Measurement": "A=0"
-				}
-			}
-		],
-		"desc": [
-			{
-				"id": 0,
-				"values": {
-					"Experiment": "",
-					"Name": "test_cycle",
-					"Type": "Cycle",
-					"Verify": true
+					"Measurement": "asd",
+					"Stables": ""
 				}
 			}
 		]

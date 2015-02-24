@@ -1,6 +1,5 @@
 tremppi.witness.load = function () {
-    var graph = cytoscape({
-        container: $("#graph_holder")[0],
+    var graph = $("#graph_object").cytoscape({
         layout: {
             name: tremppi.common.hasAllPositions(tremppi.data.elements.nodes) ? 'preset' : 'breadthfirst',
             circle: true
@@ -77,5 +76,5 @@ tremppi.witness.addQtip = function (graph) {
         }
         return text;
     };
-    tremppi.qtip.addOnHoverLabeller("graph_holder", elements, labeller);
+    tremppi.qtip.addOnHoverLabeller("graph_object", elements, labeller);
 };

@@ -1,98 +1,238 @@
 {
-   "elements" : {
-      "edges" : [
-         {
-            "data" : {
-               "id" : "0",
-               "source" : "02-1",
-               "target" : "12-2"
-            }
-         },
-         {
-            "data" : {
-               "id" : "1",
-               "source" : "11-1",
-               "target" : "12-2"
-            }
-         },
-         {
-            "data" : {
-               "id" : "2",
-               "source" : "12-1",
-               "target" : "12-2"
-            }
-         },
-         {
-            "data" : {
-               "id" : "3",
-               "source" : "12-2",
-               "target" : "02-3"
-            }
-         },
-         {
-            "data" : {
-               "id" : "4",
-               "source" : "12-2",
-               "target" : "11-3"
-            }
-         },
-         {
-            "data" : {
-               "id" : "5",
-               "source" : "12-2",
-               "target" : "12-3"
-            }
-         }
-      ],
-      "nodes" : [
-         {
-            "data" : {
-               "id" : "02-1"
-            }
-         },
-         {
-            "data" : {
-               "id" : "02-3"
-            }
-         },
-         {
-            "data" : {
-               "id" : "11-1"
-            }
-         },
-         {
-            "data" : {
-               "id" : "11-3"
-            }
-         },
-         {
-            "data" : {
-               "id" : "12-1"
-            }
-         },
-         {
-            "data" : {
-               "id" : "12-2"
-            }
-         },
-         {
-            "data" : {
-               "id" : "12-3"
-            }
-         }
-      ]
-   },
-   "setup" : {
-      "comparative" : false,
-      "compare" : "1",
-      "compared" : 26,
-      "components" : [ "A", "B" ],
-      "date" : "Wed Jan 14 14:53:11 2015",
-      "name" : "test_proj",
-      "pool_size" : 26,
-      "properties" : "test_ts,test_cycle,",
-      "select" : "1",
-      "selected" : 26
-   }
+	"elements": {
+		"nodes": [
+			{
+				"data": {
+					"id": "02-1"
+				},
+				"position": {
+					"x": 523.625,
+					"y": 269
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "02-3"
+				},
+				"position": {
+					"x": -6.625,
+					"y": 269.00000000000006
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "11-1"
+				},
+				"position": {
+					"x": 391.0625,
+					"y": 498.6049851783493
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "11-3"
+				},
+				"position": {
+					"x": 125.93749999999989,
+					"y": 39.39501482165079
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "12-1"
+				},
+				"position": {
+					"x": 125.93750000000006,
+					"y": 498.60498517834935
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "12-2"
+				},
+				"position": {
+					"x": 259.5,
+					"y": 269
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "12-3"
+				},
+				"position": {
+					"x": 1124.5280361050334,
+					"y": -115.30958036434517
+				},
+				"group": "nodes",
+				"removed": false,
+				"selected": true,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			}
+		],
+		"edges": [
+			{
+				"data": {
+					"id": "0",
+					"source": "02-1",
+					"target": "12-2"
+				},
+				"position": {},
+				"group": "edges",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "1",
+					"source": "11-1",
+					"target": "12-2"
+				},
+				"position": {},
+				"group": "edges",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "2",
+					"source": "12-1",
+					"target": "12-2"
+				},
+				"position": {},
+				"group": "edges",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "3",
+					"source": "12-2",
+					"target": "02-3"
+				},
+				"position": {},
+				"group": "edges",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "4",
+					"source": "12-2",
+					"target": "11-3"
+				},
+				"position": {},
+				"group": "edges",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			},
+			{
+				"data": {
+					"id": "5",
+					"source": "12-2",
+					"target": "12-3"
+				},
+				"position": {},
+				"group": "edges",
+				"removed": false,
+				"selected": false,
+				"selectable": true,
+				"locked": false,
+				"grabbed": false,
+				"grabbable": true,
+				"classes": ""
+			}
+		]
+	},
+	"setup": {
+		"comparative": false,
+		"compare": "1",
+		"compared": 26,
+		"components": [
+			"A",
+			"B"
+		],
+		"date": "Wed Jan 14 14:53:11 2015",
+		"name": "test_proj",
+		"pool_size": 26,
+		"properties": "test_ts,test_cycle,",
+		"select": "1",
+		"selected": 26
+	}
 }
-
