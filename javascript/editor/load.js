@@ -1,12 +1,13 @@
 tremppi.editor.load = function() { // on dom ready
     var selected_col = '#0000AA';
     
-    if (!tremppi.data.nodes)
+    if (typeof tremppi.data.nodes === 'undefined')
         tremppi.data.nodes = [];
-    if (!tremppi.data.edges)
+    if (typeof tremppi.data.edges === 'undefined')
         tremppi.data.edges = [];
         
 
+    $('#graph_object').html("");
     $('#graph_object').cytoscape({
         layout: {
             name: tremppi.common.hasAllPositions(tremppi.data.nodes) ? 'preset' : 'grid'
@@ -67,8 +68,6 @@ tremppi.editor.load = function() { // on dom ready
     // Set node drag reactions to all
     for (var j = 0; j < nodes.length; j++) 
         var selector = '#' + nodes[j].id();
-
-    graph.on('tap', tremppi.editor.tapFunction);
 
     tremppi.editor.activity_type = "selection";
     tremppi.editor.current_selection = {type: "graph", name: "regulatory", id: ""};

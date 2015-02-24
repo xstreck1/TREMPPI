@@ -30,21 +30,6 @@ var tremppi = {
                 }
             });
         },
-        // Executes the provided function in the case the server is running
-        addServerContent: function (content_function) {
-            $.ajax(
-                    {url: tremppi.common.getServerAddress(),
-                        success: function (result) {
-                            tremppi.common.server_available = true;
-                            content_function();
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            tremppi.common.server_available = false;
-                            console.log("Server not available");
-                        }
-                    }
-            );
-        },
         // test is a row is not empty
         isEmpty: function (columns) {
             for (var i = 0; i < columns.length; i++) {

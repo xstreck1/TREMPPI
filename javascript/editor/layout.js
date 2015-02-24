@@ -4,5 +4,7 @@
  * and open the template in the editor.
  */
 
-tremppi.browse.load = function () {
+tremppi.editor.layout = function() { 
+    $("#graph_object").cytoscape('get').resize();
+    // $("#graph_object").cytoscape('get').reset();
 };

@@ -23,22 +23,9 @@ div.subtitle {
 div.help { 
     text-align: center; 
     font-family: serif; 
-    font-size: 14pt; 
+    font-size: 20px; 
+    padding: 5px; 
     font-style: italic; 
-    padding: 4pt;
-}
-
-#control_panel {
-    background-color: #BBBBBB;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    padding: 4pt;
-    font-family: monospace;
-    font-size: 16pt; 
-    z-index: 1;
-    text-align: center;
 }
 
 div.controls { 
@@ -52,15 +39,48 @@ div.figure_desc {
 }
 
 button {
-    font-size: 14pt; 
+    font-size: 20px; 
+    margin: 2px;
 }
 
-body.interface {
-    margin: 37pt 5pt 0pt 5pt;
+body {
     height: 100%;
+    margin: 0;
+}
+
+html {
+    height: 100%;
+    margin: 0;
 }
 
 div.decription { 
-    font-size: 16pt; 
+    font-size: 20px; 
     font-family:monospace 
+}
+
+div.page_content {
+    cursor: pointer; 
+    background:#BBBBBB; 
+    margin: 5px; 
+    padding: 5px; 
+}
+
+#file_list {
+    position: absolute;
+    width: 200px; 
+    height: 100%;
+    background-color: #DDDDDD;
+}
+
+#widget_holder {
+    margin: 0px 0px 0px 200px; 
+    height: 100%;
+}
+
+#control_panel {
+    background-color: #DDDDDD;
+    margin: 0px 0px 0px 200px; 
+    font-family: monospace;
+    font-size: 20px; 
+    text-align: center;
 }

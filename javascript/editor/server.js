@@ -5,12 +5,14 @@
  */
 
 tremppi.editor.setServer = function () {
+    $("#graph_object").cytoscape('get').on('tap', tremppi.editor.tapFunction);
+    
     var setHelp = function (text) {
-        $("#control_panel").append('<div id="graph_help" class="help">' + text + '</div>');
+        $("#component_manipulation").append('<div id="graph_help" class="help">' + text + '</div>');
     };
-    $("#control_panel").html("");
+    $("#component_manipulation").html("");
     if (tremppi.editor.activity_type === "selection") {
-        $("#control_panel").append('<div id="graph_control" ></div>');
+        $("#component_manipulation").append('<div id="graph_control" ></div>');
         $("#graph_control").append('<button id="create">Create</button> ELEMENT / ');
         $("#create").click(function (event) {
             tremppi.editor.activity_type = "create";
@@ -28,6 +30,4 @@ tremppi.editor.setServer = function () {
     } else if (tremppi.editor.activity_type === "end_regulation") {
         setHelp("Click on a component to put a target of a REGULATION.");
     }
-
-    $("#control_pad").height(($("#control_panel").height() + 20) + "px");
 };

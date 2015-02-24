@@ -17,21 +17,26 @@
         <script src="./editor/graph_manipulation.js"></script>
         <script src="./editor/load.js"></script>
         <script src="./editor/server.js"></script>
+        <script src="./editor/layout.js"></script>
 
         <script src="./common/tremppi.setup.js"></script>
     </head>
-    <body class="interface"> 
-        <div class="title" id="title" >
-            <script type="text/javascript">document.write(tremppi.editor.model_name);</script> network 
+    <body class="interface">
+        <div id="file_list" >
+            no files loaded
         </div>
-        <div id="graph_object" >
+        <div id="widget_holder" >
+            <div id="graph_object" >
+                graph object
+            </div>
         </div>
-        <div id="graph_selection">
-            selection
-        </div>
-        <div id="control_pad"></div>
         <div id="control_panel">
-            SERVER IS NOT AVAILABLE! ANY CHANGES TO THIS DOCUMENT WILL NOT BE SAVED!
+            <div id="graph_selection">
+                selection
+            </div>
+            <div id="component_manipulation">
+                manipulation
+            </div>
         </div>
     </body>
 </html>
