@@ -55,19 +55,6 @@ tremppi.editor.load = function() { // on dom ready
                     'target-arrow-color': selected_col
                 }).update();
     tremppi.editor.graph = graph;
-    var nodes = graph.elements("node");
-    var edges = graph.elements("edge");
-
-    var clickFunction = function(type, id) {
-        return function() {
-            tremppi.editor.current_selection = {type: type, name: id};
-            tremppi.editor.setControlScheme("selection");
-        };
-    };
-
-    // Set node drag reactions to all
-    for (var j = 0; j < nodes.length; j++) 
-        var selector = '#' + nodes[j].id();
 
     tremppi.editor.activity_type = "selection";
     tremppi.editor.current_selection = {type: "graph", name: "regulatory", id: ""};

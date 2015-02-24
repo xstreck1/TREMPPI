@@ -85,8 +85,10 @@ tremppi.interact.Graph = {
                     data.line_style = 'dashed';
                 }
             }
-            else
+            else {
+                data.line_style = 'solid';
                 data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
+            }
         }
 
         var selected_col = '#5555BB';

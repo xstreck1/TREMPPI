@@ -131,7 +131,7 @@ tremppi.editor.tapFunction = function (event) {
             tremppi.editor.current_selection.id = "";
         }
     }
-    tremppi.editor.setServer();
+    tremppi.editor.setControls();
     tremppi.editor.setSelectionScheme();
     tremppi.data = tremppi.editor.graph.json().elements;
     tremppi.common.save();
