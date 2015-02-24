@@ -27,7 +27,6 @@ th.header {
 
 #Select_table, #Compare_table {
     margin: auto;
-    padding: 5px;
 }
 
 table.selections { 
@@ -35,18 +34,12 @@ table.selections {
     border: 1px solid #CCB; 
     width: 100%; 
 }
-
 table.selections th { 
     background-color:  #E0E0E0; 
 }
 table.selections tr { 
     height: 30px;
 }
-
 table.selections td { 
     
-}
-
-#selection_holder {
-    padding: 5px;
 }

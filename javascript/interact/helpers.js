@@ -69,16 +69,6 @@ tremppi.interact.Helpers = {
             }
         };
     },
-    assignPositions: function (analysis) {
-        if (tremppi.data.setup.comparative) {
-            $('#' + analysis + '_select').css('width', '33%').css('left', '0%');
-            $('#' + analysis + '_differ').css('width', '33%').css('left', '33.5%');
-            $('#' + analysis + '_compare').css('width', '33%').css('left', '67%');
-        } else {
-            $('#' + analysis + '_select').css('width', '50%').css('left', '25%');
-        }
-        ;
-    },
     deactivateUnused: function ( analysis) {
         if (!tremppi.data.setup.comparative) {
             $('#' + analysis + '_differ').html("");

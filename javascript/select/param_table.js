@@ -70,7 +70,6 @@ tremppi.select.setTable = function () {
             } else {
                 $("#table_holder").empty();
                 $("#table_holder").append('<table id="Select_table" ></table>');
-                $("#table_holder").append('<br />');
                 make_table("Select");
                 $("#table_holder").append('<table id="Compare_table" ></table>');
                 make_table("Compare");

@@ -5,6 +5,7 @@
  */
 
 tremppi.report = {
+    selections : ["left", "mid", "right", "all"],
     addSetup : function(setup) {
         values = ["date", "name", "pool_size", "select", "selected", "compare", "compared" ];
         for (var i = 0; i < values.length; i++) {
@@ -15,4 +16,4 @@ tremppi.report = {
                     '</span></div>');
         }
     }
-}; 
+};

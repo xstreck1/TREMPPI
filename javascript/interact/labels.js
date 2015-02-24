@@ -109,7 +109,5 @@ tremppi.interact.Labels = {
             addEdgeWidth(config.types[id], papers[id], cys[id].zoom());
             addGradient(config.types[id], papers[id], id);
         }
-        // Prepare the holder
-        $('#graph_labels').css('padding-bottom', (35 + width_max) + 'px');
     }
 };

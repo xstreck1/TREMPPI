@@ -1,53 +1,292 @@
 {
-    "select": {
-        "elements": {
-            "edges": [
-                {
-                    "data": {
-                        "ExpectedFreq": 0.8888888888888888,
-                        "Frequency": 1.0,
-                        "Pearson": 0.6151932857938084,
-                        "Threshold": 1,
-                        "source": "A",
-                        "target": "B"
-                    }
-                },
-                {
-                    "data": {
-                        "ExpectedFreq": 0.8888888888888888,
-                        "Frequency": 1.0,
-                        "Pearson": 0.5064076271497242,
-                        "Threshold": 2,
-                        "source": "B",
-                        "target": "B"
-                    }
-                }
-            ],
-            "nodes": [
-                {
-                    "data": {
-                        "id": "A",
-                        "name": "A"
-                    }
-                },
-                {
-                    "data": {
-                        "id": "B",
-                        "name": "B"
-                    }
-                }
-            ]
-        }
-    },
-    "setup": {
-        "comparative": false,
-        "compare": "1",
-        "compared": 26,
-        "date": "Wed Jan 14 14:53:10 2015",
-        "name": "test_proj",
-        "pool_size": 26,
-        "select": "1",
-        "selected": 26
-    }
+	"select": {
+		"elements": {
+			"nodes": [
+				{
+					"data": {
+						"id": "A",
+						"name": "A"
+					},
+					"position": {
+						"x": 258.9163959550294,
+						"y": 317.2430218359677
+					},
+					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				},
+				{
+					"data": {
+						"id": "B",
+						"name": "B"
+					},
+					"position": {
+						"x": 252.94206353223666,
+						"y": 441.86345652927145
+					},
+					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": true,
+					"grabbable": true,
+					"classes": ""
+				}
+			],
+			"edges": [
+				{
+					"data": {
+						"ExpectedFreq": 0.8888888888888888,
+						"Frequency": 1,
+						"Pearson": 0.6151932857938084,
+						"Threshold": 1,
+						"source": "A",
+						"target": "B",
+						"color_mapper": 0.6151932857938084,
+						"width_mapper": 1,
+						"weight_mapper": 1.125,
+						"target_arrow_shape": "triangle",
+						"id": "e0"
+					},
+					"position": {},
+					"group": "edges",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				},
+				{
+					"data": {
+						"ExpectedFreq": 0.8888888888888888,
+						"Frequency": 1,
+						"Pearson": 0.5064076271497242,
+						"Threshold": 2,
+						"source": "B",
+						"target": "B",
+						"color_mapper": 0.5064076271497242,
+						"width_mapper": 1,
+						"weight_mapper": 1.125,
+						"target_arrow_shape": "triangle",
+						"id": "e1"
+					},
+					"position": {},
+					"group": "edges",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				}
+			]
+		}
+	},
+	"compare": {
+		"elements": {
+			"nodes": [
+				{
+					"data": {
+						"id": "A",
+						"name": "A"
+					},
+					"position": {
+						"x": 258.9163959550294,
+						"y": 317.2430218359677
+					},
+					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				},
+				{
+					"data": {
+						"id": "B",
+						"name": "B"
+					},
+					"position": {
+						"x": 252.94206353223666,
+						"y": 441.86345652927145
+					},
+					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				}
+			],
+			"edges": [
+				{
+					"data": {
+						"ExpectedFreq": 0.8888888888888888,
+						"Frequency": 1,
+						"Pearson": 0.6151932857938084,
+						"Threshold": 1,
+						"source": "A",
+						"target": "B",
+						"color_mapper": 0.6151932857938084,
+						"width_mapper": 1,
+						"weight_mapper": 1.125,
+						"target_arrow_shape": "triangle",
+						"id": "e4"
+					},
+					"position": {},
+					"group": "edges",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				},
+				{
+					"data": {
+						"ExpectedFreq": 0.8888888888888888,
+						"Frequency": 1,
+						"Pearson": 0.5064076271497242,
+						"Threshold": 2,
+						"source": "B",
+						"target": "B",
+						"color_mapper": 0.5064076271497242,
+						"width_mapper": 1,
+						"weight_mapper": 1.125,
+						"target_arrow_shape": "triangle",
+						"id": "e5"
+					},
+					"position": {},
+					"group": "edges",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				}
+			]
+		}
+	},
+	"differ": {
+		"elements": {
+			"nodes": [
+				{
+					"data": {
+						"id": "A",
+						"name": "A"
+					},
+					"position": {
+						"x": 258.9163959550294,
+						"y": 317.2430218359677
+					},
+					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				},
+				{
+					"data": {
+						"id": "B",
+						"name": "B"
+					},
+					"position": {
+						"x": 252.94206353223666,
+						"y": 441.86345652927145
+					},
+					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				}
+			],
+			"edges": [
+				{
+					"data": {
+						"ExpectedFreq": 0.8888888888888888,
+						"Frequency": 1,
+						"Pearson": 0.6151932857938084,
+						"Threshold": 1,
+						"source": "A",
+						"target": "B",
+						"color_mapper": 0.6151932857938084,
+						"width_mapper": 1,
+						"weight_mapper": 1.125,
+						"target_arrow_shape": "circle",
+						"line_style": "solid",
+						"id": "e2"
+					},
+					"position": {},
+					"group": "edges",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": "positive"
+				},
+				{
+					"data": {
+						"ExpectedFreq": 0.8888888888888888,
+						"Frequency": 1,
+						"Pearson": 0.5064076271497242,
+						"Threshold": 2,
+						"source": "B",
+						"target": "B",
+						"color_mapper": 0.5064076271497242,
+						"width_mapper": 1,
+						"weight_mapper": 1.125,
+						"target_arrow_shape": "circle",
+						"line_style": "solid",
+						"id": "e3"
+					},
+					"position": {},
+					"group": "edges",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": "positive"
+				}
+			]
+		}
+	},
+	"setup": {
+		"comparative": true,
+		"compare": "1",
+		"compared": 26,
+		"date": "Wed Jan 14 14:53:10 2015",
+		"name": "test_proj",
+		"pool_size": 26,
+		"select": "1",
+		"selected": 26
+	},
+	"relative": false,
+	"weighted": false
 }
-

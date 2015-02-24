@@ -1,3 +1,14 @@
+tremppi.interact.Values = {
+    caption_c: "a) statistical properties of the selected parametrizations set, c) properties of the compared parametrizations set, b) difference between the two. "
+            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
+            + "Blunt edges denote positive and arrows describe the negative correlation value in the graphs a) and c). "
+            + "In the graph b) the positive change in frequency is depicted by full edge, the negative by the dashed one. "
+            + "The dotted edge is used when the difference in frequency is zero.",
+    caption_nonc: "a) statistical properties of the selected parametrizations set. "
+            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
+            + "Blunt edges denote positive and arrows describe the negative correlation value. "
+};
+
 tremppi.interact.load = function () {
     // Set the types used
     config = {};
@@ -19,7 +30,6 @@ tremppi.interact.load = function () {
         loadGraph(config, config.types[i]);
     }
     var bg_color = '#888888';
-    tremppi.interact.Helpers.assignPositions("graph");
     tremppi.interact.Helpers.deactivateUnused("graph");
     $('#graph_container').css('height', '600px');
     for (var i = 0; i < config.types.length; i++) {
@@ -30,7 +40,6 @@ tremppi.interact.load = function () {
     tremppi.data.relative = false;
     tremppi.data.weighted = false;
     tremppi.interact.Graph.labelSwitch(config, tremppi.data.relative, tremppi.data.weighted);
-    tremppi.interact.Helpers.assignPositions("label");
     tremppi.interact.Helpers.deactivateUnused("label");
     $('#graph_labels').css('padding-bottom', '45px');
     labelRefresh = function () {
@@ -40,7 +49,6 @@ tremppi.interact.load = function () {
     tremppi.interact.Graph.synchronize(config, labelRefresh);
 
     // display captions
-    tremppi.interact.Helpers.assignPositions("caption");
     tremppi.interact.Helpers.deactivateUnused("caption");
 
     // Create the control buttons functions
@@ -80,19 +88,4 @@ tremppi.interact.load = function () {
 
     // Add setup data
     tremppi.report.addSetup(tremppi.data.setup);
-
-    // Create the resize dragger
-    var y_pos = $("#dragger").offset().top;
-    $("#dragger")
-            .draggable({axis: "y"})
-            .bind('dragstop', function (event) {
-                resizeViews(y_pos - $("#dragger").offset().top);
-                $("#dragger").css("top", "0px").css("left", "0px");
-                y_pos = $("#dragger").offset().top;
-            }).hover(function () {
-        $(this).css('cursor', 'move');
-    }, function () {
-        $(this).css('cursor', 'auto');
-    });
-
 };

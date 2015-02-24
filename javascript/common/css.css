@@ -1,25 +1,3 @@
-div.title {
-    font-family: serif; 
-    font-size: 24pt; 
-    text-align: center; 
-    text-transform: uppercase;
-    background-color: #BBBBBB;
-    top: 0px; left: 0pt;
-    position: fixed;
-    width: 100%;
-    z-index: 1;
-    padding: 2pt;
-}
-
-div.subtitle {
-    font-family: serif; 
-    font-size: 16pt; 
-    text-align: center; 
-    text-transform: uppercase;
-    background-color: #DDDDDD;
-    margin: 12pt 0 8pt 0;
-}
-
 div.help { 
     text-align: center; 
     font-family: serif; 
@@ -34,7 +12,6 @@ div.controls {
 }
 
 div.figure_desc { 
-    margin: 4pt;
     font-style:italic;
 }
 
@@ -82,9 +59,14 @@ a.page_content:link {
 }
 
 #control_panel {
-    background-color: #DDDDDD;
+    background-color: #CCCCCC;
     margin: 0px 0px 0px 200px; 
     font-family: monospace;
     font-size: 20px; 
     text-align: center;
+}
+
+#analysis_setup {
+    position: absolute;
+    z-index: 1;
 }

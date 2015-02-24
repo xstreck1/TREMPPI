@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 
-tremppi.editor.setServer = function () {
-    $("#graph_object").cytoscape('get').on('tap', tremppi.editor.tapFunction);
-    
-    var setHelp = function (text) {
+tremppi.editor.setServer = function () { 
+    $("#graph_object").cytoscape('get').on('tap', tremppi.editor.tapFunction); 
+    tremppi.editor.setControls();
+};
+
+tremppi.editor.setControls = function() {
+        var setHelp = function (text) {
         $("#component_manipulation").append('<div id="graph_help" class="help">' + text + '</div>');
     };
     $("#component_manipulation").html("");
@@ -30,4 +33,4 @@ tremppi.editor.setServer = function () {
     } else if (tremppi.editor.activity_type === "end_regulation") {
         setHelp("Click on a component to put a target of a REGULATION.");
     }
-};
+}
