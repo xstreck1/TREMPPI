@@ -85,5 +85,5 @@ else:
     port = DEFAULT_PORT
 replace_regex(join(DEST_PATH, "common","common.js"), "server_port: \\d*", "server_port: " + port)
 server = HTTPServer(('', int(port)), StoreHandler)
-webbrowser.open("http://localhost:" + port + "/editor.html")
+webbrowser.open("http://localhost:" + port + "/browse.html")
 server.serve_forever()
