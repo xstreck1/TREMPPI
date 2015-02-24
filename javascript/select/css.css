@@ -27,6 +27,7 @@ th.header {
 
 #Select_table, #Compare_table {
     margin: auto;
+    padding: 5px;
 }
 
 table.selections { 
@@ -44,4 +45,8 @@ table.selections tr {
 
 table.selections td { 
     
+}
+
+#selection_holder {
+    padding: 5px;
 }

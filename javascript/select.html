@@ -15,28 +15,35 @@
         <link rel="stylesheet" type="text/css" href="select/css.css">
         <script src="./select/param_table.js"></script>    
         <script src="./select/load.js"></script>
+        <script src="./select/layout.js"></script>
         <script src="./select/server.js"></script>      
-            
+
         <script src="./common/tremppi.setup.js"></script>
     </head>
-    <body class="interface">
-        <div class="title">parametrization list and selector</div>
-        <div id="table_holder">
-            lists of selected and compared parametrizations, available only with server
+    <body >
+
+        <div id="file_list" >
+            no files loaded
         </div>
-        <br/>
-        <div id="selection_holder">
-            selection holder
-        </div>
-        <div id="selection_desc" class="figure_desc">
+        <div id="widget_holder" >         
+            <div id="table_holder">
+                lists of selected and compared parametrizations, available only with server
+            </div>
+            <div id="selection_holder">
+                selection holder
+            </div>        
+            <div id="selection_desc" class="figure_desc">
             The above table contains possible conditions for execution of additional tools, in case they have the select and/or compare functionality. 
             Effect of chosen selections can be viewed in the tables above.
             The WHERE field describes the condition that must be met for a row to be selected. 
             The condition may consist of atoms built using any of {<, <=, >, >=, =, !=}, logical connectives {AND, OR, NOT} and braces.
+            </div>
         </div>
-        <div id="control_pad"></div>
         <div id="control_panel">
-            SERVER IS NOT AVAILABLE! ANY CHANGES TO THIS DOCUMENT WILL NOT BE SAVED!
         </div>
+
+
+
+
     </body>
 </html>
