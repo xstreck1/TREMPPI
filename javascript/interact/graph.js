@@ -139,7 +139,8 @@ tremppi.interact.Graph = {
             var max = config[type][rel_string][glyph].max;
             if (min === max) 
                 $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper, config[type][glyph + sign].max);
-            else $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
+            else 
+                $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
                     'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +
                     config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
         };

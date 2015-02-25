@@ -33,7 +33,9 @@ tremppi.interact.Labels = {
         for (var id = 0; id < config.types.length; id++) {
             cys[id] = $('#graph_' + config.types[id]).cytoscape('get');
             papers[id] = new paper.PaperScope();
-            papers[id].setup($('#freq_' + config.types[id])[0]);
+            var legend_height = Math.min(config[config.types[id]][width_type].max * cys[id].zoom() + 40, $("#data").height() / 3);
+            $('#legend_' + config.types[id]).height(legend_height);
+            papers[id].setup($('#legend_' + config.types[id])[0]);
         }
         var F_height = 40;
         var P_height = 20;
@@ -50,7 +52,6 @@ tremppi.interact.Labels = {
         var addEdgeWidth = function (type, paper, width_ratio) {
             paper.activate();
             var bar_height = F_height - 10;
-            width_max = Math.max(config[type][width_type].max * width_ratio, width_max);
             var bar_right = paper.view.viewSize.width - 70;
 
             // Create the bar
@@ -106,7 +107,6 @@ tremppi.interact.Labels = {
         };
 
         // Assign the papers
-        var width_max = 0;
         for (var id = 0; id < config.types.length; id++) {
             addEdgeWidth(config.types[id], papers[id], cys[id].zoom());
             addGradient(config.types[id], papers[id], id);
