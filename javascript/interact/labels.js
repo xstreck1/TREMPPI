@@ -21,7 +21,7 @@ tremppi.interact.Labels = {
         tremppi.qtip.addOnHoverLabeller("graph_" + type, edges, labeller);
     },
     loadLabels: function () {
-        var config = tremppi.interact.config;
+        var config = tremppi.data.config;
         
         var bar_left = 110;
         var num_of_decimals = 3;

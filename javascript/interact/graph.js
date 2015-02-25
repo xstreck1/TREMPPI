@@ -129,7 +129,7 @@ tremppi.interact.Graph = {
         });
     },
     // Change between relative and absolute values
-    labelSwitch: function (config) {
+    applyVisuals: function (config) {
         var rel_string = config.relative ? "relative" : "absolute";
         var width_type = config.weighted ? "weight" : "width";
 
@@ -137,7 +137,9 @@ tremppi.interact.Graph = {
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {
             var min = config[type][rel_string][glyph].min;
             var max = config[type][rel_string][glyph].max;
-            $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
+            if (min === max) 
+                $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper, config[type][glyph + sign].max);
+            else $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
                     'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +
                     config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
         };

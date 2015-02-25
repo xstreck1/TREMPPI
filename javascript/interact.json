@@ -8,15 +8,15 @@
 						"name": "A"
 					},
 					"position": {
-						"x": 231.0780734213097,
-						"y": 329.13230541807707
+						"x": 235.8826716950834,
+						"y": 228.70629060053835
 					},
 					"group": "nodes",
 					"removed": false,
 					"selected": false,
 					"selectable": true,
 					"locked": false,
-					"grabbed": false,
+					"grabbed": true,
 					"grabbable": true,
 					"classes": ""
 				},
@@ -26,8 +26,8 @@
 						"name": "B"
 					},
 					"position": {
-						"x": 1029.4955172717437,
-						"y": 347.020525879374
+						"x": 457.4121363593946,
+						"y": 190.7896829367783
 					},
 					"group": "nodes",
 					"removed": false,
@@ -290,5 +290,117 @@
 		"pool_size": 26,
 		"select": "1",
 		"selected": 26
+	},
+	"config": {
+		"types": [
+			"select"
+		],
+		"relative": false,
+		"weigthed": false,
+		"select": {
+			"absolute": {
+				"width": {
+					"min": 0,
+					"max": 1
+				},
+				"weight": {
+					"min": 0,
+					"max": 2
+				},
+				"color": {
+					"min": 0,
+					"max": 1
+				}
+			},
+			"relative": {
+				"width": {
+					"min": 1,
+					"max": 1
+				},
+				"weight": {
+					"min": 1.125,
+					"max": 1.125
+				},
+				"color": {
+					"min": 0.5064076271497242,
+					"max": 0.6151932857938084
+				}
+			},
+			"width": {
+				"min": 1,
+				"max": 10
+			},
+			"weight": {
+				"min": 1,
+				"max": 10
+			},
+			"color": {
+				"min": "yellow",
+				"max": "green"
+			}
+		},
+		"differ": {
+			"absolute": {
+				"width": {
+					"min": 0,
+					"max": 1
+				},
+				"weight": {
+					"min": 0,
+					"max": 2
+				},
+				"color": {
+					"min": 0,
+					"max": 1
+				}
+			},
+			"relative": {},
+			"width": {
+				"min": 1,
+				"max": 10
+			},
+			"weight": {
+				"min": 1,
+				"max": 10
+			},
+			"color_neg": {
+				"min": "yellow",
+				"max": "red"
+			},
+			"color_pos": {
+				"min": "yellow",
+				"max": "green"
+			}
+		},
+		"compare": {
+			"absolute": {
+				"width": {
+					"min": 0,
+					"max": 1
+				},
+				"weight": {
+					"min": 0,
+					"max": 2
+				},
+				"color": {
+					"min": 0,
+					"max": 1
+				}
+			},
+			"relative": {},
+			"width": {
+				"min": 1,
+				"max": 10
+			},
+			"weight": {
+				"min": 1,
+				"max": 10
+			},
+			"color": {
+				"min": "yellow",
+				"max": "red"
+			}
+		},
+		"setup": true
 	}
 }
