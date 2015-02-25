@@ -6,7 +6,7 @@
 
 tremppi.interact.Graph = {
     // Synchronization in between the graphs
-    synchronize: function (config, labelRefresh) {
+    synchronize: function (config) {
         var cys = [];
         for (var id = 0; id < config.types.length; id++) {
             cys[id] = $('#graph_' + config.types[id]).cytoscape('get');
@@ -43,7 +43,7 @@ tremppi.interact.Graph = {
                     cys[i].pan(graph.pan());
                     cys[i].zoom(graph.zoom());
                 }
-                labelRefresh();
+                tremppi.interact.Labels.loadLabels();
             };
         };
 
@@ -129,9 +129,9 @@ tremppi.interact.Graph = {
         });
     },
     // Change between relative and absolute values
-    labelSwitch: function (config, relative, weighted) {
-        var rel_string = relative ? "relative" : "absolute";
-        var width_type = weighted ? "weight" : "width";
+    labelSwitch: function (config) {
+        var rel_string = config.relative ? "relative" : "absolute";
+        var width_type = config.weighted ? "weight" : "width";
 
         // Create the mapper for the graph
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {

@@ -17,7 +17,6 @@
         <script src="./common/tremppi.qtip.js"></script>
         <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
-        <script src="./interact/helpers.js"></script>
         <script src="./interact/load.js"></script>
         <script src="./interact/graph.js"></script>
         <script src="./interact/labels.js"></script>
@@ -33,7 +32,6 @@
             no files loaded
         </div>
         <div id="widget_holder" >
-
             <div id="analysis_setup"></div>
             <div id="data">
                 <div id="container_select" class="container">
@@ -56,8 +54,12 @@
                 graph figure label
             </div>
             <div id="interact_controls" >
-                Plot <button id="relative_button">relative</button> values.
-                Display <button id="weighted_button">weighted</button> frequency.
+                <button id="setup_button">Hide</button>setup.
+                Plot<button id="relative_button">relative</button>values.
+                Display<button id="weighted_button">weighted</button>frequency.
+                <span id="selection_buttons">
+                    Display<button id="button_select">select</button><button id="button_differ">differ</button><button id="button_compare">compare</button><button id="button_all">all</button>.
+                </span>
             </div>
         </div>
         <div id="control_panel"></div>

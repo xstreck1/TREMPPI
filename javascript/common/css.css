@@ -55,7 +55,7 @@ a.page_content:link {
 #widget_holder {
     margin: 0px 0px 0px 200px; 
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 
 #control_panel {

@@ -9,83 +9,174 @@ tremppi.interact.Values = {
             + "Blunt edges denote positive and arrows describe the negative correlation value. "
 };
 
+tremppi.interact.config = {
+    types: [],
+    relative: false,
+    weigthed: false,
+    select: {
+        absolute: {
+            width: {min: 0, max: 1},
+            weight: {min: 0, max: 2},
+            color: {min: 0, max: 1}
+        },
+        relative: {},
+        width: {min: 1, max: 10},
+        weight: {min: 1, max: 10},
+        color: {min: "yellow", max: "green"}
+    },
+    differ: {
+        absolute: {
+            width: {min: 0, max: 1},
+            weight: {min: 0, max: 2},
+            color: {min: 0, max: 1}
+        },
+        relative: {},
+        width: {min: 1, max: 10},
+        weight: {min: 1, max: 10},
+        color_neg: {min: "yellow", max: "red"},
+        color_pos: {min: "yellow", max: "green"}
+    },
+    compare: {
+        absolute: {
+            width: {min: 0, max: 1},
+            weight: {min: 0, max: 2},
+            color: {min: 0, max: 1}
+        },
+        relative: {},
+        width: {min: 1, max: 10},
+        weight: {min: 1, max: 10},
+        color: {min: "yellow", max: "red"}
+    },
+    setup: true
+};
+
 tremppi.interact.load = function () {
-    // Set the types used
-    config = {};
-    if (tremppi.data.setup.comparative) {
-        config.types = ['select', 'differ', 'compare'];
-    } else {
-        config.types = ['select'];
-    }
+    var getBound = function (edges, param, fun, signed, weighted) {
+        if (signed && fun === "min")
+            return 0;
+
+        var result = fun === "min" ? Number.MAX_VALUE : Number.MIN_VALUE;
+
+        var min_func = signed ? function (x, y) {
+            var res = -1 * Math.max(Math.abs(x), Math.abs(y));
+            return res;
+        } : function (x, y) {
+            var res = Math.min(Math.abs(x), Math.abs(y));
+            return res;
+        };
+        var max_func = signed ? function (x, y) {
+            return Math.max(Math.abs(x), Math.abs(y));
+        } : function (x, y) {
+            var res = Math.max(Math.abs(x), Math.abs(y));
+            return res;
+        };
+
+        var cmp_function = fun === 'min' ? min_func : max_func;
+        for (var edge_no = 0; edge_no < edges.length; edge_no++) {
+            var value = edges[edge_no].data[param];
+            if (weighted)
+                value /= edges[edge_no].data.ExpectedFreq;
+            result = cmp_function(result, value);
+        }
+        return result;
+    };
+    // gives the ranges of values and their respective mapping
+    var configure = function (config, graph, type) {
+        config[type].relative = {
+            width: {
+                min: getBound(graph.edges, "Frequency", "min", false, false),
+                max: getBound(graph.edges, "Frequency", "max", false, false)},
+            weight: {
+                min: getBound(graph.edges, "Frequency", "min", false, true),
+                max: getBound(graph.edges, "Frequency", "max", false, true)},
+            color: {
+                min: getBound(graph.edges, "Pearson", "min", type === "differ", false),
+                max: getBound(graph.edges, "Pearson", "max", type === "differ", false)
+            }
+        };
+    };
+    // Re-layout if only one graph is selected
+    var selectClick = function (type) {
+        return function () {
+            for (var j = 0; j < config.types.length; j++) {
+                if (type === config.types[j]) {
+                    $("#container_" + config.types[j]).css("display", "block").css("left", "0").css("width", "100%");
+                    $("#graph_" + config.types[j]).cytoscape('get').resize();
+                } else {
+                    $("#container_" + config.types[j]).css("display", "none");
+                }
+            }
+            tremppi.interact.Labels.loadLabels();
+        };
+    };
+    var selectAll = function () {
+        for (var j = 0; j < config.types.length; j++) {
+            $("#container_" + config.types[j]).removeAttr('style');
+            $("#graph_" + config.types[j]).cytoscape('get').resize();
+        }
+        tremppi.interact.Labels.loadLabels();
+    };
 
     // load and display graphs
     var loadGraph = function (config, type)
     {
         var name = "graph_" + type;
         var graph = tremppi.data[type];
-        tremppi.interact.Helpers.configure(config, graph.elements, type);
+        configure(config, graph.elements, type);
         tremppi.interact.Graph.makeGraph(graph.elements, type);
     };
-    for (var i = 0; i < config.types.length; i++) {
+
+
+    // Set the types used
+    var config = tremppi.interact.config;
+    config.types = tremppi.data.setup.comparative ? ['select', 'differ', 'compare'] : ['select'];
+
+    // Add setup data
+    tremppi.report.addSetup(tremppi.data.setup);
+
+    for (var i = 0; i < config.types.length; i++)
         loadGraph(config, config.types[i]);
-    }
-    var bg_color = '#888888';
-    tremppi.interact.Helpers.deactivateUnused("graph");
-    $('#graph_container').css('height', '600px');
-    for (var i = 0; i < config.types.length; i++) {
-        $('#graph_' + config.types[i]).css('background-color', bg_color);
+    if (tremppi.data.setup.comparative)
+        tremppi.interact.Graph.synchronize(config);
+    else {
+        $("#container_differ").css("display", "none");
+        $("#container_compare").css("display", "none");
+        $("#container_select").css("display", "block").css("left", "0").css("width", "100%");
+        $("#graph_select").cytoscape('get').resize();
     }
 
     // compute and display lables
-    tremppi.data.relative = false;
-    tremppi.data.weighted = false;
-    tremppi.interact.Graph.labelSwitch(config, tremppi.data.relative, tremppi.data.weighted);
-    tremppi.interact.Helpers.deactivateUnused("label");
+    tremppi.interact.Graph.labelSwitch(config);
     $('#graph_labels').css('padding-bottom', '45px');
-    labelRefresh = function () {
-        tremppi.interact.Labels.loadLabels(config, tremppi.data.relative);
-    };
-    $(window).resize(labelRefresh);
-    tremppi.interact.Graph.synchronize(config, labelRefresh);
 
     // display captions
-    tremppi.interact.Helpers.deactivateUnused("caption");
-
-    // Create the control buttons functions
-    $("#relative_button").click(function () {
-        tremppi.data.relative = !tremppi.data.relative;
-        tremppi.interact.Graph.labelSwitch(config, tremppi.data.relative, tremppi.data.weighted);
-        tremppi.interact.Labels.loadLabels(config, tremppi.data.relative, tremppi.data.weighted);
-        this.innerHTML = tremppi.data.relative ? "absolute" : "relative";
-    });
-    $("#weighted_button").click(function () {
-        tremppi.data.weighted = !tremppi.data.weighted;
-        tremppi.interact.Graph.labelSwitch(config, tremppi.data.relative, tremppi.data.weighted);
-        tremppi.interact.Labels.loadLabels(config, tremppi.data.relative, tremppi.data.weighted);
-        this.innerHTML = tremppi.data.weighted ? "total" : "weighted";
-    });
-    var resizeViews = function (change) {
-        var height = $('#graph_container').css('padding-bottom');
-        height = height.replace(new RegExp('[^\\d.]', "g"), '');
-        height = (height - change) + "px";
-        $('#graph_container').css('padding-bottom', height);
-        for (var i = 0; i < config.types.length; i++) {
-            $('#graph_' + config.types[i]).cytoscape('get').resize();
-        }
-    };
-
-    $("#copy_graph").click(function () {
-        for (var i = 0; i < config.types.length; i++) {
-            var cy = $('#graph_' + config.types[i]).cytoscape('get');
-            tremppi.data[config.types[i]] = cy.json();
-        }
-        tremppi.common.promptWithContent("report");
-    });
-
     $("#description").html((
             (tremppi.data.setup.comparative) ? tremppi.interact.Values.caption_c : tremppi.interact.Values.caption_nonc)
             + tremppi.interact.Values.caption_common);
 
-    // Add setup data
-    tremppi.report.addSetup(tremppi.data.setup);
+    // Create the control buttons functions
+    $("#setup_button").click(function() {
+        config.setup = !config.setup;
+        $("#analysis_setup").css("display", config.setup ? "block" : "none"); 
+        $("#setup_button").html(config.setup ? "Hide" : "Show");
+    });
+    $("#relative_button").click(function () {
+        config.relative = !config.relative;
+        tremppi.interact.Graph.labelSwitch(config);
+        tremppi.interact.Labels.loadLabels(config);
+        this.innerHTML = tremppi.config.relative ? "absolute" : "relative";
+    });
+    $("#weighted_button").click(function () {
+        config.weighted = !config.weighted;
+        tremppi.interact.Graph.labelSwitch(config);
+        tremppi.interact.Labels.loadLabels(config);
+        this.innerHTML = config.weighted ? "total" : "weighted";
+    });
+    if (tremppi.data.setup.comparative) {
+        for (var i = 0; i < config.types.length; i++)
+            $("#button_" + config.types[i]).click(selectClick(config.types[i]));
+        $("#button_all").click(selectAll);
+    } else {
+        $("#selection_buttons").html("");
+    }
 };

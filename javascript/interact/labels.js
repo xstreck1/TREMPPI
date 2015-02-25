@@ -20,11 +20,13 @@ tremppi.interact.Labels = {
 
         tremppi.qtip.addOnHoverLabeller("graph_" + type, edges, labeller);
     },
-    loadLabels: function (config, relative, weighted) {
+    loadLabels: function () {
+        var config = tremppi.interact.config;
+        
         var bar_left = 110;
         var num_of_decimals = 3;
-        var rel_string = relative ? "relative" : "absolute";
-        var width_type = weighted ? "weight" : "width";
+        var rel_string = config.relative ? "relative" : "absolute";
+        var width_type = config.weighted ? "weight" : "width";
 
         var cys = [];
         var papers = [];

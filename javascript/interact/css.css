@@ -4,7 +4,7 @@
 }
 
 div.container {
-    width: 33%;
+    width: 33.333%;
     height: 100%;
     position: absolute;
 }
@@ -16,16 +16,18 @@ div.container {
 
 #container_differ {
     top: 0px;
-    left: 33.5%;
+    left: 33.333%;
 }
 
 #container_compare {
     top: 0px;
-    left: 67%; 
+    left: 66.666%; 
 }
 
 div.graph {
     height: 100%;
+    border: 1px black solid;
+    background-color: #999999;
 }
 
 canvas.legend { 
@@ -42,6 +44,8 @@ div.caption {
     width: 100%
 }
 
-#selection_controls {
+#interact_controls {
     text-align: center;
+    font-family: monospace;
+    font-size: 20px; 
 }
