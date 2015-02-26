@@ -5,13 +5,13 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
-#include "analysis/regulatory_graph.hpp"
+#include "analysis/statistical_analysis.hpp"
 #include "io/output.hpp"
 #include "io/interact_options.hpp"
 
 // TODO: disable regulatory if not -r
-int tremppi_interact(int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<InteractOptions>("tremppi_interact", argc, argv);
+int tremppi_function(int argc, char ** argv) {
+	bpo::variables_map po = TremppiSystem::initiate<FunctionOptions>("tremppi_function", argc, argv);
 	Logging logging;
 
 	Json::Value out;
@@ -25,7 +25,7 @@ int tremppi_interact(int argc, char ** argv) {
 		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Copy the data
-		FileManipulation::copyAnalysisFiles(TremppiSystem::WORK_PATH / ("interact_" + TimeManager::getTimeStamp()), "interact");
+		FileManipulation::copyAnalysisFiles(TremppiSystem::WORK_PATH / ("function_" + TimeManager::getTimeStamp()), "function");
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -35,31 +35,31 @@ int tremppi_interact(int argc, char ** argv) {
 		logging.exceptionMessage(e, 2);
 	}
 
-	map<string, RegsData> data_types;
+	map<string, FunsData> data_types;
 	try {
 
 
 		BOOST_LOG_TRIVIAL(info) << "Computing interaction graph data.";
-		data_types["select"] = RegsData();
+		data_types["select"] = FunsData();
 		if (out["setup"]["comparative"].asBool()) {
-			data_types["compare"] = RegsData();
-			data_types["differ"] = RegsData();
+			data_types["compare"] = FunsData();
+			data_types["differ"] = FunsData();
 		}
 
 		logging.newPhase("Harvesting component", reg_infos.size());
 		for (const RegInfo & reg_info : reg_infos) {
 			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
-			data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
+			data_types["select"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 			// Get the statistics for the compare selection
 			if (out["setup"]["comparative"].asBool()) {
 				sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
-				data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
+				data_types["compare"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
 			}
 			logging.step();
 		}
 		// Compute difference
 		if (out["setup"]["comparative"].asBool())
-			data_types["differ"] = move(RegulatoryGraph::diff(data_types["select"], data_types["compare"]));
+			data_types["differ"] = move(StatisticalAnalysis::diff(data_types["select"], data_types["compare"]));
 
 	}
 	catch (exception & e) {
@@ -69,8 +69,8 @@ int tremppi_interact(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Building the JSON files.";
 		// For each graph create the graph data and add configuration details
-		for (auto & regs : data_types)
-			out[regs.first] = Output::regulatoryGraph(reg_infos, regs);
+		for (auto & funs : data_types)
+			out[funs.first] = Output::functionalData(funs);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 4);
@@ -81,7 +81,7 @@ int tremppi_interact(int argc, char ** argv) {
 		// Write the computed content
 		Json::StyledWriter writer;
 
-		bfs::path output_path = TremppiSystem::WORK_PATH / ("interact_" + TimeManager::getTimeStamp() + ".json");
+		bfs::path output_path = TremppiSystem::WORK_PATH / ("function" + TimeManager::getTimeStamp() + ".json");
 		fstream data_file(output_path.string(), ios::out);
 		if (!data_file)
 			throw runtime_error("Could not open " + output_path.string());
