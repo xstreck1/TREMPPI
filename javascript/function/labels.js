@@ -13,9 +13,7 @@ tremppi.function.Labels = {
         var labeller = function (my_data) {
             return "source: " + my_data.source + "<br />"
                     + "target: " + my_data.target + "<br />"
-                    + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />"
-                    + "frequency: " + my_data.Frequency.toFixed(num_of_decimals) + "<br />"
-                    + "expected frequency: " + my_data.ExpectedFreq.toFixed(num_of_decimals) + "<br />";
+                    + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />";
         };
 
         tremppi.qtip.addOnHoverLabeller("graph_" + type, edges, labeller);

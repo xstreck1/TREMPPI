@@ -74,21 +74,7 @@ tremppi.function.Graph = {
             data.color_mapper = Math.abs(data.Pearson);
             data.width_mapper = Math.abs(data.Frequency);
             data.weight_mapper = Math.abs(data.Frequency) / data.ExpectedFreq;
-            if (type === "differ") {
-                data.target_arrow_shape = 'circle';
-                graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
-                if (data.Frequency > 0) {
-                    data.line_style = 'solid';
-                } else if (data.Frequency === 0) {
-                    data.line_style = 'dotted';
-                } else {
-                    data.line_style = 'dashed';
-                }
-            }
-            else {
-                data.line_style = 'solid';
-                data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
-            }
+            data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
         }
 
         var selected_col = '#5555BB';
@@ -106,17 +92,7 @@ tremppi.function.Graph = {
                         'height': 25,
                         'font-size': 15
                     })
-                    .selector('edge')
-                    .css({
-                        'target-arrow-color': 'black',
-                        'target-arrow-shape': 'data(target_arrow_shape)',
-                        'line-style': 'data(line_style)',
-                        'content': 'data(Threshold)',
-                        'text-outline-color': 'black',
-                        'text-outline-width': 1,
-                        'color': 'white',
-                        'font-size': 25
-                    }).selector(':selected')
+                    .selector(':selected')
                     .css({
                         'border-color': selected_col,
                         'line-color': selected_col,

@@ -82,16 +82,12 @@ tremppi.function.load = function () {
     };
     // gives the ranges of values and their respective mapping
     var configure = function (config, graph, type) {
+        if (typeof graph.edges === 'undefined')
+            graph.edges = [];
         config[type].relative = {
             width: {
-                min: getBound(graph.edges, "Frequency", "min", false, false),
-                max: getBound(graph.edges, "Frequency", "max", false, false)},
-            weight: {
-                min: getBound(graph.edges, "Frequency", "min", false, true),
-                max: getBound(graph.edges, "Frequency", "max", false, true)},
-            color: {
-                min: getBound(graph.edges, "Pearson", "min", type === "differ", false),
-                max: getBound(graph.edges, "Pearson", "max", type === "differ", false)
+                min: getBound(graph.edges, "Pearson", "min", false, false),
+                max: getBound(graph.edges, "Pearson", "max", false, false)
             }
         };
     };

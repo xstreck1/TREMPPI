@@ -68,7 +68,7 @@ int tremppi_validate(int argc, char ** argv) {
 		logging.exceptionMessage(e, 4);
 	}
 
-	if (po.count("check_only") > 0)
+	if (po.count("check-only") > 0)
 		return 0;
 
 	// Conduct the check for each of the properties

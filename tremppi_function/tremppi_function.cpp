@@ -32,8 +32,8 @@ int tremppi_function(int argc, char ** argv) {
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
 		for (const RegInfo & reg_info : reg_infos) {
-			queries["selected"].emplace_back(DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db));
-			IF_CMP queries["compared"].emplace_back(DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db));
+			queries["select"].emplace_back(DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db));
+			IF_CMP queries["compare"].emplace_back(DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db));
 		}
 	}
 	catch (exception & e) {
@@ -43,18 +43,18 @@ int tremppi_function(int argc, char ** argv) {
 	map<string, FunsData> data_types;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Computing function graph data.";
-		data_types["selected"] = FunsData();
-		IF_CMP data_types["compared"] = FunsData();
+		data_types["select"] = FunsData();
+		IF_CMP data_types["compare"] = FunsData();
 		IF_CMP data_types["differ"] = FunsData();
 
-		Compute::deviation(reg_infos, out["setup"]["selected"].asInt(), queries["selected"], logging, data_types["selected"]);
-		IF_CMP Compute::deviation(reg_infos, out["setup"]["compared"].asInt(), queries["compared"], logging, data_types["compared"]);
+		Compute::deviation(reg_infos, out["setup"]["selected"].asInt(), queries["select"], logging, data_types["select"]);
+		IF_CMP Compute::deviation(reg_infos, out["setup"]["compared"].asInt(), queries["compare"], logging, data_types["compare"]);
 
-		Compute::correlation(reg_infos, out["setup"]["selected"].asInt(), queries["selected"], logging, data_types["selected"]);
-		IF_CMP Compute::correlation(reg_infos, out["setup"]["compared"].asInt(), queries["compared"], logging, data_types["compared"]);
+		Compute::correlation(reg_infos, out["setup"]["selected"].asInt(), queries["select"], logging, data_types["select"]);
+		IF_CMP Compute::correlation(reg_infos, out["setup"]["compared"].asInt(), queries["compare"], logging, data_types["compare"]);
 
 		// Compute difference
-		IF_CMP data_types["differ"] = move(StatisticalAnalysis::diff(data_types["selected"], data_types["compared"]));
+		IF_CMP data_types["differ"] = move(StatisticalAnalysis::diff(data_types["select"], data_types["compare"]));
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);

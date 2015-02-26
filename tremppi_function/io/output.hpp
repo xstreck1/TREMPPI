@@ -29,8 +29,8 @@ namespace Output {
 					continue;
 				Json::Value edge, data;
 
-				data["source"] = fun.info.ID;
-				data["target"] = funs.second[i].info.ID;
+				data["source"] = fun.info.name;
+				data["target"] = funs.second[i].info.name;
 				data["Pearson"] = fun.corrs[i]; 
 				
 				edge["data"] = data;
