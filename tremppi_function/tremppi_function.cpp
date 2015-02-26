@@ -5,9 +5,9 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
-#include "analysis/statistical_analysis.hpp"
+#include "analysis/compute.hpp"
 #include "io/output.hpp"
-#include "io/interact_options.hpp"
+#include "io/function_options.hpp"
 
 // TODO: disable regulatory if not -r
 int tremppi_function(int argc, char ** argv) {
@@ -17,6 +17,7 @@ int tremppi_function(int argc, char ** argv) {
 	Json::Value out;
 	RegInfos reg_infos;
 	sqlite3pp::database db;
+	map<string, vector<sqlite3pp::query>> queries;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
 		// Read filter conditions
@@ -30,6 +31,10 @@ int tremppi_function(int argc, char ** argv) {
 		// Read regulatory information
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
+		for (const RegInfo & reg_info : reg_infos) {
+			queries["selected"].emplace_back(DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db));
+			IF_CMP queries["compared"].emplace_back(DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db));
+		}
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 2);
@@ -37,30 +42,19 @@ int tremppi_function(int argc, char ** argv) {
 
 	map<string, FunsData> data_types;
 	try {
+		BOOST_LOG_TRIVIAL(info) << "Computing function graph data.";
+		data_types["selected"] = FunsData();
+		IF_CMP data_types["compared"] = FunsData();
+		IF_CMP data_types["differ"] = FunsData();
 
+		Compute::deviation(reg_infos, out["setup"]["selected"].asInt(), queries["selected"], logging, data_types["selected"]);
+		IF_CMP Compute::deviation(reg_infos, out["setup"]["compared"].asInt(), queries["compared"], logging, data_types["compared"]);
 
-		BOOST_LOG_TRIVIAL(info) << "Computing interaction graph data.";
-		data_types["select"] = FunsData();
-		if (out["setup"]["comparative"].asBool()) {
-			data_types["compare"] = FunsData();
-			data_types["differ"] = FunsData();
-		}
+		Compute::correlation(reg_infos, out["setup"]["selected"].asInt(), queries["selected"], logging, data_types["selected"]);
+		IF_CMP Compute::correlation(reg_infos, out["setup"]["compared"].asInt(), queries["compared"], logging, data_types["compared"]);
 
-		logging.newPhase("Harvesting component", reg_infos.size());
-		for (const RegInfo & reg_info : reg_infos) {
-			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
-			data_types["select"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
-			// Get the statistics for the compare selection
-			if (out["setup"]["comparative"].asBool()) {
-				sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
-				data_types["compare"].emplace_back(StatisticalAnalysis::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
-			}
-			logging.step();
-		}
 		// Compute difference
-		if (out["setup"]["comparative"].asBool())
-			data_types["differ"] = move(StatisticalAnalysis::diff(data_types["select"], data_types["compare"]));
-
+		IF_CMP data_types["differ"] = move(StatisticalAnalysis::diff(data_types["selected"], data_types["compared"]));
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
@@ -81,7 +75,7 @@ int tremppi_function(int argc, char ** argv) {
 		// Write the computed content
 		Json::StyledWriter writer;
 
-		bfs::path output_path = TremppiSystem::WORK_PATH / ("function" + TimeManager::getTimeStamp() + ".json");
+		bfs::path output_path = TremppiSystem::WORK_PATH / ("function_" + TimeManager::getTimeStamp() + ".json");
 		fstream data_file(output_path.string(), ios::out);
 		if (!data_file)
 			throw runtime_error("Could not open " + output_path.string());

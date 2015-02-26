@@ -1,36 +1,26 @@
 #pragma once
 
 #include <tremppi_common/network/definitions.hpp>
+#include <tremppi_common/database/sqlite3pp_func.hpp>
+#include <tremppi_common/general/common_functions.hpp>
 
 #include "../analysis/statistics.hpp"
 #include "../data/data_storage.hpp"
 
 namespace StatisticalAnalysis {
-	// Compute the correlation between the two regulatory functions in the parametrization space
-	/*vector<double> functionCorrelation(const size_t param_count, const Regs & regs, const Reg & current) {
-		vector<double> result;
-		
-		// Compute correlation with all the predecessors
-		for (const size_t o_ID : crange(current.ID)) {
-			double divident = Statistics::expected_prod_val(current.deviations, regs[o_ID].deviations);
-			double divisor = (current.std_dev * regs[o_ID].std_dev);
-			double correlation = (divisor == 0.) ? 0. : (divident / divisor);
-
-			result.emplace_back(correlation);
-		}
-
-		return result;
-	}*/
 
 	namespace {
+		double fun_bias(const sqlite3pp::query::rows & row) {
+			Levels params;
+			for (const int i : crange(row.column_count()))
+				params.emplace_back(row.get<ActLevel>(i));
+			return Statistics::expected_val(params);
+		}
+
 		double mean_val(const int step_count, sqlite3pp::query & selection) {
 			double result = 0;
-			for (const auto & row : selection) {
-				Levels params;
-				for (const int i : crange(selection.column_count()))
-					params.emplace_back(row.get<ActLevel>(i));
-				result += Statistics::expected_val(params);
-			}
+			for (const auto & row : selection)
+				result += fun_bias(row);
 			return result / step_count;
 		}
 
@@ -46,22 +36,26 @@ namespace StatisticalAnalysis {
 		}
 	}
 
-	// Compute the statistical values
-	/*void makeRegsStats(const size_t param_count, Regs & regs) {
-		for (Reg & reg : regs) {
-			// Compute mean
-			vector<double> means(param_count, 0);
-			transform(WHOLE(reg.params), means.begin(), Statistics::expected_val<ActLevel>);
-			reg.mean = Statistics::expected_val(means);
+	double covariance(const int step_count, const double m_mean, const double o_mean, sqlite3pp::query & m_qry, sqlite3pp::query & o_qry) {
+		double result = 0;
 
-			// Compute std deviation
-			reg.deviations = Statistics::deviations(means, reg.mean);
-			reg.std_dev = pow(Statistics::variance(reg.deviations), 0.5);
+		auto m_row = m_qry.begin();
+		auto o_row = o_qry.begin();
+		while (m_row != m_qry.end()) {
+			double m_bias = fun_bias(*m_row);
+			double o_bias = fun_bias(*o_row);
 
-			// Compute correlations with other functions
-			reg.correlations = functionCorrelation(param_count, regs, reg);
+			result += (m_bias - m_mean)*(o_bias - o_mean);
+
+			m_row++; o_row++;
 		}
-	}*/
+
+		return result / step_count;
+	}
+
+	double correlaction(const double covariance, const double m_std, const double o_std) {
+		return covariance / (m_std * o_std);
+	}
 
 	FunsData diff(const FunsData & sel, const FunsData & cmp) {
 		FunsData dif;
@@ -69,6 +63,9 @@ namespace StatisticalAnalysis {
 			dif.emplace_back(FunData({ sel[ID].info }));
 			// Compute mean
 			dif[ID].mean = sel[ID].mean - cmp[ID].mean;
+			dif[ID].std_dev = sel[ID].std_dev - cmp[ID].std_dev;
+			for (const int i : cscope(sel[ID].corrs))
+				dif[ID].corrs.push_back(sel[ID].corrs[i] - cmp[ID].corrs[i]);
 		}
 		return dif;
 	}

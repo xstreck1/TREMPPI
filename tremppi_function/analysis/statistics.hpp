@@ -3,7 +3,7 @@
 #include <tremppi_common/header.h>
 
 // Some basic statistical functions templates
-namespace Statistics{
+namespace Statistics {
 	//
 	template<typename T>
 	inline double expected_val(const vector<T> & data) {

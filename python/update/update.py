@@ -18,11 +18,12 @@ from tremppi_common.file_manipulation import copyanything, replace, normal_paths
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 
-folder_types = ["common", "properties", "editor", "select", "witness", "interact"]
+folder_types = ["common", "properties", "editor", "select", "witness", "interact", "function"]
 for type in folder_types:
     source = join(join(HOME_PATH, os.path.normpath("javascript/")), type)
     destination = join(DEST_PATH, type)
-    shutil.rmtree(destination)
+    if os.path.exists(destination):
+        shutil.rmtree(destination)
     copyanything(source, destination)
 
 
@@ -30,7 +31,7 @@ shutil.copy(join(HOME_PATH, os.path.normpath("javascript/editor.html")), DEST_PA
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_PATH)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/select.html")), DEST_PATH)
 files = os.listdir(DEST_PATH)
-report_types = ["witness", "interact"]
+report_types = ["witness", "interact", "function"]
 for type in report_types:
     type_files = [value for value in files if re.match(type + "_.*html", value)]
     for file in type_files:

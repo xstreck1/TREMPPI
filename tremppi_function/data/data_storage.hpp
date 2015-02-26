@@ -9,6 +9,7 @@ struct FunData {
 	// Statistical data
 	double mean;
 	double std_dev;
+	vector<double> corrs;
 };
 using FunsData = vector<FunData>;
 

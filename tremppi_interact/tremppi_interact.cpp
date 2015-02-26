@@ -52,8 +52,8 @@ int tremppi_interact(int argc, char ** argv) {
 			data_types["select"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["selected"].asInt(), sel_qry));
 			// Get the statistics for the compare selection
 			if (out["setup"]["comparative"].asBool()) {
-				sqlite3pp::query com_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
-				data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), com_qry));
+				sqlite3pp::query cmp_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["compare"].asString(), db);
+				data_types["compare"].emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["compared"].asInt(), cmp_qry));
 			}
 			logging.step();
 		}

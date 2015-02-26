@@ -23,14 +23,13 @@ if os.path.exists(DEST_CONTENT):
 
 # copy the data
 copyanything(join(HOME_PATH, os.path.normpath("javascript/common/")), join(DEST_CONTENT, "common"))
-copyanything(join(HOME_PATH, os.path.normpath("javascript/browse/")), join(DEST_CONTENT, "browse"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/properties/")), join(DEST_CONTENT, "properties"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/editor/")), join(DEST_CONTENT, "editor"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/select/")), join(DEST_CONTENT, "select"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/witness/")), join(DEST_CONTENT, "witness"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/interact/")), join(DEST_CONTENT, "interact"))
+copyanything(join(HOME_PATH, os.path.normpath("javascript/function/")), join(DEST_CONTENT, "function"))
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/editor.html")), DEST_CONTENT)
-shutil.copy(join(HOME_PATH, os.path.normpath("javascript/browse.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/select.html")), DEST_CONTENT)
 # data files are not copied - create new

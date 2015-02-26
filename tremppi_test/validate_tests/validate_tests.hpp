@@ -48,7 +48,10 @@ int basic_validate_test()  {
 	vector<string> arguments = { "--path", path, "--trace", "wit" };
 	ArgPtr arg_ptr(arguments);
 	createProperties(path);
-	return (tremppi_validate(arg_ptr.getArgc(), arg_ptr.getArgv()));
+	int res = tremppi_validate(arg_ptr.getArgc(), arg_ptr.getArgv());
+	fstream fout(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj" / "select.json").string(), ios::out);
+	fout << "[{\"id\": 0, \"values\" : {\"Selection\": \"C_test_ts\", \"Select\" : true, \"Compare\" : false}}]";
+	return res;
 }
 
 TEST_F(ValidateTest, Construction) {
