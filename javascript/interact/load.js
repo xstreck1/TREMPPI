@@ -9,48 +9,48 @@ tremppi.interact.Values = {
             + "Blunt edges denote positive and arrows describe the negative correlation value. "
 };
 
-var default_config = {
-    types: [],
-    relative: false,
-    weigthed: false,
-    select: {
-        absolute: {
-            width: {min: 0, max: 1},
-            weight: {min: 0, max: 2},
-            color: {min: 0, max: 1}
-        },
-        relative: {},
-        width: {min: 1, max: 10},
-        weight: {min: 1, max: 10},
-        color: {min: "yellow", max: "green"}
-    },
-    differ: {
-        absolute: {
-            width: {min: 0, max: 1},
-            weight: {min: 0, max: 2},
-            color: {min: 0, max: 1}
-        },
-        relative: {},
-        width: {min: 1, max: 10},
-        weight: {min: 1, max: 10},
-        color_neg: {min: "yellow", max: "red"},
-        color_pos: {min: "yellow", max: "green"}
-    },
-    compare: {
-        absolute: {
-            width: {min: 0, max: 1},
-            weight: {min: 0, max: 2},
-            color: {min: 0, max: 1}
-        },
-        relative: {},
-        width: {min: 1, max: 10},
-        weight: {min: 1, max: 10},
-        color: {min: "yellow", max: "red"}
-    },
-    setup: true
-};
-
 tremppi.interact.load = function () {
+    var default_config = {
+        types: [],
+        relative: false,
+        weigthed: false,
+        select: {
+            absolute: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: 0, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10},
+            color: {min: "yellow", max: "green"}
+        },
+        differ: {
+            absolute: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: -1, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10},
+            color_neg: {min: "yellow", max: "red"},
+            color_pos: {min: "yellow", max: "green"}
+        },
+        compare: {
+            absolute: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: 0, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10},
+            color: {min: "yellow", max: "red"}
+        },
+        setup: true
+    };
+
     var getBound = function (edges, param, fun, signed, weighted) {
         if (signed && fun === "min")
             return 0;
@@ -131,19 +131,19 @@ tremppi.interact.load = function () {
         configure(config, graph.elements, type);
         tremppi.interact.Graph.makeGraph(graph.elements, type);
     };
-    
+
     var setButtonLabels = function (config) {
         this.innerHTML = tremppi.data.config.relative ? "absolute" : "relative";
-        
+
     };
 
     // Set the types used
-    if (typeof tremppi.data.config === 'undefined'){
-        var config = { 
+    if (typeof tremppi.data.config === 'undefined') {
+        var config = {
             config: default_config
         };
         $.extend(tremppi.data, config);
-        
+
     }
     var config = tremppi.data.config;
     config.types = tremppi.data.setup.comparative ? ['select', 'differ', 'compare'] : ['select'];
@@ -153,7 +153,7 @@ tremppi.interact.load = function () {
 
     for (var i = 0; i < config.types.length; i++)
         loadGraph(config, config.types[i]);
-    tremppi.interact.Graph.synchronize(config);
+    tremppi.report.synchronize(config, tremppi.interact.Labels.loadLabels);
 
     if (!tremppi.data.setup.comparative)
         selectSelect();
@@ -192,9 +192,9 @@ tremppi.interact.load = function () {
         tremppi.interact.Labels.loadLabels(config);
         this.innerHTML = config.weighted ? "total" : "weighted";
     });
-    
+
     if (config.weighted) {
-        $("#relative_button").html("weighted");
+        $("#weighted_button").html("weighted");
     }
     if (tremppi.data.setup.comparative) {
         for (var i = 0; i < config.types.length; i++)

@@ -106,7 +106,6 @@ tremppi.function.Labels = {
 
         // Assign the papers
         for (var id = 0; id < config.types.length; id++) {
-            addEdgeWidth(config.types[id], papers[id], cys[id].zoom());
             addGradient(config.types[id], papers[id], id);
         }
     }

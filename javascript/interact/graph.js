@@ -5,66 +5,6 @@
  */
 
 tremppi.interact.Graph = {
-    // Synchronization in between the graphs
-    synchronize: function (config) {
-        var cys = [];
-        for (var id = 0; id < config.types.length; id++) {
-            cys[id] = $('#graph_' + config.types[id]).cytoscape('get');
-        }
-        var nodes = cys[0].elements("node");
-
-        // Sets all nodes with the id to the position given by graph
-        var moveFunction = function (graph, id) {
-            return function (evt) {
-                for (var i = 0; i < config.types.length; i++) {
-                    cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
-                    tremppi.data[config.types[i]]["elements"] = cys[i].json().elements;
-                }
-                tremppi.common.save();
-            };
-        };
-
-        // Set node drag reactions to all
-        for (var j = 0; j < nodes.length; j++) {
-            var id = '#' + nodes[j].id();
-            for (var i = 0; i < config.types.length; i++) {
-                cys[i].$(id).on('drag', moveFunction(cys[i], id));
-            }
-        }
-
-        // Create zooming function
-        var zoomFunction = function (graph, id) {
-            return function (evt) {
-                for (i = 0; i < config.types.length; i++) {
-                    if ((id === i)
-                            || (cys[i].zoom() === graph.zoom())
-                            || (cys[i].pan() === graph.pan()))
-                        continue;
-                    cys[i].pan(graph.pan());
-                    cys[i].zoom(graph.zoom());
-                }
-                tremppi.interact.Labels.loadLabels();
-            };
-        };
-
-        var panFunction = function (graph, id) {
-            return function (evt) {
-                for (i = 0; i < config.types.length; i++) {
-                    if ((id === i) || (cys[i].pan() === graph.pan()))
-                        continue;
-                    cys[i].pan(graph.pan());
-                }
-                ;
-            };
-        };
-        for (var i = 0; i < config.types.length; i++) {
-            cys[i].on('zoom', zoomFunction(cys[i], i));
-        }
-
-        for (var i = 0; i < config.types.length; i++) {
-            cys[i].on('mouseup', panFunction(cys[i], i));
-        }
-    },
     // Creates a single graph
     makeGraph: function (graph, type) {
         var name = 'graph_' + type;
@@ -138,7 +78,7 @@ tremppi.interact.Graph = {
             var min = config[type][rel_string][glyph].min;
             var max = config[type][rel_string][glyph].max;
             if (min === max) 
-                $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper, config[type][glyph + sign].max);
+                $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper, config[type][glyph + sign].max).update();
             else 
                 $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
                     'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +

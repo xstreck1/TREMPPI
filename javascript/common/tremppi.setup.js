@@ -18,8 +18,8 @@ $(window).ready(
                 function (data) {
                     // load data
                     tremppi.data = data;
-                    tremppi[self.widget].load();
                     tremppi.setup.addServerContent();
+                    tremppi[self.widget].load();
                     // set a function that will set the server functionality
                 }
         )
@@ -81,9 +81,6 @@ tremppi.setup.readFiles = function () {
                     for (var i = 0; i < res.length; i++) {
                         $("#file_list").append('<a class="page_content" id="' + res[i] + '" href="' + res[i] + '">' + res[i].slice(0, -5) + '</a>');
                     }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    $("#file_list").html('ERROR: could not load the files.');
                 }
             }
     );

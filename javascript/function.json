@@ -10,8 +10,8 @@
 						"name": "A"
 					},
 					"position": {
-						"x": 270.69354838709677,
-						"y": 445.31823821339947
+						"x": 247.29097229129388,
+						"y": 313.8909826401419
 					},
 					"group": "nodes",
 					"removed": false,
@@ -30,10 +30,30 @@
 						"name": "B"
 					},
 					"position": {
-						"x": 163.0519670806559,
-						"y": 504.261282326221
+						"x": 146.54415493078415,
+						"y": 651.8284581853155
 					},
 					"group": "nodes",
+					"removed": false,
+					"selected": false,
+					"selectable": true,
+					"locked": false,
+					"grabbed": false,
+					"grabbable": true,
+					"classes": ""
+				}
+			],
+			"edges": [
+				{
+					"data": {
+						"Pearson": -0.396025833912392,
+						"source": "B",
+						"target": "A",
+						"color_mapper": 0.396025833912392,
+						"id": "e0"
+					},
+					"position": {},
+					"group": "edges",
 					"removed": false,
 					"selected": false,
 					"selectable": true,
@@ -56,8 +76,8 @@
 						"name": "A"
 					},
 					"position": {
-						"x": 270.69354838709677,
-						"y": 445.31823821339947
+						"x": 247.29097229129388,
+						"y": 313.8909826401419
 					},
 					"group": "nodes",
 					"removed": false,
@@ -76,15 +96,15 @@
 						"name": "B"
 					},
 					"position": {
-						"x": 163.0519670806559,
-						"y": 504.261282326221
+						"x": 146.54415493078415,
+						"y": 651.8284581853155
 					},
 					"group": "nodes",
 					"removed": false,
 					"selected": false,
 					"selectable": true,
 					"locked": false,
-					"grabbed": true,
+					"grabbed": false,
 					"grabbable": true,
 					"classes": ""
 				}
@@ -96,9 +116,6 @@
 						"source": "B",
 						"target": "A",
 						"color_mapper": 0.396025833912392,
-						"width_mapper": null,
-						"weight_mapper": null,
-						"target_arrow_shape": "tee",
 						"id": "e1"
 					},
 					"position": {},
@@ -109,7 +126,7 @@
 					"locked": false,
 					"grabbed": false,
 					"grabbable": true,
-					"classes": ""
+					"classes": "negative"
 				}
 			]
 		}
@@ -125,15 +142,15 @@
 						"name": "A"
 					},
 					"position": {
-						"x": 270.69354838709677,
-						"y": 445.31823821339947
+						"x": 247.29097229129388,
+						"y": 313.8909826401419
 					},
 					"group": "nodes",
 					"removed": false,
 					"selected": false,
 					"selectable": true,
 					"locked": false,
-					"grabbed": false,
+					"grabbed": true,
 					"grabbable": true,
 					"classes": ""
 				},
@@ -145,8 +162,8 @@
 						"name": "B"
 					},
 					"position": {
-						"x": 163.0519670806559,
-						"y": 504.261282326221
+						"x": 146.54415493078415,
+						"y": 651.8284581853155
 					},
 					"group": "nodes",
 					"removed": false,
@@ -165,9 +182,6 @@
 						"source": "B",
 						"target": "A",
 						"color_mapper": 0.396025833912392,
-						"width_mapper": null,
-						"weight_mapper": null,
-						"target_arrow_shape": "tee",
 						"id": "e0"
 					},
 					"position": {},
@@ -187,7 +201,7 @@
 		"comparative": true,
 		"compare": "1",
 		"compared": 26,
-		"date": "Thu Feb 26 17:11:35 2015",
+		"date": "Fri Feb 27 12:52:22 2015",
 		"name": "test_proj",
 		"pool_size": 26,
 		"select": "1 AND(C_test_ts) ",
@@ -199,7 +213,7 @@
 			"differ",
 			"compare"
 		],
-		"relative": false,
+		"relative": true,
 		"weigthed": false,
 		"select": {
 			"absolute": {
@@ -207,17 +221,13 @@
 					"min": 0,
 					"max": 1
 				},
-				"weight": {
-					"min": 0,
-					"max": 2
-				},
 				"color": {
 					"min": 0,
 					"max": 1
 				}
 			},
 			"relative": {
-				"width": {
+				"color": {
 					"min": 0.396025833912392,
 					"max": 0.396025833912392
 				}
@@ -241,17 +251,13 @@
 					"min": 0,
 					"max": 1
 				},
-				"weight": {
-					"min": 0,
-					"max": 2
-				},
 				"color": {
-					"min": 0,
+					"min": -1,
 					"max": 1
 				}
 			},
 			"relative": {
-				"width": {
+				"color": {
 					"min": 0.396025833912392,
 					"max": 0.396025833912392
 				}
@@ -279,19 +285,15 @@
 					"min": 0,
 					"max": 1
 				},
-				"weight": {
-					"min": 0,
-					"max": 2
-				},
 				"color": {
 					"min": 0,
 					"max": 1
 				}
 			},
 			"relative": {
-				"width": {
-					"min": 1.7976931348623157e+308,
-					"max": 5e-324
+				"color": {
+					"min": 0.396025833912392,
+					"max": 0.396025833912392
 				}
 			},
 			"width": {

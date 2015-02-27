@@ -5,66 +5,6 @@
  */
 
 tremppi.function.Graph = {
-    // Synchronization in between the graphs
-    synchronize: function (config) {
-        var cys = [];
-        for (var id = 0; id < config.types.length; id++) {
-            cys[id] = $('#graph_' + config.types[id]).cytoscape('get');
-        }
-        var nodes = cys[0].elements("node");
-
-        // Sets all nodes with the id to the position given by graph
-        var moveFunction = function (graph, id) {
-            return function (evt) {
-                for (var i = 0; i < config.types.length; i++) {
-                    cys[i].$(id).renderedPosition(graph.$(id).renderedPosition());
-                    tremppi.data[config.types[i]]["elements"] = cys[i].json().elements;
-                }
-                tremppi.common.save();
-            };
-        };
-
-        // Set node drag reactions to all
-        for (var j = 0; j < nodes.length; j++) {
-            var id = '#' + nodes[j].id();
-            for (var i = 0; i < config.types.length; i++) {
-                cys[i].$(id).on('drag', moveFunction(cys[i], id));
-            }
-        }
-
-        // Create zooming function
-        var zoomFunction = function (graph, id) {
-            return function (evt) {
-                for (i = 0; i < config.types.length; i++) {
-                    if ((id === i)
-                            || (cys[i].zoom() === graph.zoom())
-                            || (cys[i].pan() === graph.pan()))
-                        continue;
-                    cys[i].pan(graph.pan());
-                    cys[i].zoom(graph.zoom());
-                }
-                tremppi.function.Labels.loadLabels();
-            };
-        };
-
-        var panFunction = function (graph, id) {
-            return function (evt) {
-                for (i = 0; i < config.types.length; i++) {
-                    if ((id === i) || (cys[i].pan() === graph.pan()))
-                        continue;
-                    cys[i].pan(graph.pan());
-                }
-                ;
-            };
-        };
-        for (var i = 0; i < config.types.length; i++) {
-            cys[i].on('zoom', zoomFunction(cys[i], i));
-        }
-
-        for (var i = 0; i < config.types.length; i++) {
-            cys[i].on('mouseup', panFunction(cys[i], i));
-        }
-    },
     // Creates a single graph
     makeGraph: function (graph, type) {
         var name = 'graph_' + type;
@@ -72,9 +12,9 @@ tremppi.function.Graph = {
         for (var edge_no = 0; edge_no < graph.edges.length; edge_no++) {
             var data = graph.edges[edge_no].data;
             data.color_mapper = Math.abs(data.Pearson);
-            data.width_mapper = Math.abs(data.Frequency);
-            data.weight_mapper = Math.abs(data.Frequency) / data.ExpectedFreq;
-            data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
+            
+            if (type === "differ")
+                graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
         }
 
         var selected_col = '#5555BB';
@@ -91,7 +31,9 @@ tremppi.function.Graph = {
                         'width': 100,
                         'height': 25,
                         'font-size': 15
-                    })
+                    }).selector('edge').css({
+                'width': 5
+            })
                     .selector(':selected')
                     .css({
                         'border-color': selected_col,
@@ -107,28 +49,24 @@ tremppi.function.Graph = {
     // Change between relative and absolute values
     applyVisuals: function (config) {
         var rel_string = config.relative ? "relative" : "absolute";
-        var width_type = config.weighted ? "weight" : "width";
 
         // Create the mapper for the graph
         var createMyMapping = function (config, type, rel_string, sign, selection, glyph, mapper) {
             var min = config[type][rel_string][glyph].min;
             var max = config[type][rel_string][glyph].max;
-            if (min === max) 
-                $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper, config[type][glyph + sign].max);
-            else 
+            if (min === max)
+                $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper, config[type][glyph + sign].max).update();
+            else
                 $('#graph_' + type).cytoscape('get').style().selector(selection).css(mapper,
-                    'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +
-                    config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
+                        'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +
+                        config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
         };
 
-        var setLabels = function (type) {
-            createMyMapping(config, type, rel_string, '', 'edge', width_type, 'width');
-
+        var setLabels = function (type) {            
             if (type === "differ") {
                 createMyMapping(config, type, rel_string, '_pos', 'edge.positive', 'color', 'line-color');
                 createMyMapping(config, type, rel_string, '_neg', 'edge.negative', 'color', 'line-color');
             } else {
-
                 createMyMapping(config, type, rel_string, '', 'edge', 'color', 'line-color');
             }
         };

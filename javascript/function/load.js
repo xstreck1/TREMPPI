@@ -1,56 +1,48 @@
 tremppi.function.Values = {
-    caption_c: "a) statistical properties of the selected parametrizations set, c) properties of the compared parametrizations set, b) difference between the two. "
-            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
-            + "Blunt edges denote positive and arrows describe the negative correlation value in the graphs a) and c). "
-            + "In the graph b) the positive change in frequency is depicted by full edge, the negative by the dashed one. "
-            + "The dotted edge is used when the difference in frequency is zero.",
-    caption_nonc: "a) statistical properties of the selected parametrizations set. "
-            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
-            + "Blunt edges denote positive and arrows describe the negative correlation value. "
-};
-
-var default_config = {
-    types: [],
-    relative: false,
-    weigthed: false,
-    select: {
-        absolute: {
-            width: {min: 0, max: 1},
-            weight: {min: 0, max: 2},
-            color: {min: 0, max: 1}
-        },
-        relative: {},
-        width: {min: 1, max: 10},
-        weight: {min: 1, max: 10},
-        color: {min: "yellow", max: "green"}
-    },
-    differ: {
-        absolute: {
-            width: {min: 0, max: 1},
-            weight: {min: 0, max: 2},
-            color: {min: 0, max: 1}
-        },
-        relative: {},
-        width: {min: 1, max: 10},
-        weight: {min: 1, max: 10},
-        color_neg: {min: "yellow", max: "red"},
-        color_pos: {min: "yellow", max: "green"}
-    },
-    compare: {
-        absolute: {
-            width: {min: 0, max: 1},
-            weight: {min: 0, max: 2},
-            color: {min: 0, max: 1}
-        },
-        relative: {},
-        width: {min: 1, max: 10},
-        weight: {min: 1, max: 10},
-        color: {min: "yellow", max: "red"}
-    },
-    setup: true
+    caption_c: "caption_c",
+    caption_nonc: "caption_nonc"
 };
 
 tremppi.function.load = function () {
+
+    var default_config = {
+        types: [],
+        relative: false,
+        weigthed: false,
+        select: {
+            absolute: {
+                width: {min: 0, max: 1},
+                color: {min: 0, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10},
+            color: {min: "yellow", max: "green"}
+        },
+        differ: {
+            absolute: {
+                width: {min: 0, max: 1},
+                color: {min: -1, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10},
+            color_neg: {min: "yellow", max: "red"},
+            color_pos: {min: "yellow", max: "green"}
+        },
+        compare: {
+            absolute: {
+                width: {min: 0, max: 1},
+                color: {min: 0, max: 1}
+            },
+            relative: {},
+            width: {min: 1, max: 10},
+            weight: {min: 1, max: 10},
+            color: {min: "yellow", max: "red"}
+        },
+        setup: true
+    };
+
     var getBound = function (edges, param, fun, signed, weighted) {
         if (signed && fun === "min")
             return 0;
@@ -85,7 +77,7 @@ tremppi.function.load = function () {
         if (typeof graph.edges === 'undefined')
             graph.edges = [];
         config[type].relative = {
-            width: {
+            color: {
                 min: getBound(graph.edges, "Pearson", "min", false, false),
                 max: getBound(graph.edges, "Pearson", "max", false, false)
             }
@@ -127,19 +119,18 @@ tremppi.function.load = function () {
         configure(config, graph.elements, type);
         tremppi.function.Graph.makeGraph(graph.elements, type);
     };
-    
+
     var setButtonLabels = function (config) {
         this.innerHTML = tremppi.data.config.relative ? "absolute" : "relative";
-        
+
     };
 
     // Set the types used
-    if (typeof tremppi.data.config === 'undefined'){
-        var config = { 
+    if (typeof tremppi.data.config === 'undefined') {
+        var config = {
             config: default_config
         };
         $.extend(tremppi.data, config);
-        
     }
     var config = tremppi.data.config;
     config.types = tremppi.data.setup.comparative ? ['select', 'differ', 'compare'] : ['select'];
@@ -149,7 +140,7 @@ tremppi.function.load = function () {
 
     for (var i = 0; i < config.types.length; i++)
         loadGraph(config, config.types[i]);
-    tremppi.function.Graph.synchronize(config);
+    tremppi.report.synchronize(config, tremppi.function.Labels.loadLabels);
 
     if (!tremppi.data.setup.comparative)
         selectSelect();
@@ -181,16 +172,6 @@ tremppi.function.load = function () {
     });
     if (config.relative) {
         $("#relative_button").html("absolute");
-    }
-    $("#weighted_button").click(function () {
-        config.weighted = !config.weighted;
-        tremppi.function.Graph.applyVisuals(config);
-        tremppi.function.Labels.loadLabels(config);
-        this.innerHTML = config.weighted ? "total" : "weighted";
-    });
-    
-    if (config.weighted) {
-        $("#relative_button").html("weighted");
     }
     if (tremppi.data.setup.comparative) {
         for (var i = 0; i < config.types.length; i++)
