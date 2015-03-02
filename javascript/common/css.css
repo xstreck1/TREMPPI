@@ -1,25 +1,3 @@
-div.help { 
-    text-align: center; 
-    font-family: serif; 
-    font-size: 20px; 
-    padding: 5px; 
-    font-style: italic; 
-}
-
-div.controls { 
-    text-align: center; 
-    padding: 4pt;
-}
-
-div.figure_desc { 
-    font-style:italic;
-}
-
-button {
-    font-size: 20px; 
-    margin: 2px;
-}
-
 body {
     height: 100%;
     margin: 0;
@@ -30,9 +8,11 @@ html {
     margin: 0;
 }
 
-div.decription { 
-    font-size: 20px; 
-    font-family:monospace 
+#file_list {
+    position: absolute;
+    width: 200px; 
+    height: 100%;
+    background-color: #DDDDDD;
 }
 
 a.page_content {
@@ -45,17 +25,10 @@ a.page_content:link {
     text-decoration: none;
 }
 
-#file_list {
-    position: absolute;
-    width: 200px; 
-    height: 100%;
-    background-color: #DDDDDD;
-}
-
 #widget_holder {
     margin: 0px 0px 0px 200px; 
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
 }
 
 #control_panel {
@@ -64,6 +37,11 @@ a.page_content:link {
     font-family: monospace;
     font-size: 20px; 
     text-align: center;
+}
+
+button {
+    font-size: 20px; 
+    margin: 2px;
 }
 
 #analysis_setup {

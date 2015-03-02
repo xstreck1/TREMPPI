@@ -7,108 +7,27 @@
 						"Bias": 0.5,
 						"Std": 0.5,
 						"id": "A",
-						"name": "A"
+						"name": "A",
+						"bias_mapper": 0.5
 					},
-					"position": {
-						"x": 247.29097229129388,
-						"y": 313.8909826401419
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "nodes"
 				},
 				{
 					"data": {
 						"Bias": 1,
 						"Std": 0.3922322702763681,
 						"id": "B",
-						"name": "B"
+						"name": "B",
+						"bias_mapper": 1
 					},
-					"position": {
-						"x": 146.54415493078415,
-						"y": 651.8284581853155
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "nodes"
 				}
 			],
-			"edges": [
-				{
-					"data": {
-						"Pearson": -0.396025833912392,
-						"source": "B",
-						"target": "A",
-						"color_mapper": 0.396025833912392,
-						"id": "e0"
-					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			]
+			"edges": []
 		}
 	},
 	"differ": {
 		"elements": {
-			"nodes": [
-				{
-					"data": {
-						"Bias": 0.2647058823529411,
-						"Std": -0.07581749700423662,
-						"id": "A",
-						"name": "A"
-					},
-					"position": {
-						"x": 247.29097229129388,
-						"y": 313.8909826401419
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"Bias": 0.08823529411764697,
-						"Std": 0.009429502775033738,
-						"id": "B",
-						"name": "B"
-					},
-					"position": {
-						"x": 146.54415493078415,
-						"y": 651.8284581853155
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			],
 			"edges": [
 				{
 					"data": {
@@ -118,63 +37,36 @@
 						"color_mapper": 0.396025833912392,
 						"id": "e1"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": "negative"
+					"classes": "negative",
+					"group": "edges"
+				}
+			],
+			"nodes": [
+				{
+					"data": {
+						"Bias": 0.2647058823529411,
+						"Std": -0.07581749700423662,
+						"id": "A",
+						"name": "A",
+						"bias_mapper": 0.2647058823529411
+					},
+					"group": "nodes"
+				},
+				{
+					"data": {
+						"Bias": 0.08823529411764697,
+						"Std": 0.009429502775033738,
+						"id": "B",
+						"name": "B",
+						"bias_mapper": 0.08823529411764697
+					},
+					"group": "nodes"
 				}
 			]
 		}
 	},
 	"select": {
 		"elements": {
-			"nodes": [
-				{
-					"data": {
-						"Bias": 0.7647058823529411,
-						"Std": 0.4241825029957634,
-						"id": "A",
-						"name": "A"
-					},
-					"position": {
-						"x": 247.29097229129388,
-						"y": 313.8909826401419
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": true,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"Bias": 1.088235294117647,
-						"Std": 0.4016617730514018,
-						"id": "B",
-						"name": "B"
-					},
-					"position": {
-						"x": 146.54415493078415,
-						"y": 651.8284581853155
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			],
 			"edges": [
 				{
 					"data": {
@@ -184,15 +76,29 @@
 						"color_mapper": 0.396025833912392,
 						"id": "e0"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "edges"
+				}
+			],
+			"nodes": [
+				{
+					"data": {
+						"Bias": 0.7647058823529411,
+						"Std": 0.4241825029957634,
+						"id": "A",
+						"name": "A",
+						"bias_mapper": 0.7647058823529411
+					},
+					"group": "nodes"
+				},
+				{
+					"data": {
+						"Bias": 1.088235294117647,
+						"Std": 0.4016617730514018,
+						"id": "B",
+						"name": "B",
+						"bias_mapper": 1.088235294117647
+					},
+					"group": "nodes"
 				}
 			]
 		}
@@ -213,7 +119,7 @@
 			"differ",
 			"compare"
 		],
-		"relative": true,
+		"relative": false,
 		"weigthed": false,
 		"select": {
 			"absolute": {
@@ -224,12 +130,20 @@
 				"color": {
 					"min": 0,
 					"max": 1
+				},
+				"bias": {
+					"min": 0,
+					"max": 1
 				}
 			},
 			"relative": {
 				"color": {
 					"min": 0.396025833912392,
 					"max": 0.396025833912392
+				},
+				"bias": {
+					"min": 0.7647058823529411,
+					"max": 1.088235294117647
 				}
 			},
 			"width": {
@@ -243,6 +157,10 @@
 			"color": {
 				"min": "yellow",
 				"max": "green"
+			},
+			"bias": {
+				"min": "black",
+				"max": "white"
 			}
 		},
 		"differ": {
@@ -254,12 +172,20 @@
 				"color": {
 					"min": -1,
 					"max": 1
+				},
+				"bias": {
+					"min": -1,
+					"max": 1
 				}
 			},
 			"relative": {
 				"color": {
 					"min": 0.396025833912392,
 					"max": 0.396025833912392
+				},
+				"bias": {
+					"min": 0.08823529411764697,
+					"max": 0.2647058823529411
 				}
 			},
 			"width": {
@@ -277,6 +203,10 @@
 			"color_pos": {
 				"min": "yellow",
 				"max": "green"
+			},
+			"bias": {
+				"min": "black",
+				"max": "white"
 			}
 		},
 		"compare": {
@@ -288,12 +218,20 @@
 				"color": {
 					"min": 0,
 					"max": 1
+				},
+				"bias": {
+					"min": 0,
+					"max": 1
 				}
 			},
 			"relative": {
 				"color": {
-					"min": 0.396025833912392,
-					"max": 0.396025833912392
+					"min": 1.7976931348623157e+308,
+					"max": 5e-324
+				},
+				"bias": {
+					"min": 0.5,
+					"max": 1
 				}
 			},
 			"width": {
@@ -307,6 +245,10 @@
 			"color": {
 				"min": "yellow",
 				"max": "red"
+			},
+			"bias": {
+				"min": "black",
+				"max": "white"
 			}
 		},
 		"setup": true

@@ -16,13 +16,13 @@ tremppi.properties.load = function() { // on dom ready
 
 tremppi.properties.createPropertyList = function () {
     // Create the holders
-    $("#properties_container").html("");
+    $("#widget_holder").html("");
     tremppi.properties.grids = [];
     var grids = tremppi.properties.grids;
     
     for (var i = 0; i < tremppi.data.length; i++) {
         var property_name = 'property_' + i;
-        $("#properties_container").append('<div id="' + property_name + '"></div>');
+        $("#widget_holder").append('<div id="' + property_name + '"></div>');
         $("#" + property_name).append('<div id="desc_' + i + '"></div>');
         $("#" + property_name).append('<div id="data_' + i + '"></div><br />');
     }

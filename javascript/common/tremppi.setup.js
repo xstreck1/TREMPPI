@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-var self = tremppi.common;
 tremppi.setup = {
     refresh_interval : 1000
 };
@@ -14,12 +13,12 @@ $.ajaxSetup({
 });
 //
 $(window).ready(
-        $.getJSON(self.data_file,
+        $.getJSON(tremppi.common.data_file,
                 function (data) {
                     // load data
                     tremppi.data = data;
                     tremppi.setup.addServerContent();
-                    tremppi[self.widget].load();
+                    tremppi[tremppi.common.widget].load();
                     // set a function that will set the server functionality
                 }
         )
@@ -27,7 +26,7 @@ $(window).ready(
 
 tremppi.setup.layout = function() {
     tremppi.setup.basicLayout();
-    tremppi[self.widget].layout();
+    tremppi[tremppi.common.widget].layout();
 };
 
 tremppi.setup.setServer = function () {
@@ -55,7 +54,7 @@ tremppi.setup.addServerContent = function (content_function) {
                         success: function (result) {
                             tremppi.common.server_available = true;
                             tremppi.setup.setServer();
-                            tremppi[self.widget].setServer();
+                            tremppi[tremppi.common.widget].setServer();
                             $(window).resize(tremppi.setup.layout);
                             $(window).trigger('resize');
                         },

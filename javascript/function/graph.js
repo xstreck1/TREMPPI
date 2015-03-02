@@ -16,6 +16,11 @@ tremppi.function.Graph = {
             if (type === "differ")
                 graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
         }
+        
+        for (var node_no = 0; node_no < graph.nodes.length; node_no++) {
+            var data = graph.nodes[node_no].data;
+            data.bias_mapper = Math.abs(data.Bias);
+        }
 
         var selected_col = '#5555BB';
         $('#' + name).cytoscape({
@@ -25,6 +30,9 @@ tremppi.function.Graph = {
                         'content': 'data(name)',
                         'text-valign': 'center',
                         'background-color': 'white',
+                        'text-outline-color': 'black',
+                        'text-outline-width': 1,
+                        'color': 'white',
                         'border-color': 'black',
                         'border-width': 1,
                         'shape': 'rectangle',
@@ -69,6 +77,7 @@ tremppi.function.Graph = {
             } else {
                 createMyMapping(config, type, rel_string, '', 'edge', 'color', 'line-color');
             }
+            createMyMapping(config, type, rel_string, '', 'node', 'bias', 'background-color');
         };
 
         for (var i = 0; i < config.types.length; i++) {

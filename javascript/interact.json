@@ -1,44 +1,6 @@
 {
 	"compare": {
 		"elements": {
-			"nodes": [
-				{
-					"data": {
-						"id": "A",
-						"name": "A"
-					},
-					"position": {
-						"x": 253.2738241700864,
-						"y": 260.07317464540165
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": true,
-					"grabbable": true,
-					"classes": ""
-				},
-				{
-					"data": {
-						"id": "B",
-						"name": "B"
-					},
-					"position": {
-						"x": 238.04874347485708,
-						"y": 518.882890763827
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
-				}
-			],
 			"edges": [
 				{
 					"data": {
@@ -55,15 +17,7 @@
 						"target_arrow_shape": "triangle",
 						"id": "e4"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "edges"
 				},
 				{
 					"data": {
@@ -80,59 +34,29 @@
 						"target_arrow_shape": "triangle",
 						"id": "e5"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "edges"
 				}
-			]
-		}
-	},
-	"differ": {
-		"elements": {
+			],
 			"nodes": [
 				{
 					"data": {
 						"id": "A",
 						"name": "A"
 					},
-					"position": {
-						"x": 253.2738241700864,
-						"y": 260.07317464540165
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "nodes"
 				},
 				{
 					"data": {
 						"id": "B",
 						"name": "B"
 					},
-					"position": {
-						"x": 238.04874347485708,
-						"y": 518.882890763827
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "nodes"
 				}
-			],
+			]
+		}
+	},
+	"differ": {
+		"elements": {
 			"edges": [
 				{
 					"data": {
@@ -149,15 +73,8 @@
 						"line_style": "dotted",
 						"id": "e2"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": "positive"
+					"classes": "positive",
+					"group": "edges"
 				},
 				{
 					"data": {
@@ -174,59 +91,30 @@
 						"line_style": "dotted",
 						"id": "e3"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": "negative"
+					"classes": "negative",
+					"group": "edges"
 				}
-			]
-		}
-	},
-	"select": {
-		"elements": {
+			],
 			"nodes": [
 				{
 					"data": {
 						"id": "A",
 						"name": "A"
 					},
-					"position": {
-						"x": 253.2738241700864,
-						"y": 260.07317464540165
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "nodes"
 				},
 				{
 					"data": {
 						"id": "B",
 						"name": "B"
 					},
-					"position": {
-						"x": 238.04874347485708,
-						"y": 518.882890763827
-					},
-					"group": "nodes",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "nodes"
 				}
-			],
+			]
+		}
+	},
+	"select": {
+		"elements": {
 			"edges": [
 				{
 					"data": {
@@ -243,15 +131,7 @@
 						"target_arrow_shape": "triangle",
 						"id": "e0"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "edges"
 				},
 				{
 					"data": {
@@ -268,15 +148,23 @@
 						"target_arrow_shape": "triangle",
 						"id": "e1"
 					},
-					"position": {},
-					"group": "edges",
-					"removed": false,
-					"selected": false,
-					"selectable": true,
-					"locked": false,
-					"grabbed": false,
-					"grabbable": true,
-					"classes": ""
+					"group": "edges"
+				}
+			],
+			"nodes": [
+				{
+					"data": {
+						"id": "A",
+						"name": "A"
+					},
+					"group": "nodes"
+				},
+				{
+					"data": {
+						"id": "B",
+						"name": "B"
+					},
+					"group": "nodes"
 				}
 			]
 		}
@@ -429,7 +317,6 @@
 				"max": "red"
 			}
 		},
-		"setup": true,
-		"weighted": false
+		"setup": true
 	}
 }

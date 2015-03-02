@@ -12,33 +12,39 @@ tremppi.function.load = function () {
         select: {
             absolute: {
                 width: {min: 0, max: 1},
-                color: {min: 0, max: 1}
+                color: {min: 0, max: 1},
+                bias: {min: 0, max: 1}
             },
             relative: {},
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color: {min: "yellow", max: "green"}
+            color: {min: "yellow", max: "green"},
+            bias: {min: "black", max: "white"}
         },
         differ: {
             absolute: {
                 width: {min: 0, max: 1},
-                color: {min: -1, max: 1}
+                color: {min: -1, max: 1},
+                bias: {min: -1, max: 1}
             },
             relative: {},
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
             color_neg: {min: "yellow", max: "red"},
-            color_pos: {min: "yellow", max: "green"}
+            color_pos: {min: "yellow", max: "green"},
+            bias: {min: "black", max: "white"}
         },
         compare: {
             absolute: {
                 width: {min: 0, max: 1},
-                color: {min: 0, max: 1}
+                color: {min: 0, max: 1},
+                bias: {min: 0, max: 1}
             },
             relative: {},
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color: {min: "yellow", max: "red"}
+            color: {min: "yellow", max: "red"},
+            bias: {min: "black", max: "white"}
         },
         setup: true
     };
@@ -80,6 +86,10 @@ tremppi.function.load = function () {
             color: {
                 min: getBound(graph.edges, "Pearson", "min", false, false),
                 max: getBound(graph.edges, "Pearson", "max", false, false)
+            }, 
+            bias: {
+                min: getBound(graph.nodes, "Bias", "min", false, false),
+                max: getBound(graph.nodes, "Bias", "max", false, false)
             }
         };
     };

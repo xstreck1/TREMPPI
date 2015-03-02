@@ -23,7 +23,7 @@ tremppi.interact.load = function () {
             relative: {},
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color: {min: "yellow", max: "green"}
+            color: {min: "yellow", max: "green"},
         },
         differ: {
             absolute: {

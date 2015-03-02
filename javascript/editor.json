@@ -8,8 +8,8 @@
 				"Label": "A:1"
 			},
 			"position": {
-				"x": 578.349884194043,
-				"y": 229.09516890675286
+				"x": 584.5224014785149,
+				"y": 218.75620245526255
 			},
 			"group": "nodes",
 			"removed": false,
@@ -28,8 +28,8 @@
 				"Label": "B:2"
 			},
 			"position": {
-				"x": 735.5154196170777,
-				"y": 217.11728033069156
+				"x": 731.8119092463945,
+				"y": 218.04315792336234
 			},
 			"group": "nodes",
 			"removed": false,
@@ -77,7 +77,7 @@
 			"position": {},
 			"group": "edges",
 			"removed": false,
-			"selected": false,
+			"selected": true,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,

@@ -16,6 +16,7 @@ namespace Output {
 			data["name"] = fun.info.name;
 			data["Bias"] = fun.mean;
 			data["Std"] = fun.std_dev;
+			data["Max"] = fun.info.max_activity;
 
 			node["data"] = data;
 			graph["elements"]["nodes"].append(node);
