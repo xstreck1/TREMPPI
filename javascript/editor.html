@@ -1,42 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TREMPPI network editor</title>
-        <meta charset=utf-8 />
-
-        <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
-        <script src="./common/editablegrid-2.0.1.js"></script>
-        <script src="./common/jquery.min.js"></script>
-        <script src="./common/cytoscape.js"></script>
+        <link rel="stylesheet" href="./libs/editablegrid-2.0.1.css" type="text/css" media="screen">
+        <script src="./libs/editablegrid-2.0.1.js"></script>
+        <script src="./libs/jquery.min.js"></script>
+        <script src="./libs/cytoscape.js"></script>
 
         <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/tremppi.js"></script>
         <script src="./common/common.js"></script>
-        <link rel="icon" type="image/x-icon" href="./favicon.ico">
-        <script src="./common/tremppi.setup.js"></script>
+        <script src="./common/page.js"></script>
         
-        <link rel="stylesheet" type="text/css" href="editor/css.css">
-        <script src="./editor/graph_manipulation.js"></script>
-        <script src="./editor/load.js"></script>
-        <script src="./editor/server.js"></script>
-        <script src="./editor/layout.js"></script>
-
+        <link rel="stylesheet" type="text/css" href="./editor/css.css">
+        <script src="./editor/widget.js"></script>
+        <script src="./editor/controls.js"></script>
+        <script src="./editor/page.js"></script>
     </head>
     <body>
-        <div id="file_list" >
-            no files loaded
-        </div>
-        <div id="widget_holder" >
-            <div id="graph_object" >
-                graph object
-            </div>
-        </div>
-        <div id="control_panel">
-            <div id="graph_selection">
-                selection
-            </div>
-            <div id="component_manipulation">
-                manipulation
-            </div>
-        </div>
+        <div id="files" ></div>
+        <div id="controls"> </div>
+        <div id="widget" ></div>
+        <div id="log_line" ></div>
+        <script>tremppi.page.pageDOM();</script>
     </body>
 </html>

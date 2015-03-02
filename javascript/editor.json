@@ -77,7 +77,7 @@
 			"position": {},
 			"group": "edges",
 			"removed": false,
-			"selected": true,
+			"selected": false,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,

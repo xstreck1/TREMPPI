@@ -5,6 +5,6 @@
  */
 
 tremppi.witness.layout = function() {
-   // $("#graph_object").height($("#widget_holder").height() - $("#analysis_setup").height());
+   // $("#graph_object").height($("#widget").height() - $("#analysis_setup").height());
    // $("#graph_object").cytoscape('get').resize();
 };

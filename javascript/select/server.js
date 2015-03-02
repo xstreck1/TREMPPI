@@ -9,11 +9,11 @@ tremppi.select.setServer = function () {
 };
 
 tremppi.select.addControls = function () {
-    $("#control_panel").empty();
-    $("#control_panel").append('<button onclick="tremppi.select.setTable()">APPLY</button> selections and show at most ');
-    $("#control_panel").append(' <input type="number" name="row_count" min="0" max="999" onchange="tremppi.select.val_changed()" /> rows.');
+    $("#controls").empty();
+    $("#controls").append('<button onclick="tremppi.select.setTable()">APPLY</button> selections and show at most ');
+    $("#controls").append(' <input type="number" name="row_count" min="0" max="999" onchange="tremppi.select.val_changed()" /> rows.');
     $('input[name="row_count"]').val(tremppi.select.row_count).css("font-family", "monospace").css("font-size", "14pt").css("size", "3");
-    $("#control_panel").append('<br/>');
+    $("#controls").append('<br/>');
     // Add the padding
-    $("#control_pad").height($("#control_panel").height() + 10);
+    $("#control_pad").height($("#controls").height() + 10);
 };
