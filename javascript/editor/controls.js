@@ -44,22 +44,22 @@ tremppi.editor.elementChanged = function (row_id, column_id, old_val, new_val, r
     element.data(val_name, new_val);
     tremppi.data = tremppi.editor.graph.json().elements;
     tremppi.save();
-    tremppi.editor.changeVisuals();
+    tremppi.editor.addValues(tremppi.editor.graph);
+    tremppi.editor.graph.style().update();
 };
 
 tremppi.editor.setButtons = function () {
     var setHelp = function (text) {
-        $("#component_manipulation").append('<div id="graph_help" class="help">' + text + '</div>');
+        $("#component_manipulation").append('<span id="graph_help" class="help">' + text + '</div>');
     };
     $("#component_manipulation").html("");
     if (tremppi.editor.activity_type === "selection") {
-        $("#component_manipulation").append('<div id="graph_control" ></div>');
-        $("#graph_control").append('<button id="create">Create</button> ELEMENT / ');
+        $("#component_manipulation").append('<button id="create">Create</button> ELEMENT / ');
         $("#create").click(function (event) {
             tremppi.editor.activity_type = "create";
             tremppi.editor.setButtons();
         });
-        $("#graph_control").append('<button id="delete">Delete</button> ELEMENTS');
+        $("#component_manipulation").append('<button id="delete">Delete</button> ELEMENTS');
         $("#delete").click(function (event) {
             tremppi.editor.activity_type = "delete";
             tremppi.editor.setButtons();

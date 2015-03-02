@@ -34,7 +34,7 @@ tremppi.editor.setStyle = function (graph) {
     }).update();
 };
 
-tremppi.editor.changeVisuals = function (graph) {
+tremppi.editor.addValues = function (graph) {
     var edges = graph.elements("edge");
     for (var i = 0; i < edges.length; i++) {
         var data = edges[i].data();

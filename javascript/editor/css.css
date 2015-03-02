@@ -23,5 +23,11 @@ table.selection th {  }
 input.invalid { background: red; color: #FDFDFD; }
 
 #component_manipulation {
-    padding: 5px;
+    min-height: 40px;
+    width: 100%;
+}
+
+#graph_selection {
+    min-height: 80px;
+    width: 100%;
 }
