@@ -1,3 +1,33 @@
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+tremppi.select.metadata = {
+    
+    selections: [
+        {name: "Selection", label: "WHERE", datatype: "string", editable: true},
+        {name: "Select", label: "SELECT", datatype: "boolean", editable: true},
+        {name: "Compare", label: "COMPARE", datatype: "boolean", editable: true}
+    ]
+};
+
+tremppi.select.emptyRow = function () {
+    return {
+        Selection: "",
+        Select: false,
+        Compare: false
+    };
+};
+
+tremppi.select.loadSelections = function () {
+    $("#selection_table").empty();
+    var selections_grid = new EditableGrid("Selection Table");
+    selections_grid.load({metadata: tremppi.select.metadata["selections"], data: tremppi.data});
+    selections_grid.renderGrid("selection_table", "selection");
+};
+
 tremppi.select.setTable = function () {
     // Adds non-zero counts of elements
     var set_counts = function (type) {
@@ -109,6 +139,6 @@ tremppi.select.selectionChanged = function (row_id, colum_id, old_val, new_val, 
             tremppi.data[row_i].values[column_name] = this.data[row_i].columns[column_i];
         }
     }
-    
+
     tremppi.common.save();
 };

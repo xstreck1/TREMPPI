@@ -5,5 +5,3 @@
  */
 
 
-tremppi.select.layout = function() {
-};

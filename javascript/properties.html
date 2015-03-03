@@ -1,40 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TREMPPI properties</title>
-        <meta charset=utf-8 />
-
-        <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
-        <script src="./common/editablegrid-2.0.1.js"></script>
-        <script src="./common/jquery.min.js"></script>
-        <script src="./common/cytoscape.min.js"></script>
+        <script src="./libs/jquery.min.js"></script>
+        <link rel="stylesheet" href="./libs/editablegrid-2.0.1.css" type="text/css" media="screen">
+        <script src="./libs/editablegrid-2.0.1.js"></script>
 
         <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/tremppi.js"></script>
         <script src="./common/common.js"></script>
-        <link rel="icon" type="image/x-icon" href="./favicon.ico">
-
-        <link rel="stylesheet" type="text/css" href="properties/css.css">
-        <script src="./properties/property_manipulation.js"></script>
-        <script src="./properties/layout.js"></script>
-        <script src="./properties/load.js"></script>
-        <script src="./properties/server.js"></script>
-
-        <script src="./common/tremppi.setup.js"></script>
+        <script src="./common/page.js"></script>
+        
+        <link rel="stylesheet" type="text/css" href="./select/css.css">
+        <script src="./properties/widget.js"></script>
+        <script src="./properties/controls.js"></script>
+        <script src="./properties/page.js"></script>
     </head>
-    <body class="interface"> 
-        <div id="files" >
-            no files loaded
-        </div>
-        <div id="widget" >
-                properties container
-        </div>
-        <div id="controls">
-            <div id="graph_selection">
-                selection
-            </div>
-            <div id="component_manipulation">
-                manipulation
-            </div>
-        </div>
+    <body>
+        <script>tremppi.page.pageDOM();</script>
     </body>
 </html>

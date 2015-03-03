@@ -22,6 +22,11 @@ table.selection tr { height: 25px; }
 table.selection th {  }
 input.invalid { background: red; color: #FDFDFD; }
 
+#controls {
+    height: 27px;
+    font-size: 20px;
+}
+
 #component_manipulation {
     min-height: 40px;
     width: 100%;

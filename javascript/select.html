@@ -1,45 +1,22 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-    <head>        
-        <title>TREMPPI select</title>
-        <meta charset="UTF-8">
-
-        <script src="./common/jquery.min.js"></script>
-        <link rel="stylesheet" href="./common/editablegrid-2.0.1.css" type="text/css" media="screen">
-        <script src="./common/editablegrid-2.0.1.js"></script>
+    <head>
+        <script src="./libs/jquery.min.js"></script>
+        <link rel="stylesheet" href="./libs/editablegrid-2.0.1.css" type="text/css" media="screen">
+        <script src="./libs/editablegrid-2.0.1.js"></script>
 
         <link rel="stylesheet" type="text/css" href="./common/css.css">
+        <script src="./common/tremppi.js"></script>
         <script src="./common/common.js"></script>
-        <link rel="icon" type="image/x-icon" href="./favicon.ico">
-
-        <link rel="stylesheet" type="text/css" href="select/css.css">
-        <script src="./select/param_table.js"></script>    
-        <script src="./select/load.js"></script>
-        <script src="./select/layout.js"></script>
-        <script src="./select/server.js"></script>      
-
-        <script src="./common/tremppi.setup.js"></script>
+        <script src="./common/page.js"></script>
+        
+        <link rel="stylesheet" type="text/css" href="./select/css.css">
+        <script src="./select/widget.js"></script>
+        <script src="./select/controls.js"></script>
+        <script src="./select/page.js"></script>
     </head>
-    <body >
-
-        <div id="files" >
-            no files loaded
-        </div>
-        <div id="widget" >         
-            <div id="table_holder">
-                lists of selected and compared parametrizations, available only with server
-            </div>
-            <div id="selection_holder">
-                selection holder
-            </div>        
-            <div id="selection_desc" class="figure_desc">
-            The above table contains possible conditions for execution of additional tools, in case they have the select and/or compare functionality. 
-            Effect of chosen selections can be viewed in the tables above.
-            The WHERE field describes the condition that must be met for a row to be selected. 
-            The condition may consist of atoms built using any of {<, <=, >, >=, =, !=}, logical connectives {AND, OR, NOT} and braces.
-            </div>
-        </div>
-        <div id="controls">
-        </div>
+    <body>
+        <script>tremppi.page.pageDOM();</script>
     </body>
 </html>

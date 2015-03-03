@@ -5,18 +5,23 @@
  */
 
 tremppi.page = {
-    page_list : ["editor", "select", "properties", "function", "interact", "witness"],
-    layout : function() {
-        $("#widget").height($("body").height() - $("#controls").height() - $("#log_line").height());  
-        $("#files").height($("body").height() - $("#log_line").height()); 
+    page_list: ["editor", "select", "properties", "function", "interact", "witness"],
+    layout: function () {
+        $("#widget").height($("body").height() - $("#controls").height() - $("#log_line").height());
+        $("#files").height($("body").height() - $("#log_line").height());
     },
-    pageDOM : function() {
+    pageDOM: function () {
+        $("body").append(
+                '<div id="files" ></div>' +
+                '<div id="controls"> </div>' +
+                '<div id="widget" ></div>' +
+                '<div id="log_line" ></div>');
         this.filesDOM();
         tremppi.widget.controlsDOM();
         tremppi.page.layout();
         tremppi.widget.widgetDOM();
     },
-    filesDOM : function() {
+    filesDOM: function () {
         for (var i = 0; i < this.page_list.length; i++) {
             var page = this.page_list[i];
             $("#files").append('<a class="page_content" id="' + page + '_link" href="' + page + '.html">' + page + '</a>');

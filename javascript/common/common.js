@@ -118,3 +118,11 @@ tremppi.report = {
         }
     }
 };
+tremppi.log = function (content, level) {
+    if (typeof level === "undefined")
+        level = "info";
+
+    var date = new Date();
+    $("#log_line").html("[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + content);
+    $("#log_line")[0].className = level;
+};
