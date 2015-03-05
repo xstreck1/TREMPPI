@@ -17,7 +17,7 @@ tremppi = {
             controlsJS: function () { },
             widgetJS: function () { },
             layout: function () { },
-            defaultData: function () { }
+            defaultData: { }
         };
     },
 // the setup function - sets globals, obtains data and adds server content, if possible
@@ -39,7 +39,7 @@ tremppi = {
             url: url,
             data: content,
             success: function (res) {
-                tremppi.log(tremppi.data_file + " saved successfully.");
+                tremppi.log(tremppi.widget_name + " saved successfully.");
             },
             fail: function (res) {
                 tremppi.log("DATA NOT SAVED!");
@@ -54,7 +54,7 @@ tremppi = {
             // load data
             tremppi.data = data;
             // add default content, if original not available
-            if (typeof (tremppi.data.configured) === 'undef' || tremppi.data.configured === false) {
+            if (typeof (tremppi.data.configured) === 'undefined' || tremppi.data.configured === false) {
                 $.extend(true, tremppi.data, tremppi.widget.defaultData);
                 tremppi.data.configured = true;
             }

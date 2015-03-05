@@ -9,8 +9,9 @@ and open the template in the editor.
     height: 100%;
 }
 
-table.selection { border-collapse: collapse;  margin: auto; }
-table.selection td, table.selection th { padding: 5px; border: 1px solid #000000; min-width: 200px;  }
-table.selection tr { height: 25px; }
-table.selection th {  }
-input.invalid { background: red; color: #FDFDFD; }
+button.erase_btn {
+    height: 18px;
+    padding: 0px;
+    margin: 0px;
+    font-size: 16px;
+}

@@ -5,11 +5,12 @@
  */
 
 tremppi.editor.setStyle = function (graph) {
-    var selected_col = '#0000AA';
+    var selected_col = "#FFA500";
 
     graph.style().selector('node').css({
         'content': 'data(Label)',
         'text-valign': 'center',
+        'color': 'black',
         'background-color': 'white',
         'border-color': 'black',
         'border-width': 1,
@@ -28,9 +29,7 @@ tremppi.editor.setStyle = function (graph) {
         'target-arrow-color': 'data(line_color)',
         'width': 2
     }).selector(':selected').css({
-        'border-color': selected_col,
-        'line-color': selected_col,
-        'target-arrow-color': selected_col
+        'color': selected_col
     }).update();
 };
 

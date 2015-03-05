@@ -8,12 +8,12 @@
 				"Label": "A:1"
 			},
 			"position": {
-				"x": 599.9161106749003,
+				"x": 599.7670673211016,
 				"y": 234.46224498458005
 			},
 			"group": "nodes",
 			"removed": false,
-			"selected": false,
+			"selected": true,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,
@@ -28,8 +28,8 @@
 				"Label": "B:2"
 			},
 			"position": {
-				"x": 746.3280779806839,
-				"y": 190.83516661475582
+				"x": 722.6159088873866,
+				"y": 188.00163697467627
 			},
 			"group": "nodes",
 			"removed": false,
@@ -67,11 +67,11 @@
 			"data": {
 				"source": "n1",
 				"target": "n1",
-				"Threshold": "2",
-				"Label": "Activating Only",
-				"line_style": "solid",
+				"Threshold": "1",
+				"Label": "Not Inhibiting",
+				"line_style": "dashed",
 				"line_color": "green",
-				"target_arrow_shape": "triangle",
+				"target_arrow_shape": "circle",
 				"id": "e1"
 			},
 			"position": {},

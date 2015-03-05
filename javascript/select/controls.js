@@ -4,4 +4,9 @@
  * and open the template in the editor.
  */
 
-
+tremppi.select.erase = function(entry_no) {
+    tremppi.data.records.splice(entry_no, 1);
+    w2ui['grid'].records = tremppi.data.records;
+    w2ui['grid'].refresh();    
+    tremppi.save();
+};

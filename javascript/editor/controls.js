@@ -42,7 +42,7 @@ tremppi.editor.addHelpField = function (text) {
 
 tremppi.editor.addControlButton = function (btn_function) {
     $("#controls").append('<button id="' + btn_function + '_btn" class="btn">' + btn_function + ' element</button>');
-    $("#" + btn_function + "_btn").click(function (event) {
+    $("#" + btn_function + "_btn").on('change', function (event) {
         tremppi.editor.activity_type = btn_function;
         tremppi.editor.setControls();
     });
