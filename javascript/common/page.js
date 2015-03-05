@@ -7,15 +7,19 @@
 tremppi.page = {
     page_list: ["editor", "select", "properties", "function", "interact", "witness"],
     layout: function () {
-        $("#widget").height($("body").height() - $("#controls").height() - $("#log_line").height());
-        $("#files").height($("body").height() - $("#log_line").height());
     },
-    pageDOM: function () {
-        $("body").append(
-                '<div id="files" ></div>' +
-                '<div id="controls"> </div>' +
-                '<div id="widget" ></div>' +
-                '<div id="log_line" ></div>');
+    pageDOM: function () {      
+        
+    var pstyle = 'border: 0px solid #dfdfdf;';
+        $('body').w2layout({
+                    name: 'layout',
+                    panels: [
+                        {type: 'left', style: pstyle, size: 200, content: '<div id="files" ></div>'},
+                        {type: 'main', style: pstyle, toolbar: {}, content: '<div id="widget" ></div>'},
+                        {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
+                    ]
+                });
+        
         this.filesDOM();
         tremppi.widget.controlsDOM();
         tremppi.page.layout();

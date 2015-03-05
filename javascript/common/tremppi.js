@@ -28,7 +28,6 @@ tremppi = {
         tremppi.data_file = tremppi.widget_name + ".json";
         tremppi.makeHead();
         $(window).ready(tremppi.load);
-        $(window).resize(tremppi.layout);
     },
     // Saves the variable to the respective file
     save: function () {
@@ -61,11 +60,8 @@ tremppi = {
             tremppi.widget.widgetJS();
             tremppi.widget.controlsJS();
             tremppi.log(tremppi.widget_name + " loaded.");
+            w2ui.layout.on('resize', tremppi.widget.layout);
         });
-    },
-    layout: function () {
-        tremppi.page.layout();
-        tremppi.widget.layout();
     },
     makeHead: function () {
         $("head").append(
