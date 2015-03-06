@@ -25,13 +25,12 @@ tremppi.editor.setPage = function () {
     // Save after drag
 
     tremppi.editor.setBasic();
-    tremppi.editor.activity_type = "selection";
-    tremppi.editor.current_selection = {type: "graph", name: "regulatory", id: ""};
     // tremppi.editor.setControls();
 };
 
 tremppi.editor.setData = function () {
     tremppi.editor.graph.load(tremppi.data);
+    tremppi.editor.graph.elements().unselect()
     // Add the save function
     tremppi.editor.graph.on('free', tremppi.editor.save);
 };

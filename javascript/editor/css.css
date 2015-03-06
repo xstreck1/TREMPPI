@@ -4,35 +4,7 @@
     height: 100%;
 }
 
-#graph_selection {
-    bottom: 0px;
-    font-family: monospace;
-    font-size: 20px; 
-    text-align: center;
-}
-
-td {
-    border-style: solid; 
-    border-width: 1px; 
-}
-
-table.selection { border-collapse: collapse;  margin: auto; }
-table.selection td, table.selection th { padding: 5px; border: 1px solid #000000; min-width: 200px;  }
-table.selection tr { height: 25px; }
-table.selection th {  }
-input.invalid { background: red; color: #FDFDFD; }
-
-#controls {
-    height: 27px;
-    font-size: 20px;
-}
-
-#component_manipulation {
-    min-height: 40px;
-    width: 100%;
-}
-
-#graph_selection {
-    min-height: 80px;
-    width: 100%;
+#Help {
+    font-size: 14px;
+    padding: 5px;
 }

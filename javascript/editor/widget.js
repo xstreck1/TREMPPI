@@ -5,22 +5,22 @@
  */
 
 tremppi.editor.lables = [
-        "Activating",
-        "Activating Only",
-        "Not Inhibiting",
-        "Inhibiting",
-        "Inhibiting Only",
-        "Not Activating",
-        "Observable",
-        "Not Observable",
-        "Monotone",
-        "Not Monotone",
-        "Monotone Observable",
-        "Free"
-        // "ff" not added
-        // "(-&+)|(!+&!-)" not added
-        // "+|!-" 
-        // "-|!+" not added
+    "Activating",
+    "Activating Only",
+    "Not Inhibiting",
+    "Inhibiting",
+    "Inhibiting Only",
+    "Not Activating",
+    "Observable",
+    "Not Observable",
+    "Monotone",
+    "Not Monotone",
+    "Monotone Observable",
+    "Free"
+            // "ff" not added
+            // "(-&+)|(!+&!-)" not added
+            // "+|!-" 
+            // "-|!+" not added
 ];
 
 tremppi.editor.setStyle = function (graph) {
@@ -82,81 +82,25 @@ tremppi.editor.addValues = function (graph) {
     }
 };
 
-tremppi.editor.newNode = function (_position) {
+tremppi.editor.newNode = function (click_position) {
     return {
         group: "nodes",
         data: {
             Name: "New",
             MaxActivity: 1
         },
-        position: _position
+        position: click_position
     };
 };
 
-tremppi.editor.newEdge = function (last_node) {
+tremppi.editor.newEdge = function (source, target) {
     return {
         group: "edges",
         data: {
-            source: last_node,
-            target: tremppi.editor.current_selection.id,
+            source: source.id(),
+            target: target.id(),
             Threshold: 1,
             Label: "Free"
         }
     };
-};
-
-tremppi.editor.tapFunction = function (event) {
-    // Click outside of all components
-    if (event.cy === event.cyTarget) {
-        // Create new component
-        if (tremppi.editor.activity_type === "create") {
-            var new_node = tremppi.editor.graph.add(tremppi.editor.newNode(event.cyPosition));
-            tremppi.editor.addValues(tremppi.editor.graph);
-            tremppi.editor.graphChanged();
-            tremppi.editor.current_selection.type = "node";
-            tremppi.editor.current_selection.id = new_node.id();
-        }
-        // Deselect
-        else {
-            tremppi.editor.current_selection.type = "graph";
-            tremppi.editor.current_selection.id = "";
-        }
-        tremppi.editor.activity_type = "selection";
-    } else if (event.cyTarget.isEdge()) {
-        // delete edge
-        if (tremppi.editor.activity_type === "delete") {
-            tremppi.editor.graph.remove(tremppi.editor.graph.$("#" + event.cyTarget.id()));
-            tremppi.editor.graphChanged();
-            tremppi.editor.current_selection.type = "graph";
-            tremppi.editor.current_selection.id = "";
-            tremppi.editor.activity_type = "selection";
-        }
-        // Select edge
-        else if (tremppi.editor.activity_type === "selection") {
-            tremppi.editor.current_selection.type = "edge";
-            tremppi.editor.current_selection.id = event.cyTarget.id();
-        }
-    } else if (event.cyTarget.isNode()) {
-        var last_node = tremppi.editor.current_selection.id;
-        tremppi.editor.current_selection.type = "node";
-        tremppi.editor.current_selection.id = event.cyTarget.id();
-        // Start an edge
-        if (tremppi.editor.activity_type === "create") {
-            tremppi.editor.activity_type = "end_regulation";
-        }
-        // Finish an edge
-        else if (tremppi.editor.activity_type === "end_regulation") {
-            tremppi.editor.graph.add(tremppi.editor.newEdge(last_node));
-            tremppi.editor.graphChanged();
-            tremppi.editor.activity_type = "selection";
-        }
-        // delete node
-        if (tremppi.editor.activity_type === "delete") {
-            tremppi.editor.graph.remove(tremppi.editor.graph.$("#" + event.cyTarget.id()));
-            tremppi.editor.graphChanged();
-            tremppi.editor.current_selection.type = "graph";
-            tremppi.editor.current_selection.id = "";
-            tremppi.editor.activity_type = "selection";
-        }
-    }
 };
