@@ -8,12 +8,12 @@
 				"Label": "A:1"
 			},
 			"position": {
-				"x": 599.7670673211016,
-				"y": 234.46224498458005
+				"x": -15.112729298699401,
+				"y": 22.326931082426434
 			},
 			"group": "nodes",
 			"removed": false,
-			"selected": true,
+			"selected": false,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,
@@ -28,12 +28,12 @@
 				"Label": "B:2"
 			},
 			"position": {
-				"x": 692.256662743677,
-				"y": 194.2084161862791
+				"x": -62.385170589767974,
+				"y": 65.00855372624811
 			},
 			"group": "nodes",
 			"removed": false,
-			"selected": false,
+			"selected": true,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,
@@ -68,9 +68,9 @@
 				"source": "n1",
 				"target": "n1",
 				"Threshold": "1",
-				"Label": "Not Inhibiting",
-				"line_style": "dashed",
-				"line_color": "green",
+				"Label": "Monotone Observable",
+				"line_style": "solid",
+				"line_color": "black",
 				"target_arrow_shape": "circle",
 				"id": "e1"
 			},

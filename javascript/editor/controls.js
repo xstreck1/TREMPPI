@@ -4,48 +4,65 @@
  * and open the template in the editor.
  */
 
-tremppi.editor.lables = [
-    "Activating",
-    "Activating Only",
-    "Not Inhibiting",
-    "Inhibiting",
-    "Inhibiting Only",
-    "Not Activating",
-    "Observable",
-    "Not Observable",
-    "Monotone",
-    "Not Monotone",
-    "Monotone Observable",
-    "Free"
-            // "ff" not added
-            // "(-&+)|(!+&!-)" not added
-            // "+|!-" 
-            // "-|!+" not added
-];
+tremppi.editor.toolbarClick = function (event) {
+    console.log('Target: ' + event.target, event);
+};
 
 tremppi.editor.graphChanged = function () {
     tremppi.editor.addValues(tremppi.editor.graph);
     tremppi.editor.graph.style().update();
-    tremppi.data = tremppi.editor.graph.json().elements;
-    tremppi.save();
+    tremppi.editor.save();
 };
 
-// calls appropriate controls handler
-tremppi.editor.setControls = function () {
-    $("#controls").html("");
-    tremppi.editor[tremppi.editor.current_selection.type + "Controls"]();
+tremppi.editor.removeAll = function () {
+    // Destroy all the elements
+    tremppi.editor.toolbar.remove('Create', 'Delete', 'Name', 'MaxActivity', 'Label', 'Threshold');
 };
 
-tremppi.editor.addHelpField = function (text) {
-    $("#controls").append('<span id="graph_help" class="help">' + text + '</div>');
-};
-
-tremppi.editor.addControlButton = function (btn_function) {
-    $("#controls").append('<button id="' + btn_function + '_btn" class="btn">' + btn_function + ' element</button>');
-    $("#" + btn_function + "_btn").on('change', function (event) {
-        tremppi.editor.activity_type = btn_function;
-        tremppi.editor.setControls();
+tremppi.editor.addEditField = function (element, field) {
+    tremppi.editor.toolbar.add({type: 'html', id: field, html: '<input id="' + field + '_input" placeholder="' + field + '"/>' });
+    $("#" + field + "_input").val(element.data(field)).change(function () {
+        element.data(field, this.value);
+        tremppi.editor.graphChanged();
     });
+};
+
+tremppi.editor.setBasic = function () {
+    tremppi.editor.removeAll();
+    tremppi.editor.toolbar.add({type: 'button', id: 'Create', caption: 'Create', hint: 'hint create'});
+    tremppi.editor.toolbar.add({type: 'button', id: 'Delete', caption: 'Delete', hint: 'hint delete'});
+};
+
+tremppi.editor.setNode = function (node) {
+    tremppi.editor.removeAll();
+    tremppi.editor.addEditField(node, "Name");
+    $("#Name_input").w2field('text'); 
+    tremppi.editor.addEditField(node, "MaxActivity");
+    $("#MaxActivity_input").w2field('int');
+};
+
+tremppi.editor.setEdge = function (edge) {
+    tremppi.editor.removeAll();
+    tremppi.editor.addEditField(edge, "Threshold");
+    $("#Threshold_input").w2field('int');
+    tremppi.editor.addEditField(edge, "Label");
+    $("#Label_input").w2field('list', {
+        items: tremppi.editor.lables,
+        selected: element.data("Label")
+    });
+    $("#Label_input").val(edge.data("Label"));
+};
+
+tremppi.editor.selection = function (event) {
+    if (event.cy === event.cyTarget) {
+        tremppi.editor.setBasic();
+    }
+    else if (event.cyTarget.isNode()) {
+        tremppi.editor.setNode(event.cyTarget[0]);
+    }
+    else if (event.cyTarget.isEdge()) {
+        tremppi.editor.setEdge(event.cyTarget[0]);
+    }
 };
 
 tremppi.editor.graphControls = function () {
@@ -57,14 +74,6 @@ tremppi.editor.graphControls = function () {
     } else if (tremppi.editor.activity_type === "delete") {
         tremppi.editor.addHelpField("Click on a COMPONENT or a REGULATION to delele it. Click on the plane to stop deleting.");
     }
-};
-
-tremppi.editor.addEditField = function (element, field) {
-    $("#controls").append('<input id="' + field + '_input" placeholder="' + field + '" value="' + element.data(field) + '"/>');
-    return $("#" + field + "_input").change(function () {
-        element.data(field, this.value);
-        tremppi.editor.graphChanged();
-    });
 };
 
 tremppi.editor.edgeControls = function () {
@@ -83,7 +92,6 @@ tremppi.editor.nodeControls = function () {
     if (tremppi.editor.activity_type === "end_regulation") {
         tremppi.editor.addHelpField("Click on a component to put a target of a REGULATION.");
     } else {
-        tremppi.editor.addEditField(element, "Name").w2field('text');
-        tremppi.editor.addEditField(element, "MaxActivity").w2field('int');
+
     }
 };

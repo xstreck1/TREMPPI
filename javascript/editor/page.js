@@ -4,46 +4,41 @@
  * and open the template in the editor.
  */
 
-tremppi.editor.widgetDOM = function () {
+tremppi.editor.setPage = function () {
     $("#widget").append('<div id="graph_object"></div>');
-};
-tremppi.editor.controlsDOM = function () {
-    w2ui.layout.set('main',
-            {
-                toolbar: {
-                    name: 'toolbar',
-                    items: [
-                        {type: 'button', id: 'item1', caption: 'Item 1', img: 'icon-page', hint: 'Hint for item 1'},
-                        {type: 'button', id: 'item2', caption: 'Item 2', icon: 'fa-wrench', hint: 'Hint for item 2'},
-                        {type: 'button', id: 'item3', caption: 'Item 3', icon: 'fa-star-empty', hint: 'Hint for item 3'},
-                        {type: 'button', id: 'item4', caption: 'Item 4', icon: 'fa-comments', hint: 'Hint for item 4'},
-                        {type: 'button', id: 'item5', caption: 'Item 5', icon: 'fa-beaker', hint: 'Hint for item 5'}
-                    ]
-                }
-            }
-    );
-    w2ui.layout.showToolbar('main');
-};
-tremppi.editor.controlsJS = function () {
-    tremppi.editor.activity_type = "selection";
-    tremppi.editor.current_selection = {type: "graph", name: "regulatory", id: ""};
-    // tremppi.editor.setControls();
-};
-tremppi.editor.widgetJS = function () { // on dom ready
+
     tremppi.editor.graph = cytoscape({
         container: $('#graph_object')[0],
-        layout: {name: tremppi.cytoscape.hasAllPositions(tremppi.data.nodes) ? 'preset' : 'grid'},
-        elements: tremppi.data,
+        layout: {name: 'preset', positions: function (node) {
+                var pos = node.position();
+                if (typeof pos === "undefined" || typeof pos.x === "undefined" || typeof pos.y === "undefined")
+                    return {x: 0, y: 0};
+                else
+                    return pos;
+            }
+        },
         selectionType: "single"
     });
     tremppi.editor.addValues(tremppi.editor.graph);
     tremppi.editor.setStyle(tremppi.editor.graph);
-    tremppi.editor.graph.on('tap', tremppi.editor.tapFunction);
+    tremppi.editor.graph.on('tap', tremppi.editor.selection);
     // Save after drag
-    tremppi.editor.graph.on('free', function () {
-        tremppi.data = tremppi.editor.graph.json().elements;
-        tremppi.save();
-    });
+
+    tremppi.editor.setBasic();
+    tremppi.editor.activity_type = "selection";
+    tremppi.editor.current_selection = {type: "graph", name: "regulatory", id: ""};
+    // tremppi.editor.setControls();
+};
+
+tremppi.editor.setData = function () {
+    tremppi.editor.graph.load(tremppi.data);
+    // Add the save function
+    tremppi.editor.graph.on('free', tremppi.editor.save);
+};
+
+tremppi.editor.save = function () {
+    tremppi.data = tremppi.editor.graph.json().elements;
+    tremppi.save();
 };
 
 tremppi.editor.layout = function () {
@@ -53,4 +48,10 @@ tremppi.editor.layout = function () {
 tremppi.editor.defaultData = {
     nodes: [],
     edges: []
+};
+
+
+tremppi.editor.defaultToolbar = {
+    items: [],
+    onClick: tremppi.editor.toolbarClick
 };

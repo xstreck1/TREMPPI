@@ -4,6 +4,25 @@
  * and open the template in the editor.
  */
 
+tremppi.editor.lables = [
+        "Activating",
+        "Activating Only",
+        "Not Inhibiting",
+        "Inhibiting",
+        "Inhibiting Only",
+        "Not Activating",
+        "Observable",
+        "Not Observable",
+        "Monotone",
+        "Not Monotone",
+        "Monotone Observable",
+        "Free"
+        // "ff" not added
+        // "(-&+)|(!+&!-)" not added
+        // "+|!-" 
+        // "-|!+" not added
+];
+
 tremppi.editor.setStyle = function (graph) {
     var selected_col = "#FFA500";
 
@@ -140,5 +159,4 @@ tremppi.editor.tapFunction = function (event) {
             tremppi.editor.activity_type = "selection";
         }
     }
-    tremppi.editor.setControls();
 };
