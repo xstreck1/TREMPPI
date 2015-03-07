@@ -8,8 +8,8 @@
 				"Label": "A:1"
 			},
 			"position": {
-				"x": -357.97076784890635,
-				"y": -31.85815583154195
+				"x": -389.62974650484176,
+				"y": -15.82038374925887
 			},
 			"group": "nodes",
 			"removed": false,
@@ -34,26 +34,6 @@
 			"group": "nodes",
 			"removed": false,
 			"selected": true,
-			"selectable": true,
-			"locked": false,
-			"grabbed": false,
-			"grabbable": true,
-			"classes": ""
-		},
-		{
-			"data": {
-				"Name": "C",
-				"MaxActivity": "4",
-				"id": "n2",
-				"Label": "C:4"
-			},
-			"position": {
-				"x": -480.16542853253276,
-				"y": 64.26319798365921
-			},
-			"group": "nodes",
-			"removed": false,
-			"selected": false,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,

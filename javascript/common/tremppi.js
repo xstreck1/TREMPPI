@@ -68,29 +68,42 @@ tremppi = {
         // get data
         $.getJSON(tremppi.data_file, tremppi.load);
     },
-    page_list: ["editor", "select", "properties", "function", "interact", "witness"],
     setPage: function () {
-        // Layout
-        var pstyle = 'border: 0px solid #dfdfdf;';
-        $('body').w2layout({
+        var sidebar = {
+            name: 'sidebar',
+            nodes: [
+                {id: 'widget_list', text: 'widgets', expanded: true, group: true,
+                    nodes: [
+                        {id: 'editor', text: 'editor'},
+                        {id: 'select', text: 'select'},
+                        {id: 'properties', text: 'properties'}
+                    ]
+                }
+            ]
+        };
+        var layout_style = 'border: 0px solid #dfdfdf;';
+        var layout = {
             name: 'layout',
             panels: [
-                {type: 'left', style: pstyle, size: 200, content: '<div id="files" ></div>'},
-                {type: 'main', style: pstyle, toolbar: tremppi.widget.defaultToolbar, content: '<div id="widget" ></div>'},
+                {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
+                {type: 'main', style: layout_style, toolbar: tremppi.widget.defaultToolbar, content: '<div id="widget" ></div>'},
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
             ]
-        });
-
+        };
+        // Layout
+        $('body').w2layout(layout);
         // Toolbar
         tremppi.widget.toolbar = w2ui.layout.get("main").toolbar;
         if (typeof tremppi.widget.defaultToolbar.items === "undefined")
             w2ui.layout.hideToolbar("main");
 
-        // Page links
-        for (var i = 0; i < this.page_list.length; i++) {
-            var page = this.page_list[i];
-            $("#files").append('<a class="page_content" id="' + page + '_link" href="' + page + '.html">' + page + '</a>');
-        }
+        // Side bar
+        w2ui.layout.content('left', $().w2sidebar(sidebar));
+        var sidebar = w2ui.layout.get('left').content.sidebar;
+        sidebar.select(tremppi.widget_name);
+        sidebar.on('click', function (event) {
+            window.open("./" + event.target + ".html", "_self")
+        });
     },
     makeHead: function () {
         $("head").append(
