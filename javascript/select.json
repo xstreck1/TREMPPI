@@ -3,9 +3,12 @@
 	"show": {},
 	"columns": [
 		{
+			"field": "add",
+			"type": "add"
+		},
+		{
 			"field": "erase",
-			"size": "20px",
-			"resizable": false
+			"type": "erase"
 		},
 		{
 			"field": "text",
@@ -14,6 +17,16 @@
 			"resizable": true,
 			"editable": {
 				"type": "text"
+			}
+		},
+		{
+			"field": "op",
+			"type": "sign",
+			"caption": "",
+			"size": "20px",
+			"resizable": false,
+			"editable": {
+				"type": "list"
 			}
 		},
 		{
@@ -27,15 +40,6 @@
 				"min": 0,
 				"max": 32756
 			}
-		},
-		{
-			"field": "op",
-			"caption": "op",
-			"size": "80px",
-			"resizable": true,
-			"editable": {
-				"type": "list"
-			}
 		}
 	],
 	"records": [
@@ -43,7 +47,19 @@
 			"recid": 1,
 			"int": 100,
 			"text": "sdf",
-			"op": "&#60;"
+			"op": "&#8800;"
+		},
+		{
+			"recid": 2,
+			"int": 16,
+			"text": "ddddd",
+			"op": "&#61"
+		},
+		{
+			"recid": 0,
+			"int": 15,
+			"text": "asdf",
+			"op": "&#8802;"
 		}
 	],
 	"configured": true

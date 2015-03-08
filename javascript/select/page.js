@@ -12,12 +12,15 @@ tremppi.select.setData = function () {
     tremppi.select.loadTable();
 };
 
-tremppi.select.layout = function () {
-};
-
 tremppi.select.defaultData = {
     "name": "grid",
     "show": {},
-    "columns": [],
+    "columns": [{
+            "field": "add",
+            "type": "add"
+        }, {
+            "field": "erase",
+            "type": "add"
+        }],
     "records": []
-}
+};

@@ -7,36 +7,10 @@
 tremppi.select.operators = ["&#61", "&#8800;", "&#60;", "&#8801;", "&#62;", "&#8802;"];
 
 tremppi.select.loadTable = function () {
-    $("#selection_table").html("");
-    $("#selection_table").w2grid(tremppi.data).on('change', tremppi.select.changeFunction);
-    var grid = w2ui['grid'];
+    var grid = tremppi.select.grid = $("#selection_table").w2grid(tremppi.data);
     for (var i = 0; i < grid.columns.length; i++) {
-        if (grid.columns[i].field === "erase") {
-            grid.columns[i].render = function (record, index, col_index) {
-                return '<button class="erase_btn" onclick="tremppi.select.erase('+index+')">X</button>';
-            };
-        }
-
-        if (typeof grid.columns[i].editable !== "undefined") {
-            if (grid.columns[i].editable.type === "list") {
-                grid.columns[i].editable.items = ["&#61", "&#8800;", "&#60;", "&#8801;", "&#62;", "&#8802;"];
-                grid.columns[i].render = function (record, index, col_index) {
-                    var html = this.getCellValue(index, col_index);
-                    return html.text || '';
-                };
-            }
-        }
+        tremppi.select.columnControls(grid.columns[i]);
     }
-    
+    grid.on('change', tremppi.select.changeFunction);
     grid.refresh();
-};
-
-tremppi.select.changeFunction = function (event) {
-    var column_name = tremppi.data.columns[event.column].field;
-    // List items are object, we want to store the text only
-    if (typeof event.value_new === 'object')
-        tremppi.data.records[event.index][column_name] = event.value_new.text;
-    else
-        tremppi.data.records[event.index][column_name] = event.value_new;
-    tremppi.save();
 };
