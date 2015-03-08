@@ -32,25 +32,30 @@ tremppi.editor.selection = function (event) {
     }
 };
 
+tremppi.editor.addElem = function (elem, type) {
+    tremppi.editor["glyph"+type](elem.data);
+    var new_elem = tremppi.editor.graph.add(elem)[0];
+    tremppi.editor["set"+type](new_elem);
+    tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
+    tremppi.editor.graph.style().update();
+    tremppi.editor.save();
+};
+
 tremppi.editor.creation = function (event) {
     if (event.cy === event.cyTarget) {
-        var new_node = tremppi.editor.graph.add(tremppi.editor.newNode(event.cyPosition))[0];
-        tremppi.editor.addValues(tremppi.editor.graph);
-        tremppi.editor.graphChanged();
-        tremppi.editor.setNode(new_node);
-
-        tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
+        var node = tremppi.editor.newNode(event.cyPosition);
+        tremppi.editor.addElem(node, "Node");
     }
     else if (event.cyTarget.isNode()) {
         var source = event.cyTarget[0];
         tremppi.editor.removeAll();
         tremppi.editor.addHelpField("Click on a component to put a target of a REGULATION.");
         tremppi.editor.graph.off('tap').on('tap', function (event) {
-            tremppi.editor.newEdge(source, event.cyTarget[0]);
+            var edge = tremppi.editor.newEdge(source, event.cyTarget[0]);
+            tremppi.editor.addElem(edge, "Edge");
         });
-        tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
     } else {
-        tremppi.editor.setEdge(new_node);
+        tremppi.editor.setEdge(event.cyTarget);
         tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
     }
 };
@@ -58,14 +63,9 @@ tremppi.editor.creation = function (event) {
 tremppi.editor.deletion = function (event) {
     if (event.cy !== event.cyTarget) {
         tremppi.editor.graph.remove(event.cyTarget);
+        tremppi.editor.graph.style().update();
     }
     tremppi.editor.setBasic();
-};
-
-tremppi.editor.graphChanged = function () {
-    tremppi.editor.addValues(tremppi.editor.graph);
-    tremppi.editor.graph.style().update();
-    tremppi.editor.save();
 };
 
 tremppi.editor.removeAll = function () {
@@ -79,7 +79,9 @@ tremppi.editor.addEditField = function (element, field) {
     tremppi.editor.toolbar.add({type: 'html', id: field, html: '<input id="' + field + '_input" placeholder="' + field + '"/>'});
     $("#" + field + "_input").val(element.data(field)).change(function () {
         element.data(field, this.value);
-        tremppi.editor.graphChanged();
+        tremppi.editor[element[0].isNode() ? 'glyphNode' : 'glyphEdge'](element.data());
+        tremppi.editor.graph.style().update();
+        tremppi.editor.save();
     }).height(14);
 };
 

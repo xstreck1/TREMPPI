@@ -30,3 +30,13 @@ tremppi.select.loadTable = function () {
     
     grid.refresh();
 };
+
+tremppi.select.changeFunction = function (event) {
+    var column_name = tremppi.data.columns[event.column].field;
+    // List items are object, we want to store the text only
+    if (typeof event.value_new === 'object')
+        tremppi.data.records[event.index][column_name] = event.value_new.text;
+    else
+        tremppi.data.records[event.index][column_name] = event.value_new;
+    tremppi.save();
+};

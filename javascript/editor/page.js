@@ -19,7 +19,7 @@ tremppi.editor.setPage = function () {
         },
         selectionType: "single"
     });
-    tremppi.editor.addValues(tremppi.editor.graph);
+
     tremppi.editor.setStyle(tremppi.editor.graph);
     tremppi.editor.graph.on('tap', tremppi.editor.selection);
     // Save after drag
@@ -29,8 +29,15 @@ tremppi.editor.setPage = function () {
 };
 
 tremppi.editor.setData = function () {
+    var glyphAll = function (elements, glyphFunction) {
+        for (var i = 0; i < elements.length; i++) {
+            glyphFunction(elements[i].data);
+        }
+    };
+    glyphAll(tremppi.data.nodes, tremppi.editor.glyphNode);
+    glyphAll(tremppi.data.edges, tremppi.editor.glyphEdge);
     tremppi.editor.graph.load(tremppi.data);
-    tremppi.editor.graph.elements().unselect()
+    tremppi.editor.graph.elements().unselect();
     // Add the save function
     tremppi.editor.graph.on('free', tremppi.editor.save);
 };

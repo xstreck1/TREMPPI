@@ -24,7 +24,7 @@ tremppi.editor.lables = [
 ];
 
 tremppi.editor.setStyle = function (graph) {
-    var selected_col = "#FFA500";
+    var selected_col = "blue";
 
     graph.style().selector('node').css({
         'content': 'data(Label)',
@@ -52,34 +52,29 @@ tremppi.editor.setStyle = function (graph) {
     }).update();
 };
 
-tremppi.editor.addValues = function (graph) {
-    var edges = graph.elements("edge");
-    for (var i = 0; i < edges.length; i++) {
-        var data = edges[i].data();
-        var label = data.Label;
-        if (label === "Activating" || label === "Inhibiting" || label === "Activating Only" || label === "Inhibiting Only"
-                || label === "Observable" || label === "Not Monotone" || label === "Monotone Observable")
-            data.line_style = "solid";
-        else
-            data.line_style = "dashed";
-        if (label === "Not Inhibiting" || label === "Activating Only")
-            data.line_color = "green";
-        else if (label === "Not Activating" || label === "Inhibiting Only")
-            data.line_color = "red";
-        else
-            data.line_color = "black";
-        if (label === "Activating" || label === "Activating Only")
-            data.target_arrow_shape = "triangle";
-        else if (label === "Inhibiting" || label === "Inhibiting Only")
-            data.target_arrow_shape = "tee";
-        else
-            data.target_arrow_shape = "circle";
-    }
-    var nodes = graph.elements("node");
-    for (var i = 0; i < nodes.length; i++) {
-        var node_data = nodes[i].data();
-        node_data.Label = node_data.Name + ":" + node_data.MaxActivity;
-    }
+tremppi.editor.glyphEdge = function (edge) {
+    var label = edge.Label;
+    if (label === "Activating" || label === "Inhibiting" || label === "Activating Only" || label === "Inhibiting Only"
+            || label === "Observable" || label === "Not Monotone" || label === "Monotone Observable")
+        edge.line_style = "solid";
+    else
+        edge.line_style = "dashed";
+    if (label === "Not Inhibiting" || label === "Activating Only")
+        edge.line_color = "green";
+    else if (label === "Not Activating" || label === "Inhibiting Only")
+        edge.line_color = "red";
+    else
+        edge.line_color = "black";
+    if (label === "Activating" || label === "Activating Only")
+        edge.target_arrow_shape = "triangle";
+    else if (label === "Inhibiting" || label === "Inhibiting Only")
+        edge.target_arrow_shape = "tee";
+    else
+        edge.target_arrow_shape = "circle";
+};
+
+tremppi.editor.glyphNode = function (node) {
+    node.Label = node.Name + ":" + node.MaxActivity;
 };
 
 tremppi.editor.newNode = function (click_position) {
