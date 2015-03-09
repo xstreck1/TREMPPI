@@ -2,14 +2,14 @@
 	"nodes": [
 		{
 			"data": {
-				"MaxActivity": "1",
+				"MaxActivity": 1,
 				"Name": "A",
 				"id": "n0",
 				"Label": "A:1"
 			},
 			"position": {
-				"x": -523.6133566929836,
-				"y": -41.19117106930905
+				"x": -548.9115523294919,
+				"y": -57.66167084311673
 			},
 			"group": "nodes",
 			"removed": false,
@@ -22,14 +22,14 @@
 		},
 		{
 			"data": {
-				"MaxActivity": "2",
+				"MaxActivity": 2,
 				"Name": "B",
 				"id": "n1",
 				"Label": "B:2"
 			},
 			"position": {
-				"x": -521.4213351752996,
-				"y": -149.2091049467641
+				"x": -547.3884820917963,
+				"y": -125.13272095105295
 			},
 			"group": "nodes",
 			"removed": false,
@@ -45,7 +45,7 @@
 		{
 			"data": {
 				"Label": "Free",
-				"Threshold": "1",
+				"Threshold": 1,
 				"source": "n0",
 				"target": "n1",
 				"id": "e0",
@@ -67,7 +67,7 @@
 			"data": {
 				"source": "n1",
 				"target": "n1",
-				"Threshold": "1",
+				"Threshold": 1,
 				"Label": "Monotone Observable",
 				"line_style": "solid",
 				"line_color": "black",
@@ -88,7 +88,7 @@
 			"data": {
 				"source": "n1",
 				"target": "n0",
-				"Threshold": "2",
+				"Threshold": 2,
 				"Label": "Free",
 				"line_style": "dashed",
 				"line_color": "black",
@@ -98,7 +98,7 @@
 			"position": {},
 			"group": "edges",
 			"removed": false,
-			"selected": true,
+			"selected": false,
 			"selectable": true,
 			"locked": false,
 			"grabbed": false,

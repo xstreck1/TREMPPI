@@ -23,8 +23,6 @@
 			"field": "op",
 			"type": "sign",
 			"caption": "",
-			"size": "20px",
-			"resizable": false,
 			"editable": {
 				"type": "list"
 			}

@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 
-tremppi.select.operators = ["&#61", "&#8800;", "&#60;", "&#8801;", "&#62;", "&#8802;"];
+tremppi.select.operators = [
+    "&#61", "&#8800;", "&#60;", "&#8801;", "&#62;", "&#8802;"
+];
 
 tremppi.select.loadTable = function () {
     var grid = tremppi.select.grid = $("#selection_table").w2grid(tremppi.data);

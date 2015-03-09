@@ -101,7 +101,7 @@ namespace SyntaxChecker {
 					threshold = edge["data"]["Threshold"].asInt();
 				}
 				catch (exception & e) {
-					throw runtime_error("Could not convert treshold for " + getEdgeName(edge, ids_to_names) + " to integer." + e.what());
+					throw runtime_error("Could not convert the threshold for " + getEdgeName(edge, ids_to_names) + " to integer." + e.what());
 				}
 				if (threshold < 1 || threshold > components.at(source))
 					throw runtime_error(getEdgeName(edge, ids_to_names) + " has a Threshold of " + to_string(threshold) +
@@ -118,6 +118,9 @@ namespace SyntaxChecker {
 				}
 				catch (exception & e) {
 					throw runtime_error("Could not obtain a label of an edge " + getEdgeName(edge, ids_to_names) + ". Did you remember to add parenthesis ? " + e.what());
+				}
+				if (label_list.count(label) == 0) {
+					throw runtime_error("The label " + label + " is not known to the system.");
 				}
 			}
 		}

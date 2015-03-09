@@ -21,6 +21,8 @@ tremppi.select.columnControls = function (column) {
             };
             break;
         case "sign":
+            column.size = "20px";
+            column.resizable = false;
             column.editable.items = ["&#61", "&#8800;", "&#60;", "&#8801;", "&#62;", "&#8802;"];
             break;
     }

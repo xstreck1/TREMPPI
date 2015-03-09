@@ -46,7 +46,7 @@ namespace ModelReader {
 			Model::Regulation regulation{
 				source_id,
 				static_cast<ActLevel>(edge["data"]["Threshold"].asInt()),
-				edge["data"]["Label"].asString()
+				label_list.at(edge["data"]["Label"].asString())
 			};
 
 			model.components[target_id].regulations.emplace_back(move(regulation));

@@ -75,10 +75,13 @@ tremppi.editor.removeAll = function () {
     }
 };
 
-tremppi.editor.addEditField = function (element, field) {
-    tremppi.editor.toolbar.add({type: 'html', id: field, html: '<input id="' + field + '_input" placeholder="' + field + '"/>'});
+tremppi.editor.addEditField = function (element, field, type) {
+    tremppi.editor.toolbar.add({type: 'html', id: field, html: 
+                '<input id="' + field + '_input" type="' + type + '"placeholder="' + field + '"/>'
+    });
     $("#" + field + "_input").val(element.data(field)).change(function () {
-        element.data(field, this.value);
+        var value = this.type === "number" ? parseInt(this.value) : this.value;
+        element.data(field, value);
         tremppi.editor[element[0].isNode() ? 'glyphNode' : 'glyphEdge'](element.data());
         tremppi.editor.graph.style().update();
         tremppi.editor.save();
@@ -98,17 +101,17 @@ tremppi.editor.setBasic = function () {
 
 tremppi.editor.setNode = function (node) {
     tremppi.editor.removeAll();
-    tremppi.editor.addEditField(node, "Name");
+    tremppi.editor.addEditField(node, "Name", "text");
     $("#Name_input").w2field('text');
-    tremppi.editor.addEditField(node, "MaxActivity");
+    tremppi.editor.addEditField(node, "MaxActivity", "number");
     $("#MaxActivity_input").w2field('int');
 };
 
 tremppi.editor.setEdge = function (edge) {
     tremppi.editor.removeAll();
-    tremppi.editor.addEditField(edge, "Threshold");
+    tremppi.editor.addEditField(edge, "Threshold", "number");
     $("#Threshold_input").w2field('int');
-    tremppi.editor.addEditField(edge, "Label");
+    tremppi.editor.addEditField(edge, "Label", "text");
     $("#Label_input").w2field('list', {
         items: tremppi.editor.lables,
         selected: edge.data("Label")
