@@ -9,18 +9,18 @@ tremppi.select.operators = [
 ];
 
 tremppi.select.loadTable = function () {
-    var grid = tremppi.select.grid = $("#selection_table").w2grid(tremppi.data);
-    grid.columnGroups = tremppi.select.columnGroups;
-    grid.columns = tremppi.select.columns;
+    tremppi.select.grid = $("#selection_table").w2grid(tremppi.select.grid_data);
 
-    grid.on('change', tremppi.select.changeFunction);
-    grid.refresh();
+    tremppi.select.grid.on('change', tremppi.select.changeFunction);
+
 };
 
 
 tremppi.select.setColumns = function () {
-    var columns = tremppi.select.columns = [];
-    var columnGroups = tremppi.select.columnGroups = [];
+    tremppi.select.grid_data = {};
+    $.extend(true, tremppi.select.grid_data, tremppi.data);
+    var columns = tremppi.select.grid_data.columns = [];
+    var columnGroups = tremppi.select.grid_data.columnGroups = [];
 
     var addControlColumn = function (column_data) {
         column_data.size = "20px";
@@ -64,6 +64,7 @@ tremppi.select.setColumns = function () {
                     items: tremppi.select.operators
                 }
             });
+            var new_column;
             column.size = "80px";
             column.caption = column.field.slice(2);
             columns.push(column);

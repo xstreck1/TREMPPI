@@ -1,63 +1,58 @@
 {
-	"name": "grid",
-	"show": {},
 	"columns": [
 		{
-			"field": "add",
-			"type": "add"
-		},
-		{
-			"field": "erase",
-			"type": "erase"
-		},
-		{
-			"field": "text",
-			"caption": "text",
-			"size": "120px",
-			"resizable": true,
 			"editable": {
-				"type": "text"
-			}
-		},
-		{
-			"field": "op",
-			"type": "sign",
-			"caption": "",
-			"editable": {
-				"type": "list"
-			}
-		},
-		{
-			"field": "int",
-			"caption": "int",
-			"size": "80px",
-			"resizable": true,
-			"render": "int",
-			"editable": {
-				"type": "int",
+				"max": 1,
 				"min": 0,
-				"max": 32756
-			}
+				"type": "int"
+			},
+			"field": "K_A_0"
+		},
+		{
+			"editable": {
+				"max": 1,
+				"min": 0,
+				"type": "int"
+			},
+			"field": "K_A_2"
+		},
+		{
+			"editable": {
+				"max": 2,
+				"min": 0,
+				"type": "int"
+			},
+			"field": "K_B_00"
+		},
+		{
+			"editable": {
+				"max": 2,
+				"min": 0,
+				"type": "int"
+			},
+			"field": "K_B_01"
+		},
+		{
+			"editable": {
+				"max": 2,
+				"min": 0,
+				"type": "int"
+			},
+			"field": "K_B_10"
+		},
+		{
+			"editable": {
+				"max": 2,
+				"min": 0,
+				"type": "int"
+			},
+			"field": "K_B_11"
 		}
 	],
+	"name": "grid",
 	"records": [
 		{
-			"recid": 1,
-			"int": 100,
-			"text": "sdf",
-			"op": "&#8800;"
-		},
-		{
-			"recid": 2,
-			"int": 16,
-			"text": "ddddd",
-			"op": "&#61"
-		},
-		{
-			"recid": 0,
-			"int": 15,
-			"text": "asdf",
-			"op": "&#8802;"
+			"recid": 0
 		}
 	],
 	"configured": true
