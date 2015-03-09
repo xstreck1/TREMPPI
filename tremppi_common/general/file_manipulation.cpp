@@ -47,6 +47,16 @@ Json::Value FileManipulation::parseJSON(const bfs::path & input_path) {
 	return root;
 }
 
+void FileManipulation::writeJSON(const bfs::path & output_path, const Json::Value & data) {
+	fstream data_file(output_path.string(), ios::out);
+	if (!data_file)
+		throw runtime_error("Could not open " + output_path.string());
+
+	Json::StyledWriter writer;
+	string result = writer.write(data);
+	data_file << result << endl;
+}
+
 void FileManipulation::replaceInFile(bfs::path const & file, const string & original, const string & replacement) {
 	bfs::path out_file = file;
 	out_file.replace_extension(TimeManager::getTimeStamp());

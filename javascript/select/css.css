@@ -10,15 +10,8 @@ and open the template in the editor.
 }
 
 button.grid_manip {
-    height: 18px;
+    height: 15px;
     padding: 0px;
     margin: 0px;
-    font-size: 16px;
-}
-
-button.grid_manip {
-    height: 18px;
-    padding: 0px;
-    margin: 0px;
-    font-size: 16px;
+    font-size: 13px;
 }

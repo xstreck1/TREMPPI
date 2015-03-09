@@ -51,9 +51,9 @@ tremppi.editor.layout = function () {
     $("#graph_object").cytoscape('get').resize();
 };
 
-tremppi.editor.defaultData = {
-    nodes: [],
-    edges: []
+tremppi.editor.setDefaultData = function() {
+    tremppi.data.nodes = [];
+    tremppi.data.edges = [];
 };
 
 

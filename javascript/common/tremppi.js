@@ -12,13 +12,10 @@ tremppi = {
     },
     widgetInterface: function () {
         return {
-            setPage: function () {
-            },
-            setData: function () {
-            },
-            layout: function () {
-            },
-            defaultData: {},
+            setPage: function () {},
+            setData: function () {},
+            layout: function () {},
+            setDefaultData: function () {},
             defaultToolbar: {}
         };
     },
@@ -52,8 +49,9 @@ tremppi = {
         tremppi.data = data;
         // add default content, if original not available
         if (typeof (tremppi.data.configured) === 'undefined' || tremppi.data.configured === false) {
-            $.extend(true, tremppi.data, tremppi.widget.defaultData);
+            tremppi.widget.setDefaultData();
             tremppi.data.configured = true;
+            tremppi.save();
         }
         tremppi.widget.setData();
         tremppi.log(tremppi.widget_name + " loaded.");

@@ -8,6 +8,7 @@
 #include "io/database_filler.hpp"
 #include "io/spawn_options.hpp"
 #include "io/syntax_checker.hpp"
+#include "io/select_output.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_spawn.
@@ -73,7 +74,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		logging.exceptionMessage(e, 5);
 	}
 
-	// Output the data
+	// Output the database
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Creating the database file.";
 		if (bfs::exists(database_file)) 
@@ -96,6 +97,17 @@ int tremppi_spawn(int argc, char ** argv) {
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 6);
+	}
+
+	// Output select
+	try {
+		Json::Value grid; 
+		grid["columns"] = SelectOutput::getNewColumns(model, kinetics);
+
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / ("select.json"), grid);
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 7);
 	}
 
 	return 0;

@@ -9,18 +9,15 @@ tremppi.select.setPage = function () {
 };
 
 tremppi.select.setData = function () {
+    tremppi.select.setColumns();
     tremppi.select.loadTable();
 };
 
-tremppi.select.defaultData = {
-    "name": "grid",
-    "show": {},
-    "columns": [{
-            "field": "add",
-            "type": "add"
-        }, {
-            "field": "erase",
-            "type": "add"
-        }],
-    "records": []
+tremppi.select.setDefaultData = function () {
+    tremppi.data.name = "grid";
+    if (typeof tremppi.data.columns === 'undefined')
+        tremppi.data.columns = [];
+     
+    if (typeof tremppi.data.records === 'undefined' || tremppi.data.records.length === 0)
+        tremppi.data.records = [{recid: 0}];
 };

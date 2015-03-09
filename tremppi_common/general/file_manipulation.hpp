@@ -13,6 +13,9 @@ namespace FileManipulation {
 	Json::Value parseJSON(const bfs::path & input_path);
 
 	//
+	void writeJSON(const bfs::path & output_path, const Json::Value & data);
+
+	//
 	void replaceInFile(bfs::path const & file, const string & original, const string & replacement);
 
 	//
