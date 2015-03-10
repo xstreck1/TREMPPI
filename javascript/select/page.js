@@ -11,13 +11,23 @@ tremppi.select.setPage = function () {
 tremppi.select.setData = function () {
     tremppi.select.setColumns();
     tremppi.select.loadTable();
+    tremppi.select.addColumnsSelection();
+};
+
+tremppi.select.defaultToolbar = {
+    name: 'toolbar',
+    items: [
+        {type: 'check', icon: 'w2ui-icon-check', id: 'check_all', caption: 'All', checked: false},
+        {type: 'menu', id: 'display', caption: 'Display', items: []}
+    ],
+    onClick: tremppi.select.toolbarClick
 };
 
 tremppi.select.setDefaultData = function () {
     tremppi.data.name = "grid";
     if (typeof tremppi.data.columns === 'undefined')
         tremppi.data.columns = [];
-     
+
     if (typeof tremppi.data.records === 'undefined' || tremppi.data.records.length === 0)
         tremppi.data.records = [{recid: 0}];
 };

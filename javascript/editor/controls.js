@@ -5,7 +5,9 @@
  */
 
 tremppi.editor.toolbarClick = function (event) {
-    tremppi.editor[event.target]();
+    if (event.type === 'click') {
+        tremppi.editor[event.target]();
+    }
 };
 
 tremppi.editor.Create = function () {
@@ -33,9 +35,9 @@ tremppi.editor.selection = function (event) {
 };
 
 tremppi.editor.addElem = function (elem, type) {
-    tremppi.editor["glyph"+type](elem.data);
+    tremppi.editor["glyph" + type](elem.data);
     var new_elem = tremppi.editor.graph.add(elem)[0];
-    tremppi.editor["set"+type](new_elem);
+    tremppi.editor["set" + type](new_elem);
     tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
     tremppi.editor.graph.style().update();
     tremppi.editor.save();
@@ -76,7 +78,7 @@ tremppi.editor.removeAll = function () {
 };
 
 tremppi.editor.addEditField = function (element, field, type) {
-    tremppi.editor.toolbar.add({type: 'html', id: field, html: 
+    tremppi.editor.toolbar.add({type: 'html', id: field, html:
                 '<input id="' + field + '_input" type="' + type + '"placeholder="' + field + '"/>'
     });
     $("#" + field + "_input").val(element.data(field)).change(function () {

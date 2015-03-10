@@ -52,8 +52,10 @@ tremppi.editor.layout = function () {
 };
 
 tremppi.editor.setDefaultData = function() {
-    tremppi.data.nodes = [];
-    tremppi.data.edges = [];
+    if (typeof tremppi.data.nodes === 'undefined')
+        tremppi.data.nodes = [];
+    if (typeof tremppi.data.edges === 'undefined')
+        tremppi.data.edges = [];
 };
 
 

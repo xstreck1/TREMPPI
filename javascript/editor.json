@@ -2,14 +2,14 @@
 	"nodes": [
 		{
 			"data": {
-				"MaxActivity": 1,
 				"Name": "A",
-				"id": "n0",
-				"Label": "A:1"
+				"MaxActivity": 1,
+				"Label": "A:1",
+				"id": "n0"
 			},
 			"position": {
-				"x": -548.9115523294919,
-				"y": -57.66167084311673
+				"x": 600.9500373624675,
+				"y": 275.33059341905226
 			},
 			"group": "nodes",
 			"removed": false,
@@ -22,14 +22,14 @@
 		},
 		{
 			"data": {
-				"MaxActivity": 2,
 				"Name": "B",
-				"id": "n1",
-				"Label": "B:2"
+				"MaxActivity": 2,
+				"Label": "B:2",
+				"id": "n1"
 			},
 			"position": {
-				"x": -547.3884820917963,
-				"y": -125.13272095105295
+				"x": 532.6914014790383,
+				"y": 355.8120590584658
 			},
 			"group": "nodes",
 			"removed": false,
@@ -44,14 +44,14 @@
 	"edges": [
 		{
 			"data": {
-				"Label": "Free",
-				"Threshold": 1,
 				"source": "n0",
 				"target": "n1",
-				"id": "e0",
+				"Threshold": 1,
+				"Label": "Monotone",
 				"line_style": "dashed",
 				"line_color": "black",
-				"target_arrow_shape": "circle"
+				"target_arrow_shape": "circle",
+				"id": "e0"
 			},
 			"position": {},
 			"group": "edges",
@@ -66,10 +66,10 @@
 		{
 			"data": {
 				"source": "n1",
-				"target": "n1",
+				"target": "n0",
 				"Threshold": 1,
-				"Label": "Monotone Observable",
-				"line_style": "solid",
+				"Label": "Monotone",
+				"line_style": "dashed",
 				"line_color": "black",
 				"target_arrow_shape": "circle",
 				"id": "e1"
@@ -87,11 +87,11 @@
 		{
 			"data": {
 				"source": "n1",
-				"target": "n0",
+				"target": "n1",
 				"Threshold": 2,
-				"Label": "Free",
+				"Label": "Not Inhibiting",
 				"line_style": "dashed",
-				"line_color": "black",
+				"line_color": "green",
 				"target_arrow_shape": "circle",
 				"id": "e2"
 			},
@@ -105,6 +105,5 @@
 			"grabbable": true,
 			"classes": ""
 		}
-	],
-	"configured": true
+	]
 }

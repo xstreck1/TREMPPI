@@ -27,4 +27,21 @@ namespace SelectOutput {
 
 		return columns;
 	}
+
+	Json::Value getRegulations(const Model & model) {
+		Json::Value regulations;
+
+		for (const Model::ModelComp & comp : model.components) {
+			Json::Value regulated;
+
+			regulated["id"] = comp.name;
+			for (const Model::Regulation & source : comp.regulations) {
+				regulated["regulators"].append(model.components[source.s_ID].name);
+			}
+
+			regulations.append(regulated);
+		}
+
+		return regulations;
+	}
 }

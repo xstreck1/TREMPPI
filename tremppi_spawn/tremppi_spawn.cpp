@@ -103,6 +103,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	try {
 		Json::Value grid; 
 		grid["columns"] = SelectOutput::getNewColumns(model, kinetics);
+		grid["regulations"] = SelectOutput::getRegulations(model);
 
 		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / ("select.json"), grid);
 	}

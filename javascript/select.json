@@ -14,7 +14,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_A_2"
+			"field": "K_A_1"
 		},
 		{
 			"editable": {
@@ -30,7 +30,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_B_01"
+			"field": "K_B_02"
 		},
 		{
 			"editable": {
@@ -46,13 +46,30 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_B_11"
+			"field": "K_B_12"
+		}
+	],
+	"regulations": [
+		{
+			"id": "A",
+			"regulators": [
+				"B"
+			]
+		},
+		{
+			"id": "B",
+			"regulators": [
+				"A",
+				"B"
+			]
 		}
 	],
 	"name": "grid",
 	"records": [
 		{
-			"recid": 0
+			"recid": 0,
+			"select": true,
+			"K_A_0_op": "&#8800;"
 		}
 	],
 	"configured": true
