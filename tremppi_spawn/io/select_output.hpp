@@ -17,10 +17,11 @@ namespace SelectOutput {
 				string column = KineticsTranslators::makeConcise(param, model.components[t_ID].name);
 
 				Json::Value val;
-				val["field"] = column;
+				val["field"] = column + "_val";
 				val["editable"]["type"] = "int";
 				val["editable"]["min"] = 0;
 				val["editable"]["max"] = model.components[t_ID].max_activity;
+				val["editable"]["step"] = 1;
 				columns.append(val);
 			}
 		}

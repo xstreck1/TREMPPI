@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 # find paths & load common functions
 sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
-from tremppi_common.file_manipulation import copyanything, replace, normal_paths
+from tremppi.file_manipulation import copyanything, replace, normal_paths
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 

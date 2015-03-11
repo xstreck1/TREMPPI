@@ -5,6 +5,7 @@ from urllib.parse import urlparse, parse_qs
 from os import curdir, chdir
 from os.path import dirname, join, abspath, exists
 from http.server import  HTTPServer, SimpleHTTPRequestHandler
+
 import content_functions
 
 DEFAULT_PORT = "8080"
@@ -73,7 +74,7 @@ parser.add_argument('--path', help='specify the browsing location.')
 parser.add_argument('--port', help='number of the port to run the browser on')
 args = parser.parse_args()
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi_common.file_manipulation import replace_regex, normal_paths
+from tremppi.file_manipulation import replace_regex, normal_paths
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
@@ -83,7 +84,7 @@ if (args.port != None):
     port = args.port
 else:
     port = DEFAULT_PORT
-replace_regex(join(DEST_PATH, "common","common.js"), "server_port: \\d*", "server_port: " + port)
+replace_regex(join(DEST_PATH, "common","tremppi.js"), "server_port: \\d*", "server_port: " + port)
 server = HTTPServer(('', int(port)), StoreHandler)
 webbrowser.open("http://localhost:" + port + "/editor.html")
 server.serve_forever()

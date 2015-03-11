@@ -5,12 +5,12 @@
  */
 
 tremppi.select.operators = [
-    ' ', '&#61', '&#8800;', '&#60;', '&#8804;', '&#62;', '&#8805;'
+    ' ', '*', '=', '!=', '<', '<=', '>', '>='
 ];
 
 tremppi.select.loadTable = function () {
     tremppi.select.grid = $('#selection_table').w2grid(tremppi.select.grid_data);
-    tremppi.select.grid.on('change', tremppi.select.changeFunction);
+    tremppi.select.grid.onChange = tremppi.select.changeFunction;
 };
 
 tremppi.select.setColumns = function () {
@@ -19,14 +19,17 @@ tremppi.select.setColumns = function () {
     var columns = tremppi.select.grid_data.columns = [];
     var columnGroups = tremppi.select.grid_data.columnGroups = [];
 
+    var controlColumns = [];
     var addControlColumn = function (column_data) {
         column_data.size = '20px';
         column_data.resizable = false;
         columns.push(column_data);
+        controlColumns.push(column_data.field);
     };
 
     addControlColumn({
         field: 'select',
+        caption: 'S',
         editable: {
             type: 'check',
             icon: 'w2ui-icon-cross'
@@ -34,18 +37,30 @@ tremppi.select.setColumns = function () {
     });
     addControlColumn({
         field: 'add',
+        caption: 'A',
         render: function (record, index, col_index) {
             return '<span class="w2ui-icon-plus" style="font-size: 14px" onclick="tremppi.select.add(' + index + ')"></span>';
         }
     });
     addControlColumn({
         field: 'erase',
+        caption: 'E',
         render: function (record, index, col_index) {
             return '<span class="w2ui-icon-cross" style="font-size: 14px" onclick="tremppi.select.erase(' + index + ')"></span>';
         }
     });
+    addControlColumn({
+        field: 'group',
+        caption: 'G',
+        editable: {
+            type: 'int',
+            step: 1,
+            min: 0,
+            max: 9
+        }
+    });
     
-    columnGroups.push({caption: 'controls', span: columns.length, columns: ['select','add','erase'], available: true });
+    columnGroups.push({caption: 'controls', span: controlColumns.length, columns: controlColumns, available: true });
 
     var addDataGroup = function (prefix, group_name) {
         var type_set = [];
@@ -59,7 +74,7 @@ tremppi.select.setColumns = function () {
         
         type_set.forEach(function (column) {
             addControlColumn({
-                field: column.field + '_op',
+                field: column.field + '_cmp',
                 editable: {
                     type: 'list',
                     items: tremppi.select.operators
@@ -67,11 +82,11 @@ tremppi.select.setColumns = function () {
             });
             var new_column = {};
             $.extend(true, new_column, column);
-            new_column.caption = column.field.slice(prefix.length);
-            new_column.size = new_column.caption.length * 10 + 'px';
+            new_column.caption = column.field.slice(prefix.length, -4);
+            new_column.size = 12 + new_column.caption.length * 8 + 'px';
             columns.push(new_column);
             
-            new_group.columns.push(column.field + '_op');
+            new_group.columns.push(column.field + '_cmp');
             new_group.columns.push(column.field);
         });
 

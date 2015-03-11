@@ -6,7 +6,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_A_0"
+			"field": "K_A_0_val"
 		},
 		{
 			"editable": {
@@ -14,7 +14,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_A_1"
+			"field": "K_A_1_val"
 		},
 		{
 			"editable": {
@@ -22,7 +22,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_B_00"
+			"field": "K_B_00_val"
 		},
 		{
 			"editable": {
@@ -30,7 +30,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_B_02"
+			"field": "K_B_02_val"
 		},
 		{
 			"editable": {
@@ -38,7 +38,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_B_10"
+			"field": "K_B_10_val"
 		},
 		{
 			"editable": {
@@ -46,7 +46,7 @@
 				"min": 0,
 				"type": "int"
 			},
-			"field": "K_B_12"
+			"field": "K_B_12_val"
 		}
 	],
 	"regulations": [
@@ -69,7 +69,15 @@
 		{
 			"recid": 0,
 			"select": true,
-			"K_A_0_op": "&#8800;"
+			"K_A_0_cmp": "==",
+			"group": "",
+			"K_A_0_val": 1,
+			"K_A_1_val_cmp": *",
+			"K_B_00_val": 2,
+			"K_B_12_val": 2,
+			"K_A_1_val": 0,
+			"K_B_02_val": 0,
+			"K_B_00_val_cmp": "<"
 		}
 	],
 	"configured": true

@@ -41,6 +41,7 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
+#include <boost/python.hpp>
 
 #include "configure.h"
 
@@ -62,6 +63,7 @@ namespace blg = boost::log;
 namespace src = boost::log::sources;
 namespace snk = boost::log::sinks;
 namespace kwd = boost::log::keywords;
+namespace bpy = boost::python;
 
 const string NETWORK_FILENAME = "editor.json";
 const string DATABASE_FILENAME = "database.sqlite";
