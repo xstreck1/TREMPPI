@@ -69,15 +69,36 @@
 		{
 			"recid": 0,
 			"select": true,
-			"K_A_0_cmp": "==",
-			"group": "",
+			"group": 0,
 			"K_A_0_val": 1,
-			"K_A_1_val_cmp": *",
-			"K_B_00_val": 2,
-			"K_B_12_val": 2,
-			"K_A_1_val": 0,
-			"K_B_02_val": 0,
-			"K_B_00_val_cmp": "<"
+			"K_B_00_val": 1,
+			"K_B_12_val": 1,
+			"K_A_1_val": 1,
+			"K_B_02_val": 1,
+			"K_B_10_val": 2,
+			"K_A_0_val_cmp": "<=",
+			"K_A_1_val_cmp": "=",
+			"K_B_00_val_cmp": "=",
+			"K_B_02_val_cmp": "*"
+		},
+		{
+			"recid": 1,
+			"K_B_00_val": 0,
+			"group": 1
+		},
+		{
+			"recid": 4,
+			"K_A_0_val_cmp": "=",
+			"K_B_00_val_cmp": "*",
+			"K_A_1_val": 1,
+			"group": 2,
+			"select": true
+		},
+		{
+			"recid": 2,
+			"K_B_00_val_cmp": "*",
+			"K_A_1_val": "",
+			"group": 3
 		}
 	],
 	"configured": true

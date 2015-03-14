@@ -32,6 +32,15 @@ tremppi.editablegrid = {
         return true;
     }
 };
+tremppi.w2ui = {
+    findByRecid: function(array, recid) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].recid === recid)
+                return array[i];
+        }
+        console.log("Error. Have not found element " + recid);
+    }
+};
 tremppi.cytoscape = {
     // test if nodes all have positions
     hasAllPositions: function (nodes) {

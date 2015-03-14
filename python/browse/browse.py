@@ -52,8 +52,6 @@ class StoreHandler(SimpleHTTPRequestHandler):
             elif command == "counts":
                 self.success_response('text/plain', content_functions.get_counts(query).encode())
 
-
-
     # respond to the post request
     # writes the content of the message to the file specified by the URL
     def do_POST(self):

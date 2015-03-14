@@ -69,6 +69,8 @@ SOURCE_GROUP("Header Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*
 SOURCE_GROUP("Source Files\\tremppi_common\\network" ${COMMON_FOLDER}/network/.*cpp)
 SOURCE_GROUP("Header Files\\tremppi_common\\report" ${COMMON_FOLDER}/report/.*hpp)
 SOURCE_GROUP("Source Files\\tremppi_common\\report" ${COMMON_FOLDER}/report/.*cpp)
+SOURCE_GROUP("Header Files\\tremppi_common\\python" ${COMMON_FOLDER}/python/.*hpp)
+SOURCE_GROUP("Source Files\\tremppi_common\\python" ${COMMON_FOLDER}/python/.*cpp)
 ADD_LIBRARY(tremppi_common_lib tremppi_common/header.h tremppi_common/configure.h ${COMMON_FILES})
 target_link_libraries(tremppi_common_lib ${Gecode_LIBRARIES} ${Gecode_LIBRARIES_D} ${PYTHON_LIBRARIES} sqlite3 sqlite3pp jsonccp)
 

@@ -9,18 +9,30 @@ tremppi.select.setPage = function () {
 };
 
 tremppi.select.setData = function () {
-    tremppi.select.setColumns();
-    tremppi.select.loadTable();
-    tremppi.select.addColumnsSelection();
+    var grid_data = tremppi.select.getGridData();
+    grid_data.show = {toolbar: true, selectColumn: false, toolbarSave: false, toolbarReload: false, toolbarColumns: false, toolbarAdd: false, toolbarDelete: false};
+    tremppi.select.grid = $('#selection_table').w2grid(grid_data);
+    tremppi.select.activateControls();
+    tremppi.select.addColumnsSelection(grid_data.columnGroups);
 };
 
-tremppi.select.defaultToolbar = {
-    name: 'toolbar',
-    items: [
-        {type: 'check', icon: 'w2ui-icon-check', id: 'check_all', caption: 'All', checked: false},
-        {type: 'menu', id: 'display', caption: 'Display', items: []}
-    ],
-    onClick: tremppi.select.toolbarClick
+tremppi.select.save = function () {
+    var changes = tremppi.select.grid.getChanges();
+    tremppi.select.grid.mergeChanges();
+    changes.forEach(function (change) {
+        var record = tremppi.w2ui.findByRecid(tremppi.data.records, change.recid);
+        for (var val in change) {
+            if (val !== 'recid') {
+                if (typeof change[val] === 'object') {
+                    record[val] = change[val].text;
+                }
+                else {
+                    record[val] = change[val];
+                }
+            }
+        }
+    });
+    tremppi.save();
 };
 
 tremppi.select.setDefaultData = function () {
