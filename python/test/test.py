@@ -18,9 +18,6 @@ from tremppi.file_manipulation import copyanything, replace, normal_paths
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
-from tremppi.utlities import select_query
+from tremppi.select import selection_from_file
 
-
-with open(HOME_PATH + "/test/test_proj/select.json", 'r') as selectionFile:
-    grid = json.loads(selectionFile.read())
-    print(select_query(grid["records"]))
+print(selection_from_file(HOME_PATH + "/javascript/select.json"))

@@ -4,6 +4,7 @@
 
 #include <boost/python/detail/wrap_python.hpp>
 #include <tremppi_common/general/system.hpp>
+#include <tremppi_common/python/python_functions.hpp>
 
 #include "../common_tests/common_tests_data.hpp"
 
@@ -22,3 +23,9 @@ int basic_update_test() {
 	return (tremppi_update(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
 
+TEST(Python, Select) {
+	PythonFunctions & python = PythonFunctions::getInstance();
+	python.exec("from tremppi.select import selection_from_file");
+	string selection;
+	python.eval<string>("selection_from_file(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json" )) + ")", selection);
+}

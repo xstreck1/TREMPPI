@@ -1,13 +1,10 @@
 __author__ = 'adams_000'
-import sqlite3
-import re
-from os.path import exists
-from os import listdir
+import json
 
 def get_conditions(records):
     groups = {}
     for record in records:
-        if not record["select"]:
+        if (not "select" in record) or (not record["select"]):
             continue
 
         if (not ("group" in record)) or record["group"] == '':
@@ -55,7 +52,6 @@ def select_query(records):
     else:
         conditions = get_conditions(records)
         for index, clause in conditions.items():
-            print(clause)
             result += "("
             for conjunction in clause:
                 for key, value in conjunction.items():
@@ -70,3 +66,8 @@ def select_query(records):
             result = result[:-4]
 
     return result
+
+def selection_from_file(filename):
+    with open(filename, 'r') as selectionFile:
+        grid = json.loads(selectionFile.read())
+        return select_query(grid["records"])

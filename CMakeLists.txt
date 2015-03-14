@@ -17,7 +17,8 @@ set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR})
 if(UNIX)
 	ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 	set(Boost_USE_MULTITHREADED ON)
-	find_package(Boost 1.55.0 COMPONENTS program_options system log log_setup filesystem thread python REQUIRED)
+	set(Boost_USE_STATIC_LIBS ON)
+	find_package(Boost 1.55.0 COMPONENTS program_options system log log_setup filesystem thread python3 REQUIRED)
 else(UNIX)
 	find_package(Boost 1.55.0 REQUIRED)
 endif(UNIX)
@@ -72,7 +73,7 @@ SOURCE_GROUP("Source Files\\tremppi_common\\report" ${COMMON_FOLDER}/report/.*cp
 SOURCE_GROUP("Header Files\\tremppi_common\\python" ${COMMON_FOLDER}/python/.*hpp)
 SOURCE_GROUP("Source Files\\tremppi_common\\python" ${COMMON_FOLDER}/python/.*cpp)
 ADD_LIBRARY(tremppi_common_lib tremppi_common/header.h tremppi_common/configure.h ${COMMON_FILES})
-target_link_libraries(tremppi_common_lib ${Gecode_LIBRARIES} ${Gecode_LIBRARIES_D} ${PYTHON_LIBRARIES} sqlite3 sqlite3pp jsonccp)
+target_link_libraries(tremppi_common_lib ${Boost_LIBRARIES} ${Gecode_LIBRARIES} ${Gecode_LIBRARIES_D} ${PYTHON_LIBRARIES} sqlite3 sqlite3pp jsonccp)
 
 # tremppi_python - code only, no binary
 ADD_LIBRARY(tremppi_python_lib tremppi_python/tremppi_python.cpp)
