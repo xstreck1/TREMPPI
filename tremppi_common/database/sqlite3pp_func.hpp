@@ -16,7 +16,7 @@ namespace sqlite3pp {
 		void addColumn(const string & table_name, const string & column_name, const string & type, sqlite3pp::database & db);
 
 		// Obtain number of columns in selection
-		size_t columnCount(const string & table_name, const string where_clause, sqlite3pp::database & db);
+		size_t columnCount(const string & table_name, const string & selection, sqlite3pp::database & db);;
 		size_t columnCount(const string & table_name, sqlite3pp::database & db);
 
 		// @return data references by indices specified in the columns vector

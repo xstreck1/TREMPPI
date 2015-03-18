@@ -4,8 +4,6 @@ import argparse
 import shutil
 from os.path import join, dirname, abspath
 
-print(sys.path)
-
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything, replace, normal_paths
 

@@ -96,13 +96,11 @@ vector<Levels> DatabaseReader::obtainRequirements(const string & context, const 
 
 sqlite3pp::query DatabaseReader::selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db) {
 	string columns_list = alg::join(DataConv::columns2list(columns), ", ");
-	string where_clause = selection.empty() ? "" : " WHERE " + selection;
-	return sqlite3pp::query(db, ("SELECT " + columns_list + " FROM " + PARAMETRIZATIONS_TABLE + where_clause).c_str());
+	return sqlite3pp::query(db, ("SELECT " + columns_list + " FROM " + PARAMETRIZATIONS_TABLE + selection).c_str());
 }
 
 sqlite3pp::query DatabaseReader::selectionIDs(const string & selection, sqlite3pp::database & db) {
-	string where_clause = selection.empty() ? "" : " WHERE " + selection;
-	return sqlite3pp::query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + where_clause).c_str());
+	return sqlite3pp::query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + selection).c_str());
 }
 
 string DatabaseReader::getSelectionTerm(const string & type) {

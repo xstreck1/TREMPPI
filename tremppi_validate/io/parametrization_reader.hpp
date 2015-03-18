@@ -7,12 +7,12 @@ class ParametrizationReader {
 	Levels current_parametrization;
 	ParamNo current_rowid;
 public:
-	void select(const RegInfos & reg_infos, const string & filter, sqlite3pp::database & db) {
+	void select(const RegInfos & reg_infos, const string & selection, sqlite3pp::database & db) {
 		vector<string> contexts = DataInfo::getAllContexts(reg_infos);
 		if (contexts.empty())
 			throw runtime_error("No parameter columns found in the database.");
 
-		const string qry_string = "SELECT ROWID, " + boost::algorithm::join(contexts, ", ") + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + filter;
+		const string qry_string = "SELECT ROWID, " + boost::algorithm::join(contexts, ", ") + " FROM " + PARAMETRIZATIONS_TABLE + selection;
 		selection_qry.reset(new sqlite3pp::query(db, (qry_string).c_str()));
 		sel_it = selection_qry->begin();
 	}
