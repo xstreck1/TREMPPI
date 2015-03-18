@@ -6,7 +6,8 @@ PythonFunctions::PythonFunctions() {
 	main_module = bpy::import("__main__");
 	main_namespace = main_module.attr("__dict__");
 	exec("import sys");
-	exec("sys.path.append(" + reformPath(TremppiSystem::HOME_PATH / "python" )  + ")");
+	string append_cmd = "sys.path.append(" + reformPath(TremppiSystem::HOME_PATH / "python") + ")";
+	exec(append_cmd);
 }
 
 string PythonFunctions::reformPath(const bfs::path & path) {
