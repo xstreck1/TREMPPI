@@ -6,8 +6,6 @@ from os import curdir, chdir
 from os.path import dirname, join, abspath, exists
 from http.server import  HTTPServer, SimpleHTTPRequestHandler
 
-import content_functions
-
 DEFAULT_PORT = "8080"
 
 # Tremppi server that communicates between HTML reports and the filesystem
@@ -30,27 +28,12 @@ class StoreHandler(SimpleHTTPRequestHandler):
         else:
             query = parse_qs(parsed_path.query)
             command = query["command"][0]
-            # get list of HTML files in the topmost directory
-            if command == "files":
-                self.success_response('text/plain', content_functions.get_files().encode())
-            # read content of a file under given url - used for loading models
-            if command == "content":
-                store_path = join(curdir, parsed_path.query)
-                with open(store_path) as fh:
-                    self.success_response('text/js', fh.read().encode())
-            # obtain columns of the database
 
-            elif command == "database":
+            if command == "database":
                 if not exists('database.sqlite'): # send no content if the database is missing
                     self.send_response(204)
                 else:
                     self.success_response('text/plain', "database is present".encode())
-            elif command == "columns":
-                self.success_response('text/plain', content_functions.get_columns_names(query).encode())
-            elif command == "rows":
-                self.success_response('text/plain', content_functions.get_rows(query).encode())
-            elif command == "counts":
-                self.success_response('text/plain', content_functions.get_counts(query).encode())
 
     # respond to the post request
     # writes the content of the message to the file specified by the URL

@@ -42,4 +42,7 @@ tremppi.select.setDefaultData = function () {
 
     if (typeof tremppi.data.records === 'undefined' || tremppi.data.records.length === 0)
         tremppi.data.records = [{recid: 0}];
+    
+    if (typeof tremppi.data.regulations === 'undefined')
+        tremppi.data.regulations = [];
 };

@@ -5,26 +5,26 @@
 #include "../data/data_storage.hpp"
 
 namespace Output {
-	Json::Value regulatoryGraph(const RegInfos & reg_infos, const pair<string, RegsData> & regs) {
-		Json::Value graph;
+	Json::Value regulatoryGraph(const RegInfos & reg_infos, const RegsData & regs_data) {
+		Json::Value elements;
 
 		// Write the nodes
 		string nodes;
-		for (const RegData & reg : regs.second) {
+		for (const RegData & reg : regs_data) {
 			Json::Value node, data;
 			data["id"] = reg.info.name;
 			data["name"] = reg.info.name;
 			node["data"] = data;
-			graph["elements"]["nodes"].append(node);
+			elements["elements"]["nodes"].append(node);
 		}
 
 		// Write the edges
-		for (const RegData & reg : regs.second) {
+		for (const RegData & reg : regs_data) {
 			size_t reg_i = 0;
 			for (auto & regul : reg.info.regulators) {
 				for (const size_t trh_i : cscope(regul.second)) {
 					// Skip those with no occurence
-					if (abs(reg.reg_freq.at(regul.first)[trh_i]) != 0 || regs.first == "differ") {
+					if (abs(reg.reg_freq.at(regul.first)[trh_i]) != 0) {
 						Json::Value edge, data;
 
 						data["source"] = reg_infos[regul.first].name;
@@ -35,12 +35,12 @@ namespace Output {
 						data["Threshold"] = regul.second[trh_i];
 
 						edge["data"] = data;
-						graph["elements"]["edges"].append(edge);
+						elements["elements"]["edges"].append(edge);
 					}
 					++reg_i;
 				}
 			}
 		}
-		return graph;
+		return elements;
 	}
 }

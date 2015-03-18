@@ -17,7 +17,7 @@ int tremppi_express(int argc, char ** argv) {
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str() ));
 
-		select = DatabaseReader::getSelectionTerm("Select");
+		select = DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		RegInfos infos = reader.readRegInfos(db);

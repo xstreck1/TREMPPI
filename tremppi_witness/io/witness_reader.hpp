@@ -6,9 +6,9 @@ class WitnessReader {
 	sqlite3pp::query::iterator sel_it;
 	set<pair<string, string>> current_witness;
 public:
-	void select(const string & prop_name, const string & filter, sqlite3pp::database & db) {
+	void select(const string & prop_name, const string & select, sqlite3pp::database & db) {
 		const string column_name = "W_" + prop_name;
-		const string qry_string = "SELECT " + column_name + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + filter + " AND NOT " + column_name + " = \"\" ";
+		const string qry_string = "SELECT " + column_name + " FROM " + PARAMETRIZATIONS_TABLE + select;
 		selection_qry.reset(new sqlite3pp::query(db, (qry_string).c_str()));
 		sel_it = selection_qry->begin();
 	}
@@ -24,12 +24,14 @@ public:
 		current_witness.clear();
 		string witness_string = sel_it->get<string>(0);
 
-		vector<string> transitions;
-		boost::split(transitions, witness_string, is_any_of(";"));
-		for (const string & transition : transitions) {
-			vector<string> nodes(2);
-			boost::split(nodes, transition, is_any_of(">"));
-			current_witness.insert({ nodes[0], nodes[1] });
+		if (witness_string != "") {
+			vector<string> transitions;
+			boost::split(transitions, witness_string, is_any_of(";"));
+			for (const string & transition : transitions) {
+				vector<string> nodes(2);
+				boost::split(nodes, transition, is_any_of(">"));
+				current_witness.insert({ nodes[0], nodes[1] });
+			}
 		}
 
 		sel_it++;

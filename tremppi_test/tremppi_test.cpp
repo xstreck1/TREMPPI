@@ -13,8 +13,8 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";
 	ASSERT_EQ(0, basic_interact_test()) << "Basic content test interact failed.";
-	/*ASSERT_EQ(0, basic_function_test()) << "Basic content test function failed.";
-	ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
+	ASSERT_EQ(0, basic_function_test()) << "Basic content test function failed.";
+	/*ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
 	ASSERT_EQ(0, basic_update_test()) << "Basic content test update failed.";*/
 	cout << endl;
 }

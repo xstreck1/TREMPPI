@@ -74,9 +74,3 @@ void FileManipulation::replaceInFile(bfs::path const & file, const string & orig
 	bfs::copy(out_file, file);
 	bfs::remove(out_file);
 }
-
-void FileManipulation::copyAnalysisFiles(const bfs::path & path, const string & name) {
-	bfs::path html_file = path;
-	html_file.replace_extension("html");
-	bfs::copy_file(TremppiSystem::HOME_PATH / bfs::path{ "javascript" } / bfs::path{ name + ".html" }, html_file);
-}

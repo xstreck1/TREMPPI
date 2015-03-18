@@ -30,9 +30,6 @@ int tremppi_witness(int argc, char ** argv) {
 		// Get properties 
 		properties = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME);
 
-		// Copy the data
-		FileManipulation::copyAnalysisFiles(TremppiSystem::WORK_PATH / ("witness_" + TimeManager::getTimeStamp()), "witness");
-
 		// Get database
 		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
@@ -87,14 +84,7 @@ int tremppi_witness(int argc, char ** argv) {
 	// Output 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		// Write the computed content
-		Json::StyledWriter writer;
-        bfs::path output_path = TremppiSystem::WORK_PATH / ( "witness_" + TimeManager::getTimeStamp() + ".json");
-        fstream data_file(output_path.string(), ios::out);
-        if (!data_file)
-            throw runtime_error("Could not open " + output_path.string());
-		string data = writer.write(out);
-		data_file  << data << endl;
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "witness" / (TimeManager::getTimeStamp() + ".json"), out);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

@@ -103,7 +103,7 @@ sqlite3pp::query DatabaseReader::selectionIDs(const string & selection, sqlite3p
 	return sqlite3pp::query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + selection).c_str());
 }
 
-string DatabaseReader::getSelectionTerm(const string & type) {
+string DatabaseReader::getSelectionTerm() {
 	string result;
 
 	PythonFunctions & python = PythonFunctions::getInstance();

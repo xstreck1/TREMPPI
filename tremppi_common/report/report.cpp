@@ -12,18 +12,9 @@ Json::Value Report::createSetup() {
 	out["setup"]["name"] = TremppiSystem::WORK_PATH.stem().string();
 	sqlite3pp::database db((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str());
 
-	out["setup"]["select"] = DatabaseReader::getSelectionTerm("Select");
-	out["setup"]["compare"] = DatabaseReader::getSelectionTerm("Compare");
-	// Comparing if the selecitons are not the same
-	out["setup"]["comparative"] = out["setup"]["select"].asString() != out["setup"]["compare"].asString();
-
+	out["setup"]["select"] = DatabaseReader::getSelectionTerm();
 	// Get pool sizes
-	out["setup"]["pool_size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE).c_str()).begin())->get<int>(0);
-	out["setup"]["selected"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["select"].asString()).c_str()).begin())->get<int>(0);
-	if (out["setup"]["comparative"].asBool())
-		out["setup"]["compared"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + out["setup"]["compare"].asString()).c_str()).begin())->get<int>(0);
-	else
-		out["setup"]["compared"] = out["setup"]["pool_size"];
+	out["setup"]["size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + DatabaseReader::getSelectionTerm()).c_str()).begin())->get<int>(0);
 
 	return out;
 }

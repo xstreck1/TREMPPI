@@ -40,5 +40,5 @@ public:
 	static sqlite3pp::query selectionIDs(const string & selection, sqlite3pp::database & db);
 
 	// Obtain the sqlite3 WHERE clause from the selections file
-	static string getSelectionTerm(const string & type);
+	static string getSelectionTerm();
 };
