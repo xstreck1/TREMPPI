@@ -62,7 +62,7 @@ tremppi.select.getGridData = function () {
             });
             var new_column = {};
             $.extend(true, new_column, column);
-            new_column.caption = column.field.slice(prefix.length, -4);
+            new_column.caption = column.field.slice(prefix.length);
             new_column.size = 12 + new_column.caption.length * 8 + 'px';
             columns.push(new_column);
             
@@ -75,10 +75,10 @@ tremppi.select.getGridData = function () {
             columnGroups.push(new_group);
     };
 
-    tremppi.data.regulations.forEach(function(regulation) {
-        var regulator_list = (typeof regulation.regulators === 'undefined') ? "": regulation.regulators.join(',');
-        addDataGroup('K_' + regulation.id + '_', 'K<sub>' + regulation.id + '</sub>' + '(' + regulator_list + ')');
-    });
+    for (var target in tremppi.data.regulations) {
+        var regulator_list = (typeof tremppi.data.regulations[target] === 'undefined') ? "": tremppi.data.regulations[target].join(',');
+        addDataGroup('K_' + target + '_', 'K<sub>' + target+ '</sub>' + '(' + regulator_list + ')');
+    }
     addDataGroup('C_', 'cost');
     addDataGroup('R_', 'robustness');
     

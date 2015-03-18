@@ -67,7 +67,7 @@ def select_query(records):
 
     return result
 
-def selection_from_file(filename):
+def select(filename):
     with open(filename, 'r') as selectionFile:
         grid = json.loads(selectionFile.read())
         query = select_query(grid["records"]);

@@ -90,7 +90,6 @@ vector<Levels> DatabaseReader::obtainRequirements(const string & context, const 
 			reg_i++;
 		}
 	}
-
 	return result;
 }
 
@@ -107,9 +106,9 @@ string DatabaseReader::getSelectionTerm() {
 	string result;
 
 	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from tremppi.select import selection_from_file");
+	python.exec("from tremppi.select import select");
 	string selection;
-	python.eval<string>("selection_from_file(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json")) + ")", selection);
+	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json")) + ")", selection);
 
 	return result;
 }

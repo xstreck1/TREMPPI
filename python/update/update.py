@@ -6,6 +6,8 @@ import shutil
 import re
 from os.path import join, dirname
 
+raise Exception("OUTDATED")
+
 # define options
 parser = argparse.ArgumentParser(description='Update a TREMPPI project.')
 parser.add_argument('--path', help='specify the location to update.')

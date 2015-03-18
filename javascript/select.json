@@ -1,11 +1,1 @@
-{
-	"name": "grid",
-	"columns": [],
-	"records": [
-		{
-			"recid": 0
-		}
-	],
-	"regulations": [],
-	"configured": true
-}
+{"records": [{"recid": 0}], "configured": true, "columns": [{"editable": {"min": 0, "type": "int", "max": 9}, "field": "K_A_0"}, {"editable": {"min": 0, "type": "int", "max": 9}, "field": "K_A_1"}, {"editable": {"min": 0, "type": "int", "max": 9}, "field": "K_B_00"}, {"editable": {"min": 0, "type": "int", "max": 9}, "field": "K_B_02"}, {"editable": {"min": 0, "type": "int", "max": 9}, "field": "K_B_10"}, {"editable": {"min": 0, "type": "int", "max": 9}, "field": "K_B_12"}], "regulations": {"A": ["B"], "B": ["A", "B"]}, "name": "grid"}
