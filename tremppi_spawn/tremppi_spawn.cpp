@@ -1,7 +1,7 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
-
+#include <tremppi_common/database/database_reader.hpp>
 #include "compute/parameter_builder.hpp"
 #include "compute/parametrizations_builder.hpp"
 #include "io/model_reader.hpp"
@@ -111,5 +111,6 @@ int tremppi_spawn(int argc, char ** argv) {
 		logging.exceptionMessage(e, 7);
 	}
 
+	DatabaseReader::makeSelect();
 	return 0;
 }

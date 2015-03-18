@@ -112,3 +112,14 @@ string DatabaseReader::getSelectionTerm() {
 
 	return result;
 }
+
+void DatabaseReader::makeSelect() {
+	PythonFunctions & python = PythonFunctions::getInstance();
+	python.exec("from tremppi.tabulize import tabulize");
+	python.exec("tabulize(" +
+		PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "database.sqlite")) +
+		", " +
+		PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json")) +
+		")");
+}
+

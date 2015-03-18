@@ -127,5 +127,7 @@ int tremppi_validate(int argc, char ** argv) {
 			logging.exceptionMessage(e, 6);
 		}
 	}
+
+	DatabaseReader::makeSelect();
 	return 0;
 }

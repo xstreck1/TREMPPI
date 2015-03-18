@@ -67,5 +67,6 @@ int tremppi_interact(int argc, char ** argv) {
 		logging.exceptionMessage(e, 5);
 	}
 
+	DatabaseReader::makeSelect();
 	return 0;
 }
