@@ -18,6 +18,6 @@ from tremppi.file_manipulation import copyanything, replace, normal_paths
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
-from tremppi.select import selection_from_file
+from tremppi.select import select
 
-print(selection_from_file(HOME_PATH + "/javascript/select.json"))
+print(select(HOME_PATH + "/javascript/select.json"))

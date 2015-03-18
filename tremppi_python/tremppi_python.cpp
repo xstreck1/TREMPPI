@@ -7,7 +7,7 @@ using namespace std;
 
 
 int tremppi_python(const string command, int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<PythonOptions>("tremppi_pythons", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<PythonOptions>("tremppi_python", argc, argv);
 
 	// Check if the script exists
 	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
@@ -15,11 +15,6 @@ int tremppi_python(const string command, int argc, char ** argv) {
 		cerr << file_path.string() << " is called, but does not exist.";
 		return 1;
 	}
-
-	const char * text = "test\\";
-	wchar_t * wtext = new wchar_t[strlen(text) + 1];
-	mbstowcs(wtext, text, strlen(text) + 1);
-	delete wtext;
 
 	wchar_t ** wargv = new wchar_t*[argc];
 	for (int i : crange(argc)) {

@@ -1,6 +1,7 @@
 #include "database_reader.hpp"
 #include "../general/system.hpp"
 #include "../general/file_manipulation.hpp"
+#include "../python/python_functions.hpp"
 
 map<CompID, Levels> DatabaseReader::readRegulators(const string & component, sqlite3pp::database & db) {
 	map<CompID, Levels>  result;
@@ -8,7 +9,7 @@ map<CompID, Levels> DatabaseReader::readRegulators(const string & component, sql
 	sqlite3pp::query qry(db, ("SELECT * FROM " + REGULATIONS_TABLE).c_str());
 	for (auto row : qry) {
 		string source, target; ActLevel threshold;
-		row.getter() >> target >> source >> threshold;
+		row.getter() >> source >> target >> threshold;
 		if (target == component) {
 			result[components_dict[source]].emplace_back(threshold);
 		}
@@ -105,13 +106,12 @@ sqlite3pp::query DatabaseReader::selectionIDs(const string & selection, sqlite3p
 }
 
 string DatabaseReader::getSelectionTerm(const string & type) {
-	string select = "1 AND";
+	string result;
 
-	Json::Value selections = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / SELECTION_FILENAME);
-	for (const Json::Value & selection : selections)
-		if (selection["values"][type].asBool())
-			select += "(" + selection["values"]["Selection"].asString() + ") AND ";
-	select.resize(select.size() - 4);
+	PythonFunctions & python = PythonFunctions::getInstance();
+	python.exec("from tremppi.select import selection_from_file");
+	string selection;
+	python.eval<string>("selection_from_file(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json")) + ")", selection);
 
-	return select;
+	return result;
 }

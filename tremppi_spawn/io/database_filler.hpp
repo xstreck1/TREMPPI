@@ -39,21 +39,25 @@ class DatabaseFiller {
 	}
 
 	void fillRegulations() {
-		prepareTable(REGULATIONS_TABLE, "(Target TEXT, Source TEXT, Threshold INTEGER)");
-		string update = "";
+		prepareTable(REGULATIONS_TABLE, "(Source TEXT, Target TEXT, Threshold INTEGER)");
+		vector<string> updates;
 		for (CompID t_ID : crange(model.components.size())) {
 			for (auto regul : ModelTranslators::getThresholds(model, t_ID)) {
 				for (ActLevel threshold : regul.second) {
 					string values = "(";
-					values += quote(model.components[t_ID].name) + ", ";
 					values += quote(model.components[regul.first].name) + ", ";
+					values += quote(model.components[t_ID].name) + ", ";
 					values += quote(threshold);
 					values += ");\n";
-					update += makeInsert(REGULATIONS_TABLE) + values;
+					updates.push_back(makeInsert(REGULATIONS_TABLE) + values);
 				}
 			}
 		}
-		db.execute(update.c_str());
+		// Sort so the values in the db are also sorted
+		sort(WHOLE(updates));
+		for (const string & update : updates) {
+			db.execute(update.c_str());
+		}
 	}
 
 	string getContexts() const {

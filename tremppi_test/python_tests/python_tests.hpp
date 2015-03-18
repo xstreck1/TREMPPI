@@ -22,10 +22,3 @@ int basic_update_test() {
 	ArgPtr arg_ptr(arguments);
 	return (tremppi_update(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
-
-TEST(Python, Select) {
-	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from tremppi.select import selection_from_file");
-	string selection;
-	python.eval<string>("selection_from_file(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json" )) + ")", selection);
-}

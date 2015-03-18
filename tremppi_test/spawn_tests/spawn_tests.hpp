@@ -21,11 +21,11 @@ void createModel(const bfs::path & example_model_path) {
 	root["edges"][0]["data"]["source"] = "n0";
 	root["edges"][0]["data"]["target"] = "n1";
 	root["edges"][0]["data"]["Threshold"] = 1;
-	root["edges"][0]["data"]["Label"] = "+&!-";
+	root["edges"][0]["data"]["Label"] = "Activating Only";
 	root["edges"][1]["data"]["source"] = "n1";
 	root["edges"][1]["data"]["target"] = "n1";
 	root["edges"][1]["data"]["Threshold"] = 2;
-	root["edges"][1]["data"]["Label"] = "+";
+	root["edges"][1]["data"]["Label"] = "Activating";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / bfs::path{ NETWORK_FILENAME }).string(), ios::out);

@@ -76,7 +76,8 @@ tremppi.select.getGridData = function () {
     };
 
     tremppi.data.regulations.forEach(function(regulation) {
-        addDataGroup('K_' + regulation.id + '_', 'K<sub>' + regulation.id + '</sub>' + '(' + regulation.regulators.join(',') + ')');
+        var regulator_list = (typeof regulation.regulators === 'undefined') ? "": regulation.regulators.join(',');
+        addDataGroup('K_' + regulation.id + '_', 'K<sub>' + regulation.id + '</sub>' + '(' + regulator_list + ')');
     });
     addDataGroup('C_', 'cost');
     addDataGroup('R_', 'robustness');
