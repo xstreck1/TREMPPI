@@ -62,11 +62,11 @@ int tremppi_interact(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "interact" / (TimeManager::getTimeStamp() + ".json"), out);
+		DatabaseReader::makeSelect();
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);
 	}
 
-	DatabaseReader::makeSelect();
 	return 0;
 }

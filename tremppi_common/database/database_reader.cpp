@@ -108,18 +108,18 @@ string DatabaseReader::getSelectionTerm() {
 	PythonFunctions & python = PythonFunctions::getInstance();
 	python.exec("from tremppi.select import select");
 	string selection;
-	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json")) + ")", selection);
+	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::WORK_PATH } / "select.json")) + ")", selection);
 
 	return result;
 }
 
 void DatabaseReader::makeSelect() {
 	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from tremppi.tabulize import tabulize");
-	python.exec("tabulize(" +
-		PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "database.sqlite")) +
+	python.exec("from tremppi.tabularize import tabularize");
+	python.exec("tabularize(" +
+		PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::WORK_PATH } / "database.sqlite")) +
 		", " +
-		PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "javascript" / "select.json")) +
+		PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::WORK_PATH } / "select.json")) +
 		")");
 }
 

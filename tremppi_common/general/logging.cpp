@@ -64,8 +64,8 @@ void Logging::step() {
 			Logging::phases.back().step_no += 1;
 		else {
 			string finished = "FINISHED";
-			output.resize(LINE_LENGTH - finished.size());
-			output += "FINISHED";
+			output.resize(LINE_LENGTH - finished.size() - 1);
+			output += finished;
 			break;
 		}
 	}

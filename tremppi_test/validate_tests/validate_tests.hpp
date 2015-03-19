@@ -49,8 +49,8 @@ int basic_validate_test()  {
 	ArgPtr arg_ptr(arguments);
 	createProperties(path);
 	int res = tremppi_validate(arg_ptr.getArgc(), arg_ptr.getArgv());
-	fstream fout(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj" / "select.json").string(), ios::out);
-	fout << "[{\"id\": 0, \"values\" : {\"Selection\": \"C_test_ts\", \"Select\" : true, \"Compare\" : false}}]";
+	/* fstream fout(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj" / "select.json").string(), ios::out);
+	fout << "[{\"id\": 0, \"values\" : {\"Selection\": \"C_test_ts\", \"Select\" : true, \"Compare\" : false}}]";*/
 	return res;
 }
 

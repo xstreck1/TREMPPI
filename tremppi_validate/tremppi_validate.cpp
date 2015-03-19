@@ -122,12 +122,12 @@ int tremppi_validate(int argc, char ** argv) {
 				logging.step();
 			}
 			xct.commit();
+			DatabaseReader::makeSelect();
 		}
 		catch (std::exception & e) {
 			logging.exceptionMessage(e, 6);
 		}
 	}
 
-	DatabaseReader::makeSelect();
 	return 0;
 }

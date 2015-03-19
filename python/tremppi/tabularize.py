@@ -27,21 +27,33 @@ def read_regulations(conn):
 
 def read_columns(conn):
     result = []
+    components = read_components(conn)
     cursor = conn.execute('select * from Parametrizations')
     names = list(map(lambda x: x[0], cursor.description))
     for name in names:
-        result.append({
-            "editable": {
-                "max": 9,
-                "min": 0,
-                "type": "int"
-            },
-            "field": name
-        })
-
+        parts = str(name).split("_")
+        if (parts[0] == "K"):
+            result.append({
+                "editable": {
+                    "max": components[parts[1]],
+                    "min": 0,
+                    "type": "int",
+                    "step": 1
+                },
+                "field": name
+            })
+        elif (parts[0] == "R"):
+            result.append({
+                "editable": {
+                    "max": 9,
+                    "min": 0,
+                    "type": "float"
+                },
+                "field": name
+            })
     return result
 
-def tabulize(database, target_file):
+def tabularize(database, target_file):
     with sqlite3.connect(database) as conn:
         grid = {}
         with open(target_file, 'r') as select_json:
@@ -49,6 +61,5 @@ def tabulize(database, target_file):
 
         grid["regulations"] = read_regulations(conn)
         grid["columns"] = read_columns(conn)
-
         with open(target_file, 'w') as select_json:
             json.dump(grid, select_json)

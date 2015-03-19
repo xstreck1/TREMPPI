@@ -70,6 +70,8 @@ def select_query(records):
 def select(filename):
     with open(filename, 'r') as selectionFile:
         grid = json.loads(selectionFile.read())
+        if "records" not in grid:
+            return ""
         query = select_query(grid["records"]);
         if query != '':
             return ' WHERE ' + query

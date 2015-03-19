@@ -4,9 +4,9 @@
 bool DataInfo::isValidName(const string & spec_name) {
 	if (spec_name.empty())
 		return false;
-	bool valid = isalpha(spec_name[0]) || spec_name[0] == '_';
+	bool valid = isalpha(spec_name[0]);
 	for (char ch : spec_name)
-		valid &= isalnum(ch) || ch == '_';
+		valid = valid && isalnum(ch);
 	return valid;
 }
 

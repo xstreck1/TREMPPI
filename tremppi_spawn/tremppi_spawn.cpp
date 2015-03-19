@@ -8,7 +8,6 @@
 #include "io/database_filler.hpp"
 #include "io/spawn_options.hpp"
 #include "io/syntax_checker.hpp"
-#include "io/select_output.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_spawn.
@@ -94,23 +93,11 @@ int tremppi_spawn(int argc, char ** argv) {
 		}
 
 		database_filler.finishOutpout();
+		DatabaseReader::makeSelect();
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 6);
 	}
 
-	// Output select
-	try {
-		Json::Value grid; 
-		grid["columns"] = SelectOutput::getNewColumns(model, kinetics);
-		grid["regulations"] = SelectOutput::getRegulations(model);
-
-		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / ("select.json"), grid);
-	}
-	catch (exception & e) {
-		logging.exceptionMessage(e, 7);
-	}
-
-	DatabaseReader::makeSelect();
 	return 0;
 }
