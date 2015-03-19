@@ -5,7 +5,7 @@ tremppi_common/configure.h
 *bin*
 *lib*
 
-# CMame files
+# CMake files
 CMakeFiles*
 *CMake*.bin
 *CMake*.cmake
@@ -26,7 +26,7 @@ Win32*
 
 # IDEA
 *.idea*
-*__pycache__
+*__pycache__*
 
 # projects
 proj/*

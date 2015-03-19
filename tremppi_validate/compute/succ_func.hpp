@@ -2,7 +2,7 @@
 
 #include "../data/product_structure.hpp"
 
-// #define DETERMINISM
+#define DETERMINISM
 
 namespace SuccFunc {
 	/**

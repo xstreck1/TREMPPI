@@ -20,11 +20,11 @@ public:
 	static string reformPath(const bfs::path & path);
 
 	template <typename ResultType>
-	void eval(const string & command, typename ResultType & result);
+    void eval(const string & command, ResultType & result);
 };
 
 template<typename ResultType>
-void PythonFunctions::eval(const string & command, typename ResultType & result) {
+void PythonFunctions::eval(const string & command, ResultType & result) {
 	try {
 		bpy::object value = bpy::eval(command.c_str(), main_namespace);
 		result = bpy::extract<ResultType>(value);
