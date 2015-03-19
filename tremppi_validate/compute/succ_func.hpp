@@ -2,6 +2,8 @@
 
 #include "../data/product_structure.hpp"
 
+// #define DETERMINISM
+
 namespace SuccFunc {
 	/**
 	 * @return true if this transition is open for given parametrization
@@ -34,9 +36,14 @@ namespace SuccFunc {
 			}
 		}
 
+#ifdef DETERMINISM
+		if (targets.size() != 1)
+			targets.clear();
+#else
 		// Add loops only if there is no transition (even a hell transition) available.
 		if (!hell && targets.empty())
 			targets = ts.getLoops(ID);
+#endif
 
 		return targets;
 	}

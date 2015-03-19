@@ -51,6 +51,16 @@ def read_columns(conn):
                 },
                 "field": name
             })
+        elif (parts[0] == "C"):
+            result.append({
+                "editable": {
+                    "max": 4294967296,
+                    "min": 0,
+                    "type": "int",
+                    "step": 1
+                },
+                "field": name
+            })
     return result
 
 def tabularize(database, target_file):
