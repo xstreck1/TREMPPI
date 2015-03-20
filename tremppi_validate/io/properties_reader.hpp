@@ -31,7 +31,6 @@ namespace PropertiesReader {
 				ID++;
 			}
 
-			vector<string> stables_list;
 			for (const Json::Value & measurement : property["data"]) {
 				string constraint = measurement["values"]["Measurement"].asString();
 
@@ -39,13 +38,16 @@ namespace PropertiesReader {
 
 				PropertyAutomaton::Edges edges = { { ID, negation }, { ID + 1, constraint } };
 
+				vector<string> stables_list;
+				string stables = measurement["values"]["Stables"].asString();
+				if (!stables.empty())
+					boost::split(stables_list, stables, boost::is_any_of(","));
+
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list), move(edges) });
 
 				// Stables for the next state (once the values requried here are reached)
 				ID++;
-				string stables = measurement["values"]["Stables"].asString();
-				if (!stables.empty())
-					boost::split(stables_list, stables, boost::is_any_of(","));
+
 			}
 			// Loop to the first
 			if (automaton.prop_type == "Cycle") {

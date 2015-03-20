@@ -46,7 +46,7 @@ Logging::~Logging() {
 	blg::core::get()->remove_all_sinks();
 }
 
-void Logging::newPhase(const string & _desc, const size_t _step_count) {
+void Logging::newPhase(const string & _desc, const phase_no _step_count) {
 	Logging::phases.push_back({ _step_count, 0, _desc, phases.size() });
 }
 

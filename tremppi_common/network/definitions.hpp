@@ -59,7 +59,7 @@ const std::vector<std::string> PropType = { "TimeSeries", "Cycle" };
 enum AutType { BA_finite, BA_weak, BA_standard };
 
 /// Index of the color - may be a big number.
-typedef size_t ParamNo;
+typedef uint64_t ParamNo;
 
 /// Parametrizations in Neighbourhood
 typedef vector<ParamNo> Neighbours;

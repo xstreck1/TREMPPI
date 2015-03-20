@@ -3,9 +3,11 @@
 #include "../header.h"
 #include "common_functions.hpp"
 
+using phase_no = uint64_t;
+
 struct LogPhase {
-	size_t step_count;
-	size_t step_no;
+	phase_no step_count;
+	phase_no step_no;
 	string description;
 	size_t depth;
 };
@@ -26,7 +28,7 @@ public:
 	~Logging();
 
 	// 
-    static void newPhase(const string & _desc, const size_t _step_count = 0);
+    static void newPhase(const string & _desc, const phase_no _step_count = 0);
 
 	//
 	static void killPhase();
