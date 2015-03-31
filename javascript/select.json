@@ -1,1 +1,132 @@
-{"regulations": {"A": ["B"], "B": ["A", "B"]}, "show": {"toolbarSearch": false, "toolbar": true, "toolbarDelete": false, "toolbarReload": false, "toolbarColumns": false, "toolbarSave": false, "toolbarAdd": false, "selectColumn": false}, "records": [{"select": true, "K_B_12": "[0,1)", "K_B_00": "2", "recid": 0}], "name": "grid", "columns": [{"field": "K_A_0"}, {"field": "K_A_1"}, {"field": "K_B_00"}, {"field": "K_B_02"}, {"field": "K_B_10"}, {"field": "K_B_12"}], "configured": true, "groups": [{"master": true, "hideable": false, "span": 1, "checked": false, "columns": [], "caption": ""}, {"icon": "w2ui-icon-cross", "text": "K<sub>A</sub>(B)", "hideable": true, "span": 2, "checked": false, "columns": ["K_A_0", "K_A_1"], "caption": "K<sub>A</sub>(B)"}, {"icon": "w2ui-icon-cross", "text": "K<sub>B</sub>(A,B)", "hideable": true, "span": 4, "checked": false, "columns": ["K_B_00", "K_B_02", "K_B_10", "K_B_12"], "caption": "K<sub>B</sub>(A,B)"}]}
+{
+	"records": [
+		{
+			"select": true,
+			"K_B_12": "[0,1)",
+			"recid": 0,
+			"K_B_00": "2"
+		}
+	],
+	"regulations": {
+		"B": [
+			"A",
+			"B"
+		],
+		"A": [
+			"B"
+		]
+	},
+	"show": {
+		"toolbar": true,
+		"selectColumn": false,
+		"toolbarSave": false,
+		"toolbarReload": false,
+		"toolbarSearch": false,
+		"toolbarColumns": false,
+		"toolbarAdd": false,
+		"toolbarDelete": false
+	},
+	"columns": [
+		{
+			"field": "select",
+			"caption": " ",
+			"size": "25px",
+			"resizable": false,
+			"editable": {
+				"type": "check"
+			}
+		},
+		{
+			"field": "K_B_00",
+			"caption": "00",
+			"size": "28px",
+			"resizable": true,
+			"editable": {
+				"type": "text"
+			}
+		},
+		{
+			"field": "K_B_02",
+			"caption": "02",
+			"size": "28px",
+			"resizable": true,
+			"editable": {
+				"type": "text"
+			}
+		},
+		{
+			"field": "K_B_10",
+			"caption": "10",
+			"size": "28px",
+			"resizable": true,
+			"editable": {
+				"type": "text"
+			}
+		},
+		{
+			"field": "K_B_12",
+			"caption": "12",
+			"size": "45px",
+			"resizable": true,
+			"editable": {
+				"type": "text"
+			}
+		},
+		{
+			"field": "K_A_0",
+			"caption": "0",
+			"size": "20px",
+			"resizable": true,
+			"editable": {
+				"type": "text"
+			}
+		},
+		{
+			"field": "K_A_1",
+			"caption": "1",
+			"size": "20px",
+			"resizable": true,
+			"editable": {
+				"type": "text"
+			}
+		}
+	],
+	"groups": [
+		{
+			"caption": "",
+			"columns": [],
+			"span": 1,
+			"master": true,
+			"hideable": false,
+			"checked": false
+		},
+		{
+			"caption": "K<sub>B</sub>(A,B)",
+			"columns": [
+				"K_B_00",
+				"K_B_02",
+				"K_B_10",
+				"K_B_12"
+			],
+			"hideable": true,
+			"checked": false,
+			"span": 4,
+			"text": "K<sub>B</sub>(A,B)",
+			"icon": "w2ui-icon-cross"
+		},
+		{
+			"caption": "K<sub>A</sub>(B)",
+			"columns": [
+				"K_A_0",
+				"K_A_1"
+			],
+			"hideable": true,
+			"checked": false,
+			"span": 2,
+			"text": "K<sub>A</sub>(B)",
+			"icon": "w2ui-icon-cross"
+		}
+	],
+	"configured": true,
+	"name": "grid"
+}

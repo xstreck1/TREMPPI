@@ -7,11 +7,10 @@ from os.path import exists
 from os import listdir
 import json
 
-from tremppi.database_reader import read_components, read_regulations
+from tremppi.database_reader import read_regulations
 
 def read_columns(conn):
     result = []
-    components = read_components(conn)
     cursor = conn.execute('select * from Parametrizations')
     names = list(map(lambda x: x[0], cursor.description))
     for name in names:
@@ -32,10 +31,10 @@ def read_columns(conn):
 
 def tabularize(database, target_file):
     with sqlite3.connect(database) as conn:
-        grid = {}
         with open(target_file, 'r') as select_json:
             grid = json.loads(select_json.read())
 
+        grid["configured"] = False
         grid["regulations"] = read_regulations(conn)
         grid["columns"] = read_columns(conn)
         with open(target_file, 'w') as select_json:

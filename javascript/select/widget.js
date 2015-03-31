@@ -8,7 +8,7 @@ tremppi.select.columnResize = function (event) {
     event.onComplete = function (event) {
         tremppi.data.columns.forEach(function (column) {
             if (column.field === event.field) {
-                column.size = event.resizeBy + "px";
+                column.size = (parseInt(column.size.slice(0,-2)) + parseInt(event.resizeBy)) + "px";
             }
         });
         tremppi.select.save();

@@ -13,8 +13,6 @@ tremppi.select.activateControls = function () {
     tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
     tremppi.select.grid.onToolbar = tremppi.select.toolbarClick;
-    tremppi.select.grid.onChange = tremppi.select.changeFunction;
-
 };
 
 tremppi.select.freeID = function () {

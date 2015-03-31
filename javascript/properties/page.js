@@ -6,9 +6,13 @@
 
 tremppi.properties.setPage = function () {
     $("#widget").append('<div id="property_list"></div>');
-    $("#widget").append('<div id="property_detial"></div>');
+    $("#widget").append('<div id="property_detail"></div>');
 };
 
+tremppi.properties.setData = function () {
+    tremppi.properties.list = $('#property_list').w2grid(tremppi.data.list);  
+    tremppi.properties.detail = $('#property_detail').w2grid(tremppi.data.detail);
+};
 
 tremppi.properties.setDefaultData = function (data) {
     data.name = "grid";

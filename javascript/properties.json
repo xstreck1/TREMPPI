@@ -1,24 +1,5 @@
-[
-	{
-		"desc": [
-			{
-				"id": 0,
-				"values": {
-					"Name": "property_0",
-					"Type": "TimeSeries",
-					"Experiment": "",
-					"Verify": "true"
-				}
-			}
-		],
-		"data": [
-			{
-				"id": 0,
-				"values": {
-					"Measurement": "asd",
-					"Stables": ""
-				}
-			}
-		]
-	}
-]
+{
+    "list": { "name": "list" },
+    "detail": { "name": "detail" },
+    "configured": true
+}
