@@ -43,6 +43,7 @@ tremppi.editor.setData = function () {
 };
 
 tremppi.editor.save = function () {
+    tremppi.data.configured = true;
     tremppi.data = tremppi.editor.graph.json().elements;
     tremppi.save();
 };
@@ -51,11 +52,11 @@ tremppi.editor.layout = function () {
     $("#graph_object").cytoscape('get').resize();
 };
 
-tremppi.editor.setDefaultData = function() {
-    if (typeof tremppi.data.nodes === 'undefined')
-        tremppi.data.nodes = [];
-    if (typeof tremppi.data.edges === 'undefined')
-        tremppi.data.edges = [];
+tremppi.editor.setDefaultData = function(data) {
+    if (typeof data.nodes === 'undefined')
+        data.nodes = [];
+    if (typeof data.edges === 'undefined')
+        data.edges = [];
 };
 
 

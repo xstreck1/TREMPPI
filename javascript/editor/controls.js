@@ -40,6 +40,7 @@ tremppi.editor.addElem = function (elem, type) {
     tremppi.editor["set" + type](new_elem);
     tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
     tremppi.editor.graph.style().update();
+    tremppi.editor.save();
 };
 
 tremppi.editor.creation = function (event) {
@@ -52,11 +53,14 @@ tremppi.editor.creation = function (event) {
         tremppi.editor.removeAll();
         tremppi.editor.addHelpField("Click on a component to put a target of a REGULATION.");
         tremppi.editor.graph.off('tap').on('tap', function (event) {
-            var edge = tremppi.editor.newEdge(source, event.cyTarget[0]);
-            tremppi.editor.addElem(edge, "Edge");
+            if (event.cy !== event.cyTarget && event.cyTarget.isNode())  {
+                var edge = tremppi.editor.newEdge(source, event.cyTarget[0]);
+                tremppi.editor.addElem(edge, "Edge");
+            } else {
+                tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
+            }
         });
     } else {
-        tremppi.editor.setEdge(event.cyTarget);
         tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
     }
 };
@@ -65,6 +69,7 @@ tremppi.editor.deletion = function (event) {
     if (event.cy !== event.cyTarget) {
         tremppi.editor.graph.remove(event.cyTarget);
         tremppi.editor.graph.style().update();
+        tremppi.editor.save();
     }
     tremppi.editor.setBasic();
 };
@@ -85,6 +90,7 @@ tremppi.editor.addEditField = function (element, field, type) {
         element.data(field, value);
         tremppi.editor[element[0].isNode() ? 'glyphNode' : 'glyphEdge'](element.data());
         tremppi.editor.graph.style().update();
+        tremppi.editor.save();
     }).height(14);
 };
 
@@ -94,9 +100,8 @@ tremppi.editor.addHelpField = function (help_text) {
 
 tremppi.editor.setBasic = function () {
     tremppi.editor.removeAll();
-    tremppi.editor.toolbar.add({type: 'button', id: 'save', caption: 'Save', hint: 'save the graph to the file'});
-    tremppi.editor.toolbar.add({type: 'button', id: 'create', caption: 'Create', hint: 'click on an empty space to create a node, click on a node to start an edge'});
-    tremppi.editor.toolbar.add({type: 'button', id: 'delete', caption: 'Delete', hint: 'delete an element'});
+    tremppi.editor.toolbar.add({type: 'button', id: 'create', icon: 'w2ui-icon-plus', caption: 'Add', hint: 'click on an empty space to create a node, click on a node to start an edge'});
+    tremppi.editor.toolbar.add({type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'});
     tremppi.editor.graph.off('tap').on('tap', tremppi.editor.selection);
 };
 

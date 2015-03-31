@@ -9,40 +9,31 @@ tremppi.select.setPage = function () {
 };
 
 tremppi.select.setData = function () {
-    var grid_data = tremppi.select.getGridData();
-    grid_data.show = {toolbar: true, selectColumn: false, toolbarSave: false, toolbarReload: false, toolbarColumns: false, toolbarAdd: false, toolbarDelete: false};
-    tremppi.select.grid = $('#selection_table').w2grid(grid_data);
+    tremppi.select.grid = $('#selection_table').w2grid(tremppi.data);
+    tremppi.select.grid.onChange = tremppi.select.changeFunction;
+    tremppi.select.setGroups();
+    tremppi.select.grid.refresh();
     tremppi.select.activateControls();
-    tremppi.select.addColumnsSelection(grid_data.columnGroups);
+    tremppi.select.addColumnsSelection(tremppi.data.groups);
+    tremppi.select.grid.onColumnResize = tremppi.select.columnResize;
 };
 
 tremppi.select.save = function () {
-    var changes = tremppi.select.grid.getChanges();
-    tremppi.select.grid.mergeChanges();
-    changes.forEach(function (change) {
-        var record = tremppi.w2ui.findByRecid(tremppi.data.records, change.recid);
-        for (var val in change) {
-            if (val !== 'recid') {
-                if (typeof change[val] === 'object') {
-                    record[val] = change[val].text;
-                }
-                else {
-                    record[val] = change[val];
-                }
-            }
-        }
-    });
     tremppi.save();
 };
 
-tremppi.select.setDefaultData = function () {
-    tremppi.data.name = "grid";
-    if (typeof tremppi.data.columns === 'undefined')
-        tremppi.data.columns = [];
-
-    if (typeof tremppi.data.records === 'undefined' || tremppi.data.records.length === 0)
-        tremppi.data.records = [{recid: 0}];
+tremppi.select.setDefaultData = function (data) {
+    data.name = "grid";
     
-    if (typeof tremppi.data.regulations === 'undefined')
-        tremppi.data.regulations = [];
+    data.show = {toolbar: true, selectColumn: false, toolbarSave: false, 
+        toolbarReload: false, toolbarSearch: false, toolbarColumns: false, 
+        toolbarAdd: false, toolbarDelete: false};
+    
+    tremppi.select.setGridData(data);
+
+    if (typeof data.records === 'undefined' )
+        data.records = [];
+    
+    if (typeof data.regulations === 'undefined')
+        data.regulations = [];
 };

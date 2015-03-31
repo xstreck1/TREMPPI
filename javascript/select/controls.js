@@ -5,11 +5,12 @@
  */
 
 tremppi.select.activateControls = function () {
-    tremppi.select.grid.toolbar.add({type: 'menu', id: 'display', caption: 'Display', items: []});
+    tremppi.select.grid.toolbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'check_all', caption: 'All', checked: false});
     tremppi.select.grid.toolbar.add({type: 'break', id: 'break0'});
-    tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-check', id: 'save', caption: 'Save'});
+    tremppi.select.grid.toolbar.add({type: 'menu', id: 'display', caption: 'Display', items: []});
+    tremppi.select.grid.toolbar.add({type: 'break', id: 'break1'});
     tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
-    tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-pencil', id: 'duplicate', caption: 'Duplicate'});
+    tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     tremppi.select.grid.toolbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
     tremppi.select.grid.onToolbar = tremppi.select.toolbarClick;
     tremppi.select.grid.onChange = tremppi.select.changeFunction;
@@ -29,43 +30,39 @@ tremppi.select.freeID = function () {
     return id;
 };
 
+tremppi.select.changeFunction = function (event) {
+    var column_name = tremppi.data.columns[event.column].field;
+    // List items are object, we want to store the text only
+    if (typeof event.value_new === 'object')
+        tremppi.data.records[event.index][column_name] = event.value_new.text;
+    else
+        tremppi.data.records[event.index][column_name] = event.value_new;
+    tremppi.select.save();
+};
+
 tremppi.select.toolbarClick = function (event) {
     if (event.type === 'toolbar') {
         if (event.target === 'check_all') {
-            var new_val = !event.item.checked;
+            var new_val = !event.originalEvent.item.checked;
             tremppi.data.records.forEach(function (record) {
                 record.select = new_val;
             });
             tremppi.select.grid.records = tremppi.data.records;
             tremppi.select.grid.refresh();
         }
-        if (event.target.slice(0, 8) === 'display:') {
+        else if (event.target.slice(0, 8) === 'display:') {
             var subItem = event.originalEvent.subItem;
             subItem.checked = !subItem.checked;
             subItem.icon = subItem.checked ? 'w2ui-icon-plus' : 'w2ui-icon-cross';
-            var newColumnGroups = [];
-            tremppi.select.columnGroups.forEach(function (column_group) {
-                if (column_group.caption === subItem.id) {
-                    column_group.columns.forEach(function (column) {
-                        tremppi.select.grid.toggleColumn(column);
-                    });
-                    column_group.available = !column_group.available;
-                }
-                if (column_group.available)
-                    newColumnGroups.push(column_group);
-            });
-            tremppi.select.grid.columnGroups = newColumnGroups;
+            tremppi.select.setGroups();
             tremppi.select.grid.refresh();
         }
-        if (event.target === 'save') {
-            tremppi.select.save();
-        };
-        if (event.target === 'add') {
+        else if (event.target === 'add') {
             tremppi.data.records.push({recid: tremppi.select.freeID()});
             tremppi.select.grid.records = tremppi.data.records;
             tremppi.select.grid.refresh();
         }
-        if (event.target === 'duplicate') {
+        else if (event.target === 'duplicate') {
             var new_records = [];
             tremppi.select.grid.getSelection().forEach(function (recid) {
                 for (var i = 0; i < tremppi.data.records.length; i++) {
@@ -83,9 +80,8 @@ tremppi.select.toolbarClick = function (event) {
             tremppi.select.grid.selectNone();
             new_records.forEach(function(recid){tremppi.select.grid.select(recid)});
             tremppi.select.grid.refresh();
-            tremppi.save();
         }
-        if (event.target === 'delete') {
+        else if (event.target === 'delete') {
             tremppi.select.grid.getSelection().forEach(function (recid) {
                 for (var i = 0; i < tremppi.data.records.length; i++) {
                     if (tremppi.data.records[i].recid === recid) {
@@ -97,16 +93,19 @@ tremppi.select.toolbarClick = function (event) {
             tremppi.select.grid.records = tremppi.data.records;
             tremppi.select.grid.selectNone();
             tremppi.select.grid.refresh();
-            tremppi.save();
         }
+        tremppi.select.save();
     }
     console.log('Clicked: ' + event.target, event);
 };
 
-tremppi.select.addColumnsSelection = function (columnGroups) {
+tremppi.select.addColumnsSelection = function (groups) {
     var menu = tremppi.select.grid.toolbar.get('display');
-    columnGroups.forEach(function (column_group) {
-        if (column_group.caption !== 'controls')
-            menu.items.push({text: column_group.caption, icon: 'w2ui-icon-cross', checked: false});
+    groups.forEach(function (group) {
+        if (group.hideable) {
+            group.text = group.caption;
+            group.icon = group.checked ? 'w2ui-icon-plus' : 'w2ui-icon-cross';
+            menu.items.push(group);
+        }
     });
 };

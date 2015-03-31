@@ -1,79 +1,50 @@
 __author__ = 'adams_000'
 import json
+import re
 
-def get_conditions(records):
-    groups = {}
-    for record in records:
-        if (not "select" in record) or (not record["select"]):
+
+def get_atom(record):
+    atoms = []
+    if (not "select" in record) or (not record["select"]):
+        return
+
+    for key, value in record.items():
+        if key == 'select' or key == 'recid':
             continue
+        elif re.match('\d+.*\d*', value):
+            atoms.append(key + " = " + value)
+        elif re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value):
+            matches = re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value)
+            if matches.group(1) == '(':
+                atoms.append(key + " > " + matches.group(2))
+            else:
+                atoms.append(key + " >= " + matches.group(2))
+            if matches.group(4) == ')':
+                atoms.append(key + " < " + matches.group(3))
+            else:
+                atoms.append(key + " <= " + matches.group(3))
+        else:
+            raise "The expression " + value + " for the key " + key + " is not interpreted."
 
-        if (not ("group" in record)) or record["group"] == '':
-            record["group"] = 0
-        group_no = int(record["group"])
-
-        if not (group_no in groups):
-            groups[group_no] = []
-        group = groups[group_no]
-
-        group.append({})
-        conditions = group[len(group)-1]
-
-        for key, value in record.items():
-            if len(key) < 4:
-                continue
-            elif key[-4:] == "_val" or key[-4:] == "_cmp":
-                field = key[:-4]
-                type = key[-3:]
-                if not (field in conditions):
-                    conditions[field] = (" ", 0)
-                if type == "cmp":
-                    conditions[field] = (value, conditions[field][1])
-                elif type == "val":
-                    conditions[field] = (conditions[field][0], value)
-    return groups
-
-def condition_to_string(field, cmp, val):
-    result = ''
-
-    if cmp == '' or cmp == ' ':
-        result = ''
-    elif cmp == '*':
-        result = field
-    else:
-        result = field + ' ' + str(cmp) + ' ' + str(val)
-
-    return result
+    if len(atoms) == 0:
+        atoms.push("1")
+    return atoms
 
 def select_query(records):
-    result = ''
+    clauses = []
 
-    if len(records) == 0:
-        result = "1"
-    else:
-        conditions = get_conditions(records)
-        for index, clause in conditions.items():
-            result += "("
-            for conjunction in clause:
-                for key, value in conjunction.items():
-                    condString = condition_to_string(key, value[0], value[1])
-                    if (condString != ''):
-                        result += condition_to_string(key, value[0], value[1]) + ' AND '
-                if (result[-5:] == ' AND '):
-                    result = result[:-5]
-                result += ") OR "
+    for record in records:
+        clauses.append("(" + " AND ".join(get_atom(record)) + ")")
 
-        if (result[-4:] == ' OR '):
-            result = result[:-4]
-
-    return result
+    return " OR ".join(clauses)
 
 def select(filename):
     with open(filename, 'r') as selectionFile:
         grid = json.loads(selectionFile.read())
         if "records" not in grid:
             return ""
-        query = select_query(grid["records"]);
+        query = select_query(grid["records"])
         if query != '':
             return ' WHERE ' + query
         else:
-            return ""
+            raise "No selection has been made."

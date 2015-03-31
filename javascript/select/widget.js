@@ -4,83 +4,96 @@
  * and open the template in the editor.
  */
 
-tremppi.select.operators = [
-    ' ', '*', '=', '!=', '<', '<=', '>', '>='
-];
-
-tremppi.select.getGridData = function () {
-    var grid_data = {};
-    $.extend(true, grid_data, tremppi.data);
-    var columns = grid_data.columns = [];
-    var columnGroups = grid_data.columnGroups = [];
-
-    var controlColumns = [];
-    var addControlColumn = function (column_data) {
-        column_data.size = '25px';
-        column_data.resizable = false;
-        columns.push(column_data);
-    };
-
-    addControlColumn({
-        field: 'select',
-        caption: 'S',
-        editable: {
-            type: 'check',
-            icon: 'w2ui-icon-cross'
-        }
-    });
-    addControlColumn({
-        field: 'group',
-        caption: 'G',
-        editable: {
-            type: 'int',
-            step: 1,
-            min: 0,
-            max: 9
-        }
-    });
-    controlColumns.push('select', 'group');
-    columnGroups.push({caption: 'config', span: controlColumns.length, columns: controlColumns, available: true });
-
-    var addDataGroup = function (prefix, group_name) {
-        var type_set = [];
+tremppi.select.columnResize = function (event) {
+    event.onComplete = function (event) {
         tremppi.data.columns.forEach(function (column) {
+            if (column.field === event.field) {
+                column.size = event.resizeBy + "px";
+            }
+        });
+        tremppi.select.save();
+    };
+};
+
+tremppi.select.setGroups = function () {
+    tremppi.select.grid.columnGroups = [];
+    tremppi.data.groups.forEach(function (group) {
+        if (!group.checked) {
+            group.columns.forEach(function (column) {
+                tremppi.select.grid.showColumn(column);
+            });
+        } else {
+            group.columns.forEach(function (column) {
+                tremppi.select.grid.hideColumn(column);
+            });
+        }
+    });
+
+    tremppi.data.groups.forEach(function (group) {
+        if (!group.checked) {
+            tremppi.select.grid.columnGroups.push(group);
+        }
+    });
+
+};
+
+tremppi.select.setGridData = function (data) {
+    var columns = [];
+    var groups = data.groups = [];
+
+    // Add the check
+    columns.push({
+        "field": "select",
+        "caption": " ",
+        "size": "25px",
+        "resizable": false,
+        "editable": {
+            "type": "check"
+        }
+    });
+    groups.push({caption: '', columns: [], span: 1, master: true, hideable: false, checked: false});
+
+    // Create a new group and add to columns etc.
+    var addDataGroup = function (prefix, group_name) {
+        // Order by name
+        var type_set = [];
+        data.columns.forEach(function (column) {
             if (column.field.slice(0, prefix.length) === prefix)
                 type_set.push(column);
         });
         type_set.sort();
-        
-        var new_group = { caption: group_name, columns: [], available: true };
-        
+
+        var group = {caption: group_name, columns: [], hideable: true, checked: false};
+
         type_set.forEach(function (column) {
-            addControlColumn({
-                field: column.field + '_cmp',
-                editable: {
-                    type: 'list',
-                    items: tremppi.select.operators
-                }
-            });
             var new_column = {};
             $.extend(true, new_column, column);
-            new_column.caption = column.field.slice(prefix.length);
-            new_column.size = 12 + new_column.caption.length * 8 + 'px';
+
+            if (typeof new_column.caption === 'undefined')
+                new_column.caption = column.field.slice(prefix.length);
+            if (typeof new_column.size === 'undefined')
+                new_column.size = 12 + new_column.caption.length * 8 + 'px';
+            if (typeof new_column.resizable === 'undefined')
+                new_column.resizable = true;
+            if (typeof new_column.editable === 'undefined')
+                new_column.editable = {type: 'text'};
+
             columns.push(new_column);
-            
-            new_group.columns.push(column.field + '_cmp');
-            new_group.columns.push(column.field);
+            group.columns.push(new_column.field);
         });
 
-        new_group.span = new_group.columns.length;
-        if (new_group.span > 0)
-            columnGroups.push(new_group);
+        group.span = group.columns.length;
+        if (group.span > 0)
+            groups.push(group);
     };
 
+    // Order by type
     for (var target in tremppi.data.regulations) {
-        var regulator_list = (typeof tremppi.data.regulations[target] === 'undefined') ? "": tremppi.data.regulations[target].join(',');
-        addDataGroup('K_' + target + '_', 'K<sub>' + target+ '</sub>' + '(' + regulator_list + ')');
+        var regulator_list = (typeof tremppi.data.regulations[target] === 'undefined') ? "" : tremppi.data.regulations[target].join(',');
+        addDataGroup('K_' + target + '_', 'K<sub>' + target + '</sub>' + '(' + regulator_list + ')');
     }
     addDataGroup('C_', 'cost');
     addDataGroup('R_', 'robustness');
-    
-    return grid_data;
+
+    data.columns = columns;
 };

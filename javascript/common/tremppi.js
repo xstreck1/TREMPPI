@@ -15,7 +15,7 @@ tremppi = {
             setPage: function () {},
             setData: function () {},
             layout: function () {},
-            setDefaultData: function () {},
+            setDefaultData: function (data) {},
             defaultToolbar: {}
         };
     },
@@ -49,7 +49,7 @@ tremppi = {
         tremppi.data = data;
         // add default content, if original not available
         if (typeof (tremppi.data.configured) === 'undefined' || tremppi.data.configured === false) {
-            tremppi.widget.setDefaultData();
+            tremppi.widget.setDefaultData(tremppi.data);
             tremppi.data.configured = true;
             tremppi.save();
         }
