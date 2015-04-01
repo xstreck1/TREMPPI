@@ -1,10 +1,27 @@
 {
 	"records": [
 		{
-			"select": true,
+			"select": false,
 			"K_B_12": "[0,1)",
-			"recid": 0,
-			"K_B_00": "2"
+			"recid": 5,
+			"K_B_00": "2",
+			"K_A_0": "",
+			"changes": {
+				"K_A_0": ""
+			}
+		},
+		{
+			"select": false,
+			"K_B_12": "[0,1)",
+			"recid": 3,
+			"K_B_00": "2",
+			"K_A_0": "",
+			"changes": {
+				"K_A_0": ""
+			}
+		},
+		{
+			"recid": 2
 		}
 	],
 	"regulations": {

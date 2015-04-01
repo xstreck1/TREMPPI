@@ -1,5 +1,122 @@
 {
-    "list": { "name": "list" },
-    "detail": { "name": "detail" },
-    "configured": true
+	"list": {
+		"name": "list",
+		"columns": [
+			{
+				"field": "property",
+				"caption": "Property",
+				"size": "200px",
+				"resizable": true,
+				"sortable": true,
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "validate",
+				"caption": "C",
+				"size": "20px",
+				"resizable": false,
+				"editable": {
+					"type": "checkbox"
+				}
+			},
+			{
+				"field": "witness",
+				"caption": "W",
+				"size": "20px",
+				"resizable": false,
+				"editable": {
+					"type": "checkbox"
+				}
+			},
+			{
+				"field": "robustness",
+				"caption": "R",
+				"size": "20px",
+				"resizable": false,
+				"editable": {
+					"type": "checkbox"
+				}
+			},
+			{
+				"field": "simulate",
+				"caption": "S",
+				"size": "20px",
+				"resizable": false,
+				"editable": {
+					"type": "checkbox"
+				}
+			},
+			{
+				"field": "experiement",
+				"caption": "Experiment",
+				"size": "100px",
+				"editable": {
+					"type": "text"
+				}
+			}
+		],
+		"show": {
+			"toolbar": true,
+			"selectColumn": false,
+			"toolbarSave": false,
+			"toolbarReload": false,
+			"toolbarSearch": false,
+			"toolbarColumns": false,
+			"toolbarAdd": false,
+			"toolbarDelete": false
+		},
+		"records": [
+			{
+				"recid": 0,
+				"property": "prop0",
+				"records": [
+					{
+						"recid": 0,
+						"property": "12"
+					}
+				],
+				"witness": false,
+				"experiement": "asdf"
+			},
+			{
+				"recid": 3,
+				"property": "prop0",
+				"records": [
+					{
+						"recid": 0,
+						"property": "data"
+					}
+				],
+				"witness": false,
+				"experiement": ""
+			}
+		]
+	},
+	"detail": {
+		"name": "detail",
+		"columns": [
+			{
+				"field": "property",
+				"caption": "Property",
+				"size": "200px",
+				"editable": {
+					"type": "text"
+				}
+			}
+		],
+		"show": {
+			"toolbar": true,
+			"selectColumn": false,
+			"toolbarSave": false,
+			"toolbarReload": false,
+			"toolbarSearch": false,
+			"toolbarColumns": false,
+			"toolbarAdd": false,
+			"toolbarDelete": false
+		},
+		"records": []
+	},
+	"configured": true
 }

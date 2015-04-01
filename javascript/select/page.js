@@ -10,7 +10,7 @@ tremppi.select.setPage = function () {
 
 tremppi.select.setData = function () {
     tremppi.select.grid = $('#selection_table').w2grid(tremppi.data);
-    tremppi.select.grid.onChange = tremppi.select.changeFunction;
+    tremppi.select.grid.onChange = tremppi.w2ui.changeFunction(tremppi.data.columns, tremppi.data.records);
     tremppi.select.setGroups();
     tremppi.select.grid.refresh();
     tremppi.select.activateControls();

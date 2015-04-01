@@ -33,14 +33,72 @@ tremppi.editablegrid = {
     }
 };
 tremppi.w2ui = {
-    findByRecid: function(array, recid) {
+    changeFunction: function (columns, records) {
+        return function (event) {
+            var column_name = columns[event.column].field;
+            // List items are object, we want to store the text only
+            if (typeof event.value_new === 'object')
+                records[event.index][column_name] = event.value_new.text;
+            else
+                records[event.index][column_name] = event.value_new;
+            tremppi.widget.save();
+        };
+    },
+    findByRecID: function (array, recid) {
         for (var i = 0; i < array.length; i++) {
             if (array[i].recid === recid)
                 return array[i];
         }
         console.log("Error. Have not found element " + recid);
+    },
+    getFreeRecID: function (records) {
+        var ids = records.map(function (entry) {
+            return entry.recid;
+        });
+        ids.sort();
+        for (var id = 0; id < ids.length; id++) {
+            if (ids[id] !== id) {
+                return id;
+            }
+        }
+        return id;
+    },
+    checkAll: function (event, records, grid) {
+        var new_val = !event.originalEvent.item.checked;
+        records.forEach(function (record) {
+            record[event.target] = new_val;
+        });
+        grid.records = records;
+    },
+    deleteSelected: function (records, grid) {
+        grid.getSelection().forEach(function (recid) {
+            for (var i = 0; i < records.length; i++) {
+                if (records[i].recid === recid) {
+                    records.splice(i, 1);
+                    break;
+                }
+            }
+        });
+        grid.records = records;
+    },
+    duplicateSelected: function (records, grid) {
+        var new_records = [];
+        grid.getSelection().forEach(function (recid) {
+            for (var i = 0; i < records.length; i++) {
+                if (records[i].recid === recid) {
+                    var new_entry = {};
+                    $.extend(new_entry, records[i]);
+                    new_entry.recid = tremppi.w2ui.getFreeRecID(records);
+                    new_records.push(new_entry.recid);
+                    records.splice(i, 0, new_entry);
+                    break;
+                }
+            }
+        });
+        grid.records = records;
     }
 };
+
 tremppi.cytoscape = {
     // test if nodes all have positions
     hasAllPositions: function (nodes) {
