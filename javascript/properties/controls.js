@@ -4,17 +4,26 @@
  * and open the template in the editor.
  */
 
-tremppi.properties.activateControls = function (list) {
+tremppi.properties.listControls = function (list) {
     var listbar = list.toolbar;
+    listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
+    listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
+    listbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
+    listbar.add({type: 'break', id: 'break0'});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'validate', caption: 'Validate', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'witness', caption: 'Witness', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'robustness', caption: 'Robustness', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'simulate', caption: 'Simulate', checked: false});
-    listbar.add({type: 'break', id: 'break0'});
-    listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
-    listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
-    listbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
     list.onToolbar = tremppi.properties.listClick;
+};
+
+tremppi.properties.detailControls = function (detail) {
+    var detailbar = detail.toolbar;
+    detailbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
+    detailbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
+    detailbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
+    detailbar.add({type: 'break', id: 'break0'});
+    detail.onToolbar = tremppi.properties.detailClick;
 };
 
 tremppi.properties.listClick = function (event) {
@@ -49,4 +58,4 @@ tremppi.properties.listSelect = function (event) {
         }
     });
     tremppi.properties.detail.refresh();
-}
+};

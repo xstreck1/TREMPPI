@@ -11,11 +11,12 @@ tremppi.properties.setPage = function () {
 
 tremppi.properties.setData = function () {
     tremppi.properties.list = $('#property_list').w2grid(tremppi.data.list);  
-    tremppi.properties.activateControls(tremppi.properties.list);
+    tremppi.properties.listControls(tremppi.properties.list);
     tremppi.properties.list.onChange = tremppi.w2ui.changeFunction(tremppi.data.list.columns, tremppi.data.list.records);
-    // Selection of the 
     tremppi.properties.list.onClick = tremppi.properties.listSelect;
+    
     tremppi.properties.detail = $('#property_detail').w2grid(tremppi.data.detail);
+    tremppi.properties.detailControls(tremppi.properties.detail);
 };
 
 tremppi.properties.save = function () {
@@ -24,5 +25,5 @@ tremppi.properties.save = function () {
 
 tremppi.properties.setDefaultData = function (data) {
     tremppi.properties.tableList(data.list);
-    tremppi.properties.tableDetail(data.detail);
+    tremppi.properties.tableDetail(data.detail, data.components);
 };

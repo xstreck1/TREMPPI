@@ -144,6 +144,6 @@
 			"icon": "w2ui-icon-cross"
 		}
 	],
-	"configured": true,
+	"configured": false,
 	"name": "grid"
 }

@@ -21,10 +21,12 @@ int tremppi_spawn(int argc, char ** argv) {
 
 	// Check the file
 	Json::Value root; // root of the network
+	Json::Value properties;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
 		root = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / NETWORK_FILENAME);
+		properties = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}
@@ -66,20 +68,35 @@ int tremppi_spawn(int argc, char ** argv) {
 		return 0;
 	}
 
+	// Write to properties
 	try {
-		ParametrizationsBuilder::build(false, model, kinetics);
+		BOOST_LOG_TRIVIAL(info) << "Writing properties template.";
+
+		for (const Model::ModelComp & comp : model.components) {
+			properties["components"].append(comp.name);
+		}
+		properties["configured"] = false;
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "properties" / (TimeManager::getTimeStamp() + ".json"), properties);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);
 	}
 
+	// Build parametrizations (in full this time)
+	try {
+		ParametrizationsBuilder::build(false, model, kinetics);
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 6);
+	}
+
 	// Output the database
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Creating the database file.";
-		if (bfs::exists(database_file)) 
+		if (bfs::exists(database_file))
 			BOOST_LOG_TRIVIAL(warning) << "Database file " << database_file.string() << " already exists, erasing.";
 		bfs::remove(database_file);
-		
+
 		DatabaseFiller database_filler(model, kinetics, database_file.string());
 		database_filler.creteTables();
 		database_filler.startOutput();
@@ -96,7 +113,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		DatabaseReader::makeSelect();
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 6);
+		logging.exceptionMessage(e, 7);
 	}
 
 	return 0;

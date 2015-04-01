@@ -74,7 +74,9 @@
 				"records": [
 					{
 						"recid": 0,
-						"property": "12"
+						"property": "12",
+						"A_value": "[0,1)",
+						"A_delta": "down"
 					}
 				],
 				"witness": false,
@@ -98,11 +100,45 @@
 		"name": "detail",
 		"columns": [
 			{
-				"field": "property",
-				"caption": "Property",
-				"size": "200px",
+				"field": "A_value",
+				"caption": "Value",
+				"size": "46px",
 				"editable": {
 					"type": "text"
+				}
+			},
+			{
+				"field": "A_delta",
+				"caption": "Delta",
+				"size": "44px",
+				"editable": {
+					"type": "select",
+					"items": [
+						"up",
+						"down",
+						"stay"
+					]
+				}
+			},
+			{
+				"field": "B_value",
+				"caption": "Value",
+				"size": "46px",
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "B_delta",
+				"caption": "Delta",
+				"size": "44px",
+				"editable": {
+					"type": "select",
+					"items": [
+						"up",
+						"down",
+						"stay"
+					]
 				}
 			}
 		],
@@ -116,7 +152,21 @@
 			"toolbarAdd": false,
 			"toolbarDelete": false
 		},
-		"records": []
+		"records": [],
+		"columnGroups": [
+			{
+				"span": 2,
+				"caption": "A"
+			},
+			{
+				"span": 2,
+				"caption": "B"
+			}
+		]
 	},
+	"components": [
+		"A",
+		"B"
+	],
 	"configured": true
 }

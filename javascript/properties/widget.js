@@ -36,19 +36,33 @@ tremppi.properties.tableList = function (list) {
     };
 };
 
-tremppi.properties.tableDetail = function (detail) {
+tremppi.properties.tableDetail = function (detail, components) {
     if (typeof detail.records === 'undefined') {
         detail.records = [];
     }
     detail.name = 'detail';
-    detail.columns = [
-        {field: 'property', caption: 'Property', size: '200px',
-            editable: {type: 'text'}
-        }
-    ];
     detail.show = {
         toolbar: true, selectColumn: false, toolbarSave: false,
         toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
         toolbarAdd: false, toolbarDelete: false
     };
+
+    detail.columns = [];
+    detail.columnGroups = [];
+    components.forEach(function (component) {
+        detail.columnGroups.push({
+            span: 2,
+            caption: component
+        });
+        detail.columns.push(
+                {field: component + '_value', caption: 'Value', size: '46px',
+                    editable: {type: 'text'}
+                }
+        ); 
+        detail.columns.push(
+                {field: component + '_delta', caption: 'Delta', size: '44px',
+                    editable: {type: 'select', items: ["up", "down", "stay"]}
+                }
+        );
+    });
 };
