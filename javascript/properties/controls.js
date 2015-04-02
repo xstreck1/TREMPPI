@@ -35,7 +35,7 @@ tremppi.properties.listClick = function (event) {
         }
         else if (event.target === 'add') {
             var recID = tremppi.w2ui.getFreeRecID(records);
-            records.push({recid: recID, name: 'property ' + recID, records: []});
+            records.push({recid: recID, type: "series", name: 'property ' + recID, records: []});
             grid.records = records;
         }
         else if (event.target === 'duplicate') {

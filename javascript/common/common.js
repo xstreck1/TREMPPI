@@ -35,10 +35,12 @@ tremppi.editablegrid = {
 tremppi.w2ui = {
     changeFunction: function (columns, records) {
         return function (event) {
-            var column_name = columns[event.column].field;
-            records[event.index][column_name] = event.value_new;
-            records[event.index].changes = {};
-            tremppi.widget.save();
+            event.onComplete = function (event) {
+                var column_name = columns[event.column].field;
+                records[event.index][column_name] = event.value_new;
+                records[event.index].changes = {};
+                tremppi.widget.save();
+            }
         };
     },
     findByRecID: function (array, recid) {

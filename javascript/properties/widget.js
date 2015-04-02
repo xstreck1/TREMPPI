@@ -10,9 +10,13 @@ tremppi.properties.tableList = function (list, components) {
     }
     list.name = 'list';
     list.multiSelect = false;
+    list.reorderRows = true;
     list.columns = [
         {field: 'name', caption: 'Name', size: '200px', resizable: true, sortable: true,
             editable: {type: 'text'}
+        },
+        {field: 'type', caption: 'Type', size: '60px', resizable: true,
+            editable: {type: 'select', items: ["series", "stable", "cycle"]}
         },
         {field: 'validate', caption: 'V', size: '20px', resizable: false,
             editable: {type: 'checkbox'}
@@ -39,7 +43,7 @@ tremppi.properties.tableList = function (list, components) {
                 }
         );
     });
-    
+
     list.show = {
         toolbar: true, selectColumn: false, toolbarSave: false,
         toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
@@ -53,6 +57,7 @@ tremppi.properties.tableDetail = function (detail, components) {
     }
     detail.name = 'detail';
     detail.multiSelect = false;
+    detail.reorderRows = true;
     detail.show = {
         toolbar: true, selectColumn: false, toolbarSave: false,
         toolbarReload: false, toolbarSearch: false, toolbarColumns: false,

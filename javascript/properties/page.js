@@ -28,7 +28,7 @@ tremppi.properties.save = function () {
 
 tremppi.properties.setDefaultData = function (data) {
     if (typeof tremppi.properties.detailed === 'undefined')
-        tremppi.properties.detail.detailed = -1;
+        tremppi.properties.detailed = -1;
     tremppi.properties.tableList(data.list, data.components);
     tremppi.properties.tableDetail(data.detail, data.components);
 };
