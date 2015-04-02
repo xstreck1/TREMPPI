@@ -36,7 +36,6 @@ tremppi.select.toolbarClick = function (event) {
         else if (event.target === 'delete') {
             tremppi.w2ui.deleteSelected(tremppi.data.records, tremppi.select.grid);
         }
-        tremppi.select.grid.selectNone();
         tremppi.select.grid.refresh();
         tremppi.select.save();
     }

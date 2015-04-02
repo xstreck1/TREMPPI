@@ -108,18 +108,18 @@
 						"A_value": "0"
 					},
 					{
-						"recid": 2,
-						"A_value": "1",
-						"changes": {}
-					},
-					{
-						"recid": 3,
+						"recid": 6,
 						"A_value": "2",
 						"changes": {}
 					},
 					{
 						"recid": 4,
 						"A_value": "3",
+						"changes": {}
+					},
+					{
+						"recid": 2,
+						"A_value": "1",
 						"changes": {}
 					},
 					{

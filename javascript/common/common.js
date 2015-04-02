@@ -44,9 +44,12 @@ tremppi.w2ui = {
         };
     },
     findByRecID: function (array, recid) {
+        return array[iByRecID(array, recid)];
+    },
+    iByRecID: function (array, recid) {
         for (var i = 0; i < array.length; i++) {
             if (array[i].recid === recid)
-                return array[i];
+                return i;
         }
         console.log("Error. Have not found element " + recid);
     },

@@ -19,6 +19,8 @@ tremppi.properties.listControls = function (list) {
 
 tremppi.properties.detailControls = function (detail) {
     var detailbar = detail.toolbar;
+    detailbar.add({type: 'button', id: 'up', caption: '&#8593;'});
+    detailbar.add({type: 'button', id: 'down', caption: '&#8595;'});
     detailbar.add({type: 'break', id: 'break0'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
@@ -45,7 +47,6 @@ tremppi.properties.listClick = function (event) {
             tremppi.w2ui.deleteSelected(records, grid);
         }
 
-        grid.selectNone();
         grid.refresh();
         tremppi.properties.save();
     }
@@ -66,9 +67,33 @@ tremppi.properties.detailClick = function (event) {
     if (event.type === 'toolbar' && tremppi.properties.detailed !== -1) {
         var records = tremppi.properties.detail.records;
         var grid = tremppi.properties.detail;
-        if (event.target === 'add') {
+        if (event.target === 'up') {
+            var selection = grid.getSelection();
+            if (selection.lenght = 1) {
+                var recid = grid.getSelection()[0];
+                var i = tremppi.w2ui.iByRecID(records, recid);
+                if (i > 0) {
+                    var temp = records[i];
+                    records[i] = records[i - 1];
+                    records[i - 1] = temp;
+                }
+            }
+        }
+        if (event.target === 'down') {
+            var selection = grid.getSelection();
+            if (selection.lenght = 1) {
+                var recid = grid.getSelection()[0];
+                var i = tremppi.w2ui.iByRecID(records, recid);
+                if (i + 1 < records.length) {
+                    var temp = records[i];
+                    records[i] = records[i + 1];
+                    records[i + 1] = temp;
+                }
+            }
+        }
+        else if (event.target === 'add') {
             var recID = tremppi.w2ui.getFreeRecID(records);
-            records.push({recid: recID });
+            records.push({recid: recID});
             grid.records = records;
         }
         else if (event.target === 'duplicate') {
@@ -78,7 +103,6 @@ tremppi.properties.detailClick = function (event) {
             tremppi.w2ui.deleteSelected(records, grid);
         }
 
-        grid.selectNone();
         grid.refresh();
         tremppi.properties.save();
     }
