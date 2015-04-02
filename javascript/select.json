@@ -5,23 +5,14 @@
 			"K_B_12": "[0,1)",
 			"recid": 5,
 			"K_B_00": "2",
-			"K_A_0": "",
-			"changes": {
-				"K_A_0": ""
-			}
+			"K_A_0": "0",
+			"changes": {},
+			"K_A_1": "1"
 		},
 		{
-			"select": false,
-			"K_B_12": "[0,1)",
-			"recid": 3,
-			"K_B_00": "2",
+			"recid": 1,
 			"K_A_0": "",
-			"changes": {
-				"K_A_0": ""
-			}
-		},
-		{
-			"recid": 2
+			"changes": {}
 		}
 	],
 	"regulations": {
@@ -144,6 +135,7 @@
 			"icon": "w2ui-icon-cross"
 		}
 	],
-	"configured": false,
-	"name": "grid"
+	"configured": true,
+	"name": "grid",
+	"multiSelect": false
 }

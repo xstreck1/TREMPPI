@@ -29,6 +29,8 @@ tremppi.select.setDefaultData = function (data) {
         toolbarReload: false, toolbarSearch: false, toolbarColumns: false, 
         toolbarAdd: false, toolbarDelete: false};
     
+    data.multiSelect = false;
+    
     tremppi.select.setGridData(data);
 
     if (typeof data.records === 'undefined' )

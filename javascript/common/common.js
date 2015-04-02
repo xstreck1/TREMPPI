@@ -36,11 +36,8 @@ tremppi.w2ui = {
     changeFunction: function (columns, records) {
         return function (event) {
             var column_name = columns[event.column].field;
-            // List items are object, we want to store the text only
-            if (typeof event.value_new === 'object')
-                records[event.index][column_name] = event.value_new.text;
-            else
-                records[event.index][column_name] = event.value_new;
+            records[event.index][column_name] = event.value_new;
+            records[event.index].changes = {};
             tremppi.widget.save();
         };
     },
@@ -87,8 +84,11 @@ tremppi.w2ui = {
             for (var i = 0; i < records.length; i++) {
                 if (records[i].recid === recid) {
                     var new_entry = {};
-                    $.extend(new_entry, records[i]);
+                    $.extend(true, new_entry, records[i]);
                     new_entry.recid = tremppi.w2ui.getFreeRecID(records);
+                    if (typeof new_entry.name !== 'undefined') {
+                        new_entry.name += " (copy)";
+                    }
                     new_records.push(new_entry.recid);
                     records.splice(i, 0, new_entry);
                     break;

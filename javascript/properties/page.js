@@ -17,6 +17,9 @@ tremppi.properties.setData = function () {
     
     tremppi.properties.detail = $('#property_detail').w2grid(tremppi.data.detail);
     tremppi.properties.detailControls(tremppi.properties.detail);
+    if (tremppi.properties.detailed !== -1) {
+        tremppi.properties.listSelect({recid: tremppi.properties.detailed });
+    }
 };
 
 tremppi.properties.save = function () {
@@ -24,6 +27,8 @@ tremppi.properties.save = function () {
 }
 
 tremppi.properties.setDefaultData = function (data) {
-    tremppi.properties.tableList(data.list);
+    if (typeof tremppi.properties.detailed === 'undefined')
+        tremppi.properties.detail.detailed = -1;
+    tremppi.properties.tableList(data.list, data.components);
     tremppi.properties.tableDetail(data.detail, data.components);
 };

@@ -19,33 +19,34 @@ tremppi.properties.listControls = function (list) {
 
 tremppi.properties.detailControls = function (detail) {
     var detailbar = detail.toolbar;
+    detailbar.add({type: 'break', id: 'break0'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-    detailbar.add({type: 'break', id: 'break0'});
     detail.onToolbar = tremppi.properties.detailClick;
 };
 
 tremppi.properties.listClick = function (event) {
     if (event.type === 'toolbar') {
+        var records = tremppi.data.list.records;
+        var grid = tremppi.properties.list;
         if (event.target === 'validate' || event.target === 'witness' || event.target === 'robustness' || event.target === 'simulate') {
-            tremppi.w2ui.checkAll(event, tremppi.data.list.records, tremppi.properties.list);
+            tremppi.w2ui.checkAll(event, records, grid);
         }
         else if (event.target === 'add') {
-            var recID = tremppi.w2ui.getFreeRecID(tremppi.data.list.records);
-            tremppi.data.list.records.push({recid: recID, property: 'property ' + recID, records: []});
-            tremppi.properties.list.records = tremppi.data.list.records;
-            tremppi.properties.list.refresh();
+            var recID = tremppi.w2ui.getFreeRecID(records);
+            records.push({recid: recID, name: 'property ' + recID, records: []});
+            grid.records = records;
         }
         else if (event.target === 'duplicate') {
-            tremppi.w2ui.duplicateSelected(tremppi.data.list.records, tremppi.properties.list);
+            tremppi.w2ui.duplicateSelected(records, grid);
         }
         else if (event.target === 'delete') {
-            tremppi.w2ui.deleteSelected(tremppi.data.list.records, tremppi.properties.list);
+            tremppi.w2ui.deleteSelected(records, grid);
         }
 
-        tremppi.properties.list.selectNone();
-        tremppi.properties.list.refresh();
+        grid.selectNone();
+        grid.refresh();
         tremppi.properties.save();
     }
 };
@@ -53,9 +54,32 @@ tremppi.properties.listClick = function (event) {
 tremppi.properties.listSelect = function (event) {
     tremppi.data.list.records.forEach(function (record) {
         if (record.recid === parseInt(event.recid)) {
+            tremppi.properties.detailed = event.recid;
             tremppi.properties.detail.records = record.records;
             tremppi.properties.detail.onChange = tremppi.w2ui.changeFunction(tremppi.properties.detail.columns, record.records);
         }
     });
     tremppi.properties.detail.refresh();
+};
+
+tremppi.properties.detailClick = function (event) {
+    if (event.type === 'toolbar' && tremppi.properties.detailed !== -1) {
+        var records = tremppi.properties.detail.records;
+        var grid = tremppi.properties.detail;
+        if (event.target === 'add') {
+            var recID = tremppi.w2ui.getFreeRecID(records);
+            records.push({recid: recID });
+            grid.records = records;
+        }
+        else if (event.target === 'duplicate') {
+            tremppi.w2ui.duplicateSelected(records, grid);
+        }
+        else if (event.target === 'delete') {
+            tremppi.w2ui.deleteSelected(records, grid);
+        }
+
+        grid.selectNone();
+        grid.refresh();
+        tremppi.properties.save();
+    }
 };

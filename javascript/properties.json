@@ -3,8 +3,8 @@
 		"name": "list",
 		"columns": [
 			{
-				"field": "property",
-				"caption": "Property",
+				"field": "name",
+				"caption": "Name",
 				"size": "200px",
 				"resizable": true,
 				"sortable": true,
@@ -14,7 +14,7 @@
 			},
 			{
 				"field": "validate",
-				"caption": "C",
+				"caption": "V",
 				"size": "20px",
 				"resizable": false,
 				"editable": {
@@ -49,9 +49,26 @@
 				}
 			},
 			{
-				"field": "experiement",
-				"caption": "Experiment",
-				"size": "100px",
+				"field": "bound",
+				"caption": "Bound",
+				"size": "60px",
+				"resizable": true,
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "A",
+				"caption": "A",
+				"size": "46px",
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "B",
+				"caption": "B",
+				"size": "46px",
 				"editable": {
 					"type": "text"
 				}
@@ -70,31 +87,11 @@
 		"records": [
 			{
 				"recid": 0,
-				"property": "prop0",
-				"records": [
-					{
-						"recid": 0,
-						"property": "12",
-						"A_value": "[0,1)",
-						"A_delta": "down"
-					}
-				],
-				"witness": false,
-				"experiement": "asdf"
-			},
-			{
-				"recid": 3,
-				"property": "prop0",
-				"records": [
-					{
-						"recid": 0,
-						"property": "data"
-					}
-				],
-				"witness": false,
-				"experiement": ""
+				"name": "property 0",
+				"records": []
 			}
-		]
+		],
+		"multiSelect": false
 	},
 	"detail": {
 		"name": "detail",
@@ -114,6 +111,7 @@
 				"editable": {
 					"type": "select",
 					"items": [
+						"",
 						"up",
 						"down",
 						"stay"
@@ -135,6 +133,7 @@
 				"editable": {
 					"type": "select",
 					"items": [
+						"",
 						"up",
 						"down",
 						"stay"
@@ -152,7 +151,6 @@
 			"toolbarAdd": false,
 			"toolbarDelete": false
 		},
-		"records": [],
 		"columnGroups": [
 			{
 				"span": 2,
@@ -162,7 +160,8 @@
 				"span": 2,
 				"caption": "B"
 			}
-		]
+		],
+		"multiSelect": false
 	},
 	"components": [
 		"A",
