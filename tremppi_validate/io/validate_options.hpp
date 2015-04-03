@@ -11,45 +11,6 @@ class ValidateOptions : public ProgramOptions {
 public:
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
 	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
-		visible.add_options()
-			("trace", bpo::value<string>()->default_value("none"), "what form of trace analysis should be applied, one of {none, rob, wit}")
-			("bound", bpo::value<string>()->default_value("inf"), "what bound is placed on the search, one of {inf, min, N} where N is a non-zero positive integer")
-			("check-only,c", "do not create a database and only verify the file syntax");
-
 		return ProgramOptions::parseProgramOptions(argc, argv);
-	}
-
-	// @obtains the exact numeric bound from the parsed options. If the bound can't be obtained, return INF
-	static size_t getBound(const bpo::variables_map & po) {
-		if (regex_match(po["bound"].as<string>(), regex("\\d+")))
-			return po["bound"].as<size_t>();
-		else
-			return INF;
-	}
-
-	// @brief:	obtains the trace type from the parsed options, also does syntax check
-	static TraceType getTracteType(const bpo::variables_map & po)  {
-		string input = po["trace"].as<string>();
-		if (input == "none")
-			return TraceType::none;
-		else if (input == "rob")
-			return TraceType::rob;
-		else if (input == "wit")
-			return TraceType::wit;
-		else
-			throw runtime_error("Unknown trace type specified: " + input);
-	}
-
-	// @brief:	obtains the bound type from the parsed options, also does syntax check
-	static BoundType getBoundType(const bpo::variables_map & po) {
-		string input = po["bound"].as<string>();
-		if (input == "inf")
-			return BoundType::inf;
-		else if (input == "min")
-			return BoundType::min;
-		else if (regex_match(input, regex("\\d+")))
-			return BoundType::step;
-		else
-			throw runtime_error("Unknown bound type specified: " + input);
 	}
 };

@@ -15,10 +15,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class UnparametrizedStructureBuilder {
 	const RegInfos & reg_infos;
-	const PropertyAutomaton & property;
+	const PropertyAutomaton & property_automaton;
 
 	vector<size_t> index_jumps; ///< Holds index differences between two neighbour states in each direction for each ID.
-	vector<bool> allowed_states; ///< Masking the states (by IDs) that are allowed by the current experiment
 
 	/**
 	 * @brief addTransition add a transition if feasible
@@ -45,9 +44,6 @@ class UnparametrizedStructureBuilder {
 	 * Differences are caused by the way the states are generated.
 	 */
 	void computeJumps(const Levels & range_size);
-
-	/* Prepare the data structure that stores IDs of allowed states. */
-	void prepareAllowed(const UnparametrizedStructure & structure, const size_t state_count, const bool init);
 
 	// Label, as allowed, those states that satisfy the experiment
 	size_t solveConstrains(UnparametrizedStructure & structure);

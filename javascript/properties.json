@@ -101,46 +101,33 @@
 		"records": [
 			{
 				"recid": 0,
-				"name": "property 0",
+				"type": "series",
+				"name": "property0",
+				"validate": true,
+				"witness": true,
+				"robustness": false,
+				"simulate": false,
 				"records": [
 					{
-						"recid": 0,
-						"A_value": "0"
-					},
-					{
-						"recid": 6,
-						"A_value": "2",
-						"changes": {}
-					},
-					{
-						"recid": 4,
-						"A_value": "3",
-						"changes": {}
-					},
-					{
-						"recid": 2,
-						"A_value": "1",
-						"changes": {}
-					},
-					{
-						"recid": 5,
-						"A_value": "4",
-						"changes": {}
-					},
-					{
 						"recid": 1,
-						"A_value": "5",
+						"A_value": "[0,1)",
+						"A_delta": "",
+						"B_value": "[0,2)",
+						"B_delta": "stay",
+						"changes": {}
+					},
+					{
+						"recid": 0,
+						"A_value": "[1,1]",
+						"A_delta": "",
+						"B_value": "[1,2]",
+						"B_delta": "",
 						"changes": {}
 					}
 				],
-				"type": "series",
+				"A": "",
+				"B": "",
 				"changes": {}
-			},
-			{
-				"recid": 1,
-				"type": "series",
-				"name": "property 1",
-				"records": []
 			}
 		],
 		"multiSelect": false,

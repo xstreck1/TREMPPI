@@ -10,76 +10,105 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace PropertiesReader {
 	// Konvert model in (almost) JSON to Model object
-	vector<PropertyAutomaton> jsonToProperties(const Json::Value & root) {
+	vector<PropertyAutomaton> jsonToProperties(const RegInfos & reg_infos, Json::Value & properties) {
 		vector<PropertyAutomaton> automata;
-		for (const Json::Value & property : root) {
+		for (const Json::Value & property_node : properties) {
 			PropertyAutomaton automaton;
 
 			// Skip those that are not in use
-			if (!property["desc"][0]["values"]["Verify"].asBool())
+			if (!property_node["validate"].asBool()) {
 				continue;
+			}
 
-			automaton.name = property["desc"][0]["values"]["Name"].asString();
-			automaton.prop_type = property["desc"][0]["values"]["Type"].asString();
-			automaton.experiment = property["desc"][0]["values"]["Experiment"].asString();
+			automaton.robustness = property_node["robustness"].asBool();
+			automaton.witness = property_node["witness"].asBool();
+
+			automaton.name = property_node["name"].asString();
+			automaton.prop_type = property_node["type"].asString();
+			automaton.bound = INF;
+
+			// Get the bounds
+			for (const RegInfo & reg_info : reg_infos) {
+				pair<ActLevel, ActLevel> bound;
+				string value = property_node[reg_info.name].asString(); 
+				std::smatch sm;
+				// Bound is specified
+				if (regex_match(value, sm, regex{ "([\\(\\[])(\\d+.*\\d*),(\\d+.*\\d*)([\\)\\]])" })) {
+					if (sm[1].str() == "(") {
+						bound.first = stoi(sm[2].str()) + 1;
+					}
+					else {
+						bound.first = stoi(sm[2].str());
+					}
+					if (sm[4].str() == ")") {
+						bound.second = stoi(sm[3].str()) - 1;
+					}
+					else {
+						bound.second = stoi(sm[3].str());
+					}
+				}
+				// The whole range
+				else if (value == "") {
+					bound.first = 0;
+					bound.second = reg_info.max_activity;
+				}
+				else {
+					throw invalid_argument("unknown value " + value + " for the component " + reg_info.name + " of the property " + automaton.name);
+				}
+				automaton.bounds.push_back(bound);
+			}
 
 			StateID ID = 0;
 
 			// Add an accepting first state
-			if (automaton.prop_type == "Cycle") {
+			if (automaton.prop_type == "cycle") {
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, {}, PropertyAutomaton::Edges({ { 1, "tt" } }) });
 				ID++;
 			}
 
-			for (const Json::Value & measurement : property["data"]) {
-				string constraint = measurement["values"]["Measurement"].asString();
+			for (const Json::Value & record : property_node["records"]) {
+				string constraint;
+				vector<string> stables_list;
 
+				for (const RegInfo & reg_info : reg_infos) {
+					if (record[reg_info.name + "_delta"].asString() == "stay") {
+						stables_list.push_back(reg_info.name);
+					}
+					string value = record[reg_info.name + "_value"].asString();
+					std::smatch sm;
+					if (regex_match(value, sm, regex{ "([\\(\\[])(\\d+.*\\d*),(\\d+.*\\d*)([\\)\\]])" })) {
+						if (sm[1].str() == "(") {
+							constraint += reg_info.name + ">" + sm[2].str() + "&";
+						}
+						else {
+							constraint += reg_info.name + ">=" + sm[2].str() + "&";
+						}
+						if (sm[4].str() == ")") {
+							constraint += reg_info.name + "<" + sm[3].str() + "&";
+						}
+						else {
+							constraint += reg_info.name + "<=" + sm[3].str() + "&";
+						}
+					}
+				}
+				constraint.resize(std::max(0u, constraint.size() - 1));
 				string negation = "!(" + constraint + ")";
 
-				PropertyAutomaton::Edges edges = { { ID, negation }, { ID + 1, constraint } };
-
-				vector<string> stables_list;
-				string stables = measurement["values"]["Stables"].asString();
-				if (!stables.empty())
-					boost::split(stables_list, stables, boost::is_any_of(","));
-
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list), move(edges) });
-
-				// Stables for the next state (once the values requried here are reached)
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list),{ { ID, negation }, { ID + 1, constraint } } });
 				ID++;
-
 			}
+
 			// Loop to the first
-			if (automaton.prop_type == "Cycle") {
+			if (automaton.prop_type == "cycle") {
 				automaton.states.back().edges.back().target_ID = 0;
 			}
 			// Add a new state to the end that has a loop and compies the requirement for stables
-			if (automaton.prop_type == "TimeSeries") {
+			if (automaton.prop_type == "series") {
 				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, {}, PropertyAutomaton::Edges({ { ID, "tt" } }) });
 			}
-			
+
 			automata.emplace_back(move(automaton));
 		}
 		return automata;
-	}
-
-	namespace {
-		void checkTimeSeries(const Json::Value & property) {
-			// Nothing to check specifically, 
-		}
-	}
-
-	void checkSemantics(const Json::Value & root) {
-		for (const Json::Value & property : root) {
-			// Check name
-			DataInfo::isValidName(property["desc"][0]["Name"].asString());
-			// Check prop type
-			const string PROP_TYPE = property["desc"][0]["values"]["Type"].asString();
-			if (find(WHOLE(PropType), PROP_TYPE) == end(PropType))
-				throw runtime_error("Unknown property type: " + PROP_TYPE);
-			// Check property specific
-			if (PROP_TYPE == "TimeSeries")
-				checkTimeSeries(property);
-		}		
 	}
 }

@@ -21,10 +21,14 @@ struct PropertyAutomaton {
 		Edges edges; ///< Edges in Buchi Automaton (Target ID, edge label).
 	};
 
+	vector<pair<ActLevel, ActLevel> > bounds;
 	string name;
 	string prop_type; ///< What property does this automaton hold.
 	vector<State> states; ///< vector of all states of the controlling Buchi automaton
 	string experiment;
+	size_t bound;
+	bool robustness;
+	bool witness;
 };
 
 namespace PropertyHelper {

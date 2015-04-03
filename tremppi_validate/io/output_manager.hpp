@@ -7,7 +7,8 @@
 /// \brief Class that outputs formatted resulting data.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class OutputManager {
-	const bpo::variables_map & po; ///< User can influence the format of the output.
+	const bool witness; ///< Write the witness?
+	const bool robustness; ///< Write the robustness?
 	const RegInfos & reg_infos; ///< Reference to the model itself.
 	const string & name; ///< Name of the property
 	sqlite3pp::database & db;
@@ -17,13 +18,13 @@ public:
 	NO_COPY(OutputManager)
 
 		// Store the names of the columns to be used
-		OutputManager(const bpo::variables_map  & _po, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db)
-		: po(_po), reg_infos(_reg_infos), name(_name), db(_db)
+		OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db)
+		: witness(_witness), robustness(_robustness), reg_infos(_reg_infos), name(_name), db(_db)
 	{
 		new_columns.insert({ "C_" + name, "INTEGER" });
-		if (po.at("trace").as<string>() == "rob" || po.at("trace").as<string>() == "wit")
+		if (robustness)
 			new_columns.insert({ "R_" + name, "REAL" });
-		if (po.at("trace").as<string>() == "wit")
+		if (witness)
 			new_columns.insert({ "W_" + name, "TEXT" });
 	}
 
@@ -36,13 +37,13 @@ public:
 	}
 
 	// Output parametrizations from this round together with additional data, if requested.
-	void outputRound(const size_t cost, const double robustness_val, const string & witness, const Levels & parametrization, const ParamNo & rowid) {
+	void outputRound(const size_t cost, const double robustness_val, const string & witness_path, const Levels & parametrization, const ParamNo & rowid) {
 		string command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET ";
 		command += "C_" + name + "=" + (cost == INF ? "NULL" : to_string(cost));
-		if (po.at("trace").as<string>() == "rob" || po.at("trace").as<string>() == "wit")
+		if (robustness)
 			command += ", R_" + name + "=" + to_string(robustness_val);
-		if (po.at("trace").as<string>() == "wit")
-			command += ", W_" + name + "=\"" + witness + "\"";
+		if (witness)
+			command += ", W_" + name + "=\"" + witness_path + "\"";
 		command += " WHERE rowid=" + to_string(rowid);
 		db.execute(command.c_str());
 	}

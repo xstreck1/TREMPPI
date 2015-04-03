@@ -38,7 +38,7 @@ public:
 	/**
 	 * @brief checkFull conduct model check for a lasso
 	 */
-	tuple<size_t, multimap<StateID, StateID>, double >  checkFull(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
+	tuple<size_t, multimap<StateID, StateID>, double >  checkFull(const size_t bfs_bound, const bool witness, const bool robustness, const Levels & parametrization) {
 		tuple<size_t, multimap<StateID, StateID>, double > result;
 		get<2>(result) = 0.0;
 		get<0>(result) = INF;
@@ -67,7 +67,7 @@ public:
 		}
 
 		// Compute the analysis for the lasso
-		if (get<0>(result) != INF && trace_type != TraceType::none) {
+		if (get<0>(result) != INF && (witness || robustness)) {
 			for (const StateID ID : product.getFinalStates()) {
 				if (reach_storage.isFound(ID)) {
 					// Get the loop visits
@@ -81,13 +81,13 @@ public:
 						settings.initial_states.clear(); // Reset initals to all
 						settings.circ = false;
 						auto reach_wit = searcher->findWitnesses(settings, parametrization, reach_storage);
-						double reach_rob = computer->compute(settings, parametrization, reach_storage, reach_wit);
+						double reach_rob = robustness ? 0 : computer->compute(settings, parametrization, reach_storage, reach_wit);
 
 						// Compute loop analysis
 						settings.initial_states = { ID };
 						settings.circ = true;
 						auto loop_wit = searcher->findWitnesses(settings, parametrization, loop_storage);
-						double loop_rob = computer->compute(settings, parametrization, loop_storage, loop_wit) - 1;
+						double loop_rob = robustness ? 0 : computer->compute(settings, parametrization, loop_storage, loop_wit) - 1;
 
 						// Merge
 						get<1>(result).insert(WHOLE(reach_wit));
@@ -104,7 +104,7 @@ public:
 	/**
 	 * @brief checkFinite conduct model check with reachability only
 	 */
-	tuple<size_t, multimap<StateID, StateID>, double > checkFinite(const size_t bfs_bound, const TraceType trace_type, const Levels & parametrization) {
+	tuple<size_t, multimap<StateID, StateID>, double > checkFinite(const size_t bfs_bound, const bool witness, const bool robustness, const Levels & parametrization) {
 		tuple<size_t, multimap<StateID, StateID>, double > result;
 		get<2>(result) = 0.0;
 		get<0>(result) = INF;
@@ -117,12 +117,12 @@ public:
 		VisitStorage storage(product.getStateCount());
 		storage = model_checker->conductCheck(settings, parametrization, move(storage));
 
-		if (storage.succeeded() && trace_type != TraceType::none) {
+		if (storage.succeeded() && (witness || robustness) ){
 			auto transitions = searcher->findWitnesses(settings, parametrization, storage);
-			if (trace_type == TraceType::wit)
+			if (witness)
 				get<1>(result) = transitions;
 
-			get<2>(result) = computer->compute(settings, parametrization, storage, transitions);
+			get<2>(result) = robustness ? 0 : computer->compute(settings, parametrization, storage, transitions);
 		}
 
 		get<0>(result) = storage.getCost();

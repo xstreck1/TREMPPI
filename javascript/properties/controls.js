@@ -28,6 +28,23 @@ tremppi.properties.detailControls = function (detail) {
     detail.onToolbar = tremppi.properties.detailClick;
 };
 
+tremppi.properties.emptyProperty = function(recID) {
+    var new_prop = {
+        recid: recID, 
+        type: "series", 
+        name: 'property' + recID,
+        validate: false,
+        witness: false,
+        robustness: false,
+        simulate: false,
+        records: []
+    };
+    for (var i = 0; i < tremppi.data.components.length; i++) {
+        new_prop[tremppi.data.components[i]] = "";
+    } 
+    return new_prop;
+};
+
 tremppi.properties.listClick = function (event) {
     if (event.type === 'toolbar') {
         var records = tremppi.data.list.records;
@@ -37,7 +54,7 @@ tremppi.properties.listClick = function (event) {
         }
         else if (event.target === 'add') {
             var recID = tremppi.w2ui.getFreeRecID(records);
-            records.push({recid: recID, type: "series", name: 'property ' + recID, records: []});
+            records.push(tremppi.properties.emptyProperty(recID));
             grid.records = records;
         }
         else if (event.target === 'duplicate') {

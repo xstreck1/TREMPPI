@@ -14,14 +14,12 @@ void UnparametrizedStructureBuilder::addTransitions(const StateID trans_ID, cons
 		// If this value is not the lowest one, add neighbour with lower
 		if (state_levels[ID] > structure.mins[ID]) {
 			const StateID target_ID = trans_ID - index_jumps[ID];
-			if (allowed_states[target_ID])
-				addTransition(trans_ID, target_ID, ID, false, state_levels, structure);
+			addTransition(trans_ID, target_ID, ID, false, state_levels, structure);
 		}
 		// If this value is not the highest one, add neighbour with higher
 		if (state_levels[ID] < structure.maxes[ID]) {
 			const StateID target_ID = trans_ID + index_jumps[ID];
-			if (allowed_states[target_ID])
-				addTransition(trans_ID, target_ID, ID, true, state_levels, structure);
+			addTransition(trans_ID, target_ID, ID, true, state_levels, structure);
 		}
 	}
 }
@@ -63,46 +61,21 @@ void UnparametrizedStructureBuilder::computeJumps(const Levels & range_size) {
 	}
 }
 
-void UnparametrizedStructureBuilder::prepareAllowed(const UnparametrizedStructure & structure, const size_t state_count, const bool init) {
-	if (state_count * property.states.size() > structure.states.max_size())
-		throw runtime_error("The number of states of the product (" + to_string(state_count * property.states.size()) +
-		" is bigger than the maximum of " + to_string(structure.states.max_size()));
-	allowed_states.resize(state_count, init);
-}
-
 size_t UnparametrizedStructureBuilder::solveConstrains(UnparametrizedStructure & structure) {
-	pair<Levels, Levels> bounds = PropertyHelper::getBounds(reg_infos, property);
+	pair<Levels, Levels> bounds = PropertyHelper::getBounds(reg_infos, property_automaton);
 	structure.mins = bounds.first; structure.maxes = bounds.second;
 	rng::transform(structure.maxes, structure.mins, back_inserter(structure.range_size), [](const ActLevel max, const ActLevel min) {return max - min + 1; });
 
-	ConstraintParser * cons_pars = new ConstraintParser(reg_infos.size(), DataInfo::getMaxLevel(reg_infos));
-	cons_pars->addBoundaries(bounds.first, false);
-	cons_pars->addBoundaries(bounds.second, true);
-	cons_pars->applyFormula(DataInfo::getAllNames(reg_infos), property.experiment);
 	// Compute distances between neighbours
 	computeJumps(structure.range_size);
 
-	// Mark allowed states
 	size_t state_count = accumulate(structure.range_size.begin(), structure.range_size.end(), 1, multiplies<size_t>());
-	bool all_states = property.experiment == "tt";
-	prepareAllowed(structure, state_count, all_states);
-
-	// Conduct search
-	if (!all_states) {
-		Gecode::DFS<ConstraintParser> search(cons_pars);
-		delete cons_pars;
-		while (ConstraintParser *result = search.next()) {
-			StateID ID = structure.getID(result->getSolution());
-			allowed_states[ID] = true;
-			delete result;
-		}
-	}
 
 	return state_count;
 }
 
-UnparametrizedStructureBuilder::UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property)
-	: reg_infos(_reg_infos), property(_property) {}
+UnparametrizedStructureBuilder::UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property_automaton)
+	: reg_infos(_reg_infos), property_automaton(_property_automaton) {}
 
 UnparametrizedStructure UnparametrizedStructureBuilder::buildStructure() {
 	UnparametrizedStructure structure;
@@ -113,13 +86,9 @@ UnparametrizedStructure UnparametrizedStructureBuilder::buildStructure() {
 	Levels levels(structure.mins);
 	do {
 		// Fill the structure with the state
-		if (allowed_states[ID]) {
-			structure.addState(ID, levels);
-			addTransitions(ID, levels, structure);
-		}
-		else {
-			structure.addState(ID, Levels());
-		}
+		structure.addState(ID, levels);
+		addTransitions(ID, levels, structure);
+
 		ID++;
 	} while (iterate(structure.maxes, structure.mins, levels));
 

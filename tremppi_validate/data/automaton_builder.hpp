@@ -77,12 +77,12 @@ class AutomatonBuilder {
 	 * @brief setAutType sets type of the automaton based on the type of the property
 	 */
 	void setAutType(AutomatonStructure & automaton) {
-		if (property.prop_type == "TimeSeries")
+		if (property.prop_type == "series")
 			if (property.states.back().stables_list.empty())
 				automaton.my_type = BA_finite;
 			else // Partial stable states require full check
 				automaton.my_type = BA_standard;
-		else if (property.prop_type == "Cycle")
+		else if (property.prop_type == "cycle")
 			automaton.my_type = BA_standard;
 		else
 			throw runtime_error("Type of the verification automaton is not known.");

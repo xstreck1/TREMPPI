@@ -5,36 +5,37 @@ import re
 
 def get_atom(record):
     atoms = []
-    if (not "select" in record) or (not record["select"]):
-        return
 
-    for key, value in record.items():
-        if key == 'select' or key == 'recid':
-            continue
-        elif re.match('\d+.*\d*', value):
-            atoms.append(key + " = " + value)
-        elif re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value):
-            matches = re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value)
-            if matches.group(1) == '(':
-                atoms.append(key + " > " + matches.group(2))
+    if ("select" in record) and record["select"]:
+        for key, value in record.items():
+            if key == 'select' or key == 'recid' or key == 'changes' or value == '':
+                continue
+            elif re.match('\d+.*\d*', value):
+                atoms.append(key + " = " + value)
+            elif re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value):
+                matches = re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value)
+                if matches.group(1) == '(':
+                    atoms.append(key + " > " + matches.group(2))
+                else:
+                    atoms.append(key + " >= " + matches.group(2))
+                if matches.group(4) == ')':
+                    atoms.append(key + " < " + matches.group(3))
+                else:
+                    atoms.append(key + " <= " + matches.group(3))
             else:
-                atoms.append(key + " >= " + matches.group(2))
-            if matches.group(4) == ')':
-                atoms.append(key + " < " + matches.group(3))
-            else:
-                atoms.append(key + " <= " + matches.group(3))
-        else:
-            raise "The expression " + value + " for the key " + key + " is not interpreted."
+                raise Exception("The expression " + value + " for the key " + key + " is not interpreted.")
+        if len(atoms) == 0:
+            atoms.append("1")
 
-    if len(atoms) == 0:
-        atoms.push("1")
     return atoms
 
 def select_query(records):
     clauses = []
 
     for record in records:
-        clauses.append("(" + " AND ".join(get_atom(record)) + ")")
+        atoms = get_atom(record)
+        if (len(atoms) > 0):
+            clauses.append("(" + " AND ".join(atoms) + ")")
 
     return " OR ".join(clauses)
 
@@ -47,4 +48,4 @@ def select(filename):
         if query != '':
             return ' WHERE ' + query
         else:
-            raise "No selection has been made."
+            raise Exception("No selection has been made.")

@@ -10,7 +10,6 @@ tremppi.properties.tableList = function (list, components) {
     }
     list.name = 'list';
     list.multiSelect = false;
-    list.reorderRows = true;
     list.columns = [
         {field: 'name', caption: 'Name', size: '200px', resizable: true, sortable: true,
             editable: {type: 'text'}
@@ -57,7 +56,6 @@ tremppi.properties.tableDetail = function (detail, components) {
     }
     detail.name = 'detail';
     detail.multiSelect = false;
-    detail.reorderRows = true;
     detail.show = {
         toolbar: true, selectColumn: false, toolbarSave: false,
         toolbarReload: false, toolbarSearch: false, toolbarColumns: false,

@@ -211,6 +211,12 @@ namespace Common {
 		else
 			return std::numeric_limits<std::size_t>::max();
 	}
+
+	template<class... Args, class T, class R>
+	auto resolved(R(T::*m)(Args...)) { return m; }
+
+	template<class T, class R>
+	auto resolved(R(T::*m)()) { return m; }
 }
 
 using namespace Common;

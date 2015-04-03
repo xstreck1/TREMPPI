@@ -41,13 +41,12 @@ int tremppi_validate(int argc, char ** argv) {
 	}
 
 	// Check the file
-	Json::Value root; // root of the properties
+	Json::Value properties; // root of the properties
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
-		root = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME);
-
-		PropertiesReader::checkSemantics(root);
+		Json::Value root = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME);
+		properties = root["list"]["records"];
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
@@ -58,18 +57,12 @@ int tremppi_validate(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing the properties.";
 
-		automata = PropertiesReader::jsonToProperties(root);
-
-		// Just checks if it is possible to construct (parse) the automata
-		for (const PropertyAutomaton & automaton : automata)
-			ConstructionManager::test(reg_infos, automaton);
+		automata = PropertiesReader::jsonToProperties(reg_infos, properties);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 4);
 	}
 
-	if (po.count("check-only") > 0)
-		return 0;
 
 	// Conduct the check for each of the properties
 	logging.newPhase("Checking properties", automata.size());
@@ -91,9 +84,8 @@ int tremppi_validate(int argc, char ** argv) {
 			BOOST_LOG_TRIVIAL(info) << "Validating for an automaton: " << automaton.name;
 
 			AnalysisManager analysis_manager(product);
-			OutputManager output(po, reg_infos, automaton.name, db);
+			OutputManager output(automaton.witness, automaton.robustness, reg_infos, automaton.name, db);
 			output.outputForm();
-			size_t BFS_bound = ValidateOptions::getBound(po); ///< Maximal cost on the verified automaton.
 
 			logging.newPhase("Validating parametrizations", sqlite3pp::func::columnCount(PARAMETRIZATIONS_TABLE, select, db));
 			// Do the computation for all the rounds
@@ -104,10 +96,10 @@ int tremppi_validate(int argc, char ** argv) {
 				// Call analysis procedure based on the type of the automaton.
 				switch (product.getMyType()) {
 				case BA_finite:
-					result = analysis_manager.checkFinite(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
+					result = analysis_manager.checkFinite(automaton.bound, automaton.witness, automaton.robustness, par_reader.getParametrization());
 					break;
 				case BA_standard:
-					result = analysis_manager.checkFull(ValidateOptions::getBound(po), ValidateOptions::getTracteType(po), par_reader.getParametrization());
+					result = analysis_manager.checkFull(automaton.bound, automaton.witness, automaton.robustness, par_reader.getParametrization());
 					break;
 				default:
 					throw runtime_error("Unsupported Buchi automaton type.");
@@ -115,8 +107,8 @@ int tremppi_validate(int argc, char ** argv) {
 
 				// Parametrization was considered satisfying.
 				string witness_path;
-				if (get<0>(result) != INF)
-					witness_path = WitnessSearcher::getOutput(ValidateOptions::getTracteType(po), product, get<0>(result), get<1>(result));
+				if (get<0>(result) != INF && automaton.witness)
+					witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
 
 				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 				logging.step();
