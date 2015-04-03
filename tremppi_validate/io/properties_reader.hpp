@@ -29,7 +29,7 @@ namespace PropertiesReader {
 
 			// Get the bounds
 			for (const RegInfo & reg_info : reg_infos) {
-				pair<ActLevel, ActLevel> bound;
+				pair<ActLevel, ActLevel> bound = { 0, INF };
 				string value = property_node[reg_info.name].asString(); 
 				std::smatch sm;
 				// Bound is specified
@@ -47,14 +47,13 @@ namespace PropertiesReader {
 						bound.second = stoi(sm[3].str());
 					}
 				}
-				// The whole range
-				else if (value == "") {
-					bound.first = 0;
-					bound.second = reg_info.max_activity;
-				}
-				else {
+				else if (value != "") {
 					throw invalid_argument("unknown value " + value + " for the component " + reg_info.name + " of the property " + automaton.name);
 				}
+				// Corrections on the bounds
+				if (bound.first > bound.second)
+					throw invalid_argument("invalid value " + value + " for the component " + reg_info.name + " of the property " + automaton.name);
+				bound.second = std::min(reg_info.max_activity, bound.second);
 				automaton.bounds.push_back(bound);
 			}
 

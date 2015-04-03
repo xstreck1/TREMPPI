@@ -10,32 +10,32 @@ int tremppi_validate(int, char**);
 // Print the basic model
 void createProperties(const bfs::path & example_model_path) {
 	Json::Value root;
-	root.resize(2);
-	// Add time series
-	root[0]["desc"].resize(1);
-	root[0]["desc"][0]["id"] = 0;
-	root[0]["desc"][0]["values"]["Name"] = "test_ts";
-	root[0]["desc"][0]["values"]["Type"] = "TimeSeries";
-	root[0]["desc"][0]["values"]["Experiment"] = "";
-	root[0]["desc"][0]["values"]["Verify"] = true;
-	root[0]["data"].resize(2);
-	root[0]["data"][0]["id"] = 0;
-	root[0]["data"][0]["values"]["Measurement"] = "B>0";
-	root[0]["data"][1]["id"] = 1;
-	root[0]["data"][1]["values"]["Measurement"] = "A>0&B>1";
-	// Add a cycle
-	root[1]["desc"].resize(1);
-	root[1]["desc"][0]["id"] = 0;
-	root[1]["desc"][0]["values"]["Name"] = "test_cycle";
-	root[1]["desc"][0]["values"]["Type"] = "Cycle";
-	root[1]["desc"][0]["values"]["Experiment"] = "";
-	root[1]["desc"][0]["values"]["Verify"] = true;
-	root[1]["data"].resize(2);
-	root[1]["data"][0]["id"] = 0;
-	root[1]["data"][0]["values"]["Measurement"] = "A=1";
-	root[1]["data"][1]["id"] = 1;
-	root[1]["data"][1]["values"]["Measurement"] = "A=0";
+	Json::Value & records = root["list"]["records"];
+	records.resize(2);
 
+	// Add time series
+	records[0]["name"] = "test_ts";
+	records[0]["type"] = "series";
+	records[0]["A"] = "";
+	records[0]["B"] = "";
+	records[0]["validate"] = true;
+	records[0]["robustness"] = true;
+	records[0]["witness"] = false;
+	records[0]["records"].resize(2);
+	records[0]["records"][0]["B_value"] = "[0,1)";
+	records[0]["records"][1]["B_value"] = "[1,2)";
+
+	// Add a cycle
+	records[0]["name"] = "test_cycle";
+	records[0]["type"] = "cycle";
+	records[0]["A"] = "";
+	records[0]["B"] = "";
+	records[0]["validate"] = true;
+	records[0]["robustness"] = false;
+	records[0]["witness"] = true;
+	records[0]["records"].resize(2);
+	records[0]["records"][0]["A_value"] = "[0,1)";
+	records[0]["records"][1]["A_value"] = "[1,2)";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
@@ -43,9 +43,9 @@ void createProperties(const bfs::path & example_model_path) {
 	data_file << data;
 }
 
-int basic_validate_test()  {
+int basic_validate_test() {
 	const string path = bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string();
-	vector<string> arguments = { "--path", path, "--trace", "wit" };
+	vector<string> arguments = { "--path", path };
 	ArgPtr arg_ptr(arguments);
 	createProperties(path);
 	int res = tremppi_validate(arg_ptr.getArgc(), arg_ptr.getArgv());
@@ -104,7 +104,7 @@ TEST_F(ValidateTest, Construction) {
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = a_unreagulated_is_steady.checkFinite(INF, TraceType::wit, { 1 });
+	auto results = a_unreagulated_is_steady.checkFinite(INF, true, true, { 1 });
 	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2--just one loop";
 	EXPECT_EQ(1, get<1>(results).size()) << "Witness should contain exactly a single loop";
 	EXPECT_EQ(1, get<1>(results).begin()->first) << "Witness should a loop (1,1)";
@@ -114,16 +114,16 @@ TEST_F(ValidateTest, SteadyStates) {
 TEST_F(ValidateTest, BasicValidation) {
 	ProductStructure p_two_circuit_spike_on_A = ConstructionManager::construct(r_two_circuit, a_spike_on_A);
 	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A);
-	auto results = a_two_circuit_spike_on_A.checkFinite(INF, TraceType::wit, { 0, 1, 1, 0 });
+	auto results = a_two_circuit_spike_on_A.checkFinite(INF, true, true, { 0, 1, 1, 0 });
 	EXPECT_EQ(3, get<0>(results)) << "Two-steps way for the spike prop.";
 	EXPECT_EQ(2, get<1>(results).size()) << "Exactly two steps are present for the spike.";
-	EXPECT_DOUBLE_EQ(1.0/4.0, get<2>(results)) << "Robustnes 1/4---deterministic path from one of the initial states.";
+	EXPECT_DOUBLE_EQ(1.0 / 4.0, get<2>(results)) << "Robustnes 1/4---deterministic path from one of the initial states.";
 }
 
 TEST_F(ValidateTest, CycleProperty) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = a_unreagulated_is_steady.checkFull(INF, TraceType::wit, { 1, 0 });
+	auto results = a_unreagulated_is_steady.checkFull(INF, true, true, { 1, 0 });
 	EXPECT_EQ(4, get<0>(results)) << "One step plus two-step loop.";
 	EXPECT_EQ(3, get<1>(results).size()) << "One step plus two-step loop.";
 	EXPECT_DOUBLE_EQ(1.0 / 2.0, get<2>(results)) << "Robustnes 1/2---deterministic path with two initials.";

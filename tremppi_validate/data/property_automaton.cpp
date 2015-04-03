@@ -13,7 +13,7 @@ CompID PropertyHelper::findID(const string & name, const PropertyAutomaton & pro
 pair<Levels, Levels> PropertyHelper::getBounds(const RegInfos & reg_infos, const PropertyAutomaton & property_automaton) {
 	// Impose constraints
 	pair<Levels, Levels> result = { Levels(reg_infos.size(), INF), Levels(reg_infos.size(), 0) };
-	transform(WHOLE(property_automaton.bounds), begin(result.first), [](const pair<ActLevel, ActLevel> & bound) {return get<0>(bound); });
-	transform(WHOLE(property_automaton.bounds), begin(result.second), [](const pair<ActLevel, ActLevel> & bound) {return get<1>(bound); });
+	transform(begin(property_automaton.bounds), begin(property_automaton.bounds) + reg_infos.size(), begin(result.first), [](const pair<ActLevel, ActLevel> & bound) {return get<0>(bound); });
+	transform(begin(property_automaton.bounds), begin(property_automaton.bounds) + reg_infos.size(), begin(result.second), [](const pair<ActLevel, ActLevel> & bound) {return get<1>(bound); });
 	return result;
 }

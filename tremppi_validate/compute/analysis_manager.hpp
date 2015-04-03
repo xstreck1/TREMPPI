@@ -81,13 +81,13 @@ public:
 						settings.initial_states.clear(); // Reset initals to all
 						settings.circ = false;
 						auto reach_wit = searcher->findWitnesses(settings, parametrization, reach_storage);
-						double reach_rob = robustness ? 0 : computer->compute(settings, parametrization, reach_storage, reach_wit);
+						double reach_rob = robustness ? computer->compute(settings, parametrization, reach_storage, reach_wit) : 0;
 
 						// Compute loop analysis
 						settings.initial_states = { ID };
 						settings.circ = true;
 						auto loop_wit = searcher->findWitnesses(settings, parametrization, loop_storage);
-						double loop_rob = robustness ? 0 : computer->compute(settings, parametrization, loop_storage, loop_wit) - 1;
+						double loop_rob = robustness ? computer->compute(settings, parametrization, loop_storage, loop_wit) - 1 : 0;
 
 						// Merge
 						get<1>(result).insert(WHOLE(reach_wit));
@@ -122,7 +122,7 @@ public:
 			if (witness)
 				get<1>(result) = transitions;
 
-			get<2>(result) = robustness ? 0 : computer->compute(settings, parametrization, storage, transitions);
+			get<2>(result) = robustness ? computer->compute(settings, parametrization, storage, transitions) : 0;
 		}
 
 		get<0>(result) = storage.getCost();
