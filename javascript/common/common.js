@@ -196,5 +196,6 @@ tremppi.log = function (content, level) {
 
     var date = new Date();
     $("#log_line").html("[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] " + content);
-    $("#log_line")[0].className = level;
+    if ($("#log_line").length > 0)
+        $("#log_line")[0].className = level;
 };

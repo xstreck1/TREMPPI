@@ -8,13 +8,13 @@ tremppi.select.setPage = function () {
     $("#widget").append('<div id="selection_table"></div>');
 };
 
-tremppi.select.setData = function () {
-    tremppi.select.grid = $('#selection_table').w2grid(tremppi.data);
-    tremppi.select.grid.onChange = tremppi.w2ui.changeFunction(tremppi.data.columns, tremppi.data.records);
+tremppi.select.setData = function (data) {
+    tremppi.select.grid = $('#selection_table').w2grid(data);
+    tremppi.select.grid.onChange = tremppi.w2ui.changeFunction(data.columns, data.records);
     tremppi.select.setGroups();
     tremppi.select.grid.refresh();
     tremppi.select.activateControls();
-    tremppi.select.addColumnsSelection(tremppi.data.groups);
+    tremppi.select.addColumnsSelection(data.groups);
     tremppi.select.grid.onColumnResize = tremppi.select.columnResize;
 };
 

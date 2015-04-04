@@ -9,13 +9,13 @@ tremppi.properties.setPage = function () {
     $("#widget").append('<div id="property_detail"></div>');
 };
 
-tremppi.properties.setData = function () {
-    tremppi.properties.list = $('#property_list').w2grid(tremppi.data.list);  
+tremppi.properties.setData = function (data) {
+    tremppi.properties.list = $('#property_list').w2grid(data.list);  
     tremppi.properties.listControls(tremppi.properties.list);
-    tremppi.properties.list.onChange = tremppi.w2ui.changeFunction(tremppi.data.list.columns, tremppi.data.list.records);
+    tremppi.properties.list.onChange = tremppi.w2ui.changeFunction(data.list.columns, data.list.records);
     tremppi.properties.list.onClick = tremppi.properties.listSelect;
     
-    tremppi.properties.detail = $('#property_detail').w2grid(tremppi.data.detail);
+    tremppi.properties.detail = $('#property_detail').w2grid(data.detail);
     tremppi.properties.detailControls(tremppi.properties.detail);
     if (tremppi.properties.detailed !== -1) {
         tremppi.properties.listSelect({recid: tremppi.properties.detailed });

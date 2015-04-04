@@ -24,19 +24,20 @@ tremppi.editor.setPage = function () {
     tremppi.editor.graph.on('tap', tremppi.editor.selection);
     // Save after drag
 
+    tremppi.editor.toolbar.onClick = tremppi.editor.toolbarClick;
     tremppi.editor.setBasic();
     // tremppi.editor.setControls();
 };
 
-tremppi.editor.setData = function () {
+tremppi.editor.setData = function (data) {
     var glyphAll = function (elements, glyphFunction) {
         for (var i = 0; i < elements.length; i++) {
             glyphFunction(elements[i].data);
         }
     };
-    glyphAll(tremppi.data.nodes, tremppi.editor.glyphNode);
-    glyphAll(tremppi.data.edges, tremppi.editor.glyphEdge);
-    tremppi.editor.graph.load(tremppi.data);
+    glyphAll(data.nodes, tremppi.editor.glyphNode);
+    glyphAll(data.edges, tremppi.editor.glyphEdge);
+    tremppi.editor.graph.load(data);
     tremppi.editor.graph.elements().unselect();
     // Add the save function
     tremppi.editor.graph.on('free', tremppi.editor.save);
@@ -52,7 +53,7 @@ tremppi.editor.layout = function () {
     $("#graph_object").cytoscape('get').resize();
 };
 
-tremppi.editor.setDefaultData = function(data) {
+tremppi.editor.setDefaultData = function (data) {
     if (typeof data.nodes === 'undefined')
         data.nodes = [];
     if (typeof data.edges === 'undefined')
@@ -60,7 +61,8 @@ tremppi.editor.setDefaultData = function(data) {
 };
 
 
-tremppi.editor.defaultToolbar = {
-    items: [],
-    onClick: tremppi.editor.toolbarClick
+tremppi.editor.defaultToolbar = function () {
+    return {
+        items: []
+    };
 };

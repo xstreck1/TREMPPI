@@ -12,11 +12,12 @@ tremppi = {
     },
     widgetInterface: function () {
         return {
-            setPage: function () {},
-            setData: function () {},
-            layout: function () {},
-            setDefaultData: function (data) {},
-            defaultToolbar: {}
+            setPage: function () { tremppi.log("setPage not implemented", "warning" ); },
+            setData: function (data) { tremppi.log("setData not implemented", "warning" ); },
+            layout: function () { tremppi.log("layout not implemented", "warning" ); },
+            save: function () { tremppi.log("save not implemented", "warning" ); },
+            setDefaultData: function (data) { tremppi.log("setDefaultDatas not implemented", "warning" ); },
+            defaultToolbar: function (){ tremppi.log("toolbar not implemented", "warning" ); }
         };
     },
     // the setup function - sets globals, obtains data and adds server content, if possible
@@ -49,11 +50,11 @@ tremppi = {
         tremppi.data = data;
         // add default content, if original not available
         if (typeof (tremppi.data.configured) === 'undefined' || tremppi.data.configured === false) {
-            tremppi.widget.setDefaultData(tremppi.data);
+            tremppi.widget.setDefaultData(data);
             tremppi.data.configured = true;
             tremppi.save();
         }
-        tremppi.widget.setData();
+        tremppi.widget.setData(data);
         tremppi.log(tremppi.widget_name + " loaded.");
     },
     construct: function () {
@@ -74,7 +75,8 @@ tremppi = {
                     nodes: [
                         {id: 'editor', text: 'editor'},
                         {id: 'select', text: 'select'},
-                        {id: 'properties', text: 'properties'}
+                        {id: 'properties', text: 'properties'},
+                        {id: 'overview', text: 'overview'}
                     ]
                 }
             ]
@@ -84,16 +86,19 @@ tremppi = {
             name: 'layout',
             panels: [
                 {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
-                {type: 'main', style: layout_style, toolbar: tremppi.widget.defaultToolbar, content: '<div id="widget" ></div>'},
+                {type: 'main', style: layout_style, content: '<div id="widget" ></div>'},
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
             ]
         };
+        
+        var toolbar = tremppi.widget.defaultToolbar();
+        if (toolbar !== "undefined")
+            layout.panels[1].toolbar = toolbar;
+        
         // Layout
         $('body').w2layout(layout);
         // Toolbar
         tremppi.widget.toolbar = w2ui.layout.get("main").toolbar;
-        if (typeof tremppi.widget.defaultToolbar.items === "undefined")
-            w2ui.layout.hideToolbar("main");
 
         // Side bar
         w2ui.layout.content('left', $().w2sidebar(sidebar));

@@ -1,0 +1,14 @@
+{
+	"selections": [
+		"sel1",
+		"sel2"
+	],
+	"left": "",
+	"right": "",
+	"grid": {
+		"name": "grid",
+		"columns": [],
+		"records": []
+	},
+	"configured": true
+}
