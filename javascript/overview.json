@@ -7,7 +7,37 @@
 	"right": "",
 	"grid": {
 		"name": "grid",
-		"columns": [],
+		"header": "",
+		"show": {
+			"header": true
+		},
+		"columns": [
+			{
+				"field": "count",
+				"caption": "Count",
+				"size": "20%"
+			},
+			{
+				"field": "portion",
+				"caption": "Portion",
+				"size": "20%"
+			},
+			{
+				"field": "min",
+				"caption": "Min",
+				"size": "20%"
+			},
+			{
+				"field": "max",
+				"caption": "Max",
+				"size": "20%"
+			},
+			{
+				"field": "mean",
+				"caption": "Mean",
+				"size": "20%"
+			}
+		],
 		"records": []
 	},
 	"configured": true

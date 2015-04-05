@@ -42,6 +42,6 @@ namespace DataInfo {
 	map<CompID, vector<vector<size_t>>> getColumnsOfThresholds(const RegInfo & reg_info);
 
 	// for a regultor from the given regulatory info, obtain its ordinal index
-	size_t inline getRegulatorI(const CompID ID, const RegInfo & reg_info);
+	size_t getRegulatorI(const CompID ID, const RegInfo & reg_info);
 }
 

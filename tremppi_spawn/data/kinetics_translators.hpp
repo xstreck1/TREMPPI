@@ -7,7 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace KineticsTranslators {
 	// @return the number of parametrizations
-	inline ParamNo getSpaceSize(const Kinetics & kinetics);
+	ParamNo getSpaceSize(const Kinetics & kinetics);
 
 	// @return parametrization vector from its number
 	Levels createParamVector(const Kinetics & kinetics, const ParamNo param_no);

@@ -1,6 +1,6 @@
 #include "kinetics_translators.hpp"
 
-inline ParamNo KineticsTranslators::getSpaceSize(const Kinetics & kinetics) {
+ParamNo KineticsTranslators::getSpaceSize(const Kinetics & kinetics) {
 	return accumulate(begin(kinetics.components), end(kinetics.components), static_cast<ParamNo>(1), [](const ParamNo A, const Kinetics::Component & B) -> ParamNo {
 		return A * B.subcolors.size();
 	});

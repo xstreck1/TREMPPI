@@ -9,27 +9,28 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/counting_range.hpp>
 
+
 #define NO_COPY(TypeName) \
-	TypeName() = default;  \
-	TypeName(TypeName && ) = default;  \
-	TypeName& operator=(TypeName && ) = default; \
-	TypeName(const TypeName & ) = delete; \
-	TypeName& operator=(const TypeName & ) = delete; 
+		TypeName() = default;  \
+		TypeName(TypeName && ) = default;  \
+		TypeName& operator=(TypeName && ) = default; \
+		TypeName(const TypeName & ) = delete; \
+		TypeName& operator=(const TypeName & ) = delete; 
 
 #define GROUNDED(TypeName) \
-	TypeName() = default;  \
-	TypeName(TypeName && ) = delete;  \
-	TypeName& operator=(TypeName && ) = delete; \
-	TypeName(const TypeName & ) = delete; \
-	TypeName& operator=(const TypeName & ) = delete; 
+		TypeName() = default;  \
+		TypeName(TypeName && ) = delete;  \
+		TypeName& operator=(TypeName && ) = delete; \
+		TypeName(const TypeName & ) = delete; \
+		TypeName& operator=(const TypeName & ) = delete; 
 
 #define NO_COPY_SHORT(TypeName) \
-	TypeName(const TypeName & ) = delete; \
-	TypeName& operator=(const TypeName & ) = delete; 
+		TypeName(const TypeName & ) = delete; \
+		TypeName& operator=(const TypeName & ) = delete; 
 
 #define DEFAULT_MOVE(TypeName) \
-	TypeName(TypeName && ) = default;  \
-	TypeName& operator=(TypeName && ) = default; 
+		TypeName(TypeName && ) = default;  \
+		TypeName& operator=(TypeName && ) = default; 
 
 #define WHOLE(Container) begin(Container),end(Container)
 
@@ -54,7 +55,7 @@ namespace Common {
 	* @return  a counting range for [0,end[
 	*/
 	template<typename IntegralType>
-	inline auto crange(const IntegralType end) -> decltype(boost::counting_range(end, end))  {
+	inline auto crange(const IntegralType end) -> decltype(boost::counting_range(end, end)) {
 		return boost::counting_range(static_cast<IntegralType>(0), end);
 	}
 
@@ -64,7 +65,7 @@ namespace Common {
 	* @return  a counting range for [0,container.size()[
 	*/
 	template<typename SeqType>
-	inline auto cscope(const SeqType & container) -> decltype(crange(container.size()))  {
+	inline auto cscope(const SeqType & container) -> decltype(crange(container.size())) {
 		typedef decltype(container.size()) ContSizeT;
 		return crange(static_cast<ContSizeT>(0), container.size());
 	}
@@ -80,7 +81,7 @@ namespace Common {
 		std::vector<IntegralType> values(end - begin);
 
 		size_t val = begin;
-		generate(values.begin(), values.end(), [&val](){return val++; });
+		generate(values.begin(), values.end(), [&val]() {return val++; });
 
 		return values;
 	}
@@ -91,7 +92,7 @@ namespace Common {
 	* @return  a vector for [0,end[
 	*/
 	template<typename IntegralType>
-	inline std::vector<IntegralType> vrange(const IntegralType end)  {
+	inline std::vector<IntegralType> vrange(const IntegralType end) {
 		return vrange(static_cast<IntegralType>(0), end);
 	}
 
@@ -101,13 +102,13 @@ namespace Common {
 	* @param[in,out] val  reference to value that will be increased
 	*/
 	template<typename IntegralType>
-	void increase(typename std::vector<IntegralType>::reference val) { 
-		val++; 
+	void increase(typename std::vector<IntegralType>::reference val) {
+		val++;
 	}
 
 
-    template<>
-    void increase<bool>(std::vector<bool>::reference val);
+	template<>
+	void increase<bool>(std::vector<bool>::reference val);
 
 	/**
 	* @brief Iterates values from left to right if it is possible. If so, return true, otherwise return false.
@@ -183,7 +184,7 @@ namespace Common {
 	*/
 	template<typename T>
 	std::string quote(const T & content) {
-		return "\"" + boost::lexical_cast<std::string, T>(content)+"\"";
+		return "\"" + boost::lexical_cast<std::string, T>(content) + "\"";
 	}
 
 	/**
@@ -211,12 +212,6 @@ namespace Common {
 		else
 			return std::numeric_limits<std::size_t>::max();
 	}
-
-	template<class... Args, class T, class R>
-	auto resolved(R(T::*m)(Args...)) { return m; }
-
-	template<class T, class R>
-	auto resolved(R(T::*m)()) { return m; }
 }
 
 using namespace Common;

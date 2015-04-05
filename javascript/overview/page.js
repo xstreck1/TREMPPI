@@ -12,12 +12,15 @@ tremppi.overview.setPage = function () {
 
 tremppi.overview.setData = function (data) {
     tremppi.overview.left = {}, tremppi.overview.mid = {}, tremppi.overview.right = {};
-    $.extend(true, tremppi.overview.left, data);
+    $.extend(true, tremppi.overview.left, data.grid);
     tremppi.overview.left.name = 'left';
-    $.extend(true, tremppi.overview.mid, data);
+    tremppi.overview.left.header = 'left';
+    $.extend(true, tremppi.overview.mid, data.grid);
     tremppi.overview.mid.name = 'mid';
-    $.extend(true, tremppi.overview.right, data);
+    tremppi.overview.mid.header = 'mid';
+    $.extend(true, tremppi.overview.right, data.grid);
     tremppi.overview.right.name = 'right';
+    tremppi.overview.right.header = 'right';
     tremppi.overview.left = $('#container_left').w2grid(tremppi.overview.left);
     tremppi.overview.mid = $('#container_mid').w2grid(tremppi.overview.mid);
     tremppi.overview.right = $('#container_right').w2grid(tremppi.overview.right);
@@ -43,15 +46,21 @@ tremppi.overview.setDefaultData = function (data) {
     if (typeof data.right === 'undefined')
         data.right = "";
 
-    if (typeof data.grid === 'undefined')
-        data.grid = {};
 
-    if (typeof data.grid.name === 'undefined')
-        data.grid.name = 'grid';
-    if (typeof data.grid.columns === 'undefined')
-        data.grid.columns = [];
-    if (typeof data.grid.records === 'undefined')
-        data.grid.records = [];
+    data.grid = {};
+    data.grid.name = 'grid';
+    data.grid.header = "";
+    data.grid.show = {
+        header: true
+    };
+    data.grid.columns = [
+        {field: 'count', caption: 'Count', size: '20%'},
+        {field: 'portion', caption: 'Portion', size: '20%'},
+        {field: 'min', caption: 'Min', size: '20%'},
+        {field: 'max', caption: 'Max', size: '20%'},
+        {field: 'mean', caption: 'Mean', size: '20%'}
+    ];
+    data.grid.records = [];
 };
 
 tremppi.overview.defaultToolbar = function () {
@@ -60,11 +69,11 @@ tremppi.overview.defaultToolbar = function () {
         items: [
             {type: 'menu', id: 'select', caption: 'Select', items: []},
             {type: 'menu', id: 'compare', caption: 'Compare', items: []},
-            { type: 'break',  id: 'break0' },
-            { type: 'radio',  id: 'all',  group: '1', caption: 'All', checked: true  },
-            { type: 'radio',  id: 'left',  group: '1', caption: 'Left' },
-            { type: 'radio',  id: 'mid',  group: '1', caption: 'Mid' },
-            { type: 'radio',  id: 'right',  group: '1', caption: 'Right' }
+            {type: 'break', id: 'break0'},
+            {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
+            {type: 'radio', id: 'left', group: '1', caption: 'Left'},
+            {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
+            {type: 'radio', id: 'right', group: '1', caption: 'Right'}
         ]
     };
 };
