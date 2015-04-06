@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+/* global tremppi */
+
 tremppi.select.setPage = function () {
     $("#widget").append('<div id="selection_table"></div>');
 };

@@ -31,6 +31,7 @@ copyanything(join(HOME_PATH, os.path.normpath("javascript/select/")), join(DEST_
 copyanything(join(HOME_PATH, os.path.normpath("javascript/witness/")), join(DEST_CONTENT, "witness"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/interact/")), join(DEST_CONTENT, "interact"))
 copyanything(join(HOME_PATH, os.path.normpath("javascript/function/")), join(DEST_CONTENT, "function"))
+copyanything(join(HOME_PATH, os.path.normpath("javascript/summary/")), join(DEST_CONTENT, "summary"))
 
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/editor.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_CONTENT)
@@ -38,6 +39,7 @@ shutil.copy(join(HOME_PATH, os.path.normpath("javascript/select.html")), DEST_CO
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/witness.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/interact.html")), DEST_CONTENT)
 shutil.copy(join(HOME_PATH, os.path.normpath("javascript/function.html")), DEST_CONTENT)
+shutil.copy(join(HOME_PATH, os.path.normpath("javascript/summary.html")), DEST_CONTENT)
 # data files are not copied - create new
 open(join(DEST_CONTENT, "editor.json"), 'w').write('{}')
 open(join(DEST_CONTENT, "properties.json"), 'w').write('{}')
@@ -45,3 +47,4 @@ open(join(DEST_CONTENT, "select.json"), 'w').write('{}')
 open(join(DEST_CONTENT, "witness.json"), 'w').write('{}')
 open(join(DEST_CONTENT, "interact.json"), 'w').write('{}')
 open(join(DEST_CONTENT, "function.json"), 'w').write('{}')
+open(join(DEST_CONTENT, "summary.json"), 'w').write('{}')

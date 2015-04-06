@@ -70,4 +70,5 @@ const string NETWORK_FILENAME = "editor.json";
 const string DATABASE_FILENAME = "database.sqlite";
 const string PROPERTIES_FILENAME = "properties.json";
 const string SELECTION_FILENAME = "select.json";
+const string SUMMARY_FILENAME = "summary.json";
 

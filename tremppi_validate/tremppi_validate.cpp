@@ -87,7 +87,7 @@ int tremppi_validate(int argc, char ** argv) {
 			OutputManager output(automaton.witness, automaton.robustness, reg_infos, automaton.name, db);
 			output.outputForm();
 
-			logging.newPhase("Validating parametrizations", sqlite3pp::func::columnCount(PARAMETRIZATIONS_TABLE, select, db));
+			logging.newPhase("Validating parametrizations", sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, select, db));
 			// Do the computation for all the rounds
 			sqlite3pp::transaction xct(db);
 			while (par_reader.next()) {

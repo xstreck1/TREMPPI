@@ -26,16 +26,16 @@ void createProperties(const bfs::path & example_model_path) {
 	records[0]["records"][1]["B_value"] = "[1,2)";
 
 	// Add a cycle
-	records[0]["name"] = "test_cycle";
-	records[0]["type"] = "cycle";
-	records[0]["A"] = "";
-	records[0]["B"] = "";
-	records[0]["validate"] = true;
-	records[0]["robustness"] = false;
-	records[0]["witness"] = true;
-	records[0]["records"].resize(2);
-	records[0]["records"][0]["A_value"] = "[0,1)";
-	records[0]["records"][1]["A_value"] = "[1,2)";
+	records[1]["name"] = "test_cycle";
+	records[1]["type"] = "cycle";
+	records[1]["A"] = "";
+	records[1]["B"] = "";
+	records[1]["validate"] = true;
+	records[1]["robustness"] = false;
+	records[1]["witness"] = true;
+	records[1]["records"].resize(2);
+	records[1]["records"][0]["A_value"] = "[0,1)";
+	records[1]["records"][1]["A_value"] = "[1,2)";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);

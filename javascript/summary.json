@@ -7,6 +7,10 @@
 		{
 			"id": "sel2",
 			"text": "sel2"
+		},
+		{
+			"id": "150406192229",
+			"text": "150406192229"
 		}
 	],
 	"left": "",
@@ -52,7 +56,7 @@
 		"records": []
 	},
 	"configured": true,
-	"select": "sel1",
+	"select": "150406192229",
 	"compare": "sel2",
 	"panel": "all"
 }

@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 
+#include <tremppi_common/header.h>
 #include <tremppi_common/network/data_info.hpp>
 
 class CommonTest : public ::testing::Test {

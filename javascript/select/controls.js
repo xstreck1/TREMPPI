@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+/* global tremppi */
+
 tremppi.select.activateControls = function () {
     tremppi.select.grid.toolbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'select', caption: 'All', checked: false});
     tremppi.select.grid.toolbar.add({type: 'break', id: 'break0'});

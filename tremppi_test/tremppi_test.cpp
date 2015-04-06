@@ -6,6 +6,7 @@
 #include "interact_tests/interact_tests.hpp"
 #include "function_tests/function_tests.hpp"
 #include "witness_tests/wintess_tests.hpp"
+#include "summary_tests/summary_tests.hpp"
 
 TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";
@@ -15,6 +16,7 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_interact_test()) << "Basic content test interact failed.";
 	ASSERT_EQ(0, basic_function_test()) << "Basic content test function failed.";
 	ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
+	ASSERT_EQ(0, basic_summary_test()) << "Basic content test summary failed.";
 	ASSERT_EQ(0, basic_update_test()) << "Basic content test update failed.";
 	cout << endl;
 }

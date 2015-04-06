@@ -26,11 +26,11 @@ void sqlite3pp::func::addColumn(const string & table_name, const string & column
 		db.execute(("UPDATE " + table_name + " SET " + column_name + "=NULL;").c_str());*/
 }
 
-size_t sqlite3pp::func::columnCount(const string & table_name, const string & selection, sqlite3pp::database & db) {
+size_t sqlite3pp::func::rowCount(const string & table_name, const string & selection, sqlite3pp::database & db) {
 	sqlite3pp::query qry(db, ("SELECT COUNT(*) FROM " + table_name + selection).c_str());
 	return qry.begin()->get<size_t>(0);
 }
 
-size_t sqlite3pp::func::columnCount(const string & table_name, sqlite3pp::database & db) {
-	return columnCount(table_name, "1", db);
+size_t sqlite3pp::func::rowCount(const string & table_name, sqlite3pp::database & db) {
+	return rowCount(table_name, "1", db);
 }
