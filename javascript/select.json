@@ -133,7 +133,7 @@
 		{
 			"field": "K_B_12",
 			"caption": "12",
-			"size": "36px",
+			"size": "1570px",
 			"resizable": true,
 			"editable": {
 				"type": "text"
@@ -142,7 +142,7 @@
 		{
 			"field": "C_property0",
 			"caption": "property0",
-			"size": "84px",
+			"size": "1531px",
 			"resizable": true,
 			"editable": {
 				"type": "text"

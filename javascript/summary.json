@@ -1,7 +1,13 @@
 {
 	"selections": [
-		"sel1",
-		"sel2"
+		{
+			"id": "sel1",
+			"text": "sel1"
+		},
+		{
+			"id": "sel2",
+			"text": "sel2"
+		}
 	],
 	"left": "",
 	"right": "",
@@ -13,32 +19,40 @@
 		},
 		"columns": [
 			{
+				"field": "name",
+				"caption": "Name",
+				"size": "50%"
+			},
+			{
 				"field": "count",
 				"caption": "Count",
-				"size": "20%"
+				"size": "10%"
 			},
 			{
 				"field": "portion",
 				"caption": "Portion",
-				"size": "20%"
+				"size": "10%"
 			},
 			{
 				"field": "min",
 				"caption": "Min",
-				"size": "20%"
+				"size": "10%"
 			},
 			{
 				"field": "max",
 				"caption": "Max",
-				"size": "20%"
+				"size": "10%"
 			},
 			{
 				"field": "mean",
 				"caption": "Mean",
-				"size": "20%"
+				"size": "10%"
 			}
 		],
 		"records": []
 	},
-	"configured": true
+	"configured": true,
+	"select": "sel1",
+	"compare": "sel2",
+	"panel": "all"
 }

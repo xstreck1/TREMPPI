@@ -4,11 +4,16 @@
  * and open the template in the editor.
  */
 
+/* global w2ui */
+
 tremppi = {
     server_port: 8080,
     server_location: "localhost",
     getServerAddress: function () {
         return "http://" + this.server_location + ":" + this.server_port + "/";
+    },
+    getDataFile: function(file) {
+        return "./" + tremppi.widget_name + "/" + file + ".json";
     },
     widgetInterface: function () {
         return {
@@ -25,7 +30,7 @@ tremppi = {
         var url = window.location.pathname;
         tremppi.widget_name = url.substring(url.lastIndexOf('/') + 1).slice(0, -5);
         tremppi[tremppi.widget_name] = tremppi.widget = this.widgetInterface();
-        tremppi.data_file = tremppi.widget_name + ".json";
+        tremppi.data_file = "./" + tremppi.widget_name + ".json";
         tremppi.makeHead();
         $(window).ready(tremppi.construct);
     },
@@ -66,6 +71,8 @@ tremppi = {
         $.ajaxSetup({cache: false});
         // get data
         $.getJSON(tremppi.data_file, tremppi.load);
+        // Reinstate
+        // $.ajaxSetup({cache: true});
     },
     setPage: function () {
         var sidebar = {
@@ -76,7 +83,7 @@ tremppi = {
                         {id: 'editor', text: 'editor'},
                         {id: 'select', text: 'select'},
                         {id: 'properties', text: 'properties'},
-                        {id: 'overview', text: 'overview'}
+                        {id: 'summary', text: 'summary'}
                     ]
                 }
             ]
@@ -105,7 +112,7 @@ tremppi = {
         var sidebar = w2ui.layout.get('left').content.sidebar;
         sidebar.select(tremppi.widget_name);
         sidebar.on('click', function (event) {
-            window.open("./" + event.target + ".html", "_self")
+            window.open("./" + event.target + ".html", "_self");
         });
     },
     makeHead: function () {
