@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+/* global tremppi */
+
 tremppi.properties.tableList = function (list, components) {
     if (typeof list.records === 'undefined') {
         list.records = [];

@@ -3,38 +3,22 @@ import sys
 import os
 import argparse
 import shutil
-import re
-from os.path import join, dirname
-
-raise Exception("OUTDATED")
+from os.path import join, dirname, abspath
+sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
+from tremppi.file_manipulation import copyanything, replace, normal_paths
 
 # define options
 parser = argparse.ArgumentParser(description='Update a TREMPPI project.')
 parser.add_argument('--path', help='specify the location to update.')
 args = parser.parse_args()
 
-# find paths & load common functions
-sys.path.append(dirname(os.path.abspath(sys.argv[0])))
-from tremppi.file_manipulation import copyanything, replace, normal_paths
-
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
-
-folder_types = ["common", "properties", "editor", "select", "witness", "interact", "function"]
-for type in folder_types:
+types = ["properties", "editor", "select", "witness", "interact", "function", "summary"]
+for type in types:
     source = join(join(HOME_PATH, os.path.normpath("javascript/")), type)
     destination = join(DEST_PATH, type)
     if os.path.exists(destination):
         shutil.rmtree(destination)
     copyanything(source, destination)
-
-
-shutil.copy(join(HOME_PATH, os.path.normpath("javascript/editor.html")), DEST_PATH)
-shutil.copy(join(HOME_PATH, os.path.normpath("javascript/properties.html")), DEST_PATH)
-shutil.copy(join(HOME_PATH, os.path.normpath("javascript/select.html")), DEST_PATH)
-files = os.listdir(DEST_PATH)
-report_types = ["witness", "interact", "function"]
-for type in report_types:
-    type_files = [value for value in files if re.match(type + "_.*html", value)]
-    for file in type_files:
-        shutil.copy(join(HOME_PATH, os.path.normpath("javascript/" + type + ".html")), join(DEST_PATH, file))
+    shutil.copy(join(HOME_PATH, os.path.normpath("javascript/" + type + ".html")), DEST_PATH)

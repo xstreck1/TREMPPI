@@ -13,7 +13,7 @@ namespace ModelChecker {
 	/**
 	* @return true if this transition is open for given parametrization
 	*/
-	inline bool isOpen(const Levels & parametrization, const TransConst & trans_cost);
+	bool isOpen(const Levels & parametrization, const TransConst & trans_cost);
 
 	/**
 	* @return (vector of reachable targets from ID for this parametrization, is the state stable?)

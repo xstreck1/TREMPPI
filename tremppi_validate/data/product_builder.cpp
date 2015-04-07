@@ -23,7 +23,7 @@ void ProductBuilder::relabel(const StateID BA_ID, ProductStructure & product) co
 		}
 	}
 	if (product.getAutomaton().isFinal(BA_ID)) {
-		Gecode::DFS<ConstraintParser> search(product.getAutomaton().init_constr);
+		Gecode::DFS<ConstraintParser> search(product.getAutomaton().acc_constr);
 		while (ConstraintParser *result = search.next()) {
 			auto solution = result->getSolution();
 			StateID KS_ID = product.getStructure().getID(solution);

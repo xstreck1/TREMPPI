@@ -127,8 +127,8 @@ int tremppi_summary(int argc, char ** argv) {
 		new_summary["id"] = TimeManager::getTimeStamp();
 		new_summary["text"] = TimeManager::getTimeStamp();
 		summary["selections"].append(new_summary);
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "data" / "summary" / (TimeManager::getTimeStamp() + ".json"), out);
 		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "summary.json", summary);
-		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "summary" / (TimeManager::getTimeStamp() + ".json"), out);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

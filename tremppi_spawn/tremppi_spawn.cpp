@@ -76,7 +76,7 @@ int tremppi_spawn(int argc, char ** argv) {
 			properties["components"].append(comp.name);
 		}
 		properties["configured"] = false;
-		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "properties" / (TimeManager::getTimeStamp() + ".json"), properties);
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / PROPERTIES_FILENAME, properties);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

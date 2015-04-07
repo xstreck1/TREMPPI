@@ -13,12 +13,12 @@ tremppi = {
         return "http://" + this.server_location + ":" + this.server_port + "/";
     },
     getDataFile: function(file) {
-        return "./" + tremppi.widget_name + "/" + file + ".json";
+        return "./data/" + tremppi.widget_name + "/" + file + ".json";
     },
     widgetInterface: function () {
         return {
             setPage: function () { tremppi.log("setPage not implemented", "warning" ); },
-            setData: function (data) { tremppi.log("setData not implemented", "warning" ); },
+            setData: function (data) { tremppi.log("setData not implemented", "warning" ); return false; },
             layout: function () { tremppi.log("layout not implemented", "warning" ); },
             save: function () { tremppi.log("save not implemented", "warning" ); },
             setDefaultData: function (data) { tremppi.log("setDefaultDatas not implemented", "warning" ); },
@@ -59,8 +59,8 @@ tremppi = {
             tremppi.data.configured = true;
             tremppi.save();
         }
-        tremppi.widget.setData(data);
-        tremppi.log(tremppi.widget_name + " loaded.");
+        if (tremppi.widget.setData(data))
+            tremppi.log(tremppi.widget_name + " loaded.");
     },
     construct: function () {
         tremppi.setPage();

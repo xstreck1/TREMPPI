@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+/* global tremppi */
+
 tremppi.properties.listControls = function (list) {
     var listbar = list.toolbar;
     listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});

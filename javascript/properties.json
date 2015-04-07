@@ -1,6 +1,8 @@
 {
 	"list": {
+		"records": [],
 		"name": "list",
+		"multiSelect": false,
 		"columns": [
 			{
 				"field": "name",
@@ -70,22 +72,6 @@
 				"editable": {
 					"type": "text"
 				}
-			},
-			{
-				"field": "A",
-				"caption": "A",
-				"size": "46px",
-				"editable": {
-					"type": "text"
-				}
-			},
-			{
-				"field": "B",
-				"caption": "B",
-				"size": "46px",
-				"editable": {
-					"type": "text"
-				}
 			}
 		],
 		"show": {
@@ -97,90 +83,12 @@
 			"toolbarColumns": false,
 			"toolbarAdd": false,
 			"toolbarDelete": false
-		},
-		"records": [
-			{
-				"recid": 0,
-				"type": "series",
-				"name": "property0",
-				"validate": true,
-				"witness": true,
-				"robustness": false,
-				"simulate": false,
-				"records": [
-					{
-						"recid": 1,
-						"A_value": "[0,1)",
-						"A_delta": "",
-						"B_value": "[0,2)",
-						"B_delta": "stay",
-						"changes": {}
-					},
-					{
-						"recid": 0,
-						"A_value": "[1,1]",
-						"A_delta": "",
-						"B_value": "[1,2]",
-						"B_delta": "",
-						"changes": {}
-					}
-				],
-				"A": "",
-				"B": "",
-				"changes": {}
-			}
-		],
-		"multiSelect": false,
-		"reorderRows": true
+		}
 	},
 	"detail": {
+		"records": [],
 		"name": "detail",
-		"columns": [
-			{
-				"field": "A_value",
-				"caption": "Value",
-				"size": "46px",
-				"editable": {
-					"type": "text"
-				}
-			},
-			{
-				"field": "A_delta",
-				"caption": "Delta",
-				"size": "44px",
-				"editable": {
-					"type": "select",
-					"items": [
-						"",
-						"up",
-						"down",
-						"stay"
-					]
-				}
-			},
-			{
-				"field": "B_value",
-				"caption": "Value",
-				"size": "46px",
-				"editable": {
-					"type": "text"
-				}
-			},
-			{
-				"field": "B_delta",
-				"caption": "Delta",
-				"size": "44px",
-				"editable": {
-					"type": "select",
-					"items": [
-						"",
-						"up",
-						"down",
-						"stay"
-					]
-				}
-			}
-		],
+		"multiSelect": false,
 		"show": {
 			"toolbar": true,
 			"selectColumn": false,
@@ -191,23 +99,8 @@
 			"toolbarAdd": false,
 			"toolbarDelete": false
 		},
-		"columnGroups": [
-			{
-				"span": 2,
-				"caption": "A"
-			},
-			{
-				"span": 2,
-				"caption": "B"
-			}
-		],
-		"multiSelect": false,
-		"records": [],
-		"reorderRows": true
+		"columns": [],
+		"columnGroups": []
 	},
-	"components": [
-		"A",
-		"B"
-	],
 	"configured": true
 }
