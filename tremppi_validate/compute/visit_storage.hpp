@@ -12,62 +12,35 @@ class VisitStorage {
 
 public:
 	/* */
-	VisitStorage(const size_t state_count) {
-		// Create states
-		states.resize(state_count, INF);
-		cost = 0;
-	}
+	VisitStorage(const size_t state_count);
 
 	VisitStorage() = default; ///< Empty constructor for an empty storage.
 
 	/**
 	 * Sets all values for all the states to zero. Allocated memory remains.
 	 */
-	void reset() {
-		states.assign(states.size(), INF);
-		cost = 0;
-	}
+	void reset();
 
 	/**
 	* Called when a state is found
 	* @param ID	index of the state
 	* @return  true if there was an actuall update
 	*/
-	inline bool update(const StateID ID) {
-		// If nothing is new return false
-		if (isFound(ID))
-			return false;
-		// Add new parameters and return true
-		states[ID] = cost;
-		return true;
-	}
+	bool update(const StateID ID);
 
 	/**
 	 * Return true if the state would be updated, false otherwise.
 	 * @return  true if there would be an update
 	 */
-	inline bool isFound(const StateID ID) const {
-		return states[ID] != INF;
-	}
+	bool isFound(const StateID ID) const;
 
-	/**/
-	inline size_t getVisit(const StateID ID) const {
-		return states[ID];
-	}
+	size_t getVisit(const StateID ID) const;
 
-	inline size_t getCost() const  {
-		return cost;
-	}
+	size_t getCost() const;
 
-	inline void incCost() {
-		cost++;
-	}
+	void incCost();
 
-	inline bool succeeded() const {
-		return cost != INF;
-	}
+	bool succeeded() const;
 
-	inline void notFound() {
-		cost = INF;
-	}
+	void notFound();
 };

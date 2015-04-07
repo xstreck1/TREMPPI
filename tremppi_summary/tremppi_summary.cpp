@@ -127,6 +127,12 @@ int tremppi_summary(int argc, char ** argv) {
 		new_summary["id"] = TimeManager::getTimeStamp();
 		new_summary["text"] = TimeManager::getTimeStamp();
 		summary["selections"].append(new_summary);
+		if (!bfs::exists(TremppiSystem::WORK_PATH / "data")) {
+			bfs::create_directory(TremppiSystem::WORK_PATH / "data");
+		}
+		if (!bfs::exists(TremppiSystem::WORK_PATH / "data" / "summary")) {
+			bfs::create_directory(TremppiSystem::WORK_PATH / "data" / "summary");
+		}
 		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "data" / "summary" / (TimeManager::getTimeStamp() + ".json"), out);
 		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "summary.json", summary);
 	}

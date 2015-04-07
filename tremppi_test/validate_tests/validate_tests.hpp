@@ -76,54 +76,47 @@ TEST_F(ValidateTest, Construction) {
 	// Create the Buchi automaton
 	AutomatonBuilder automaton_builder(r_negative_loop, a_spike_on_A);
 	AutomatonStructure automaton = automaton_builder.buildAutomaton();
-	ASSERT_EQ(3, automaton.getStateCount());
+	ASSERT_EQ(2, automaton.getStateCount());
 	EXPECT_EQ(vector < StateID > {0}, automaton.getInitialStates());
-	EXPECT_EQ(vector < StateID > {2}, automaton.getFinalStates());
+	EXPECT_EQ(vector < StateID > {1}, automaton.getFinalStates());
 	EXPECT_EQ(BA_finite, automaton.getMyType());
 	ASSERT_EQ(2, automaton.getTransitionCount(0));
 	EXPECT_EQ(0, automaton.getTargetID(0, 0));
-	EXPECT_EQ(1, automaton.getTargetID(0, 1));
-	ASSERT_EQ(2, automaton.getTransitionCount(1));
-	EXPECT_EQ(1, automaton.getTargetID(1, 0));
-	EXPECT_EQ(2, automaton.getTargetID(1, 1));
-	EXPECT_EQ(0, automaton.getTransitionCount(2));
 
 	// Create the product
 	ProductBuilder product_builder;
 	ProductStructure product = product_builder.buildProduct(move(unparametrized_structure), move(automaton));
-	ASSERT_EQ(6, product.getStateCount());
+	ASSERT_EQ(4, product.getStateCount());
 	ASSERT_EQ(1, product.getTransitionCount(0));
 	EXPECT_EQ(1, product.getTargetID(0, 0));
 	ASSERT_EQ(1, product.getTransitionCount(1));
 	EXPECT_EQ(2, product.getTargetID(1, 0));
-	ASSERT_EQ(1, product.getTransitionCount(2));
-	EXPECT_EQ(5, product.getTargetID(2, 0));
 }
 
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
 	auto results = a_unreagulated_is_steady.check({ 1 });
-	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2--just one loop";
-	EXPECT_EQ(1, get<1>(results).size()) << "Witness should contain exactly a single loop";
-	EXPECT_EQ(1, get<1>(results).begin()->first) << "Witness should a loop (1,1)";
-	EXPECT_DOUBLE_EQ(0.5, get<2>(results)) << "Robustnes should be half (no witness from 0)";
+	EXPECT_EQ(1, get<0>(results)) << "Cost in SteadyStates should be 1--just one state";
+	ASSERT_EQ(0, get<1>(results).size()) << "Witness is empty---just a single state.";
+	EXPECT_DOUBLE_EQ(1, get<2>(results)) << "Robustnes should be 1";
 }
 
 TEST_F(ValidateTest, BasicValidation) {
 	ProductStructure p_two_circuit_spike_on_A = ConstructionManager::construct(r_two_circuit, a_spike_on_A);
 	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A, INF, true, true);
 	auto results = a_two_circuit_spike_on_A.check({ 0, 1, 1, 0 });
-	EXPECT_EQ(3, get<0>(results)) << "Two-steps way for the spike prop.";
-	EXPECT_EQ(2, get<1>(results).size()) << "Exactly two steps are present for the spike.";
-	EXPECT_DOUBLE_EQ(1.0 / 4.0, get<2>(results)) << "Robustnes 1/4---deterministic path from one of the initial states.";
+	// std::cout << WitnessSearcher::getOutput(p_two_circuit_spike_on_A, get<0>(results), get<1>(results));
+	EXPECT_EQ(4, get<0>(results)) << "Two-steps way for the spike prop.";
+	ASSERT_EQ(3, get<1>(results).size()) << "Exactly two steps are present for the spike.";
+	EXPECT_DOUBLE_EQ(0.5, get<2>(results)) << "Robustnes 1---deterministic path from one of two initials.";
 }
 
 TEST_F(ValidateTest, CycleProperty) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
 	auto results = a_unreagulated_is_steady.check({ 1, 0 });
-	EXPECT_EQ(4, get<0>(results)) << "One step plus two-step loop.";
-	EXPECT_EQ(3, get<1>(results).size()) << "One step plus two-step loop.";
-	EXPECT_DOUBLE_EQ(1.0 / 2.0, get<2>(results)) << "Robustnes 1/2---deterministic path with two initials.";
+	EXPECT_EQ(3, get<0>(results)) << "Two-step loop.";
+	ASSERT_EQ(2, get<1>(results).size()) << "Two-step loop.";
+	EXPECT_DOUBLE_EQ(1.0 , get<2>(results)) << "Robustnes 1---deterministic path.";
 }
