@@ -27,7 +27,7 @@ protected:
 		a_spike_on_A.bound = INF;
 
 		a_is_steady.name = "is_steady";
-		a_is_steady.prop_type = "series";
+		a_is_steady.prop_type = "stable";
 		a_is_steady.states.emplace_back(PropertyAutomaton::State{ "0", 0, false });
 		a_is_steady.states[0].stables_list = { "A" };
 		a_is_steady.states[0].edges = vector < PropertyAutomaton::Edge > { PropertyAutomaton::Edge{ 1, "tt" }};
@@ -36,7 +36,6 @@ protected:
 		a_is_steady.witness = false;
 		a_is_steady.robustness = false;
 		a_is_steady.bound = INF;
-
 
 		a_cycle_on_A.name = "cycle_on_A";
 		a_cycle_on_A.prop_type = "cycle";

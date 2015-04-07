@@ -75,7 +75,6 @@ int tremppi_summary(int argc, char ** argv) {
 		// Read the data
 		for (auto row : group_qry) {
 			for (int i = 0; i < group_qry.column_count(); i++) {
-				cout << i << ": " << row.column_type(i) << endl;
 				if (row.column_type(i) != SQLITE_NULL) {
 					double val;
 					if (row.column_type(i) == SQLITE_INTEGER) {

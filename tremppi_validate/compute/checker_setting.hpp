@@ -1,19 +1,19 @@
 #pragma once
 
 #include "../data/product_structure.hpp"
-#include "../io/validate_options.hpp"
+#include "../data/property_automaton.hpp"
 
 class CheckerSetting {
 public:
    vector<StateID> initial_states;
    vector<StateID> final_states;
    BoundType bound_type;
-   TraceType trace_type;
    size_t bfs_bound;
-   bool circ; ///< True if we are looking for a circuit (i.e. non-trivial path from s to s)
+   bool circ; ///< True if we are looking only for cycles (i.e. init==accepting)
+   bool stable; ///< True if we are looking only for paths with a stable last state.
    size_t minimal_count;
 
-   CheckerSetting() : bound_type(BoundType::inf), trace_type(TraceType::none), bfs_bound(INF), circ(false), minimal_count(1) { }
+   CheckerSetting() : bound_type(BoundType::inf),  bfs_bound(INF), circ(false), stable(false), minimal_count(1) { }
 
    inline bool isInitial(const StateID ID, const ProductStructure & product) const {
       if (initial_states.empty())

@@ -2,6 +2,7 @@
 
 #include "witness_searcher.hpp"
 #include "checker_setting.hpp"
+#include "model_checker.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class responsible for computation of robustness values for each acceptable parametrization.
@@ -37,7 +38,7 @@ public:
 		// Cycle through the levels of the BFS procedure
 		for (size_t round_num = 0; round_num < results.getCost(); round_num++) {
 			for (const StateID ID : updates) {
-				auto transports = SuccFunc::broadcastParameters(_parametrization, product, ID);
+				auto transports = ModelChecker::broadcastParameters(_parametrization, product, ID).first;
 				double exit_prob = prob[ID] / transports.size();
 
 				for (auto it = transitions.equal_range(ID).first; it != transitions.equal_range(ID).second; it++) {

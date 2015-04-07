@@ -2,6 +2,8 @@
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/network/data_info.hpp>
 
+enum BoundType { inf, min, step }; //< What sort of bound the user placed - do the full check / check until the minimal lenght is found for a parametrization / use only bounded amount of steps
+
 struct PropertyAutomaton {
 	NO_COPY(PropertyAutomaton)
 
@@ -20,6 +22,8 @@ struct PropertyAutomaton {
 
 		Edges edges; ///< Edges in Buchi Automaton (Target ID, edge label).
 	};
+	string init_condition; // What must hold true for a state to be initial
+	string acc_condition; // What must hold true for a state to be accepting
 
 	vector<pair<ActLevel, ActLevel> > bounds;
 	string name;

@@ -8,8 +8,7 @@
 struct ProdTransitionion : public TransitionProperty {
 	const TransConst & trans_const;
 
-	ProdTransitionion(const StateID _target_ID, const TransConst & _trans_const)
-		: TransitionProperty(_target_ID), trans_const(_trans_const) {}
+	ProdTransitionion(const StateID _target_ID, const TransConst & _trans_const);
 };
 
 /// State of the product - same as the state of UKS but put together with a BA state.
@@ -20,8 +19,7 @@ struct ProdState : public AutomatonStateProperty<ProdTransitionion> {
 	vector<StateID> loops; ///< States with the Same KS ID, but different BA that are possible targets
 
 	/// Simple filler, assigns values to all the variables
-	ProdState(const StateID ID, const StateID _KS_ID, const StateID _BA_ID, const bool initial, const bool final, const Levels & _species_level)
-		: AutomatonStateProperty<ProdTransitionion>(initial, final, ID), KS_ID(_KS_ID), BA_ID(_BA_ID), levels(_species_level) {}
+	ProdState(const StateID ID, const StateID _KS_ID, const StateID _BA_ID, const bool initial, const bool final, const Levels & _species_level);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,60 +37,23 @@ class ProductStructure : public AutomatonInterface<ProdState>, public TSInterfac
 
 public:
 	ProductStructure() = default;
-	ProductStructure(UnparametrizedStructure _structure, AutomatonStructure _automaton) : structure(move(_structure)), automaton(move(_automaton)) {
-		my_type = _automaton.getMyType();
-	}
+	ProductStructure(UnparametrizedStructure _structure, AutomatonStructure _automaton);
 	ProductStructure(ProductStructure &&) = default;
 	ProductStructure(const ProductStructure &) = delete;
 	ProductStructure& operator=(const ProductStructure &) = delete;
-	ProductStructure& operator=(ProductStructure && other) {
-		structure = move(other.structure);
-		automaton = move(other.automaton);
-		states = move(other.states);
-		my_type = other.my_type;
-		initial_states = move(other.initial_states);
-		final_states = move(other.final_states);
-		return *this;
-	}
+	ProductStructure& operator=(ProductStructure && other);
 
-	const inline UnparametrizedStructure & getStructure() const {
-		return structure;
-	}
+	const UnparametrizedStructure & getStructure() const;
 
-	const inline AutomatonStructure & getAutomaton() const {
-		return automaton;
-	}
+	const AutomatonStructure & getAutomaton() const;
 
-	inline StateID getProductID(const StateID KS_ID, const StateID BA_ID) const {
-		return (BA_ID * structure.getStateCount() + KS_ID);
-	}
+	StateID getProductID(const StateID KS_ID, const StateID BA_ID) const;
 
-	inline StateID getBAID(const StateID ID) const {
-		return states[ID].BA_ID;
-	}
+	StateID getBAID(const StateID ID) const;
 
-	inline StateID getKSID(const StateID ID) const {
-		return states[ID].KS_ID;
-	}
+	StateID getKSID(const StateID ID) const;
 
-	const string getString(const StateID ID) const {
-		string label;
+	const string getString(const StateID ID) const;
 
-		for (const ActLevel lev : states[ID].levels)
-			label += to_string(lev);
-
-		label += char(getBAID(ID) + 65);
-
-		return label;
-	}
-
-	const string getString(const StateID ID, const size_t cost) const {
-		string label;
-
-		for (const ActLevel lev : states[ID].levels)
-			label += to_string(lev);
-		label += "-" + to_string(cost);
-
-		return label;
-	}
+	const string getString(const StateID ID, const size_t cost) const;
 };

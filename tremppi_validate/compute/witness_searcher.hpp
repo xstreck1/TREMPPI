@@ -1,8 +1,8 @@
 #pragma once
 
-#include "succ_func.hpp"
 #include "visit_storage.hpp"
 #include "checker_setting.hpp"
+#include "model_checker.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Class for search of transitions belonging to shortest time series paths.
@@ -46,7 +46,7 @@ class WitnessSearcher {
 
 		// Continue with the DFS otherwise.
 		else if ((depth < max_depth - 1) && !used[ID]) {
-			vector<StateID> transports = SuccFunc::broadcastParameters(parametrization, product, ID);
+			vector<StateID> transports = ModelChecker::broadcastParameters(parametrization, product, ID).first;
 
 			for (const StateID & succ : transports) {
 				branch = std::min(DFS(storage, succ, depth + 1, branch), depth); // Recursive descent with parametrizations passed from the predecessor.

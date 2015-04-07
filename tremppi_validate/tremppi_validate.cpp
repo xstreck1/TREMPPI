@@ -1,23 +1,20 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
+#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 
-#include "io/validate_options.hpp"
 #include "io/properties_reader.hpp"
 #include "io/parametrization_reader.hpp"
 #include "io/output_manager.hpp"
 #include "data/construction_manager.hpp"
 #include "compute/analysis_manager.hpp"
 
-// TODO: Check if the transition generation is correct for all three components (w.r.t. the transition system used)
-// TODO: Components still required to be ordered...
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<ValidateOptions>("tremppi_validate", argc, argv);
+	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_validate", argc, argv);
 	Logging logging;
 	string select;
 
@@ -83,7 +80,7 @@ int tremppi_validate(int argc, char ** argv) {
 		try {
 			BOOST_LOG_TRIVIAL(info) << "Validating for an automaton: " << automaton.name;
 
-			AnalysisManager analysis_manager(product);
+			AnalysisManager analysis_manager(product, automaton.bound, automaton.witness, automaton.robustness);
 			OutputManager output(automaton.witness, automaton.robustness, reg_infos, automaton.name, db);
 			output.outputForm();
 
@@ -93,17 +90,7 @@ int tremppi_validate(int argc, char ** argv) {
 			while (par_reader.next()) {
 				tuple<size_t, multimap<StateID, StateID>, double> result;
 
-				// Call analysis procedure based on the type of the automaton.
-				switch (product.getMyType()) {
-				case BA_finite:
-					result = analysis_manager.checkFinite(automaton.bound, automaton.witness, automaton.robustness, par_reader.getParametrization());
-					break;
-				case BA_standard:
-					result = analysis_manager.checkFull(automaton.bound, automaton.witness, automaton.robustness, par_reader.getParametrization());
-					break;
-				default:
-					throw runtime_error("Unsupported Buchi automaton type.");
-				}
+				result = analysis_manager.check(par_reader.getParametrization());
 
 				// Parametrization was considered satisfying.
 				string witness_path;

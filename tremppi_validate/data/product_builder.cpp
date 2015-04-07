@@ -13,20 +13,16 @@ void ProductBuilder::relabel(const StateID BA_ID, ProductStructure & product) co
 		for (const StateID KS_ID : crange(product.getStructure().getStateCount())) {
 			StateID ID = product.getProductID(KS_ID, BA_ID);
 			// If there's a way to leave the state
-			if ((product.states[ID].transitions.size() + product.states[ID].loops.size()) > 0) {
-				product.initial_states.push_back(ID);
-				product.states[ID].initial = true;
-			}
+			product.initial_states.push_back(ID);
+			product.states[ID].initial = true;
 		}
 	}
 	if (product.getAutomaton().isFinal(BA_ID)) {
 		for (const StateID KS_ID : crange(product.getStructure().getStateCount())) {
 			StateID ID = product.getProductID(KS_ID, BA_ID);
 			// If there's a way to leave the state
-			if ((product.states[ID].transitions.size() + product.states[ID].loops.size()) > 0 || (product.getAutomaton().getMyType() == BA_finite)) {
-				product.final_states.push_back(ID);
-				product.states[ID].final = true;
-			}
+			product.final_states.push_back(ID);
+			product.states[ID].final = true;
 		}
 	}
 }

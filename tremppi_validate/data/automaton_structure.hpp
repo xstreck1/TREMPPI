@@ -8,21 +8,13 @@
 struct AutTransitionion : public TransitionProperty {
 	mutable ConstraintParser * trans_constr; ///< Allowed values of species for this transition.
 
-	~AutTransitionion() {
-		if (trans_constr != nullptr)
-			delete trans_constr;
-	}
 	// Move constructor is necessary as the parent (Automaton) is passed around by moving. The memory must be kept safe.
-	AutTransitionion(AutTransitionion && other) : TransitionProperty(other.target_ID) {
-		trans_constr = other.trans_constr;
-		other.trans_constr = nullptr;
-	}
+	AutTransitionion(AutTransitionion && other);
+	AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr);
 	AutTransitionion& operator=(AutTransitionion &&) = delete;
 	AutTransitionion(const AutTransitionion &) = delete;
 	AutTransitionion& operator=(const AutTransitionion &) = delete;
-
-	AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr)
-		: TransitionProperty(target_ID), trans_constr(_trans_constr) {}
+	~AutTransitionion();
 };
 
 /// Storing a single state of the Buchi automaton. This state is extended with a value saying wheter the states is final.
@@ -30,8 +22,7 @@ struct AutState : public AutomatonStateProperty<AutTransitionion> {
 	vector<CompID> stables; //< IDs of the components that must not change before the next state is reached (so not even when transiting into the next state)
 
 	/// Fills data and checks if the state has value  -> is initial
-	AutState(const StateID ID, const bool final, const vector<StateID> _stables)
-	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID),  stables(move(_stables)) { }
+	AutState(const StateID ID, const bool final, const vector<StateID> _stables);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,13 +38,7 @@ public:
 	AutomatonStructure(AutomatonStructure &&) = default;
 	AutomatonStructure(const AutomatonStructure &) = delete;
 	AutomatonStructure& operator=(const AutomatonStructure &) = delete;
-	AutomatonStructure& operator= (AutomatonStructure && other) {
-		states = move(other.states);
-		my_type = other.my_type;
-		initial_states = move(other.initial_states);
-		final_states = move(other.final_states);
-		return *this;
-	}
+	AutomatonStructure& operator= (AutomatonStructure && other);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FILLING METHODS (can be used only from AutomatonStructureBuilder)
@@ -61,27 +46,15 @@ public:
 	/**
 	 * @param final	if true than state with index equal to the one of this vector is final
 	 */
-	void addState(const StateID ID, const bool final, const vector<StateID> stables) {
-		states.push_back({ ID, final, move(stables) });
-		if (ID == 0)
-			initial_states.push_back(ID);
-		if (final)
-			final_states.push_back(ID);
-	}
+	void addState(const StateID ID, const bool final, const vector<StateID> stables);
 
 	//
-	void addTransition(const StateID ID, AutTransitionion transition) {
-		states[ID].transitions.push_back(move(transition));
-	}
+	void addTransition(const StateID ID, AutTransitionion transition);
 
 	// Gecode accepts only a raw pointer for the searcher.
-	ConstraintParser * getTransitionConstraint(const StateID ID, const size_t trans_no) const {
-		return states[ID].transitions[trans_no].trans_constr;
-	}
+	ConstraintParser * getTransitionConstraint(const StateID ID, const size_t trans_no) const;
 
 	// @return	the stables for the given state
-	const vector<CompID> & getStables(const StateID ID) const {
-		return states[ID].stables;
-	}
+	const vector<CompID> & getStables(const StateID ID) const;
 };
 

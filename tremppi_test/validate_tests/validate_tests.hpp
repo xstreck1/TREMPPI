@@ -1,7 +1,6 @@
 #pragma once
 
 #include <tremppi_validate/compute/analysis_manager.hpp>
-#include <tremppi_validate/io/validate_options.hpp>
 
 #include "validate_tests_data.hpp"
 
@@ -23,7 +22,7 @@ void createProperties(const bfs::path & example_model_path) {
 	records[0]["witness"] = false;
 	records[0]["records"].resize(2);
 	records[0]["records"][0]["B_value"] = "[0,1)";
-	records[0]["records"][1]["B_value"] = "[1,2)";
+	records[0]["records"][1]["B_value"] = "(1,2]";
 
 	// Add a cycle
 	records[1]["name"] = "test_cycle";
@@ -34,8 +33,8 @@ void createProperties(const bfs::path & example_model_path) {
 	records[1]["robustness"] = false;
 	records[1]["witness"] = true;
 	records[1]["records"].resize(2);
-	records[1]["records"][0]["A_value"] = "[0,1)";
-	records[1]["records"][1]["A_value"] = "[1,2)";
+	records[1]["records"][0]["B_value"] = "[0,1)";
+	records[1]["records"][1]["B_value"] = "[1,1]";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
@@ -103,8 +102,8 @@ TEST_F(ValidateTest, Construction) {
 
 TEST_F(ValidateTest, SteadyStates) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
-	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = a_unreagulated_is_steady.checkFinite(INF, true, true, { 1 });
+	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
+	auto results = a_unreagulated_is_steady.check({ 1 });
 	EXPECT_EQ(2, get<0>(results)) << "Cost in SteadyStates should be 2--just one loop";
 	EXPECT_EQ(1, get<1>(results).size()) << "Witness should contain exactly a single loop";
 	EXPECT_EQ(1, get<1>(results).begin()->first) << "Witness should a loop (1,1)";
@@ -113,8 +112,8 @@ TEST_F(ValidateTest, SteadyStates) {
 
 TEST_F(ValidateTest, BasicValidation) {
 	ProductStructure p_two_circuit_spike_on_A = ConstructionManager::construct(r_two_circuit, a_spike_on_A);
-	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A);
-	auto results = a_two_circuit_spike_on_A.checkFinite(INF, true, true, { 0, 1, 1, 0 });
+	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A, INF, true, true);
+	auto results = a_two_circuit_spike_on_A.check({ 0, 1, 1, 0 });
 	EXPECT_EQ(3, get<0>(results)) << "Two-steps way for the spike prop.";
 	EXPECT_EQ(2, get<1>(results).size()) << "Exactly two steps are present for the spike.";
 	EXPECT_DOUBLE_EQ(1.0 / 4.0, get<2>(results)) << "Robustnes 1/4---deterministic path from one of the initial states.";
@@ -122,8 +121,8 @@ TEST_F(ValidateTest, BasicValidation) {
 
 TEST_F(ValidateTest, CycleProperty) {
 	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
-	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady);
-	auto results = a_unreagulated_is_steady.checkFull(INF, true, true, { 1, 0 });
+	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
+	auto results = a_unreagulated_is_steady.check({ 1, 0 });
 	EXPECT_EQ(4, get<0>(results)) << "One step plus two-step loop.";
 	EXPECT_EQ(3, get<1>(results).size()) << "One step plus two-step loop.";
 	EXPECT_DOUBLE_EQ(1.0 / 2.0, get<2>(results)) << "Robustnes 1/2---deterministic path with two initials.";
