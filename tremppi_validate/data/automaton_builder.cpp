@@ -1,17 +1,19 @@
 #include "automaton_builder.hpp"
 
+ConstraintParser *  AutomatonBuilder::constrToParser(const string & constraint) const {
+	ConstraintParser * parser = new ConstraintParser(maxes.size(), *max_element(maxes.begin(), maxes.end()));
+	parser->applyFormula(names, constraint);
+	parser->addBoundaries(maxes, true);
+	parser->addBoundaries(mins, false);
+	return parser;
+}
+
 void AutomatonBuilder::addTransitions(AutomatonStructure & automaton, const StateID ID) const {
 	const PropertyAutomaton::Edges & edges = property_automaton.states[ID].edges;
 
 	// Transform each edge into transition and pass it to the automaton
 	for (const PropertyAutomaton::Edge & edge : edges) {
-		// Compute allowed values from string of constrains
-		ConstraintParser * parser = new ConstraintParser(maxes.size(), *max_element(maxes.begin(), maxes.end()));
-		parser->applyFormula(names, edge.constraint);
-		parser->addBoundaries(maxes, true);
-		parser->addBoundaries(mins, false);
-
-		automaton.addTransition(ID, { edge.target_ID, parser });
+		automaton.addTransition(ID, { edge.target_ID, constrToParser(edge.constraint) });
 	}
 }
 
@@ -51,6 +53,9 @@ AutomatonStructure AutomatonBuilder::buildAutomaton() {
 	setAutType(automaton);
 	const size_t state_count = property_automaton.states.size();
 	size_t state_no = 0;
+
+	automaton.init_constr = AutomatonBuilder::constrToParser(property_automaton.init_condition);
+	automaton.acc_constr = AutomatonBuilder::constrToParser(property_automaton.acc_condition);
 
 	// List throught all the automaton states
 	for (StateID ID : cscope(property_automaton.states)) {

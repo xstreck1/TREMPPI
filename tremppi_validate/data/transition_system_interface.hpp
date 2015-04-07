@@ -14,7 +14,7 @@ struct TSTransitionProperty : public TransitionProperty {
    TransConst trans_const;
 
    TSTransitionProperty(const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_value)
-	   : TransitionProperty(target_ID), trans_const({ param_no, req_dir, req_value }) {}
+	   : TransitionProperty{ target_ID }, trans_const{ param_no, req_dir, req_value } {}
 };
 
 /// State having specie levels attached.

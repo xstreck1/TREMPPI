@@ -15,7 +15,13 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 
 		automaton.name = property_node["name"].asString();
 		automaton.prop_type = property_node["type"].asString();
-		automaton.bound = INF;
+
+		try {
+			automaton.bound = property_node["bound"].asInt();
+		}
+		catch (exception & e) {
+			automaton.bound = INF;
+		}
 
 		// Get the bounds
 		for (const RegInfo & reg_info : reg_infos) {
@@ -23,7 +29,7 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			string value = property_node[reg_info.name].asString();
 			std::smatch sm;
 			// Bound is specified
-			if (regex_match(value, sm, regex{ "([\\(\\[])(\\d+.*\\d*),(\\d+.*\\d*)([\\)\\]])" })) {
+			if (regex_match(value, sm, BOUNDARY_EXPR)) {
 				if (sm[1].str() == "(") {
 					bound.first = stoi(sm[2].str()) + 1;
 				}
@@ -55,17 +61,16 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			ID++;
 		}
 
+		size_t record_i = 0;
+		vector<string> stables_list;
 		for (const Json::Value & record : property_node["records"]) {
 			string constraint;
-			vector<string> stables_list;
 
+			// get the constraint
 			for (const RegInfo & reg_info : reg_infos) {
-				if (record[reg_info.name + "_delta"].asString() == "stay") {
-					stables_list.push_back(reg_info.name);
-				}
 				string value = record[reg_info.name + "_value"].asString();
 				std::smatch sm;
-				if (regex_match(value, sm, regex{ "([\\(\\[])(\\d+.*\\d*),(\\d+.*\\d*)([\\)\\]])" })) {
+				if (regex_match(value, sm, BOUNDARY_EXPR)) {
 					if (sm[1].str() == "(") {
 						constraint += reg_info.name + ">" + sm[2].str() + "&";
 					}
@@ -83,8 +88,28 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			constraint.resize(std::max(0u, constraint.size() - 1));
 			string negation = "!(" + constraint + ")";
 
-			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list),{ { ID, negation },{ ID + 1, constraint } } });
-			ID++;
+			if (record_i == 0) {
+				automaton.init_condition = constraint;
+				if (automaton.prop_type == "cycle") {
+					automaton.acc_condition = constraint;
+				}
+			}
+			else if (record_i == property_node["records"].size() - 1 && automaton.prop_type != "cycle") {
+				automaton.acc_condition = constraint;
+			}
+			else {
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list),{ { ID, negation },{ ID + 1, constraint } } });
+				ID++;
+			}
+
+			// get the stables
+			stables_list.clear();
+			for (const RegInfo & reg_info : reg_infos) {
+				if (record[reg_info.name + "_delta"].asString() == "stay") {
+					stables_list.push_back(reg_info.name);
+				}
+			}
+			record_i++;
 		}
 
 		// Loop to the first
@@ -92,8 +117,8 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			automaton.states.back().edges.back().target_ID = 0;
 		}
 		// Add a new state to the end that has a loop and compies the requirement for stables
-		if (automaton.prop_type == "series") {
-			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true,{}, PropertyAutomaton::Edges({ { ID, "tt" } }) });
+		if (automaton.prop_type == "series" || automaton.prop_type == "stable") {
+			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, move(stables_list),{ { ID, "tt" } } });
 		}
 
 		automata.emplace_back(move(automaton));

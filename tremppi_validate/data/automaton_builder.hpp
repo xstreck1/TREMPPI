@@ -25,6 +25,9 @@ class AutomatonBuilder {
 	Levels mins; ///< Minimal activity levels of the species.
 	Levels range_size; ///< Number of valid values for the species.
 
+	// Compute allowed values from string of constrains
+	ConstraintParser * constrToParser(const string & constraint) const;
+
 	/**
 	 * Creates transitions from labelled edges of BA and passes them to the automaton structure.
 	 */
@@ -35,6 +38,7 @@ class AutomatonBuilder {
 	 */
 	void setAutType(AutomatonStructure & automaton);
 
+	//
 	vector<CompID> transformStables(const vector<string> & stable_names);
 
 public:

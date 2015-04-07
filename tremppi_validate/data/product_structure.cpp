@@ -1,7 +1,7 @@
 #include "product_structure.hpp"
 
 ProdTransitionion::ProdTransitionion(const StateID _target_ID, const TransConst & _trans_const)
-	: TransitionProperty(_target_ID), trans_const(_trans_const) {}
+	: TransitionProperty{ _target_ID }, trans_const(_trans_const) {}
 
 ProdState::ProdState(const StateID ID, const StateID _KS_ID, const StateID _BA_ID, const bool initial, const bool final, const Levels & _species_level)
 	: AutomatonStateProperty<ProdTransitionion>(initial, final, ID), KS_ID(_KS_ID), BA_ID(_BA_ID), levels(_species_level) {}

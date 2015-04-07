@@ -10,8 +10,8 @@ struct AutTransitionion : public TransitionProperty {
 
 	// Move constructor is necessary as the parent (Automaton) is passed around by moving. The memory must be kept safe.
 	AutTransitionion(AutTransitionion && other);
+	AutTransitionion& operator=(AutTransitionion && other);
 	AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr);
-	AutTransitionion& operator=(AutTransitionion &&) = delete;
 	AutTransitionion(const AutTransitionion &) = delete;
 	AutTransitionion& operator=(const AutTransitionion &) = delete;
 	~AutTransitionion();
@@ -34,11 +34,15 @@ struct AutState : public AutomatonStateProperty<AutTransitionion> {
 class AutomatonStructure : public AutomatonInterface<AutState> {
 public:
 	friend class AutomatonBuilder;
-	AutomatonStructure() = default;
-	AutomatonStructure(AutomatonStructure &&) = default;
+	AutomatonStructure();
+	AutomatonStructure(AutomatonStructure && other);
 	AutomatonStructure(const AutomatonStructure &) = delete;
 	AutomatonStructure& operator=(const AutomatonStructure &) = delete;
 	AutomatonStructure& operator= (AutomatonStructure && other);
+	~AutomatonStructure();
+
+	ConstraintParser * init_constr;
+	ConstraintParser * acc_constr;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FILLING METHODS (can be used only from AutomatonStructureBuilder)
@@ -47,6 +51,7 @@ public:
 	 * @param final	if true than state with index equal to the one of this vector is final
 	 */
 	void addState(const StateID ID, const bool final, const vector<StateID> stables);
+
 
 	//
 	void addTransition(const StateID ID, AutTransitionion transition);

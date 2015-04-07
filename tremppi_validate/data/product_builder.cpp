@@ -10,19 +10,29 @@ void ProductBuilder::createSubspace(const StateID BA_ID, ProductStructure & prod
 
 void ProductBuilder::relabel(const StateID BA_ID, ProductStructure & product) const {
 	if (product.getAutomaton().isInitial(BA_ID)) {
-		for (const StateID KS_ID : crange(product.getStructure().getStateCount())) {
+		Gecode::DFS<ConstraintParser> search(product.getAutomaton().init_constr);
+		while (ConstraintParser *result = search.next()) {
+			auto solution = result->getSolution();
+			StateID KS_ID = product.getStructure().getID(solution);
 			StateID ID = product.getProductID(KS_ID, BA_ID);
-			// If there's a way to leave the state
+
 			product.initial_states.push_back(ID);
 			product.states[ID].initial = true;
+
+			delete result;
 		}
 	}
 	if (product.getAutomaton().isFinal(BA_ID)) {
-		for (const StateID KS_ID : crange(product.getStructure().getStateCount())) {
+		Gecode::DFS<ConstraintParser> search(product.getAutomaton().init_constr);
+		while (ConstraintParser *result = search.next()) {
+			auto solution = result->getSolution();
+			StateID KS_ID = product.getStructure().getID(solution);
 			StateID ID = product.getProductID(KS_ID, BA_ID);
-			// If there's a way to leave the state
+
 			product.final_states.push_back(ID);
 			product.states[ID].final = true;
+
+			delete result;
 		}
 	}
 }
