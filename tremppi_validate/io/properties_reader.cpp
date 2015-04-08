@@ -29,7 +29,10 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			string value = property_node[reg_info.name].asString();
 			std::smatch sm;
 			// Bound is specified
-			if (regex_match(value, sm, BOUNDARY_EXPR)) {
+			if (regex_match(value, sm, INT_NUM)) {
+				bound.first = bound.second = stoi(sm[0].str());
+			}
+			else if (regex_match(value, sm, INT_BOUNDARY)) {
 				if (sm[1].str() == "(") {
 					bound.first = stoi(sm[2].str()) + 1;
 				}
@@ -70,7 +73,10 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			for (const RegInfo & reg_info : reg_infos) {
 				string value = record[reg_info.name + "_value"].asString();
 				std::smatch sm;
-				if (regex_match(value, sm, BOUNDARY_EXPR)) {
+				if (regex_match(value, sm, INT_NUM)) {
+					constraint += reg_info.name + "=" + sm[0].str() + "&";
+				}
+				else if (regex_match(value, sm, INT_BOUNDARY)) {
 					if (sm[1].str() == "(") {
 						constraint += reg_info.name + ">" + sm[2].str() + "&";
 					}

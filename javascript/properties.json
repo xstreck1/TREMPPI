@@ -1,8 +1,81 @@
 {
-	"list": {
-		"records": [],
-		"name": "list",
+	"components": [
+		"A",
+		"B"
+	],
+	"configured": true,
+	"detail": {
+		"columnGroups": [
+			{
+				"span": 2,
+				"caption": "A"
+			},
+			{
+				"span": 2,
+				"caption": "B"
+			}
+		],
+		"columns": [
+			{
+				"field": "A_value",
+				"caption": "Value",
+				"size": "46px",
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "A_delta",
+				"caption": "Delta",
+				"size": "44px",
+				"editable": {
+					"type": "select",
+					"items": [
+						"",
+						"up",
+						"down",
+						"stay"
+					]
+				}
+			},
+			{
+				"field": "B_value",
+				"caption": "Value",
+				"size": "46px",
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "B_delta",
+				"caption": "Delta",
+				"size": "44px",
+				"editable": {
+					"type": "select",
+					"items": [
+						"",
+						"up",
+						"down",
+						"stay"
+					]
+				}
+			}
+		],
 		"multiSelect": false,
+		"name": "detail",
+		"records": [],
+		"show": {
+			"toolbar": true,
+			"selectColumn": false,
+			"toolbarSave": false,
+			"toolbarReload": false,
+			"toolbarSearch": false,
+			"toolbarColumns": false,
+			"toolbarAdd": false,
+			"toolbarDelete": false
+		}
+	},
+	"list": {
 		"columns": [
 			{
 				"field": "name",
@@ -72,6 +145,204 @@
 				"editable": {
 					"type": "text"
 				}
+			},
+			{
+				"field": "A",
+				"caption": "A",
+				"size": "46px",
+				"editable": {
+					"type": "text"
+				}
+			},
+			{
+				"field": "B",
+				"caption": "B",
+				"size": "46px",
+				"editable": {
+					"type": "text"
+				}
+			}
+		],
+		"multiSelect": false,
+		"name": "list",
+		"records": [
+			{
+				"recid": 0,
+				"type": "series",
+				"name": "property0",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 1,
+				"type": "series",
+				"name": "property1",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 2,
+				"type": "series",
+				"name": "property2",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [
+					{
+						"recid": 1,
+						"changes": {},
+						"A_value": "d"
+					},
+					{
+						"recid": 0
+					}
+				],
+				"A": "",
+				"B": "",
+				"changes": {}
+			},
+			{
+				"recid": 3,
+				"type": "series",
+				"name": "property3",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 4,
+				"type": "series",
+				"name": "property4",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 5,
+				"type": "series",
+				"name": "property5",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 6,
+				"type": "series",
+				"name": "property6",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 7,
+				"type": "series",
+				"name": "property7",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 8,
+				"type": "series",
+				"name": "property8",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 9,
+				"type": "series",
+				"name": "property9",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 13,
+				"type": "series",
+				"name": "property13",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 12,
+				"type": "series",
+				"name": "property12",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 11,
+				"type": "series",
+				"name": "property11",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
+			},
+			{
+				"recid": 10,
+				"type": "series",
+				"name": "property10",
+				"validate": false,
+				"witness": false,
+				"robustness": false,
+				"simulate": false,
+				"records": [],
+				"A": "",
+				"B": ""
 			}
 		],
 		"show": {
@@ -84,23 +355,5 @@
 			"toolbarAdd": false,
 			"toolbarDelete": false
 		}
-	},
-	"detail": {
-		"records": [],
-		"name": "detail",
-		"multiSelect": false,
-		"show": {
-			"toolbar": true,
-			"selectColumn": false,
-			"toolbarSave": false,
-			"toolbarReload": false,
-			"toolbarSearch": false,
-			"toolbarColumns": false,
-			"toolbarAdd": false,
-			"toolbarDelete": false
-		},
-		"columns": [],
-		"columnGroups": []
-	},
-	"configured": true
+	}
 }

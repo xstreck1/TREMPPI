@@ -63,9 +63,11 @@ tremppi.w2ui = {
     },
     getFreeRecID: function (records) {
         var ids = records.map(function (entry) {
-            return entry.recid;
+            return parseInt(entry.recid);
         });
-        ids.sort();
+        ids.sort(function (a, b) {
+            return a - b;
+        });
         for (var id = 0; id < ids.length; id++) {
             if (ids[id] !== id) {
                 return id;
@@ -103,12 +105,36 @@ tremppi.w2ui = {
                         new_entry.name += " (copy)";
                     }
                     new_records.push(new_entry.recid);
-                    records.splice(i, 0, new_entry);
+                    records.splice(i + 1, 0, new_entry);
                     break;
                 }
             }
         });
         grid.records = records;
+    },
+    up: function (grid, records) {
+        var selection = grid.getSelection();
+        if (selection.length === 1) {
+            var recid = grid.getSelection()[0];
+            var i = tremppi.w2ui.iByRecID(records, recid);
+            if (i > 0) {
+                var temp = records[i];
+                records[i] = records[i - 1];
+                records[i - 1] = temp;
+            }
+        }
+    },
+    down: function (grid, records) {
+        var selection = grid.getSelection();
+        if (selection.length === 1) {
+            var recid = grid.getSelection()[0];
+            var i = tremppi.w2ui.iByRecID(records, recid);
+            if (i + 1 < records.length) {
+                var temp = records[i];
+                records[i] = records[i + 1];
+                records[i + 1] = temp;
+            }
+        }
     }
 };
 

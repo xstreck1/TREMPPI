@@ -71,7 +71,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	// Write to properties
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing properties template.";
-
+		properties["components"] = Json::Value();
 		for (const Model::ModelComp & comp : model.components) {
 			properties["components"].append(comp.name);
 		}

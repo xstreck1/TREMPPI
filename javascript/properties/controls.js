@@ -8,10 +8,13 @@
 
 tremppi.properties.listControls = function (list) {
     var listbar = list.toolbar;
+    listbar.add({type: 'button', id: 'up', caption: '&#8593;'});
+    listbar.add({type: 'button', id: 'down', caption: '&#8595;'});
+    listbar.add({type: 'break', id: 'break0'});
     listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     listbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-    listbar.add({type: 'break', id: 'break0'});
+    listbar.add({type: 'break', id: 'break1'});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'validate', caption: 'Validate', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'witness', caption: 'Witness', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'robustness', caption: 'Robustness', checked: false});
@@ -51,7 +54,15 @@ tremppi.properties.listClick = function (event) {
     if (event.type === 'toolbar') {
         var records = tremppi.data.list.records;
         var grid = tremppi.properties.list;
-        if (event.target === 'validate' || event.target === 'witness' || event.target === 'robustness' || event.target === 'simulate') {
+        if (event.target === 'up') {
+            tremppi.w2ui.up(grid, records);
+            grid.records = records;
+        }
+        else if (event.target === 'down') {
+            tremppi.w2ui.down(grid, records);
+            grid.records = records;
+        }
+        else if (event.target === 'validate' || event.target === 'witness' || event.target === 'robustness' || event.target === 'simulate') {
             tremppi.w2ui.checkAll(event, records, grid);
         }
         else if (event.target === 'add') {
@@ -65,7 +76,6 @@ tremppi.properties.listClick = function (event) {
         else if (event.target === 'delete') {
             tremppi.w2ui.deleteSelected(records, grid);
         }
-
         grid.refresh();
         tremppi.properties.save();
     }
@@ -87,28 +97,10 @@ tremppi.properties.detailClick = function (event) {
         var records = tremppi.properties.detail.records;
         var grid = tremppi.properties.detail;
         if (event.target === 'up') {
-            var selection = grid.getSelection();
-            if (selection.lenght = 1) {
-                var recid = grid.getSelection()[0];
-                var i = tremppi.w2ui.iByRecID(records, recid);
-                if (i > 0) {
-                    var temp = records[i];
-                    records[i] = records[i - 1];
-                    records[i - 1] = temp;
-                }
-            }
+            tremppi.w2ui.up(grid, records);
         }
-        if (event.target === 'down') {
-            var selection = grid.getSelection();
-            if (selection.lenght = 1) {
-                var recid = grid.getSelection()[0];
-                var i = tremppi.w2ui.iByRecID(records, recid);
-                if (i + 1 < records.length) {
-                    var temp = records[i];
-                    records[i] = records[i + 1];
-                    records[i + 1] = temp;
-                }
-            }
+        else if (event.target === 'down') {
+            tremppi.w2ui.down(grid, records);
         }
         else if (event.target === 'add') {
             var recID = tremppi.w2ui.getFreeRecID(records);

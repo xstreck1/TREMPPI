@@ -31,7 +31,11 @@ const std::map<std::string, std::string> label_list = {
 	{ "Free", "tt" }
 };
 
-const std::regex BOUNDARY_EXPR{ "([\\(\\[])(\\d+.*\\d*),(\\d+.*\\d*)([\\)\\]])" };
+
+const std::regex INT_NUM{ "\\d+" };
+const std::regex INT_BOUNDARY{ "([\\(\\[])(\\d+),(\\d+)([\\)\\]])" };
+const std::regex FLOAT_NUM{ "\\d+.*\\d*" };
+const std::regex FLOAT_BOUNDARY{ "([\\(\\[])(\\d+.*\\d*),(\\d+.*\\d*)([\\)\\]])" };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
