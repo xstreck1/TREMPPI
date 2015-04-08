@@ -91,7 +91,7 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 					}
 				}
 			}
-			constraint.resize(std::max(0u, constraint.size() - 1));
+            constraint.resize(std::max(0, static_cast<int>(constraint.size()) - 1));
 			string negation = "!(" + constraint + ")";
 
 			if (record_i == 0) {

@@ -109,7 +109,7 @@ int tremppi_summary(int argc, char ** argv) {
 		for (Computed & result : results) {
 			Json::Value result_node;
 			result_node["name"] = result.name;
-			result_node["count"] = result.count;
+            result_node["count"] = static_cast<Json::Value::UInt>(result.count);
 			result_node["portion"] = result.portion;
 			result_node["min"] = result.min;
 			result_node["max"] = result.max;
