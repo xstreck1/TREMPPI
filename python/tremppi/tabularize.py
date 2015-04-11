@@ -34,6 +34,7 @@ def tabularize(database, target_file):
         with open(target_file, 'r') as select_json:
             grid = json.loads(select_json.read())
 
+        grid["groups"] = []
         grid["configured"] = False
         grid["regulations"] = read_regulations(conn)
         grid["columns"] = read_columns(conn)

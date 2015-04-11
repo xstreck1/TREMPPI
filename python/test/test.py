@@ -19,3 +19,4 @@ EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 print(select(HOME_PATH + "/javascript/select.json"))
 tabularize(HOME_PATH + "/javascript/database.sqlite", HOME_PATH + "/javascript/select.json")
+tabularize("C:/Users/adams_000/MODELS/Tremppi/EGFR_article/database.sqlite", "C:/Users/adams_000/MODELS/Tremppi/EGFR_article/select.json")

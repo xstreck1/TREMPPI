@@ -18,11 +18,7 @@ tremppi.select.columnResize = function (event) {
 tremppi.select.setGroups = function () {
     tremppi.select.grid.columnGroups = [];
     tremppi.data.groups.forEach(function (group) {
-        if (!group.checked) {
-            group.columns.forEach(function (column) {
-                tremppi.select.grid.showColumn(column);
-            });
-        } else {
+        if (group.checked) {
             group.columns.forEach(function (column) {
                 tremppi.select.grid.hideColumn(column);
             });

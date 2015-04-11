@@ -56,7 +56,7 @@ int tremppi_summary(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.emplace_back(Computed{ column.second, 0, 0, 0, 0, 0 });
+			results.emplace_back(Computed{ column.second, 0, 0, numeric_limits<double>::max(), numeric_limits<double>::min(), 0 });
 		}
 	}
 	catch (exception & e) {

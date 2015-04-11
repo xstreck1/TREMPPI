@@ -22,6 +22,9 @@ tremppi.select.toolbarClick = function (event) {
         if (event.target === 'select') {
             tremppi.w2ui.checkAll(event, tremppi.data.records, tremppi.select.grid);
         }
+        else if (event.target === 'display') {
+            return;
+        }
         else if (event.target.slice(0, 8) === 'display:') {
             var subItem = event.originalEvent.subItem;
             subItem.checked = !subItem.checked;
