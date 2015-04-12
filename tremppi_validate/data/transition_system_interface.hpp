@@ -13,8 +13,8 @@ struct TransConst {
 struct TSTransitionProperty : public TransitionProperty {
    TransConst trans_const;
 
-   TSTransitionProperty(const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_value)
-	   : TransitionProperty{ target_ID }, trans_const{ param_no, req_dir, req_value } {}
+   inline TSTransitionProperty(const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_value)
+	   : TransitionProperty(target_ID), trans_const{ param_no, req_dir, req_value } {}
 };
 
 /// State having specie levels attached.
@@ -22,8 +22,8 @@ struct TSStateProperty : public StateProperty<TSTransitionProperty> {
    Levels levels; ///< Species_level[i] = activation level of specie i.
    vector<StateID> loops;
 
-   TSStateProperty(const StateID ID, const Levels& _species_level)
-      : StateProperty<TSTransitionProperty>(ID), levels(_species_level) { } ///< Simple filler, assigns values to all the variables.
+   inline TSStateProperty(const StateID ID, const Levels& _species_level)
+	   : StateProperty<TSTransitionProperty>(ID), levels(_species_level) { } ///< Simple filler, assigns values to all the variables.
 };
 
 /// Transition system has states labeled with activity levels and transitions labeleld with constraints.
@@ -50,7 +50,7 @@ public:
       return GraphInterface<StateT>::states[ID].levels;
    }
 
-   inline const vector<StateID> & getLoops(const StateID ID) const {
+   virtual inline const vector<StateID> & getLoops(const StateID ID) const {
        return GraphInterface<StateT>::states[ID].loops;
    }
 };

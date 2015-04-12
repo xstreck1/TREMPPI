@@ -14,6 +14,11 @@
 struct TransitionProperty {
 	/// Unique ID of the state.
 	const StateID target_ID;
+
+	/**
+	* Basic constructor that fills in the ID.
+	*/
+	inline TransitionProperty(const StateID _target_ID) : target_ID(_target_ID) {}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +34,7 @@ struct StateProperty {
 	/**
 	 * Basic constructor that fills in the ID and label.
 	 */
-	StateProperty<Transition>(const StateID _ID) : ID(_ID) { }
+	inline StateProperty<Transition>(const StateID _ID) : ID(_ID) { }
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +47,7 @@ protected:
 
 public:
 	NO_COPY(GraphInterface)
-		virtual ~GraphInterface() = default;
+	virtual ~GraphInterface() = default;
 
 	/**
 	 * Obtains number of states of the graph.
@@ -76,8 +81,7 @@ public:
 	 * @param ID	ID of the state to turn into the string
 	 * @return	given state as a string
 	 */
-
-	const string getString(const StateID ID) const {
+	const inline string getString(const StateID ID) const {
 		return to_string(ID);
 	}
 };

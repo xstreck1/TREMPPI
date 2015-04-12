@@ -10,7 +10,7 @@ AutTransitionion::AutTransitionion(AutTransitionion && other) : TransitionProper
 }
 
 AutTransitionion::AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr)
-	: TransitionProperty{ target_ID }, trans_constr(_trans_constr) {}
+	: TransitionProperty( target_ID ), trans_constr(_trans_constr) {}
 
 AutState::AutState(const StateID ID, const bool final, const vector<StateID> _stables)
 	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID), stables(move(_stables)) {}

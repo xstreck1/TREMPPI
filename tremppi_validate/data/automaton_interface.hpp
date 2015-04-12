@@ -18,7 +18,7 @@ struct AutomatonStateProperty : public StateProperty<Transition> {
    /**
     * Adds information if the state is final or initial, passes the rest.
     */
-   AutomatonStateProperty<Transition>(const bool _initial, const bool _final, const StateID ID)
+   inline AutomatonStateProperty<Transition>(const bool _initial, const bool _final, const StateID ID)
       : StateProperty<Transition>(ID), initial(_initial), final(_final) { }
 };
 
