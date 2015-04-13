@@ -28,14 +28,19 @@ void AutomatonBuilder::setAutType(AutomatonStructure & automaton) {
 		throw runtime_error("Type of the verification automaton is not known.");
 }
 
-vector<CompID> AutomatonBuilder::transformStables(const vector<string>& stable_names) {
-	vector<CompID> stables(stable_names.size());
+vector<PathCons> AutomatonBuilder::transformConstraints(const map<string, PathCons>& constraints_list) {
+	vector<PathCons> result;
 
-	transform(WHOLE(stable_names), begin(stables), [this](const string & stable_name) {
-		return DataInfo::getCompID(reg_infos, stable_name);
-	});
+	for (const string & name : names) {
+		if (constraints_list.count(name) > 0) {
+			result.push_back(constraints_list.at(name));
+		}
+		else {
+			result.push_back(PathCons::none);
+		}
+	}
 
-	return stables;
+	return result;
 }
 
 AutomatonBuilder::AutomatonBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property_automaton) : reg_infos(_reg_infos), property_automaton(_property_automaton) {
@@ -59,13 +64,11 @@ AutomatonStructure AutomatonBuilder::buildAutomaton() {
 
 	// List throught all the automaton states
 	for (StateID ID : cscope(property_automaton.states)) {
-		// Convert names into IDs
-		const vector<string> & stable_names = property_automaton.states[ID].stables_list;
-		vector<CompID> stables;
-		stables = transformStables(stable_names);
+		// Conver
+		vector<PathCons> constraints = transformConstraints(property_automaton.states[ID].constraints_list);
 
 		// Fill auxiliary data
-		automaton.addState(ID, property_automaton.states[ID].final, stables);
+		automaton.addState(ID, property_automaton.states[ID].final, constraints);
 		// Add transitions for this state
 		addTransitions(automaton, ID);
 	}

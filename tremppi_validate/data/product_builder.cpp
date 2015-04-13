@@ -56,7 +56,7 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 			const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
 			const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
 			// If the transition does not meet the stability requirements, add transition to hell (infty)
-			const StateID t_ID = matchesStables(structure, KS_ID, KS_target, automaton.getStables(BA_ID)) ? product.getProductID(KS_target, BA_target) : INF;
+			const StateID t_ID = matchesConstraints(structure, KS_ID, KS_target, automaton.getPathCons(BA_ID)) ? product.getProductID(KS_target, BA_target) : INF;
 			product.states[ID].transitions.push_back({ t_ID, trans_const });
 		}
 
@@ -67,13 +67,24 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 	}
 }
 
-bool ProductBuilder::matchesStables(const UnparametrizedStructure & structure, const CompID s_ID, const CompID t_ID, const vector<StateID>& stables) const {
+bool ProductBuilder::matchesConstraints(const UnparametrizedStructure & structure, const CompID s_ID, const CompID t_ID, const vector<PathCons>& path_cons) const {
+	bool result = true;
+	
 	const Levels & s_levels = structure.getStateLevels(s_ID);
 	const Levels & t_levels = structure.getStateLevels(t_ID);
-	for (const size_t stable_req : stables)
-		if (s_levels[stable_req] != t_levels[stable_req])
-			return false;
-	return true;
+
+	for (const CompID ID : cscope(path_cons)) {
+		switch (path_cons[ID]) {
+		case PathCons::up:
+			result &= t_levels[ID] >= s_levels[ID];
+		case PathCons::down:
+			result &= t_levels[ID] <= s_levels[ID];
+		case PathCons::stay:
+			result &= t_levels[ID] == s_levels[ID];
+		}
+	}
+
+	return result;
 }
 
 ProductStructure ProductBuilder::buildProduct(UnparametrizedStructure  _structure, AutomatonStructure  _automaton) const {

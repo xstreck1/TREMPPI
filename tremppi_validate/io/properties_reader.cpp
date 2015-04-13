@@ -65,7 +65,7 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 		}
 
 		size_t record_i = 0;
-		vector<string> stables_list;
+		map<string, PathCons> trans_consts;
 		for (const Json::Value & record : property_node["records"]) {
 			string constraint;
 
@@ -104,15 +104,25 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 				automaton.acc_condition = constraint;
 			}
 			else {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(stables_list),{ { ID, negation },{ ID + 1, constraint } } });
+				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(trans_consts),{ { ID, negation },{ ID + 1, constraint } } });
 				ID++;
 			}
 
-			// get the stables
-			stables_list.clear();
+			// get the constraints
+			trans_consts.clear();
 			for (const RegInfo & reg_info : reg_infos) {
-				if (record[reg_info.name + "_delta"].asString() == "stay") {
-					stables_list.push_back(reg_info.name);
+				const string constraint =  record[reg_info.name + "_delta"].asString();
+				if (constraint == "stay") {
+					trans_consts.insert(make_pair(reg_info.name, PathCons::stay));
+				}
+				else if (constraint == "up") {
+					trans_consts.insert(make_pair(reg_info.name, PathCons::up));
+				}
+				else if (constraint == "down") {
+					trans_consts.insert(make_pair(reg_info.name, PathCons::down));
+				}
+				else {
+					trans_consts.insert(make_pair(reg_info.name, PathCons::none));
 				}
 			}
 			record_i++;
@@ -124,7 +134,7 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 		}
 		// Add a new state to the end that has a loop and compies the requirement for stables
 		if (automaton.prop_type == "series" || automaton.prop_type == "stable") {
-			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, move(stables_list),{ { ID, "tt" } } });
+			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, move(trans_consts),{ { ID, "tt" } } });
 		}
 
 		automata.emplace_back(move(automaton));

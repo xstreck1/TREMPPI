@@ -3,6 +3,7 @@
 #include <tremppi_common/network/data_info.hpp>
 
 enum BoundType { inf, min, step }; //< What sort of bound the user placed - do the full check / check until the minimal lenght is found for a parametrization / use only bounded amount of steps
+enum PathCons { none, up, down, stay }; ///< What are the requirements on the transitions between measurements? (none, monotonicity, stability)
 
 struct PropertyAutomaton {
 	NO_COPY(PropertyAutomaton)
@@ -18,7 +19,7 @@ struct PropertyAutomaton {
 		string name; ///< Label of the state.
 		CompID ID; ///< Numerical constant used to distinguish the state. Starts from 0!
 		bool final; ///< True if the state is final.
-		vector<string> stables_list; ///< Which states must not change its value 
+		map<string, PathCons> constraints_list; ///< Components whose values are constrained.
 
 		Edges edges; ///< Edges in Buchi Automaton (Target ID, edge label).
 	};

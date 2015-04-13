@@ -39,7 +39,7 @@ class AutomatonBuilder {
 	void setAutType(AutomatonStructure & automaton);
 
 	//
-	vector<CompID> transformStables(const vector<string> & stable_names);
+	vector<PathCons> transformConstraints(const map<string, PathCons>& constraints_list);
 
 public:
 	AutomatonBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property_automaton);

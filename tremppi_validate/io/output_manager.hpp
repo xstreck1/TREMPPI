@@ -17,8 +17,8 @@ class OutputManager {
 public:
 	NO_COPY(OutputManager)
 
-		// Store the names of the columns to be used
-		OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db);
+	// Store the names of the columns to be used
+	OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db);
 
 	// Write the new columns to the database
 	void outputForm();

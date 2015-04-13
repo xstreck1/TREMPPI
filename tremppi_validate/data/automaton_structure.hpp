@@ -3,6 +3,7 @@
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
 #include "automaton_interface.hpp"
+#include "property_automaton.hpp"
 
 /// Single labelled transition from one state to another.
 struct AutTransitionion : public TransitionProperty {
@@ -19,10 +20,9 @@ struct AutTransitionion : public TransitionProperty {
 
 /// Storing a single state of the Buchi automaton. This state is extended with a value saying wheter the states is final.
 struct AutState : public AutomatonStateProperty<AutTransitionion> {
-	vector<CompID> stables; //< IDs of the components that must not change before the next state is reached (so not even when transiting into the next state)
+	vector<PathCons> path_cons; //< Contraints on trainsitions from this state (ordered by components)
 
-	/// Fills data and checks if the state has value  -> is initial
-	AutState(const StateID ID, const bool final, const vector<StateID> _stables);
+	AutState(const StateID ID, const bool final, vector<PathCons> _path_cons);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,8 +50,7 @@ public:
 	/**
 	 * @param final	if true than state with index equal to the one of this vector is final
 	 */
-	void addState(const StateID ID, const bool final, const vector<StateID> stables);
-
+	void addState(const StateID ID, const bool final, vector<PathCons> stables);
 
 	//
 	void addTransition(const StateID ID, AutTransitionion transition);
@@ -59,7 +58,7 @@ public:
 	// Gecode accepts only a raw pointer for the searcher.
 	ConstraintParser * getTransitionConstraint(const StateID ID, const size_t trans_no) const;
 
-	// @return	the stables for the given state
-	const vector<CompID> & getStables(const StateID ID) const;
+	// @return	the the path constraints for the given state
+	const vector<PathCons>& getPathCons(const StateID ID) const;
 };
 

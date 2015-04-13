@@ -12,8 +12,8 @@ AutTransitionion::AutTransitionion(AutTransitionion && other) : TransitionProper
 AutTransitionion::AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr)
 	: TransitionProperty( target_ID ), trans_constr(_trans_constr) {}
 
-AutState::AutState(const StateID ID, const bool final, const vector<StateID> _stables)
-	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID), stables(move(_stables)) {}
+AutState::AutState(const StateID ID, const bool final, vector<PathCons> _path_cons)
+	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID), path_cons(move(_path_cons)) {}
 
 AutomatonStructure::AutomatonStructure() {
 	init_constr = nullptr;
@@ -48,12 +48,14 @@ AutomatonStructure::AutomatonStructure(AutomatonStructure && other) {
 	other.acc_constr = nullptr;
 }
 
-void AutomatonStructure::AutomatonStructure::addState(const StateID ID, const bool final, const vector<StateID> stables) {
-	states.push_back({ ID, final, move(stables) });
-	if (ID == 0)
+void AutomatonStructure::AutomatonStructure::addState(const StateID ID, const bool final, vector<PathCons> path_cons) {
+	states.push_back(AutState{ ID, final, move(path_cons) });
+	if (ID == 0) {
 		initial_states.push_back(ID);
-	if (final)
+	}
+	if (final) {
 		final_states.push_back(ID);
+	}
 }
 
 void AutomatonStructure::addTransition(const StateID ID, AutTransitionion transition) {
@@ -64,6 +66,6 @@ ConstraintParser * AutomatonStructure::getTransitionConstraint(const StateID ID,
 	return states[ID].transitions[trans_no].trans_constr;
 }
 
-const vector<CompID>& AutomatonStructure::getStables(const StateID ID) const {
-	return states[ID].stables;
+const vector<PathCons>& AutomatonStructure::getPathCons(const StateID ID) const {
+	return states[ID].path_cons;
 }

@@ -1,0 +1,62 @@
+{
+	"selections": [
+		{
+			"id": "sel1",
+			"text": "sel1"
+		},
+		{
+			"id": "sel2",
+			"text": "sel2"
+		},
+		{
+			"id": "150406192229",
+			"text": "150406192229"
+		}
+	],
+	"left": "",
+	"right": "",
+	"grid": {
+		"name": "grid",
+		"header": "",
+		"show": {
+			"header": true
+		},
+		"columns": [
+			{
+				"field": "name",
+				"caption": "Name",
+				"size": "50%"
+			},
+			{
+				"field": "count",
+				"caption": "Count",
+				"size": "10%"
+			},
+			{
+				"field": "portion",
+				"caption": "Portion",
+				"size": "10%"
+			},
+			{
+				"field": "min",
+				"caption": "Min",
+				"size": "10%"
+			},
+			{
+				"field": "max",
+				"caption": "Max",
+				"size": "10%"
+			},
+			{
+				"field": "mean",
+				"caption": "Mean",
+				"size": "10%"
+			}
+		],
+		"records": []
+	},
+	"configured": true,
+	"select": "150406192229",
+	"compare": "sel2",
+	"panel": "all"
+}

@@ -6,49 +6,49 @@
 
 /* global tremppi */
 
-tremppi.summary.setPage = function () {
+tremppi.occurence.setPage = function () {
     $("#widget").append('<div id="container_left">left</div>');
     $("#widget").append('<div id="container_mid">mid</div>');
     $("#widget").append('<div id="container_right">right</div>');
 };
 
-tremppi.summary.setPanel = function (data, panel) {
-    tremppi.summary[panel] = {};
-    $.extend(true, tremppi.summary[panel], data.grid);
-    tremppi.summary[panel].name = panel;
-    tremppi.summary[panel].header = panel;
-    tremppi.summary[panel] = $('#container_' + panel).w2grid(tremppi.summary[panel]);
+tremppi.occurence.setPanel = function (data, panel) {
+    tremppi.occurence[panel] = {};
+    $.extend(true, tremppi.occurence[panel], data.grid);
+    tremppi.occurence[panel].name = panel;
+    tremppi.occurence[panel].header = panel;
+    tremppi.occurence[panel] = $('#container_' + panel).w2grid(tremppi.occurence[panel]);
 };
 
-tremppi.summary.setData = function (data) {
-    tremppi.summary.setPanel(data, 'left');
-    tremppi.summary.setPanel(data, 'mid');
-    tremppi.summary.setPanel(data, 'right');
-    tremppi.summary.toolbar.get('select').items = tremppi.data.selections;
-    tremppi.summary.toolbar.get('compare').items = tremppi.data.selections;
-    tremppi.summary.toolbar.onClick = tremppi.summary.toolbarClick;
+tremppi.occurence.setData = function (data) {
+    tremppi.occurence.setPanel(data, 'left');
+    tremppi.occurence.setPanel(data, 'mid');
+    tremppi.occurence.setPanel(data, 'right');
+    tremppi.occurence.toolbar.get('select').items = tremppi.data.selections;
+    tremppi.occurence.toolbar.get('compare').items = tremppi.data.selections;
+    tremppi.occurence.toolbar.onClick = tremppi.occurence.toolbarClick;
     if (data.panel === 'left' || data.panel === 'mid' || data.panel === 'right') {
-        tremppi.summary.toolbar.uncheck('all');
-        tremppi.summary.toolbar.check(data.panel);
-        tremppi.summary.showPanel(data.panel);
+        tremppi.occurence.toolbar.uncheck('all');
+        tremppi.occurence.toolbar.check(data.panel);
+        tremppi.occurence.showPanel(data.panel);
     }
 
     if (data.select !== "") {
-        tremppi.summary.pickData(data.select, 'left');
+        tremppi.occurence.pickData(data.select, 'left');
     }
     if (data.compare !== "") {
-        tremppi.summary.pickData(data.compare, 'right');
+        tremppi.occurence.pickData(data.compare, 'right');
     }
 };
 
-tremppi.summary.save = function () {
+tremppi.occurence.save = function () {
     tremppi.save();
 };
 
-tremppi.summary.layout = function () {
+tremppi.occurence.layout = function () {
 };
 
-tremppi.summary.setDefaultData = function (data) {
+tremppi.occurence.setDefaultData = function (data) {
     if (typeof data.selections === 'undefined')
         data.selections = [];
 
@@ -66,20 +66,15 @@ tremppi.summary.setDefaultData = function (data) {
         header: true
     };
     if (data.grid.columns === 'undefined') {
-        var portion = (100 - 50) / 5;
         data.grid.columns = [
-            {field: 'name', caption: 'Name', size: '50%'},
-            {field: 'count', caption: 'Count', size: portion + '%'},
-            {field: 'portion', caption: 'Portion', size: portion + '%'},
-            {field: 'min', caption: 'Min', size: portion + '%'},
-            {field: 'max', caption: 'Max', size: portion + '%'},
-            {field: 'mean', caption: 'Mean', size: portion + '%'}
+            {field: 'name', caption: 'Name', size: '20%'},
+            {field: 'value', caption: 'Value', size: '80%'}
         ];
     }
-       data.grid.records = [];
+    data.grid.records = [];
 };
 
-tremppi.summary.defaultToolbar = function () {
+tremppi.occurence.defaultToolbar = function () {
     return {
         name: 'toolbar',
         items: [

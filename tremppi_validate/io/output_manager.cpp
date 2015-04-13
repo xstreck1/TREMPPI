@@ -1,6 +1,6 @@
 #include "output_manager.hpp"
 
-inline OutputManager::OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db)
+OutputManager::OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db)
 	: witness(_witness), robustness(_robustness), reg_infos(_reg_infos), name(_name), db(_db)
 {
 	new_columns.insert({ "C_" + name, "INTEGER" });
@@ -10,7 +10,7 @@ inline OutputManager::OutputManager(const bool _witness, const bool _robustness,
 		new_columns.insert({ "W_" + name, "TEXT" });
 }
 
-inline void OutputManager::outputForm() {
+void OutputManager::outputForm() {
 	db.execute("BEGIN TRANSACTION;");
 	for (const pair<string, string> & column : new_columns)
 		sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, column.first, column.second, db);
@@ -19,7 +19,7 @@ inline void OutputManager::outputForm() {
 
 // Output parametrizations from this round together with additional data, if requested.
 
-inline void OutputManager::outputRound(const size_t cost, const double robustness_val, const string & witness_path, const Levels & parametrization, const ParamNo & rowid) {
+void OutputManager::outputRound(const size_t cost, const double robustness_val, const string & witness_path, const Levels & parametrization, const ParamNo & rowid) {
 	string command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET ";
 	command += "C_" + name + "=" + (cost == INF ? "NULL" : to_string(cost));
 	if (robustness)
