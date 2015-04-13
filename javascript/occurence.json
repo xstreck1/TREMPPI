@@ -1,62 +1,51 @@
 {
-	"selections": [
-		{
-			"id": "sel1",
-			"text": "sel1"
-		},
-		{
-			"id": "sel2",
-			"text": "sel2"
-		},
-		{
-			"id": "150406192229",
-			"text": "150406192229"
-		}
-	],
-	"left": "",
-	"right": "",
-	"grid": {
-		"name": "grid",
-		"header": "",
-		"show": {
-			"header": true
-		},
-		"columns": [
-			{
-				"field": "name",
-				"caption": "Name",
-				"size": "50%"
-			},
-			{
-				"field": "count",
-				"caption": "Count",
-				"size": "10%"
-			},
-			{
-				"field": "portion",
-				"caption": "Portion",
-				"size": "10%"
-			},
-			{
-				"field": "min",
-				"caption": "Min",
-				"size": "10%"
-			},
-			{
-				"field": "max",
-				"caption": "Max",
-				"size": "10%"
-			},
-			{
-				"field": "mean",
-				"caption": "Mean",
-				"size": "10%"
-			}
-		],
-		"records": []
-	},
-	"configured": true,
-	"select": "150406192229",
-	"compare": "sel2",
-	"panel": "all"
+   "compare" : "150413141702",
+   "configured" : true,
+   "grid" : {
+      "columns" : [
+         {
+            "caption" : "Name",
+            "field" : "name",
+            "size" : "20%"
+         },
+         {
+            "caption" : "Value",
+            "field" : "value",
+            "size" : "80%"
+         }
+      ],
+      "header" : "",
+      "name" : "grid",
+      "records" : [],
+      "show" : {
+         "header" : true
+      }
+   },
+   "left" : "",
+   "panel" : "all",
+   "right" : "",
+   "select" : "150413141702",
+   "selections" : [
+      {
+         "id" : "sel1",
+         "text" : "sel1"
+      },
+      {
+         "id" : "sel2",
+         "text" : "sel2"
+      },
+      {
+         "id" : "150413141702",
+         "text" : "150413141702"
+      },
+      {
+         "id" : "150413145410",
+         "text" : "150413145410"
+      },
+      {
+         "id" : "150413145515",
+         "text" : "150413145515"
+      }
+   ]
 }
+

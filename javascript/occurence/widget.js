@@ -15,12 +15,12 @@ tremppi.occurence.findByName = function (list, name) {
     return {};
 };
 
-tremppi.occurence.valuesToRecords = function(values) {
+tremppi.occurence.valuesToRecords = function (values) {
     var records = [];
     for (var i = 0; i < values.length; i++) {
-        var record = {name: values[i].name, text: ""};
-        for (var j = 0; j < values[i].data; j++) {
-            record.text += values[i].data[j].name + ":" + values[i].data[j].portion + " ";
+        var record = {name: values[i].name, value: ""};
+        for (var j = 0; j < values[i].data.length; j++) {
+            record.value += values[i].data[j].name + ":" + (Math.round(values[i].data[j].portion * 10000) / 100) + " ";
         }
         records.push(record);
     }
@@ -38,18 +38,31 @@ tremppi.occurence.valuesSetter = function (source, panel) {
         var sel_vals = tremppi.occurence['left'].values;
         var dif_vals = tremppi.occurence['mid'].values = [];
         var cmp_vals = tremppi.occurence['right'].values;
-        for (var i = 0; i < sel_vals.length; i++) {
-            var sel_val = sel_vals[i];
-            var cmp_val = tremppi.occurence.findByName(cmp_vals, sel_val.name);
-            if (typeof cmp_val.name !== 'undefined') {
-                var dif_val = {name: sel_val.name};
-                dif_vals.push(dif_val);
+        if (typeof sel_vals !== 'undefined' && typeof cmp_vals !== 'undefined') {
+            for (var i = 0; i < sel_vals.length; i++) {
+                var sel_val = sel_vals[i];
+                var cmp_val = tremppi.occurence.findByName(cmp_vals, sel_val.name);
+                if (typeof cmp_val.name !== 'undefined') {
+                    var dif_val = {name: sel_val.name, data: []};
+                    for (var j = 0; j < sel_val.data.length; j++) {
+                        var cmp_data = tremppi.occurence.findByName(cmp_val.data, sel_val.data[j].name);
+                        if (typeof cmp_data.name !== 'undefined') {
+                            var difference = (sel_val.data[j].portion - cmp_data.portion);
+                            if (difference !== 0) {
+                                dif_val.data.push({
+                                    name: sel_val.data[j].name,
+                                    portion: difference
+                                });
+                            }
+                        }
+                    }
+                    dif_vals.push(dif_val);
+                }
             }
-        }
 
-        
-        tremppi.occurence.mid.records = tremppi.occurence.valuesToRecords(dif_vals);
-        tremppi.occurence.mid.header = tremppi.occurence.left.header + " - " + tremppi.occurence.right.header;
-        tremppi.occurence.mid.refresh();
+            tremppi.occurence.mid.records = tremppi.occurence.valuesToRecords(dif_vals);
+            tremppi.occurence.mid.header = tremppi.occurence.left.header + " - " + tremppi.occurence.right.header;
+            tremppi.occurence.mid.refresh();
+        }
     };
 };

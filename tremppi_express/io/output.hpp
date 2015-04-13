@@ -83,9 +83,9 @@ namespace Output {
 			}
 		}
 
-		if (result.empty())
+		if (result.empty() || result== "|")
 			result = "0";
-		if (result.back() == '|')
+		else if (result.back() == '|')
 			result.resize(result.size() - 1);
 		return result;
 	}

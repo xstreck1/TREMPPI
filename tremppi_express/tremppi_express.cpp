@@ -67,7 +67,8 @@ int tremppi_express(int argc, char ** argv) {
 				}
 				
 				string formula = "\"" + Output::pdnfToFormula(functions, reg_func, pdnfs) + "\"";
-				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + formula + " WHERE ROWID=" + to_string(sel_ID.get<int>(0));
+				int rowid = sel_ID.get<int>(0);
+				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + formula + " WHERE ROWID=" + to_string(rowid);
 				db.execute(update.c_str());
 
 				sel_it++;

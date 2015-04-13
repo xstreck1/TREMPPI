@@ -118,9 +118,9 @@ tremppi = {
     },
     makeHead: function () {
         $("head").append(
-                '<title>TREMPPI ' + tremppi.widget_name + '</title>' +
                 '<meta charset=utf-8 />' +
                 '<link rel="icon" type="image/x-icon" href="./favicon.ico">');
+        document.title = tremppi.widget_name;
     }
 };
 tremppi.initiate();

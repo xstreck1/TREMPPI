@@ -65,12 +65,10 @@ tremppi.occurence.setDefaultData = function (data) {
     data.grid.show = {
         header: true
     };
-    if (data.grid.columns === 'undefined') {
-        data.grid.columns = [
-            {field: 'name', caption: 'Name', size: '20%'},
-            {field: 'value', caption: 'Value', size: '80%'}
-        ];
-    }
+    data.grid.columns = [
+        {field: 'name', caption: 'Name', size: '20%'},
+        {field: 'value', caption: 'Value', size: '80%'}
+    ];
     data.grid.records = [];
 };
 

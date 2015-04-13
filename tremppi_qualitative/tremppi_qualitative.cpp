@@ -8,19 +8,23 @@
 
 struct Computed {
 	string name;
-	size_t count;
-	double portion;
-	double min;
-	double max;
-	double mean;
+	map<string, size_t> values;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \file Entry point of tremppi_summary
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_summary(int argc, char ** argv) {
+inline void incrementOccurence(const string & value, map<string, size_t> & values) {
+	if (values.count(value) == 0) {
+		values.insert(make_pair(value, 0));
+	}
+	else {
+		values[value]++;
+	}
+}
 
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_summary", argc, argv);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file Entry point of tremppi_qualitative
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int tremppi_qualitative(int argc, char ** argv) {
+	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_qualitative", argc, argv);
 	Logging logging;
 
 	Json::Value out;
@@ -28,14 +32,14 @@ int tremppi_summary(int argc, char ** argv) {
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	map<size_t, string> columns;
-	const vector<string> prefixes = { "K", "C", "R" };
+	const vector<string> prefixes = { "K", "F" };
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
 
 		// Read filter conditions
 		out = Report::createSetup();
 
-		widget_data = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / SUMMARY_FILENAME);
+		widget_data = FileManipulation::parseJSON(TremppiSystem::WORK_PATH / QUALITATIVE_FILENAME);
 
 		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
 
@@ -56,7 +60,7 @@ int tremppi_summary(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.emplace_back(Computed{ column.second, 0, 0, numeric_limits<double>::max(), numeric_limits<double>::min(), 0 });
+			results.emplace_back(Computed{ column.second, { {"null", 0} } });
 		}
 	}
 	catch (exception & e) {
@@ -64,6 +68,7 @@ int tremppi_summary(int argc, char ** argv) {
 	}
 
 	const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);
+	const double row_count_d = row_count;
 	try {
 
 		BOOST_LOG_TRIVIAL(info) << "Reading the values, computing the statistics.";
@@ -75,27 +80,19 @@ int tremppi_summary(int argc, char ** argv) {
 		// Read the data
 		for (auto row : group_qry) {
 			for (int i = 0; i < group_qry.column_count(); i++) {
-				if (row.column_type(i) != SQLITE_NULL) {
-					double val;
-					if (row.column_type(i) == SQLITE_INTEGER) {
-						val = row.get<int>(i);
-					} else if (row.column_type(i) == SQLITE_FLOAT) {
-						val = row.get<double>(i);
-					}
-					results[i].count++;
-					results[i].min = min(results[i].min, val);
-					results[i].max = max(results[i].max, val);
-					results[i].mean += val;
+				if (row.column_type(i) == SQLITE_NULL) {
+					results[i].values["null"]++;
+				} else if (row.column_type(i) == SQLITE_INTEGER) {
+					incrementOccurence(to_string(row.get<int>(i)), results[i].values);
+				} else if (row.column_type(i) == SQLITE_FLOAT) {
+					incrementOccurence(to_string(row.get<double>(i)), results[i].values);
+				} else if (row.column_type(i) == SQLITE3_TEXT) {
+					incrementOccurence(row.get<const char *>(i), results[i].values);
+				} else {
+					throw runtime_error("Unknown SQLITE3 columne type " + to_string(SQLITE3_TEXT));
 				}
 			}
 			logging.step();
-		}
-
-		// Compute remaning values
-		for (Computed & result : results) {
-			result.portion = static_cast<double>(result.count) / row_count;
-			if (result.count > 0)
-				result.mean /= static_cast<double>(result.count);
 		}
 	}
 	catch (exception & e) {
@@ -109,12 +106,13 @@ int tremppi_summary(int argc, char ** argv) {
 		for (Computed & result : results) {
 			Json::Value result_node;
 			result_node["name"] = result.name;
-            result_node["count"] = static_cast<Json::Value::UInt>(result.count);
-			result_node["portion"] = result.portion;
-			result_node["min"] = result.min;
-			result_node["max"] = result.max;
-			result_node["mean"] = result.mean;
-			out["records"].append(result_node);
+			for (const pair<string, size_t> & value : result.values) {
+				Json::Value data;
+				data["name"] = value.first;
+				data["portion"] = value.second / row_count_d;
+				result_node["data"].append(data);
+			}
+			out["values"].append(result_node);
 		}
 	}
 	catch (exception & e) {
@@ -130,11 +128,11 @@ int tremppi_summary(int argc, char ** argv) {
 		if (!bfs::exists(TremppiSystem::WORK_PATH / "data")) {
 			bfs::create_directory(TremppiSystem::WORK_PATH / "data");
 		}
-		if (!bfs::exists(TremppiSystem::WORK_PATH / "data" / "summary")) {
-			bfs::create_directory(TremppiSystem::WORK_PATH / "data" / "summary");
+		if (!bfs::exists(TremppiSystem::WORK_PATH / "data" / "occurence")) {
+			bfs::create_directory(TremppiSystem::WORK_PATH / "data" / "occurence");
 		}
-		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "data" / "summary" / (TimeManager::getTimeStamp() + ".json"), out);
-		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / SUMMARY_FILENAME, widget_data);
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "data" / "occurence" / (TimeManager::getTimeStamp() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / QUALITATIVE_FILENAME, widget_data);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

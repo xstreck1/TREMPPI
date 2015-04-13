@@ -71,4 +71,5 @@ const string DATABASE_FILENAME = "database.sqlite";
 const string PROPERTIES_FILENAME = "properties.json";
 const string SELECTION_FILENAME = "select.json";
 const string SUMMARY_FILENAME = "summary.json";
+const string QUALITATIVE_FILENAME = "occurence.json";
 

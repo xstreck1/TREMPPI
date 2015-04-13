@@ -65,18 +65,16 @@ tremppi.summary.setDefaultData = function (data) {
     data.grid.show = {
         header: true
     };
-    if (data.grid.columns === 'undefined') {
-        var portion = (100 - 50) / 5;
-        data.grid.columns = [
-            {field: 'name', caption: 'Name', size: '50%'},
-            {field: 'count', caption: 'Count', size: portion + '%'},
-            {field: 'portion', caption: 'Portion', size: portion + '%'},
-            {field: 'min', caption: 'Min', size: portion + '%'},
-            {field: 'max', caption: 'Max', size: portion + '%'},
-            {field: 'mean', caption: 'Mean', size: portion + '%'}
-        ];
-    }
-       data.grid.records = [];
+    var portion = (100 - 50) / 5;
+    data.grid.columns = [
+        {field: 'name', caption: 'Name', size: '50%'},
+        {field: 'count', caption: 'Count', size: portion + '%'},
+        {field: 'portion', caption: 'Portion', size: portion + '%'},
+        {field: 'min', caption: 'Min', size: portion + '%'},
+        {field: 'max', caption: 'Max', size: portion + '%'},
+        {field: 'mean', caption: 'Mean', size: portion + '%'}
+    ];
+    data.grid.records = [];
 };
 
 tremppi.summary.defaultToolbar = function () {
