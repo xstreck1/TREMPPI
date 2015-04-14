@@ -13,7 +13,7 @@ struct Computed {
 
 inline void incrementOccurence(const string & value, map<string, size_t> & values) {
 	if (values.count(value) == 0) {
-		values.insert(make_pair(value, 0));
+		values.insert(make_pair(value, 1));
 	}
 	else {
 		values[value]++;

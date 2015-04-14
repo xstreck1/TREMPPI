@@ -14,11 +14,14 @@ args = parser.parse_args()
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
-types = ["properties", "editor", "select", "witness", "interact", "function", "summary"]
-for type in types:
-    source = join(join(HOME_PATH, os.path.normpath("javascript/")), type)
-    destination = join(DEST_PATH, type)
+folders = ["common", "libs", "properties", "editor", "select", "witness", "interact", "function", "summary", "qualitative"]
+for folder in folders:
+    source = join(join(HOME_PATH, os.path.normpath("javascript/")), folder)
+    destination = join(DEST_PATH, folder)
     if os.path.exists(destination):
         shutil.rmtree(destination)
     copyanything(source, destination)
-    shutil.copy(join(HOME_PATH, os.path.normpath("javascript/" + type + ".html")), DEST_PATH)
+
+files = ["properties", "editor", "select", "witness", "interact", "function", "summary", "qualitative"]
+for file in files:
+    shutil.copy(join(HOME_PATH, os.path.normpath("javascript/" + file + ".html")), DEST_PATH)

@@ -17,7 +17,8 @@ namespace Output {
 	string plitToFormula(const string & component, const Levels & trhs, const PLit & plit, const ActLevel max) {
 		string result;
 		// Skip completely if the literal contains all the thresholds
-		if (plit.size() == trhs.size())
+		if (plit.size() == trhs.size() + 1)
+			return "";
 
 		// If multivalued, use Post literal
 		if (max > 1) {
@@ -83,8 +84,10 @@ namespace Output {
 			}
 		}
 
-		if (result.empty() || result== "|")
+		if (result.empty())
 			result = "0";
+		else if (result == "|")
+			result = "1";
 		else if (result.back() == '|')
 			result.resize(result.size() - 1);
 		return result;
