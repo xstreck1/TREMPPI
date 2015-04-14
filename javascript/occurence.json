@@ -1,55 +1,54 @@
 {
-   "compare" : "150413141702",
-   "configured" : true,
-   "grid" : {
-      "columns" : [
-         {
-            "caption" : "Name",
-            "field" : "name",
-            "size" : "20%"
-         },
-         {
-            "caption" : "Value",
-            "field" : "value",
-            "size" : "80%"
-         }
-      ],
-      "header" : "",
-      "name" : "grid",
-      "records" : [],
-      "show" : {
-         "header" : true
-      }
-   },
-   "left" : "",
-   "panel" : "all",
-   "right" : "",
-   "select" : " WHERE sel1",
-   "selections" : [
-      {
-         "id" : "sel1",
-         "text" : "sel1"
-      },
-      {
-         "id" : "sel2",
-         "text" : "sel2"
-      },
-      {
-         "id" : "150413141702",
-         "text" : "150413141702"
-      },
-      {
-         "id" : "150413145410",
-         "text" : "150413145410"
-      },
-      {
-         "id" : "150413145515",
-         "text" : "150413145515"
-      },
-      {
-         "id" : " WHERE sel1",
-         "text" : " WHERE sel1"
-      }
-   ]
+	"compare": " WHERE sel1",
+	"configured": true,
+	"grid": {
+		"columns": [
+			{
+				"caption": "Name",
+				"field": "name",
+				"size": "20%"
+			},
+			{
+				"caption": "Value",
+				"field": "value",
+				"size": "80%"
+			}
+		],
+		"header": "",
+		"name": "grid",
+		"records": [],
+		"show": {
+			"header": true
+		}
+	},
+	"left": "",
+	"panel": "all",
+	"right": "",
+	"select": " WHERE sel1",
+	"selections": [
+		{
+			"id": "sel1",
+			"text": "sel1"
+		},
+		{
+			"id": "sel2",
+			"text": "sel2"
+		},
+		{
+			"id": "150413141702",
+			"text": "150413141702"
+		},
+		{
+			"id": "150413145410",
+			"text": "150413145410"
+		},
+		{
+			"id": "150413145515",
+			"text": "150413145515"
+		},
+		{
+			"id": " WHERE sel1",
+			"text": " WHERE sel1"
+		}
+	]
 }
-

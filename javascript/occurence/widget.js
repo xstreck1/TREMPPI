@@ -20,7 +20,9 @@ tremppi.occurence.valuesToRecords = function (values) {
     for (var i = 0; i < values.length; i++) {
         var record = {name: values[i].name, value: ""};
         for (var j = 0; j < values[i].data.length; j++) {
-            record.value += "<b>"+ values[i].data[j].name + "</b>:" + (Math.round(values[i].data[j].portion * 10000) / 100) + ", ";
+            if (values[i].data[j].portion !== 0.0) {
+                record.value += "<b>" + values[i].data[j].name + "</b>:" + (Math.round(values[i].data[j].portion * 10000) / 100) + ", ";
+            }
         }
         records.push(record);
     }
@@ -44,16 +46,30 @@ tremppi.occurence.valuesSetter = function (source, panel) {
                 var cmp_val = tremppi.occurence.findByName(cmp_vals, sel_val.name);
                 if (typeof cmp_val.name !== 'undefined') {
                     var dif_val = {name: sel_val.name, data: []};
+                    // Add those in select
                     for (var j = 0; j < sel_val.data.length; j++) {
                         var cmp_data = tremppi.occurence.findByName(cmp_val.data, sel_val.data[j].name);
                         if (typeof cmp_data.name !== 'undefined') {
-                            var difference = (sel_val.data[j].portion - cmp_data.portion);
-                            if (difference !== 0) {
-                                dif_val.data.push({
-                                    name: sel_val.data[j].name,
-                                    portion: difference
-                                });
-                            }
+                            dif_val.data.push({
+                                name: sel_val.data[j].name,
+                                portion: (sel_val.data[j].portion - cmp_data.portion)
+                            });
+                        }
+                        else {
+                            dif_val.data.push({
+                                name: sel_val.data[j].name,
+                                portion: sel_val.data[j].portion
+                            });
+                        }
+                    }
+                    // Add those in compare only
+                    for (var j = 0; j < cmp_val.data.length; j++) {
+                        var sel_data = tremppi.occurence.findByName(sel_val.data, cmp_val.data[j].name);
+                        if (typeof sel_data.name === 'undefined') {
+                            dif_val.data.push({
+                                name: cmp_val.data[j].name,
+                                portion: -cmp_val.data[j].portion
+                            });
                         }
                     }
                     dif_vals.push(dif_val);

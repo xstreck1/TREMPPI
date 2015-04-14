@@ -19,3 +19,17 @@ Json::Value Report::createSetup() {
 
 	return out;
 }
+
+
+string Report::reformName(string name) {
+	if (count(WHOLE(name), '_') == 1) {
+		name += "_";
+	}
+	else if (count(WHOLE(name), '_') < 1) {
+		throw runtime_error("reforming a name did not work since there's only one underscore");
+	}
+	name.replace(name.find("_"), 1, "<sub>");
+	name.replace(name.find("_"), 1, "</sub>(");
+	name.append(")");
+	return name;
+}

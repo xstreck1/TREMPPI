@@ -21,20 +21,7 @@ inline void incrementOccurence(const string & value, map<string, size_t> & value
 }
 
 
-
 // TODO: duplicated (as many other things here)
-static string reformName(string name) {
-	if (count(WHOLE(name), '_') == 1) {
-		name += "_";
-	}
-	else if (count(WHOLE(name), '_') < 1) {
-		throw runtime_error("reforming a name did not work since there's only one underscore");
-	}
-	name.replace(name.find("_"), 1, "<sub>");
-	name.replace(name.find("_"), 1, "</sub>");
-	return name;
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_qualitative
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +107,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 
 		for (Computed & result : results) {
 			Json::Value result_node;
-			result_node["name"] = reformName(result.name);
+			result_node["name"] = Report::reformName(result.name);
 			for (const pair<string, size_t> & value : result.values) {
 				Json::Value data;
 				data["name"] = value.first;
