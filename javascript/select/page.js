@@ -21,7 +21,7 @@ tremppi.select.setData = function (data) {
         tremppi.select.setGroups();
         tremppi.select.grid.refresh();
         tremppi.select.activateControls();
-        tremppi.select.addColumnsSelection(data.groups);
+        // tremppi.select.addColumnsSelection(data.groups);
         tremppi.select.grid.onColumnResize = tremppi.select.columnResize;
         return true;
     }

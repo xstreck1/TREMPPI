@@ -47,16 +47,16 @@ tremppi.select.setGridData = function (data) {
             "type": "check"
         }
     });
-//    columns.push({
-//        "field": "name",
-//        "caption": "Name",
-//        "size": "100px",
-//        "resizable": true,
-//        "editable": {
-//            "type": "text"
-//        }
-//    });
-    groups.push({caption: '', columns: [], span: 1, master: true, hideable: false, checked: false});
+    columns.push({
+        "field": "name",
+        "caption": "Name",
+        "size": "100px",
+        "resizable": true,
+        "editable": {
+            "type": "text"
+        }
+    });
+    groups.push({caption: '', columns: ['select', 'name'], span: 2, master: false, hideable: false, checked: false});
 
     // Create a new group and add to columns etc.
     var addDataGroup = function (prefix, group_name) {

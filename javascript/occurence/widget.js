@@ -20,7 +20,7 @@ tremppi.occurence.valuesToRecords = function (values) {
     for (var i = 0; i < values.length; i++) {
         var record = {name: values[i].name, value: ""};
         for (var j = 0; j < values[i].data.length; j++) {
-            record.value += values[i].data[j].name + ":" + (Math.round(values[i].data[j].portion * 10000) / 100) + " ";
+            record.value += "<b>"+ values[i].data[j].name + "</b>:" + (Math.round(values[i].data[j].portion * 10000) / 100) + ", ";
         }
         records.push(record);
     }

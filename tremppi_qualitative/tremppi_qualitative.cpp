@@ -20,6 +20,21 @@ inline void incrementOccurence(const string & value, map<string, size_t> & value
 	}
 }
 
+
+
+// TODO: duplicated (as many other things here)
+static string reformName(string name) {
+	if (count(WHOLE(name), '_') == 1) {
+		name += "_";
+	}
+	else if (count(WHOLE(name), '_') < 1) {
+		throw runtime_error("reforming a name did not work since there's only one underscore");
+	}
+	name.replace(name.find("_"), 1, "<sub>");
+	name.replace(name.find("_"), 1, "</sub>");
+	return name;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_qualitative
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +120,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 
 		for (Computed & result : results) {
 			Json::Value result_node;
-			result_node["name"] = result.name;
+			result_node["name"] = reformName(result.name);
 			for (const pair<string, size_t> & value : result.values) {
 				Json::Value data;
 				data["name"] = value.first;
@@ -121,17 +136,25 @@ int tremppi_qualitative(int argc, char ** argv) {
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		Json::Value new_entry;
-		new_entry["id"] = TimeManager::getTimeStamp();
-		new_entry["text"] = TimeManager::getTimeStamp();
-		widget_data["selections"].append(new_entry);
+		const string name = out["setup"]["s_name"].asString();
+		// add if not exists
+		bool exists = false;
+		for (Json::Value selection : widget_data["selections"]) {
+			exists |= (selection["id"].asString() == name);
+		}
+		if (!exists) {
+			Json::Value new_entry;
+			new_entry["id"] = name;
+			new_entry["text"] = name;
+			widget_data["selections"].append(new_entry);
+		}
 		if (!bfs::exists(TremppiSystem::WORK_PATH / "data")) {
 			bfs::create_directory(TremppiSystem::WORK_PATH / "data");
 		}
 		if (!bfs::exists(TremppiSystem::WORK_PATH / "data" / "occurence")) {
 			bfs::create_directory(TremppiSystem::WORK_PATH / "data" / "occurence");
 		}
-		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "data" / "occurence" / (TimeManager::getTimeStamp() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / "data" / "occurence" / (name + ".json"), out);
 		FileManipulation::writeJSON(TremppiSystem::WORK_PATH / QUALITATIVE_FILENAME, widget_data);
 	}
 	catch (exception & e) {

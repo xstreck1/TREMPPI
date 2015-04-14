@@ -8,8 +8,12 @@ def get_atom(record):
 
     if ("select" in record) and record["select"]:
         for key, value in record.items():
-            if key == 'select' or key == 'recid' or key == 'changes' or value == '':
+            if key == 'select' or key == 'recid' or key == 'name' or key == 'changes' or value == '':
                 continue
+            elif value == 'ANY':
+                atoms.append(key + " IS NOT NULL")
+            elif value == 'NULL':
+                atoms.append(key + " IS NULL")
             elif re.match('\d+.*\d*', value):
                 atoms.append(key + " = " + value)
             elif re.match('([\(\[])(\d+.*\d*),(\d+.*\d*)([\)\]])', value):
@@ -39,13 +43,34 @@ def select_query(records):
 
     return " OR ".join(clauses)
 
-def select(filename):
+def select_name(records):
+    names = []
+
+    for record in records:
+        if ("select" in record) and record["select"]:
+            if ("name" in record) and record["name"] != '':
+                names.append(record["name"])
+            else:
+                raise Exception("One of the selections does not have a name.")
+
+
+    return "|".join(names)
+
+
+def select(filename, term):
     with open(filename, 'r') as selectionFile:
         grid = json.loads(selectionFile.read())
         if "records" not in grid:
             return ""
-        query = select_query(grid["records"])
-        if query != '':
-            return ' WHERE ' + query
+        if (term):
+            result = select_query(grid["records"])
+            if result != '':
+                return ' WHERE ' + result
+            else:
+                raise Exception("No selection has been made.")
         else:
-            raise Exception("No selection has been made.")
+            result = select_name(grid["records"])
+            if result != '':
+                return result
+            else:
+                raise Exception("No selection has been made.")

@@ -9,10 +9,11 @@ Json::Value Report::createSetup() {
 	Json::Value out;
 
 	out["setup"]["date"] = TimeManager::getTime();
-	out["setup"]["name"] = TremppiSystem::WORK_PATH.stem().string();
+	out["setup"]["model"] = TremppiSystem::WORK_PATH.stem().string();
 	sqlite3pp::database db((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str());
 
 	out["setup"]["select"] = DatabaseReader::getSelectionTerm();
+	out["setup"]["s_name"] = DatabaseReader::getSelectionName();
 	// Get pool sizes
 	out["setup"]["size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + DatabaseReader::getSelectionTerm()).c_str()).begin())->get<int>(0);
 

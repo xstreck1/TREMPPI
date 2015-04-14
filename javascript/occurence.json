@@ -24,7 +24,7 @@
    "left" : "",
    "panel" : "all",
    "right" : "",
-   "select" : "150413141702",
+   "select" : " WHERE sel1",
    "selections" : [
       {
          "id" : "sel1",
@@ -45,6 +45,10 @@
       {
          "id" : "150413145515",
          "text" : "150413145515"
+      },
+      {
+         "id" : " WHERE sel1",
+         "text" : " WHERE sel1"
       }
    ]
 }

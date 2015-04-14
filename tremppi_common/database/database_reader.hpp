@@ -42,6 +42,9 @@ public:
 	// Obtain the sqlite3 WHERE clause from the selections file
 	static string getSelectionTerm();
 
+	// Obtain the term describing the current selection
+	static string getSelectionName();
+
 	//
 	static void makeSelect();
 };

@@ -107,7 +107,17 @@ string DatabaseReader::getSelectionTerm() {
 
 	PythonFunctions & python = PythonFunctions::getInstance();
 	python.exec("from tremppi.select import select");
-	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::WORK_PATH } / "select.json")) + ")", result);
+	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::WORK_PATH } / "select.json")) + ", True)", result);
+
+	return result;
+}
+
+string DatabaseReader::getSelectionName() {
+	string result;
+
+	PythonFunctions & python = PythonFunctions::getInstance();
+	python.exec("from tremppi.select import select");
+	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(bfs::path{ TremppiSystem::WORK_PATH } / "select.json")) + ", False)", result);
 
 	return result;
 }
