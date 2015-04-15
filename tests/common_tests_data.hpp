@@ -4,6 +4,7 @@
 
 #include <tremppi_common/header.h>
 #include <tremppi_common/network/data_info.hpp>
+#include <tremppi_common/general/system.hpp>
 
 class CommonTest : public ::testing::Test {
 protected:

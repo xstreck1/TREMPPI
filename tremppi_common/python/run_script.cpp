@@ -1,13 +1,12 @@
 #include <boost/python/detail/wrap_python.hpp>
 #include <tremppi_common/header.h>
+#include <tremppi_common/general/program_options.hpp>
+#include <tremppi_common/general/system.hpp>
 
-#include "io/python_options.hpp"
+#include "run_script.hpp"
 
-using namespace std;
-
-
-int tremppi_python(const string command, int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<PythonOptions>("tremppi_python", argc, argv);
+int run_script(const string command, int argc, char ** argv) {
+	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_python", argc, argv);
 
 	// Check if the script exists
 	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
@@ -18,7 +17,7 @@ int tremppi_python(const string command, int argc, char ** argv) {
 
 	wchar_t ** wargv = new wchar_t*[argc];
 	for (int i : crange(argc)) {
-		wargv[i] = new wchar_t[strlen(argv[i]) +1]; 
+		wargv[i] = new wchar_t[strlen(argv[i]) + 1];
 		mbstowcs(wargv[i], argv[i], strlen(argv[i]) + 1);
 	}
 
@@ -30,7 +29,7 @@ int tremppi_python(const string command, int argc, char ** argv) {
 
 	// Initialize Python interpreter, the intepreter gets the name of this binary as the argv[0]
 	Py_SetProgramName(program_name);
-	
+
 	Py_Initialize();
 	PySys_SetArgv(argc, wargv);
 
@@ -40,20 +39,20 @@ int tremppi_python(const string command, int argc, char ** argv) {
 	PyRun_SimpleString(contents.c_str());
 
 	delete[] program_name;
-	for (int i : crange(argc)) 
+	for (int i : crange(argc))
 		delete[] wargv[i];
 	delete[] wargv;
 	return 0;
 }
 
 int tremppi_init(int argc, char ** argv) {
-	return tremppi_python("init", argc, argv);
+	return run_script("init", argc, argv);
 }
 
 int tremppi_browse(int argc, char ** argv) {
-	return tremppi_python("browse", argc, argv);
+	return run_script("browse", argc, argv);
 }
 
 int tremppi_update(int argc, char ** argv) {
-	return tremppi_python("update", argc, argv);
+	return run_script("update", argc, argv);
 }

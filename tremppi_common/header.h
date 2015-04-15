@@ -73,3 +73,15 @@ const string SELECTION_FILENAME = "select.json";
 const string SUMMARY_FILENAME = "summary.json";
 const string QUALITATIVE_FILENAME = "occurence.json";
 
+// MODULES
+int tremppi_correlate(int argc, char ** argv);
+int tremppi_browse(int argc, char ** argv);
+int tremppi_express(int argc, char ** argv);
+int tremppi_init(int argc, char ** argv);
+int tremppi_interact(int argc, char ** argv);
+int tremppi_qualitative(int argc, char ** argv);
+int tremppi_spawn(int argc, char ** argv);
+int tremppi_summary(int argc, char ** argv);
+int tremppi_update(int argc, char ** argv);
+int tremppi_validate(int argc, char ** argv);
+int tremppi_witness(int argc, char ** argv);

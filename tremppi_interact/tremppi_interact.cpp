@@ -5,7 +5,7 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
-#include "analysis/regulatory_graph.hpp"
+#include "compute/regulatory_graph.hpp"
 #include "io/output.hpp"
 #include "io/interact_options.hpp"
 

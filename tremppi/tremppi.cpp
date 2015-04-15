@@ -3,24 +3,12 @@
 #include <tremppi_common/header.h>
 using namespace std;
 
-int tremppi_init(int argc, char ** argv);
-int tremppi_browse(int argc, char ** argv);
-int tremppi_spawn(int argc, char ** argv);
-int tremppi_express(int argc, char ** argv);
-int tremppi_function(int argc, char ** argv);
-int tremppi_interact(int argc, char ** argv);
-int tremppi_qualitative(int argc, char ** argv);
-int tremppi_summary(int argc, char ** argv);
-int tremppi_update(int argc, char ** argv);
-int tremppi_validate(int argc, char ** argv);
-int tremppi_witness(int argc, char ** argv);
-
 map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
 		{ "init", { tremppi_init, "create a new model with a model viewer" } },
 		{ "browse", { tremppi_browse, "starts a local server to allow browsing data" } },
 		{ "spawn", { tremppi_spawn, "read a model and create a database of parametrizations based on the model" } },
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
-		{ "function", { tremppi_function, "create a function graph based on a statistical analysis" } },
+		{ "correlate", { tremppi_correlate, "create a function graph based on a statistical analysis" } },
 		{ "interact", { tremppi_interact, "create an interaction graph based on a statistical analysis" } },
 		{ "qualitative", { tremppi_qualitative, "get qualitative analysis of the known data" } },
 		{ "summary", { tremppi_summary, "get summary of up till now known data" } },

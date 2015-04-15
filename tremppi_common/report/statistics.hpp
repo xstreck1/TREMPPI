@@ -15,7 +15,7 @@ namespace Statistics {
 	inline double expected_val(const vector<T> & data, const vector<size_t> & indices, const size_t shift) {
 		double expected_val = 0;
 
-		for (const size_t index : indices) 
+		for (const size_t index : indices)
 			expected_val += data[index - shift];
 		expected_val /= indices.size();
 
@@ -35,7 +35,7 @@ namespace Statistics {
 	vector<double> deviations(const vector<T> & data, const double mean, const vector<size_t> & indices, const size_t shift) {
 		vector<double> result;
 		result.reserve(indices.size());
-		for (const size_t index : indices) 
+		for (const size_t index : indices)
 			result.push_back(mean - data[index - shift]);
 		return result;
 	}
@@ -52,7 +52,7 @@ namespace Statistics {
 	// 
 	template<typename T>
 	double variance(const vector<T> & dev) {
-		return accumulate(WHOLE(dev), 0.0, [](double variance, const double dev){
+		return accumulate(WHOLE(dev), 0.0, [](double variance, const double dev) {
 			return variance + pow(dev, 2.);
 		}) / dev.size();
 	}

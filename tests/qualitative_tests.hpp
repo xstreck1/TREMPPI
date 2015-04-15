@@ -1,8 +1,6 @@
 #pragma once
 
-#include "../common_tests/common_tests_data.hpp"
-
-int tremppi_qualitative(int, char**);
+#include "common_tests_data.hpp"
 
 int basic_qualitative_test() {
 	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string() };

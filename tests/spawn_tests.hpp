@@ -1,11 +1,6 @@
 #pragma once
 
-#include <gtest/gtest.h>
-#include <tremppi_common/general/system.hpp>
-
-#include "../common_tests/common_tests_data.hpp"
-
-int tremppi_spawn(int, char**);
+#include "common_tests_data.hpp"
 
 // Print the basic model
 void createModel(const bfs::path & example_model_path) {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <tremppi_common/network/definitions.hpp>
+#include <tremppi_common/report/statistics.hpp>
 
-#include "../analysis/statistics.hpp"
 #include "../data/data_storage.hpp"
 
 namespace RegulatoryGraph {

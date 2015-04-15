@@ -3,15 +3,15 @@
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
+#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
-#include "analysis/compute.hpp"
+#include "compute/compute.hpp"
 #include "io/output.hpp"
-#include "io/function_options.hpp"
 
 // TODO: disable regulatory if not -r
-int tremppi_function(int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<FunctionOptions>("tremppi_function", argc, argv);
+int tremppi_correlate(int argc, char ** argv) {
+	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_function", argc, argv);
 	Logging logging;
 
 	Json::Value out;

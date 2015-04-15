@@ -1,15 +1,15 @@
 #include <tremppi_common/general/program_options.hpp>
 
-#include "python_tests/python_tests.hpp"
-#include "common_tests/common_tests.hpp"
-#include "spawn_tests/spawn_tests.hpp"
-#include "express_tests/express_tests.hpp"
-#include "validate_tests/validate_tests.hpp"
-#include "interact_tests/interact_tests.hpp"
-#include "function_tests/function_tests.hpp"
-#include "witness_tests/wintess_tests.hpp"
-#include "summary_tests/summary_tests.hpp"
-#include "qualitative_tests/qualitative_tests.hpp"
+#include "python_tests.hpp"
+#include "common_tests.hpp"
+#include "spawn_tests.hpp"
+#include "express_tests.hpp"
+#include "validate_tests.hpp"
+#include "interact_tests.hpp"
+#include "correlate_tests.hpp"
+#include "wintess_tests.hpp"
+#include "summary_tests.hpp"
+#include "qualitative_tests.hpp"
 
 TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";

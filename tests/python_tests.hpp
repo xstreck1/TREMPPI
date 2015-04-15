@@ -1,15 +1,10 @@
 #pragma once
 
-#include <gtest/gtest.h>
-
 #include <boost/python/detail/wrap_python.hpp>
-#include <tremppi_common/general/system.hpp>
+
 #include <tremppi_common/python/python_functions.hpp>
 
-#include "../common_tests/common_tests_data.hpp"
-
-int tremppi_init(int, char**);
-int tremppi_update(int, char**);
+#include "common_tests_data.hpp"
 
 int basic_init_test() {
 	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" ).string(), "test_proj" };
