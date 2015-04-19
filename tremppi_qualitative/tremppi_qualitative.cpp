@@ -6,7 +6,7 @@
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
 
-struct Computed {
+struct ComputedQual {
 	string name;
 	map<string, size_t> values;
 };
@@ -58,11 +58,11 @@ int tremppi_qualitative(int argc, char ** argv) {
 		logging.exceptionMessage(e, 2);
 	}
 
-	vector<Computed> results;
+	vector<ComputedQual> results;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.emplace_back(Computed{ column.second, { {"null", 0} } });
+			results.emplace_back(ComputedQual{ column.second, { {"null", 0} } });
 		}
 	}
 	catch (exception & e) {
@@ -105,7 +105,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Building the JSON file.";
 		// For each graph create the graph data and add configuration details
 
-		for (Computed & result : results) {
+		for (ComputedQual & result : results) {
 			Json::Value result_node;
 			result_node["name"] = Report::reformName(result.name);
 			for (const pair<string, size_t> & value : result.values) {
