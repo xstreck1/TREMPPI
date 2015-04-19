@@ -6,7 +6,7 @@
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
 
-struct Computed {
+struct ComputedData {
 	string name;
 	size_t count;
 	double portion;
@@ -52,11 +52,11 @@ int tremppi_summary(int argc, char ** argv) {
 		logging.exceptionMessage(e, 2);
 	}
 
-	vector<Computed> results;
+	vector<ComputedData> results;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.emplace_back(Computed{ column.second, 0, 0, numeric_limits<double>::max(), numeric_limits<double>::min(), 0 });
+			results.push_back(ComputedData{ column.second, 0, 0, numeric_limits<double>::max(), numeric_limits<double>::min(), 0 });
 		}
 	}
 	catch (exception & e) {
@@ -92,10 +92,11 @@ int tremppi_summary(int argc, char ** argv) {
 		}
 
 		// Compute remaning values
-		for (Computed & result : results) {
+		for (ComputedData & result : results) {
 			result.portion = static_cast<double>(result.count) / row_count;
-			if (result.count > 0)
-				result.mean /= static_cast<double>(result.count);
+			if (result.count > 0) {
+				result.mean = result.mean / result.count;
+			}
 		}
 	}
 	catch (exception & e) {
@@ -106,7 +107,7 @@ int tremppi_summary(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Building the JSON file.";
 		// For each graph create the graph data and add configuration details
 
-		for (Computed & result : results) {
+		for (ComputedData & result : results) {
 			Json::Value result_node;
 			result_node["name"] = Report::reformName(result.name);
             result_node["count"] = static_cast<Json::Value::UInt>(result.count);
