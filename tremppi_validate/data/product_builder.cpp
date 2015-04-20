@@ -77,10 +77,13 @@ bool ProductBuilder::matchesConstraints(const UnparametrizedStructure & structur
 		switch (path_cons[ID]) {
 		case PathCons::up:
 			result &= t_levels[ID] >= s_levels[ID];
+			break;
 		case PathCons::down:
 			result &= t_levels[ID] <= s_levels[ID];
+			break;
 		case PathCons::stay:
 			result &= t_levels[ID] == s_levels[ID];
+			break;
 		}
 	}
 

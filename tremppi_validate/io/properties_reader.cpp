@@ -109,7 +109,6 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 			}
 
 			// get the constraints
-			trans_consts.clear();
 			for (const RegInfo & reg_info : reg_infos) {
 				const string constraint =  record[reg_info.name + "_delta"].asString();
 				if (constraint == "stay") {

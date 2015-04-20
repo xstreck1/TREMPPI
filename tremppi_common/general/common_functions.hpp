@@ -32,7 +32,7 @@
 		TypeName(TypeName && ) = default;  \
 		TypeName& operator=(TypeName && ) = default; 
 
-#define WHOLE(Container) begin(Container),end(Container)
+#define WHOLE(Container) std::begin(Container),std::end(Container)
 
 #define DEL_IF_EXISTS(pointer) if (pointer != nullptr) { delete pointer; pointer = nullptr; }
 

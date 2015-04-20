@@ -66,7 +66,7 @@ tremppi.occurence.setDefaultData = function (data) {
         header: true
     };
     data.grid.columns = [
-        {field: 'name', caption: 'Name', size: '20%'},
+        {field: 'name', caption: 'Name', size: '20%', sortable: true},
         {field: 'value', caption: 'Value', size: '80%'}
     ];
     data.grid.records = [];
