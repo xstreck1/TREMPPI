@@ -26,7 +26,7 @@ class AutomatonBuilder {
 	Levels range_size; ///< Number of valid values for the species.
 
 	// Compute allowed values from string of constrains
-	ConstraintParser * constrToParser(const string & constraint) const;
+	ConstraintParser * constrToParser(const string & state_constraint) const;
 
 	/**
 	 * Creates transitions from labelled edges of BA and passes them to the automaton structure.

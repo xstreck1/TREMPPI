@@ -11,7 +11,8 @@ struct PropertyAutomaton {
 		/// Edge in Buchi Automaton
 	struct Edge {
 		StateID target_ID;
-		string constraint;
+		string state_constraint;
+		map<string, PathCons> path_constraint; ///< Components whose values are constrained.
 	};
 	typedef vector<Edge> Edges; ///< Set of outgoing edges.
 

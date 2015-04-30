@@ -1,8 +1,8 @@
 #include "automaton_builder.hpp"
 
-ConstraintParser *  AutomatonBuilder::constrToParser(const string & constraint) const {
+ConstraintParser *  AutomatonBuilder::constrToParser(const string & state_constraint) const {
 	ConstraintParser * parser = new ConstraintParser(maxes.size(), *max_element(maxes.begin(), maxes.end()));
-	parser->applyFormula(names, constraint);
+	parser->applyFormula(names, state_constraint);
 	parser->addBoundaries(maxes, true);
 	parser->addBoundaries(mins, false);
 	return parser;
@@ -13,7 +13,7 @@ void AutomatonBuilder::addTransitions(AutomatonStructure & automaton, const Stat
 
 	// Transform each edge into transition and pass it to the automaton
 	for (const PropertyAutomaton::Edge & edge : edges) {
-		automaton.addTransition(ID, { edge.target_ID, constrToParser(edge.constraint) });
+		automaton.addTransition(ID, { edge.target_ID, constrToParser(edge.state_constraint) });
 	}
 }
 
