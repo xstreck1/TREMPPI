@@ -62,7 +62,7 @@ void UnparametrizedStructureBuilder::computeJumps(const Levels & range_size) {
 }
 
 size_t UnparametrizedStructureBuilder::solveConstrains(UnparametrizedStructure & structure) {
-	pair<Levels, Levels> bounds = PropertyHelper::getBounds(reg_infos, property_automaton);
+	pair<Levels, Levels> bounds = PropertiesReader::getBounds(reg_infos, property_info);
 	structure.mins = bounds.first; structure.maxes = bounds.second;
 	rng::transform(structure.maxes, structure.mins, back_inserter(structure.range_size), [](const ActLevel max, const ActLevel min) {return max - min + 1; });
 
@@ -74,8 +74,8 @@ size_t UnparametrizedStructureBuilder::solveConstrains(UnparametrizedStructure &
 	return state_count;
 }
 
-UnparametrizedStructureBuilder::UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property_automaton)
-	: reg_infos(_reg_infos), property_automaton(_property_automaton) {}
+UnparametrizedStructureBuilder::UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyInfo & _property_info)
+	: reg_infos(_reg_infos), property_info(_property_info) {}
 
 UnparametrizedStructure UnparametrizedStructureBuilder::buildStructure() {
 	UnparametrizedStructure structure;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../data/property_automaton.hpp"
+#include "../data/property_info.hpp"
 
 #include "witness_searcher.hpp"
 #include "visit_storage.hpp"

@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "../data/property_automaton.hpp"
+#include "../data/property_info.hpp"
 #include "automaton_builder.hpp"
 #include "unparametrized_structure_builder.hpp"
 #include "product_builder.hpp"
@@ -15,9 +15,9 @@ namespace ConstructionManager {
 	/**
 	 * Function that constructs all the data in a cascade of temporal builders.
 	 */
-	ProductStructure construct(const RegInfos & reg_infos, const PropertyAutomaton & property);
+	ProductStructure construct(const RegInfos & reg_infos, const PropertyInfo & property);
 
 
 	// Tests whether the objects are constructible
-	void test(const RegInfos & reg_infos, const PropertyAutomaton & property);
+	void test(const RegInfos & reg_infos, const PropertyInfo & property);
 }

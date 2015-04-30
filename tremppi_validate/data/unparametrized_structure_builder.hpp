@@ -2,7 +2,7 @@
 
 #include <tremppi_common/network/data_info.hpp>
 
-#include "../data/property_automaton.hpp"
+#include "../data/property_info.hpp"
 #include "unparametrized_structure.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class UnparametrizedStructureBuilder {
 	const RegInfos & reg_infos;
-	const PropertyAutomaton & property_automaton;
+	const PropertyInfo & property_info;
 
 	vector<size_t> index_jumps; ///< Holds index differences between two neighbour states in each direction for each ID.
 
@@ -49,7 +49,7 @@ class UnparametrizedStructureBuilder {
 	size_t solveConstrains(UnparametrizedStructure & structure);
 
 public:
-	UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property);
+	UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyInfo & _property);
 
 	/**
 	 * Create the states from the model and fill the structure with them.

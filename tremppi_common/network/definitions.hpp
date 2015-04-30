@@ -55,6 +55,9 @@ typedef uint16_t ActLevel;
 /// Vector of activation levels of species used for labelling of states of KS.
 typedef vector<ActLevel> Levels;
 
+/// Boundary inclusive range of a component activity
+typedef pair<ActLevel, ActLevel> ActRange;
+
 /// Transitional values in a state of BA.
 typedef vector<Levels> Configurations;
 

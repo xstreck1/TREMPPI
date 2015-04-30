@@ -3,7 +3,7 @@
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
 #include "automaton_interface.hpp"
-#include "property_automaton.hpp"
+#include "property_info.hpp"
 
 /// Single labelled transition from one state to another.
 struct AutTransitionion : public TransitionProperty {

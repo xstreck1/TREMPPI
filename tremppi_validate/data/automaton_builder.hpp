@@ -7,7 +7,7 @@
  */
 
 #include <tremppi_common/network/data_info.hpp>
-#include "../data/property_automaton.hpp"
+#include "../data/property_info.hpp"
 #include "automaton_structure.hpp"
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AutomatonBuilder {
 	const RegInfos & reg_infos; ///< Model that holds the data.
-	const PropertyAutomaton & property_automaton;
+	const PropertyInfo & property_info;
 
 	vector<string> names; ///< Name of the i-th specie.
 	Levels maxes; ///< Maximal activity levels of the species.
@@ -34,7 +34,7 @@ class AutomatonBuilder {
 	void addTransitions(AutomatonStructure & automaton, const StateID ID) const;
 
 	/**
-	 * @brief setAutType sets type of the automaton based on the type of the property_automaton
+	 * @brief setAutType sets type of the automaton based on the type of the property_info
 	 */
 	void setAutType(AutomatonStructure & automaton);
 
@@ -42,7 +42,7 @@ class AutomatonBuilder {
 	vector<PathCons> transformConstraints(const map<string, PathCons>& constraints_list);
 
 public:
-	AutomatonBuilder(const RegInfos & _reg_infos, const PropertyAutomaton & _property_automaton);
+	AutomatonBuilder(const RegInfos & _reg_infos, const PropertyInfo & _property_info);
 
 	/**
 	 * Create the transitions from the model and fill the automaton with them.

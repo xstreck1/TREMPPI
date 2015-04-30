@@ -50,7 +50,7 @@ int tremppi_validate(int argc, char ** argv) {
 	}
 
 	// Parse the properties
-	vector<PropertyAutomaton> automata;
+	vector<PropertyInfo> automata;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing the properties.";
 
@@ -63,7 +63,7 @@ int tremppi_validate(int argc, char ** argv) {
 
 	// Conduct the check for each of the properties
 	logging.newPhase("Checking properties", automata.size());
-	for (const PropertyAutomaton & automaton : automata) {
+	for (const PropertyInfo & automaton : automata) {
 		ProductStructure product;
 		// Construction of data structures
 		try {

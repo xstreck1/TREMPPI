@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../data/product_structure.hpp"
-#include "../data/property_automaton.hpp"
+#include "../data/property_info.hpp"
 
 class CheckerSetting {
 public:

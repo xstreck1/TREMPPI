@@ -1,6 +1,6 @@
 #include "properties_reader.hpp"
 
-pair<ActLevel, ActLevel> PropertiesReader::readExperiment(const string & value, const string & property_name, const string & comp_name, const ActLevel max_activity) {
+pair<ActLevel, ActLevel> PropertiesReader::readBoundary(const string & value, const string & property_name, const string & comp_name) {
 	pair<ActLevel, ActLevel> bound = { 0, INF };
 	std::smatch sm;
 	// Bound is specified
@@ -24,33 +24,7 @@ pair<ActLevel, ActLevel> PropertiesReader::readExperiment(const string & value, 
 	else if (value != "") {
 		throw invalid_argument("unknown value " + value + " for the component " + comp_name + " of the property " + property_name);
 	}
-	// Corrections on the bounds
-	if (bound.first > bound.second)
-		throw invalid_argument("invalid value " + value + " for the component " + comp_name + " of the property " + property_name);
-	bound.second = std::min(max_activity, bound.second);
 	return bound;
-}
-
-string PropertiesReader::getStateConstraint(const string & value, const string & comp_name) {
-	std::smatch sm;
-	if (regex_match(value, sm, INT_NUM)) {
-		return comp_name + "=" + sm[0].str() + "&";
-	}
-	else if (regex_match(value, sm, INT_BOUNDARY)) {
-		if (sm[1].str() == "(") {
-			return comp_name + ">" + sm[2].str() + "&";
-		}
-		else {
-			return comp_name + ">=" + sm[2].str() + "&";
-		}
-		if (sm[4].str() == ")") {
-			return comp_name + "<" + sm[3].str() + "&";
-		}
-		else {
-			return comp_name + "<=" + sm[3].str() + "&";
-		}
-	}
-	else return "";
 }
 
 pair<string, PathCons> PropertiesReader::getTransitionConstraint(const string & constraint, const string & comp_name) {
@@ -68,10 +42,22 @@ pair<string, PathCons> PropertiesReader::getTransitionConstraint(const string & 
 	}
 }
 
-vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & reg_infos, Json::Value & properties) {
-	vector<PropertyAutomaton> automata;
+vector<string> getComponent(const Json::Value & properties) {
+	vector<string> result;
+
+	for (const Json::Value & component : properties["components"]) {
+		result.emplace_back(component.asString());
+	}
+
+	sort(WHOLE(result));
+	return result;
+}
+
+vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties) {
+	vector<PropertyInfo> automata;
+	const vector<string> components = getComponent(properties);
 	for (const Json::Value & property_node : properties) {
-		PropertyAutomaton automaton;
+		PropertyInfo automaton;
 
 		// Skip those that are not in use
 		if (!property_node["validate"].asBool()) {
@@ -92,66 +78,61 @@ vector<PropertyAutomaton> PropertiesReader::jsonToProperties(const RegInfos & re
 		}
 
 		// Get the experiment bounds
-		for (const RegInfo & reg_info : reg_infos) {
-			string value = property_node[reg_info.name].asString();
-			pair<ActLevel, ActLevel> component_bound = readExperiment(value, automaton.name, reg_info.name, reg_info.max_activity);
-			automaton.bounds.push_back(component_bound);
-		}
-
-		StateID ID = 0;
-
-		// Add an accepting first state
-		if (automaton.prop_type == "cycle") {
-			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true,{}, PropertyAutomaton::Edges({ { 1, "tt" } }) });
-			ID++;
+		for (const string & component : components) {
+			const string value = property_node[component].asString();
+			if (!value.empty()) {
+				pair<ActLevel, ActLevel> component_bound = readBoundary(value, automaton.name, component);
+				automaton.bounds.insert({ component, component_bound });
+			}
 		}
 
 		// Parse records
-		size_t record_i = 0;
-		map<string, PathCons> trans_consts;
-		for (const Json::Value & record : property_node["records"]) {
-			string state_constraint;
+		map<string, PathCons> last_trans;
+		for (const const Json::Value & record : property_node["records"]) {
+			map<string, ActRange> state_consts;
+			map<string, PathCons> path_consts;
 
 			// get the constraint
-			for (const RegInfo & reg_info : reg_infos) {
-				string value = record[reg_info.name + "_value"].asString();
-				state_constraint += PropertiesReader::getStateConstraint(value, reg_info.name);
-			}
-			state_constraint.resize(std::max(0, static_cast<int>(state_constraint.size()) - 1));
-			string negation = "!(" + state_constraint + ")";
+			for (const string & component : components) {
+				if (record.isMember(component + "_value") && !record[component + "_value"].asString().empty()) {
+					const string state_str = record[component + "_value"].asString();
+					state_consts.insert({ component,  PropertiesReader::readBoundary(state_str, component) });
+				}
 
-			if (record_i == 0) {
-				automaton.init_condition = state_constraint;
-				if (automaton.prop_type == "cycle") {
-					automaton.acc_condition = state_constraint;
+				if (record.isMember(component + "_delta") && !record[component + "_delta"].asString().empty()) {
+					const string trans_str = record[component + "_delta"].asString();
+					state_consts.insert({ component,  PropertiesReader::getTransitionConstraint(trans_str, component) });
 				}
 			}
-			else if (record_i == property_node["records"].size() - 1 && automaton.prop_type != "cycle") {
-				automaton.acc_condition = state_constraint;
-			}
-			else {
-				automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, false, move(trans_consts),{ { ID, negation },{ ID + 1, state_constraint } } });
-				ID++;
-			}
 
-			// get the constraints
-			for (const RegInfo & reg_info : reg_infos) {
-				const string constraint = record[reg_info.name + "_delta"].asString();
-				trans_consts.insert(getTransitionConstraint(constraint, reg_info.name));
-			}
-			record_i++;
-		}
 
-		// Loop to the first
-		if (automaton.prop_type == "cycle") {
-			automaton.states.back().edges.back().target_ID = 0;
-		}
-		// Add a new state to the end that has a loop and compies the requirement for stables
-		if (automaton.prop_type == "series" || automaton.prop_type == "stable") {
-			automaton.states.emplace_back(PropertyAutomaton::State{ to_string(ID), ID, true, move(trans_consts),{ { ID, "tt" } } });
+			const StateID ID = automaton.states.size();
+			automaton.states.emplace_back(PropertyInfo::State{ automaton.states.size(), move(state_consts), move(path_consts) });
 		}
 
 		automata.emplace_back(move(automaton));
 	}
 	return automata;
+}
+
+pair<Levels, Levels> PropertiesReader::getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info) {
+	// Impose constraints
+	pair<Levels, Levels> result = { Levels(reg_infos.size(), INF), Levels(reg_infos.size(), INF) };
+	transform(WHOLE(reg_infos), begin(result.first), [&property_info](const RegInfo & reg_info) {
+		if (property_info.bounds.count(reg_info.name) > 0) {
+			return property_info.bounds.at(reg_info.name).first;
+		}
+		else {
+			return static_cast<ActLevel>(0);
+		}
+	});
+	transform(WHOLE(reg_infos), begin(result.second), [&property_info](const RegInfo & reg_info) {
+		if (property_info.bounds.count(reg_info.name) > 0) {
+			return property_info.bounds.at(reg_info.name).second;
+		}
+		else {
+			return reg_info.max_activity;
+		}
+	});
+	return result;
 }
