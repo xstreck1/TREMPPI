@@ -1,15 +1,14 @@
 #include "unparametrized_structure.hpp"
 
-void UnparametrizedStructure::addState(const StateID ID, Levels species_level) {
-	GraphInterface<TSStateProperty>::states.emplace_back(TSStateProperty(ID, move(species_level)));
+UnparametrizedStructure::UnparametrizedStructure(const tuple<Levels, Levels, Levels> & bounds) 
+	: _bounds{ bounds } {}
+
+void UnparametrizedStructure::addState(const StateID ID, const Levels & levels) {
+	GraphInterface<TSStateProperty>::_states.emplace_back(TSStateProperty(ID, levels));
 }
 
-/**
-* @param ID	add data to the state with this IS
-* Add a new transition to the source specie, containg necessary edge labels for the CMC
-*/
-void UnparametrizedStructure::addTransition(const StateID ID, const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_level) {
-	GraphInterface<TSStateProperty>::states[ID].transitions.push_back(TSTransitionProperty(target_ID, param_no, req_dir, req_level));
+void UnparametrizedStructure::addTransition(const StateID ID, const StateID target_ID, const ParamNo fun_no, const bool req_dir, const ActLevel req_level) {
+	GraphInterface<TSStateProperty>::_states[ID]._transitions.push_back(TSTransitionProperty(target_ID, fun_no, req_dir, req_level));
 }
 
 StateID UnparametrizedStructure::getID(const Levels & levels) const {
@@ -17,8 +16,8 @@ StateID UnparametrizedStructure::getID(const Levels & levels) const {
 	size_t factor = 1;
 
 	for (size_t lvl_no = 0; lvl_no < levels.size(); lvl_no++) {
-		result += (levels[lvl_no] - mins[lvl_no]) * factor;
-		factor *= (range_size[lvl_no]);
+		result += (levels[lvl_no] - get<0>(_bounds)[lvl_no]) * factor;
+		factor *= (get<2>(_bounds)[lvl_no]);
 	}
 
 	return result;

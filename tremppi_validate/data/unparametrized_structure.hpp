@@ -15,31 +15,19 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class UnparametrizedStructure : public TSInterface<TSStateProperty> {
-	friend class UnparametrizedStructureBuilder;
-	Levels maxes; ///< Maximal activity levels of the components.
-	Levels mins; ///< Minimal activity levels of the components.
-	Levels range_size; ///< Differences between the two.
+	tuple<Levels, Levels, Levels> _bounds;
 
 public:
-	UnparametrizedStructure() = default;
-	UnparametrizedStructure(UnparametrizedStructure &&) = default;
-	UnparametrizedStructure(const UnparametrizedStructure &) = delete;
-	UnparametrizedStructure& operator=(const UnparametrizedStructure &) = delete;
-	UnparametrizedStructure& operator=(UnparametrizedStructure && other) {
-		states = move(other.states);
-		return *this;
-	}
+	UnparametrizedStructure(tuple<Levels, Levels, Levels> bounds);
+	NO_COPY_SHORT(UnparametrizedStructure);
+	DEFAULT_MOVE(UnparametrizedStructure);
 
-	/**
-	  * Add a new state, only with ID and levels
-	  */
-	void addState(const StateID ID, Levels species_level);
+	// Add a new state, only with ID and levels
+	void addState(const StateID ID, const Levels & levels);
 
-	/**
-	 * @param ID	add data to the state with this IS
-	 * Add a new transition to the source specie, containg necessary edge labels for the CMC
-	 */
-	void addTransition(const StateID ID, const StateID target_ID, const uint16_t param_no, const bool req_dir, const ActLevel req_level);
+	// Add a new transition to the source specie, containg necessary edge labels for the CMC
+	void addTransition(const StateID ID, const StateID target_ID, const ParamNo fun_no, const bool req_dir, const ActLevel req_level);
 
+	// convert the levels to a state ID
 	StateID getID(const Levels & levels) const;
 };

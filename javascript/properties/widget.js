@@ -5,7 +5,6 @@
  */
 
 /* global tremppi */
-
 tremppi.properties.tableList = function (list, components) {
     if (typeof list.records === 'undefined') {
         list.records = [];
@@ -16,8 +15,36 @@ tremppi.properties.tableList = function (list, components) {
         {field: 'name', caption: 'Name', size: '200px', resizable: true, sortable: true,
             editable: {type: 'text'}
         },
-        {field: 'type', caption: 'Type', size: '60px', resizable: true,
-            editable: {type: 'select', items: ["series", "stable", "cycle"]}
+        {field: 'ending', caption: 'Ending', size: '70px', resizable: true,
+            editable: {type: 'select', items: [	"any",
+						"stable",
+						"goto A",
+						"goto B",
+						"goto C",
+						"goto D",
+						"goto E",
+						"goto F",
+						"goto G",
+						"goto H",
+						"goto I",
+						"goto J",
+						"goto K",
+						"goto L",
+						"goto M",
+						"goto N",
+						"goto O",
+						"goto P",
+						"goto Q",
+						"goto R",
+						"goto S",
+						"goto T",
+						"goto U",
+						"goto V",
+						"goto W",
+						"goto X",
+						"goto Y",
+						"goto Z" ]
+        }
         },
         {field: 'validate', caption: 'V', size: '20px', resizable: false,
             editable: {type: 'checkbox'}
@@ -64,8 +91,8 @@ tremppi.properties.tableDetail = function (detail, components) {
         toolbarAdd: false, toolbarDelete: false
     };
 
-    detail.columns = [];
-    detail.columnGroups = [];
+    detail.columns = [{field: 'id', caption: 'Id', size: '30px' }];
+    detail.columnGroups = [{span: 1, caption: ''}];
     components.forEach(function (component) {
         detail.columnGroups.push({
             span: 2,

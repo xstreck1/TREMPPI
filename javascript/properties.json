@@ -7,6 +7,10 @@
 	"detail": {
 		"columnGroups": [
 			{
+				"span": 1,
+				"caption": ""
+			},
+			{
 				"span": 2,
 				"caption": "A"
 			},
@@ -16,6 +20,11 @@
 			}
 		],
 		"columns": [
+			{
+				"field": "id",
+				"caption": "Id",
+				"size": "30px"
+			},
 			{
 				"field": "A_value",
 				"caption": "Value",
@@ -89,15 +98,40 @@
 			},
 			{
 				"field": "type",
-				"caption": "Type",
-				"size": "60px",
+				"caption": "Ending",
+				"size": "70px",
 				"resizable": true,
 				"editable": {
 					"type": "select",
 					"items": [
-						"series",
+						"any",
 						"stable",
-						"cycle"
+						"goto A",
+						"goto B",
+						"goto C",
+						"goto D",
+						"goto E",
+						"goto F",
+						"goto G",
+						"goto H",
+						"goto I",
+						"goto J",
+						"goto K",
+						"goto L",
+						"goto M",
+						"goto N",
+						"goto O",
+						"goto P",
+						"goto Q",
+						"goto R",
+						"goto S",
+						"goto T",
+						"goto U",
+						"goto V",
+						"goto W",
+						"goto X",
+						"goto Y",
+						"goto Z"
 					]
 				}
 			},
@@ -168,181 +202,52 @@
 		"records": [
 			{
 				"recid": 0,
-				"type": "series",
+				"type": "any",
 				"name": "property0",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 1,
-				"type": "series",
-				"name": "property1",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 2,
-				"type": "series",
-				"name": "property2",
 				"validate": false,
 				"witness": false,
 				"robustness": false,
 				"simulate": false,
 				"records": [
 					{
-						"recid": 1,
-						"changes": {},
-						"A_value": "d"
+						"recid": 0,
+						"id": "A"
 					},
 					{
-						"recid": 0
+						"recid": 1,
+						"id": "B"
+					},
+					{
+						"recid": 2,
+						"id": "C"
+					},
+					{
+						"recid": 3,
+						"id": "D"
+					},
+					{
+						"recid": 4,
+						"id": "E"
+					},
+					{
+						"recid": 5,
+						"id": "F",
+						"changes": {},
+						"A_value": ""
+					},
+					{
+						"recid": 6,
+						"id": "G"
+					},
+					{
+						"recid": 7,
+						"id": "H"
 					}
 				],
 				"A": "",
 				"B": "",
+				"id": null,
 				"changes": {}
-			},
-			{
-				"recid": 3,
-				"type": "series",
-				"name": "property3",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 4,
-				"type": "series",
-				"name": "property4",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 5,
-				"type": "series",
-				"name": "property5",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 6,
-				"type": "series",
-				"name": "property6",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 7,
-				"type": "series",
-				"name": "property7",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 8,
-				"type": "series",
-				"name": "property8",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 9,
-				"type": "series",
-				"name": "property9",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 13,
-				"type": "series",
-				"name": "property13",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 12,
-				"type": "series",
-				"name": "property12",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 11,
-				"type": "series",
-				"name": "property11",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
-			},
-			{
-				"recid": 10,
-				"type": "series",
-				"name": "property10",
-				"validate": false,
-				"witness": false,
-				"robustness": false,
-				"simulate": false,
-				"records": [],
-				"A": "",
-				"B": ""
 			}
 		],
 		"show": {

@@ -16,36 +16,13 @@
  /// This builder creates a basic automaton controlling property - this automaton is based on the AutomatonInterface.
  /// Automaton is provided with string labels on the edges that are parsed and resolved for the graph.
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class AutomatonBuilder {
-	const RegInfos & reg_infos; ///< Model that holds the data.
-	const PropertyInfo & property_info;
-
-	vector<string> names; ///< Name of the i-th specie.
-	Levels maxes; ///< Maximal activity levels of the species.
-	Levels mins; ///< Minimal activity levels of the species.
-	Levels range_size; ///< Number of valid values for the species.
-
+namespace AutomatonBuilder {
 	// Compute allowed values from string of constrains
-	ConstraintParser * constrToParser(const string & state_constraint) const;
-
-	/**
-	 * Creates transitions from labelled edges of BA and passes them to the automaton structure.
-	 */
-	void addTransitions(AutomatonStructure & automaton, const StateID ID) const;
-
-	/**
-	 * @brief setAutType sets type of the automaton based on the type of the property_info
-	 */
-	void setAutType(AutomatonStructure & automaton);
+	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const bool negate);
 
 	//
-	vector<PathCons> transformConstraints(const map<string, PathCons>& constraints_list);
+	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);
 
-public:
-	AutomatonBuilder(const RegInfos & _reg_infos, const PropertyInfo & _property_info);
-
-	/**
-	 * Create the transitions from the model and fill the automaton with them.
-	 */
-	AutomatonStructure buildAutomaton();
+	// Create the transitions from the model and fill the automaton with them.
+	AutomatonStructure buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names);
 };

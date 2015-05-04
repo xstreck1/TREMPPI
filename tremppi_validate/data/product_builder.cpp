@@ -10,7 +10,7 @@ void ProductBuilder::createSubspace(const StateID BA_ID, ProductStructure & prod
 
 void ProductBuilder::relabel(const StateID BA_ID, ProductStructure & product) const {
 	if (product.getAutomaton().isInitial(BA_ID)) {
-		Gecode::DFS<ConstraintParser> search(product.getAutomaton().init_constr);
+		Gecode::DFS<ConstraintParser> search(product.getAutomaton().init_constr.get());
 		while (ConstraintParser *result = search.next()) {
 			auto solution = result->getSolution();
 			StateID KS_ID = product.getStructure().getID(solution);
@@ -23,7 +23,7 @@ void ProductBuilder::relabel(const StateID BA_ID, ProductStructure & product) co
 		}
 	}
 	if (product.getAutomaton().isFinal(BA_ID)) {
-		Gecode::DFS<ConstraintParser> search(product.getAutomaton().acc_constr);
+		Gecode::DFS<ConstraintParser> search(product.getAutomaton().acc_constr.get());
 		while (ConstraintParser *result = search.next()) {
 			auto solution = result->getSolution();
 			StateID KS_ID = product.getStructure().getID(solution);
@@ -43,7 +43,7 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 	StateID BA_target = automaton.getTargetID(BA_ID, trans_no);
 
 	// List through the states that are allowed by the constraint
-	Gecode::DFS<ConstraintParser> search(automaton.getTransitionConstraint(BA_ID, trans_no));
+	Gecode::DFS<ConstraintParser> search(automaton.getStateConstr(BA_ID, trans_no));
 	while (ConstraintParser *result = search.next()) {
 		auto solution = result->getSolution();
 		// bool is_ss = static_cast<bool>(solution[solution.size() - 1]);
@@ -56,7 +56,7 @@ void ProductBuilder::addSubspaceTransitions(const StateID BA_ID, const size_t tr
 			const StateID KS_target = product.getStructure().getTargetID(KS_ID, trans_no);
 			const TransConst & trans_const = product.getStructure().getTransitionConst(KS_ID, trans_no);
 			// If the transition does not meet the stability requirements, add transition to hell (infty)
-			const StateID t_ID = matchesConstraints(structure, KS_ID, KS_target, automaton.getPathCons(BA_ID)) ? product.getProductID(KS_target, BA_target) : INF;
+			const StateID t_ID = matchesConstraints(structure, KS_ID, KS_target, automaton.getPathCons(BA_ID, trans_no)) ? product.getProductID(KS_target, BA_target) : INF;
 			product.states[ID].transitions.push_back({ t_ID, trans_const });
 		}
 

@@ -68,7 +68,7 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 		automaton.witness = property_node["witness"].asBool();
 
 		automaton.name = property_node["name"].asString();
-		automaton.prop_type = property_node["type"].asString();
+		automaton.ending = property_node["ending"].asString();
 
 		try {
 			automaton.bound = property_node["bound"].asInt();
@@ -113,26 +113,4 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 		automata.emplace_back(move(automaton));
 	}
 	return automata;
-}
-
-pair<Levels, Levels> PropertiesReader::getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info) {
-	// Impose constraints
-	pair<Levels, Levels> result = { Levels(reg_infos.size(), INF), Levels(reg_infos.size(), INF) };
-	transform(WHOLE(reg_infos), begin(result.first), [&property_info](const RegInfo & reg_info) {
-		if (property_info.bounds.count(reg_info.name) > 0) {
-			return property_info.bounds.at(reg_info.name).first;
-		}
-		else {
-			return static_cast<ActLevel>(0);
-		}
-	});
-	transform(WHOLE(reg_infos), begin(result.second), [&property_info](const RegInfo & reg_info) {
-		if (property_info.bounds.count(reg_info.name) > 0) {
-			return property_info.bounds.at(reg_info.name).second;
-		}
-		else {
-			return reg_info.max_activity;
-		}
-	});
-	return result;
 }

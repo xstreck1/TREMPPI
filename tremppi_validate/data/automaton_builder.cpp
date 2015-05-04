@@ -1,34 +1,37 @@
 #include "automaton_builder.hpp"
 
-ConstraintParser *  AutomatonBuilder::constrToParser(const string & state_constraint) const {
-	ConstraintParser * parser = new ConstraintParser(maxes.size(), *max_element(maxes.begin(), maxes.end()));
-	parser->applyFormula(names, state_constraint);
-	parser->addBoundaries(maxes, true);
-	parser->addBoundaries(mins, false);
-	return parser;
-}
+Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const bool negate) {
+	Configurations result(names.size());
 
-void AutomatonBuilder::addTransitions(AutomatonStructure & automaton, const StateID ID) const {
-	const PropertyInfo::Edges & edges = property_info.states[ID].edges;
-
-	// Transform each edge into transition and pass it to the automaton
-	for (const PropertyInfo::Edge & edge : edges) {
-		automaton.addTransition(ID, { edge.target_ID, constrToParser(edge.state_constraint) });
+	for (const CompID ID : cscope(names)) {
+		Levels accepted;
+		if (state_constraint.count(names[ID]) == 0) {
+			accepted = vrange(get<0>(bounds)[ID], get<1>(bounds)[ID]);
+		}
+		else {
+			const ActRange constr_range = state_constraint.at(names[ID]);
+			if (negate) {
+				for (const ActLevel act_level : crange(get<0>(bounds)[ID], get<1>(bounds)[ID])) {
+					if (act_level < get<0>(bounds)[ID] || act_level > get<1>(bounds)[ID]) {
+						accepted.emplace_back(act_level);
+					}
+				}
+			} else {
+				for (const ActLevel act_level : crange(get<0>(bounds)[ID], get<1>(bounds)[ID])) {
+					if (act_level >= get<0>(bounds)[ID] && act_level <= get<1>(bounds)[ID]) {
+						accepted.emplace_back(act_level);
+					}
+				}
+			} 
+		}
+		result.emplace_back(move(accepted));
 	}
+
+	return result;
 }
 
-void AutomatonBuilder::setAutType(AutomatonStructure & automaton) {
-	if (property_info.prop_type == "series")
-		automaton.my_type = BA_finite;
-	else if (property_info.prop_type == "stable")
-		automaton.my_type = BA_stable;
-	else if (property_info.prop_type == "cycle")
-		automaton.my_type = BA_standard;
-	else
-		throw runtime_error("Type of the verification automaton is not known.");
-}
 
-vector<PathCons> AutomatonBuilder::transformConstraints(const map<string, PathCons>& constraints_list) {
+vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names) {
 	vector<PathCons> result;
 
 	for (const string & name : names) {
@@ -43,35 +46,36 @@ vector<PathCons> AutomatonBuilder::transformConstraints(const map<string, PathCo
 	return result;
 }
 
-AutomatonBuilder::AutomatonBuilder(const RegInfos & _reg_infos, const PropertyInfo & _property_info) : reg_infos(_reg_infos), property_info(_property_info) {
-	pair<Levels, Levels> bounds = PropertiesReader::getBounds(reg_infos, property_info);
-	mins = bounds.first; maxes = bounds.second;
-	rng::transform(maxes, mins, back_inserter(range_size), [](const ActLevel max, const ActLevel min) {return max - min + 1; });
-
-	for (const CompID ID : cscope(reg_infos)) {
-		names.push_back(reg_infos[ID].name);
+AutomatonStructure AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names) {
+	if (property_info.ending == "any") {
+		AutomatonStructure automaton(BA_finite, 
+			makeStateConst(property_info.states.front().state_constraints, bounds, names, false), 
+			makeStateConst(property_info.states.back().state_constraints, bounds, names, false));
+		for (const StateID ID : crange(1u, property_info.states.size())) {
+			const bool initial = ID == 1; 
+			const bool final = ID == property_info.states.size() - 1;
+			automaton.addState(ID - 1, initial, final);
+			automaton.addTransition(ID - 1, ID - 1,
+				makeStateConst(property_info.states[ID].state_constraints, bounds, names, true),
+				makePathConst(property_info.states[ID - 1].path_constraints, names));
+			if (!final) {
+				automaton.addTransition(ID - 1, ID,
+					makeStateConst(property_info.states[ID].state_constraints, bounds, names, false),
+					makePathConst(property_info.states[ID].path_constraints, names));
+			}
+		}
+		return automaton;
 	}
-}
-
-AutomatonStructure AutomatonBuilder::buildAutomaton() {
-	AutomatonStructure automaton;
-	setAutType(automaton);
-	const size_t state_count = property_info.states.size();
-	size_t state_no = 0;
-
-	automaton.init_constr = AutomatonBuilder::constrToParser(property_info.init_condition);
-	automaton.acc_constr = AutomatonBuilder::constrToParser(property_info.acc_condition);
-
-	// List throught all the automaton states
-	for (StateID ID : cscope(property_info.states)) {
-		// Conver
-		vector<PathCons> constraints = transformConstraints(property_info.states[ID].constraints_list);
-
-		// Fill auxiliary data
-		automaton.addState(ID, property_info.states[ID].final, constraints);
-		// Add transitions for this state
-		addTransitions(automaton, ID);
+	else if (property_info.ending == "stable") {
+		AutomatonStructure automaton(BA_stable, {}, {});
+		return automaton;
 	}
-
-	return automaton;
+	else if (property_info.ending.substr(0,4) == "goto") {
+		AutomatonStructure automaton(BA_standard, {}, {});
+		return automaton;
+	}
+	else {
+		throw runtime_error("Unknown property type " + property_info.ending + " of the property " + property_info.name);
+		return AutomatonStructure(BA_standard, {}, {});
+	}
 }

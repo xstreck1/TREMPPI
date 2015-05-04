@@ -1,71 +1,45 @@
 #include "automaton_structure.hpp"
 
-AutTransitionion::~AutTransitionion() {
-	DEL_IF_EXISTS(trans_constr)
+AutTransitionion::AutTransitionion(const StateID t_ID, const Configurations & state_constr, const vector<PathCons> & path_constr)
+	: TransitionProperty{ t_ID }, _state_constr{ state_constr }, _path_constr{path_constr} {}
+
+AutState::AutState(const StateID ID, const bool is_initial, const bool is_final)
+	: AutomatonStateProperty<AutTransitionion>(ID, is_initial, is_final) {}
+
+AutomatonStructure::AutomatonStructure(const AutType aut_type, const Configurations & init_const, const Configurations & acc_constr)
+	: _init_constr{ init_const }, _acc_constr(acc_constr) 
+{ 
+	_aut_type = aut_type;
 }
 
-AutTransitionion::AutTransitionion(AutTransitionion && other) : TransitionProperty{ other.target_ID } {
-	trans_constr = other.trans_constr;
-	other.trans_constr = nullptr;
-}
-
-AutTransitionion::AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr)
-	: TransitionProperty( target_ID ), trans_constr(_trans_constr) {}
-
-AutState::AutState(const StateID ID, const bool final, vector<PathCons> _path_cons)
-	: AutomatonStateProperty<AutTransitionion>((ID == 0), final, ID), path_cons(move(_path_cons)) {}
-
-AutomatonStructure::AutomatonStructure() {
-	init_constr = nullptr;
-	acc_constr = nullptr;
-}
-
-AutomatonStructure::~AutomatonStructure() {
-	DEL_IF_EXISTS(init_constr);
-	DEL_IF_EXISTS(acc_constr);
-}
-
-AutomatonStructure & AutomatonStructure::operator=(AutomatonStructure && other) {
-	states = move(other.states);
-	my_type = other.my_type;
-	initial_states = move(other.initial_states);
-	final_states = move(other.final_states);
-	init_constr = other.init_constr;
-	other.init_constr = nullptr;
-	acc_constr = other.acc_constr;
-	other.acc_constr = nullptr;
-	return *this;
-}
-
-AutomatonStructure::AutomatonStructure(AutomatonStructure && other) {
-	states = move(other.states);
-	my_type = other.my_type;
-	initial_states = move(other.initial_states);
-	final_states = move(other.final_states);
-	init_constr = other.init_constr;
-	other.init_constr = nullptr;
-	acc_constr = other.acc_constr;
-	other.acc_constr = nullptr;
-}
-
-void AutomatonStructure::AutomatonStructure::addState(const StateID ID, const bool final, vector<PathCons> path_cons) {
-	states.push_back(AutState{ ID, final, move(path_cons) });
-	if (ID == 0) {
-		initial_states.push_back(ID);
+void AutomatonStructure::AutomatonStructure::addState(const StateID ID, const bool is_initial, const bool is_final) {
+	_states.push_back(AutState{ ID, is_initial, is_final });
+	if (is_initial) {
+		_initial_states.push_back(ID);
 	}
-	if (final) {
-		final_states.push_back(ID);
+	if (is_final) {
+		_final_states.push_back(ID);
 	}
 }
 
-void AutomatonStructure::addTransition(const StateID ID, AutTransitionion transition) {
-	states[ID].transitions.push_back(move(transition));
+void AutomatonStructure::addTransition(const StateID ID, const StateID t_ID, const Configurations & state_constr, const vector<PathCons> & path_constr) {
+	_states[ID]._transitions.push_back(AutTransitionion(t_ID, state_constr, path_constr));
 }
 
-ConstraintParser * AutomatonStructure::getTransitionConstraint(const StateID ID, const size_t trans_no) const {
-	return states[ID].transitions[trans_no].trans_constr;
+const Configurations & AutomatonStructure::getStateConstr(const StateID ID, const size_t trans_no) const {
+	return _states[ID]._transitions[trans_no]._state_constr;
 }
 
-const vector<PathCons>& AutomatonStructure::getPathCons(const StateID ID) const {
-	return states[ID].path_cons;
+const vector<PathCons> & AutomatonStructure::getPathConstr(const StateID ID, const size_t trans_no) const {
+	return _states[ID]._transitions[trans_no]._path_constr;
 }
+
+const Configurations & AutomatonStructure::getInitConstr() const {
+	return _init_constr;
+}
+
+const Configurations & AutomatonStructure::getAccConstr() const {
+	return _acc_constr;
+}
+
+

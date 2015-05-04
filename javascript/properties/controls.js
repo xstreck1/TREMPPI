@@ -92,6 +92,11 @@ tremppi.properties.listSelect = function (event) {
     tremppi.properties.detail.refresh();
 };
 
+tremppi.properties.assignLetters = function(records) {
+    var letter = 65;
+    records.forEach(function(record){ record.id = String.fromCharCode(letter++);});
+};
+
 tremppi.properties.detailClick = function (event) {
     if (event.type === 'toolbar' && tremppi.properties.detailed !== -1) {
         var records = tremppi.properties.detail.records;
@@ -102,7 +107,7 @@ tremppi.properties.detailClick = function (event) {
         else if (event.target === 'down') {
             tremppi.w2ui.down(grid, records);
         }
-        else if (event.target === 'add') {
+        else if (event.target === 'add' && records.length < 26) {
             var recID = tremppi.w2ui.getFreeRecID(records);
             records.push({recid: recID});
             grid.records = records;
@@ -114,6 +119,7 @@ tremppi.properties.detailClick = function (event) {
             tremppi.w2ui.deleteSelected(records, grid);
         }
 
+        tremppi.properties.assignLetters(records);
         grid.refresh();
         tremppi.properties.save();
     }

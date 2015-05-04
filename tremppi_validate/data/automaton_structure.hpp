@@ -7,22 +7,18 @@
 
 /// Single labelled transition from one state to another.
 struct AutTransitionion : public TransitionProperty {
-	mutable ConstraintParser * trans_constr; ///< Allowed values of species for this transition.
+	Configurations _state_constr; //< Boundary on the state values in the current configuraion
+	vector<PathCons> _path_constr; //< Contraints on trainsitions from this state (ordered by components)
 
 	// Move constructor is necessary as the parent (Automaton) is passed around by moving. The memory must be kept safe.
-	AutTransitionion(AutTransitionion && other);
-	AutTransitionion& operator=(AutTransitionion && other);
-	AutTransitionion(const StateID target_ID, ConstraintParser * _trans_constr);
-	AutTransitionion(const AutTransitionion &) = delete;
-	AutTransitionion& operator=(const AutTransitionion &) = delete;
-	~AutTransitionion();
+	AutTransitionion(const StateID target_ID, const Configurations & state_constr, const vector<PathCons> & path_constr);
+	NO_COPY_SHORT(AutTransitionion);
+	DEFAULT_MOVE(AutTransitionion);
 };
 
 /// Storing a single state of the Buchi automaton. This state is extended with a value saying wheter the states is final.
 struct AutState : public AutomatonStateProperty<AutTransitionion> {
-	vector<PathCons> path_cons; //< Contraints on trainsitions from this state (ordered by components)
-
-	AutState(const StateID ID, const bool final, vector<PathCons> _path_cons);
+	AutState(const StateID ID, const bool is_initial, const bool is_final);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,33 +28,31 @@ struct AutState : public AutomatonStateProperty<AutTransitionion> {
 /// AutomatonStructure data can be set only from the AutomatonStructureBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AutomatonStructure : public AutomatonInterface<AutState> {
+protected:
+	Configurations _init_constr;
+	Configurations _acc_constr;
+
 public:
-	friend class AutomatonBuilder;
-	AutomatonStructure();
-	AutomatonStructure(AutomatonStructure && other);
-	AutomatonStructure(const AutomatonStructure &) = delete;
-	AutomatonStructure& operator=(const AutomatonStructure &) = delete;
-	AutomatonStructure& operator= (AutomatonStructure && other);
-	~AutomatonStructure();
-
-	ConstraintParser * init_constr;
-	ConstraintParser * acc_constr;
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// FILLING METHODS (can be used only from AutomatonStructureBuilder)
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**
-	 * @param final	if true than state with index equal to the one of this vector is final
-	 */
-	void addState(const StateID ID, const bool final, vector<PathCons> stables);
+	AutomatonStructure(const AutType aut_type, const Configurations & init_const, const Configurations & acc_constr);
+	NO_COPY_SHORT(AutomatonStructure);
+	DEFAULT_MOVE(AutomatonStructure);
+	
+	// 
+	void addState(const StateID ID, const bool is_initial, const bool is_final);
 
 	//
-	void addTransition(const StateID ID, AutTransitionion transition);
+	void addTransition(const StateID ID, const StateID t_ID, const Configurations & state_constr, const vector<PathCons> & path_constr)
 
-	// Gecode accepts only a raw pointer for the searcher.
-	ConstraintParser * getTransitionConstraint(const StateID ID, const size_t trans_no) const;
+	// 
+	const Configurations & getStateConstr(const StateID ID, const size_t trans_no) const;
 
-	// @return	the the path constraints for the given state
-	const vector<PathCons>& getPathCons(const StateID ID) const;
+	// 
+	const vector<PathCons>& getPathConstr(const StateID ID, const size_t trans_no) const;
+
+	//
+	const Configurations & getInitConstr() const;
+
+	//
+	const Configurations & getAccConstr() const;
 };
 

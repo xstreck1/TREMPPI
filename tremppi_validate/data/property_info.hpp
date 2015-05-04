@@ -15,11 +15,12 @@ struct PropertyInfo {
 	};
 	vector<State> states; ///< vector of all states of the controlling Buchi automaton
 
-	map<string, ActRange> bounds;
-	string name;
-	string prop_type;
-	size_t bound;
-	bool robustness;
-	bool witness;
+	string name; // Identifier for the property
+	string ending; // What should happen after last measurement? (anything, stability is reached, there is return to another) 
+	map<string, ActRange> bounds; // Per component Range of component activity (bound inclusive)
+	// Execution constraints
+	size_t bound; // Maximal search depth...
+	bool robustness; // Should compute robustness?
+	bool witness; // Should compute witness?
 };
 

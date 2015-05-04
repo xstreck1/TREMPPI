@@ -12,12 +12,9 @@
 /// All the objects constructed are stored within a provided CostructionHolder and further acessible only via constant getters.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ConstructionManager {
-	/**
-	 * Function that constructs all the data in a cascade of temporal builders.
-	 */
+	// @return (Mins, Maxes, Range)
+	tuple<Levels, Levels, Levels> getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info);
+	
+	// Function that constructs all the data in a cascade of temporal builders.
 	ProductStructure construct(const RegInfos & reg_infos, const PropertyInfo & property);
-
-
-	// Tests whether the objects are constructible
-	void test(const RegInfos & reg_infos, const PropertyInfo & property);
 }
