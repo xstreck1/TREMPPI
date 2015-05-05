@@ -4,10 +4,10 @@
 * @return true if this transition is open for given parametrization
 */
 bool ModelChecker::isOpen(const Levels & parametrization, const TransConst & trans_cost) {
-	if (trans_cost.req_dir)
-		return parametrization[trans_cost.param_no] > trans_cost.req_value;
+	if (trans_cost._req_dir)
+		return parametrization[trans_cost._param_no] > trans_cost._req_value;
 	else
-		return parametrization[trans_cost.param_no] < trans_cost.req_value;
+		return parametrization[trans_cost._param_no] < trans_cost._req_value;
 }
 
 /**
@@ -46,7 +46,7 @@ VisitStorage ModelChecker::conductCheck(const ProductStructure & product, const 
 					sat = true;
 			}
 		}
-		if ((sat && _settings.bound_type == BoundType::min) || (_settings.bfs_bound <= storage.getCost() && _settings.bound_type == BoundType::step))
+		if ((sat && _settings.bound_type == BoundType::bt_min) || (_settings.bfs_bound <= storage.getCost() && _settings.bound_type == BoundType::bt_step))
 			updates.clear();
 		else
 			updates = move(next_updates);

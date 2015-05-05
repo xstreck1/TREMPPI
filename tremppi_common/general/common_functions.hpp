@@ -15,7 +15,7 @@
 		TypeName(TypeName && ) = default;  \
 		TypeName& operator=(TypeName && ) = default; \
 		TypeName(const TypeName & ) = delete; \
-		TypeName& operator=(const TypeName & ) = delete; 
+		TypeName& operator=(const TypeName & ) = delete;
 
 #define GROUNDED(TypeName) \
 		TypeName() = default;  \
@@ -135,6 +135,52 @@ namespace Common {
 			}
 		}
 		return true;
+	}
+
+	/**
+	* @brief Iterates values from left to right if it is possible. If so, return true, otherwise return false.
+	* @param[in] values	sets of values for each member, left to right    
+	* @param[in,out] iterated    vector of values to iterate
+	* @return  true if the iteration was valid, false if it caused overflow (iterated > bottom)
+	*/
+	template<typename IntegralType>
+	bool iterate(const std::vector<std::vector<IntegralType>>  & values, std::vector<IntegralType> & iterated) {
+		if (iterated.empty())
+			return false;
+		for (size_t val_num = 0; val_num <= iterated.size(); val_num++) {
+			if (val_num == iterated.size())
+				return false;
+			if (iterated[val_num] == values[val_num].back()) {
+				iterated[val_num] = values[val_num].front();
+			}
+			else {
+				iterated[val_num] = *(find(WHOLE(values[val_num]), iterated[val_num])++);
+				break;
+			}
+		}
+		return true;
+	}
+
+	template<typename IntegralType>
+	std::vector<IntegralType> min(const std::vector<std::vector<IntegralType>> & values) {
+		std::vector<IntegralType>  result(values.size());
+
+		for (size_t val_num = 0; val_num <= values.size(); val_num++) {
+			result[val_num] = values[val_num].front();
+		}
+
+		return result;
+	}
+
+	template<typename IntegralType>
+	std::vector<IntegralType> max(const std::vector<std::vector<IntegralType>> & values) {
+		std::vector<IntegralType> result(values.size());
+
+		for (size_t val_num = 0; val_num <= values.size(); val_num++) {
+			result[val_num] = values[val_num].back();
+		}
+
+		return result;
 	}
 
 	/**

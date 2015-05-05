@@ -30,8 +30,8 @@ size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, cons
 }
 
 WitnessSearcher::WitnessSearcher(const ProductStructure & _product) : product(_product) {
-	found = vector<size_t>(product.getStateCount(), INF);
-	used = vector<bool>(product.getStateCount(), false);
+	found = vector<size_t>(product.size(), INF);
+	used = vector<bool>(product.size(), false);
 }
 
 /**
@@ -72,9 +72,9 @@ const string WitnessSearcher::getOutput(const ProductStructure & product, const 
 			auto range = transitions.equal_range(ID);
 
 			for (auto it = range.first; it != range.second; it++) {
-				acceptable_paths.append(product.getString(ID, cost))
+				acceptable_paths.append(product.getString(ID) + "-" + to_string(cost))
 					.append(">")
-					.append(product.getString(it->second, cost + 1))
+					.append(product.getString(it->second) + "-" + to_string(cost+1))
 					.append(";");
 				next_depth.insert(it->second);
 			}

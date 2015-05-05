@@ -27,18 +27,18 @@ pair<ActLevel, ActLevel> PropertiesReader::readBoundary(const string & value, co
 	return bound;
 }
 
-pair<string, PathCons> PropertiesReader::getTransitionConstraint(const string & constraint, const string & comp_name) {
+PathCons PropertiesReader::getTransitionConstraint(const string & constraint, const string & comp_name) {
 	if (constraint == "stay") {
-		return make_pair(comp_name, PathCons::stay);
+		return PathCons::pc_stay;
 	}
 	else if (constraint == "up") {
-		return make_pair(comp_name, PathCons::up);
+		return PathCons::pc_up;
 	}
 	else if (constraint == "down") {
-		return make_pair(comp_name, PathCons::down);
+		return PathCons::pc_down;
 	}
 	else {
-		return make_pair(comp_name, PathCons::none);
+		return PathCons::pc_none;
 	}
 }
 
@@ -57,32 +57,32 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 	vector<PropertyInfo> automata;
 	const vector<string> components = getComponent(properties);
 	for (const Json::Value & property_node : properties) {
-		PropertyInfo automaton;
+		PropertyInfo property_info;
 
 		// Skip those that are not in use
 		if (!property_node["validate"].asBool()) {
 			continue;
 		}
 
-		automaton.robustness = property_node["robustness"].asBool();
-		automaton.witness = property_node["witness"].asBool();
+		property_info.robustness = property_node["robustness"].asBool();
+		property_info.witness = property_node["witness"].asBool();
 
-		automaton.name = property_node["name"].asString();
-		automaton.ending = property_node["ending"].asString();
+		property_info.name = property_node["name"].asString();
+		property_info.ending = property_node["ending"].asString();
 
 		try {
-			automaton.bound = property_node["bound"].asInt();
+			property_info.bound = property_node["bound"].asInt();
 		}
 		catch (exception & e) {
-			automaton.bound = INF;
+			property_info.bound = INF;
 		}
 
 		// Get the experiment bounds
 		for (const string & component : components) {
 			const string value = property_node[component].asString();
 			if (!value.empty()) {
-				pair<ActLevel, ActLevel> component_bound = readBoundary(value, automaton.name, component);
-				automaton.bounds.insert({ component, component_bound });
+				pair<ActLevel, ActLevel> component_bound = readBoundary(value, property_info.name, component);
+				property_info.bounds.insert({ component, component_bound });
 			}
 		}
 
@@ -96,21 +96,21 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 			for (const string & component : components) {
 				if (record.isMember(component + "_value") && !record[component + "_value"].asString().empty()) {
 					const string state_str = record[component + "_value"].asString();
-					state_consts.insert({ component,  PropertiesReader::readBoundary(state_str, component) });
+					state_consts.insert(make_pair(component,  PropertiesReader::readBoundary(state_str, property_info.name, component)));
 				}
 
 				if (record.isMember(component + "_delta") && !record[component + "_delta"].asString().empty()) {
 					const string trans_str = record[component + "_delta"].asString();
-					state_consts.insert({ component,  PropertiesReader::getTransitionConstraint(trans_str, component) });
+					path_consts.insert(make_pair(component,  PropertiesReader::getTransitionConstraint(trans_str, component)));
 				}
 			}
 
 
-			const StateID ID = automaton.states.size();
-			automaton.states.emplace_back(PropertyInfo::State{ automaton.states.size(), move(state_consts), move(path_consts) });
+			const StateID ID = property_info.states.size();
+			property_info.states.emplace_back(PropertyInfo::State{ property_info.states.size(), move(state_consts), move(path_consts) });
 		}
 
-		automata.emplace_back(move(automaton));
+		automata.emplace_back(move(property_info));
 	}
 	return automata;
 }

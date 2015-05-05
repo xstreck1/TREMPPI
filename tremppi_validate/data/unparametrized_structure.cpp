@@ -1,17 +1,11 @@
 #include "unparametrized_structure.hpp"
 
-UnparametrizedStructure::UnparametrizedStructure(const tuple<Levels, Levels, Levels> & bounds) 
-	: _bounds{ bounds } {}
-
-void UnparametrizedStructure::addState(const StateID ID, const Levels & levels) {
-	GraphInterface<TSStateProperty>::_states.emplace_back(TSStateProperty(ID, levels));
+void UnparametrizedStructure::setBounds(const tuple<Levels, Levels, Levels> & bounds) {
+	_bounds = bounds;
 }
 
-void UnparametrizedStructure::addTransition(const StateID ID, const StateID target_ID, const ParamNo fun_no, const bool req_dir, const ActLevel req_level) {
-	GraphInterface<TSStateProperty>::_states[ID]._transitions.push_back(TSTransitionProperty(target_ID, fun_no, req_dir, req_level));
-}
 
-StateID UnparametrizedStructure::getID(const Levels & levels) const {
+StateID UnparametrizedStructure::computeID(const Levels & levels) const {
 	StateID result = 0;
 	size_t factor = 1;
 
@@ -21,4 +15,8 @@ StateID UnparametrizedStructure::getID(const Levels & levels) const {
 	}
 
 	return result;
+}
+
+const tuple<Levels, Levels, Levels> & UnparametrizedStructure::getBounds() const {
+	return _bounds;
 }

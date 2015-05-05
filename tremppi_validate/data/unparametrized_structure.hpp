@@ -14,20 +14,19 @@
 /// UnparametrizedStructure data can be set only from the UnparametrizedStructureBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class UnparametrizedStructure : public TSInterface<TSStateProperty> {
+using USTransition = TSTransitionProperty;
+using USState = TSStateProperty<TSTransitionProperty>;
+
+class UnparametrizedStructure : public TSInterface<USState> {
 	tuple<Levels, Levels, Levels> _bounds;
 
 public:
-	UnparametrizedStructure(tuple<Levels, Levels, Levels> bounds);
-	NO_COPY_SHORT(UnparametrizedStructure);
-	DEFAULT_MOVE(UnparametrizedStructure);
+	GROUNDED(UnparametrizedStructure);
 
-	// Add a new state, only with ID and levels
-	void addState(const StateID ID, const Levels & levels);
-
-	// Add a new transition to the source specie, containg necessary edge labels for the CMC
-	void addTransition(const StateID ID, const StateID target_ID, const ParamNo fun_no, const bool req_dir, const ActLevel req_level);
-
+	void setBounds(const tuple<Levels, Levels, Levels> & bounds);
+	
 	// convert the levels to a state ID
-	StateID getID(const Levels & levels) const;
+	StateID computeID(const Levels & levels) const;
+
+	const tuple<Levels, Levels, Levels> & getBounds() const;
 };

@@ -27,5 +27,5 @@ namespace UnparametrizedStructureBuilder {
 	vector<size_t> computeJumps(const Levels & comp_range);
 
 	// Create the states from the model and fill the structure with them.
-	UnparametrizedStructure buildStructure(const RegInfos & _reg_infos, const tuple<Levels, Levels, Levels> & bounds);
+	void buildStructure(const RegInfos & reg_infos, UnparametrizedStructure & structure);
 };

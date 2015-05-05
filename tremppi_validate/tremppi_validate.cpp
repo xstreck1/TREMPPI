@@ -54,7 +54,7 @@ int tremppi_validate(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing the properties.";
 
-		automata = PropertiesReader::jsonToProperties(reg_infos, properties);
+		automata = PropertiesReader::jsonToProperties(properties);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 4);
@@ -68,7 +68,7 @@ int tremppi_validate(int argc, char ** argv) {
 		// Construction of data structures
 		try {
 			BOOST_LOG_TRIVIAL(info) << "Building a product with the automaton: " << automaton.name;
-			product = ConstructionManager::construct(reg_infos, automaton);
+			ConstructionManager::construct(reg_infos, automaton, product);
 		}
 		catch (std::exception & e) {
 			logging.exceptionMessage(e, 5);

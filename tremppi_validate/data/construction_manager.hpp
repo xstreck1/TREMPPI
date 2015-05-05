@@ -16,5 +16,5 @@ namespace ConstructionManager {
 	tuple<Levels, Levels, Levels> getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info);
 	
 	// Function that constructs all the data in a cascade of temporal builders.
-	ProductStructure construct(const RegInfos & reg_infos, const PropertyInfo & property);
+	void construct(const RegInfos & reg_infos, const PropertyInfo & property_info, ProductStructure & product);
 }

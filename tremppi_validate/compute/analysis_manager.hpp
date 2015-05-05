@@ -22,7 +22,6 @@ class AnalysisManager {
 	unique_ptr<VisitStorage> storage; ///< Class that holds.
 	unique_ptr<WitnessSearcher> searcher; ///< Class to build wintesses.
 	unique_ptr<RobustnessCompute> computer; ///< Class to compute robustness.
-	const AutType aut_type;
 	const size_t bfs_bound;
 	const bool witness;
 	const bool robustness; 

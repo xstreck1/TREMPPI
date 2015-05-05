@@ -7,16 +7,16 @@ tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::standard(cons
 
 	CheckerSetting settings;
 	settings.bfs_bound = bfs_bound - 1; // We need at least one step for the loop on the final state
-	settings.bound_type = BoundType::step;
+	settings.bound_type = BoundType::bt_step;
 	settings.circ = false;
 	settings.stable = false;
 
-	VisitStorage reach_storage(product.getStateCount());
-	VisitStorage loop_storage(product.getStateCount());
+	VisitStorage reach_storage(product.size());
+	VisitStorage loop_storage(product.size());
 
 	reach_storage = ModelChecker::conductCheck(product, settings, parametrization, move(reach_storage));
 	// step 2
-	settings.bound_type = BoundType::min;
+	settings.bound_type = BoundType::bt_min;
 	settings.circ = true;
 	for (const StateID ID : product.getFinalStates()) {
 		if (reach_storage.isFound(ID)) {
@@ -71,11 +71,11 @@ tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::finite(const 
 
 	CheckerSetting settings;
 	settings.bfs_bound = bfs_bound;
-	settings.bound_type = BoundType::min;
+	settings.bound_type = BoundType::bt_min;
 	settings.circ = false;
 	settings.stable = stable;
 
-	VisitStorage storage(product.getStateCount());
+	VisitStorage storage(product.size());
 	storage = ModelChecker::conductCheck(product, settings, parametrization, move(storage));
 
 	if (storage.succeeded() && (witness || robustness)) {
@@ -92,17 +92,16 @@ tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::finite(const 
 
 AnalysisManager::AnalysisManager(const ProductStructure & _product, const size_t _bfs_bound, const bool _witness, const bool _robustness) :
 	product(_product),
-	storage(new VisitStorage(_product.getStateCount())),
+	storage(new VisitStorage(_product.size())),
 	searcher(new WitnessSearcher(_product)),
 	computer(new RobustnessCompute(_product)),
-	aut_type(_product.getAutomaton().getMyType()),
 	bfs_bound(_bfs_bound),
 	witness(_witness),
 	robustness(_robustness) {
 }
 
 tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::check(const Levels & parametrization) {
-	switch (aut_type) {
+	switch (product.getAutType()) {
 	case BA_standard:
 		return standard(parametrization);
 	case BA_stable:

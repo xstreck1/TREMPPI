@@ -1,29 +1,5 @@
 #include "unparametrized_structure_builder.hpp"
 
-#include <tremppi_common/network/constraint_parser.hpp>
-
-void UnparametrizedStructureBuilder::addTransition(const StateID source, const StateID target, const CompID ID, const bool direction, const Levels & state_levels, UnparametrizedStructure & structure) {
-	// Find out which function is currently active
-	const size_t fun_no = getActiveFunction(ID, state_levels);
-
-	structure.addTransition(source, target, fun_no, direction, state_levels[ID]);
-}
-
-void UnparametrizedStructureBuilder::addTransitions(const StateID trans_ID, const Levels & state_levels, UnparametrizedStructure & structure) {
-	for (const CompID ID : cscope(reg_infos)) {
-		// If this value is not the lowest one, add neighbour with lower
-		if (state_levels[ID] > structure.mins[ID]) {
-			const StateID target_ID = trans_ID - index_jumps[ID];
-			addTransition(trans_ID, target_ID, ID, false, state_levels, structure);
-		}
-		// If this value is not the highest one, add neighbour with higher
-		if (state_levels[ID] < structure.maxes[ID]) {
-			const StateID target_ID = trans_ID + index_jumps[ID];
-			addTransition(trans_ID, target_ID, ID, true, state_levels, structure);
-		}
-	}
-}
-
 bool UnparametrizedStructureBuilder::testRegulators(const vector<Levels> & requirements, const Levels & state_levels) {
 	// Const function
 	if (requirements.empty())
@@ -38,11 +14,10 @@ bool UnparametrizedStructureBuilder::testRegulators(const vector<Levels> & requi
 	return true;
 }
 
-
-size_t UnparametrizedStructureBuilder::getActiveFunction(const CompID ID, const Levels & state_levels) {
+ParamNo UnparametrizedStructureBuilder::getActiveFunction(const map<size_t, vector<Levels> > & requirements,  const Levels & state_levels) {
 	// Cycle until the function is found
 	bool found = false;
-	for (const auto & req : reg_infos[ID].requirements) {
+	for (const auto & req : requirements) {
 		found = testRegulators(req.second, state_levels);
 		if (found)
 			return req.first;
@@ -50,47 +25,42 @@ size_t UnparametrizedStructureBuilder::getActiveFunction(const CompID ID, const 
 	throw runtime_error("Active function in some state not found.");
 }
 
-void UnparametrizedStructureBuilder::computeJumps(const Levels & range_size) {
-	index_jumps.reserve(reg_infos.size());
+vector<size_t> UnparametrizedStructureBuilder::computeJumps(const Levels & comp_range) {
+	vector<size_t> result(comp_range.size());
 	// How many far away are two neighbour in the vector
 	size_t jump_lenght = 1;
 	// Species with higher index cause bigger differences
-	for (size_t specie_no : cscope(reg_infos)) {
-		index_jumps.emplace_back(jump_lenght);
-		jump_lenght *= (range_size[specie_no]);
+	for (CompID ID : cscope(comp_range)) {
+		result[ID] = jump_lenght;
+		jump_lenght *= (comp_range[ID]);
 	}
+
+	return result;
 }
 
-size_t UnparametrizedStructureBuilder::solveConstrains(UnparametrizedStructure & structure) {
-	pair<Levels, Levels> bounds = PropertiesReader::getBounds(reg_infos, property_info);
-	structure.mins = bounds.first; structure.maxes = bounds.second;
-	rng::transform(structure.maxes, structure.mins, back_inserter(structure.range_size), [](const ActLevel max, const ActLevel min) {return max - min + 1; });
+void UnparametrizedStructureBuilder::buildStructure(const RegInfos & reg_infos, UnparametrizedStructure & structure) {
+	const size_t state_count = accumulate(WHOLE(get<2>(structure.getBounds())), static_cast<ActLevel>(1), multiplies<ActLevel>());
+	const vector<size_t> jumps = computeJumps(get<2>(structure.getBounds()));
 
-	// Compute distances between neighbours
-	computeJumps(structure.range_size);
-
-	size_t state_count = accumulate(structure.range_size.begin(), structure.range_size.end(), 1, multiplies<size_t>());
-
-	return state_count;
-}
-
-UnparametrizedStructureBuilder::UnparametrizedStructureBuilder(const RegInfos & _reg_infos, const PropertyInfo & _property_info)
-	: reg_infos(_reg_infos), property_info(_property_info) {}
-
-UnparametrizedStructure UnparametrizedStructureBuilder::buildStructure() {
-	UnparametrizedStructure structure;
-
-	// Create states
-	StateID ID = 0;
-	const size_t state_count = solveConstrains(structure);
-	Levels levels(structure.mins);
+	StateID s_ID = 0;
+	Levels levels(get<0>(structure.getBounds()));
 	do {
 		// Fill the structure with the state
-		structure.addState(ID, levels);
-		addTransitions(ID, levels, structure);
-
-		ID++;
-	} while (iterate(structure.maxes, structure.mins, levels));
-
-	return structure;
+		structure.addState(USState(s_ID,levels));
+		// Add transitions from the state under each dimension
+		for (const CompID c_ID : cscope(jumps)) {
+			const ParamNo fun_no = getActiveFunction(reg_infos[c_ID].requirements, levels);
+			// If this value is not the lowest one, add neighbour with lower
+			if (levels[c_ID] > get<0>(structure.getBounds())[c_ID]) {
+				const StateID t_ID = s_ID - jumps[c_ID];
+				structure.addTransition(s_ID, USTransition(t_ID, TransConst{ fun_no, false, levels[c_ID] }));
+			}
+			// If this value is not the highest one, add neighbour with higher
+			if (levels[c_ID] < get<1>(structure.getBounds())[c_ID]) {
+				const StateID t_ID = s_ID + jumps[c_ID];
+				structure.addTransition(s_ID, USTransition(t_ID, TransConst{ fun_no, true, levels[c_ID] }));
+			}
+		}
+		s_ID++;
+	} while (iterate(get<1>(structure.getBounds()), get<0>(structure.getBounds()), levels));
 }

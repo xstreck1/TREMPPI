@@ -13,12 +13,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct TransitionProperty {
 	/// Unique ID of the state.
-	const StateID target_ID;
+	const StateID _t_ID;
 
-	/**
-	* Basic constructor that fills in the ID.
-	*/
-	inline TransitionProperty(const StateID _target_ID) : target_ID(_target_ID) {}
+	TransitionProperty(const StateID t_ID)
+		: _t_ID(t_ID) {}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,34 +25,49 @@ struct TransitionProperty {
 template <typename Transition>
 struct StateProperty {
 	/// Unique ID of the state.
-	const StateID ID;
+	const StateID _ID;
 	/// Graph or automaton transitions, basically it is an edge with a label.
-	vector<Transition> transitions;
+	vector<Transition> _transitions;
 
-	/**
-	 * Basic constructor that fills in the ID and label.
-	 */
-	inline StateProperty<Transition>(const StateID _ID) : ID(_ID) { }
+	StateProperty(const StateID ID) 
+		: _ID(ID) {}
+
+	size_t size() const {
+		return _transitions.size();
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Interface for all the classes that represent a directed graph. Transitions are expected to be stored within their source state structure.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename StateT>
-class GraphInterface {
+template <typename StateT, typename TransitionT = decltype(declval<StateT>()._transitions.front())>
+struct GraphInterface {
 protected:
-	vector<StateT> states; ///< Vector holding states of the graph.
+	vector<StateT> _states; ///< Vector holding states of the graph.
 
 public:
 	NO_COPY(GraphInterface)
-	virtual ~GraphInterface() = default;
+
+	/**
+	 *
+	 */
+	void addState(StateT state) {
+		_states.emplace_back(move(state));
+	}
+
+	/**
+	 *
+	 */
+	void addTransition(const CompID s_ID, typename TransitionT transition) {
+		_states[s_ID]._transitions.emplace_back(move(transition));
+	}
 
 	/**
 	 * Obtains number of states of the graph.
 	 * @return integer with size of the graph
 	 */
-	inline size_t getStateCount() const {
-		return states.size();
+	inline size_t size() const {
+		return _states.size();
 	}
 
 	/**
@@ -63,17 +76,14 @@ public:
 	 * @return	integer with number of outcoming transitions
 	 */
 	inline size_t getTransitionCount(const StateID ID) const {
-		return states[ID].transitions.size();
+		return _states[ID]._transitions.size();
 	}
 
 	/**
-	 * Obtains ID of the target of given transition for given state.
-	 * @param ID	ID of the state to get the neighbour from
-	 * @param trans_number	index in the vector of transitions
-	 * @return	ID of the requested target
+	 *
 	 */
-	inline StateID getTargetID(const StateID ID, const size_t transition_number) const {
-		return states[ID].transitions[transition_number].target_ID;
+	inline const StateT & getState(const StateID ID) const {
+		return _states[ID];
 	}
 
 	/**

@@ -1,7 +1,7 @@
 #include "robustness_compute.hpp"
 
 RobustnessCompute::RobustnessCompute(const ProductStructure & _product) : product(_product) {
-	prob = vector<double>(product.getStateCount(), 0.0);
+	prob = vector<double>(product.size(), 0.0);
 }
 
 double RobustnessCompute::compute(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & results, const multimap<StateID, StateID>& transitions) {

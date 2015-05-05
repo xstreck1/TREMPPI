@@ -30,7 +30,6 @@ Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & st
 	return result;
 }
 
-
 vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names) {
 	vector<PathCons> result;
 
@@ -39,43 +38,42 @@ vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& co
 			result.push_back(constraints_list.at(name));
 		}
 		else {
-			result.push_back(PathCons::none);
+			result.push_back(PathCons::pc_none);
 		}
 	}
 
 	return result;
 }
 
-AutomatonStructure AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names) {
+void AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton) {
 	if (property_info.ending == "any") {
-		AutomatonStructure automaton(BA_finite, 
-			makeStateConst(property_info.states.front().state_constraints, bounds, names, false), 
-			makeStateConst(property_info.states.back().state_constraints, bounds, names, false));
+		automaton.setType(BA_finite);
+		automaton.setInitContrs(makeStateConst(property_info.states.front().state_constraints, bounds, names, false));
+		automaton.setAccContrs(makeStateConst(property_info.states.back().state_constraints, bounds, names, false));
+
 		for (const StateID ID : crange(1u, property_info.states.size())) {
 			const bool initial = ID == 1; 
 			const bool final = ID == property_info.states.size() - 1;
-			automaton.addState(ID - 1, initial, final);
-			automaton.addTransition(ID - 1, ID - 1,
+			automaton.addState(AutState( - 1, initial, final));
+			// Add a loop with path contraints from the already satisfied measurement
+			automaton.addTransition(ID - 1, AutTransitionion(ID - 1,
 				makeStateConst(property_info.states[ID].state_constraints, bounds, names, true),
-				makePathConst(property_info.states[ID - 1].path_constraints, names));
+				makePathConst(property_info.states[ID - 1].path_constraints, names)
+			));
+			// Add a step to the next state under the current measurement and path condition
 			if (!final) {
-				automaton.addTransition(ID - 1, ID,
-					makeStateConst(property_info.states[ID].state_constraints, bounds, names, false),
-					makePathConst(property_info.states[ID].path_constraints, names));
+				automaton.addTransition(ID - 1, AutTransitionion(ID,
+						makeStateConst(property_info.states[ID].state_constraints, bounds, names, false),
+						makePathConst(property_info.states[ID].path_constraints, names)
+				));
 			}
 		}
-		return automaton;
 	}
 	else if (property_info.ending == "stable") {
-		AutomatonStructure automaton(BA_stable, {}, {});
-		return automaton;
 	}
 	else if (property_info.ending.substr(0,4) == "goto") {
-		AutomatonStructure automaton(BA_standard, {}, {});
-		return automaton;
 	}
 	else {
 		throw runtime_error("Unknown property type " + property_info.ending + " of the property " + property_info.name);
-		return AutomatonStructure(BA_standard, {}, {});
 	}
 }

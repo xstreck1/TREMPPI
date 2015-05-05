@@ -11,7 +11,7 @@
 namespace PropertiesReader {
 	pair<ActLevel, ActLevel> readBoundary(const string & value, const string & property_name, const string & comp_name);
 	//
-	pair<string, PathCons> getTransitionConstraint(const string & constraint, const string & comp_name);
+	PathCons getTransitionConstraint(const string & constraint, const string & comp_name);
 	// Konvert model in (almost) JSON to Model object
 	vector<PropertyInfo> jsonToProperties(Json::Value & properties);
 	//

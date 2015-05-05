@@ -24,5 +24,5 @@ namespace AutomatonBuilder {
 	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);
 
 	// Create the transitions from the model and fill the automaton with them.
-	AutomatonStructure buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names);
+	void buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton);
 };
