@@ -71,15 +71,6 @@ public:
 	}
 
 	/**
-	 * Obtains number of outcoming transitions for given state.
-	 * @param ID	ID of the state to get the number from
-	 * @return	integer with number of outcoming transitions
-	 */
-	inline size_t getTransitionCount(const StateID ID) const {
-		return _states[ID]._transitions.size();
-	}
-
-	/**
 	 *
 	 */
 	inline const StateT & getState(const StateID ID) const {

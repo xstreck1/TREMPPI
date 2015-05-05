@@ -54,47 +54,57 @@ int basic_validate_test() {
 }
 
 TEST_F(ValidateTest, Construction) {
+	auto bounds = ConstructionManager::getBounds(r_negative_loop, a_spike_on_A);
+	ASSERT_EQ(1, get<0>(bounds).size());
+	EXPECT_EQ(0, get<0>(bounds)[0]) << "Min is 0";
+	ASSERT_EQ(1, get<1>(bounds).size());
+	EXPECT_EQ(1, get<1>(bounds)[0]) << "Max is 1";
+	ASSERT_EQ(1, get<2>(bounds).size());
+	EXPECT_EQ(2, get<1>(bounds)[0]) << "Two values in total";
+
 	// Construct unparametrized structure and check if all the values are as expected
-	UnparametrizedStructureBuilder unparametrized_structure_builder(r_negative_loop, a_spike_on_A);
-	UnparametrizedStructure unparametrized_structure = unparametrized_structure_builder.buildStructure();
-	ASSERT_EQ(2, unparametrized_structure.size());
-	EXPECT_EQ(Levels{ 0 }, unparametrized_structure.getStateLevels(0));
-	EXPECT_EQ(Levels{ 1 }, unparametrized_structure.getStateLevels(1));
-	ASSERT_EQ(1, unparametrized_structure.getTransitionCount(0));
-	EXPECT_EQ(1, unparametrized_structure.getState(0)._transitions[0]._t_ID);
-	const TransConst & const_1 = unparametrized_structure.getState(0)._transitions[0]._trans_const;
-	EXPECT_EQ(0, const_1.param_no);
-	EXPECT_EQ(true, const_1.req_dir);
-	EXPECT_EQ(0, const_1.req_value);
-	ASSERT_EQ(1, unparametrized_structure.getTransitionCount(1));
-	EXPECT_EQ(0, unparametrized_structure.getState(1)._transitions[0]._t_ID);
-	const TransConst & const_2 = unparametrized_structure.getState(1)._transitions[0]._trans_const;
-	EXPECT_EQ(1, const_2.param_no);
-	EXPECT_EQ(false, const_2.req_dir);
-	EXPECT_EQ(1, const_2.req_value);
+	UnparametrizedStructure us;
+	us.setBounds(bounds);
+	UnparametrizedStructureBuilder::buildStructure(r_negative_loop, us);
+	ASSERT_EQ(2, us.size());
+	EXPECT_EQ(Levels{ 0 }, us.getState(0)._levels);
+	EXPECT_EQ(Levels{ 1 }, us.getState(1)._levels);
+	ASSERT_EQ(1, us.getState(0).size());
+	EXPECT_EQ(1, us.getState(0)._transitions[0]._t_ID);
+	const TransConst & const_1 = us.getState(0)._transitions[0]._trans_const;
+	EXPECT_EQ(0, const_1._param_no);
+	EXPECT_EQ(true, const_1._req_dir);
+	EXPECT_EQ(0, const_1._req_value);
+	ASSERT_EQ(1, us.getState(1).size());
+	EXPECT_EQ(0, us.getState(1)._transitions[0]._t_ID);
+	const TransConst & const_2 = us.getState(1)._transitions[0]._trans_const;
+	EXPECT_EQ(1, const_2._param_no);
+	EXPECT_EQ(false, const_2._req_dir);
+	EXPECT_EQ(1, const_2._req_value);
 
 	// Create the Buchi automaton
-	AutomatonBuilder automaton_builder(r_negative_loop, a_spike_on_A);
-	AutomatonStructure automaton = automaton_builder.buildAutomaton();
-	ASSERT_EQ(2, automaton.size());
-	EXPECT_EQ(vector < StateID > {0}, automaton.getInitialStates());
-	EXPECT_EQ(vector < StateID > {1}, automaton.getFinalStates());
-	EXPECT_EQ(BA_finite, automaton.getAutType());
-	ASSERT_EQ(2, automaton.getTransitionCount(0));
-	EXPECT_EQ(0, automaton.getState(0)._transitions[0]._t_ID);
+	AutomatonStructure a;
+	AutomatonBuilder::buildAutomaton(a_spike_on_A, bounds, { "A" }, a);
+	ASSERT_EQ(2, a.size());
+	EXPECT_EQ(vector < StateID > {0}, a.getInitialStates());
+	EXPECT_EQ(vector < StateID > {1}, a.getFinalStates());
+	EXPECT_EQ(BA_finite, a.getAutType());
+	ASSERT_EQ(2, a.getState(0).size());
+	EXPECT_EQ(0, a.getState(0)._transitions[0]._t_ID);
 
 	// Create the product
-	ProductBuilder product_builder;
-	ProductStructure product = product_builder.buildProduct(move(unparametrized_structure), move(automaton));
-	ASSERT_EQ(4, product.size());
-	ASSERT_EQ(1, product.getTransitionCount(0));
-	EXPECT_EQ(1, product.getState(0)._transitions[0]._t_ID);
-	ASSERT_EQ(1, product.getTransitionCount(1));
-	EXPECT_EQ(2, product.getState(1)._transitions[0]._t_ID);
+	ProductStructure p;
+	ProductBuilder::buildProduct(us, a, p);
+	ASSERT_EQ(4, p.size());
+	ASSERT_EQ(1, p.getState(0).size());
+	EXPECT_EQ(1, p.getState(0)._transitions[0]._t_ID);
+	ASSERT_EQ(1, p.getState(0).size());
+	EXPECT_EQ(2, p.getState(1)._transitions[0]._t_ID);
 }
 
 TEST_F(ValidateTest, SteadyStates) {
-	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_unregulated, a_is_steady);
+	ProductStructure p_unreagulated_is_steady;
+	ConstructionManager::construct(r_unregulated, a_is_steady, p_unreagulated_is_steady);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
 	auto results = a_unreagulated_is_steady.check({ 1 });
 	EXPECT_EQ(1, get<0>(results)) << "Cost in SteadyStates should be 1--just one state";
@@ -103,7 +113,8 @@ TEST_F(ValidateTest, SteadyStates) {
 }
 
 TEST_F(ValidateTest, BasicValidation) {
-	ProductStructure p_two_circuit_spike_on_A = ConstructionManager::construct(r_two_circuit, a_spike_on_A);
+	ProductStructure p_two_circuit_spike_on_A;
+	ConstructionManager::construct(r_two_circuit, a_spike_on_A, p_two_circuit_spike_on_A);
 	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A, INF, true, true);
 	auto results = a_two_circuit_spike_on_A.check({ 0, 1, 1, 0 });
 	// std::cout << WitnessSearcher::getOutput(p_two_circuit_spike_on_A, get<0>(results), get<1>(results));
@@ -113,7 +124,8 @@ TEST_F(ValidateTest, BasicValidation) {
 }
 
 TEST_F(ValidateTest, CycleProperty) {
-	ProductStructure p_unreagulated_is_steady = ConstructionManager::construct(r_negative_loop, a_cycle_on_A);
+	ProductStructure p_unreagulated_is_steady;
+	ConstructionManager::construct(r_negative_loop, a_cycle_on_A, p_unreagulated_is_steady);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
 	auto results = a_unreagulated_is_steady.check({ 1, 0 });
 	EXPECT_EQ(3, get<0>(results)) << "Two-step loop.";

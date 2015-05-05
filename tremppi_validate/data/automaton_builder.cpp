@@ -46,25 +46,30 @@ vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& co
 }
 
 void AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton) {
+	/*
+	TODO: No measurements?
+	
+	*/
+	
 	if (property_info.ending == "any") {
 		automaton.setType(BA_finite);
-		automaton.setInitContrs(makeStateConst(property_info.states.front().state_constraints, bounds, names, false));
-		automaton.setAccContrs(makeStateConst(property_info.states.back().state_constraints, bounds, names, false));
+		automaton.setInitContrs(makeStateConst(property_info.measurements.front().state_constraints, bounds, names, false));
+		automaton.setAccContrs(makeStateConst(property_info.measurements.back().state_constraints, bounds, names, false));
 
-		for (const StateID ID : crange(1u, property_info.states.size())) {
+		for (const StateID ID : crange(1u, property_info.measurements.size())) {
 			const bool initial = ID == 1; 
-			const bool final = ID == property_info.states.size() - 1;
+			const bool final = ID == property_info.measurements.size() - 1;
 			automaton.addState(AutState( - 1, initial, final));
 			// Add a loop with path contraints from the already satisfied measurement
 			automaton.addTransition(ID - 1, AutTransitionion(ID - 1,
-				makeStateConst(property_info.states[ID].state_constraints, bounds, names, true),
-				makePathConst(property_info.states[ID - 1].path_constraints, names)
+				makeStateConst(property_info.measurements[ID].state_constraints, bounds, names, true),
+				makePathConst(property_info.measurements[ID - 1].path_constraints, names)
 			));
 			// Add a step to the next state under the current measurement and path condition
 			if (!final) {
 				automaton.addTransition(ID - 1, AutTransitionion(ID,
-						makeStateConst(property_info.states[ID].state_constraints, bounds, names, false),
-						makePathConst(property_info.states[ID].path_constraints, names)
+						makeStateConst(property_info.measurements[ID].state_constraints, bounds, names, false),
+						makePathConst(property_info.measurements[ID].path_constraints, names)
 				));
 			}
 		}

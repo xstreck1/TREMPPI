@@ -105,9 +105,7 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 				}
 			}
 
-
-			const StateID ID = property_info.states.size();
-			property_info.states.emplace_back(PropertyInfo::State{ property_info.states.size(), move(state_consts), move(path_consts) });
+			property_info.measurements.emplace_back(PropertyInfo::Measurement{ property_info.measurements.size(), move(state_consts), move(path_consts) });
 		}
 
 		automata.emplace_back(move(property_info));

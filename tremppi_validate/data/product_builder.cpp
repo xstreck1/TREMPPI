@@ -58,7 +58,7 @@ void ProductBuilder::addSubspaceTransitions(const UnparametrizedStructure & stru
 		StateID ID = product.getProductID(KS_ID, BA_ID);
 
 		// Add all the trasient combinations for the kripke structure
-		for (const size_t trans_no : crange(structure.getTransitionCount(KS_ID))) {
+		for (const size_t trans_no : cscope(structure.getState(KS_ID))) {
 			const StateID KS_target = structure.getState(KS_ID)._transitions[trans_no]._t_ID;
 			const TransConst & trans_const = structure.getState(KS_ID)._transitions[trans_no]._trans_const;
 			// If the transition does not meet the stability requirements, add transition to hell (infty)

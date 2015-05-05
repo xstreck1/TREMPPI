@@ -19,9 +19,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AnalysisManager {
 	const ProductStructure & product;
-	unique_ptr<VisitStorage> storage; ///< Class that holds.
-	unique_ptr<WitnessSearcher> searcher; ///< Class to build wintesses.
-	unique_ptr<RobustnessCompute> computer; ///< Class to compute robustness.
+	WitnessSearcher searcher; ///< Class to build wintesses.
+	RobustnessCompute computer; ///< Class to compute robustness.
 	const size_t bfs_bound;
 	const bool witness;
 	const bool robustness; 

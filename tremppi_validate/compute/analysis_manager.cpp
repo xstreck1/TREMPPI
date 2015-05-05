@@ -43,14 +43,14 @@ tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::standard(cons
 					// Compute reach analysis
 					settings.initial_states.clear(); // Reset initals to all
 					settings.circ = false;
-					auto reach_wit = searcher->findWitnesses(settings, parametrization, reach_storage);
-					double reach_rob = robustness ? computer->compute(settings, parametrization, reach_storage, reach_wit) : 0;
+					auto reach_wit = searcher.findWitnesses(settings, parametrization, reach_storage);
+					double reach_rob = robustness ? computer.compute(settings, parametrization, reach_storage, reach_wit) : 0;
 
 					// Compute loop analysis
 					settings.initial_states = { ID };
 					settings.circ = true;
-					auto loop_wit = searcher->findWitnesses(settings, parametrization, loop_storage);
-					double loop_rob = robustness ? computer->compute(settings, parametrization, loop_storage, loop_wit) - 1 : 0;
+					auto loop_wit = searcher.findWitnesses(settings, parametrization, loop_storage);
+					double loop_rob = robustness ? computer.compute(settings, parametrization, loop_storage, loop_wit) - 1 : 0;
 
 					// Merge
 					get<1>(result).insert(WHOLE(reach_wit));
@@ -79,11 +79,11 @@ tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::finite(const 
 	storage = ModelChecker::conductCheck(product, settings, parametrization, move(storage));
 
 	if (storage.succeeded() && (witness || robustness)) {
-		auto transitions = searcher->findWitnesses(settings, parametrization, storage);
+		auto transitions = searcher.findWitnesses(settings, parametrization, storage);
 		if (witness)
 			get<1>(result) = transitions;
 
-		get<2>(result) = robustness ? computer->compute(settings, parametrization, storage, transitions) : 0;
+		get<2>(result) = robustness ? computer.compute(settings, parametrization, storage, transitions) : 0;
 	}
 
 	get<0>(result) = storage.getCost();
@@ -92,9 +92,8 @@ tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::finite(const 
 
 AnalysisManager::AnalysisManager(const ProductStructure & _product, const size_t _bfs_bound, const bool _witness, const bool _robustness) :
 	product(_product),
-	storage(new VisitStorage(_product.size())),
-	searcher(new WitnessSearcher(_product)),
-	computer(new RobustnessCompute(_product)),
+	searcher(WitnessSearcher(_product)),
+	computer(RobustnessCompute(_product)),
 	bfs_bound(_bfs_bound),
 	witness(_witness),
 	robustness(_robustness) {

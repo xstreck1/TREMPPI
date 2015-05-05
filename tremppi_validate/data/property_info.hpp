@@ -8,12 +8,12 @@ enum PathCons { pc_none, pc_up, pc_down, pc_stay }; ///< What are the requiremen
 struct PropertyInfo {
 	NO_COPY(PropertyInfo)
 
-	struct State {
-		CompID ID; ///< Numerical constant used to distinguish the state. Starts from 0!
+	struct Measurement {
+		size_t ID; ///< Numerical constant used to distinguish the state. Starts from 0!
 		map<string, ActRange> state_constraints; ///< Per component state constraints
 		map<string, PathCons> path_constraints; ///< Per component path constraints
 	};
-	vector<State> states; ///< vector of all states of the controlling Buchi automaton
+	vector<Measurement> measurements; 
 
 	string name; // Identifier for the property
 	string ending; // What should happen after last measurement? (anything, stability is reached, there is return to another) 
