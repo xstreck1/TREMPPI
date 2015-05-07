@@ -4,14 +4,14 @@ CheckerSetting::CheckerSetting() : bound_type(BoundType::bt_inf), bfs_bound(INF)
 
 bool CheckerSetting::isInitial(const StateID ID, const ProductStructure & product) const {
 	if (initial_states.empty())
-		return product.getState(ID)._initial;
+		return product._states[ID]._initial;
 	else
 		return (find(initial_states.begin(), initial_states.end(), ID) != initial_states.end());
 }
 
 bool CheckerSetting::isFinal(const StateID ID, const ProductStructure & product) const {
 	if (final_states.empty())
-		return product.getState(ID)._final;
+		return product._states[ID]._final;
 	else
 		return (find(final_states.begin(), final_states.end(), ID) != final_states.end());
 }

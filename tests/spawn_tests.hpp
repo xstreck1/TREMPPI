@@ -29,10 +29,9 @@ void createModel(const bfs::path & example_model_path) {
 }
 
 int basic_spawn_test() {
-	const string path = bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string();
-	vector<string> arguments = { "--path", path};
+	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
-	createModel(path);
+	createModel(arguments[1]);
 	return (tremppi_spawn(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
 

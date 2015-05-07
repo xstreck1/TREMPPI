@@ -1,10 +1,5 @@
 #include "unparametrized_structure.hpp"
 
-void UnparametrizedStructure::setBounds(const tuple<Levels, Levels, Levels> & bounds) {
-	_bounds = bounds;
-}
-
-
 StateID UnparametrizedStructure::computeID(const Levels & levels) const {
 	StateID result = 0;
 	size_t factor = 1;
@@ -15,8 +10,4 @@ StateID UnparametrizedStructure::computeID(const Levels & levels) const {
 	}
 
 	return result;
-}
-
-const tuple<Levels, Levels, Levels> & UnparametrizedStructure::getBounds() const {
-	return _bounds;
 }

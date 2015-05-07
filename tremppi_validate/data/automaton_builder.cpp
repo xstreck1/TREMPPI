@@ -46,25 +46,27 @@ vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& co
 
 
 void AutomatonBuilder::buildTransient(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton) {
-	automaton.setInitContrs(makeStateConst(property_info.measurements.front().state_constraints, bounds, names, true));
-	automaton.setAccContrs(makeStateConst(property_info.measurements.back().state_constraints, bounds, names, true));
+	automaton._init_constr = makeStateConst(property_info.measurements.front().state_constraints, bounds, names, true);
+	automaton._acc_constr = makeStateConst(property_info.measurements.back().state_constraints, bounds, names, true);
 
 	if (property_info.measurements.size() == 1) {
-		automaton.addState(AutState(0, true, true));
-		automaton.addTransition(0, AutTransitionion(0, makeStateConst({}, bounds, names, false), makePathConst({}, names)));
+		automaton._states.emplace_back(AutState(0, true, true));
+		automaton._states[0]._transitions.emplace_back(AutTransitionion(0, makeStateConst({}, bounds, names, false), makePathConst({}, names)));
 	}
 	else {
 		for (const StateID ID : crange(1u, property_info.measurements.size())) {
 			const bool initial = ID == 1;
 			const bool final = ID == property_info.measurements.size() - 1;
-			automaton.addState(AutState(ID - 1, initial, final));
+			automaton._states.emplace_back(AutState(ID - 1, initial, final));
 			// Add a loop with path contraints from the already satisfied measurement
-			automaton.addTransition(ID - 1, AutTransitionion(ID - 1,
+			automaton._states[ID - 1]._transitions.emplace_back(
+				AutTransitionion(ID - 1,
 				makeStateConst(property_info.measurements[ID].state_constraints, bounds, names, false),
 				makePathConst(property_info.measurements[ID - 1].path_constraints, names)));
 			// Add a step to the next state under the current measurement and path condition
 			if (!final) {
-				automaton.addTransition(ID - 1, AutTransitionion(ID,
+				automaton._states[ID - 1]._transitions.emplace_back(
+					AutTransitionion(ID,
 					makeStateConst(property_info.measurements[ID].state_constraints, bounds, names, true),
 					makePathConst(property_info.measurements[ID].path_constraints, names)));
 			}
@@ -78,7 +80,6 @@ RULES:
 	X in goto X is the accepting, also the state where X is checked is accepting in the BA
 	if goto X + 1 and X is the last measurement, all is accepting
 	if goto A, then accepting=initial and it's placed on the check for B
-
 */
 void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const char target, AutomatonStructure & automaton) {
 	const size_t target_ID = AutomatonStructure::NameToID(target);
@@ -87,19 +88,19 @@ void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tup
 		throw runtime_error("Goto in the property " + property_info.name + " goes beyond the measurements.");
 	}
 
-	automaton.setInitContrs(makeStateConst(property_info.measurements.front().state_constraints, bounds, names, true));
-	automaton.setAccContrs(makeStateConst(property_info.measurements[target_ID].state_constraints, bounds, names, true));
+	automaton._init_constr = makeStateConst(property_info.measurements.front().state_constraints, bounds, names, true);
+	automaton._acc_constr = makeStateConst(property_info.measurements[target_ID].state_constraints, bounds, names, true);
 
 	for (const StateID ID : crange(0u, property_info.measurements.size())) {
 		const bool initial = ID == 0u;
 		const bool final = ID == target_ID;
-		automaton.addState(AutState(ID, initial, final));
+		automaton._states.emplace_back(AutState(ID, initial, final));
 		// Add a loop with path contraints from the already satisfied measurement
-		automaton.addTransition(ID, AutTransitionion(ID,
+		automaton._states[ID]._transitions.emplace_back(AutTransitionion(ID,
 			makeStateConst(property_info.measurements[ID].state_constraints, bounds, names, false),
 			initial ? makePathConst({}, names) : makePathConst(property_info.measurements[ID-1].path_constraints, names)));
 		// Add a step to the next state under the current measurement and path condition, if this is last, then goto is the next
-		automaton.addTransition(ID, AutTransitionion(property_info.measurements.size() == ID + 1 ? target_ID : ID + 1,
+		automaton._states[ID]._transitions.emplace_back(AutTransitionion(property_info.measurements.size() == ID + 1 ? target_ID : ID + 1,
 				makeStateConst(property_info.measurements[ID].state_constraints, bounds, names, true),
 				makePathConst(property_info.measurements[ID].path_constraints, names)));
 	}
@@ -112,15 +113,15 @@ void AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const 
 	}
 	
 	if (property_info.ending == "any") {
-		automaton.setType(BA_finite);
+		automaton._aut_type = BA_finite;
 		buildTransient(property_info, bounds, names, automaton);
 	}
 	else if (property_info.ending == "stable") {
-		automaton.setType(BA_stable);
+		automaton._aut_type = BA_stable;
 		buildTransient(property_info, bounds, names, automaton);
 	}
 	else if (property_info.ending.substr(0, 4) == "goto") {
-		automaton.setType(BA_standard);
+		automaton._aut_type = BA_standard;
 		buildCyclic(property_info, bounds, names, property_info.ending[5], automaton);
 	}
 	else {

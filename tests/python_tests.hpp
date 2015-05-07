@@ -7,13 +7,13 @@
 #include "common_tests_data.hpp"
 
 int basic_init_test() {
-	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" ).string(), "test_proj" };
+	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER).string(), TEST_PROJECT };
 	ArgPtr arg_ptr(arguments);
 	return (tremppi_init(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
 
 int basic_update_test() {
-	vector<string> arguments = { "--path", bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string() };
+	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	return (tremppi_update(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }

@@ -43,10 +43,9 @@ void createProperties(const bfs::path & example_model_path) {
 }
 
 int basic_validate_test() {
-	const string path = bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj").string();
-	vector<string> arguments = { "--path", path };
+	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
-	createProperties(path);
+	createProperties(arguments[1]);
 	int res = tremppi_validate(arg_ptr.getArgc(), arg_ptr.getArgv());
 	/* fstream fout(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj" / "select.json").string(), ios::out);
 	fout << "[{\"id\": 0, \"values\" : {\"Selection\": \"C_test_ts\", \"Select\" : true, \"Compare\" : false}}]";*/
@@ -64,20 +63,20 @@ TEST_F(ValidateTest, Construction) {
 
 	// Construct unparametrized structure and check if all the values are as expected
 	UnparametrizedStructure us;
-	us.setBounds(bounds);
+	us._bounds = bounds;
 	UnparametrizedStructureBuilder::buildStructure(r_negative_loop, us);
 	ASSERT_EQ(2, us.size());
-	EXPECT_EQ(Levels{ 0 }, us.getState(0)._levels);
-	EXPECT_EQ(Levels{ 1 }, us.getState(1)._levels);
-	ASSERT_EQ(1, us.getState(0).size());
-	EXPECT_EQ(1, us.getState(0)._transitions[0]._t_ID);
-	const TransConst & const_1 = us.getState(0)._transitions[0]._trans_const;
+	EXPECT_EQ(Levels{ 0 }, us._states[0]._levels);
+	EXPECT_EQ(Levels{ 1 }, us._states[1]._levels);
+	ASSERT_EQ(1, us._states[0].size());
+	EXPECT_EQ(1, us._states[0]._transitions[0]._t_ID);
+	const TransConst & const_1 = us._states[0]._transitions[0]._trans_const;
 	EXPECT_EQ(0, const_1._param_no);
 	EXPECT_EQ(true, const_1._req_dir);
 	EXPECT_EQ(0, const_1._req_value);
-	ASSERT_EQ(1, us.getState(1).size());
-	EXPECT_EQ(0, us.getState(1)._transitions[0]._t_ID);
-	const TransConst & const_2 = us.getState(1)._transitions[0]._trans_const;
+	ASSERT_EQ(1, us._states[1].size());
+	EXPECT_EQ(0, us._states[1]._transitions[0]._t_ID);
+	const TransConst & const_2 = us._states[1]._transitions[0]._trans_const;
 	EXPECT_EQ(1, const_2._param_no);
 	EXPECT_EQ(false, const_2._req_dir);
 	EXPECT_EQ(1, const_2._req_value);
@@ -88,18 +87,18 @@ TEST_F(ValidateTest, Construction) {
 	ASSERT_EQ(2, a.size());
 	EXPECT_EQ(vector < StateID > {0}, a.getInitialStates());
 	EXPECT_EQ(vector < StateID > {1}, a.getFinalStates());
-	EXPECT_EQ(BA_finite, a.getAutType());
-	ASSERT_EQ(2, a.getState(0).size());
-	EXPECT_EQ(0, a.getState(0)._transitions[0]._t_ID);
+	EXPECT_EQ(BA_finite, a._aut_type);
+	ASSERT_EQ(2, a._states[0].size());
+	EXPECT_EQ(0, a._states[0]._transitions[0]._t_ID);
 
 	// Create the product
 	ProductStructure p;
 	ProductBuilder::buildProduct(us, a, p);
 	ASSERT_EQ(4, p.size());
-	ASSERT_EQ(1, p.getState(0).size());
-	EXPECT_EQ(1, p.getState(0)._transitions[0]._t_ID);
-	ASSERT_EQ(1, p.getState(0).size());
-	EXPECT_EQ(2, p.getState(1)._transitions[0]._t_ID);
+	ASSERT_EQ(1, p._states[0].size());
+	EXPECT_EQ(1, p._states[0]._transitions[0]._t_ID);
+	ASSERT_EQ(1, p._states[0].size());
+	EXPECT_EQ(2, p._states[1]._transitions[0]._t_ID);
 }
 
 TEST_F(ValidateTest, SteadyStates) {

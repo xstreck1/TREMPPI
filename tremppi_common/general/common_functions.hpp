@@ -9,7 +9,6 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/range/counting_range.hpp>
 
-
 #define NO_COPY(TypeName) \
 		TypeName() = default;  \
 		TypeName(TypeName && ) = default;  \

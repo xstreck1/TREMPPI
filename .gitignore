@@ -30,7 +30,7 @@ Win32*
 
 # projects
 proj/*
-test/*
+tests/test_project*
 javascript/data*
 
 # created files

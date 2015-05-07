@@ -23,9 +23,6 @@ namespace AutomatonBuilder {
 	//
 	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);
 
-	void createEmpty(const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
-
-
 	//
 	void buildTransient(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
 

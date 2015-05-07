@@ -17,16 +17,12 @@
 using USTransition = TSTransitionProperty;
 using USState = TSStateProperty<TSTransitionProperty>;
 
-class UnparametrizedStructure : public TSInterface<USState> {
+struct UnparametrizedStructure : public TSInterface<USState> {
 	tuple<Levels, Levels, Levels> _bounds;
 
-public:
+	//
 	GROUNDED(UnparametrizedStructure);
-
-	void setBounds(const tuple<Levels, Levels, Levels> & bounds);
 	
 	// convert the levels to a state ID
 	StateID computeID(const Levels & levels) const;
-
-	const tuple<Levels, Levels, Levels> & getBounds() const;
 };

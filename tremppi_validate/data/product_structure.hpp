@@ -21,13 +21,15 @@ struct ProdState : public AutomatonStateProperty<TSTransitionProperty>, public T
 ///
 /// ProductStructure data can be set only from the ProductBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductStructure : public AutomatonInterface<ProdState>, public TSInterface<ProdState> {
-public:
+struct ProductStructure : public AutomatonInterface<ProdState>, public TSInterface<ProdState> {
 	pair<size_t, size_t> _sizes;
 
+	//
 	GROUNDED(ProductStructure);
 
-	StateID getProductID(const StateID KS_ID, const StateID BA_ID) const;
+	//
+	StateID computeID(const StateID KS_ID, const StateID BA_ID) const;
 
-	const string getString(const StateID ID) const;
+	//
+	string getString(const StateID ID) const;
 };

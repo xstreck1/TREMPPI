@@ -100,7 +100,7 @@ AnalysisManager::AnalysisManager(const ProductStructure & _product, const size_t
 }
 
 tuple<size_t, multimap<StateID, StateID>, double> AnalysisManager::check(const Levels & parametrization) {
-	switch (product.getAutType()) {
+	switch (product._aut_type) {
 	case BA_standard:
 		return standard(parametrization);
 	case BA_stable:

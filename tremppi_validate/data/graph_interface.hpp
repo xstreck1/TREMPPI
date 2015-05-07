@@ -15,7 +15,7 @@ struct TransitionProperty {
 	/// Unique ID of the state.
 	const StateID _t_ID;
 
-	TransitionProperty(const StateID t_ID)
+	inline TransitionProperty(const StateID t_ID)
 		: _t_ID(t_ID) {}
 };
 
@@ -29,10 +29,10 @@ struct StateProperty {
 	/// Graph or automaton transitions, basically it is an edge with a label.
 	vector<Transition> _transitions;
 
-	StateProperty(const StateID ID) 
+	inline StateProperty(const StateID ID)
 		: _ID(ID) {}
 
-	size_t size() const {
+	inline size_t size() const {
 		return _transitions.size();
 	}
 };
@@ -42,25 +42,7 @@ struct StateProperty {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename StateT, typename TransitionT = decltype(declval<StateT>()._transitions.front())>
 struct GraphInterface {
-protected:
 	vector<StateT> _states; ///< Vector holding states of the graph.
-
-public:
-	NO_COPY(GraphInterface)
-
-	/**
-	 *
-	 */
-	void addState(StateT state) {
-		_states.emplace_back(move(state));
-	}
-
-	/**
-	 *
-	 */
-	void addTransition(const CompID s_ID, typename TransitionT transition) {
-		_states[s_ID]._transitions.emplace_back(move(transition));
-	}
 
 	/**
 	 * Obtains number of states of the graph.
@@ -71,18 +53,11 @@ public:
 	}
 
 	/**
-	 *
-	 */
-	inline const StateT & getState(const StateID ID) const {
-		return _states[ID];
-	}
-
-	/**
 	 * Returns given state as a string.
 	 * @param ID	ID of the state to turn into the string
 	 * @return	given state as a string
 	 */
-	const inline string getString(const StateID ID) const {
+	inline string getString(const StateID ID) const {
 		return to_string(ID);
 	}
 };

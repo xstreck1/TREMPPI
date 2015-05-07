@@ -26,18 +26,18 @@ tuple<Levels, Levels, Levels> ConstructionManager::getBounds(const RegInfos & re
 }
 
 void ConstructionManager::construct(const RegInfos & reg_infos, const PropertyInfo & property_info, ProductStructure & product) {
-	const auto bounds = ConstructionManager::getBounds(reg_infos, property_info);
+	UnparametrizedStructure unparametrized_structure;
+	AutomatonStructure automaton;
+
+	unparametrized_structure._bounds = ConstructionManager::getBounds(reg_infos, property_info);
 	vector<string> components(reg_infos.size());
 	transform(WHOLE(reg_infos), begin(components), [](const RegInfo & reg_info) {return reg_info.name; });
 
 	// Create the UKS
-	UnparametrizedStructure unparametrized_structure;
-	unparametrized_structure.setBounds(bounds);
 	UnparametrizedStructureBuilder::buildStructure(reg_infos, unparametrized_structure);
 
 	// Create the Buchi automaton
-	AutomatonStructure automaton;
-	AutomatonBuilder::buildAutomaton(property_info, bounds, components, automaton);
+	AutomatonBuilder::buildAutomaton(property_info, unparametrized_structure._bounds, components, automaton);
 
 	// Create the product
 	ProductBuilder::buildProduct(unparametrized_structure, automaton, product);

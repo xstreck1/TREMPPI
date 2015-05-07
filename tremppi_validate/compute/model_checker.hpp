@@ -33,11 +33,11 @@ pair<vector<StateID>, bool> ModelChecker::broadcastParameters(const Levels & par
 	bool hell = false; ///< A transition to hell is available
 
 					   // Cycle through all the transition
-	for (const size_t trans_no : cscope(ts.getState(ID))) {
-		StateID target_ID = ts.getState(ID)._transitions[trans_no]._t_ID;
+	for (const size_t trans_no : cscope(ts._states[ID])) {
+		StateID target_ID = ts._states[ID]._transitions[trans_no]._t_ID;
 
 		// From an update strip all the parameters that can not pass through the transition - color intersection on the transition
-		if (isOpen(parametrization, ts.getState(ID)._transitions[trans_no]._trans_const)) {
+		if (isOpen(parametrization, ts._states[ID]._transitions[trans_no]._trans_const)) {
 			if (target_ID == INF)
 				hell = true;
 			else
@@ -47,7 +47,7 @@ pair<vector<StateID>, bool> ModelChecker::broadcastParameters(const Levels & par
 
 	// Add loops only if there is no transition (even a hell transition) available.
 	if (!hell && targets.empty())
-		return make_pair(ts.getState(ID)._loops, true);
+		return make_pair(ts._states[ID]._loops, true);
 	else
 		return make_pair(targets, false);
 }

@@ -29,9 +29,4 @@ struct TSStateProperty : public virtual StateProperty<Transition> {
 
 /// Transition system has states labeled with activity levels and transitions labeleld with constraints.
 template<typename StateT>
-class TSInterface : public virtual GraphInterface<StateT> {
-public:
-	inline void addLoop(const StateID s_ID, const StateID t_ID) {
-		_states[s_ID]._loops.emplace_back(t_ID);
-	}
-};
+struct TSInterface : public virtual GraphInterface<StateT> {};

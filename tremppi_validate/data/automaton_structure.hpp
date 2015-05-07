@@ -20,31 +20,12 @@ using AutState = AutomatonStateProperty<AutTransitionion>;
 /// AutomatonStructure stores Buchi automaton with edges labelled by values the KS can be in for the transition to be allowed.
 /// AutomatonStructure data can be set only from the AutomatonStructureBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class AutomatonStructure : public AutomatonInterface<AutState> {
-protected:
+struct AutomatonStructure : public AutomatonInterface<AutState> {
 	Configurations _init_constr;
 	Configurations _acc_constr;
 
-public:
+	//
 	GROUNDED(AutomatonStructure);
-
-	//
-	void setInitContrs(const Configurations & init_constr);
-
-	//
-	void setAccContrs(const Configurations & acc_constr);
-	
-	// 
-	const Configurations & getStateConstr(const StateID ID, const size_t trans_no) const;
-
-	// 
-	const vector<PathCons>& getPathConstr(const StateID ID, const size_t trans_no) const;
-
-	//
-	const Configurations & getInitConstr() const;
-
-	//
-	const Configurations & getAccConstr() const;
 
 	//
 	static char IDToName(const size_t ID);

@@ -26,44 +26,8 @@ struct AutomatonStateProperty : public virtual StateProperty<Transition> {
 ///  \brief Interface for all the classes that represent a Buchi automaton. Buchi automaton is based on a GraphInterface.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename StateT>
-class AutomatonInterface : public virtual GraphInterface<StateT> {
-protected:
+struct AutomatonInterface : public virtual GraphInterface<StateT> {
    AutType _aut_type; ///< Type of this automaton (influences verification procedure).
-
-public:
-	virtual inline void setInitial(const StateID ID) {
-		_states[ID]._initial = true;
-	}
-
-	virtual inline void setFinal(const StateID ID) {
-		_states[ID]._final = true;
-	}
-
-	virtual inline void setType(const AutType aut_type) {
-		_aut_type = aut_type;
-	}
-
-	/**
-     * For a given state find out whether it is marked as final.
-	 *
-	 * @param ID	state to test
-	 *
-	 * @return	true if the state is final
-	 */
-	virtual inline bool isFinal(const StateID ID) const {
-        return GraphInterface<StateT>::_states[ID]._final;
-	}
-
-	/**
-	 * For given state find out if it is marked as initial.
-	 *
-	 * @param ID	state to test
-	 *
-	 * @return	true if the state is initial
-	 */
-	virtual inline bool isInitial(const StateID ID) const {
-        return GraphInterface<StateT>::_states[ID]._initial;
-	}
 
 	/**
 	 * Get IDs of all states that are marked as final.
@@ -94,14 +58,5 @@ public:
 		}
 		return result;
 	}
-
-   /**
-    * @brief getAutType obtain type of the automaton
-    *
-    * @return value of AutType enum
-    */
-   virtual inline AutType getAutType() const {
-      return _aut_type;
-   }
 };
 
