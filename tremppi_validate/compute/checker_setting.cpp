@@ -16,14 +16,14 @@ bool CheckerSetting::isFinal(const StateID ID, const ProductStructure & product)
 		return (find(final_states.begin(), final_states.end(), ID) != final_states.end());
 }
 
-const vector<StateID>& CheckerSetting::getInitials(const ProductStructure & product) const {
+const vector<StateID> CheckerSetting::getInitials(const ProductStructure & product) const {
 	if (initial_states.empty())
 		return product.getInitialStates();
 	else
 		return initial_states;
 }
 
-const vector<StateID>& CheckerSetting::getFinals(const ProductStructure & product) const {
+const vector<StateID> CheckerSetting::getFinals(const ProductStructure & product) const {
 	if (final_states.empty())
 		return product.getFinalStates();
 	else

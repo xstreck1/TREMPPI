@@ -41,21 +41,8 @@ PathCons PropertiesReader::getTransitionConstraint(const string & constraint, co
 		return PathCons::pc_none;
 	}
 }
-
-vector<string> getComponent(const Json::Value & properties) {
-	vector<string> result;
-
-	for (const Json::Value & component : properties["components"]) {
-		result.emplace_back(component.asString());
-	}
-
-	sort(WHOLE(result));
-	return result;
-}
-
 vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties) {
 	vector<PropertyInfo> automata;
-	const vector<string> components = getComponent(properties);
 	for (const Json::Value & property_node : properties) {
 		PropertyInfo property_info;
 
@@ -78,13 +65,17 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 		}
 
 		// Get the experiment bounds
-		for (const string & component : components) {
-			const string value = property_node[component].asString();
-			if (!value.empty()) {
-				pair<ActLevel, ActLevel> component_bound = readBoundary(value, property_info.name, component);
-				property_info.bounds.insert({ component, component_bound });
+		for (const string & member : property_node.getMemberNames()) {
+			if (member.substr(0, 2) == "E_") {
+				const string component = member.substr(2);
+				const string value = property_node[member].asString();
+				if (!value.empty()) {
+					pair<ActLevel, ActLevel> component_bound = readBoundary(value, property_info.name, component);
+					property_info.bounds.insert({ component, component_bound });
+				}
 			}
 		}
+
 
 		// Parse records
 		map<string, PathCons> last_trans;
@@ -92,20 +83,21 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 			map<string, ActRange> state_consts;
 			map<string, PathCons> path_consts;
 
-			// get the constraint
-			for (const string & component : components) {
-				if (record.isMember(component + "_value") && !record[component + "_value"].asString().empty()) {
-					const string state_str = record[component + "_value"].asString();
-					state_consts.insert(make_pair(component,  PropertiesReader::readBoundary(state_str, property_info.name, component)));
+			for (const string & member : property_node.getMemberNames()) {
+				// get the constraint
+				if (member.substr(0, 2) == "V_") {
+					const string component = member.substr(2);
+					const string state_str = record[member].asString();
+					state_consts.insert(make_pair(component, PropertiesReader::readBoundary(state_str, property_info.name, component)));
+				}
+				else if (member.substr(0, 2) == "D_") {
+					const string component = member.substr(2);
+					const string path_str = record[component + "_delta"].asString();
+					path_consts.insert(make_pair(component, PropertiesReader::getTransitionConstraint(path_str, component)));
 				}
 
-				if (record.isMember(component + "_delta") && !record[component + "_delta"].asString().empty()) {
-					const string trans_str = record[component + "_delta"].asString();
-					path_consts.insert(make_pair(component,  PropertiesReader::getTransitionConstraint(trans_str, component)));
-				}
+				property_info.measurements.emplace_back(PropertyInfo::Measurement{ property_info.measurements.size(), move(state_consts), move(path_consts) });
 			}
-
-			property_info.measurements.emplace_back(PropertyInfo::Measurement{ property_info.measurements.size(), move(state_consts), move(path_consts) });
 		}
 
 		automata.emplace_back(move(property_info));

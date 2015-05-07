@@ -19,8 +19,8 @@ public:
 
    bool isFinal(const StateID ID, const ProductStructure & product) const;
 
-   const vector<StateID> & getInitials(const ProductStructure & product) const;
+   const vector<StateID> getInitials(const ProductStructure & product) const;
 
-   const vector<StateID> & getFinals(const ProductStructure & product) const;
+   const vector<StateID> getFinals(const ProductStructure & product) const;
 };
 

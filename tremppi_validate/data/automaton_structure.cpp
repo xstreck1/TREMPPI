@@ -29,4 +29,10 @@ const Configurations & AutomatonStructure::getAccConstr() const {
 	return _acc_constr;
 }
 
+char AutomatonStructure::IDToName(const size_t ID) {
+	return static_cast<char>(ID + 65);
+}
 
+size_t AutomatonStructure::NameToID(const char name) {
+	return static_cast<size_t>(name) - 65u;
+}

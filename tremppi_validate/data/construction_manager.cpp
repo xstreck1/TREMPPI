@@ -21,7 +21,7 @@ tuple<Levels, Levels, Levels> ConstructionManager::getBounds(const RegInfos & re
 		}
 	});
 
-	transform(WHOLE(get<0>(result)), begin(get<2>(result)), begin(get<2>(result)), [](const ActLevel min, const ActLevel max) {return static_cast<ActLevel>(max - min + 1); });
+	transform(WHOLE(get<0>(result)), begin(get<1>(result)), begin(get<2>(result)), [](const ActLevel min, const ActLevel max) {return static_cast<ActLevel>(max - min + 1); });
 	return result;
 }
 

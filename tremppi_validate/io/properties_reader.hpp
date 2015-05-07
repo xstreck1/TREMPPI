@@ -14,6 +14,4 @@ namespace PropertiesReader {
 	PathCons getTransitionConstraint(const string & constraint, const string & comp_name);
 	// Konvert model in (almost) JSON to Model object
 	vector<PropertyInfo> jsonToProperties(Json::Value & properties);
-	//
-	pair<Levels, Levels> getBounds(const RegInfos & reg_infos, const PropertyInfo & property);
 }

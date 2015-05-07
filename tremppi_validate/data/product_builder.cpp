@@ -11,15 +11,15 @@ void ProductBuilder::createSubspace(const UnparametrizedStructure & structure, c
 void ProductBuilder::relabel(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, ProductStructure & product) {
 	if (automaton.getState(BA_ID)._initial) {
 		Levels levels = min(automaton.getInitConstr());
-		while (iterate(automaton.getInitConstr(), levels)) {
+		do {
 			product.setInitial(product.getProductID(structure.computeID(levels), BA_ID));
-		}
+		} while (iterate(automaton.getInitConstr(), levels));
 	}
 	if (automaton.getState(BA_ID)._final) {
-		Levels levels = max(automaton.getInitConstr());
-		while (iterate(automaton.getInitConstr(), levels)) {
+		Levels levels = min(automaton.getAccConstr());
+		do {
 			product.setFinal(product.getProductID(structure.computeID(levels), BA_ID));
-		}
+		} while (iterate(automaton.getAccConstr(), levels));
 	}
 }
 
@@ -46,33 +46,34 @@ bool ProductBuilder::matchesConstraints(const UnparametrizedStructure & structur
 	return result;
 }
 
-void ProductBuilder::addSubspaceTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, const size_t trans_no, ProductStructure & product) {
-	StateID BA_target = automaton.getState(BA_ID)._transitions[trans_no]._t_ID;
+void ProductBuilder::addSubspaceTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, const size_t BA_trans_no, ProductStructure & product) {
+	StateID BA_target = automaton.getState(BA_ID)._transitions[BA_trans_no]._t_ID;
 
 	// List through the states that are allowed by the constraint
-	Levels levels = min(automaton.getStateConstr(BA_ID, trans_no));
-	while (iterate(automaton.getStateConstr(BA_ID, trans_no), levels)) {
+	Levels levels = min(automaton.getStateConstr(BA_ID, BA_trans_no));
+	do {
 		// bool is_ss = static_cast<bool>(solution[solution.size() - 1]);
 		// solution.resize(solution.size() - 1);
 		StateID KS_ID = structure.computeID(levels);
 		StateID ID = product.getProductID(KS_ID, BA_ID);
 
 		// Add all the trasient combinations for the kripke structure
-		for (const size_t trans_no : cscope(structure.getState(KS_ID))) {
-			const StateID KS_target = structure.getState(KS_ID)._transitions[trans_no]._t_ID;
-			const TransConst & trans_const = structure.getState(KS_ID)._transitions[trans_no]._trans_const;
+		for (const size_t KS_trans_no : cscope(structure.getState(KS_ID))) {
+			const StateID KS_target = structure.getState(KS_ID)._transitions[KS_trans_no]._t_ID;
+			const TransConst & trans_const = structure.getState(KS_ID)._transitions[KS_trans_no]._trans_const;
 			// If the transition does not meet the stability requirements, add transition to hell (infty)
-			const StateID t_ID = matchesConstraints(structure, KS_ID, KS_target, automaton.getPathConstr(BA_ID, trans_no)) ? product.getProductID(KS_target, BA_target) : INF;
+			const StateID t_ID = matchesConstraints(structure, KS_ID, KS_target, automaton.getPathConstr(BA_ID, BA_trans_no)) ? product.getProductID(KS_target, BA_target) : INF;
 			product.addTransition(ID, TSTransitionProperty( t_ID, trans_const ));
 		}
 
 		// Add a self-loop
 		product.addLoop(ID, product.getProductID(KS_ID, BA_target));
-	}
+	} while (iterate(automaton.getStateConstr(BA_ID, BA_trans_no), levels));
 }
 
 void ProductBuilder::buildProduct(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, ProductStructure & product) {
 	product._sizes = make_pair(structure.size(), automaton.size());
+	product.setType(automaton.getAutType());
 
 	// Creates states and their transitions
 	for (const size_t BA_ID : cscope(automaton)) {

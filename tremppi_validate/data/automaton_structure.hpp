@@ -45,5 +45,11 @@ public:
 
 	//
 	const Configurations & getAccConstr() const;
+
+	//
+	static char IDToName(const size_t ID);
+
+	//
+	static size_t NameToID(const char name);
 };
 

@@ -154,7 +154,7 @@ namespace Common {
 				iterated[val_num] = values[val_num].front();
 			}
 			else {
-				iterated[val_num] = *(find(WHOLE(values[val_num]), iterated[val_num])++);
+				iterated[val_num] = *(++find(WHOLE(values[val_num]), iterated[val_num]));
 				break;
 			}
 		}
@@ -165,7 +165,7 @@ namespace Common {
 	std::vector<IntegralType> min(const std::vector<std::vector<IntegralType>> & values) {
 		std::vector<IntegralType>  result(values.size());
 
-		for (size_t val_num = 0; val_num <= values.size(); val_num++) {
+		for (size_t val_num = 0; val_num < values.size(); val_num++) {
 			result[val_num] = values[val_num].front();
 		}
 
@@ -176,7 +176,7 @@ namespace Common {
 	std::vector<IntegralType> max(const std::vector<std::vector<IntegralType>> & values) {
 		std::vector<IntegralType> result(values.size());
 
-		for (size_t val_num = 0; val_num <= values.size(); val_num++) {
+		for (size_t val_num = 0; val_num < values.size(); val_num++) {
 			result[val_num] = values[val_num].back();
 		}
 

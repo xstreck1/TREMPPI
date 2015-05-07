@@ -18,10 +18,19 @@
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace AutomatonBuilder {
 	// Compute allowed values from string of constrains
-	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const bool negate);
+	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const bool inclusive);
 
 	//
 	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);
+
+	void createEmpty(const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
+
+
+	//
+	void buildTransient(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
+
+	//
+	void buildCyclic(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, const char target, AutomatonStructure & automaton);
 
 	// Create the transitions from the model and fill the automaton with them.
 	void buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton);

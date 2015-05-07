@@ -14,27 +14,27 @@ void createProperties(const bfs::path & example_model_path) {
 
 	// Add time series
 	records[0]["name"] = "test_ts";
-	records[0]["type"] = "series";
-	records[0]["A"] = "";
-	records[0]["B"] = "";
+	records[0]["ending"] = "any";
+	records[0]["E_A"] = "";
+	records[0]["E_B"] = "";
 	records[0]["validate"] = true;
 	records[0]["robustness"] = true;
 	records[0]["witness"] = false;
 	records[0]["records"].resize(2);
-	records[0]["records"][0]["B_value"] = "[0,1)";
-	records[0]["records"][1]["B_value"] = "(1,2]";
+	records[0]["records"][0]["V_B"] = "[0,1)";
+	records[0]["records"][1]["V_B"] = "(1,2]";
 
 	// Add a cycle
 	records[1]["name"] = "test_cycle";
-	records[1]["type"] = "cycle";
-	records[1]["A"] = "";
-	records[1]["B"] = "";
+	records[1]["ending"] = "goto A";
+	records[1]["E_A"] = "";
+	records[1]["E_B"] = "";
 	records[1]["validate"] = true;
 	records[1]["robustness"] = false;
 	records[1]["witness"] = true;
 	records[1]["records"].resize(2);
-	records[1]["records"][0]["B_value"] = "[0,1)";
-	records[1]["records"][1]["B_value"] = "[1,1]";
+	records[1]["records"][0]["V_B"] = "[0,1)";
+	records[1]["records"][1]["V_B"] = "[1,1]";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
@@ -60,7 +60,7 @@ TEST_F(ValidateTest, Construction) {
 	ASSERT_EQ(1, get<1>(bounds).size());
 	EXPECT_EQ(1, get<1>(bounds)[0]) << "Max is 1";
 	ASSERT_EQ(1, get<2>(bounds).size());
-	EXPECT_EQ(2, get<1>(bounds)[0]) << "Two values in total";
+	EXPECT_EQ(2, get<2>(bounds)[0]) << "Two values in total";
 
 	// Construct unparametrized structure and check if all the values are as expected
 	UnparametrizedStructure us;

@@ -63,11 +63,11 @@ multimap<StateID, StateID> WitnessSearcher::findWitnesses(const CheckerSetting &
 const string WitnessSearcher::getOutput(const ProductStructure & product, const size_t max_cost, const multimap<StateID, StateID>& transitions) {
 	string acceptable_paths; // Vector fo actuall data
 
-	set<StateID> current_depth(WHOLE(product.getInitialStates()));
+	vector<StateID> current_depth = product.getInitialStates();
 	size_t cost = 1;
 
 	while (max_cost != INF && cost < max_cost) {
-		set<StateID> next_depth;
+		vector<StateID> next_depth;
 		for (StateID ID : current_depth) {
 			auto range = transitions.equal_range(ID);
 
@@ -76,11 +76,11 @@ const string WitnessSearcher::getOutput(const ProductStructure & product, const 
 					.append(">")
 					.append(product.getString(it->second) + "-" + to_string(cost+1))
 					.append(";");
-				next_depth.insert(it->second);
+				next_depth.emplace_back(it->second);
 			}
 		}
 
-		current_depth = next_depth;
+		current_depth = makeUnique(next_depth);
 		cost++;
 	}
 
