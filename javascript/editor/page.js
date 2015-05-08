@@ -59,10 +59,3 @@ tremppi.editor.setDefaultData = function (data) {
     if (typeof data.edges === 'undefined')
         data.edges = [];
 };
-
-
-tremppi.editor.defaultToolbar = function () {
-    return {
-        items: []
-    };
-};

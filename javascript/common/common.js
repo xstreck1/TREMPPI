@@ -48,7 +48,7 @@ tremppi.w2ui = {
                 records[event.index][column_name] = event.value_new;
                 records[event.index].changes = {};
                 tremppi.widget.save();
-            }
+            };
         };
     },
     findByRecID: function (array, recid) {

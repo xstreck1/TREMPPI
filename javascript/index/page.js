@@ -4,14 +4,16 @@
  * and open the template in the editor.
  */
 
-tremppi.index.setPage = function () {};
+/* global tremppi */
 
-tremppi.index.setData = function (data) {};
-
-tremppi.index.save = function () {};
+tremppi.index.page = function () {
+    tremppi.index.widget();
+};
 
 tremppi.index.layout = function () {};
 
-tremppi.index.setDefaultData = function (data) {};
-
-tremppi.index.defaultToolbar = function () {};
+tremppi.index.setData = function (data) {
+    $("#text_field").val(data.text);
+    
+    tremppi.index.controls();
+};

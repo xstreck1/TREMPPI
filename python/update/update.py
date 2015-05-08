@@ -16,13 +16,13 @@ args = parser.parse_args()
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 for folder in folders:
-    source = join(join(HOME_PATH, os.path.normpath(source_folder)), folder)
+    source = join(join(HOME_PATH, source_folder), folder)
     destination = join(DEST_PATH, folder)
     if os.path.exists(destination):
         shutil.rmtree(destination)
     copyanything(source, destination)
 
 for file in files:
-    shutil.copy(join(HOME_PATH, os.path.normpath(source_folder + file + ".html")), DEST_PATH)
+    shutil.copy(join(HOME_PATH, source_folder + file + ".html"), DEST_PATH)
 
-shutil.copy(join(HOME_PATH, os.path.normpath(source_folder + "favicon.ico")), DEST_PATH)
+shutil.copy(join(HOME_PATH, source_folder + "favicon.ico"), DEST_PATH)
