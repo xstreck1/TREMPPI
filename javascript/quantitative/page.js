@@ -6,49 +6,49 @@
 
 /* global tremppi */
 
-tremppi.summary.setPage = function () {
+tremppi.quantitative.setPage = function () {
     $("#widget").append('<div id="container_left">left</div>');
     $("#widget").append('<div id="container_mid">mid</div>');
     $("#widget").append('<div id="container_right">right</div>');
 };
 
-tremppi.summary.setPanel = function (data, panel) {
-    tremppi.summary[panel] = {};
-    $.extend(true, tremppi.summary[panel], data.grid);
-    tremppi.summary[panel].name = panel;
-    tremppi.summary[panel].header = panel;
-    tremppi.summary[panel] = $('#container_' + panel).w2grid(tremppi.summary[panel]);
+tremppi.quantitative.setPanel = function (data, panel) {
+    tremppi.quantitative[panel] = {};
+    $.extend(true, tremppi.quantitative[panel], data.grid);
+    tremppi.quantitative[panel].name = panel;
+    tremppi.quantitative[panel].header = panel;
+    tremppi.quantitative[panel] = $('#container_' + panel).w2grid(tremppi.quantitative[panel]);
 };
 
-tremppi.summary.setData = function (data) {
-    tremppi.summary.setPanel(data, 'left');
-    tremppi.summary.setPanel(data, 'mid');
-    tremppi.summary.setPanel(data, 'right');
-    tremppi.summary.toolbar.get('select').items = tremppi.data.selections;
-    tremppi.summary.toolbar.get('compare').items = tremppi.data.selections;
-    tremppi.summary.toolbar.onClick = tremppi.summary.toolbarClick;
+tremppi.quantitative.setData = function (data) {
+    tremppi.quantitative.setPanel(data, 'left');
+    tremppi.quantitative.setPanel(data, 'mid');
+    tremppi.quantitative.setPanel(data, 'right');
+    tremppi.quantitative.toolbar.get('select').items = tremppi.data.selections;
+    tremppi.quantitative.toolbar.get('compare').items = tremppi.data.selections;
+    tremppi.quantitative.toolbar.onClick = tremppi.quantitative.toolbarClick;
     if (data.panel === 'left' || data.panel === 'mid' || data.panel === 'right') {
-        tremppi.summary.toolbar.uncheck('all');
-        tremppi.summary.toolbar.check(data.panel);
-        tremppi.summary.showPanel(data.panel);
+        tremppi.quantitative.toolbar.uncheck('all');
+        tremppi.quantitative.toolbar.check(data.panel);
+        tremppi.quantitative.showPanel(data.panel);
     }
 
     if (data.select !== "") {
-        tremppi.summary.pickData(data.select, 'left');
+        tremppi.quantitative.pickData(data.select, 'left');
     }
     if (data.compare !== "") {
-        tremppi.summary.pickData(data.compare, 'right');
+        tremppi.quantitative.pickData(data.compare, 'right');
     }
 };
 
-tremppi.summary.save = function () {
+tremppi.quantitative.save = function () {
     tremppi.save();
 };
 
-tremppi.summary.layout = function () {
+tremppi.quantitative.layout = function () {
 };
 
-tremppi.summary.setDefaultData = function (data) {
+tremppi.quantitative.setDefaultData = function (data) {
     if (typeof data.selections === 'undefined')
         data.selections = [];
 
@@ -77,7 +77,7 @@ tremppi.summary.setDefaultData = function (data) {
     data.grid.records = [];
 };
 
-tremppi.summary.defaultToolbar = function () {
+tremppi.quantitative.defaultToolbar = function () {
     return {
         name: 'toolbar',
         items: [

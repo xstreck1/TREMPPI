@@ -30,7 +30,7 @@ tremppi = {
         var url = window.location.pathname;
         tremppi.widget_name = url.substring(url.lastIndexOf('/') + 1).slice(0, -5);
         tremppi[tremppi.widget_name] = tremppi.widget = this.widgetInterface();
-        tremppi.data_file = "./" + tremppi.widget_name + ".json";
+        tremppi.data_file = tremppi.getDataFile(tremppi.widget_name);
         tremppi.makeHead();
         $(window).ready(tremppi.construct);
     },
@@ -80,11 +80,12 @@ tremppi = {
             nodes: [
                 {id: 'widget_list', text: 'widgets', expanded: true, group: true,
                     nodes: [
+                        {id: 'index', text: 'index'},
                         {id: 'editor', text: 'editor'},
                         {id: 'select', text: 'select'},
                         {id: 'properties', text: 'properties'},
-                        {id: 'summary', text: 'summary'},
-                        {id: 'occurence', text: 'occurence'}
+                        {id: 'quantitative', text: 'quantitative'},
+                        {id: 'qualitative', text: 'qualitative'}
                     ]
                 }
             ]

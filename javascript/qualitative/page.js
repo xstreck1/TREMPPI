@@ -6,49 +6,49 @@
 
 /* global tremppi */
 
-tremppi.occurence.setPage = function () {
+tremppi.qualitative.setPage = function () {
     $("#widget").append('<div id="container_left">left</div>');
     $("#widget").append('<div id="container_mid">mid</div>');
     $("#widget").append('<div id="container_right">right</div>');
 };
 
-tremppi.occurence.setPanel = function (data, panel) {
-    tremppi.occurence[panel] = {};
-    $.extend(true, tremppi.occurence[panel], data.grid);
-    tremppi.occurence[panel].name = panel;
-    tremppi.occurence[panel].header = panel;
-    tremppi.occurence[panel] = $('#container_' + panel).w2grid(tremppi.occurence[panel]);
+tremppi.qualitative.setPanel = function (data, panel) {
+    tremppi.qualitative[panel] = {};
+    $.extend(true, tremppi.qualitative[panel], data.grid);
+    tremppi.qualitative[panel].name = panel;
+    tremppi.qualitative[panel].header = panel;
+    tremppi.qualitative[panel] = $('#container_' + panel).w2grid(tremppi.qualitative[panel]);
 };
 
-tremppi.occurence.setData = function (data) {
-    tremppi.occurence.setPanel(data, 'left');
-    tremppi.occurence.setPanel(data, 'mid');
-    tremppi.occurence.setPanel(data, 'right');
-    tremppi.occurence.toolbar.get('select').items = tremppi.data.selections;
-    tremppi.occurence.toolbar.get('compare').items = tremppi.data.selections;
-    tremppi.occurence.toolbar.onClick = tremppi.occurence.toolbarClick;
+tremppi.qualitative.setData = function (data) {
+    tremppi.qualitative.setPanel(data, 'left');
+    tremppi.qualitative.setPanel(data, 'mid');
+    tremppi.qualitative.setPanel(data, 'right');
+    tremppi.qualitative.toolbar.get('select').items = tremppi.data.selections;
+    tremppi.qualitative.toolbar.get('compare').items = tremppi.data.selections;
+    tremppi.qualitative.toolbar.onClick = tremppi.qualitative.toolbarClick;
     if (data.panel === 'left' || data.panel === 'mid' || data.panel === 'right') {
-        tremppi.occurence.toolbar.uncheck('all');
-        tremppi.occurence.toolbar.check(data.panel);
-        tremppi.occurence.showPanel(data.panel);
+        tremppi.qualitative.toolbar.uncheck('all');
+        tremppi.qualitative.toolbar.check(data.panel);
+        tremppi.qualitative.showPanel(data.panel);
     }
 
     if (data.select !== "") {
-        tremppi.occurence.pickData(data.select, 'left');
+        tremppi.qualitative.pickData(data.select, 'left');
     }
     if (data.compare !== "") {
-        tremppi.occurence.pickData(data.compare, 'right');
+        tremppi.qualitative.pickData(data.compare, 'right');
     }
 };
 
-tremppi.occurence.save = function () {
+tremppi.qualitative.save = function () {
     tremppi.save();
 };
 
-tremppi.occurence.layout = function () {
+tremppi.qualitative.layout = function () {
 };
 
-tremppi.occurence.setDefaultData = function (data) {
+tremppi.qualitative.setDefaultData = function (data) {
     if (typeof data.selections === 'undefined')
         data.selections = [];
 
@@ -72,7 +72,7 @@ tremppi.occurence.setDefaultData = function (data) {
     data.grid.records = [];
 };
 
-tremppi.occurence.defaultToolbar = function () {
+tremppi.qualitative.defaultToolbar = function () {
     return {
         name: 'toolbar',
         items: [
