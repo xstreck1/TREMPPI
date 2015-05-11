@@ -7,9 +7,6 @@
 /* global w2ui */
 
 tremppi = {
-    server_port: 8080,
-    server_location: "localhost",
-    project_name: "default_project_name",
     widgetInterface: function () {
         return {
             page: function () {
@@ -24,7 +21,7 @@ tremppi = {
         };
     },
     getServerAddress: function () {
-        return "http://" + this.server_location + ":" + this.server_port + "/";
+        return "http://" + tremppi.setup.server_location + ":" + tremppi.setup.server_port + "/";
     },
     makeDataFilepath: function (filename) {
         if (typeof filename === 'undefined') {
@@ -80,10 +77,40 @@ tremppi = {
             return localStorage.getItem(makeStorageKey(key));
         }
     },
+    makeScript: function(src) {
+        var element = document.createElement('script');
+        element.src = src;
+        return element;
+    },
+    makeLink: function(rel, type, href) {
+        var element = document.createElement('link');
+        element.rel = rel;
+        element.type = type;
+        element.href = href;
+        return element;
+    },
     makeHead: function () {
-        $("head").append(
-                '<meta charset=utf-8 />' +
-                '<link rel="icon" type="image/x-icon" href="./favicon.ico">');
+        var head = document.getElementsByTagName('head')[0];
+        
+        // libraries 
+        head.appendChild(tremppi.makeScript('./libs/jquery-2.1.3.js'));
+        head.appendChild(tremppi.makeScript('./libs/cytoscape-2.3.9.js'));
+        head.appendChild(tremppi.makeScript('./libs/w2ui-1.4.2.js'));
+        head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './libs/w2ui-1.4.2.css'));
+        
+        // common 
+        head.appendChild(tremppi.makeLink('icon', 'image/x-icon', './favicon.ico'));
+        head.appendChild(tremppi.makeScript('./setup.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
+        head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './common/css.css'));
+        head.appendChild(tremppi.makeScript('./common/common.js'));
+        
+        // widget-related
+        head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './' + tremppi.widget_name + '/css.css'));
+        head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/widget.js'));
+        head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/controls.js'));
+        head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/page.js'));
+        head.appendChild(tremppi.makeScript('./data/' + tremppi.widget_name + '.js?_=' + Math.random().toString().slice(2)));
+        
         document.title = tremppi.widget_name;
     },
     makeBody: function () {
@@ -133,15 +160,15 @@ tremppi = {
         w2ui.layout.on('resize', tremppi.widget.layout);
 
         // Load the specific data
+        $.ajaxSetup({cache: false});
         tremppi.getData(tremppi.widget.setData);
     }
 };
 // Initial content execution, 
-$.ajaxSetup({cache: false});
 var url = window.location.pathname;
 tremppi.widget_name = url.substring(url.lastIndexOf('/') + 1).slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
 tremppi.makeHead();
-$(window).ready(tremppi.makeBody);
+window.onload = tremppi.makeBody;
 
 
