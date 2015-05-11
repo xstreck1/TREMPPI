@@ -1,0 +1,17 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+
+#selection_table {
+    width : 100%;
+    height: 100%;
+}
+
+button.grid_manip {
+    height: 15px;
+    padding: 0px;
+    margin: 0px;
+    font-size: 13px;
+}

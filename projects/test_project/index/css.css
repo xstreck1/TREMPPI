@@ -1,0 +1,19 @@
+#project_title {
+    text-align: center;
+    font-size: 30pt;
+    padding: 20pt;
+    width: 100%;
+    position: absolute;
+}
+
+#text_box {
+    width: 100%;
+    height: 100%;
+    padding: 80pt 20pt 20pt 20pt;
+    resize:both;
+}
+
+#text_field {
+    width: 100%;
+    height: 100%;
+}

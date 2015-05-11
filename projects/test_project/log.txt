@@ -1,0 +1,58 @@
+[2015-May-11 18:52:12.753382] (1) <info>: ------------------------------
+[2015-May-11 18:52:12.755384] (2) <info>: tremppi_spawn started.
+[2015-May-11 18:52:12.755384] (3) <info>: Checking the JSON correctness.
+[2015-May-11 18:52:12.757386] (4) <info>: Parsing the network.
+[2015-May-11 18:52:12.780195] (5) <info>: Obtaining kinetics.
+[2015-May-11 18:52:12.802213] (6) <info>: Creating the database file.
+[2015-May-11 18:52:13.047280] (7) <info>: Writing the database file, in total 26 parametrizations.
+[2015-May-11 18:52:13.162359] (8) <info>: tremppi_spawn finished successfully.
+[2015-May-11 18:52:13.166361] (9) <info>: ------------------------------
+[2015-May-11 18:52:13.167361] (10) <info>: tremppi_express started.
+[2015-May-11 18:52:13.512098] (11) <info>: tremppi_express finished successfully.
+[2015-May-11 18:52:13.531070] (12) <info>: ------------------------------
+[2015-May-11 18:52:13.533072] (13) <info>: tremppi_validate started.
+[2015-May-11 18:52:13.533072] (14) <info>: Parsing database.
+[2015-May-11 18:52:13.539075] (15) <info>: Checking the JSON correctness.
+[2015-May-11 18:52:13.540076] (16) <info>: Parsing the properties.
+[2015-May-11 18:52:13.542077] (17) <info>: Building a product with the automaton: test_ts
+[2015-May-11 18:52:13.549085] (18) <info>: Validating for an automaton: test_ts
+[2015-May-11 18:52:13.822607] (19) <info>: Building a product with the automaton: test_cycle
+[2015-May-11 18:52:13.829611] (20) <info>: Validating for an automaton: test_cycle
+[2015-May-11 18:52:14.220619] (21) <info>: tremppi_validate finished successfully.
+[2015-May-11 18:52:14.224622] (22) <info>: ------------------------------
+[2015-May-11 18:52:14.225623] (23) <info>: tremppi_interact started.
+[2015-May-11 18:52:14.225623] (24) <info>: Parsing data file.
+[2015-May-11 18:52:14.234628] (25) <info>: Computing interaction graph data.
+[2015-May-11 18:52:14.245637] (26) <info>: Building the JSON files.
+[2015-May-11 18:52:14.246636] (27) <info>: Writing output.
+[2015-May-11 18:52:14.258645] (28) <info>: tremppi_interact finished successfully.
+[2015-May-11 18:52:14.264650] (29) <info>: ------------------------------
+[2015-May-11 18:52:14.265651] (30) <info>: tremppi_function started.
+[2015-May-11 18:52:14.265651] (31) <info>: Parsing data file.
+[2015-May-11 18:52:14.275656] (32) <info>: Computing function graph data.
+[2015-May-11 18:52:14.278658] (33) <info>: Building the JSON.
+[2015-May-11 18:52:14.279659] (34) <info>: Writing output.
+[2015-May-11 18:52:14.292667] (35) <info>: tremppi_function finished successfully.
+[2015-May-11 18:52:14.296670] (36) <info>: ------------------------------
+[2015-May-11 18:52:14.298670] (37) <info>: tremppi_witness started.
+[2015-May-11 18:52:14.298670] (38) <info>: Parsing data.
+[2015-May-11 18:52:14.308678] (39) <info>: Loading witnesses.
+[2015-May-11 18:52:14.309679] (40) <info>: Converting to JSON
+[2015-May-11 18:52:14.309679] (41) <info>: Writing output.
+[2015-May-11 18:52:14.313680] (42) <info>: tremppi_witness finished successfully.
+[2015-May-11 18:52:21.416918] (43) <info>: ------------------------------
+[2015-May-11 18:52:21.417920] (44) <info>: tremppi_qualitative started.
+[2015-May-11 18:52:21.417920] (45) <info>: Parsing data.
+[2015-May-11 18:52:21.428926] (46) <info>: Preparing the data.
+[2015-May-11 18:52:21.429927] (47) <info>: Reading the values, computing the statistics.
+[2015-May-11 18:52:21.435930] (48) <info>: Building the JSON file.
+[2015-May-11 18:52:21.437931] (49) <info>: Writing output.
+[2015-May-11 18:52:21.444936] (50) <info>: tremppi_qualitative finished successfully.
+[2015-May-11 18:52:21.448939] (51) <info>: ------------------------------
+[2015-May-11 18:52:21.449940] (52) <info>: tremppi_quantitative started.
+[2015-May-11 18:52:21.450941] (53) <info>: Parsing data.
+[2015-May-11 18:52:21.461947] (54) <info>: Preparing the data.
+[2015-May-11 18:52:21.461947] (55) <info>: Reading the values, computing the statistics.
+[2015-May-11 18:52:21.466950] (56) <info>: Building the JSON file.
+[2015-May-11 18:52:21.467951] (57) <info>: Writing output.
+[2015-May-11 18:52:21.513982] (58) <info>: tremppi_quantitative finished successfully.

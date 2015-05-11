@@ -12,6 +12,7 @@
 #include "qualitative_tests.hpp"
 
 TEST(CoreTest, AllPrograms) {
+	bfs::remove_all(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT);
 	ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";
 	ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
 	ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";

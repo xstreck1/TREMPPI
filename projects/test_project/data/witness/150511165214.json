@@ -1,0 +1,14 @@
+{
+   "elements" : {
+      "edges" : null,
+      "nodes" : null
+   },
+   "setup" : {
+      "components" : [ "A", "B" ],
+      "date" : "Mon May 11 18:52:14 2015",
+      "s_name" : "",
+      "select" : "",
+      "size" : 26
+   }
+}
+

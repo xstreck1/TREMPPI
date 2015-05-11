@@ -95,7 +95,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 3);
+		logging.exceptionMessage(e, 4);
 	}
 
 	try {
@@ -115,12 +115,11 @@ int tremppi_qualitative(int argc, char ** argv) {
 		}
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 4);
+		logging.exceptionMessage(e, 5);
 	}
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		const string name = out["setup"]["s_name"].asString();
 		// add if not exists
 		//bool exists = false;
 		//for (Json::Value selection : widget_data["selections"]) {
@@ -133,10 +132,10 @@ int tremppi_qualitative(int argc, char ** argv) {
 		//	widget_data["selections"].append(new_entry);
 		//}
 		
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "qualitative" / (name + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "qualitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 5);
+		logging.exceptionMessage(e, 6);
 	}
 
 	return 0;

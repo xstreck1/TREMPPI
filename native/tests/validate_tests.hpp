@@ -37,7 +37,7 @@ void createProperties(const bfs::path & example_model_path) {
 	records[1]["records"][1]["V_B"] = "[1,1]";
 
 	Json::StyledWriter writer;
-	ofstream data_file((example_model_path / PROPERTIES_FILENAME).string(), ios::out);
+	ofstream data_file((example_model_path / DATA_FOLDER / PROPERTIES_FILENAME).string(), ios::out);
 	string data = writer.write(root);
 	data_file << data;
 }

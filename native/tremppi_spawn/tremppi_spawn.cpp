@@ -21,12 +21,10 @@ int tremppi_spawn(int argc, char ** argv) {
 
 	// Check the file
 	Json::Value root; // root of the network
-	Json::Value properties;
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
 		root = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / NETWORK_FILENAME);
-		properties = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}
@@ -68,26 +66,12 @@ int tremppi_spawn(int argc, char ** argv) {
 		return 0;
 	}
 
-	// Write to properties
-	try {
-		BOOST_LOG_TRIVIAL(info) << "Writing properties template.";
-		properties["components"] = Json::Value();
-		for (const Model::ModelComp & comp : model.components) {
-			properties["components"].append(comp.name);
-		}
-		properties["configured"] = false;
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME, properties);
-	}
-	catch (exception & e) {
-		logging.exceptionMessage(e, 5);
-	}
-
 	// Build parametrizations (in full this time)
 	try {
 		ParametrizationsBuilder::build(false, model, kinetics);
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 6);
+		logging.exceptionMessage(e, 5);
 	}
 
 	// Output the database
@@ -113,7 +97,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		DatabaseReader::makeSelect();
 	}
 	catch (exception & e) {
-		logging.exceptionMessage(e, 7);
+		logging.exceptionMessage(e, 6);
 	}
 
 	return 0;

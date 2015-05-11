@@ -124,11 +124,9 @@ string DatabaseReader::getSelectionName() {
 
 void DatabaseReader::makeSelect() {
 	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from tremppi.tabularize import tabularize");
-	python.exec("tabularize(" +
-		PythonFunctions::reformPath(bfs::absolute(TremppiSystem::DATA_PATH  / DATABASE_FILENAME)) +
-		", " +
-		PythonFunctions::reformPath(bfs::absolute(TremppiSystem::WORK_PATH  / SELECTION_FILENAME)) +
-		")");
+	python.exec("from configure.configure import configure");
+	python.exec("configure(" +
+		PythonFunctions::reformPath(bfs::absolute(TremppiSystem::DATA_PATH)) +
+		", \"select\")");
 }
 

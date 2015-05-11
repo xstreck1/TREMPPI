@@ -34,7 +34,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 		// Read filter conditions
 		out = Report::createSetup();
 		
-		db = move(sqlite3pp::database((TremppiSystem::WORK_PATH / DATABASE_FILENAME).string().c_str()));
+		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read regulatory information
 		DatabaseReader reader;
@@ -122,7 +122,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH/ "quantitative" / (name + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH/ "quantitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

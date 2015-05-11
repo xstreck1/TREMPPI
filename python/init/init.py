@@ -2,11 +2,28 @@ import sys
 import os
 import argparse
 import shutil
-from os.path import join, dirname, abspath
-
+import json
+from os.path import join, dirname, abspath, isfile, exists
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything, replace_regex, normal_paths
-from tremppi.header import folders, widgets, source_folder
+from tremppi.header import folders, widgets, source_folder, data_folder
+
+# make sure all the data are present
+def generateData(data_path):
+    if not exists(data_path):
+        os.makedirs(data_path)
+    for widget in widgets:
+        # main json
+        json_filename = join(data_path, widget + '.json')
+        if not isfile(json_filename):
+            with open(json_filename, 'w+') as json_file:
+                json.dump({}, json_file)
+        # config js
+        js_filename = join(data_path, widget + '.js')
+        if not isfile(js_filename):
+            open(js_filename, 'w+').close()
+        if not exists(join(data_path, widget)):
+            os.makedirs(join(data_path, widget))
 
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--path', help='specify the location where the file gets created.')
@@ -14,7 +31,6 @@ parser.add_argument('name', help='name of the newly created model')
 args = parser.parse_args()
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
-
 DEST_CONTENT = join(DEST_PATH, args.name)
 if os.path.exists(DEST_CONTENT):
     raise 'The destination folder ' + DEST_CONTENT + ' already exists, aborting.'
@@ -26,12 +42,7 @@ for folder in folders:
     copyanything(source, destination)
 
 # make the data directory
-os.makedirs(join(DEST_CONTENT, 'data'))
-
-for widget in widgets:
-    html_file = join(source_folder, widget + '.html')
-    shutil.copy(join(HOME_PATH, html_file, DEST_CONTENT))
-    open(join(DEST_CONTENT, 'data', widget +'.js')) #create an empty data configure file
+generateData(join(DEST_CONTENT, data_folder))
 
 # create the configure data
 with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:

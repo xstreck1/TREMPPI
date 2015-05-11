@@ -6,7 +6,7 @@
 #include <tremppi_common/network/data_info.hpp>
 #include <tremppi_common/general/system.hpp>
 
-const string TEST_FOLDER = "tests";
+const string TEST_FOLDER = "projects";
 const string TEST_PROJECT = "test_project";
 
 

@@ -12,7 +12,7 @@ bool TremppiSystem::standalone;
 void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) {
 	TremppiSystem::PROGRAM_NAME = name;
 	TremppiSystem::WORK_PATH = _WORK_PATH;
-	TremppiSystem::DATA_PATH = _WORK_PATH / DATA_FOLDER;
+	TremppiSystem::DATA_PATH = TremppiSystem::WORK_PATH / DATA_FOLDER;
 	TremppiSystem::BIN_PATH = bfs::absolute(bfs::path{ arg });
 	TremppiSystem::EXEC_PATH = bfs::current_path();
 

@@ -1,0 +1,75 @@
+{
+   "records" : [
+      {
+         "count" : 26,
+         "max" : 1.0,
+         "mean" : 0.50,
+         "min" : 0.0,
+         "name" : "K<sub>A</sub>()",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 1.0,
+         "mean" : 0.2307692307692308,
+         "min" : 0.0,
+         "name" : "K<sub>B</sub>(00)",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 2.0,
+         "mean" : 0.9230769230769231,
+         "min" : 0.0,
+         "name" : "K<sub>B</sub>(02)",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 2.0,
+         "mean" : 1.076923076923077,
+         "min" : 0.0,
+         "name" : "K<sub>B</sub>(10)",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 2.0,
+         "mean" : 1.769230769230769,
+         "min" : 1.0,
+         "name" : "K<sub>B</sub>(12)",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 15.0,
+         "mean" : 15.0,
+         "min" : 15.0,
+         "name" : "C<sub>test</sub>(ts)",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 6.100000000000000e-05,
+         "mean" : 6.100000000000001e-05,
+         "min" : 6.100000000000000e-05,
+         "name" : "R<sub>test</sub>(ts)",
+         "portion" : 1.0
+      },
+      {
+         "count" : 26,
+         "max" : 3.0,
+         "mean" : 2.038461538461538,
+         "min" : 2.0,
+         "name" : "C<sub>test</sub>(cycle)",
+         "portion" : 1.0
+      }
+   ],
+   "setup" : {
+      "date" : "Mon May 11 18:52:21 2015",
+      "s_name" : "",
+      "select" : "",
+      "size" : 26
+   }
+}
+

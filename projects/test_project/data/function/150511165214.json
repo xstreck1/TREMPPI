@@ -1,0 +1,31 @@
+{
+   "elements" : {
+      "nodes" : [
+         {
+            "data" : {
+               "Bias" : 0.50,
+               "Max" : 1,
+               "Std" : 0.50,
+               "id" : "A",
+               "name" : "A"
+            }
+         },
+         {
+            "data" : {
+               "Bias" : 1.0,
+               "Max" : 2,
+               "Std" : 0.3922322702763681,
+               "id" : "B",
+               "name" : "B"
+            }
+         }
+      ]
+   },
+   "setup" : {
+      "date" : "Mon May 11 18:52:14 2015",
+      "s_name" : "",
+      "select" : "",
+      "size" : 26
+   }
+}
+
