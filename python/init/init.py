@@ -6,7 +6,7 @@ from os.path import join, dirname, abspath
 
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything, replace_regex, normal_paths
-from tremppi.header import folders, files, source_folder
+from tremppi.header import folders, widgets, source_folder
 
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--path', help='specify the location where the file gets created.')
@@ -25,12 +25,17 @@ for folder in folders:
     destination = join(DEST_CONTENT, folder)
     copyanything(source, destination)
 
-for file in files:
-    html_file = join(source_folder, file + '.html')
-    shutil.copy(join(HOME_PATH, html_file, DEST_CONTENT))
+# make the data directory
+os.makedirs(join(DEST_CONTENT, 'data'))
 
-with open(join(DEST_CONTENT, 'setup.js'), 'w+') as setup:
-    setup.write('tremppi.setup = { ' +
+for widget in widgets:
+    html_file = join(source_folder, widget + '.html')
+    shutil.copy(join(HOME_PATH, html_file, DEST_CONTENT))
+    open(join(DEST_CONTENT, 'data', widget +'.js')) #create an empty data configure file
+
+# create the configure data
+with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:
+    setup.write('tremppi.configure = { ' +
                 'server_port: 8080' +
                 'server_location: "localhost"' +
                 'project_name: ' + args.name)

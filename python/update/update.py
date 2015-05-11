@@ -6,7 +6,7 @@ import shutil
 from os.path import join, dirname, abspath
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything, replace, normal_paths
-from tremppi.header import folders, files, source_folder
+from tremppi.header import folders, widgets, source_folder
 
 # define options
 parser = argparse.ArgumentParser(description='Update a TREMPPI project.')
@@ -22,7 +22,7 @@ for folder in folders:
         shutil.rmtree(destination)
     copyanything(source, destination)
 
-for file in files:
+for file in widgets:
     shutil.copy(join(HOME_PATH, source_folder + file + ".html"), DEST_PATH)
 
 shutil.copy(join(HOME_PATH, source_folder + "favicon.ico"), DEST_PATH)

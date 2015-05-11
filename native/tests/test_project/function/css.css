@@ -1,0 +1,51 @@
+#data {
+    position: relative;
+    height: 100%;
+}
+
+div.container {
+    width: 33.333%;
+    height: 100%;
+    position: absolute;
+}
+
+#container_select {
+    top: 0px;
+    left: 0%;
+}
+
+#container_differ {
+    top: 0px;
+    left: 33.333%;
+}
+
+#container_compare {
+    top: 0px;
+    left: 66.666%; 
+}
+
+div.graph {
+    height: 100%;
+    border: 1px black solid;
+    background-color: #999999;
+}
+
+canvas.legend { 
+    width: 100%; 
+    height: 60px;
+    text-align: center;
+    position: absolute;
+    bottom: 25px;
+}
+
+div.caption {
+    text-align: center; 
+    font-size: 20px; 
+    width: 100%
+}
+
+#function_controls {
+    text-align: center;
+    font-family: monospace;
+    font-size: 20px; 
+}

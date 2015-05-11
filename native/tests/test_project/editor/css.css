@@ -1,0 +1,10 @@
+#graph_object {
+    width: 100%; 
+    background-color: #888888;
+    height: 100%;
+}
+
+#Help {
+    font-size: 14px;
+    padding: 5px;
+}

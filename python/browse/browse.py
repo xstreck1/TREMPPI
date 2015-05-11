@@ -8,9 +8,7 @@ from os.path import dirname, join, abspath, exists, normpath, isfile
 from http.server import  HTTPServer, SimpleHTTPRequestHandler
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import replace_regex, normal_paths
-from tremppi.header import files, data_folder
-
-DEFAULT_PORT = "8080"
+from tremppi.header import widgets, data_folder, default_port
 
 # Tremppi server that communicates between HTML reports and the filesystem
 class StoreHandler(SimpleHTTPRequestHandler):
@@ -53,7 +51,7 @@ class StoreHandler(SimpleHTTPRequestHandler):
             self.wfile.write("".encode())
         self.send_response(200)
 
-# options and system setup
+# options and system configure
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--path', help='specify the browsing location.')
 parser.add_argument('--port', help='number of the port to run the browser on')
@@ -61,26 +59,23 @@ args = parser.parse_args()
 
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
-# make sure all the data are correct
-for file in files:
-    json_filename = join(DEST_PATH, data_folder, file + '.json')
+# make sure all the data are present
+for widget in widgets:
+    json_filename = join(DEST_PATH, data_folder, widget + '.json')
     if not isfile(json_filename):
         with open(json_filename, 'w+') as json_file:
             json.dump({}, json_file)
-    js_filename = join(DEST_PATH, data_folder, file + '.js')
+    js_filename = join(DEST_PATH, data_folder, widget + '.js')
     if not isfile(js_filename):
-        with open(js_filename, 'w+') as js_file:
-            js_file.write("tremppi." + file + ".setup = ")
-            json.dump({}, js_file)
-            js_file.write(";")
+        open(js_filename, 'w+').close()
 
 # start the server and open the webpage
 chdir(DEST_PATH)
 if (args.port != None):
     port = args.port
 else:
-    port = DEFAULT_PORT
-replace_regex(join(DEST_PATH, "common", "tremppi.js"), "server_port: \\d*", "server_port: " + port)
+    port = default_port
+replace_regex(join(DEST_PATH, "configuration.js"), "server_port: \\d*", "server_port: " + port)
 server = HTTPServer(('', int(port)), StoreHandler)
 webbrowser.open("http://localhost:" + port + "/index.html")
 server.serve_forever()

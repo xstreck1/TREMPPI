@@ -1,0 +1,2 @@
+tremppi.interact.setServer = function () {
+};

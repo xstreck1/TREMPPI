@@ -6,12 +6,14 @@ if(UNIX)
 endif(UNIX)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(NATIVE_SOURCE_DIR ${TREMPPI_SOURCE_DIR}/native)
+
 # build to bin and lib
 file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/lib)
 file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
-set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 
 # Boost
 if(UNIX)
@@ -33,8 +35,8 @@ include_directories(${Gecode_INCLUDE_DIRS})
 
 # configure a header file 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/tremppi_common/configure.h.in"
-  "${PROJECT_BINARY_DIR}/tremppi_common/configure.h"
+  "${NATIVE_SOURCE_DIR}/tremppi_common/configure.h.in"
+  "${NATIVE_SOURCE_DIR}/tremppi_common/configure.h"
 )
   
 # Python
@@ -43,19 +45,19 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 link_directories(${PYTHON_LIBRARY_DIRS})
   
 # some 3rd party libraries are by linked from the project repository
-include_directories(${TREMPPI_SOURCE_DIR})
+include_directories(${NATIVE_SOURCE_DIR})
 # Sqlite
-ADD_LIBRARY(sqlite3 sqlite3/sqlite3.c)
+ADD_LIBRARY(sqlite3 ${NATIVE_SOURCE_DIR}/sqlite3/sqlite3.c)
 if(UNIX)
 	target_link_libraries(sqlite3 pthread dl)
 endif(UNIX)
-ADD_LIBRARY(sqlite3pp sqlite3pp/sqlite3pp.cpp sqlite3pp/sqlite3ppext.cpp)
+ADD_LIBRARY(sqlite3pp ${NATIVE_SOURCE_DIR}/sqlite3pp/sqlite3pp.cpp ${NATIVE_SOURCE_DIR}/sqlite3pp/sqlite3ppext.cpp)
 target_link_libraries(sqlite3pp sqlite3 ${Boost_LIBRARIES})
 # Jsoncpp
-ADD_LIBRARY(jsonccp json/json_reader.cpp json/json_value.cpp json/json_writer.cpp)
+ADD_LIBRARY(jsonccp ${NATIVE_SOURCE_DIR}/json/json_reader.cpp ${NATIVE_SOURCE_DIR}/json/json_value.cpp ${NATIVE_SOURCE_DIR}/json/json_writer.cpp)
 
 # tremppi_common - code only, no binary
-set(COMMON_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_common)
+set(COMMON_FOLDER ${NATIVE_SOURCE_DIR}/tremppi_common)
 FILE(GLOB_RECURSE COMMON_FILES ${COMMON_FOLDER}/*.*pp )
 SOURCE_GROUP("Header Files\\database" ${COMMON_FOLDER}/database/.*hpp)
 SOURCE_GROUP("Source Files\\database" ${COMMON_FOLDER}/database/.*cpp)
@@ -67,7 +69,7 @@ SOURCE_GROUP("Header Files\\report" ${COMMON_FOLDER}/report/.*hpp)
 SOURCE_GROUP("Source Files\\report" ${COMMON_FOLDER}/report/.*cpp)
 SOURCE_GROUP("Header Files\\python" ${COMMON_FOLDER}/python/.*hpp)
 SOURCE_GROUP("Source Files\\python" ${COMMON_FOLDER}/python/.*cpp)
-ADD_LIBRARY(tremppi_common tremppi_common/header.h tremppi_common/configure.h ${COMMON_FILES})
+ADD_LIBRARY(tremppi_common ${NATIVE_SOURCE_DIR}/tremppi_common/header.h ${NATIVE_SOURCE_DIR}/tremppi_common/configure.h ${COMMON_FILES})
 target_link_libraries(tremppi_common ${Boost_LIBRARIES} ${Gecode_LIBRARIES} ${Gecode_LIBRARIES_D} ${PYTHON_LIBRARIES} sqlite3 sqlite3pp jsonccp)
 
 
@@ -76,7 +78,7 @@ if (BUILD_TEST)
 	find_package(GTEST)
 	if (GTEST_FOUND)
 		include_directories(${GTEST_INCLUDE_DIR})
-		set(TEST_FOLDER ${TREMPPI_SOURCE_DIR}/tests)
+		set(TEST_FOLDER ${NATIVE_SOURCE_DIR}/tests)
 		FILE(GLOB TEST_HEADERS ${TEST_FOLDER}/*.hpp)
 		ADD_EXECUTABLE(tests ${TEST_FOLDER}/tests.cpp ${TEST_FOLDER}/main.cpp ${TEST_HEADERS})
 		target_link_libraries(tests tremppi_common  ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
@@ -86,13 +88,13 @@ if (BUILD_TEST)
 endif (BUILD_TEST)
 
 # tremppi core
-set(CORE_FOLDER ${TREMPPI_SOURCE_DIR}/tremppi)
+set(CORE_FOLDER ${NATIVE_SOURCE_DIR}/tremppi)
 ADD_EXECUTABLE(tremppi ${CORE_FOLDER}/tremppi.cpp)
 target_link_libraries(tremppi tremppi_common)
 
 #tremppi module function
 function(module name)
-	set(FOLDER ${TREMPPI_SOURCE_DIR}/tremppi_${name})
+	set(FOLDER ${NATIVE_SOURCE_DIR}/tremppi_${name})
 	FILE(GLOB_RECURSE HEADERS ${FOLDER}/*.*pp)
 	SOURCE_GROUP("Headers ${name}\\compute" ${FOLDER}/compute/.*hpp)
 	SOURCE_GROUP("Sources ${name}\\compute" ${FOLDER}/compute/.*cpp)
@@ -117,9 +119,9 @@ endfunction()
 module("correlate")
 module("express")
 module("interact")
+module("quantitative")
 module("qualitative")
 module("spawn")
-module("summary")
 module("validate")
 module("witness")
 
