@@ -29,8 +29,7 @@ Win32*
 *__pycache__*
 
 # projects
-proj/*
-tests/test_project*
+projects/*
 javascript/data*
 
 # created files
