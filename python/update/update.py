@@ -23,6 +23,6 @@ for folder in folders:
     copyanything(source, destination)
 
 for file in widgets:
-    shutil.copy(join(HOME_PATH, source_folder + file + ".html"), DEST_PATH)
+    shutil.copy(join(HOME_PATH, source_folder, file + ".html"), DEST_PATH)
 
-shutil.copy(join(HOME_PATH, source_folder + "favicon.ico"), DEST_PATH)
+shutil.copy(join(HOME_PATH, source_folder, "favicon.ico"), DEST_PATH)
