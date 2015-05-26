@@ -25,28 +25,29 @@ def generateData(data_path):
         if not exists(join(data_path, widget)):
             os.makedirs(join(data_path, widget))
 
-parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
-parser.add_argument('--path', help='specify the location where the file gets created.')
-parser.add_argument('name', help='name of the newly created model')
-args = parser.parse_args()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
+    parser.add_argument('--path', help='specify the location where the file gets created.')
+    parser.add_argument('name', help='name of the newly created model')
+    args = parser.parse_args()
 
-EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
-DEST_CONTENT = join(DEST_PATH, args.name)
-if os.path.exists(DEST_CONTENT):
-    raise 'The destination folder ' + DEST_CONTENT + ' already exists, aborting.'
+    EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
+    DEST_CONTENT = join(DEST_PATH, args.name)
+    if os.path.exists(DEST_CONTENT):
+        raise 'The destination folder ' + DEST_CONTENT + ' already exists, aborting.'
 
-# copy the data
-for folder in folders:
-    source = join(join(HOME_PATH, source_folder), folder)
-    destination = join(DEST_CONTENT, folder)
-    copyanything(source, destination)
+    # copy the data
+    for folder in folders:
+        source = join(join(HOME_PATH, source_folder), folder)
+        destination = join(DEST_CONTENT, folder)
+        copyanything(source, destination)
 
-# make the data directory
-generateData(join(DEST_CONTENT, data_folder))
+    # make the data directory
+    generateData(join(DEST_CONTENT, data_folder))
 
-# create the configure data
-with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:
-    setup.write('tremppi.configure = { ' +
-                'server_port: 8080' +
-                'server_location: "localhost"' +
-                'project_name: ' + args.name)
+    # create the configure data
+    with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:
+        setup.write('tremppi.configure = { ' +
+                    'server_port: 8080' +
+                    'server_location: "localhost"' +
+                    'project_name: ' + args.name)

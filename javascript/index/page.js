@@ -10,10 +10,20 @@ tremppi.index.page = function () {
     tremppi.index.widget();
 };
 
-tremppi.index.layout = function () {};
+tremppi.index.layout = function () {
+};
 
 tremppi.index.setData = function (data) {
     $("#text_field").val(data.text);
-    
+
     tremppi.index.controls();
+};
+
+tremppi.index.toolbarClass = function () {
+    return {
+        name: 'toolbar',
+        items: [
+            {type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'}
+        ]
+    };
 };

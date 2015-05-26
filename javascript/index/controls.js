@@ -6,13 +6,22 @@
 
 /* global tremppi */
 
-tremppi.index.controls = function() {
+tremppi.index.controls = function () {
+    tremppi.toolbar.onClick = tremppi.index.toolbarClick;
+};
+
+tremppi.index.toolbarClick = function (event) {
+    if (event.type === 'click') {
+        if (event.target === 'save') {
+            tremppi.index.save();
+        }
+    }
+};
+
+tremppi.index.save = function () {
     var text_field = $("#text_field");
-    text_field.on('change paste keyup', function(){
-         //value
-        var text_string = text_field.val();
-        console.log(text_string);
-        text_string.replace(/\r?\n/g, '<br />');
-        tremppi.saveData({text: text_string});
-    });
+    var text_string = text_field.val();
+    // console.log(text_string);
+    text_string.replace(/\r?\n/g, '<br />');
+    tremppi.saveData({text: text_string});
 };

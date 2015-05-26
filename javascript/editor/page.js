@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 
-tremppi.editor.setPage = function () {
+/* global tremppi */
+
+tremppi.editor.page = function () {
     $("#widget").append('<div id="graph_object"></div>');
 
     tremppi.editor.graph = cytoscape({
@@ -21,15 +23,12 @@ tremppi.editor.setPage = function () {
     });
 
     tremppi.editor.setStyle(tremppi.editor.graph);
-    tremppi.editor.graph.on('tap', tremppi.editor.selection);
-    // Save after drag
-
-    tremppi.editor.toolbar.onClick = tremppi.editor.toolbarClick;
-    tremppi.editor.setBasic();
-    // tremppi.editor.setControls();
+    
+    tremppi.editor.widget();
 };
 
 tremppi.editor.setData = function (data) {
+    tremppi.editor.setDefaultData(data);
     var glyphAll = function (elements, glyphFunction) {
         for (var i = 0; i < elements.length; i++) {
             glyphFunction(elements[i].data);
@@ -39,14 +38,8 @@ tremppi.editor.setData = function (data) {
     glyphAll(data.edges, tremppi.editor.glyphEdge);
     tremppi.editor.graph.load(data);
     tremppi.editor.graph.elements().unselect();
-    // Add the save function
-    tremppi.editor.graph.on('free', tremppi.editor.save);
-};
-
-tremppi.editor.save = function () {
-    tremppi.data.configured = true;
-    tremppi.data = tremppi.editor.graph.json().elements;
-    tremppi.save();
+    
+    tremppi.editor.controls();
 };
 
 tremppi.editor.layout = function () {
@@ -58,4 +51,13 @@ tremppi.editor.setDefaultData = function (data) {
         data.nodes = [];
     if (typeof data.edges === 'undefined')
         data.edges = [];
+};
+
+tremppi.editor.toolbarClass = function() {
+    return {
+        name: 'toolbar',
+        items: [
+            {type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'}
+        ]
+    };
 };

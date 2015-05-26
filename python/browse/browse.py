@@ -9,7 +9,7 @@ from http.server import  HTTPServer, SimpleHTTPRequestHandler
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import replace_regex, normal_paths
 from tremppi.header import widgets, data_folder, default_port
-from configure.configure import generateFiles
+from init.init import generateData
 
 # Tremppi server that communicates between HTML reports and the filesystem
 class StoreHandler(SimpleHTTPRequestHandler):
@@ -61,7 +61,7 @@ args = parser.parse_args()
 EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
 
 # make sure data exist
-generateFiles(join(DEST_PATH, data_folder))
+generateData(join(DEST_PATH, data_folder))
 
 # start the server and open the webpage
 chdir(DEST_PATH)

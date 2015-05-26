@@ -17,6 +17,10 @@ tremppi = {
             },
             setData: function (data) {
                 tremppi.log("setData not implemented", "warning");
+            },
+            toolbarClass: function () {
+                tremppi.log("toolbarClass not implemented", "warning");
+                return {};
             }
         };
     },
@@ -68,7 +72,7 @@ tremppi = {
             localStorage.setItem(makeStorageKey(key), value);
         }
     },
-    getItem: function (key, value) {
+    getItem: function (key) {
         if (typeof localStorage === 'undefined') {
             tremppi.log("localStorage not available, browser key " + key + " not loaded", "warning");
             return null;
@@ -120,7 +124,7 @@ tremppi = {
                 {id: 'widget_list', text: 'widgets', expanded: true, group: true,
                     nodes: [
                         {id: 'index', text: 'index'},
-//                        {id: 'editor', text: 'editor'},
+                        {id: 'editor', text: 'editor'},
 //                        {id: 'select', text: 'select'},
 //                        {id: 'properties', text: 'properties'},
 //                        {id: 'quantitative', text: 'quantitative'},
@@ -136,11 +140,13 @@ tremppi = {
             name: 'layout',
             panels: [
                 {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
-                {type: 'main', style: layout_style, content: '<div id="widget" ></div>'},
+                {type: 'main', style: layout_style, content: '<div id="widget" ></div>', toolbar : tremppi.widget.toolbarClass() },
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
             ]
         };
+        
         $('body').w2layout(layout);
+        tremppi.toolbar = w2ui.layout.get("main").toolbar;
 
         // Set left side bar
         w2ui.layout.content('left', $().w2sidebar(sidebar));
@@ -149,11 +155,6 @@ tremppi = {
         sidebar.on('click', function (event) {
             window.open("./" + event.target + ".html", "_self");
         });
-
-        // Set the toolbar, if any
-        if (toolbar !== "undefined")
-            layout.panels[1].toolbar = tremppi.widget.toolbar;
-        tremppi.toolbar = w2ui.layout.get("main").toolbar;
 
         // Set the widget
         tremppi.widget.page();
