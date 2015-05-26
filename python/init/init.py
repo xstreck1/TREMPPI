@@ -48,6 +48,8 @@ if __name__ == "__main__":
     # create the configure data
     with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:
         setup.write('tremppi.configure = { ' +
-                    'server_port: 8080' +
-                    'server_location: "localhost"' +
-                    'project_name: ' + args.name)
+                    '\tserver_port: 8080, \n' +
+                    '\tserver_location: "localhost", \n' +
+                    '\tproject_name: ' + args.name + '\n' +
+                    '};'
+                    )

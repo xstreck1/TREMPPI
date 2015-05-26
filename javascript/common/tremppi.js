@@ -104,12 +104,6 @@ tremppi = {
     makeHead: function () {
         var head = document.getElementsByTagName('head')[0];
 
-        // libraries 
-        head.appendChild(tremppi.makeScript('./libs/jquery-2.1.3.js'));
-        head.appendChild(tremppi.makeScript('./libs/cytoscape-2.3.9.js'));
-        head.appendChild(tremppi.makeScript('./libs/w2ui-1.4.2.js'));
-        head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './libs/w2ui-1.4.2.css'));
-
         // common 
         head.appendChild(tremppi.makeLink('icon', 'image/x-icon', './favicon.ico'));
         head.appendChild(tremppi.makeScript('./configuration.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
