@@ -6,6 +6,11 @@
 
 /* global tremppi */
 
+tremppi.properties.controls = function() {
+    tremppi.properties.listControls();
+    tremppi.properties.detailControls();
+};
+
 tremppi.properties.listControls = function (list) {
     var listbar = list.toolbar;
     listbar.add({type: 'button', id: 'up', caption: '&#8593;'});
@@ -19,7 +24,7 @@ tremppi.properties.listControls = function (list) {
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'witness', caption: 'Witness', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'robustness', caption: 'Robustness', checked: false});
     listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'simulate', caption: 'Simulate', checked: false});
-    list.onToolbar = tremppi.properties.listClick;
+    listbar.onClick = tremppi.properties.listClick;
 };
 
 tremppi.properties.detailControls = function (detail) {
@@ -30,7 +35,7 @@ tremppi.properties.detailControls = function (detail) {
     detailbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     detailbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-    detail.onToolbar = tremppi.properties.detailClick;
+    detailbar.onClick = tremppi.properties.detailClick;
 };
 
 tremppi.properties.emptyProperty = function(recID) {
@@ -51,7 +56,6 @@ tremppi.properties.emptyProperty = function(recID) {
 };
 
 tremppi.properties.listClick = function (event) {
-    if (event.type === 'toolbar') {
         var records = tremppi.data.list.records;
         var grid = tremppi.properties.list;
         if (event.target === 'up') {
@@ -78,7 +82,6 @@ tremppi.properties.listClick = function (event) {
         }
         grid.refresh();
         tremppi.properties.save();
-    }
 };
 
 tremppi.properties.listSelect = function (event) {
@@ -98,7 +101,7 @@ tremppi.properties.assignLetters = function(records) {
 };
 
 tremppi.properties.detailClick = function (event) {
-    if (event.type === 'toolbar' && tremppi.properties.detailed !== -1) {
+    if (tremppi.properties.detailed !== -1) {
         var records = tremppi.properties.detail.records;
         var grid = tremppi.properties.detail;
         if (event.target === 'up') {

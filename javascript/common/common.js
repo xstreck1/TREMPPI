@@ -7,6 +7,9 @@
 /* global tremppi */
 
 tremppi.common = {
+    compare_numbers: function (a, b) {
+        return a - b;
+    }
 };
 tremppi.qtip = {
     getConfig: function () {
@@ -65,9 +68,7 @@ tremppi.w2ui = {
         var ids = records.map(function (entry) {
             return parseInt(entry.recid);
         });
-        ids.sort(function (a, b) {
-            return a - b;
-        });
+        ids.sort(tremppi.common.compare_numbers);
         for (var id = 0; id < ids.length; id++) {
             if (ids[id] !== id) {
                 return id;
@@ -81,6 +82,12 @@ tremppi.w2ui = {
             record[event.target] = new_val;
         });
     },
+    add: function (grid, element) {
+        element.recid = tremppi.w2ui.getFreeRecID(grid.records);
+        grid.add(element);
+        grid.selectNone();
+        grid.select(element.recid);
+    },
     deleteSelected: function (grid) {
         grid.getSelection().forEach(function (recid) {
             for (var i = 0; i < grid.records.length; i++) {
@@ -90,10 +97,12 @@ tremppi.w2ui = {
                 }
             }
         });
+        grid.selectNone();
     },
     duplicateSelected: function (grid) {
-        var new_records = [];
-        grid.getSelection().forEach(function (recid) {
+        var selected = grid.getSelection();
+        grid.selectNone();
+        selected.forEach(function (recid) {
             for (var i = 0; i < grid.records.length; i++) {
                 if (grid.records[i].recid === recid) {
                     var new_entry = {};
@@ -102,8 +111,8 @@ tremppi.w2ui = {
                     if (typeof new_entry.name !== 'undefined') {
                         new_entry.name += " (copy)";
                     }
-                    new_records.push(new_entry.recid);
                     grid.records.splice(i + 1, 0, new_entry);
+                    grid.select(new_entry.recid);
                     break;
                 }
             }
@@ -111,27 +120,38 @@ tremppi.w2ui = {
     },
     up: function (grid) {
         var selection = grid.getSelection();
-        if (selection.length === 1) {
-            var recid = grid.getSelection()[0];
-            var i = tremppi.w2ui.iByRecID(grid.records, recid);
-            if (i > 0) {
-                var temp = grid.records[i];
-                grid.records[i] = grid.records[i - 1];
-                grid.records[i - 1] = temp;
+        var positions = selection.map(function (recid) {
+            return tremppi.w2ui.iByRecID(grid.records, recid);
+        });
+        positions.sort(tremppi.common.compare_numbers);
+        grid.selectNone();
+        for (var i = 0; i < positions.length; i++) {
+            var pos = positions[i];
+            if (pos > 0) {
+                var temp = grid.records[pos];
+                grid.records[pos] = grid.records[pos - 1];
+                grid.records[pos - 1] = temp;
             }
         }
+        selection.forEach(function(recid) {grid.select(recid); });
     },
     down: function (grid) {
         var selection = grid.getSelection();
-        if (selection.length === 1) {
-            var recid = grid.getSelection()[0];
-            var i = grid.tremppi.w2ui.iByRecID(grid.records, recid);
-            if (i + 1 < grid.records.length) {
-                var temp = grid.records[i];
-                grid.records[i] = grid.records[i + 1];
-                grid.records[i + 1] = temp;
+        var positions = selection.map(function (recid) {
+            return tremppi.w2ui.iByRecID(grid.records, recid);
+        });
+        positions.sort(tremppi.common.compare_numbers);
+        grid.selectNone();
+        for (var i = positions.length - 1; i >= 0; i--) {
+            var pos = positions[i];
+            console.log(pos);
+            if (pos + 1 < grid.records.length) {
+                var temp = grid.records[pos];
+                grid.records[pos] = grid.records[pos + 1];
+                grid.records[pos + 1] = temp;
             }
         }
+        selection.forEach(function(recid) {grid.select(recid); });
     }
 };
 
