@@ -54,7 +54,7 @@ void AutomatonBuilder::buildTransient(const PropertyInfo & property_info, const 
 		automaton._states[0]._transitions.emplace_back(AutTransitionion(0, makeStateConst({}, bounds, names, false), makePathConst({}, names)));
 	}
 	else {
-		for (const StateID ID : crange(1u, property_info.measurements.size())) {
+        for (const StateID ID : crange(static_cast<size_t>(1), property_info.measurements.size())) {
 			const bool initial = ID == 1;
 			const bool final = ID == property_info.measurements.size() - 1;
 			automaton._states.emplace_back(AutState(ID - 1, initial, final));
@@ -91,7 +91,7 @@ void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tup
 	automaton._init_constr = makeStateConst(property_info.measurements.front().state_constraints, bounds, names, true);
 	automaton._acc_constr = makeStateConst(property_info.measurements[target_ID].state_constraints, bounds, names, true);
 
-	for (const StateID ID : crange(0u, property_info.measurements.size())) {
+    for (const StateID ID : crange(static_cast<size_t>(0), property_info.measurements.size())) {
 		const bool initial = ID == 0u;
 		const bool final = ID == target_ID;
 		automaton._states.emplace_back(AutState(ID, initial, final));

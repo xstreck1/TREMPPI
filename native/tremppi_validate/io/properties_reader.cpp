@@ -79,7 +79,7 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 
 		// Parse records
 		map<string, PathCons> last_trans;
-		for (const const Json::Value & record : property_node["records"]) {
+        for (const Json::Value & record : property_node["records"]) {
 			map<string, ActRange> state_consts;
 			map<string, PathCons> path_consts;
 
