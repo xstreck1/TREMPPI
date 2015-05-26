@@ -13,6 +13,10 @@ tremppi.select.save = function () {
 };
 
 tremppi.select.controls = function () {
+    tremppi.select.grid.toolbar.onClick = tremppi.select.toolbarClick;
+};
+
+tremppi.select.addButtons = function() {
     var gridbar = tremppi.select.grid.toolbar;
     gridbar.add({type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'});
     gridbar.add({type: 'break', id: 'break0'});
@@ -26,8 +30,7 @@ tremppi.select.controls = function () {
     gridbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     gridbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     gridbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-    gridbar.onClick = tremppi.select.toolbarClick;
-};
+}
 
 tremppi.select.toolbarClick = function (event) {
     var grid = tremppi.select.grid;

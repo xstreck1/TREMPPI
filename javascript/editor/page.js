@@ -23,8 +23,6 @@ tremppi.editor.page = function () {
     });
 
     tremppi.editor.setStyle(tremppi.editor.graph);
-    
-    tremppi.editor.widget();
 };
 
 tremppi.editor.setData = function (data) {
@@ -39,6 +37,7 @@ tremppi.editor.setData = function (data) {
     tremppi.editor.graph.load(data);
     tremppi.editor.graph.elements().unselect();
     
+    // Enable controls
     tremppi.editor.controls();
 };
 

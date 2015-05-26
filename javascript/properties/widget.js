@@ -5,108 +5,30 @@
  */
 
 /* global tremppi */
-tremppi.properties.tableList = function (list, components) {
-    if (typeof list.records === 'undefined') {
-        list.records = [];
-    }
-    list.name = 'list';
-    list.multiSelect = false;
-    list.columns = [
-        {field: 'name', caption: 'Name', size: '200px', resizable: true, sortable: true,
-            editable: {type: 'text'}
-        },
-        {field: 'ending', caption: 'Ending', size: '70px', resizable: true,
-            editable: {type: 'select', items: [	"any",
-						"stable",
-						"goto A",
-						"goto B",
-						"goto C",
-						"goto D",
-						"goto E",
-						"goto F",
-						"goto G",
-						"goto H",
-						"goto I",
-						"goto J",
-						"goto K",
-						"goto L",
-						"goto M",
-						"goto N",
-						"goto O",
-						"goto P",
-						"goto Q",
-						"goto R",
-						"goto S",
-						"goto T",
-						"goto U",
-						"goto V",
-						"goto W",
-						"goto X",
-						"goto Y",
-						"goto Z" ]
-        }
-        },
-        {field: 'validate', caption: 'V', size: '20px', resizable: false,
-            editable: {type: 'checkbox'}
-        },
-        {field: 'witness', caption: 'W', size: '20px', resizable: false,
-            editable: {type: 'checkbox'}
-        },
-        {field: 'robustness', caption: 'R', size: '20px', resizable: false,
-            editable: {type: 'checkbox'}
-        },
-        {field: 'simulate', caption: 'S', size: '20px', resizable: false,
-            editable: {type: 'checkbox'}
-        },
-        {field: 'bound', caption: 'Bound', size: '60px', resizable: true,
-            editable: {type: 'text'}
-        }
-    ];
 
-    // Add components contraints
-    components.forEach(function (component) {
-        list.columns.push(
-                {field: component, caption: component, size: '46px',
-                    editable: {type: 'text'}
-                }
-        );
-    });
-
-    list.show = {
-        toolbar: true, selectColumn: false, toolbarSave: false,
-        toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
-        toolbarAdd: false, toolbarDelete: false
+tremppi.properties.makeList = function () {
+    return {
+        name: 'list',
+        multiSelect: false,
+        columns: tremppi.properties.setup.list_columns,
+        show : {
+            toolbar: true, selectColumn: false, toolbarSave: false,
+            toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
+            toolbarAdd: false, toolbarDelete: false
+        }
     };
 };
 
-tremppi.properties.tableDetail = function (detail, components) {
-    if (typeof detail.records === 'undefined') {
-        detail.records = [];
-    }
-    detail.name = 'detail';
-    detail.multiSelect = false;
-    detail.show = {
-        toolbar: true, selectColumn: false, toolbarSave: false,
-        toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
-        toolbarAdd: false, toolbarDelete: false
+tremppi.properties.makeDetail = function () {
+    return {
+        name: 'detail',
+        multiSelect: false,
+        columns: tremppi.properties.setup.detail_columns,
+        columnGroups: tremppi.properties.setup.detail_groups,
+        show : {
+            toolbar: true, selectColumn: false, toolbarSave: false,
+            toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
+            toolbarAdd: false, toolbarDelete: false
+        }
     };
-
-    detail.columns = [{field: 'id', caption: 'Id', size: '30px' }];
-    detail.columnGroups = [{span: 1, caption: ''}];
-    components.forEach(function (component) {
-        detail.columnGroups.push({
-            span: 2,
-            caption: component
-        });
-        detail.columns.push(
-                {field: component + '_value', caption: 'Value', size: '46px',
-                    editable: {type: 'text'}
-                }
-        );
-        detail.columns.push(
-                {field: component + '_delta', caption: 'Delta', size: '44px',
-                    editable: {type: 'select', items: ["", "up", "down", "stay"]}
-                }
-        );
-    });
 };

@@ -36,7 +36,7 @@ struct AutomatonInterface : public virtual GraphInterface<StateT> {
 	 */
 	virtual inline vector<StateID> getFinalStates() const {
 		vector<StateID> result;
-		for (const StateT & state : _states) {
+		for (const StateT & state : this->_states) {
 			if (state._final) {
 				result.push_back(state._ID);
 			}
@@ -51,7 +51,7 @@ struct AutomatonInterface : public virtual GraphInterface<StateT> {
 	 */
 	virtual inline vector<StateID> getInitialStates() const {
 		vector<StateID> result;
-		for (const StateT & state : _states) {
+		for (const StateT & state : this->_states) {
 			if (state._initial) {
 				result.push_back(state._ID);
 			}

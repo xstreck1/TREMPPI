@@ -7,7 +7,9 @@
 /* global tremppi */
 
 tremppi.index.page = function () {
-    tremppi.index.widget();
+    $("#widget").append('<div id="project_title">'+ tremppi.setup.project_name + '</div>');
+    $("#widget").append('<div id="text_box"></div>');
+    $("#text_box").append('<textarea id="text_field" placeholder="Use this form to provide details about your project."></textarea>');
 };
 
 tremppi.index.layout = function () {
@@ -15,6 +17,8 @@ tremppi.index.layout = function () {
 
 tremppi.index.setData = function (data) {
     $("#text_field").val(data.text);
+    
+    // Enable controls
     tremppi.index.controls();
 };
 

@@ -7,12 +7,13 @@
 /* global tremppi */
 
 tremppi.select.page = function () {
-    $("#widget").append('<div id="selection_table"></div>');
-    if (typeof tremppi.select.configured === 'undefined') {
+    tremppi.layout.hideToolbar('main');
+    if (typeof tremppi.select.setup === 'undefined') {
         $("#widget").html("The selection has not been configured yet. The Tremppi Spawn command needs to be called.");
     }
-    else {
-        var grid_class = {
+    else {  
+        $("#widget").append('<div id="selection_table"></div>');
+            var grid_class = {
             name: 'grid',
             header: 'the list of selections',
             show: {
@@ -25,14 +26,11 @@ tremppi.select.page = function () {
                 toolbarAdd: false, 
                 toolbarDelete: false
             },
-            columns: tremppi.select.configured.columns,
-            columnGroups: tremppi.select.configured.groups
+            columns: tremppi.select.setup.columns,
+            columnGroups: tremppi.select.setup.groups
         };
-        tremppi.select.grid = $('#selection_table').w2grid(grid_class);
+        tremppi.select.grid = $('#selection_table').w2grid(grid_class); 
     }
-    tremppi.layout.hideToolbar('main');
-    
-    tremppi.select.widget();
 };
 
 tremppi.select.layout = function () {
@@ -42,7 +40,9 @@ tremppi.select.setData = function (data) {
     tremppi.select.setDefaultData(data);
     tremppi.select.grid.records = data.records;
     tremppi.select.grid.refresh();
-    
+        
+    // Enable controls
+    tremppi.select.addButtons(); 
     tremppi.select.controls();
 };
 

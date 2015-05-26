@@ -7,10 +7,6 @@
 
 /* global tremppi */
 
-tremppi.editor.widget = function() {
-    
-};
-
 tremppi.editor.lables = [
     "Activating",
     "Activating Only",

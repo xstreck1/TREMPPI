@@ -10,10 +10,10 @@ StateID ProductStructure::computeID(const StateID KS_ID, const StateID BA_ID) co
 string ProductStructure::getString(const StateID ID) const {
 	string label;
 
-	for (const ActLevel lev : _states[ID]._levels)
+	for (const ActLevel lev : this->_states[ID]._levels)
 		label += to_string(lev);
 
-	label += char(_states[ID]._BA_ID + 65);
+	label += char(this->_states[ID]._BA_ID + 65);
 
 	return label;
 }

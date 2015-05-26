@@ -5,7 +5,3 @@
  */
 
 /* global tremppi */
-
-tremppi.select.widget = function() {
-    
-};

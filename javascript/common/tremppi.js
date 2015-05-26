@@ -18,6 +18,9 @@ tremppi = {
             setData: function (data) {
                 tremppi.log("setData not implemented", "warning");
             },
+            controls: function() {
+                tremppi.log("controls not implemented", "warning");
+            },
             toolbarClass: function () {
                 tremppi.log("toolbarClass not implemented", "warning");
                 return {};
@@ -128,7 +131,7 @@ tremppi = {
                         {id: 'index', text: 'index'},
                         {id: 'editor', text: 'editor'},
                         {id: 'select', text: 'select'},
-//                        {id: 'properties', text: 'properties'},
+                        {id: 'properties', text: 'properties'},
 //                        {id: 'quantitative', text: 'quantitative'},
 //                        {id: 'qualitative', text: 'qualitative'}
                     ]

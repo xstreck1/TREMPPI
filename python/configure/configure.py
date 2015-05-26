@@ -12,7 +12,7 @@ from tremppi.header import data_folder, widgets, database_file
 from tremppi.file_manipulation import normal_paths
 
 
-def read_columns(conn):
+def make_selection(conn):
     columns = []
     groups = []
     components = read_components(conn)
@@ -70,7 +70,7 @@ def read_columns(conn):
                     "resizable": True
                 })
                 groups[-1]['columns'].append(column_name)
-                groups[-1]['span'] += 1;
+                groups[-1]['span'] += 1
 
     # Add robustness
     groups.append({
@@ -125,16 +125,127 @@ def read_columns(conn):
     return columns, groups
 
 
+def make_list(conn):
+    columns = [
+        {'field': 'name', 'caption': 'Name', 'size': '200px', 'resizable': True, 'sortable': True,
+         'editable': {'type': 'text'}
+         },
+        {'field': 'ending', 'caption': 'Ending', 'size': '70px', 'resizable': True,
+         'editable': {
+             'type': 'select',
+             'items': [
+                 "any",
+                 "stable",
+                 "goto A",
+                 "goto B",
+                 "goto C",
+                 "goto D",
+                 "goto E",
+                 "goto F",
+                 "goto G",
+                 "goto H",
+                 "goto I",
+                 "goto J",
+                 "goto K",
+                 "goto L",
+                 "goto M",
+                 "goto N",
+                 "goto O",
+                 "goto P",
+                 "goto Q",
+                 "goto R",
+                 "goto S",
+                 "goto T",
+                 "goto U",
+                 "goto V",
+                 "goto W",
+                 "goto X",
+                 "goto Y",
+                 "goto Z"
+                 ]
+            }
+         },
+        {'field': 'validate', 'caption': 'V', 'size': '20px', 'resizable': False,
+         'editable': {'type': 'checkbox'}
+         },
+        {'field': 'witness', 'caption': 'W', 'size': '20px', 'resizable': False,
+         'editable': {'type': 'checkbox'}
+         },
+        {'field': 'robustness', 'caption': 'R', 'size': '20px', 'resizable': False,
+         'editable': {'type': 'checkbox'}
+         },
+        {'field': 'simulate', 'caption': 'S', 'size': '20px', 'resizable': False,
+         'editable': {'type': 'checkbox'}
+         },
+        {'field': 'bound', 'caption': 'Bound', 'size': '60px', 'resizable': True,
+         'editable': {'type': 'text'}
+         }
+    ]
+    components = read_components(conn)
+    for comp_name in components:
+        columns.append({
+            'field': 'E_' + comp_name,
+            'caption': comp_name,
+            'size': '46px',
+            'editable': {
+                'type': 'text'
+            }
+        })
+    return columns
+
+
+def make_detail(conn):
+    columns = []
+    groups = []
+    components = read_components(conn)
+    for comp_name in components:
+        groups.append({
+            'span': 2,
+            'caption': comp_name
+        })
+        columns.append({
+            'field': 'V_' + comp_name,
+            'caption': 'Value',
+            'size': '46px',
+            'editable': {
+                'type': 'text'
+            }
+        })
+        columns.append({
+            'field': 'D_' + comp_name,
+            'caption': 'Delta',
+            'size': '44px',
+            'editable': {
+                'type': 'select',
+                'items': ["", "up", "down", "stay"]
+            }
+        })
+    return columns, groups
+
+
 # Creates the configuration files
 def configure(data_path, widget):
     if widget == "select":
         with sqlite3.connect(join(data_path, database_file)) as conn:
             with open(join(data_path, "select.js"), 'w+') as select_js:
-                columns, groups = read_columns(conn)
-                grid = {'columns': columns, 'groups': groups}
-                select_js.write("tremppi.select.configured = ")
-                json.dump(grid, select_js)
+                columns, groups = make_selection(conn)
+                configured = {'columns': columns, 'groups': groups}
+                select_js.write("tremppi.select.setup = ")
+                json.dump(configured, select_js)
                 select_js.write(";")
+    elif widget == "properties":
+        with sqlite3.connect(join(data_path, database_file)) as conn:
+            with open(join(data_path, "properties.js"), 'w+') as properties_js:
+                list_columns = make_list(conn)
+                detail_columns, detail_groups = make_detail(conn)
+                configured = {
+                    'list_columns': list_columns,
+                    'detail_columns': detail_columns,
+                    'detail_groups': detail_groups
+                }
+                properties_js.write("tremppi.properties.setup = ")
+                json.dump(configured, properties_js)
+                properties_js.write(";")
     elif widget in ["qualitative", "quantitative", "interact", "function"]:
         files = []
         widget_dir = join(data_path, widget)
@@ -145,7 +256,7 @@ def configure(data_path, widget):
                 if file.endswith(".json"):
                     files.append(file)
         with open(join(data_path, widget + '.js'), 'w+') as file_js:
-            file_js.write('tremppi.' + widget + '.configured = ')
+            file_js.write('tremppi.' + widget + '.setup = ')
             json.dump(files, file_js)
             file_js.write(';')
     elif widget in widgets:
