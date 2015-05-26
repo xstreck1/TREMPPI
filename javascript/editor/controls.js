@@ -6,7 +6,7 @@
 
 /* global tremppi */
 
-tremppi.editor.controls = function() {
+tremppi.editor.controls = function () {
     tremppi.editor.graph.on('tapend', tremppi.editor.selection);
     // Save after drag
 
@@ -15,9 +15,7 @@ tremppi.editor.controls = function() {
 };
 
 tremppi.toolbarClick = function (event) {
-    if (event.type === 'click') {
-        tremppi.editor[event.target]();
-    }
+    tremppi.editor[event.target]();
 };
 
 tremppi.editor.save = function () {
@@ -67,7 +65,7 @@ tremppi.editor.creation = function (event) {
         tremppi.editor.removeAll();
         tremppi.editor.addHelpField("Click on a component to put a target of a REGULATION.");
         tremppi.editor.graph.off('tapend').on('tapend', function (event) {
-            if (event.cy !== event.cyTarget && event.cyTarget.isNode())  {
+            if (event.cy !== event.cyTarget && event.cyTarget.isNode()) {
                 var edge = tremppi.editor.newEdge(source, event.cyTarget[0]);
                 tremppi.editor.addElem(edge, "Edge");
             } else {

@@ -100,5 +100,7 @@ int tremppi_spawn(int argc, char ** argv) {
 		logging.exceptionMessage(e, 6);
 	}
 
+	
+	tremppi_configure(argc, argv);
 	return 0;
 }

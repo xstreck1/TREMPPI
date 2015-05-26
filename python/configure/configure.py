@@ -5,10 +5,12 @@ import os
 import json
 import sqlite3
 from os.path import join, dirname, abspath, exists
+
 sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.database_reader import read_regulations, read_components
 from tremppi.header import data_folder, widgets, database_file
 from tremppi.file_manipulation import normal_paths
+
 
 def read_columns(conn):
     columns = []
@@ -41,8 +43,7 @@ def read_columns(conn):
         'columns': ['select', 'name'],
         'span': 2,
         'master': False,
-        'hideable': False,
-        'checked': False
+        'hideable': False
     })
 
     # Add parameters
@@ -52,8 +53,7 @@ def read_columns(conn):
             'columns': [],
             'span': 0,
             'master': False,
-            'hideable': True,
-            'checked': False
+            'hideable': True
         })
         for column_name in column_names:
             parts = str(column_name).split('_')
@@ -61,10 +61,13 @@ def read_columns(conn):
                 columns.append({
                     'field': column_name,
                     'caption': parts[2],
-                    'min': 0,
-                    'max': components[comp_name],
                     'size': str(12 + len(parts[2]) * 8) + 'px',
-                    'type': 'text'
+                    'editable': {
+                        'min': 0,
+                        'max': components[comp_name],
+                        'type': 'text'
+                    },
+                    "resizable": True
                 })
                 groups[-1]['columns'].append(column_name)
                 groups[-1]['span'] += 1;
@@ -75,8 +78,7 @@ def read_columns(conn):
         'columns': [],
         'span': 0,
         'master': False,
-        'hideable': True,
-        'checked': False
+        'hideable': True
     })
     for column_name in column_names:
         parts = str(column_name).split('_')
@@ -84,10 +86,13 @@ def read_columns(conn):
             columns.append({
                 'field': column_name,
                 'caption': parts[1],
-                'min': 0,
-                'max': 1,
                 'size': str(12 + len(parts[1]) * 8) + 'px',
-                'type': 'text'
+                'editable': {
+                    'min': 0,
+                    'max': 1,
+                    'type': 'text'
+                },
+                "resizable": True
             })
             groups[-1]['columns'].append(column_name)
             groups[-1]['span'] += 1
@@ -98,8 +103,7 @@ def read_columns(conn):
         'columns': [],
         'span': 0,
         'master': False,
-        'hideable': True,
-        'checked': False
+        'hideable': True
     })
     for column_name in column_names:
         parts = str(column_name).split('_')
@@ -107,15 +111,19 @@ def read_columns(conn):
             columns.append({
                 'field': column_name,
                 'caption': parts[1],
-                'min': 0,
-                'max': 65536,
                 'size': str(12 + len(parts[1]) * 8) + 'px',
-                'type': 'text'
+                'editable': {
+                    'min': 0,
+                    'max': 65536,
+                    'type': 'text'
+                },
+                "resizable": True
             })
             groups[-1]['columns'].append(column_name)
             groups[-1]['span'] += 1
 
     return columns, groups
+
 
 # Creates the configuration files
 def configure(data_path, widget):
@@ -124,7 +132,7 @@ def configure(data_path, widget):
             with open(join(data_path, "select.js"), 'w+') as select_js:
                 columns, groups = read_columns(conn)
                 grid = {'columns': columns, 'groups': groups}
-                select_js.write("tremppi.select.grid_structure = ")
+                select_js.write("tremppi.select.configured = ")
                 json.dump(grid, select_js)
                 select_js.write(";")
     elif widget in ["qualitative", "quantitative", "interact", "function"]:
@@ -136,15 +144,16 @@ def configure(data_path, widget):
             for file in os.listdir(widget_dir):
                 if file.endswith(".json"):
                     files.append(file)
-        with open(join(data_path, widget + '.js'), 'w+') as js_file:
-            js_file.write('tremppi.' + widget + '.file_list = ')
-            json.dump(files, files)
-            js_file.write(';')
+        with open(join(data_path, widget + '.js'), 'w+') as file_js:
+            file_js.write('tremppi.' + widget + '.configured = ')
+            json.dump(files, file_js)
+            file_js.write(';')
     elif widget in widgets:
         js_filename = join(DATA_PATH, widget + '.js')
         open(js_filename, 'w+').close()
     else:
         raise "Unknown widget " + widget
+
 
 if __name__ == "__main__":
     # define options

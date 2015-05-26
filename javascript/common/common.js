@@ -75,64 +75,61 @@ tremppi.w2ui = {
         }
         return id;
     },
-    checkAll: function (event, records, grid) {
+    checkAll: function (event, grid) {
         var new_val = !event.originalEvent.item.checked;
-        records.forEach(function (record) {
+        grid.records.forEach(function (record) {
             record[event.target] = new_val;
         });
-        grid.records = records;
     },
-    deleteSelected: function (records, grid) {
+    deleteSelected: function (grid) {
         grid.getSelection().forEach(function (recid) {
-            for (var i = 0; i < records.length; i++) {
-                if (records[i].recid === recid) {
-                    records.splice(i, 1);
+            for (var i = 0; i < grid.records.length; i++) {
+                if (grid.records[i].recid === recid) {
+                    grid.records.splice(i, 1);
                     break;
                 }
             }
         });
-        grid.records = records;
     },
-    duplicateSelected: function (records, grid) {
+    duplicateSelected: function (grid) {
         var new_records = [];
         grid.getSelection().forEach(function (recid) {
-            for (var i = 0; i < records.length; i++) {
-                if (records[i].recid === recid) {
+            for (var i = 0; i < grid.records.length; i++) {
+                if (grid.records[i].recid === recid) {
                     var new_entry = {};
-                    $.extend(true, new_entry, records[i]);
-                    new_entry.recid = tremppi.w2ui.getFreeRecID(records);
+                    $.extend(true, new_entry, grid.records[i]);
+                    new_entry.recid = tremppi.w2ui.getFreeRecID(grid.records);
                     if (typeof new_entry.name !== 'undefined') {
                         new_entry.name += " (copy)";
                     }
                     new_records.push(new_entry.recid);
-                    records.splice(i + 1, 0, new_entry);
+                    grid.records.splice(i + 1, 0, new_entry);
                     break;
                 }
             }
         });
-        grid.records = records;
     },
-    up: function (grid, records) {
+    up: function (grid) {
         var selection = grid.getSelection();
         if (selection.length === 1) {
             var recid = grid.getSelection()[0];
-            var i = tremppi.w2ui.iByRecID(records, recid);
+            var i = tremppi.w2ui.iByRecID(grid.records, recid);
             if (i > 0) {
-                var temp = records[i];
-                records[i] = records[i - 1];
-                records[i - 1] = temp;
+                var temp = grid.records[i];
+                grid.records[i] = grid.records[i - 1];
+                grid.records[i - 1] = temp;
             }
         }
     },
-    down: function (grid, records) {
+    down: function (grid) {
         var selection = grid.getSelection();
         if (selection.length === 1) {
             var recid = grid.getSelection()[0];
-            var i = tremppi.w2ui.iByRecID(records, recid);
-            if (i + 1 < records.length) {
-                var temp = records[i];
-                records[i] = records[i + 1];
-                records[i + 1] = temp;
+            var i = grid.tremppi.w2ui.iByRecID(grid.records, recid);
+            if (i + 1 < grid.records.length) {
+                var temp = grid.records[i];
+                grid.records[i] = grid.records[i + 1];
+                grid.records[i + 1] = temp;
             }
         }
     }

@@ -15,7 +15,6 @@ tremppi.index.layout = function () {
 
 tremppi.index.setData = function (data) {
     $("#text_field").val(data.text);
-
     tremppi.index.controls();
 };
 

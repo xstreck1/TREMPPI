@@ -11,10 +11,8 @@ tremppi.index.controls = function () {
 };
 
 tremppi.index.toolbarClick = function (event) {
-    if (event.type === 'click') {
-        if (event.target === 'save') {
-            tremppi.index.save();
-        }
+    if (event.target === 'save') {
+        tremppi.index.save();
     }
 };
 

@@ -45,7 +45,11 @@ tremppi = {
             url: url,
             data: content,
             success: function (res) {
-                tremppi.log(filename + " saved successfully.");
+                if (typeof filename === 'undefined') {
+                    tremppi.log(tremppi.widget_name + " saved successfully.");
+                } else {
+                    tremppi.log(filename + " saved successfully.");
+                }
             },
             fail: function (res) {
                 tremppi.log("Load of the file " + filename + " failed! Data were not saved!");
@@ -55,7 +59,11 @@ tremppi = {
     getData: function (callback, filename) {
         $.getJSON(tremppi.makeDataFilepath(filename), callback)
                 .done(function () {
-                    tremppi.log(filename + " loaded successfully.");
+                    if (typeof filename === 'undefined') {
+                        tremppi.log(tremppi.widget_name + " loaded successfully.");
+                    } else {
+                        tremppi.log(filename + " loaded successfully.");
+                    }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                     tremppi.log("Load of the file " + filename + " failed!");
@@ -81,12 +89,12 @@ tremppi = {
             return localStorage.getItem(makeStorageKey(key));
         }
     },
-    makeScript: function(src) {
+    makeScript: function (src) {
         var element = document.createElement('script');
         element.src = src;
         return element;
     },
-    makeLink: function(rel, type, href) {
+    makeLink: function (rel, type, href) {
         var element = document.createElement('link');
         element.rel = rel;
         element.type = type;
@@ -95,26 +103,26 @@ tremppi = {
     },
     makeHead: function () {
         var head = document.getElementsByTagName('head')[0];
-        
+
         // libraries 
         head.appendChild(tremppi.makeScript('./libs/jquery-2.1.3.js'));
         head.appendChild(tremppi.makeScript('./libs/cytoscape-2.3.9.js'));
         head.appendChild(tremppi.makeScript('./libs/w2ui-1.4.2.js'));
         head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './libs/w2ui-1.4.2.css'));
-        
+
         // common 
         head.appendChild(tremppi.makeLink('icon', 'image/x-icon', './favicon.ico'));
         head.appendChild(tremppi.makeScript('./configuration.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
         head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './common/css.css'));
         head.appendChild(tremppi.makeScript('./common/common.js'));
-        
+
         // widget-related
         head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './' + tremppi.widget_name + '/css.css'));
         head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/widget.js'));
         head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/controls.js'));
         head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/page.js'));
         head.appendChild(tremppi.makeScript('./data/' + tremppi.widget_name + '.js?_=' + Math.random().toString().slice(2)));
-        
+
         document.title = tremppi.widget_name;
     },
     makeBody: function () {
@@ -125,7 +133,7 @@ tremppi = {
                     nodes: [
                         {id: 'index', text: 'index'},
                         {id: 'editor', text: 'editor'},
-//                        {id: 'select', text: 'select'},
+                        {id: 'select', text: 'select'},
 //                        {id: 'properties', text: 'properties'},
 //                        {id: 'quantitative', text: 'quantitative'},
 //                        {id: 'qualitative', text: 'qualitative'}
@@ -140,12 +148,12 @@ tremppi = {
             name: 'layout',
             panels: [
                 {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
-                {type: 'main', style: layout_style, content: '<div id="widget" ></div>', toolbar : tremppi.widget.toolbarClass() },
+                {type: 'main', style: layout_style, content: '<div id="widget" ></div>', toolbar: tremppi.widget.toolbarClass()},
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
             ]
         };
-        
-        $('body').w2layout(layout);
+
+        tremppi.layout = $('body').w2layout(layout);
         tremppi.toolbar = w2ui.layout.get("main").toolbar;
 
         // Set left side bar
