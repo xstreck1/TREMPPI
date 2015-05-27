@@ -44,12 +44,12 @@ tremppi.editablegrid = {
     }
 };
 tremppi.w2ui = {
-    findByRecID: function (array, recid) {
-        return array[iByRecID(array, recid)];
+    findByRecID: function (records, recid) {
+        return records[tremppi.w2ui.iByRecID(records, recid)];
     },
-    iByRecID: function (array, recid) {
-        for (var i = 0; i < array.length; i++) {
-            if (array[i].recid === recid)
+    iByRecID: function (records, recid) {
+        for (var i = 0; i < records.length; i++) {
+            if (records[i].recid === recid)
                 return i;
         }
         console.log("Error. Have not found element " + recid);
@@ -67,12 +67,15 @@ tremppi.w2ui = {
         return id;
     },
     checkAll: function (event, grid) {
-        var new_val = !event.originalEvent.item.checked;
+        var new_val = !event.item.checked;
         grid.records.forEach(function (record) {
             record[event.target] = new_val;
         });
     },
     add: function (grid, element) {
+        if (typeof element === "undefined") {
+            throw "trying to add an empty element";
+        }
         element.recid = tremppi.w2ui.getFreeRecID(grid.records);
         grid.add(element);
         grid.selectNone();

@@ -13,13 +13,12 @@ tremppi.select.save = function () {
 };
 
 tremppi.select.controls = function () {
-    tremppi.select.grid.toolbar.onClick = tremppi.select.toolbarClick;
+    tremppi.select.grid.toolbar.onClick = tremppi.select.gridbarClick;
+    tremppi.toolbar.onClick = tremppi.select.toolbarClick;
 };
 
 tremppi.select.addButtons = function() {
     var gridbar = tremppi.select.grid.toolbar;
-    gridbar.add({type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'});
-    gridbar.add({type: 'break', id: 'break0'});
     gridbar.add({type: 'button', id: 'up', caption: '&#8593;'});
     gridbar.add({type: 'button', id: 'down', caption: '&#8595;'});
     gridbar.add({type: 'break', id: 'break1'});
@@ -30,13 +29,16 @@ tremppi.select.addButtons = function() {
     gridbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     gridbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     gridbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-}
+};
 
 tremppi.select.toolbarClick = function (event) {
-    var grid = tremppi.select.grid;
     if (event.target === 'save') {
-        tremppi.select.save();
+        tremppi.index.save();
     }
+};
+
+tremppi.select.gridbarClick = function (event) {
+    var grid = tremppi.select.grid;
     if (event.target === 'select') {
         tremppi.w2ui.checkAll(event, grid);
     }

@@ -30,3 +30,11 @@ tremppi.index.toolbarClass = function () {
         ]
     };
 };
+
+tremppi.index.save = function () {
+    var text_field = $("#text_field");
+    var text_string = text_field.val();
+    // console.log(text_string);
+    text_string.replace(/\r?\n/g, '<br />');
+    tremppi.saveData({text: text_string});
+};

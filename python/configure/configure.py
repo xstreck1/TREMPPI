@@ -195,8 +195,8 @@ def make_list(conn):
 
 
 def make_detail(conn):
-    columns = []
-    groups = []
+    columns = [{'field': 'id', 'caption': 'Id', 'size': '30px' }]
+    groups = [{'span': 1, 'caption': ''}]
     components = read_components(conn)
     for comp_name in components:
         groups.append({

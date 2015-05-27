@@ -7,7 +7,6 @@
 /* global tremppi */
 
 tremppi.select.page = function () {
-    tremppi.layout.hideToolbar('main');
     if (typeof tremppi.select.setup === 'undefined') {
         $("#widget").html("The selection has not been configured yet. The Tremppi Spawn command needs to be called.");
     }
@@ -49,4 +48,13 @@ tremppi.select.setData = function (data) {
 tremppi.select.setDefaultData = function (data) {
     if (typeof data.records === 'undefined')
         data.records = [];
+};
+
+tremppi.select.toolbarClass = function () {
+    return {
+        name: 'toolbar',
+        items: [
+            {type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'}
+        ]
+    };
 };

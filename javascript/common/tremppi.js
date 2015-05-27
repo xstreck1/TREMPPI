@@ -80,16 +80,27 @@ tremppi = {
             tremppi.log("localStorage not available, browser key " + key + " not stored", "warning");
         }
         else {
-            localStorage.setItem(makeStorageKey(key), value);
+            localStorage.setItem(tremppi.makeStorageKey(key), value);
         }
     },
-    getItem: function (key) {
+    getItem: function (key, default_value) {
         if (typeof localStorage === 'undefined') {
             tremppi.log("localStorage not available, browser key " + key + " not loaded", "warning");
             return null;
         }
         else {
-            return localStorage.getItem(makeStorageKey(key));
+            var value = localStorage.getItem(tremppi.makeStorageKey(key));
+            if (value === null) {
+                if (typeof default_value === 'undefined') {
+                    return null;
+                }
+                else {
+                    return default_value;
+                }
+            }
+            else {
+                return value;
+            }
         }
     },
     makeScript: function (src) {
