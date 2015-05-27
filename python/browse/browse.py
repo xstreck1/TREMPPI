@@ -69,7 +69,7 @@ if (args.port != None):
     port = args.port
 else:
     port = default_port
-replace_regex(join(DEST_PATH, "configuration.js"), "server_port: \\d*", "server_port: " + port)
+replace_regex(join(DEST_PATH, "configure.js"), "server_port: \\d*", "server_port: " + port)
 server = HTTPServer(('', int(port)), StoreHandler)
 webbrowser.open("http://localhost:" + port + "/index.html")
 server.serve_forever()

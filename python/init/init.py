@@ -42,14 +42,17 @@ if __name__ == "__main__":
         destination = join(DEST_CONTENT, folder)
         copyanything(source, destination)
 
+    for file in widgets:
+        shutil.copy(join(HOME_PATH, source_folder, file + ".html"), DEST_CONTENT)
+
     # make the data directory
     generateData(join(DEST_CONTENT, data_folder))
 
     # create the configure data
     with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:
-        setup.write('tremppi.configure = { ' +
+        setup.write('tremppi.setup = { ' +
                     '\tserver_port: 8080, \n' +
                     '\tserver_location: "localhost", \n' +
-                    '\tproject_name: ' + args.name + '\n' +
+                    '\tproject_name: "' + args.name + '"\n' +
                     '};'
                     )

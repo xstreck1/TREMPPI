@@ -120,7 +120,7 @@ tremppi = {
 
         // common 
         head.appendChild(tremppi.makeLink('icon', 'image/x-icon', './favicon.ico'));
-        head.appendChild(tremppi.makeScript('./configuration.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
+        head.appendChild(tremppi.makeScript('./configure.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
         head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './common/css.css'));
         head.appendChild(tremppi.makeScript('./common/common.js'));
 
