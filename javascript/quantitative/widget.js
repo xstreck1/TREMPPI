@@ -6,6 +6,26 @@
 
 /* global tremppi */
 
+tremppi.quantitative.initialPanel = function () {
+    var panel = tremppi.getItem("panel", "all");
+    if (panel === 'left' || panel === 'mid' || panel === 'right') {
+        tremppi.quantitative.toolbar.uncheck('all');
+        tremppi.quantitative.toolbar.check(panel);
+        tremppi.quantitative.showPanel(panel);
+    }
+
+    if (tremppi.getItem("selected") !== null) {
+        tremppi.quantitative.pickData(tremppi.getItem("selected"), 'left');
+    }
+    if (tremppi.getItem("compared") !== null) {
+        tremppi.quantitative.pickData(tremppi.getItem("compared"), 'right');
+    }
+};
+
+tremppi.quantitative.setPanel = function (panel) {
+    tremppi.quantitative[panel] = $('#container_' + panel).w2grid(tremppi.quantitative.getGrid(panel));
+};
+
 tremppi.quantitative.findByName = function (list, name) {
     for (var i = 0; i < list.length; i++) {
         if (list[i].name === name) {
@@ -41,5 +61,24 @@ tremppi.quantitative.valuesSetter = function (source, panel) {
 
         tremppi.quantitative.mid.header = tremppi.quantitative.left.header + " - " + tremppi.quantitative.right.header;
         tremppi.quantitative.mid.refresh();
+    };
+};
+
+tremppi.quantitative.getGrid = function (grid_name) {
+    var portion = (100 - 50) / 5;
+    return {
+        name: grid_name,
+        header: grid_name,
+        show: {
+            header: true
+        },
+        columns: [
+            {field: 'name', caption: 'Name', size: '50%', sortable: true},
+            {field: 'count', caption: 'Count', size: portion + '%', sortable: true},
+            {field: 'portion', caption: 'Portion', size: portion + '%', sortable: true},
+            {field: 'min', caption: 'Min', size: portion + '%', sortable: true},
+            {field: 'max', caption: 'Max', size: portion + '%', sortable: true},
+            {field: 'mean', caption: 'Mean', size: portion + '%', sortable: true}
+        ]
     };
 };

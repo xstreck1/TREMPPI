@@ -27,25 +27,23 @@ tremppi.quantitative.showAll = function () {
 };
 
 tremppi.quantitative.pickData = function (source, panel) {
-    $.getJSON(tremppi.getDataFile(source), tremppi.quantitative.valuesSetter(source, panel));
+    tremppi.getData(tremppi.quantitative.valuesSetter(source, panel), source);
 };
 
 tremppi.quantitative.toolbarClick = function (event) {
-    if (event.type === 'click') {
-        if (event.target === 'all') {
-            tremppi.quantitative.showAll();
-            tremppi.data.panel = 'all';
-        } else if (event.target === 'left' | event.target === 'mid' | event.target === 'right') {
-            tremppi.data.panel = event.target;
-            tremppi.quantitative.showPanel(tremppi.data.panel);
-        } else if (event.target.slice(0, 7) === 'select:') {
-            tremppi.data.select = event.target.slice(7);
-            tremppi.quantitative.pickData(tremppi.data.select, 'left');
-        } else if (event.target.slice(0, 8) === 'compare:') {
-            tremppi.data.compare = event.target.slice(8);
-            tremppi.quantitative.pickData(tremppi.data.compare, 'right');
-        }
-        tremppi.quantitative.save();
+    if (event.target === 'all') {
+        tremppi.quantitative.showAll();
+        tremppi.setItem('panel', 'all');
+    } else if (event.target === 'left' | event.target === 'mid' | event.target === 'right') {
+        tremppi.setItem('panel', event.target);
+        tremppi.quantitative.showPanel(event.target);
+    } else if (event.target.slice(0, 7) === 'select:') {
+        var selected = event.target.slice(7);
+        tremppi.setItem('selected', selected);
+        tremppi.quantitative.pickData(selected, 'left');
+    } else if (event.target.slice(0, 8) === 'compare:') {
+        var compared = event.target.slice(8);
+        tremppi.setItem('compared', selected);
+        tremppi.quantitative.pickData(compared, 'right');
     }
-    console.log('Clicked: ' + event.target, event);
 };

@@ -254,10 +254,10 @@ def configure(data_path, widget):
         else:
             for file in os.listdir(widget_dir):
                 if file.endswith(".json"):
-                    files.append(file)
+                    files.append(file[:-5])
         with open(join(data_path, widget + '.js'), 'w+') as file_js:
             file_js.write('tremppi.' + widget + '.setup = ')
-            json.dump(files, file_js)
+            json.dump({"files": files}, file_js)
             file_js.write(';')
     elif widget in widgets:
         js_filename = join(DATA_PATH, widget + '.js')
