@@ -61,7 +61,7 @@ def select(filename, term):
     with open(filename, 'r') as selectionFile:
         grid = json.loads(selectionFile.read())
         if "records" not in grid:
-            return ""
+            raise Exception("No selection is present.")
         if (term):
             result = select_query(grid["records"])
             if result != '':

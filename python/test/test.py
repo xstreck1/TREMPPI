@@ -5,6 +5,9 @@ import argparse
 import shutil
 import re
 import json
+import sqlite3
+from random import randint
+
 from os.path import join, dirname
 sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
 from tremppi.file_manipulation import  normal_paths
@@ -21,3 +24,4 @@ print(select(HOME_PATH + "/javascript/data/select.json", False) + " : " + select
 configure(HOME_PATH + "/javascript/data", "select")
 configure(HOME_PATH + "/javascript/data", "properties")
 configure(HOME_PATH + "/javascript/data", "quantitative")
+configure(HOME_PATH + "/javascript/data", "qualitative")

@@ -28,10 +28,25 @@ void createModel(const bfs::path & example_model_path) {
 	data_file << data;
 }
 
+void createSelect(const bfs::path & example_model_path) {
+	Json::Value all;
+	all["recid"] = 0;
+	all["name"] = "all";
+	all["select"] = true;
+	Json::Value root;
+	root["records"].append(all);
+
+	Json::StyledWriter writer;
+	ofstream data_file((example_model_path / DATA_FOLDER / bfs::path{ SELECTION_FILENAME }).string(), ios::out);
+	string data = writer.write(root);
+	data_file << data;
+}
+
 int basic_spawn_test() {
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	createModel(arguments[1]);
+	createSelect(arguments[1]);
 	return (tremppi_spawn(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
 

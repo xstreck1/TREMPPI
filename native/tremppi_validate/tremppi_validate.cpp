@@ -3,6 +3,7 @@
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
+#include <tremppi_common/python/python_functions.hpp>
 
 #include "io/properties_reader.hpp"
 #include "io/parametrization_reader.hpp"
@@ -101,11 +102,17 @@ int tremppi_validate(int argc, char ** argv) {
 				logging.step();
 			}
 			xct.commit();
-			DatabaseReader::makeSelect();
 		}
 		catch (std::exception & e) {
 			logging.exceptionMessage(e, 6);
 		}
+	}
+
+	try {
+		PythonFunctions::configure("select");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 7);
 	}
 
 	return 0;

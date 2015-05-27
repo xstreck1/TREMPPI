@@ -6,35 +6,6 @@
 
 /* global tremppi */
 
-tremppi.quantitative.initialPanel = function () {
-    var panel = tremppi.getItem("panel", "all");
-    if (panel === 'left' || panel === 'mid' || panel === 'right') {
-        tremppi.quantitative.toolbar.uncheck('all');
-        tremppi.quantitative.toolbar.check(panel);
-        tremppi.quantitative.showPanel(panel);
-    }
-
-    if (tremppi.getItem("selected") !== null) {
-        tremppi.quantitative.pickData(tremppi.getItem("selected"), 'left');
-    }
-    if (tremppi.getItem("compared") !== null) {
-        tremppi.quantitative.pickData(tremppi.getItem("compared"), 'right');
-    }
-};
-
-tremppi.quantitative.setPanel = function (panel) {
-    tremppi.quantitative[panel] = $('#container_' + panel).w2grid(tremppi.quantitative.getGrid(panel));
-};
-
-tremppi.quantitative.findByName = function (list, name) {
-    for (var i = 0; i < list.length; i++) {
-        if (list[i].name === name) {
-            return list[i];
-        }
-    }
-    return {};
-};
-
 tremppi.quantitative.valuesSetter = function (source, panel) {
     return function (data) {
         tremppi.quantitative[panel].records = data.records;
@@ -47,7 +18,7 @@ tremppi.quantitative.valuesSetter = function (source, panel) {
         var cmp_recs = tremppi.quantitative['right'].records;
         for (var i = 0; i < sel_recs.length; i++) {
             var sel_rec = sel_recs[i];
-            var cmp_rec = tremppi.quantitative.findByName(cmp_recs, sel_rec.name);
+            var cmp_rec = tremppi.report.findByName(cmp_recs, sel_rec.name);
             if (typeof cmp_rec.name !== 'undefined') {
                 var dif_rec = {name: sel_rec.name};
                 ['count', 'portion', 'min', 'max', 'mean'].forEach(function (val) {

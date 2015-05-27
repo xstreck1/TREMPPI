@@ -6,13 +6,19 @@
 
 /* global tremppi */
 
-tremppi.qualitative.findByName = function (list, name) {
-    for (var i = 0; i < list.length; i++) {
-        if (list[i].name === name) {
-            return list[i];
-        }
-    }
-    return {};
+tremppi.qualitative.getGrid = function (grid_name) {
+    return {
+        name: grid_name,
+        header: grid_name,
+        show: {
+            header: true
+        },
+        columns: [
+            {field: 'name', caption: 'Name', size: '20%', sortable: true},
+            {field: 'entries', caption: 'Entries', size: '10%'},
+            {field: 'value', caption: 'Value', size: '70%'}
+        ]
+    };
 };
 
 tremppi.qualitative.valuesToRecords = function (values) {
@@ -43,12 +49,12 @@ tremppi.qualitative.valuesSetter = function (source, panel) {
         if (typeof sel_vals !== 'undefined' && typeof cmp_vals !== 'undefined') {
             for (var i = 0; i < sel_vals.length; i++) {
                 var sel_val = sel_vals[i];
-                var cmp_val = tremppi.qualitative.findByName(cmp_vals, sel_val.name);
+                var cmp_val = tremppi.report.findByName(cmp_vals, sel_val.name);
                 if (typeof cmp_val.name !== 'undefined') {
                     var dif_val = {name: sel_val.name, data: []};
                     // Add those in select
                     for (var j = 0; j < sel_val.data.length; j++) {
-                        var cmp_data = tremppi.qualitative.findByName(cmp_val.data, sel_val.data[j].name);
+                        var cmp_data = tremppi.report.findByName(cmp_val.data, sel_val.data[j].name);
                         if (typeof cmp_data.name !== 'undefined') {
                             dif_val.data.push({
                                 name: sel_val.data[j].name,
@@ -64,7 +70,7 @@ tremppi.qualitative.valuesSetter = function (source, panel) {
                     }
                     // Add those in compare only
                     for (var j = 0; j < cmp_val.data.length; j++) {
-                        var sel_data = tremppi.qualitative.findByName(sel_val.data, cmp_val.data[j].name);
+                        var sel_data = tremppi.report.findByName(sel_val.data, cmp_val.data[j].name);
                         if (typeof sel_data.name === 'undefined') {
                             dif_val.data.push({
                                 name: cmp_val.data[j].name,

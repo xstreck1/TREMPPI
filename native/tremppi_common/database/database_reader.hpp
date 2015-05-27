@@ -44,7 +44,4 @@ public:
 
 	// Obtain the term describing the current selection
 	static string getSelectionName();
-
-	//
-	static void makeSelect();
 };

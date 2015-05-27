@@ -122,11 +122,4 @@ string DatabaseReader::getSelectionName() {
 	return result;
 }
 
-void DatabaseReader::makeSelect() {
-	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from configure.configure import configure");
-	python.exec("configure(" +
-		PythonFunctions::reformPath(bfs::absolute(TremppiSystem::DATA_PATH)) +
-		", \"select\")");
-}
 

@@ -105,6 +105,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 		for (ComputedQual & result : results) {
 			Json::Value result_node;
 			result_node["name"] = Report::reformName(result.name);
+			result_node["entries"] = result.values.size();
 			for (const pair<string, size_t> & value : result.values) {
 				Json::Value data;
 				data["name"] = value.first;
@@ -120,17 +121,6 @@ int tremppi_qualitative(int argc, char ** argv) {
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		// add if not exists
-		//bool exists = false;
-		//for (Json::Value selection : widget_data["selections"]) {
-		//	exists |= (selection["id"].asString() == name);
-		//}
-		//if (!exists) {
-		//	Json::Value new_entry;
-		//	new_entry["id"] = name;
-		//	new_entry["text"] = name;
-		//	widget_data["selections"].append(new_entry);
-		//}
 		
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "qualitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}

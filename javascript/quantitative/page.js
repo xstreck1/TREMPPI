@@ -7,21 +7,10 @@
 /* global tremppi */
 
 tremppi.quantitative.page = function () {
-    tremppi.toolbar.get('select').items = tremppi.quantitative.setup.files;
-    tremppi.toolbar.get('compare').items = tremppi.quantitative.setup.files;
-    $("#widget").append('<div id="container_left">left</div>');
-    $("#widget").append('<div id="container_mid">mid</div>');
-    $("#widget").append('<div id="container_right">right</div>');
-    tremppi.quantitative.setPanel('left');
-    tremppi.quantitative.setPanel('mid');
-    tremppi.quantitative.setPanel('right');
-    
-    tremppi.quantitative.initialPanel();
-    
+    tremppi.report.createPanels();
+    tremppi.report.initialPanel();
     tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
 };
-
-
 
 tremppi.quantitative.setData = function (data) {
 };

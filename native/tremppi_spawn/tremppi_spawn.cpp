@@ -1,6 +1,7 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/network/constraint_parser.hpp>
+#include <tremppi_common/python/python_functions.hpp>
 #include <tremppi_common/database/database_reader.hpp>
 #include "compute/parameter_builder.hpp"
 #include "compute/parametrizations_builder.hpp"
@@ -94,13 +95,18 @@ int tremppi_spawn(int argc, char ** argv) {
 		}
 
 		database_filler.finishOutpout();
-		DatabaseReader::makeSelect();
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 6);
 	}
 
-	
-	tremppi_configure(argc, argv);
+	try {
+		PythonFunctions::configure("select");
+		PythonFunctions::configure("properties");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 7);
+	}
+
 	return 0;
 }

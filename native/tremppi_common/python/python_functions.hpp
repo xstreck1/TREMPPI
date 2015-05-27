@@ -16,11 +16,13 @@ public:
 
 	void exec(const string & command);
 
-
 	static string reformPath(const bfs::path & path);
 
 	template <typename ResultType>
     void eval(const string & command, ResultType & result);
+
+	//
+	static void configure(string widget);
 };
 
 template<typename ResultType>
