@@ -5,8 +5,8 @@ import os
 import json
 import sqlite3
 from os.path import join, dirname, abspath, exists
-
-sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
+if __name__ == "__main__":
+    sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.database_reader import read_regulations, read_components
 from tremppi.header import data_folder, widgets, database_file
 from tremppi.file_manipulation import normal_paths

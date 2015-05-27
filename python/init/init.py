@@ -4,7 +4,8 @@ import argparse
 import shutil
 import json
 from os.path import join, dirname, abspath, isfile, exists
-sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
+if __name__ == "__main__":
+    sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything, replace_regex, normal_paths
 from tremppi.header import folders, widgets, source_folder, data_folder
 

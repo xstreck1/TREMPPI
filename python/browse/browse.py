@@ -6,7 +6,8 @@ from urllib.parse import urlparse, parse_qs
 from os import curdir, chdir
 from os.path import dirname, join, abspath, exists, normpath, isfile
 from http.server import  HTTPServer, SimpleHTTPRequestHandler
-sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
+if __name__ == "__main__":
+    sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import replace_regex, normal_paths
 from tremppi.header import widgets, data_folder, default_port
 from init.init import generateData

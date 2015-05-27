@@ -33,7 +33,7 @@ tremppi.select.addButtons = function() {
 
 tremppi.select.toolbarClick = function (event) {
     if (event.target === 'save') {
-        tremppi.index.save();
+        tremppi.select.save();
     }
 };
 

@@ -1,15 +1,7 @@
 __author__ = 'adams_000'
 import sys
-import os
 import argparse
-import shutil
-import re
-import json
-import sqlite3
-from random import randint
 
-from os.path import join, dirname
-sys.path.append(dirname(dirname(os.path.abspath(sys.argv[0]))))
 from tremppi.file_manipulation import  normal_paths
 from tremppi.select import select
 from configure.configure import configure
