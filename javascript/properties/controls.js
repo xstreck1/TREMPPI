@@ -96,11 +96,15 @@ tremppi.properties.listSelect = function (recid) {
         return;
     } else {
         var selected = tremppi.w2ui.findByRecID(tremppi.properties.list.records, recid);
-        tremppi.properties.detailed = selected.recid;
-        tremppi.properties.detail.records = selected.records;
-        tremppi.properties.detail.header = selected.name;
-        tremppi.properties.detail.refresh();
-        tremppi.setItem("detailed", recid);
+        if (typeof selected === 'undefined') {
+            tremppi.setItem("detailed", -1);
+        } else {
+            tremppi.properties.detailed = selected.recid;
+            tremppi.properties.detail.records = selected.records;
+            tremppi.properties.detail.header = selected.name;
+            tremppi.properties.detail.refresh();
+            tremppi.setItem("detailed", recid);
+        }
     }
 };
 

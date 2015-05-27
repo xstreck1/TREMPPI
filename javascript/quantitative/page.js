@@ -7,9 +7,13 @@
 /* global tremppi */
 
 tremppi.quantitative.page = function () {
-    tremppi.report.createPanels();
-    tremppi.report.initialPanel();
-    tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
+    if (typeof tremppi.qualitative.setup === 'undefined') {
+        $("#widget").html("No quantitative report has been created yet.");
+    } else {
+        tremppi.report.createPanels();
+        tremppi.report.initialPanel();
+        tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
+    }
 };
 
 tremppi.quantitative.setData = function (data) {

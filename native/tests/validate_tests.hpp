@@ -9,7 +9,7 @@ int tremppi_validate(int, char**);
 // Print the basic model
 void createProperties(const bfs::path & example_model_path) {
 	Json::Value root;
-	Json::Value & records = root["list"]["records"];
+	Json::Value & records = root["records"];
 	records.resize(2);
 
 	// Add time series

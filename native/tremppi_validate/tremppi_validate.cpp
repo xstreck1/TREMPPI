@@ -44,7 +44,7 @@ int tremppi_validate(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
 
 		Json::Value root = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
-		properties = root["list"]["records"];
+		properties = root["records"];
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
