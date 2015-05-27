@@ -2,8 +2,8 @@
 tremppi_common/configure.h
 
 # build files
-*bin*
-*lib*
+/bin*
+/lib*
 
 # CMake files
 CMakeFiles*
