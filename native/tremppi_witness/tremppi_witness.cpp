@@ -52,10 +52,10 @@ int tremppi_witness(int argc, char ** argv) {
 		BOOST_LOG_TRIVIAL(info) << "Loading witnesses.";
 		logging.newPhase("computing witness", properties.size());
 
-		for (const auto & property : properties) {
+		for (const auto & property : properties["records"]) {
 			// If selected
-			if (property["desc"][0]["values"]["Verify"].asBool()) {
-				const string name = property["desc"][0]["values"]["Name"].asString();
+			if (property["validate"].asBool()) {
+				const string name = property["name"].asString();
 				out["setup"]["properties"] = out["setup"]["properties"].asString() + name + ",";
 
 				wit_reader.select(name, out["setup"]["select"].asString(), db);

@@ -83,7 +83,7 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 			map<string, ActRange> state_consts;
 			map<string, PathCons> path_consts;
 
-			for (const string & member : property_node.getMemberNames()) {
+			for (const string & member : record.getMemberNames()) {
 				// get the constraint
 				if (member.substr(0, 2) == "V_") {
 					const string component = member.substr(2);
@@ -96,8 +96,8 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 					path_consts.insert(make_pair(component, PropertiesReader::getTransitionConstraint(path_str, component)));
 				}
 
-				property_info.measurements.emplace_back(PropertyInfo::Measurement{ property_info.measurements.size(), move(state_consts), move(path_consts) });
 			}
+			property_info.measurements.emplace_back(PropertyInfo::Measurement{ property_info.measurements.size(), move(state_consts), move(path_consts) });
 		}
 
 		automata.emplace_back(move(property_info));
