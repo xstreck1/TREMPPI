@@ -46,28 +46,42 @@ bool ProductBuilder::matchesConstraints(const UnparametrizedStructure & structur
 	return result;
 }
 
-void ProductBuilder::addSubspaceTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, const size_t BA_trans_no, ProductStructure & product) {
+void ProductBuilder::addStateTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID s_BA_ID, const StateID s_KS_ID, const AutTransitionion & BA_transition, ProductStructure & product) {
+	StateID s_ID = product.computeID(s_KS_ID, s_BA_ID);
+
+	// Add all the trasient combinations for the kripke structure
+	for (const size_t KS_trans_no : cscope(structure._states[s_KS_ID])) {
+		const StateID t_KS_ID = structure._states[s_KS_ID]._transitions[KS_trans_no]._t_ID;
+		const TransConst & trans_const = structure._states[s_KS_ID]._transitions[KS_trans_no]._trans_const;
+		// If the transition does not meet the stability requirements, add transition to hell (infty)
+		const StateID t_ID = matchesConstraints(structure, s_KS_ID, t_KS_ID, BA_transition._path_constr) ? product.computeID(t_KS_ID, BA_transition._t_ID) : INF;
+		product._states[s_ID]._transitions.emplace_back(TSTransitionProperty(t_ID, trans_const));
+	}
+
+	// Add a self-loop
+	product._states[s_ID]._loops.emplace_back(product.computeID(s_KS_ID, BA_transition._t_ID));
+}
+
+// THIS IS WRONG! ITERATING OVER CONSTRAINTS AS SOURCES INSTEAD OF JUST TAKING ALL POSSIBILITIES
+void ProductBuilder::addSubspaceTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID s_BA_ID, const size_t BA_trans_no, ProductStructure & product) {
 	// List through the states that are allowed by the constraint
-	const auto & BA_transition = automaton._states[BA_ID]._transitions[BA_trans_no];
-	Levels levels = min(BA_transition._state_constr);
-	do {
-		// bool is_ss = static_cast<bool>(solution[solution.size() - 1]);
-		// solution.resize(solution.size() - 1);
-		StateID KS_ID = structure.computeID(levels);
-		StateID ID = product.computeID(KS_ID, BA_ID);
-
-		// Add all the trasient combinations for the kripke structure
-		for (const size_t KS_trans_no : cscope(structure._states[KS_ID])) {
-			const StateID KS_target = structure._states[KS_ID]._transitions[KS_trans_no]._t_ID;
-			const TransConst & trans_const = structure._states[KS_ID]._transitions[KS_trans_no]._trans_const;
-			// If the transition does not meet the stability requirements, add transition to hell (infty)
-			const StateID t_ID = matchesConstraints(structure, KS_ID, KS_target, BA_transition._path_constr) ? product.computeID(KS_target, BA_transition._t_ID) : INF;
-			product._states[ID]._transitions.emplace_back(TSTransitionProperty( t_ID, trans_const ));
+	const auto & BA_transition = automaton._states[s_BA_ID]._transitions[BA_trans_no];
+	// Enumerate the conditions
+	if (BA_transition._inclusive) {
+		Levels levels = min(BA_transition._state_constr);
+		do {
+			StateID s_KS_ID = structure.computeID(levels);
+			addStateTransitions(structure, automaton, s_BA_ID, s_KS_ID, BA_transition, product);
+		} while (iterate(BA_transition._state_constr, levels));
+	}
+	// Enumerate all states, for each go forward only if it does NOT meat the conditions
+	else {
+		for (const StateID s_KS_ID : cscope(structure._states)) {
+			if (!belongsToProduct(structure._states[s_KS_ID]._levels, BA_transition._state_constr)) {
+				addStateTransitions(structure, automaton, s_BA_ID, s_KS_ID, BA_transition, product);
+			}
 		}
-
-		// Add a self-loop
-		product._states[ID]._loops.emplace_back(product.computeID(KS_ID, BA_transition._t_ID));
-	} while (iterate(BA_transition._state_constr, levels));
+	}
 }
 
 void ProductBuilder::buildProduct(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, ProductStructure & product) {

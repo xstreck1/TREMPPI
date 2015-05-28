@@ -18,7 +18,7 @@
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace AutomatonBuilder {
 	// Compute allowed values from string of constrains
-	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const bool inclusive);
+	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names);
 
 	//
 	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);

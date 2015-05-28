@@ -21,9 +21,13 @@ namespace ProductBuilder {
 	void relabel(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, ProductStructure & product);
 
 	/**
-	 * Create state of the product as a combination of a single BA and a single UKS state
-	 * @param BA_ID	source in the BA
-	 * @param transition_count	value which counts the transition for the whole product, will be filled
+	 * Add transitions to a single state matching the BA transition.
+	 */
+	void addStateTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID s_BA_ID, const StateID s_KS_ID, const AutTransitionion & BA_transition, ProductStructure & product);
+
+
+	/**
+	 * Add transitions to all states matching the BA transition.
 	 */
 	void addSubspaceTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, const size_t trans_no, ProductStructure & product);
 

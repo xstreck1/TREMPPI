@@ -161,6 +161,21 @@ namespace Common {
 	}
 
 	template<typename IntegralType>
+	bool belongsToProduct(const std::vector<IntegralType> & element, const std::vector<std::vector<IntegralType>> & sets) {
+		for (size_t set_no = 0; set_no < sets.size(); set_no++) {
+			for (size_t val_no = 0; val_no <= sets[set_no].size(); val_no++) {
+				if (val_no == sets[set_no].size()) {
+					return false;
+				}
+				else if (element[set_no] == sets[set_no][val_no]) {
+					break;
+				}
+			}
+		}
+		return true;
+	}
+
+	template<typename IntegralType>
 	std::vector<IntegralType> min(const std::vector<std::vector<IntegralType>> & values) {
 		std::vector<IntegralType>  result(values.size());
 
