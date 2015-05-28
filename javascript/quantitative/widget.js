@@ -53,3 +53,8 @@ tremppi.quantitative.getGrid = function (grid_name) {
         ]
     };
 };
+
+
+tremppi.quantitative.setPanel = function (panel) {
+    tremppi.widget[panel] = $('#container_' + panel).w2grid(tremppi.widget.getGrid(panel));
+};

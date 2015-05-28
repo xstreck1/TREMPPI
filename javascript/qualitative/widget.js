@@ -21,6 +21,10 @@ tremppi.qualitative.getGrid = function (grid_name) {
     };
 };
 
+tremppi.qualitative.setPanel = function (panel) {
+    tremppi.widget[panel] = $('#container_' + panel).w2grid(tremppi.widget.getGrid(panel));
+};
+
 tremppi.qualitative.valuesToRecords = function (values) {
     var records = [];
     for (var i = 0; i < values.length; i++) {

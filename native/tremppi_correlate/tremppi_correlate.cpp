@@ -58,7 +58,7 @@ int tremppi_correlate(int argc, char ** argv) {
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "function" / (TimeManager::getTimeStamp() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "correlate" / (out["setup"]["s_name"].asString() + ".json"), out);
 	
 	}
 	catch (exception & e) {

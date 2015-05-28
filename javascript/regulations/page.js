@@ -6,23 +6,29 @@
 
 /* global tremppi */
 
-tremppi.quantitative.page = function () {
-    if (typeof tremppi.quantitative.setup === 'undefined') {
-        $("#widget").html("No quantitative report has been created yet.");
+tremppi.regulations.page = function () {
+    if (typeof tremppi.regulations.setup === 'undefined') {
+        $("#widget").html("No regulations report has been created yet.");
     } else {
         tremppi.report.createPanels();
         tremppi.report.initialPanel();
-        tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
+        tremppi.regulations.config = tremppi.regulations.getConfiguraion();
     }
 };
 
-tremppi.quantitative.setData = function (data) {
+tremppi.regulations.setData = function (data) {
+    tremppi.toolbar.onClick = tremppi.regulations.toolbarClick;
 };
 
-tremppi.quantitative.layout = function () {
+tremppi.regulations.layout = function () {    
+//    tremppi.regulations.left.resize();
+//    tremppi.regulations.mid.resize();
+//    tremppi.regulations.right.resize();
+
+    // tremppi.regulations.Labels.loadLabels();
 };
 
-tremppi.quantitative.toolbarClass = function () {
+tremppi.regulations.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [

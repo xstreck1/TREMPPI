@@ -1,18 +1,5 @@
-#container_left {
+div.container {
     width: 33.33%; 
     height: 100%;
     float: left;
 }
-
-#container_mid {
-    width: 33.33%; 
-    height: 100%;
-    float: left;
-}
-
-#container_right {
-    width: 33.33%; 
-    height: 100%;
-    float: left;
-}
-

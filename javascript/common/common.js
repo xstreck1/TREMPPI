@@ -20,9 +20,9 @@ tremppi.qtip = {
         this.content = {text: ''};
         this.show = false; // Do not show on mouseover of the graph
     },
-    addOnHoverLabeller: function (div_id, elements, labeller) {
+    addOnHoverLabeller: function (type, elements, labeller) {
         var config = new tremppi.qtip.getConfig();
-        var api = $('#' + div_id).qtip(config).qtip('api');
+        var api = $('#container_' + type).qtip(config).qtip('api');
         elements.on('tapdragover', function (eve) {
             var my_data = eve.cyTarget.data();
             api.set('content.text', labeller(my_data));
@@ -243,12 +243,12 @@ tremppi.report = {
     createPanels: function () {
         tremppi.toolbar.get('select').items = tremppi.widget.setup.files;
         tremppi.toolbar.get('compare').items = tremppi.widget.setup.files;
-        $("#widget").append('<div id="container_left">left</div>');
-        $("#widget").append('<div id="container_mid">mid</div>');
-        $("#widget").append('<div id="container_right">right</div>');
-        tremppi.report.setPanel('left');
-        tremppi.report.setPanel('mid');
-        tremppi.report.setPanel('right');
+        $("#widget").append('<div class="container" id="container_left">left</div>');
+        $("#widget").append('<div class="container" id="container_mid">mid</div>');
+        $("#widget").append('<div class="container" id="container_right">right</div>');
+        tremppi.widget.setPanel('left');
+        tremppi.widget.setPanel('mid');
+        tremppi.widget.setPanel('right');
     },
     initialPanel: function () {
         var panel = tremppi.getItem('panel', 'all');
@@ -264,9 +264,6 @@ tremppi.report = {
         if (tremppi.getItem('compared') !== null) {
             tremppi.report.pickData(tremppi.getItem('compared'), 'right');
         }
-    },
-    setPanel: function (panel) {
-        tremppi.widget[panel] = $('#container_' + panel).w2grid(tremppi.widget.getGrid(panel));
     },
     findByName: function (list, name) {
         for (var i = 0; i < list.length; i++) {
