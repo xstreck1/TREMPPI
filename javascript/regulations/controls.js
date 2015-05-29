@@ -21,6 +21,18 @@ tremppi.regulations.toolbarClick = function (event) {
         var compared = event.target.slice(8);
         tremppi.setItem('compared', compared);
         tremppi.report.pickData(compared, 'right');
+    } else if (event.target === 'relative') {
+        var checked = !event.item.checked;
+        tremppi.setItem('relative', checked);
+        for (var i = 0; i < tremppi.report.panels.length; i++) {
+            tremppi.regulations.applyVisuals(tremppi.report.panels[i]);
+        }
+    } else if (event.target === 'weighted') {
+        var checked = !event.item.checked;
+        tremppi.setItem('weighted', checked);
+        for (var i = 0; i < tremppi.report.panels.length; i++) {
+            tremppi.regulations.applyVisuals(tremppi.report.panels[i]);
+        }
     }
 };
 
@@ -52,7 +64,7 @@ tremppi.regulations.getConfiguraion = function () {
             absolute: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: -1, max: 1}
+                color: {min: 0, max: 1}
             },
             relative: {},
             width: {min: 1, max: 10},
@@ -82,23 +94,20 @@ tremppi.regulations.compareFunction = function (is_max, signed) {
             };
         }
         else {
-            return    function (x, y) {
-                var res = Math.max(Math.abs(x), Math.abs(y));
-                return res;
+            return function (x, y) {
+                return Math.max(x, y);
             };
         }
     }
     else {
         if (signed) {
             return function (x, y) {
-                var res = -1 * Math.max(Math.abs(x), Math.abs(y));
-                return res;
+                return 0;
             };
-        } 
+        }
         else {
             return function (x, y) {
-                var res = Math.min(Math.abs(x), Math.abs(y));
-                return res;
+                return Math.min(Math.abs(x), Math.abs(y));
             };
 
         }
@@ -106,52 +115,34 @@ tremppi.regulations.compareFunction = function (is_max, signed) {
 };
 
 tremppi.regulations.getBound = function (edges, param, fun, signed, weighted) {
-    if (signed && fun === "min") {
-        return 0;
-    } 
-    else {
-        var result = fun === "min" ? Number.MAX_VALUE : Number.MIN_VALUE;
+    var result = 0;
 
-        var cmp_function = tremppi.regulations.compareFunction(fun === 'min', signed);
+    var cmp_function = tremppi.regulations.compareFunction(fun === 'max', signed);
 
-        for (var edge_no = 0; edge_no < edges.length; edge_no++) {
-            var value = edges[edge_no].data[param];
-            if (weighted)
-                value /= edges[edge_no].data.ExpectedFreq;
-            result = cmp_function(result, value);
-        }
-
-        return result;
+    for (var edge_no = 0; edge_no < edges.length; edge_no++) {
+        var value = edges[edge_no].data(param);
+        if (weighted)
+            value /= edges[edge_no].data("ExpectedFreq");
+        result = cmp_function(result, value);
     }
+
+    return result;
 };
 
 // gives the ranges of values and their respective mapping
-tremppi.regulations.configure = function (graph, type) {
+tremppi.regulations.configure = function (type) {
+    var edges = tremppi.regulations[type].edges();
     tremppi.regulations.config[type].relative = {
         width: {
-            min: getBound(graph.edges, "Frequency", "min", false, false),
-            max: getBound(graph.edges, "Frequency", "max", false, false)},
+            min: tremppi.regulations.getBound(edges, "Frequency", "min", false, false),
+            max: tremppi.regulations.getBound(edges, "Frequency", "max", false, false)},
         weight: {
-            min: getBound(graph.edges, "Frequency", "min", false, true),
-            max: getBound(graph.edges, "Frequency", "max", false, true)},
+            min: tremppi.regulations.getBound(edges, "Frequency", "min", false, true),
+            max: tremppi.regulations.getBound(edges, "Frequency", "max", false, true)},
         color: {
-            min: getBound(graph.edges, "Pearson", "min", type === "differ", false),
-            max: getBound(graph.edges, "Pearson", "max", type === "differ", false)
+            min: tremppi.regulations.getBound(edges, "Pearson", "min", type === "mid", false),
+            max: tremppi.regulations.getBound(edges, "Pearson", "max", type === "mid", false)
         }
-    };
-};
-// Re-layout if only one graph is selected
-tremppi.regulations.selectClick = function (type) {
-    return function () {
-        for (var j = 0; j < config.types.length; j++) {
-            if (type === config.types[j]) {
-                $("#container_" + config.types[j]).css("display", "block").css("left", "0").css("width", "100%");
-                $("#graph_" + config.types[j]).cytoscape('get').resize();
-            } else {
-                $("#container_" + config.types[j]).css("display", "none");
-            }
-        }
-        tremppi.regulations.Labels.loadLabels();
     };
 };
 

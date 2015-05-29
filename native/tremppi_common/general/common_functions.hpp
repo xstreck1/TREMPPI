@@ -180,6 +180,9 @@ namespace Common {
 		std::vector<IntegralType>  result(values.size());
 
 		for (size_t val_num = 0; val_num < values.size(); val_num++) {
+			if (values[val_num].empty()) {
+				throw runtime_error("Trying to obtain a lower bound of an empty product.");
+			}
 			result[val_num] = values[val_num].front();
 		}
 
@@ -191,6 +194,9 @@ namespace Common {
 		std::vector<IntegralType> result(values.size());
 
 		for (size_t val_num = 0; val_num < values.size(); val_num++) {
+			if (values[val_num].empty()) {
+				throw runtime_error("Trying to obtain an upper bound of an empty product.");
+			}
 			result[val_num] = values[val_num].back();
 		}
 

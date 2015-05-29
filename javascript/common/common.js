@@ -167,6 +167,7 @@ tremppi.cytoscape = {
     }
 };
 tremppi.report = {
+    panels: ['left', 'mid', 'right'],
     selections: ['left', 'mid', 'right', 'all'],
     addSetup: function (setup) {
         values = ['date', 'name', 'pool_size', 'select', 'selected', 'compare', 'compared'];

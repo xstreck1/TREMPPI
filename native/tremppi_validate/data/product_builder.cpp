@@ -9,14 +9,25 @@ void ProductBuilder::createSubspace(const UnparametrizedStructure & structure, c
 }
 
 void ProductBuilder::relabel(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, ProductStructure & product) {
+	Levels levels;
 	if (automaton._states[BA_ID]._initial) {
-		Levels levels = min(automaton._init_constr);
+		try {
+			 levels = min(automaton._init_constr);
+		}
+		catch (exception & e) {
+			throw runtime_error("Could not label initial states. Probably no initial state exists.");
+		}
 		do {
 			product._states[product.computeID(structure.computeID(levels), BA_ID)]._initial = true; 
 		} while (iterate(automaton._init_constr, levels));
 	}
 	if (automaton._states[BA_ID]._final) {
-		Levels levels = min(automaton._acc_constr);
+		try {
+			levels = min(automaton._acc_constr);
+		}
+		catch (exception & e) {
+			throw runtime_error("Could not label accepting states. Probably no accepting state exists.");
+		}
 		do {
 			product._states[product.computeID(structure.computeID(levels), BA_ID)]._final = true;
 		} while (iterate(automaton._acc_constr, levels));

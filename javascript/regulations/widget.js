@@ -6,13 +6,34 @@
 
 /* global tremppi, cytoscape */
 
+tremppi.regulations.createPanelContent = function (elements, panel) {
+    tremppi.regulations.makeGraph(elements, panel);
+    tremppi.regulations[panel].load(elements);
+    tremppi.regulations.configure(panel);
+    tremppi.regulations.applyVisuals(panel);
+    tremppi.regulations[panel].reset();
+    tremppi.regulations.addQtip(panel);
+};
+
 tremppi.regulations.valuesSetter = function (source, panel) {
     return function (data) {
-        tremppi.regulations.makeGraph(data.elements, panel);
-        tremppi.regulations.applyVisuals(panel, "absolute", "weight");
-        tremppi.regulations[panel].load(data.elements);
-        tremppi.regulations[panel].reset();
-        tremppi.regulations.addQtip(panel);
+        tremppi.regulations.createPanelContent(data.elements, panel);
+        tremppi.log(source + " loaded successfully.");
+
+        if (tremppi.regulations.left.edges().length > 0 && tremppi.regulations.right.edges().length > 0) {
+            var mid = {};
+            $.extend(true, mid, tremppi.regulations.left.json().elements);
+            var right_edges = tremppi.regulations.right.json().elements.edges;
+            // Only make diff if both graphs are loaded
+            for (var i = 0; i < right_edges.length; i++) {
+                var substract = function (value) {
+                    mid.edges[i].data[value] -= right_edges[i].data[value]
+                };
+                substract("Frequency");
+                substract("Pearson");
+            }
+            tremppi.regulations.createPanelContent(mid, 'mid');
+        }
     };
 };
 
@@ -80,30 +101,31 @@ tremppi.regulations.makeGraph = function (graph, type) {
     }
 };
 
-
-
 // Create the mapper for the graph
 tremppi.regulations.createMyMapping = function (type, rel_string, sign, selection, glyph, mapper) {
     var config = tremppi.regulations.config;
     var min = config[type][rel_string][glyph].min;
     var max = config[type][rel_string][glyph].max;
     if (min === max)
-       tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph + sign].max).update();
-    else
-        tremppi.regulations[type].style().selector(selection).css(mapper,
-                'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' +
-                config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')').update();
+        tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph + sign].min).update();
+    else {
+        var map = 'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')';
+        tremppi.regulations[type].style().selector(selection).css(mapper, map).update();
+    }
 };
 
 // Change between relative and absolute values
-tremppi.regulations.applyVisuals = function (type, weigth, width) {
-    tremppi.regulations.createMyMapping(type, weigth, '', 'edge', width, 'width');
+tremppi.regulations.applyVisuals = function (type) {
+    var relative = tremppi.getItem("relative") === "true" ? "relative" : "absolute";
+    var weighted = tremppi.getItem("weighted") === "true" ? "weight" : "width";
+
+    tremppi.regulations.createMyMapping(type, relative, '', 'edge', weighted, 'width');
 
     if (type === 'mid') {
-        tremppi.regulations.createMyMapping(type, weigth, '_pos', 'edge.positive', 'color', 'line-color');
-        tremppi.regulations.createMyMapping(type, weigth, '_neg', 'edge.negative', 'color', 'line-color');
+        tremppi.regulations.createMyMapping(type, relative, '_pos', 'edge.positive', 'color', 'line-color');
+        tremppi.regulations.createMyMapping(type, relative, '_neg', 'edge.negative', 'color', 'line-color');
     } else {
-        tremppi.regulations.createMyMapping(type, weigth, '', 'edge', 'color', 'line-color');
+        tremppi.regulations.createMyMapping(type, relative, '', 'edge', 'color', 'line-color');
     }
 };
 

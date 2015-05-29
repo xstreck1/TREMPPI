@@ -12,6 +12,16 @@ tremppi.regulations.page = function () {
     } else {
         tremppi.report.createPanels();
         tremppi.report.initialPanel();
+        var setCheck = function (id) {
+            var checked = tremppi.getItem(id, tremppi.toolbar.get(id).checked) === "true";
+            if (checked) {
+                tremppi.toolbar.check(id);
+            }
+            tremppi.setItem(id, checked);
+        };
+        setCheck("relative");
+        setCheck("weighted");
+
         tremppi.regulations.config = tremppi.regulations.getConfiguraion();
     }
 };
@@ -20,7 +30,7 @@ tremppi.regulations.setData = function (data) {
     tremppi.toolbar.onClick = tremppi.regulations.toolbarClick;
 };
 
-tremppi.regulations.layout = function () {    
+tremppi.regulations.layout = function () {
 //    tremppi.regulations.left.resize();
 //    tremppi.regulations.mid.resize();
 //    tremppi.regulations.right.resize();
@@ -38,7 +48,10 @@ tremppi.regulations.toolbarClass = function () {
             {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
             {type: 'radio', id: 'left', group: '1', caption: 'Left'},
             {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
-            {type: 'radio', id: 'right', group: '1', caption: 'Right'}
+            {type: 'radio', id: 'right', group: '1', caption: 'Right'},
+            {type: 'break', id: 'break1'},
+            {type: 'check', icon: 'w2ui-icon-check', id: 'relative', caption: 'Relative', checked: false},
+            {type: 'check', icon: 'w2ui-icon-check', id: 'weighted', caption: 'Weighted', checked: false}
         ]
     };
 };
