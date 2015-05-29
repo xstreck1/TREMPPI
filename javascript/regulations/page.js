@@ -11,6 +11,11 @@ tremppi.regulations.page = function () {
         $("#widget").html("No regulations report has been created yet.");
     } else {
         tremppi.report.createPanels();
+        for (var i = 0; i < tremppi.report.panels.length; i++) {
+            $('#container_' + tremppi.report.panels[i]).html("");
+            $("#container_" + tremppi.report.panels[i]).append('<div class="graph" id="graph_'+ tremppi.report.panels[i] + '"></div>');
+            $("#container_" + tremppi.report.panels[i]).append('<canvas class="legend" id="legend_'+ tremppi.report.panels[i] + '"></canvas>');
+        }
         tremppi.report.initialPanel();
         var setCheck = function (id) {
             var checked = tremppi.getItem(id, tremppi.toolbar.get(id).checked) === "true";
@@ -28,6 +33,7 @@ tremppi.regulations.page = function () {
 
 tremppi.regulations.setData = function (data) {
     tremppi.toolbar.onClick = tremppi.regulations.toolbarClick;
+    tremppi.report.synchronize(tremppi.regulations.loadLabels);
 };
 
 tremppi.regulations.layout = function () {

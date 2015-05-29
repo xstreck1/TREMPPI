@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* global tremppi, cytoscape */
+/* global tremppi, cytoscape, paper */
 
 tremppi.regulations.createPanelContent = function (elements, panel) {
     tremppi.regulations.makeGraph(elements, panel);
@@ -13,6 +13,7 @@ tremppi.regulations.createPanelContent = function (elements, panel) {
     tremppi.regulations.applyVisuals(panel);
     tremppi.regulations[panel].reset();
     tremppi.regulations.addQtip(panel);
+    tremppi.regulations.loadLabels(panel);
 };
 
 tremppi.regulations.valuesSetter = function (source, panel) {
@@ -39,9 +40,8 @@ tremppi.regulations.valuesSetter = function (source, panel) {
 
 tremppi.regulations.setPanel = function (panel) {
     var selected_col = '#5555BB';
-    $('#container_' + panel).html("");
     tremppi.widget[panel] = cytoscape({
-        container: document.getElementById('container_' + panel),
+        container: document.getElementById('graph_' + panel),
         style: cytoscape.stylesheet()
                 .selector('node')
                 .css({
@@ -145,95 +145,89 @@ tremppi.regulations.addQtip = function (type) {
     tremppi.qtip.addOnHoverLabeller(type, edges, labeller);
 };
 
-tremppi.regulations.loadLabels = function () {
-    var config = tremppi.data.config;
+tremppi.regulations.bar_left = 110;
+tremppi.regulations.num_of_decimals = 3;
+tremppi.regulations.F_height = 40;
+tremppi.regulations.P_height = 20;
 
-    var bar_left = 110;
-    var num_of_decimals = 3;
-    var rel_string = config.relative ? "relative" : "absolute";
-    var width_type = config.weighted ? "weight" : "width";
+tremppi.regulations.loadLabels = function (type) {
+    var graph = tremppi.regulations[type];
 
-    var cys = [];
-    var papers = [];
-    for (var id = 0; id < config.types.length; id++) {
-        cys[id] = $('#graph_' + config.types[id]).cytoscape('get');
-        papers[id] = new paper.PaperScope();
-        var legend_height = Math.min(config[config.types[id]][width_type].max * cys[id].zoom() + 40, $("#data").height() / 3);
-        $('#legend_' + config.types[id]).height(legend_height);
-        papers[id].setup($('#legend_' + config.types[id])[0]);
-    }
-    var F_height = 40;
-    var P_height = 20;
+    var relative = tremppi.getItem("relative") === "true" ? "relative" : "absolute";
+    var weighted = tremppi.getItem("weighted") === "true" ? "weight" : "width";
 
-    var makeText = function (content, position) {
-        var text = new paper.PointText(position);
-        text.fillColor = 'black';
-        text.fontSize = 20;
-        text.fontFamily = 'Courier New';
-        text.content = content;
-        return text;
-    };
+    var my_paper = new paper.PaperScope();
+    var legend_height = Math.min(tremppi.regulations.config[type][weighted].max * graph.zoom() + 40, $("#container_" + type).height() / 3);
+    $('#legend_' + type).height(legend_height);
+    my_paper.setup($('#legend_' + type)[0]);
 
-    var addEdgeWidth = function (type, paper, width_ratio) {
-        paper.activate();
-        var bar_height = F_height - 10;
-        var bar_right = paper.view.viewSize.width - 70;
+    tremppi.regulations.addEdgeWidth(relative, weighted, type, my_paper, graph.zoom());
+    tremppi.regulations.addGradient(relative, weighted, type, my_paper);
+};
 
-        // Create the bar
-        var bar = new paper.Path();
-        bar.fillColor = 'black';
-        bar.strokeWidth = 0;
-        var min_width = config[type][width_type].min * width_ratio;
-        var max_width = config[type][width_type].max * width_ratio;
-        bar.add(new paper.Point(bar_right, bar_height));
-        bar.add(new paper.Point(bar_left, bar_height + (max_width - min_width) / 2));
-        bar.add(new paper.Point(bar_left, bar_height + (max_width + min_width) / 2));
-        bar.add(new paper.Point(bar_right, bar_height + max_width));
-        bar.add(new paper.Point(bar_right, bar_height));
-        // Add the label
-        var min = config[type][rel_string][width_type].min.toFixed(num_of_decimals);
-        min = min >= 0 ? ' ' + min : min;
-        var max = config[type][rel_string][width_type].max.toFixed(num_of_decimals);
-        var F_pad = (config[type][width_type].max * width_ratio) / 2 - 4;
-        makeText('F: ', new paper.Point(10, F_height + F_pad));
-        makeText(min, new paper.Point(bar_left - 75, F_height + F_pad));
-        makeText(max, new paper.Point(bar_right + 5, F_height + F_pad));
-        paper.view.draw();
-    };
 
-    var addGradient = function (type, paper, id) {
-        paper.activate();
-        var bar_right = paper.view.viewSize.width - 70;
-        makeText('P: ', new paper.Point(10, P_height));
-        // Make the bar   
-        var bar = new paper.Path.Rectangle(
-                new paper.Rectangle(
-                        new paper.Point(bar_left, P_height - 10),
-                        new paper.Point(bar_right, P_height)));
-        bar.fillColor = {gradient: {}};
-        bar.fillColor.origin = [bar_left, 0];
-        bar.fillColor.destination = [bar_right, 0];
-        if (id === 0)
-            bar.fillColor.gradient.stops = ['yellow', 'green'];
-        else if (id === 1)
-            bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
-        else if (id === 2)
-            bar.fillColor.gradient.stops = ['yellow', 'red'];
-        bar.strokeColor = 'black';
-        bar.strokeWidth = 1;
-        // Make the text
-        var min = config[type][rel_string].color.min.toFixed(num_of_decimals);
-        min = min >= 0 ? ' ' + min : min;
-        var max = config[type][rel_string].color.max.toFixed(num_of_decimals);
-        makeText(min, new paper.Point(bar_left - 75, P_height));
-        makeText(max, new paper.Point(bar_right + 5, P_height));
+tremppi.regulations.makeText = function (content, position) {
+    var text = new paper.PointText(position);
+    text.fillColor = 'black';
+    text.fontSize = 20;
+    text.fontFamily = 'Courier New';
+    text.content = content;
+    return text;
+};
 
-        paper.view.draw();
-    };
+tremppi.regulations.addEdgeWidth = function (relative, weighted, type, my_paper, width_ratio) {
+    my_paper.activate();
+    var bar_height = tremppi.regulations.F_height - 10;
+    var bar_right = my_paper.view.viewSize.width - 70;
 
-    // Assign the papers
-    for (var id = 0; id < config.types.length; id++) {
-        addEdgeWidth(config.types[id], papers[id], cys[id].zoom());
-        addGradient(config.types[id], papers[id], id);
-    }
+    // Create the bar
+    var bar = new paper.Path();
+    bar.fillColor = 'black';
+    bar.strokeWidth = 0;
+    var min_width = tremppi.regulations.config[type][weighted].min * width_ratio;
+    var max_width = tremppi.regulations.config[type][weighted].max * width_ratio;
+    bar.add(new paper.Point(bar_right, bar_height));
+    bar.add(new paper.Point(tremppi.regulations.bar_left, bar_height + (max_width - min_width) / 2));
+    bar.add(new paper.Point(tremppi.regulations.bar_left, bar_height + (max_width + min_width) / 2));
+    bar.add(new paper.Point(bar_right, bar_height + max_width));
+    bar.add(new paper.Point(bar_right, bar_height));
+    // Add the label
+    var min = tremppi.regulations.config[type][relative][weighted].min.toFixed(tremppi.regulations.num_of_decimals);
+    min = min >= 0 ? ' ' + min : min;
+    var max = tremppi.regulations.config[type][relative][weighted].max.toFixed(tremppi.regulations.num_of_decimals);
+    var F_pad = (tremppi.regulations.config[type][weighted].max * width_ratio) / 2 - 4;
+    tremppi.regulations.makeText('F: ', new paper.Point(10, tremppi.regulations.F_height + F_pad));
+    tremppi.regulations.makeText(min, new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.F_height + F_pad));
+    tremppi.regulations.makeText(max, new paper.Point(bar_right + 5, tremppi.regulations.F_height + F_pad));
+    my_paper.view.draw();
+};
+
+tremppi.regulations.addGradient = function (relative, weighted, type, my_paper) {
+    my_paper.activate();
+    var bar_right = my_paper.view.viewSize.width - 70;
+    tremppi.regulations.makeText('P: ', new paper.Point(10, tremppi.regulations.P_height));
+    // Make the bar   
+    var bar = new paper.Path.Rectangle(
+            new paper.Rectangle(
+                    new paper.Point(tremppi.regulations.bar_left, tremppi.regulations.P_height - 10),
+                    new paper.Point(bar_right, tremppi.regulations.P_height)));
+    bar.fillColor = {gradient: {}};
+    bar.fillColor.origin = [tremppi.regulations.bar_left, 0];
+    bar.fillColor.destination = [bar_right, 0];
+    if (type === "left")
+        bar.fillColor.gradient.stops = ['yellow', 'green'];
+    else if (type === 'mid')
+        bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
+    else if (type === 'right')
+        bar.fillColor.gradient.stops = ['yellow', 'red'];
+    bar.strokeColor = 'black';
+    bar.strokeWidth = 1;
+    // Make the text
+    var min = tremppi.regulations.config[type][relative].color.min.toFixed(tremppi.regulations.num_of_decimals);
+    min = min >= 0 ? ' ' + min : min;
+    var max = tremppi.regulations.config[type][relative].color.max.toFixed(tremppi.regulations.num_of_decimals);
+    tremppi.regulations.makeText(min, new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.P_height));
+    tremppi.regulations.makeText(max, new paper.Point(bar_right + 5, tremppi.regulations.P_height));
+
+    my_paper.view.draw();
 };

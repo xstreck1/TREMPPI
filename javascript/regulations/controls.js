@@ -10,9 +10,13 @@ tremppi.regulations.toolbarClick = function (event) {
     if (event.target === 'all') {
         tremppi.report.showAll();
         tremppi.setItem('panel', 'all');
+        for (var i = 0; i < tremppi.report.panels.length; i++) {
+            tremppi.regulations.loadLabels(tremppi.report.panels[i]);
+        }
     } else if (event.target === 'left' | event.target === 'mid' | event.target === 'right') {
         tremppi.setItem('panel', event.target);
         tremppi.report.showPanel(event.target);
+        tremppi.regulations.loadLabels(event.target);
     } else if (event.target.slice(0, 7) === 'select:') {
         var selected = event.target.slice(7);
         tremppi.setItem('selected', selected);
@@ -55,7 +59,11 @@ tremppi.regulations.getConfiguraion = function () {
                 weight: {min: 0, max: 2},
                 color: {min: 0, max: 1}
             },
-            relative: {},
+            relative: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: 0, max: 1}
+            },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
             color: {min: "yellow", max: "green"}
@@ -66,7 +74,11 @@ tremppi.regulations.getConfiguraion = function () {
                 weight: {min: 0, max: 2},
                 color: {min: 0, max: 1}
             },
-            relative: {},
+            relative: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: 0, max: 1}
+            },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
             color_neg: {min: "yellow", max: "red"},
@@ -78,7 +90,11 @@ tremppi.regulations.getConfiguraion = function () {
                 weight: {min: 0, max: 2},
                 color: {min: 0, max: 1}
             },
-            relative: {},
+            relative: {
+                width: {min: 0, max: 1},
+                weight: {min: 0, max: 2},
+                color: {min: 0, max: 1}
+            },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
             color: {min: "yellow", max: "red"}
@@ -145,76 +161,3 @@ tremppi.regulations.configure = function (type) {
         }
     };
 };
-
-tremppi.regulations.setButtonLabels = function (config) {
-    this.innerHTML = tremppi.data.config.relative ? "absolute" : "relative";
-};
-
-//    // Set the types used
-//    if (typeof tremppi.data.config === 'undefined') {
-//        var config = {
-//            config: default_config
-//        };
-//        $.extend(tremppi.data, config);
-//
-//    }
-//    var config = tremppi.data.config;
-//    config.types = tremppi.data.setup.comparative ? ['select', 'differ', 'compare'] : ['select'];
-//
-//    // Add setup data
-//    tremppi.report.addSetup(tremppi.data.setup);
-//
-//    for (var i = 0; i < config.types.length; i++)
-//        loadGraph(config, config.types[i]);
-//    tremppi.report.synchronize(config, tremppi.regulations.Labels.loadLabels);
-//
-//    if (!tremppi.data.setup.comparative)
-//        selectSelect();
-//
-//    // compute and display lables
-//    tremppi.regulations.Graph.applyVisuals(config);
-//    $('#graph_labels').css('padding-bottom', '45px');
-//
-//    // display captions
-//    $("#description").html((
-//            (tremppi.data.setup.comparative) ? tremppi.regulations.Values.caption_c : tremppi.regulations.Values.caption_nonc)
-//            + tremppi.regulations.Values.caption_common);
-//
-//    // Create the control buttons functions
-//    $("#setup_button").click(function () {
-//        config.setup = !config.setup;
-//        $("#analysis_setup").css("display", config.setup ? "block" : "none");
-//        this.innerHTML = config.setup ? "Hide" : "Show";
-//    });
-//    if (!config.setup) {
-//        $("#analysis_setup").css("display", "none");
-//        $("#setup_button").html("Show");
-//    }
-//    $("#relative_button").click(function () {
-//        config.relative = !config.relative;
-//        tremppi.regulations.Graph.applyVisuals(config);
-//        tremppi.regulations.Labels.loadLabels(config);
-//        this.innerHTML = config.relative ? "absolute" : "relative";
-//    });
-//    if (config.relative) {
-//        $("#relative_button").html("absolute");
-//    }
-//    $("#weighted_button").click(function () {
-//        config.weighted = !config.weighted;
-//        tremppi.regulations.Graph.applyVisuals(config);
-//        tremppi.regulations.Labels.loadLabels(config);
-//        this.innerHTML = config.weighted ? "total" : "weighted";
-//    });
-//
-//    if (config.weighted) {
-//        $("#weighted_button").html("weighted");
-//    }
-//    if (tremppi.data.setup.comparative) {
-//        for (var i = 0; i < config.types.length; i++)
-//            $("#button_" + config.types[i]).click(selectClick(config.types[i]));
-//        $("#button_all").click(selectAll);
-//    } else {
-//        $("#selection_buttons").html("");
-//    }
-//    $("#regulations_controls").click(tremppi.common.save);
-//};
