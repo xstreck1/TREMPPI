@@ -15,7 +15,7 @@ namespace Output {
 			data["id"] = reg.info.name;
 			data["name"] = reg.info.name;
 			node["data"] = data;
-			elements["elements"]["nodes"].append(node);
+			elements["nodes"].append(node);
 		}
 
 		// Write the edges
@@ -35,7 +35,7 @@ namespace Output {
 						data["Threshold"] = regul.second[trh_i];
 
 						edge["data"] = data;
-						elements["elements"]["edges"].append(edge);
+						elements["edges"].append(edge);
 					}
 					++reg_i;
 				}

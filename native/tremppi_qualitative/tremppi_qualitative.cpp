@@ -5,6 +5,7 @@
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
+#include <tremppi_common/python/python_functions.hpp>
 
 struct ComputedQual {
 	string name;
@@ -127,6 +128,14 @@ int tremppi_qualitative(int argc, char ** argv) {
 	catch (exception & e) {
 		logging.exceptionMessage(e, 6);
 	}
+
+	try {
+		PythonFunctions::configure("qualitative");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 6);
+	}
+
 
 	return 0;
 }

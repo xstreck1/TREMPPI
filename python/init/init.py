@@ -35,7 +35,7 @@ if __name__ == "__main__":
     EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
     DEST_CONTENT = join(DEST_PATH, args.name)
     if os.path.exists(DEST_CONTENT):
-        raise 'The destination folder ' + DEST_CONTENT + ' already exists, aborting.'
+        raise Exception('The destination folder ' + DEST_CONTENT + ' already exists, aborting.')
 
     # copy the data
     for folder in folders:

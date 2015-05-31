@@ -5,7 +5,7 @@
 #include "spawn_tests.hpp"
 #include "express_tests.hpp"
 #include "validate_tests.hpp"
-#include "interact_tests.hpp"
+#include "regulations_tests.hpp"
 #include "correlate_tests.hpp"
 #include "wintess_tests.hpp"
 #include "quantitative_tests.hpp"
@@ -17,7 +17,7 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
 	ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";
-	ASSERT_EQ(0, basic_interact_test()) << "Basic content test interact failed.";
+	ASSERT_EQ(0, basic_regulations_test()) << "Basic content test regulations failed.";
 	ASSERT_EQ(0, basic_function_test()) << "Basic content test function failed.";
 	// ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
 	ASSERT_EQ(0, basic_qualitative_test()) << "Basic content test qualitative failed.";

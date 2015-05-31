@@ -6,6 +6,8 @@
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
+#include <tremppi_common/python/python_functions.hpp>
+
 #include "compute/compute.hpp"
 #include "io/output.hpp"
 

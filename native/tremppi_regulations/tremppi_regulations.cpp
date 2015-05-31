@@ -4,14 +4,16 @@
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
+#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
+#include <tremppi_common/python/python_functions.hpp>
+
 #include "compute/regulatory_graph.hpp"
 #include "io/output.hpp"
-#include "io/interact_options.hpp"
 
 // TODO: disable regulatory if not -r
-int tremppi_interact(int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<InteractOptions>("tremppi_interact", argc, argv);
+int tremppi_regulations(int argc, char ** argv) {
+	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_regulations", argc, argv);
 	Logging logging;
 
 	Json::Value out;
@@ -35,7 +37,7 @@ int tremppi_interact(int argc, char ** argv) {
 	RegsData regs_data;
 	try {
 
-		BOOST_LOG_TRIVIAL(info) << "Computing interaction graph data.";
+		BOOST_LOG_TRIVIAL(info) << "Computing regulationsion graph data.";
 
 		logging.newPhase("Harvesting component", reg_infos.size());
 		for (const RegInfo & reg_info : reg_infos) {
@@ -61,13 +63,19 @@ int tremppi_interact(int argc, char ** argv) {
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "interact" / (out["setup"]["s_name"].asString() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "regulations" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);
 	}
 
-	// TODO configure
+	try {
+		PythonFunctions::configure("regulations");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 6);
+	}
+
 
 	return 0;
 }

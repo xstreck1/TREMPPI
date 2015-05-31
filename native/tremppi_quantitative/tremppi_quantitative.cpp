@@ -5,6 +5,7 @@
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
+#include <tremppi_common/python/python_functions.hpp>
 
 struct ComputedData {
 	string name;
@@ -126,6 +127,13 @@ int tremppi_quantitative(int argc, char ** argv) {
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);
+	}
+
+	try {
+		PythonFunctions::configure("quantitative");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 6);
 	}
 
 	return 0;

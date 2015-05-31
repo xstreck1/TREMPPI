@@ -3,5 +3,5 @@
 
 int main(int argc, char ** argv) {
 	TremppiSystem::standalone = true;
-	return tremppi_interact(argc, argv);
+	return tremppi_regulations(argc, argv);
 }

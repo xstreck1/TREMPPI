@@ -4,5 +4,5 @@ default_port = "8080"
 database_file = 'database.sqlite'
 source_folder = 'javascript'
 data_folder = 'data'
-widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlate', 'quantitative', 'qualitative']
-folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'correlate', 'regulations', 'quantitative', 'qualitative']
+widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'bias', 'quantitative', 'qualitative']
+folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'bias',  'quantitative', 'qualitative']

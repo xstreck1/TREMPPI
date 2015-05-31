@@ -73,7 +73,7 @@ typedef uint64_t ParamNo;
 /// Parametrizations in Neighbourhood
 typedef vector<ParamNo> Neighbours;
 
-/// Lattice of neighbourhood interactions
+/// Lattice of neighbourhood regulationsions
 using NeighLattice = vector<Neighbours>;
 
 /// this value represents infinite value - used for showing that a variable is unset

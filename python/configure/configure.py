@@ -107,7 +107,7 @@ def make_selection(conn):
     })
     for column_name in column_names:
         parts = str(column_name).split('_')
-        if parts[0] == 'R':
+        if parts[0] == 'C':
             columns.append({
                 'field': column_name,
                 'caption': parts[1],
@@ -246,7 +246,7 @@ def configure(data_path, widget):
                 properties_js.write("tremppi.properties.setup = ")
                 json.dump(configured, properties_js)
                 properties_js.write(";")
-    elif widget in ["qualitative", "quantitative", "interact", "function"]:
+    elif widget in ["qualitative", "quantitative", "regulations", "bias"]:
         files = []
         widget_dir = join(data_path, widget)
         if not exists(widget_dir):
@@ -260,10 +260,10 @@ def configure(data_path, widget):
             json.dump({"files": files}, file_js)
             file_js.write(';')
     elif widget in widgets:
-        js_filename = join(DATA_PATH, widget + '.js')
+        js_filename = join(data_path, widget + '.js')
         open(js_filename, 'w+').close()
     else:
-        raise "Unknown widget " + widget
+        raise Exception("Unknown widget " + widget)
 
 
 if __name__ == "__main__":

@@ -118,7 +118,7 @@ endfunction()
 # MODULES
 module("correlate")
 module("express")
-module("interact")
+module("regulations")
 module("quantitative")
 module("qualitative")
 module("spawn")

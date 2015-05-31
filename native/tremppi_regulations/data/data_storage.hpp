@@ -8,7 +8,7 @@ enum EdgeSign { EdgePos, EdgeNeg, EdgeMixed };
 struct RegData {
 	// Info about this component
 	const RegInfo & info;
-	// Interaction graph data - for each regulating component hold the values in the order of the thresholds
+	// regulationsion graph data - for each regulating component hold the values in the order of the thresholds
 	map<CompID, vector<double> > reg_corr;
 	map<CompID, vector<double> > reg_freq;
 	map<CompID, vector<EdgeSign> > reg_sign;
