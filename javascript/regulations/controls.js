@@ -30,12 +30,14 @@ tremppi.regulations.toolbarClick = function (event) {
         tremppi.setItem('relative', checked);
         for (var i = 0; i < tremppi.report.panels.length; i++) {
             tremppi.regulations.applyVisuals(tremppi.report.panels[i]);
+            tremppi.regulations.loadLabels(tremppi.report.panels[i]);
         }
     } else if (event.target === 'weighted') {
         var checked = !event.item.checked;
         tremppi.setItem('weighted', checked);
         for (var i = 0; i < tremppi.report.panels.length; i++) {
             tremppi.regulations.applyVisuals(tremppi.report.panels[i]);
+            tremppi.regulations.loadLabels(tremppi.report.panels[i]);
         }
     }
 };
