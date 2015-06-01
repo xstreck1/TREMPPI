@@ -184,6 +184,9 @@ tremppi = {
 };
 // Initial content execution, 
 var url = window.location.pathname;
+if (url.slice(-1) === '/') {
+    url += "index.html";
+}
 tremppi.widget_name = url.substring(url.lastIndexOf('/') + 1).slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
 tremppi.makeHead();

@@ -3,5 +3,5 @@
 
 int main(int argc, char ** argv) {
 	TremppiSystem::standalone = true;
-	return tremppi_correlate(argc, argv);
+	return tremppi_bias(argc, argv);
 }

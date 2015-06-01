@@ -77,11 +77,12 @@ const string QUALITATIVE_FILENAME = "qualitative.json";
 const string LOG_FILENAME = "log.txt";
 
 // MODULES
-int tremppi_correlate(int argc, char ** argv);
+int tremppi_bias(int argc, char ** argv);
 int tremppi_browse(int argc, char ** argv);
 int tremppi_configure(int argc, char ** argv);
 int tremppi_express(int argc, char ** argv);
 int tremppi_init(int argc, char ** argv);
+int tremppi_label(int argc, char ** argv);
 int tremppi_qualitative(int argc, char ** argv);
 int tremppi_quantitative(int argc, char ** argv);
 int tremppi_regulations(int argc, char ** argv);

@@ -4,11 +4,12 @@
 using namespace std;
 
 map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
-		{ "init", { tremppi_init, "create a new model with a model viewer" } },
-		{ "browse", { tremppi_browse, "starts a local server to allow browsing data" } },
+		{ "browse", { tremppi_browse, "open the IDE" } },
 		{ "configure", { tremppi_configure, "call to explicitly recreate data configuration files" } },
-		{ "correlate",{ tremppi_correlate, "create a function graph based on a statistical analysis" } },
+		{ "bias", { tremppi_bias, "create a graph of bias correlation between components" } },
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
+		{ "init",{ tremppi_init, "create a new model with a model viewer" } },
+		{ "label", { tremppi_label, "label the edges of individual parametrizations" } },
 		{ "qualitative", { tremppi_qualitative, "get qualitative analysis of the known data" } },
 		{ "quantitative", { tremppi_quantitative, "get summary of up till now known data" } },
 		{ "regulations",{ tremppi_regulations, "create an regulationsion graph based on a statistical analysis" } },

@@ -11,9 +11,8 @@
 #include "compute/compute.hpp"
 #include "io/output.hpp"
 
-// TODO: disable regulatory if not -r
-int tremppi_correlate(int argc, char ** argv) {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_function", argc, argv);
+int tremppi_bias(int argc, char ** argv) {
+	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_bias", argc, argv);
 	Logging logging;
 
 	Json::Value out;
@@ -60,7 +59,7 @@ int tremppi_correlate(int argc, char ** argv) {
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "correlate" / (out["setup"]["s_name"].asString() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "bias" / (out["setup"]["s_name"].asString() + ".json"), out);
 	
 	}
 	catch (exception & e) {
