@@ -19,9 +19,6 @@ namespace DataConv {
 
 	// create a map that provides indeces for thresholds
 	map<ActLevel, size_t> getThresholdToIndex(const Levels & thresholds);
-
-	//
-	map<CompID, vector<vector<size_t>>> getColumnsOfEdges(const map<CompID, vector<vector<size_t>>>& columns_of_thresholds);
 }
 
 

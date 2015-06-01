@@ -57,6 +57,11 @@ RegInfos DatabaseReader::readRegInfos(sqlite3pp::database & db) {
 		// read requirements for each context
 		map<size_t, vector<Levels> > requirements;
 		auto columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("K_" + component + "_.*"), db);
+		map<size_t, Levels> contexts;
+		transform(WHOLE(columns), inserter(contexts, begin(contexts)), [](const pair<size_t, string> & column) {
+			return make_pair(column.first, DataConv::getThrsFromContext(column.second));
+		});
+
 		size_t prev_index = 0;
 		for (const auto & column : columns) {
 			if (column.first < prev_index) {

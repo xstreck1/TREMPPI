@@ -60,30 +60,43 @@ CompID DataInfo::getCompID(const map<string, CompID> & components, const string 
 		return components.at(name);
 }
 
-map<CompID, vector<vector<size_t>>> DataInfo::getColumnsOfThresholds(const RegInfo & reg_info)
-{
-	map<CompID, vector<vector<size_t>>> result;
-
-	for (auto & regulator : reg_info.regulators) {
-		vector<vector<size_t> > columns(regulator.second.size() + 1);
-		const size_t reg_i = getRegulatorI(regulator.first, reg_info);
-		map<ActLevel, size_t> threshold_to_index = DataConv::getThresholdToIndex(regulator.second);
-
-		// Distribute the column indices based on the value of the threshold in the specific column
-		for (auto & column : reg_info.columns) {
-            const auto & trhs = DataConv::getThrsFromContext(column.second);
-			ActLevel trh = trhs[reg_i];
-			size_t i = threshold_to_index[trh];
-			columns[i].push_back(column.first);
-		}
-
-		result.insert({ regulator.first, move(columns) });
-	}
-
-	return result;
+size_t DataInfo::RegIDToRegNo(const RegInfo & reg_info, const CompID reg_ID) {
+	return distance(begin(reg_info.regulators), reg_info.regulators.find(reg_ID));
 }
 
-size_t DataInfo::getRegulatorI(const CompID ID, const RegInfo & reg_info)
-{
-	return distance(begin(reg_info.regulators), reg_info.regulators.find(ID));
+CompID DataInfo::RegNoToRegID(const RegInfo & reg_info, const size_t reg_no) {
+	auto it = begin(reg_info.regulators);
+	for (int i = 0; i < reg_no; i++) {
+		it++;
+	}
+	return it->first;
+}
+
+// 
+size_t columnNoToColumnID(const RegInfo & reg_info, const size_t column_no) {
+	auto it = begin(reg_info.columns);
+	for (int i = 0; i < column_no; i++) {
+		it++;
+	}
+	return it->first;
+}
+
+//
+size_t columnIDToColumnNo(const RegInfo & reg_info, const size_t column_ID) {
+	return distance(begin(reg_info.columns), reg_info.columns.find(column_ID));
+}
+
+size_t DataInfo::getColumnWithout(const RegInfo & reg_info, const size_t column_no, const CompID reg_ID, const ActLevel threshold) {
+	const auto & thresholds = reg_info.regulators.at(reg_ID);
+	const auto threshold_it = find(WHOLE(thresholds), threshold);
+	const ActLevel lower_threshold = *(threshold_it - 1);
+	Levels new_context = reg_info.contexts.at(column_no);
+	const size_t reg_no = RegIDToRegNo(reg_info, reg_ID);
+	new_context[reg_no] = lower_threshold;
+	for (const auto & contex : reg_info.contexts) {
+		if (contex.second == new_context) {
+			return contex.first;
+		}
+	}
+	throw runtime_error("Did not find a context after removal of a regulator from the component " + reg_info.name);
 }

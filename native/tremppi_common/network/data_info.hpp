@@ -10,9 +10,10 @@ struct RegInfo {
 	CompID ID;
 	string name;
 	ActLevel max_activity;
-	map<size_t, string> columns;
-	map<CompID, Levels> regulators;
-	map<size_t, vector<Levels> > requirements; // To each collumn assign the values of the reugulators that fall into the context
+	map<size_t, string> columns; // (column index, starting from 0, based on SELECT *, column name)
+	map<size_t, Levels> contexts; // (column index, starting from 0, based on SELECT *, column thresholds)
+	map<CompID, Levels> regulators; // (Regulator ID, all thresholds)
+	map<size_t, Configurations > requirements; // To each column assign the values of the reugulators that fall into the context
 };
 using RegInfos = vector<RegInfo>;
 
@@ -38,10 +39,19 @@ namespace DataInfo {
 	//
 	CompID getCompID(const map<string, CompID> & components, const string & name);
 
-	//
-	map<CompID, vector<vector<size_t>>> getColumnsOfThresholds(const RegInfo & reg_info);
+	// for a regulator from the given regulatory info, obtain its ordinal index
+	size_t RegIDToRegNo(const RegInfo & reg_info, const CompID ID);
 
-	// for a regultor from the given regulatory info, obtain its ordinal index
-	size_t getRegulatorI(const CompID ID, const RegInfo & reg_info);
+	// for a regulator from the given index number, obtain its ID
+	CompID RegNoToRegID(const RegInfo & reg_info, const size_t reg_no);
+
+	// 
+	size_t columnNoToColumnID(const RegInfo & reg_info, const size_t column_no);
+
+	//
+	size_t columnIDToColumnNo(const RegInfo & reg_info, const size_t column_ID);
+
+	// Which context do I obtain if I remove from the context in the column "column_no" of the component "reg_info" the regulation by "reg_ID" with the threshold "threshold" 
+	size_t getColumnWithout(const RegInfo & reg_info, const size_t column_no, const CompID reg_ID, const ActLevel threshold);
 }
 
