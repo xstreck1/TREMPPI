@@ -73,13 +73,13 @@ def make_selection(conn):
                 groups[-1]['span'] += 1
 
     # Add robustness
-    groups.append({
+    new_group = {
         'caption': 'Robustness(property)',
         'columns': [],
         'span': 0,
         'master': False,
         'hideable': True
-    })
+    }
     for column_name in column_names:
         parts = str(column_name).split('_')
         if parts[0] == 'R':
@@ -96,15 +96,17 @@ def make_selection(conn):
             })
             groups[-1]['columns'].append(column_name)
             groups[-1]['span'] += 1
+    if new_group['span'] > 0:
+        groups.append(new_group)
 
     # Add cost
-    groups.append({
+    new_group = {
         'caption': 'Cost(property)',
         'columns': [],
         'span': 0,
         'master': False,
         'hideable': True
-    })
+    }
     for column_name in column_names:
         parts = str(column_name).split('_')
         if parts[0] == 'C':
@@ -119,8 +121,11 @@ def make_selection(conn):
                 },
                 "resizable": True
             })
-            groups[-1]['columns'].append(column_name)
-            groups[-1]['span'] += 1
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
+    if new_group['span'] > 0:
+        groups.append(new_group)
+
 
     return columns, groups
 
