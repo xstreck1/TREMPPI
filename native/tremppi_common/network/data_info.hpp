@@ -53,5 +53,11 @@ namespace DataInfo {
 
 	// Which context do I obtain if I remove from the context in the column "column_no" of the component "reg_info" the regulation by "reg_ID" with the threshold "threshold" 
 	size_t getColumnWithout(const RegInfo & reg_info, const size_t column_no, const CompID reg_ID, const ActLevel threshold);
+
+	//
+	vector<string> columnsVector(const RegInfo & reg_info);
+
+	//
+	vector<Levels> contextsVector(const RegInfo & reg_info);
 }
 

@@ -73,7 +73,7 @@ CompID DataInfo::RegNoToRegID(const RegInfo & reg_info, const size_t reg_no) {
 }
 
 // 
-size_t columnNoToColumnID(const RegInfo & reg_info, const size_t column_no) {
+size_t DataInfo::columnNoToColumnID(const RegInfo & reg_info, const size_t column_no) {
 	auto it = begin(reg_info.columns);
 	for (int i = 0; i < column_no; i++) {
 		it++;
@@ -82,14 +82,14 @@ size_t columnNoToColumnID(const RegInfo & reg_info, const size_t column_no) {
 }
 
 //
-size_t columnIDToColumnNo(const RegInfo & reg_info, const size_t column_ID) {
+size_t DataInfo::columnIDToColumnNo(const RegInfo & reg_info, const size_t column_ID) {
 	return distance(begin(reg_info.columns), reg_info.columns.find(column_ID));
 }
 
 size_t DataInfo::getColumnWithout(const RegInfo & reg_info, const size_t column_no, const CompID reg_ID, const ActLevel threshold) {
 	const auto & thresholds = reg_info.regulators.at(reg_ID);
 	const auto threshold_it = find(WHOLE(thresholds), threshold);
-	const ActLevel lower_threshold = *(threshold_it - 1);
+	const ActLevel lower_threshold = (threshold_it == begin(thresholds)) ? 0 : *(threshold_it - 1);
 	Levels new_context = reg_info.contexts.at(column_no);
 	const size_t reg_no = RegIDToRegNo(reg_info, reg_ID);
 	new_context[reg_no] = lower_threshold;
@@ -99,4 +99,22 @@ size_t DataInfo::getColumnWithout(const RegInfo & reg_info, const size_t column_
 		}
 	}
 	throw runtime_error("Did not find a context after removal of a regulator from the component " + reg_info.name);
+}
+
+//
+vector<string> DataInfo::columnsVector(const RegInfo & reg_info) {
+	vector<string> result;
+	for (const auto & column : reg_info.columns) {
+		result.emplace_back(column.second);
+	}
+	return result;
+}
+
+//
+vector<Levels> DataInfo::contextsVector(const RegInfo & reg_info) {
+	vector<Levels> result;
+	for (const auto & column : reg_info.contexts) {
+		result.emplace_back(column.second);
+	}
+	return result;
 }

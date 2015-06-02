@@ -72,7 +72,7 @@ RegInfos DatabaseReader::readRegInfos(sqlite3pp::database & db) {
 			requirements.insert({ column.first, obtainRequirements(column.second, requlators, db) });
 		}
 
-		result.push_back({ components_dict[component], component, maxes_dict[component], move(columns), move(requlators), requirements });
+		result.push_back(RegInfo{ components_dict[component], component, maxes_dict[component], move(columns), move(contexts), move(requlators), requirements });
 	}
 	return result;
 }
