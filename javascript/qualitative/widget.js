@@ -28,7 +28,7 @@ tremppi.qualitative.setPanel = function (panel) {
 tremppi.qualitative.valuesToRecords = function (values) {
     var records = [];
     for (var i = 0; i < values.length; i++) {
-        var record = {name: values[i].name, value: ""};
+        var record = {name: values[i].name, entries: values[i].entries, value: ""};
         for (var j = 0; j < values[i].data.length; j++) {
             if (values[i].data[j].portion !== 0.0) {
                 record.value += "<b>" + values[i].data[j].name + "</b>:" + (Math.round(values[i].data[j].portion * 10000) / 100) + ", ";

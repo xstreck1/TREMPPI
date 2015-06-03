@@ -28,7 +28,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	map<size_t, string> columns;
-	const vector<string> prefixes = { "K", "C", "R" };
+	const vector<string> prefixes = { "K", "C", "R", "E" };
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
 
@@ -54,7 +54,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.push_back(ComputedData{ column.second, 0, 0, numeric_limits<double>::max(), numeric_limits<double>::min(), 0 });
+			results.push_back(ComputedData{ column.second, 0, 0, numeric_limits<double>::max(), -1 * numeric_limits<double>::max(), 0 });
 		}
 	}
 	catch (exception & e) {
@@ -110,9 +110,16 @@ int tremppi_quantitative(int argc, char ** argv) {
 			result_node["name"] = Report::reformName(result.name);
             result_node["count"] = static_cast<Json::Value::UInt>(result.count);
 			result_node["portion"] = result.portion;
-			result_node["min"] = result.min;
-			result_node["max"] = result.max;
-			result_node["mean"] = result.mean;
+			if (result.count == 0) {
+				result_node["min"] = "NaN";
+				result_node["max"] = "NaN";
+				result_node["mean"] = "NaN";
+			}
+			else {
+				result_node["min"] = result.min;
+				result_node["max"] = result.max;
+				result_node["mean"] = result.mean;
+			}
 			out["records"].append(result_node);
 		}
 	}

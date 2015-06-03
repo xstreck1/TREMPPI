@@ -33,7 +33,6 @@ tremppi.regulations.page = function () {
 
 tremppi.regulations.setData = function (data) {
     tremppi.toolbar.onClick = tremppi.regulations.toolbarClick;
-    tremppi.report.synchronize(tremppi.regulations.loadLabels);
 };
 
 tremppi.regulations.layout = function () {

@@ -164,21 +164,8 @@ tremppi.cytoscape = {
                 return false;
         }
         return true;
-    }
-};
-tremppi.report = {
-    panels: ['left', 'mid', 'right'],
-    selections: ['left', 'mid', 'right', 'all'],
-    addSetup: function (setup) {
-        values = ['date', 'name', 'pool_size', 'select', 'selected', 'compare', 'compared'];
-        for (var i = 0; i < values.length; i++) {
-            $('#analysis_setup').append('<div class="decription"><span class="desc_title">' +
-                    values[i] +
-                    ':</span> <span class="desc_content" id="analysis_date">' +
-                    setup[values[i]] +
-                    '</span></div>');
-        }
-    }, // Synchronization in between the graphs
+    },
+    // Synchronization in between the graphs
     synchronize: function (labelFunction) {
         var panels = tremppi.report.panels;
         var cys = [];
@@ -200,7 +187,7 @@ tremppi.report = {
         for (var j = 0; j < nodes.length; j++) {
             var id = '#' + nodes[j].id();
             for (var i = 0; i < panels.length; i++) {
-                cys[i].$(id).on('drag', moveFunction(cys[i], id));
+                cys[i].$(id).off('drag').on('drag', moveFunction(cys[i], id));
             }
         }
 
@@ -229,11 +216,25 @@ tremppi.report = {
             };
         };
         for (var i = 0; i < panels.length; i++) {
-            cys[i].on('zoom', zoomFunction(cys[i], i));
+            cys[i].off('zoom').on('zoom', zoomFunction(cys[i], i));
         }
 
         for (var i = 0; i < panels.length; i++) {
-            cys[i].on('mouseup', panFunction(cys[i], i));
+            cys[i].off('mouseup').on('mouseup', panFunction(cys[i], i));
+        }
+    }
+};
+tremppi.report = {
+    panels: ['left', 'mid', 'right'],
+    selections: ['left', 'mid', 'right', 'all'],
+    addSetup: function (setup) {
+        values = ['date', 'name', 'pool_size', 'select', 'selected', 'compare', 'compared'];
+        for (var i = 0; i < values.length; i++) {
+            $('#analysis_setup').append('<div class="decription"><span class="desc_title">' +
+                    values[i] +
+                    ':</span> <span class="desc_content" id="analysis_date">' +
+                    setup[values[i]] +
+                    '</span></div>');
         }
     },
     pickData: function (source, panel) {

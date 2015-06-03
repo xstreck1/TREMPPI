@@ -28,13 +28,16 @@ tremppi.regulations.valuesSetter = function (source, panel) {
             // Only make diff if both graphs are loaded
             for (var i = 0; i < right_edges.length; i++) {
                 var substract = function (value) {
-                    mid.edges[i].data[value] -= right_edges[i].data[value]
+                    mid.edges[i].data[value] -= right_edges[i].data[value];
                 };
                 substract("Frequency");
                 substract("Pearson");
             }
             tremppi.regulations.createPanelContent(mid, 'mid');
         }
+
+
+        tremppi.cytoscape.synchronize(tremppi.regulations.loadLabels);
     };
 };
 
@@ -83,20 +86,15 @@ tremppi.regulations.makeGraph = function (graph, type) {
         data.color_mapper = Math.abs(data.Pearson);
         data.width_mapper = Math.abs(data.Frequency);
         data.weight_mapper = Math.abs(data.Frequency) / data.ExpectedFreq;
-        if (type === 'mid') {
-            data.target_arrow_shape = 'circle';
-            graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
-            if (data.Frequency > 0) {
-                data.line_style = 'solid';
-            } else if (data.Frequency === 0) {
-                data.line_style = 'dotted';
-            } else {
-                data.line_style = 'dashed';
-            }
-        }
-        else {
+
+        data.target_arrow_shape = 'circle';
+        graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
+        if (data.Frequency > 0) {
             data.line_style = 'solid';
-            data.target_arrow_shape = data.Pearson >= 0 ? 'triangle' : 'tee';
+        } else if (data.Frequency === 0) {
+            data.line_style = 'dotted';
+        } else {
+            data.line_style = 'dashed';
         }
     }
 };
@@ -121,12 +119,8 @@ tremppi.regulations.applyVisuals = function (type) {
 
     tremppi.regulations.createMyMapping(type, relative, '', 'edge', weighted, 'width');
 
-    if (type === 'mid') {
-        tremppi.regulations.createMyMapping(type, relative, '_pos', 'edge.positive', 'color', 'line-color');
-        tremppi.regulations.createMyMapping(type, relative, '_neg', 'edge.negative', 'color', 'line-color');
-    } else {
-        tremppi.regulations.createMyMapping(type, relative, '', 'edge', 'color', 'line-color');
-    }
+    tremppi.regulations.createMyMapping(type, relative, '_pos', 'edge.positive', 'color', 'line-color');
+    tremppi.regulations.createMyMapping(type, relative, '_neg', 'edge.negative', 'color', 'line-color');
 };
 
 // Adds reactive tip window that appears on mouseover on the edge
@@ -215,11 +209,11 @@ tremppi.regulations.addGradient = function (relative, weighted, type, my_paper) 
     bar.fillColor.origin = [tremppi.regulations.bar_left, 0];
     bar.fillColor.destination = [bar_right, 0];
     if (type === "left")
-        bar.fillColor.gradient.stops = ['yellow', 'green'];
+        bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
     else if (type === 'mid')
         bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
     else if (type === 'right')
-        bar.fillColor.gradient.stops = ['yellow', 'red'];
+        bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text

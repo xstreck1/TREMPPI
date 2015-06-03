@@ -21,14 +21,18 @@ Json::Value Report::createSetup() {
 
 
 string Report::reformName(string name) {
-	if (count(WHOLE(name), '_') == 1) {
-		name += "_";
+	switch (name[0]) {
+		case 'C':
+			return regex_replace(name, regex("C_(.*)"), "Cost($1)");
+		case 'E':
+			return regex_replace(name, regex("E_(.*)"), "Indigree($1)");
+		case 'F':
+			return regex_replace(name, regex("F_(.*)"), "F<sub>$1</sub>");
+		case 'K':
+			return regex_replace(name, regex("K_(.*)_(\\d*)"), "K<sub>$1</sub>($2)");
+		case 'L':
+			return regex_replace(name, regex("L_(.*)_(\\d)_(.*)"), "Label($1,$2,$3)");
+		case 'R':
+			return regex_replace(name, regex("R_(.*)"), "Robustness($1)");
 	}
-	else if (count(WHOLE(name), '_') < 1) {
-		throw runtime_error("reforming a name did not work since there's only one underscore");
-	}
-	name.replace(name.find("_"), 1, "<sub>");
-	name.replace(name.find("_"), 1, "</sub>(");
-	name.append(")");
-	return name;
 }

@@ -7,16 +7,14 @@ import sqlite3
 from os.path import join, dirname, abspath, exists
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.database_reader import read_regulations, read_components
+from tremppi.database_reader import component_regulators_list, read_components, read_regulations
 from tremppi.header import data_folder, widgets, database_file
 from tremppi.file_manipulation import normal_paths
-
 
 def make_selection(conn):
     columns = []
     groups = []
     components = read_components(conn)
-    regulations = read_regulations(conn)
     cursor = conn.execute('select * from Parametrizations')
     column_names = list(map(lambda x: x[0], cursor.description))
 
@@ -47,9 +45,14 @@ def make_selection(conn):
     })
 
     # Add parameters
-    for comp_name in components:
+    component_regs_list = component_regulators_list(conn)
+    for comp_name, comp_max in components:
+        reg_tuple = ""
+        if comp_name in component_regs_list:
+            reg_tuple = ','.join(component_regs_list[comp_name])
+
         groups.append({
-            'caption': 'K<sub>' + comp_name + '</sub>' + '(' + ','.join(regulations[comp_name]) + ')',
+            'caption': 'K<sub>' + comp_name + '</sub>(' + reg_tuple + ')',
             'columns': [],
             'span': 0,
             'master': False,
@@ -61,16 +64,68 @@ def make_selection(conn):
                 columns.append({
                     'field': column_name,
                     'caption': parts[2],
-                    'size': str(12 + len(parts[2]) * 8) + 'px',
+                    'size': str(len(column_name) * 8) + 'px',
                     'editable': {
                         'min': 0,
-                        'max': components[comp_name],
+                        'max': comp_max,
                         'type': 'text'
                     },
                     "resizable": True
                 })
                 groups[-1]['columns'].append(column_name)
                 groups[-1]['span'] += 1
+
+    # Add edges
+    new_group = {
+        'caption': 'Label(edge)',
+        'columns': [],
+        'span': 0,
+        'master': False,
+        'hideable': True
+    }
+    for column_name in column_names:
+        parts = str(column_name).split('_')
+        if parts[0] == 'L':
+            columns.append({
+                'field': column_name,
+                'caption': '(' + parts[1] + ',' + parts[2] + ',' + parts[3] + ')',
+                'size': str(len(column_name) * 8) + 'px',
+                'editable': {
+                    'type': 'select',
+                    'items': ["1", "0", "+", "-"]
+                },
+                "resizable": True
+            })
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
+    if new_group['span'] > 0:
+        groups.append(new_group)
+
+    # Add indegree
+    new_group = {
+        'caption': 'Indegree(component)',
+        'columns': [],
+        'span': 0,
+        'master': False,
+        'hideable': True
+    }
+    for column_name in column_names:
+        parts = str(column_name).split('_')
+        if parts[0] == 'E':
+            columns.append({
+                'field': column_name,
+                'caption': parts[1],
+                'size': str(len(column_name) * 8) + 'px',
+                'editable': {
+                    'min': 0,
+                    'max': 1024,
+                    'type': 'text'
+                },
+                "resizable": True
+            })
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
+    groups.append(new_group)
 
     # Add robustness
     new_group = {
@@ -86,7 +141,7 @@ def make_selection(conn):
             columns.append({
                 'field': column_name,
                 'caption': parts[1],
-                'size': str(12 + len(parts[1]) * 8) + 'px',
+                'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'min': 0,
                     'max': 1,
@@ -94,8 +149,8 @@ def make_selection(conn):
                 },
                 "resizable": True
             })
-            groups[-1]['columns'].append(column_name)
-            groups[-1]['span'] += 1
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
     if new_group['span'] > 0:
         groups.append(new_group)
 
@@ -113,10 +168,10 @@ def make_selection(conn):
             columns.append({
                 'field': column_name,
                 'caption': parts[1],
-                'size': str(12 + len(parts[1]) * 8) + 'px',
+                'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'min': 0,
-                    'max': 65536,
+                    'max': 1024,
                     'type': 'text'
                 },
                 "resizable": True
@@ -125,7 +180,6 @@ def make_selection(conn):
             new_group['span'] += 1
     if new_group['span'] > 0:
         groups.append(new_group)
-
 
     return columns, groups
 
@@ -138,37 +192,8 @@ def make_list(conn):
         {'field': 'ending', 'caption': 'Ending', 'size': '70px', 'resizable': True,
          'editable': {
              'type': 'select',
-             'items': [
-                 "any",
-                 "stable",
-                 "goto A",
-                 "goto B",
-                 "goto C",
-                 "goto D",
-                 "goto E",
-                 "goto F",
-                 "goto G",
-                 "goto H",
-                 "goto I",
-                 "goto J",
-                 "goto K",
-                 "goto L",
-                 "goto M",
-                 "goto N",
-                 "goto O",
-                 "goto P",
-                 "goto Q",
-                 "goto R",
-                 "goto S",
-                 "goto T",
-                 "goto U",
-                 "goto V",
-                 "goto W",
-                 "goto X",
-                 "goto Y",
-                 "goto Z"
-                 ]
-            }
+             'items': ["any", "stable", "goto A", "goto B", "goto C", "goto D", "goto E", "goto F", "goto G", "goto H", "goto I", "goto J", "goto K", "goto L", "goto M", "goto N", "goto O", "goto P", "goto Q", "goto R", "goto S", "goto T", "goto U", "goto V", "goto W", "goto X", "goto Y", "goto Z"]
+         }
          },
         {'field': 'validate', 'caption': 'V', 'size': '20px', 'resizable': False,
          'editable': {'type': 'checkbox'}
@@ -187,7 +212,7 @@ def make_list(conn):
          }
     ]
     components = read_components(conn)
-    for comp_name in components:
+    for comp_name, comp_max in components:
         columns.append({
             'field': 'E_' + comp_name,
             'caption': comp_name,
@@ -203,7 +228,7 @@ def make_detail(conn):
     columns = [{'field': 'id', 'caption': 'Id', 'size': '30px' }]
     groups = [{'span': 1, 'caption': ''}]
     components = read_components(conn)
-    for comp_name in components:
+    for comp_name, comp_max in components:
         groups.append({
             'span': 2,
             'caption': comp_name

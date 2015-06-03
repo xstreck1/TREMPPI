@@ -15,7 +15,7 @@ void addColumns(const RegInfos & reg_infos, sqlite3pp::database & db) {
 		const string column_name = "E_" + reg_info.name;
 		sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, column_name, "INTEGER", db);
 	}
-	const string column_name = "E_total";
+	const string column_name = "E_SUM";
 	sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, column_name, "INTEGER", db);
 }
 
@@ -150,7 +150,7 @@ int tremppi_label(int argc, char ** argv) {
 		}
 
 		// Countthe total edges
-		string sum_command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET E_total =";
+		string sum_command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET E_SUM =";
 		for (const RegInfo & reg_info : reg_infos) {
 			sum_command += " E_" + reg_info.name + " +";
 		}

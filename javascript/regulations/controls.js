@@ -59,27 +59,28 @@ tremppi.regulations.getConfiguraion = function () {
             absolute: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: 0, max: 1}
+                color: {min: -1, max: 1}
             },
             relative: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: 0, max: 1}
+                color: {min: -1, max: 1}
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color: {min: "yellow", max: "green"}
+            color_neg: {min: "yellow", max: "red"},
+            color_pos: {min: "yellow", max: "green"}
         },
         mid: {
             absolute: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: 0, max: 1}
+                color: {min: -2, max: 2}
             },
             relative: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: 0, max: 1}
+                color: {min: -2, max: 2}
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
@@ -90,16 +91,17 @@ tremppi.regulations.getConfiguraion = function () {
             absolute: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: 0, max: 1}
+                color: {min: -1, max: 1}
             },
             relative: {
                 width: {min: 0, max: 1},
                 weight: {min: 0, max: 2},
-                color: {min: 0, max: 1}
+                color: {min: -1, max: 1}
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color: {min: "yellow", max: "red"}
+            color_neg: {min: "yellow", max: "red"},
+            color_pos: {min: "yellow", max: "green"}
         }
     };
 };
@@ -158,8 +160,8 @@ tremppi.regulations.configure = function (type) {
             min: tremppi.regulations.getBound(edges, "Frequency", "min", false, true),
             max: tremppi.regulations.getBound(edges, "Frequency", "max", false, true)},
         color: {
-            min: tremppi.regulations.getBound(edges, "Pearson", "min", type === "mid", false),
-            max: tremppi.regulations.getBound(edges, "Pearson", "max", type === "mid", false)
+            min: tremppi.regulations.getBound(edges, "Pearson", "min", true, false),
+            max: tremppi.regulations.getBound(edges, "Pearson", "max", true, false)
         }
     };
 };
