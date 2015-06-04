@@ -124,7 +124,7 @@ int tremppi_label(int argc, char ** argv) {
 
 			// Go through parametrizations
 			for (auto sel_ID : sel_IDs) {
-				Levels params = sqlite3pp::func::getRow<ActLevel>(sel_it, 0, sel_qry.column_count());
+				Levels params = sqlite3pp::func::getRow<ActLevel>(*sel_it, 0, sel_qry.column_count());
 				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET";
 				size_t indegree = 0;
 				for (const size_t reg_no : cscope(reg_info.regulators)) {

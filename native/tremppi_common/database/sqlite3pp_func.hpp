@@ -19,15 +19,15 @@ namespace sqlite3pp {
 		size_t rowCount(const string & table_name, const string & selection, sqlite3pp::database & db);;
 		size_t rowCount(const string & table_name, sqlite3pp::database & db);
 
-		// @return data references by indices specified in the columns vector
+		// @return data references by indices specified in the columns vecto
 		template <typename DataType>
-		vector<DataType> getRow(const sqlite3pp::query::iterator & i, const size_t first_column, const size_t column_count) {
-			vector<DataType> data;
+		vector<DataType> getRow(const sqlite3pp::query::rows & row, const size_t first_column, const size_t column_count) {
+			vector<DataType> result;
 
 			for (const size_t column_i : crange(first_column, first_column + column_count))
-				data.push_back((*i).get<DataType>(column_i));
+				result.push_back(row.get<DataType>(column_i));
 
-			return data;
+			return result;
 		}
 	}
 }

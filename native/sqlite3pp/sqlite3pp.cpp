@@ -577,7 +577,7 @@ namespace sqlite3pp
 
     char const* query::rows::get(int idx, char const*) const
     {
-        assert(column_type(idx) == SQLITE_TEXT);
+        // assert(column_type(idx) == SQLITE_TEXT);
         return reinterpret_cast<char const*>(sqlite3_column_text(stmt_, idx));
     }
 

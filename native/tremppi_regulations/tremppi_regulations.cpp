@@ -1,6 +1,4 @@
 #include <json/json.h>
-#include <tremppi_common/database/database_reader.hpp>
-#include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
@@ -9,6 +7,7 @@
 #include <tremppi_common/python/python_functions.hpp>
 
 #include "compute/regulatory_graph.hpp"
+#include "compute/edge_signs.hpp"
 #include "io/output.hpp"
 
 // TODO: disable regulatory if not -r
@@ -36,17 +35,26 @@ int tremppi_regulations(int argc, char ** argv) {
 
 	RegsData regs_data;
 	try {
-
 		BOOST_LOG_TRIVIAL(info) << "Computing regulationsion graph data.";
 
 		logging.newPhase("Harvesting component", reg_infos.size());
 		for (const RegInfo & reg_info : reg_infos) {
+			regs_data.emplace_back(RegData(reg_info));
+			RegData & reg_data = regs_data.back();
+
 			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, out["setup"]["select"].asString(), db);
-			regs_data.emplace_back(RegulatoryGraph::build(reg_info, out["setup"]["size"].asInt(), sel_qry));
-			// Get the statistics for the compare selection
+			RegulatoryGraph::compute(reg_info, out["setup"]["size"].asInt(), sel_qry, reg_data.reg_corr);
+
+			EdgeSigns::computeExpectedFreq(reg_info, reg_data.expected_freq);
+
+			map<size_t, string> label_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("L_.*" + reg_info.name), db);
+			if (!label_columns.empty()) {
+				sqlite3pp::query label_qry = DatabaseReader::selectionFilter(label_columns, out["setup"]["select"].asString(), db);
+				EdgeSigns::compute(reg_infos, reg_info.ID, out["setup"]["size"].asInt(), label_qry, reg_data.reg_freq, reg_data.reg_sign);
+			}
+
 			logging.step();
 		}
-
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);

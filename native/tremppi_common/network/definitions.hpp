@@ -52,6 +52,9 @@ typedef size_t CompID;
 /// Activity level of a specie.
 typedef uint16_t ActLevel;
 
+/// 
+typedef tuple<CompID, ActLevel, CompID> Regulation;
+
 /// Vector of activation levels of species used for labelling of states of KS.
 typedef vector<ActLevel> Levels;
 

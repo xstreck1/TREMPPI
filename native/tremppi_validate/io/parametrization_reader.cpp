@@ -21,7 +21,7 @@ bool ParametrizationReader::next() {
 		return false;
 
 	current_rowid = sel_it->get<ParamNo>(0);
-	current_parametrization = sqlite3pp::func::getRow<ActLevel>(sel_it, 1, selection_qry->column_count() - 1);
+	current_parametrization = sqlite3pp::func::getRow<ActLevel>(*sel_it, 1, selection_qry->column_count() - 1);
 	sel_it++;
 	return true;
 }
