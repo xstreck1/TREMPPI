@@ -70,7 +70,7 @@ tremppi.regulations.getConfiguraion = function () {
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color_neg: {min: "yellow", max: "red"},
+            color_neg: {min: "red", max: "yellow"},
             color_pos: {min: "yellow", max: "green"}
         },
         mid: {
@@ -88,7 +88,7 @@ tremppi.regulations.getConfiguraion = function () {
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color_neg: {min: "yellow", max: "red"},
+            color_neg: {min: "red", max: "yellow"},
             color_pos: {min: "yellow", max: "green"}
         },
         right: {
@@ -106,7 +106,7 @@ tremppi.regulations.getConfiguraion = function () {
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color_neg: {min: "yellow", max: "red"},
+            color_neg: {min: "red", max: "yellow"},
             color_pos: {min: "yellow", max: "green"}
         }
     };
@@ -117,9 +117,9 @@ tremppi.regulations.getBound = function (edges, param, fun, weighted) {
     var result = 0;
 
     for (var edge_no = 0; edge_no < edges.length; edge_no++) {
-        var value = edges[edge_no].data(param);
+        var value = edges[edge_no].data[param];
         if (typeof weighted !== 'undefined' && weighted) {
-            value /= edges[edge_no].data("ExpectedFreq");
+            value /= edges[edge_no].data["ExpectedFreq"];
         }
         result = fun(Math.abs(result), Math.abs(value));
     }
@@ -128,8 +128,8 @@ tremppi.regulations.getBound = function (edges, param, fun, weighted) {
 };
 
 // gives the ranges of values and their respective mapping
-tremppi.regulations.configure = function (type) {
-    var edges = tremppi.regulations[type].edges();
+tremppi.regulations.configure = function (type, elements) {
+    var edges = elements.edges;
     tremppi.regulations.config[type].relative = {
         width: {
             min: tremppi.regulations.getBound(edges, "Frequency", Math.min),

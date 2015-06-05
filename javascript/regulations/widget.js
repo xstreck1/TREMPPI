@@ -9,7 +9,7 @@
 tremppi.regulations.createPanelContent = function (elements, panel) {
     tremppi.regulations.makeGraph(elements, panel);
     tremppi.regulations[panel].load(elements);
-    tremppi.regulations.configure(panel);
+    tremppi.regulations.configure(panel,elements);
     tremppi.regulations.applyVisuals(panel);
     tremppi.regulations[panel].reset();
     tremppi.regulations.addQtip(panel);
@@ -32,9 +32,6 @@ tremppi.regulations.valuesSetter = function (source, panel) {
                 };
                 substract("Frequency");
                 substract("Pearson");
-                if (mid.edges[i].data.Sign !== right_edges[i].Sign ) {
-                    mid.edges[i].data.Sign = '1';
-                }
             }
             tremppi.regulations.createPanelContent(mid, 'mid');
         }
@@ -119,8 +116,14 @@ tremppi.regulations.createMyMapping = function (type, rel_string, selection, gly
     var config = tremppi.regulations.config;
     var min = config[type][rel_string][glyph].min;
     var max = config[type][rel_string][glyph].max;
-    if (min === max)
-        tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph].min).update();
+    if (min === max) {
+        if (min >= 0) {
+            tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph].min).update();
+        }
+        else {
+            tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph].max).update(); 
+        }
+    }
     else {
         var map = 'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + config[type][glyph].min + ', ' + config[type][glyph].max + ')';
         tremppi.regulations[type].style().selector(selection).css(mapper, map).update();
@@ -170,7 +173,7 @@ tremppi.regulations.loadLabels = function (type) {
     my_paper.setup($('#legend_' + type)[0]);
 
     tremppi.regulations.addEdgeWidth(relative, weighted, type, my_paper, graph.zoom());
-    tremppi.regulations.addGradient(relative, weighted, type, my_paper);
+    tremppi.regulations.addGradient(relative, type, my_paper);
 };
 
 
@@ -210,7 +213,7 @@ tremppi.regulations.addEdgeWidth = function (relative, weighted, type, my_paper,
     my_paper.view.draw();
 };
 
-tremppi.regulations.addGradient = function (relative, weighted, type, my_paper) {
+tremppi.regulations.addGradient = function (relative, type, my_paper) {
     my_paper.activate();
     var bar_right = my_paper.view.viewSize.width - 70;
     tremppi.regulations.makeText('P: ', new paper.Point(10, tremppi.regulations.P_height));
@@ -222,12 +225,7 @@ tremppi.regulations.addGradient = function (relative, weighted, type, my_paper) 
     bar.fillColor = {gradient: {}};
     bar.fillColor.origin = [tremppi.regulations.bar_left, 0];
     bar.fillColor.destination = [bar_right, 0];
-    if (type === "left")
-        bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
-    else if (type === 'mid')
-        bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
-    else if (type === 'right')
-        bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
+    bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
