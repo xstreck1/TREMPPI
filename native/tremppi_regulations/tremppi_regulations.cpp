@@ -84,6 +84,5 @@ int tremppi_regulations(int argc, char ** argv) {
 		logging.exceptionMessage(e, 6);
 	}
 
-
 	return 0;
 }

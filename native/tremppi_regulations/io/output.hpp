@@ -10,6 +10,7 @@ namespace Output {
 
 		// Write the nodes
 		string nodes;
+		elements["nodes"].resize(0);
 		for (const RegData & reg : regs_data) {
 			Json::Value node, data;
 			data["id"] = reg._info.name;
@@ -19,6 +20,7 @@ namespace Output {
 		}
 
 		// Write the edges
+		elements["edges"].resize(0);
 		for (const RegData & reg : regs_data) {
 			size_t reg_i = 0;
 			for (auto & regul : reg._info.regulators) {

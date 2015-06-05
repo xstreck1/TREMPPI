@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tremppi_common/header.h>
+#include <tremppi_common/network/definitions.hpp>
 
 // The information for the regulatory network
 struct FunData {
@@ -12,18 +12,3 @@ struct FunData {
 	vector<double> corrs;
 };
 using FunsData = vector<FunData>;
-
-/*
-struct Par {
-	// Common to all the sets of parametrizations
-	vector<string> columns_name;
-	vector<size_t> params_ids;
-	// Read from the database
-	vector<ParamNo> row_ids;
-	Configurations params;
-	// Lattice data
-	NeighLattice neigh_lattice;
-	vector<ParamNo> neigh_count;
-	vector<vector<ParamNo> > components;
-	vector<ParamNo> component_membership;
-};*/

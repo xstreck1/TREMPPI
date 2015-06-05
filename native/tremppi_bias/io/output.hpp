@@ -1,7 +1,4 @@
 #pragma once
-
-#include <tremppi_common/header.h>
-
 #include "../data/data_storage.hpp"
 
 namespace Output {
@@ -10,11 +7,13 @@ namespace Output {
 
 		// Write the nodes
 		string nodes;
+		elements["nodes"].resize(0);
 		for (const FunData & fun : funs_data) {
 			Json::Value node, data;
 			data["id"] = fun.info.name;
 			data["name"] = fun.info.name;
-			data["Bias"] = fun.mean;
+			data["Bias"] = ((fun.mean * 2) - fun.info.max_activity) / fun.info.max_activity;
+			data["Mean"] = fun.mean;
 			data["Std"] = fun.std_dev;
 			data["Max"] = fun.info.max_activity;
 
@@ -23,6 +22,7 @@ namespace Output {
 		}
 
 		// Write the edges
+		elements["edges"].resize(0);
 		for (const FunData & fun : funs_data) {
 			size_t reg_i = 0;
 			for (const int i : cscope(fun.corrs)) {

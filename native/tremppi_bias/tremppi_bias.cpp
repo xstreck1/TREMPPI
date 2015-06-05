@@ -66,7 +66,14 @@ int tremppi_bias(int argc, char ** argv) {
 		logging.exceptionMessage(e, 5);
 	}
 
-	// TODO configure
+
+	try {
+		PythonFunctions::configure("bias");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 6);
+	}
+
 
 	return 0;
 }

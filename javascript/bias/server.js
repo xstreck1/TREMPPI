@@ -1,2 +1,0 @@
-tremppi.function.setServer = function () {
-};
