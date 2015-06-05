@@ -16,12 +16,12 @@ namespace EdgeSigns {
 		double all_params = pow(reg_info.max_activity + 1, context_c);
 		double same_params = pow(reg_info.max_activity + 1, other_c) * pow(reg_info.max_activity + 1, other_c * (reg_info.regulators.at(reg_ID).size() - 1));
 
-		return 1 - (same_params / all_params);
+		return 1.0 - (same_params / all_params);
 	}
 
 	void computeExpectedFreq(const RegInfo & reg_info, map<CompID, double> & result) {
 		for (const auto & regulator : reg_info.regulators) {
-			result.insert({ regulator.first, computeExpectedFreq(reg_info, regulator.first) });
+			result[regulator.first] = computeExpectedFreq(reg_info, regulator.first);
 		}
 	}
 
@@ -53,7 +53,7 @@ namespace EdgeSigns {
 					char label = row.get<const char *>(column_i)[0];
 					if (label != '0') {
 						freq[regulator.first][threshold_i]++;
-						sign[regulator.first][threshold_i] &= label;
+						sign[regulator.first][threshold_i] |= label;
 					}
 				}
 			}
@@ -63,7 +63,12 @@ namespace EdgeSigns {
 
 		for (const auto & regulator : reg_infos[ID].regulators) {
 			for (size_t threshold_i : cscope(regulator.second)) {
-				if (sign[regulator.first][threshold_i] != '+' && sign[ID][threshold_i] != '-' && sign[ID][threshold_i] != '0') {
+				// no active edge at all
+				if (sign[regulator.first][threshold_i] == 0) {
+					sign[regulator.first][threshold_i] = '0';
+				}
+				// there were active edges and they were not either only + or only -
+				else if (sign[regulator.first][threshold_i] != '+' && sign[ID][threshold_i] != '-') {
 					sign[regulator.first][threshold_i] = '1';
 				}
 			}

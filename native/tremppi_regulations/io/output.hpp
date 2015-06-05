@@ -33,7 +33,7 @@ namespace Output {
 						data["Frequency"] = reg.reg_freq.at(regul.first)[trh_i];
 						data["Pearson"] = reg.reg_corr.at(regul.first)[trh_i];
 						data["Threshold"] = regul.second[trh_i];
-						data["Sign"] = reg.reg_sign.at(regul.first)[trh_i];
+						data["Sign"] = string(1, reg.reg_sign.at(regul.first)[trh_i]);
 
 						edge["data"] = data;
 						elements["edges"].append(edge);

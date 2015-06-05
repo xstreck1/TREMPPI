@@ -25,7 +25,7 @@ struct RegData {
 		for (const auto & regulator : _info.regulators) {
 			reg_corr.insert({ regulator.first, vector<double>(regulator.second.size(), 0.0) });
 			reg_freq.insert({ regulator.first, vector<double>(regulator.second.size(), 0.0) });
-			reg_sign.insert({ regulator.first, vector<char>(regulator.second.size(), '0') });
+			reg_sign.insert({ regulator.first, vector<char>(regulator.second.size(), 0) });
 			expected_freq.insert({ regulator.first, 0.0 });
 		}
 	}

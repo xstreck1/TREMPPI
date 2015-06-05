@@ -32,6 +32,9 @@ tremppi.regulations.valuesSetter = function (source, panel) {
                 };
                 substract("Frequency");
                 substract("Pearson");
+                if (mid.edges[i].data.Sign !== right_edges[i].Sign ) {
+                    mid.edges[i].data.Sign = '1';
+                }
             }
             tremppi.regulations.createPanelContent(mid, 'mid');
         }
@@ -83,11 +86,23 @@ tremppi.regulations.setPanel = function (panel) {
 tremppi.regulations.makeGraph = function (graph, type) {
     for (var edge_no = 0; edge_no < graph.edges.length; edge_no++) {
         var data = graph.edges[edge_no].data;
-        data.color_mapper = Math.abs(data.Pearson);
+        data.color_pos_mapper = data.Pearson;
+        data.color_neg_mapper = data.Pearson;
         data.width_mapper = Math.abs(data.Frequency);
         data.weight_mapper = Math.abs(data.Frequency) / data.ExpectedFreq;
 
-        data.target_arrow_shape = 'circle';
+        if (data.Sign === '+') {          
+            data.target_arrow_shape = 'triangle';
+        }
+        else if (data.Sign === '-') {          
+            data.target_arrow_shape = 'tee';
+        }
+        else if (data.Sign === '1') {          
+            data.target_arrow_shape = 'triangle-tee';
+        }
+        else if (data.Sign === '0') {          
+            data.target_arrow_shape = 'circle';
+        }
         graph.edges[edge_no].classes = data.Pearson >= 0 ? 'positive' : 'negative';
         if (data.Frequency > 0) {
             data.line_style = 'solid';
@@ -100,14 +115,14 @@ tremppi.regulations.makeGraph = function (graph, type) {
 };
 
 // Create the mapper for the graph
-tremppi.regulations.createMyMapping = function (type, rel_string, sign, selection, glyph, mapper) {
+tremppi.regulations.createMyMapping = function (type, rel_string, selection, glyph, mapper) {
     var config = tremppi.regulations.config;
     var min = config[type][rel_string][glyph].min;
     var max = config[type][rel_string][glyph].max;
     if (min === max)
-        tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph + sign].min).update();
+        tremppi.regulations[type].style().selector(selection).css(mapper, config[type][glyph].min).update();
     else {
-        var map = 'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + config[type][glyph + sign].min + ', ' + config[type][glyph + sign].max + ')';
+        var map = 'mapData(' + glyph + '_mapper, ' + min + ', ' + max + ', ' + config[type][glyph].min + ', ' + config[type][glyph].max + ')';
         tremppi.regulations[type].style().selector(selection).css(mapper, map).update();
     }
 };
@@ -117,10 +132,9 @@ tremppi.regulations.applyVisuals = function (type) {
     var relative = tremppi.getItem("relative") === "true" ? "relative" : "absolute";
     var weighted = tremppi.getItem("weighted") === "true" ? "weight" : "width";
 
-    tremppi.regulations.createMyMapping(type, relative, '', 'edge', weighted, 'width');
-
-    tremppi.regulations.createMyMapping(type, relative, '_pos', 'edge.positive', 'color', 'line-color');
-    tremppi.regulations.createMyMapping(type, relative, '_neg', 'edge.negative', 'color', 'line-color');
+    tremppi.regulations.createMyMapping(type, relative, 'edge', weighted, 'width');
+    tremppi.regulations.createMyMapping(type, relative, 'edge.positive', 'color_pos', 'line-color');
+    tremppi.regulations.createMyMapping(type, relative, 'edge.negative', 'color_neg', 'line-color');
 };
 
 // Adds reactive tip window that appears on mouseover on the edge
@@ -217,9 +231,9 @@ tremppi.regulations.addGradient = function (relative, weighted, type, my_paper) 
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
-    var min = tremppi.regulations.config[type][relative].color.min.toFixed(tremppi.regulations.num_of_decimals);
+    var min = tremppi.regulations.config[type][relative].color_neg.min.toFixed(tremppi.regulations.num_of_decimals);
     min = min >= 0 ? ' ' + min : min;
-    var max = tremppi.regulations.config[type][relative].color.max.toFixed(tremppi.regulations.num_of_decimals);
+    var max = tremppi.regulations.config[type][relative].color_pos.max.toFixed(tremppi.regulations.num_of_decimals);
     tremppi.regulations.makeText(min, new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.P_height));
     tremppi.regulations.makeText(max, new paper.Point(bar_right + 5, tremppi.regulations.P_height));
 
