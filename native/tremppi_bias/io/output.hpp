@@ -26,8 +26,6 @@ namespace Output {
 		for (const FunData & fun : funs_data) {
 			size_t reg_i = 0;
 			for (const int i : cscope(fun.corrs)) {
-				if (fun.corrs[i] == 0)
-					continue;
 				Json::Value edge, data;
 
 				data["source"] = fun.info.name;

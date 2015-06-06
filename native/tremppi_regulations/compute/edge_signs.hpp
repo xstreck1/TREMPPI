@@ -68,7 +68,7 @@ namespace EdgeSigns {
 					sign[regulator.first][threshold_i] = '0';
 				}
 				// there were active edges and they were not either only + or only -
-				else if (sign[regulator.first][threshold_i] != '+' && sign[ID][threshold_i] != '-') {
+				else if (sign[regulator.first][threshold_i] != '+' && sign[regulator.first][threshold_i] != '-') {
 					sign[regulator.first][threshold_i] = '1';
 				}
 			}

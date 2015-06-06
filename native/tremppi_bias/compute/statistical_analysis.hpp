@@ -54,7 +54,12 @@ namespace StatisticalAnalysis {
 	}
 
 	double correlaction(const double covariance, const double m_std, const double o_std) {
-		return covariance / (m_std * o_std);
+		if (m_std == 0 || o_std == 0) {
+			return 0;
+		}
+		else {
+			return covariance / (m_std * o_std);
+		}
 	}
 
 	FunsData diff(const FunsData & sel, const FunsData & cmp) {
