@@ -42,108 +42,13 @@ tremppi.regulations.toolbarClick = function (event) {
     }
 };
 
-tremppi.regulations.Values = {
-    caption_c: "a) statistical properties of the selected parametrizations set, c) properties of the compared parametrizations set, b) difference between the two. "
-            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
-            + "Blunt edges denote positive and arrows describe the negative correlation value in the graphs a) and c). "
-            + "In the graph b) the positive change in frequency is depicted by full edge, the negative by the dashed one. "
-            + "The dotted edge is used when the difference in frequency is zero.",
-    caption_nonc: "a) statistical properties of the selected parametrizations set. "
-            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
-            + "Blunt edges denote positive and arrows describe the negative correlation value. "
-};
-
-tremppi.regulations.getConfiguraion = function () {
-    return {
-        left: {
-            absolute: {
-                width: {min: 0, max: 1},
-                weight: {min: 0, max: 2},
-                color_pos: {min: 0, max: 1},
-                color_neg: {min: -1, max: 0}
-            },
-            relative: {
-                width: {min: 0, max: 1},
-                weight: {min: 0, max: 2},
-                color_pos: {min: 0, max: 1},
-                color_neg: {min: -1, max: 0}
-            },
-            width: {min: 1, max: 10},
-            weight: {min: 1, max: 10},
-            color_neg: {min: "red", max: tremppi.regulations.null_color },
-            color_pos: {min: tremppi.regulations.null_color , max: "green"}
-        },
-        mid: {
-            absolute: {
-                width: {min: 0, max: 1},
-                weight: {min: 0, max: 2},
-                color_pos: {min: 0, max: 2},
-                color_neg: {min: -2, max: 0}
-            },
-            relative: {
-                width: {min: 0, max: 1},
-                weight: {min: 0, max: 2},
-                color_pos: {min: 0, max: 2},
-                color_neg: {min: -2, max: 0}
-            },
-            width: {min: 1, max: 10},
-            weight: {min: 1, max: 10},
-            color_neg: {min: "red", max: tremppi.regulations.null_color },
-            color_pos: {min: tremppi.regulations.null_color , max: "green"}
-        },
-        right: {
-            absolute: {
-                width: {min: 0, max: 1},
-                weight: {min: 0, max: 2},
-                color_pos: {min: 0, max: 1},
-                color_neg: {min: -1, max: 0}
-            },
-            relative: {
-                width: {min: 0, max: 1},
-                weight: {min: 0, max: 2},
-                color_pos: {min: 0, max: 1},
-                color_neg: {min: -1, max: 0}
-            },
-            width: {min: 1, max: 10},
-            weight: {min: 1, max: 10},
-            color_neg: {min: "red", max: tremppi.regulations.null_color },
-            color_pos: {min: tremppi.regulations.null_color, max: "green"}
-        }
-    };
-};
-
-
-tremppi.regulations.getBound = function (edges, param, fun, weighted) {
-    var result = 0;
-
-    for (var edge_no = 0; edge_no < edges.length; edge_no++) {
-        var value = edges[edge_no].data[param];
-        if (typeof weighted !== 'undefined' && weighted) {
-            value /= edges[edge_no].data["ExpectedFreq"];
-        }
-        result = fun(Math.abs(result), Math.abs(value));
-    }
-
-    return result;
-};
-
-// gives the ranges of values and their respective mapping
-tremppi.regulations.configure = function (type, elements) {
-    var edges = elements.edges;
-    tremppi.regulations.config[type].relative = {
-        width: {
-            min: tremppi.regulations.getBound(edges, "Frequency", Math.min),
-            max: tremppi.regulations.getBound(edges, "Frequency", Math.max)},
-        weight: {
-            min: tremppi.regulations.getBound(edges, "Frequency", Math.min, true),
-            max: tremppi.regulations.getBound(edges, "Frequency", Math.max, true)},
-        color_pos: {
-            min: 0,
-            max: tremppi.regulations.getBound(edges, "Pearson", Math.max)
-        },
-        color_neg: {
-            min: tremppi.regulations.getBound(edges, "Pearson", Math.max) * -1,
-            max: 0
-        }
-    };
-};
+//tremppi.regulations.Values = {
+//    caption_c: "a) statistical properties of the selected parametrizations set, c) properties of the compared parametrizations set, b) difference between the two. "
+//            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
+//            + "Blunt edges denote positive and arrows describe the negative correlation value in the graphs a) and c). "
+//            + "In the graph b) the positive change in frequency is depicted by full edge, the negative by the dashed one. "
+//            + "The dotted edge is used when the difference in frequency is zero.",
+//    caption_nonc: "a) statistical properties of the selected parametrizations set. "
+//            + "F stands for frequency of occurrence of an edge in the given set, P for the Pearson correlation coefficient between the value of the regulator and the parameter value. "
+//            + "Blunt edges denote positive and arrows describe the negative correlation value. "
+//};

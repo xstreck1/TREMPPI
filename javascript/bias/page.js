@@ -6,7 +6,7 @@
 
 /* global tremppi */
 
-tremppi.bias.node_null_color = "yellow";
+tremppi.bias.node_null_color = "white";
 tremppi.bias.edge_null_color = "yellow";
 
 tremppi.bias.page = function () {
