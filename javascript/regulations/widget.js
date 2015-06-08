@@ -168,12 +168,14 @@ tremppi.regulations.loadLabels = function (type) {
     var weighted = tremppi.getItem("weighted") === "true" ? "weight" : "width";
 
     var my_paper = new paper.PaperScope();
-    var legend_height = Math.min(tremppi.regulations.config[type][weighted].max * graph.zoom() + 40, $("#container_" + type).height() / 3);
+    var legend_height = Math.min(tremppi.regulations.config[type][weighted].max * graph.zoom() + 35, $("#container_" + type).height() / 3);
     $('#legend_' + type).height(legend_height);
     my_paper.setup($('#legend_' + type)[0]);
 
+    my_paper.activate();
     tremppi.regulations.addEdgeWidth(relative, weighted, type, my_paper, graph.zoom());
-    tremppi.regulations.addGradient(relative, type, my_paper);
+    tremppi.regulations.addGradient(relative, type, my_paper);    
+    my_paper.view.draw();
 };
 
 
@@ -210,11 +212,9 @@ tremppi.regulations.addEdgeWidth = function (relative, weighted, type, my_paper,
     tremppi.regulations.makeText('F: ', new paper.Point(10, tremppi.regulations.F_height + F_pad));
     tremppi.regulations.makeText(min, new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.F_height + F_pad));
     tremppi.regulations.makeText(max, new paper.Point(bar_right + 5, tremppi.regulations.F_height + F_pad));
-    my_paper.view.draw();
 };
 
 tremppi.regulations.addGradient = function (relative, type, my_paper) {
-    my_paper.activate();
     var bar_right = my_paper.view.viewSize.width - 70;
     tremppi.regulations.makeText('P: ', new paper.Point(10, tremppi.regulations.P_height));
     // Make the bar   
@@ -225,7 +225,7 @@ tremppi.regulations.addGradient = function (relative, type, my_paper) {
     bar.fillColor = {gradient: {}};
     bar.fillColor.origin = [tremppi.regulations.bar_left, 0];
     bar.fillColor.destination = [bar_right, 0];
-    bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
+    bar.fillColor.gradient.stops = ['red', tremppi.regulations.null_color, 'green'];
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
@@ -234,6 +234,4 @@ tremppi.regulations.addGradient = function (relative, type, my_paper) {
     var max = tremppi.regulations.config[type][relative].color_pos.max.toFixed(tremppi.regulations.num_of_decimals);
     tremppi.regulations.makeText(min, new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.P_height));
     tremppi.regulations.makeText(max, new paper.Point(bar_right + 5, tremppi.regulations.P_height));
-
-    my_paper.view.draw();
 };

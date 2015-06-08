@@ -6,6 +6,8 @@
 
 /* global tremppi */
 
+tremppi.regulations.null_color = "yellow";
+
 tremppi.regulations.page = function () {
     if (typeof tremppi.regulations.setup === 'undefined') {
         $("#widget").html("No regulations report has been created yet.");

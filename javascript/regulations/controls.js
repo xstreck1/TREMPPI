@@ -70,8 +70,8 @@ tremppi.regulations.getConfiguraion = function () {
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color_neg: {min: "red", max: "yellow"},
-            color_pos: {min: "yellow", max: "green"}
+            color_neg: {min: "red", max: tremppi.regulations.null_color },
+            color_pos: {min: tremppi.regulations.null_color , max: "green"}
         },
         mid: {
             absolute: {
@@ -88,8 +88,8 @@ tremppi.regulations.getConfiguraion = function () {
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color_neg: {min: "red", max: "yellow"},
-            color_pos: {min: "yellow", max: "green"}
+            color_neg: {min: "red", max: tremppi.regulations.null_color },
+            color_pos: {min: tremppi.regulations.null_color , max: "green"}
         },
         right: {
             absolute: {
@@ -106,8 +106,8 @@ tremppi.regulations.getConfiguraion = function () {
             },
             width: {min: 1, max: 10},
             weight: {min: 1, max: 10},
-            color_neg: {min: "red", max: "yellow"},
-            color_pos: {min: "yellow", max: "green"}
+            color_neg: {min: "red", max: tremppi.regulations.null_color },
+            color_pos: {min: tremppi.regulations.null_color, max: "green"}
         }
     };
 };

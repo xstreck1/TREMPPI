@@ -25,7 +25,7 @@ tremppi.bias.valuesSetter = function (source, panel) {
             var mid = {};
             $.extend(true, mid, tremppi.bias.left.json().elements);
             var right_edges = tremppi.bias.right.json().elements.edges;
-            var right_nodes= tremppi.bias.right.json().elements.nodes;
+            var right_nodes = tremppi.bias.right.json().elements.nodes;
             // Only make diff if both graphs are loaded
             for (var i = 0; i < right_edges.length; i++) {
                 mid.edges[i].data.Pearson -= right_edges[i].data.Pearson;
@@ -99,7 +99,7 @@ tremppi.bias.createMyMapping = function (type, rel_string, selection, glyph, map
             tremppi.bias[type].style().selector(selection).css(mapper, config[type][glyph].min).update();
         }
         else {
-            tremppi.bias[type].style().selector(selection).css(mapper, config[type][glyph].max).update(); 
+            tremppi.bias[type].style().selector(selection).css(mapper, config[type][glyph].max).update();
         }
     }
     else {
@@ -123,31 +123,34 @@ tremppi.bias.addQtip = function (type) {
     var num_of_decimals = 3;
 
     var edges = tremppi.bias[type].edges();
-    var labeller = function (my_data) {
+    var edge_labeller = function (my_data) {
         return "source: " + my_data.source + "<br />"
                 + "target: " + my_data.target + "<br />"
-                + "pearson: " + my_data.Pearson.toFixed(num_of_decimals) + "<br />";
+                + "pearson: " + my_data.Pearson.toFixed(tremppi.bias.num_of_decimals ) + "<br />";
     };
-
-    tremppi.qtip.addOnHoverLabeller(type, edges, labeller);
+    tremppi.qtip.addOnHoverLabeller(type, edges, edge_labeller);
+    
+    var nodes = tremppi.bias[type].nodes();
+    var node_labeller = function(my_data) {
+        return "name: " + my_data.name + "<br />"
+                + "bias: " + my_data.Bias.toFixed(tremppi.bias.num_of_decimals ) + "<br />";
+    };
+    tremppi.qtip.addOnHoverLabeller(type, nodes, node_labeller);
 };
 
 tremppi.bias.bar_left = 110;
 tremppi.bias.num_of_decimals = 3;
-tremppi.bias.F_height = 40;
-tremppi.bias.P_height = 20;
 
 tremppi.bias.loadLabels = function (type) {
-    var graph = tremppi.bias[type];
-
     var relative = tremppi.getItem("relative") === "true" ? "relative" : "absolute";
 
     var my_paper = new paper.PaperScope();
-    var legend_height = 80;
-    $('#legend_' + type).height(legend_height);
-    my_paper.setup($('#legend_' + type)[0]);
 
-    tremppi.bias.addGradient(relative, type, my_paper);
+    my_paper.setup($('#legend_' + type)[0]);
+    my_paper.activate();
+    tremppi.bias.addGradient(relative, type, my_paper, "edge", 40);
+    tremppi.bias.addGradient(relative, type, my_paper, "node", 20);
+    my_paper.view.draw();
 };
 
 
@@ -160,27 +163,26 @@ tremppi.bias.makeText = function (content, position) {
     return text;
 };
 
-tremppi.bias.addGradient = function (relative, type, my_paper) {
-    my_paper.activate();
+tremppi.bias.addGradient = function (relative, type, my_paper, element_type, height) {
     var bar_right = my_paper.view.viewSize.width - 70;
-    tremppi.bias.makeText('P: ', new paper.Point(10, tremppi.bias.P_height));
+    tremppi.bias.makeText(element_type === 'node' ? 'B: ' : 'C: ' , new paper.Point(10, height));
     // Make the bar   
     var bar = new paper.Path.Rectangle(
             new paper.Rectangle(
-                    new paper.Point(tremppi.bias.bar_left, tremppi.bias.P_height - 10),
-                    new paper.Point(bar_right, tremppi.bias.P_height)));
+                    new paper.Point(tremppi.bias.bar_left, height - 10),
+                    new paper.Point(bar_right, height)
+                    )
+            );
     bar.fillColor = {gradient: {}};
     bar.fillColor.origin = [tremppi.bias.bar_left, 0];
     bar.fillColor.destination = [bar_right, 0];
-    bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
+    bar.fillColor.gradient.stops = ['red', tremppi.bias[element_type + '_null_color'], 'green'];
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
-    var min = tremppi.bias.config[type][relative].edge_neg.min.toFixed(tremppi.bias.num_of_decimals);
+    var min = tremppi.bias.config[type][relative][element_type + '_neg'].min.toFixed(tremppi.bias.num_of_decimals);
     min = min >= 0 ? ' ' + min : min;
-    var max = tremppi.bias.config[type][relative].edge_pos.max.toFixed(tremppi.bias.num_of_decimals);
-    tremppi.bias.makeText(min, new paper.Point(tremppi.bias.bar_left - 75, tremppi.bias.P_height));
-    tremppi.bias.makeText(max, new paper.Point(bar_right + 5, tremppi.bias.P_height));
-
-    my_paper.view.draw();
+    var max = tremppi.bias.config[type][relative][element_type + '_pos'].max.toFixed(tremppi.bias.num_of_decimals);
+    tremppi.bias.makeText(min, new paper.Point(tremppi.bias.bar_left - 75, height));
+    tremppi.bias.makeText(max, new paper.Point(bar_right + 5, height));
 };

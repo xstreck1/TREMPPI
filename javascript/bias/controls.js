@@ -61,10 +61,10 @@ tremppi.bias.getConfiguraion = function () {
                 edge_pos: {min: 0, max: 1},
                 edge_neg: {min: -1, max: 0}
             },
-            node_pos: {min: "yellow", max: "green"},
-            node_neg: {min: "red", max: "yellow"},
-            edge_pos: {min: "yellow", max: "green"},
-            edge_neg: {min: "red", max: "yellow"}
+            node_pos: {min: tremppi.bias.node_null_color, max: "green"},
+            node_neg: {min: "red", max: tremppi.bias.node_null_color},
+            edge_pos: {min: tremppi.bias.edge_null_color, max: "green"},
+            edge_neg: {min: "red", max: tremppi.bias.edge_null_color}
         },
         mid: {
             absolute: {
@@ -79,10 +79,10 @@ tremppi.bias.getConfiguraion = function () {
                 edge_pos: {min: 0, max: 2},
                 edge_neg: {min: -2, max: 0}
             },
-            node_pos: {min: "yellow", max: "green"},
-            node_neg: {min: "red", max: "yellow"},
-            edge_pos: {min: "yellow", max: "green"},
-            edge_neg: {min: "red", max: "yellow"}
+            node_pos: {min: tremppi.bias.node_null_color, max: "green"},
+            node_neg: {min: "red", max: tremppi.bias.node_null_color},
+            edge_pos: {min: tremppi.bias.edge_null_color, max: "green"},
+            edge_neg: {min: "red", max: tremppi.bias.edge_null_color}
         },
         right: {
             absolute: {
@@ -97,10 +97,10 @@ tremppi.bias.getConfiguraion = function () {
                 edge_pos: {min: 0, max: 1},
                 edge_neg: {min: -1, max: 0}
             },
-            node_pos: {min: "yellow", max: "green"},
-            node_neg: {min: "red", max: "yellow"},
-            edge_pos: {min: "yellow", max: "green"},
-            edge_neg: {min: "red", max: "yellow"}
+            node_pos: {min: tremppi.bias.node_null_color, max: "green"},
+            node_neg: {min: "red", max: tremppi.bias.node_null_color},
+            edge_pos: {min: tremppi.bias.edge_null_color, max: "green"},
+            edge_neg: {min: "red", max: tremppi.bias.edge_null_color}
         }
     };
 };

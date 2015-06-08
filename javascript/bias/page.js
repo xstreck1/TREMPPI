@@ -6,6 +6,9 @@
 
 /* global tremppi */
 
+tremppi.bias.node_null_color = "yellow";
+tremppi.bias.edge_null_color = "yellow";
+
 tremppi.bias.page = function () {
     if (typeof tremppi.bias.setup === 'undefined') {
         $("#widget").html("No bias report has been created yet.");
