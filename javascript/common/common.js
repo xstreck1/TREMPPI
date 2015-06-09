@@ -153,6 +153,13 @@ tremppi.w2ui = {
 };
 
 tremppi.cytoscape = {
+    mapValue: function (type, selection, glyph, value) {
+        tremppi.widget[type].style().selector(selection).css(glyph, value).update();
+    },
+    mapRange: function (type, selection, param, glyph, min_range, max_range, min_domain, max_domain) {
+        var map = 'mapData(' + param + ', ' + min_range + ', ' + max_range + ', ' + min_domain + ', ' + max_domain + ')';
+        tremppi.widget[type].style().selector(selection).css(glyph, map).update();
+    },
     // test if nodes all have positions
     hasAllPositions: function (nodes) {
         if (typeof nodes === 'undefined')
@@ -290,6 +297,38 @@ tremppi.report = {
         tremppi.widget.left.resize();
         tremppi.widget.mid.resize();
         tremppi.widget.right.resize();
+    },
+    getBound: function (selected, param) {
+        var min = Number.POSITIVE_INFINITY;
+        var max = 0;
+
+        for (var ele_no = 0; ele_no < selected.length; ele_no++) {
+            var value = Math.abs(selected[ele_no].data(param));
+            min = Math.min(min, value);
+            max = Math.max(max, value);
+        }
+
+        return {min: min, max: max};
+    },
+    getRange: function (type, relative, selection, param, positive) {
+        var range;
+        if (relative) {
+            var selected = tremppi.widget[type].elements(selection);
+            range = tremppi.report.getBound(selected, param);
+        }
+        if (!relative || range.min === range.max || range.min === Number.POSITIVE_INFINITY) {
+            range = {
+                min: 0, max: tremppi.widget.bounds[param].max
+            };
+            if (type === 'mid') {
+                range = {min: 0, max: tremppi.widget.bounds[param].max - tremppi.widget.bounds[param].min};
+            }
+        }
+        if (!positive) {
+            return {min: -1 * range.max, max: -1 * range.min}
+        } else {
+            return range;
+        }
     }
 };
 

@@ -33,11 +33,11 @@ tremppi.regulations.page = function () {
             Pearson: {
                 min: -1, max: 1
             },
-            Width: {
+            Frequency: {
                 min: 0, max: 1
             },
-            Weight: {
-                min: 0, max: 2
+            WeightedFrequency: {
+                min: 0, max: 1
             }
         };
     }

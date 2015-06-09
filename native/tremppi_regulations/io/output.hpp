@@ -31,8 +31,8 @@ namespace Output {
 
 						data["source"] = reg_infos[regul.first].name;
 						data["target"] = reg._info.name;
-						data["ExpectedFreq"] = reg.expected_freq.at(regul.first);
 						data["Frequency"] = reg.reg_freq.at(regul.first)[trh_i];
+						data["WeightedFrequency"] = reg.reg_freq.at(regul.first)[trh_i] / (reg.expected_freq.at(regul.first) * 2);
 						data["Pearson"] = reg.reg_corr.at(regul.first)[trh_i];
 						data["Threshold"] = regul.second[trh_i];
 						data["Sign"] = string(1, reg.reg_sign.at(regul.first)[trh_i]);

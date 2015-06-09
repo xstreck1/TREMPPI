@@ -6,9 +6,6 @@
 
 /* global tremppi */
 
-tremppi.bias.node_null_color = "white";
-tremppi.bias.edge_null_color = "yellow";
-
 tremppi.bias.page = function () {
     if (typeof tremppi.bias.setup === 'undefined') {
         $("#widget").html("No bias report has been created yet.");
@@ -29,7 +26,14 @@ tremppi.bias.page = function () {
         };
         setCheck("relative");
 
-        tremppi.bias.config = tremppi.bias.getConfiguraion();
+        tremppi.bias.bounds = {
+            Pearson: {
+                min: -1, max: 1
+            },
+            Bias: {
+                min: 0, max: 1
+            }
+        };
     }
 };
 
@@ -37,7 +41,10 @@ tremppi.bias.setData = function (data) {
     tremppi.toolbar.onClick = tremppi.bias.toolbarClick;
 };
 
-tremppi.bias.layout = function () {
+tremppi.bias.layout = function () {    
+    for (var i = 0; i < tremppi.report.panels.length; i++) {
+        tremppi.bias.loadLabels(tremppi.report.panels[i]);
+    }
 };
 
 tremppi.bias.toolbarClass = function () {
