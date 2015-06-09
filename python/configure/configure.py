@@ -3,6 +3,7 @@ import sys
 import argparse
 import os
 import json
+import re
 import sqlite3
 from os.path import join, dirname, abspath, exists
 if __name__ == "__main__":
@@ -60,10 +61,10 @@ def make_selection(conn):
         })
         for column_name in column_names:
             parts = str(column_name).split('_')
-            if parts[0] == 'K' and parts[1] == comp_name:
+            if re.match('K_' + comp_name + '_(.*)', column_name):
                 columns.append({
                     'field': column_name,
-                    'caption': parts[2],
+                    'caption': re.sub('(\d)', '\\1,', re.sub('K_' + comp_name + '_(.*)', '\\1', column_name))[:-1], #take only the number, put commas between
                     'size': str(len(column_name) * 8) + 'px',
                     'editable': {
                         'min': 0,
@@ -85,10 +86,10 @@ def make_selection(conn):
     }
     for column_name in column_names:
         parts = str(column_name).split('_')
-        if parts[0] == 'L':
+        if re.match('L_(.*)', column_name):
             columns.append({
                 'field': column_name,
-                'caption': '(' + parts[1] + ',' + parts[2] + ',' + parts[3] + ')',
+                'caption': re.sub('L_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'type': 'select',
@@ -111,10 +112,10 @@ def make_selection(conn):
     }
     for column_name in column_names:
         parts = str(column_name).split('_')
-        if parts[0] == 'E':
+        if re.match('E_(.*)', column_name):
             columns.append({
                 'field': column_name,
-                'caption': parts[1],
+                'caption': re.sub('E_(.*)', '\\1', column_name),
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'min': 0,
@@ -125,7 +126,8 @@ def make_selection(conn):
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
-    groups.append(new_group)
+    if new_group['span'] > 0:
+        groups.append(new_group)
 
     # Add robustness
     new_group = {
@@ -136,11 +138,10 @@ def make_selection(conn):
         'hideable': True
     }
     for column_name in column_names:
-        parts = str(column_name).split('_')
-        if parts[0] == 'R':
+        if re.match('R_(.*)', column_name):
             columns.append({
                 'field': column_name,
-                'caption': parts[1],
+                'caption': re.sub('R_(.*)', '\\1', column_name),
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'min': 0,
@@ -163,11 +164,10 @@ def make_selection(conn):
         'hideable': True
     }
     for column_name in column_names:
-        parts = str(column_name).split('_')
-        if parts[0] == 'C':
+        if re.match('C_(.*)', column_name):
             columns.append({
                 'field': column_name,
-                'caption': parts[1],
+                'caption': re.sub('C_(.*)', '\\1', column_name),
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'min': 0,

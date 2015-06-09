@@ -19,7 +19,8 @@ tremppi.editor.page = function () {
                     return pos;
             }
         },
-        selectionType: "single"
+        selectionType: "single",
+        wheelSensitivity: 0.2
     });
 
     tremppi.editor.setStyle(tremppi.editor.graph);

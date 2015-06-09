@@ -31,7 +31,7 @@ tremppi.bias.valuesSetter = function (source, panel) {
             for (var i = 0; i < right_nodes.length; i++) {
                 mid.nodes[i].data['Bias'] -= right_nodes[i].data['Bias'];
             }
-            
+
             tremppi.bias.createPanelContent(mid, 'mid');
 
             if (to_synchronize) {
@@ -69,7 +69,8 @@ tremppi.bias.setPanel = function (panel) {
                 }),
         layout: {
             name: 'grid'
-        }
+        },
+        wheelSensitivity: 0.2
     });
 };
 
@@ -96,20 +97,19 @@ tremppi.bias.num_of_decimals = 3;
 
 // Adds reactive tip window that appears on mouseover on the edge
 tremppi.bias.addQtip = function (type) {
-    var edges = tremppi.bias[type].edges();
-    var edge_labeller = function (my_data) {
-        return 'source: ' + my_data.source + '<br />'
-                + 'target: ' + my_data.target + '<br />'
-                + 'Pearson: ' + my_data.Pearson.toFixed(tremppi.bias.num_of_decimals) + '<br />';
+    var elements = tremppi.bias[type].elements();
+    var labeller = function (my_data) {
+        if (typeof my_data.name !== 'undefined') {
+            return 'name: ' + my_data.name + '<br />'
+                    + 'Bias: ' + my_data.Bias.toFixed(tremppi.bias.num_of_decimals) + '<br />';
+        } 
+        else {
+            return 'source: ' + my_data.source + '<br />'
+                    + 'target: ' + my_data.target + '<br />'
+                    + 'Correlation: ' + my_data.Pearson.toFixed(tremppi.bias.num_of_decimals) + '<br />';
+        }
     };
-    tremppi.qtip.addOnHoverLabeller(type, edges, edge_labeller);
-
-    var nodes = tremppi.bias[type].nodes();
-    var node_labeller = function (my_data) {
-        return 'name: ' + my_data.name + '<br />'
-                + 'Bias: ' + my_data.Bias.toFixed(tremppi.bias.num_of_decimals) + '<br />';
-    };
-    tremppi.qtip.addOnHoverLabeller(type, nodes, node_labeller);
+    tremppi.qtip.addOnHoverLabeller(type, elements, labeller);
 };
 
 tremppi.bias.bar_left = 110;

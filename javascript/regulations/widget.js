@@ -75,7 +75,8 @@ tremppi.regulations.setPanel = function (panel) {
                 }),
         layout: {
             name: 'grid'
-        }
+        },
+        wheelSensitivity: 0.2
     });
 };
 
@@ -113,9 +114,9 @@ tremppi.regulations.addQtip = function (type) {
     var labeller = function (my_data) {
         return 'source: ' + my_data.source + '<br />'
                 + 'target: ' + my_data.target + '<br />'
-                + 'pearson: ' + my_data.Pearson.toFixed(num_of_decimals) + '<br />'
-                + 'frequency: ' + my_data.Frequency.toFixed(num_of_decimals) + '<br />'
-                + 'weighted frequency: ' + my_data.WeightedFrequency.toFixed(num_of_decimals) + '<br />';
+                + 'Impact: ' + my_data.Pearson.toFixed(num_of_decimals) + '<br />'
+                + 'Ocurrence: ' + my_data.Frequency.toFixed(num_of_decimals) + '<br />'
+                + 'Weighted Occurence: ' + my_data.WeightedFrequency.toFixed(num_of_decimals) + '<br />';
     };
 
     tremppi.qtip.addOnHoverLabeller(type, edges, labeller);
@@ -176,7 +177,7 @@ tremppi.regulations.addGradient = function (relative, type, my_paper, positive) 
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
-    tremppi.regulations.makeText('P: ', new paper.Point(10, height));
+    tremppi.regulations.makeText('I: ', new paper.Point(10, height));
     tremppi.regulations.makeText(
             range.min.toFixed(tremppi.regulations.num_of_decimals),
             new paper.Point(tremppi.regulations.bar_left - 75, height)
