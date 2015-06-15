@@ -4,10 +4,19 @@
 #include "statistical_analysis.hpp"
 
 namespace Compute {
+	FunData build(const RegInfo & info, const int step_count, sqlite3pp::query & qry) {
+		FunData result = { info };
+		result.mean = StatisticalAnalysis::mean_val(step_count, qry);
+		qry.reset();
+		result.std_dev = StatisticalAnalysis::std_dev_val(step_count, result.mean, qry);
+
+		return result;
+	}
+
 	void deviation(const RegInfos & reg_infos, const size_t step_count, vector<sqlite3pp::query> & queries, Logging & logging, FunsData & funs_data) {
 		logging.newPhase("Deviation of function", reg_infos.size());
 		for (const RegInfo & reg_info : reg_infos) {
-			funs_data.emplace_back(StatisticalAnalysis::build(reg_info, step_count, queries[reg_info.ID]));
+			funs_data.emplace_back(build(reg_info, step_count, queries[reg_info.ID]));
 			logging.step();
 		}
 	}

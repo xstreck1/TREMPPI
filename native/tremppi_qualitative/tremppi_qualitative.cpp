@@ -106,7 +106,6 @@ int tremppi_qualitative(int argc, char ** argv) {
 		for (ComputedQual & result : results) {
 			Json::Value result_node;
 			result_node["name"] = Report::reformName(result.name);
-            result_node["entries"] = static_cast<Json::Value::UInt>(result.values.size());
 			for (const pair<string, size_t> & value : result.values) {
 				Json::Value data;
 				data["name"] = value.first;

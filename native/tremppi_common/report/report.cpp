@@ -22,12 +22,16 @@ Json::Value Report::createSetup() {
 
 string Report::reformName(string name) {
 	switch (name[0]) {
+		case 'B':
+			return regex_replace(name, regex("C_(.*)"), "Bias($1)");
 		case 'C':
 			return regex_replace(name, regex("C_(.*)"), "Cost($1)");
 		case 'E':
 			return regex_replace(name, regex("E_(.*)"), "Indigree($1)");
 		case 'F':
 			return regex_replace(name, regex("F_(.*)"), "F<sub>$1</sub>");
+		case 'I':
+			return regex_replace(name, regex("I_(.*)_(\\d)_(.*)"), "Impact($1,$2,$3)");
 		case 'K':
 			return regex_replace(name, regex("K_(.*)_(\\d*)"), "K<sub>$1</sub>($2)");
 		case 'L':

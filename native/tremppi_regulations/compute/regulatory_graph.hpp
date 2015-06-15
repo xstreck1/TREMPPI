@@ -29,35 +29,37 @@ namespace RegulatoryGraph {
 	}
 
 	// computes the correlation of the regulators to the regulated component for each component
-	void compute(const RegInfo & reg_info, const int step_count, sqlite3pp::query & qry, map<CompID, vector<double> > & result) {
-		// Get the header data
-		vector<string> columns_list = DataConv::columns2list(reg_info.columns);
-		// For each regulator holds the values of the threshold in each column
-		vector<Levels> reg_values;
-		// For each regulator hold the columns that contain the contexts with this regulator and those exactly without is (i.e. if I have a context with this regulator and remove the regulator, what do I obtain?)
-		map<CompID, vector<vector<size_t>>> edge_dist;
-		for (const auto & regulator : reg_info.regulators) {
-			// Obtain the id of the regulator from the order in the regulator list
-			size_t reg_i = DataInfo::RegIDToRegNo(reg_info, regulator.first);
-			reg_values.emplace_back(DataConv::getThrFromContexts(columns_list, reg_i));
-			edge_dist.insert({ regulator.first, getColumnsOfRegulator(reg_i, regulator.second, reg_info.columns) });
-		}
-
-		// Compute relation to each regulation of this component, step by database rows
-		for (const auto & row : qry) {
-			Levels parametrization = sqlite3pp::func::getRow<ActLevel>(row, 0, qry.column_count());
-
-			for (const auto & regulator : reg_info.regulators) {
-				// Obtain the id of the regulator from the order in the regulator list and prepare the results
-				size_t reg_no = DataInfo::RegIDToRegNo(reg_info, regulator.first);
-
-				for (size_t edge_no = 0; edge_no < regulator.second.size(); edge_no++) {
-					double correlation = Statistics::correlation(reg_values[reg_no], parametrization, edge_dist.at(regulator.first)[edge_no], reg_info.columns.begin()->first);
-					result[regulator.first][edge_no] += correlation;
+	void compute(const RegInfos & reg_infos, const CompID ID, const int step_count, sqlite3pp::query & qry, map<CompID, vector<double> > & corr) {
+		map<Regulation, size_t> column_of_regulation;
+		for (const auto & regulator : reg_infos[ID].regulators) {
+			for (ActLevel threshold : regulator.second) {
+				string column_name = "I_" + reg_infos[regulator.first].name + "_" + to_string(threshold) + "_" + reg_infos[ID].name;
+				Regulation regulation = Regulation{ reg_infos[regulator.first].ID, threshold, reg_infos[ID].ID };
+				for (const size_t column_i : crange(qry.column_count())) {
+					string database_column = qry.column_name(column_i);
+					if (database_column == column_name) {
+						column_of_regulation[regulation] = column_i;
+					}
+				}
+				if (column_of_regulation.count(regulation) == 0) {
+					throw runtime_error("did not find the regulation " + column_name + " in the database");
 				}
 			}
 		}
 
-		RegData::Normalize(step_count, result);
+		// Compute relation to each regulation of this component, step by database rows
+		for (const auto & row : qry) {
+			for (const auto & regulator : reg_infos[ID].regulators) {
+				for (size_t threshold_i : cscope(regulator.second)) {
+					const ActLevel threshold = regulator.second[threshold_i];
+					Regulation regulation = Regulation{ reg_infos[regulator.first].ID, threshold, reg_infos[ID].ID };
+					size_t column_i = column_of_regulation[regulation];
+					double impact = row.get<double>(column_i);
+					corr[regulator.first][threshold_i] += impact;
+				}
+			}
+		}
+		
+		RegData::Normalize(step_count, corr);
 	}
 }

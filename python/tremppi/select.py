@@ -8,7 +8,7 @@ def get_atom(record):
 
     if ("select" in record) and record["select"]:
         for key, value in record.items():
-            if key == 'select' or key == 'recid' or key == 'name' or key == 'changes' or value == '':
+            if key == 'select' or key == 'recid' or key == 'name' or key == 'changes' or value == '' or value == ' ':
                 continue
             elif value == 'ANY':
                 atoms.append(key + " IS NOT NULL")
@@ -26,6 +26,8 @@ def get_atom(record):
                     atoms.append(key + " < " + matches.group(3))
                 else:
                     atoms.append(key + " <= " + matches.group(3))
+            elif re.match('[+-01]', value):
+                atoms.append(key + ' = "' + value + '"')
             else:
                 raise Exception("The expression " + value + " for the key " + key + " is not interpreted.")
         if len(atoms) == 0:
@@ -38,7 +40,7 @@ def select_query(records):
 
     for record in records:
         atoms = get_atom(record)
-        if (len(atoms) > 0):
+        if len(atoms) > 0:
             clauses.append("(" + " AND ".join(atoms) + ")")
 
     return " OR ".join(clauses)
@@ -62,7 +64,7 @@ def select(filename, term):
         grid = json.loads(selectionFile.read())
         if "records" not in grid:
             raise Exception("No selection is present.")
-        if (term):
+        if term:
             result = select_query(grid["records"])
             if result != '':
                 return ' WHERE ' + result

@@ -6,8 +6,10 @@ using namespace std;
 map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
 		{ "browse", { tremppi_browse, "open the IDE" } },
 		{ "configure", { tremppi_configure, "call to explicitly recreate data configuration files" } },
-		{ "bias", { tremppi_bias, "create a graph of bias correlation between components" } },
+		{ "bias", { tremppi_bias, "label parametrizations with their bias" } },
+		{ "correlations", { tremppi_correlations, "create a correlations graph report"} },
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
+		{ "impact",{ tremppi_impact, "label with the impact of a regulator on its target" } },
 		{ "init",{ tremppi_init, "create a new model with a model viewer" } },
 		{ "label", { tremppi_label, "label the edges of individual parametrizations" } },
 		{ "qualitative", { tremppi_qualitative, "get qualitative analysis of the known data" } },

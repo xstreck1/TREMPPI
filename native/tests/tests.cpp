@@ -18,9 +18,11 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
 	ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";
 	ASSERT_EQ(0, basic_label_test()) << "Basic content test label failed.";
+	ASSERT_EQ(0, basic_bias_test()) << "Basic content test bias failed.";
+	ASSERT_EQ(0, basic_impact_test()) << "Basic content test impact failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";
 	ASSERT_EQ(0, basic_regulations_test()) << "Basic content test regulations failed.";
-	ASSERT_EQ(0, basic_bias_test()) << "Basic content test bias failed.";
+	ASSERT_EQ(0, basic_correlations_test()) << "Basic content test correlations test failed.";
 	// ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
 	ASSERT_EQ(0, basic_qualitative_test()) << "Basic content test qualitative failed.";
 	ASSERT_EQ(0, basic_quantitative_test()) << "Basic content test quantitative failed.";

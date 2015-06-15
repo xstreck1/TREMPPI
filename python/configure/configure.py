@@ -76,7 +76,7 @@ def make_selection(conn):
                 groups[-1]['columns'].append(column_name)
                 groups[-1]['span'] += 1
 
-    # Add edges
+    # Add sign
     new_group = {
         'caption': 'Label(edge)',
         'columns': [],
@@ -93,7 +93,7 @@ def make_selection(conn):
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'type': 'select',
-                    'items': ["1", "0", "+", "-"]
+                    'items': ["1", "0", "+", "-", " "]
                 },
                 "resizable": True
             })
@@ -120,6 +120,60 @@ def make_selection(conn):
                 'editable': {
                     'min': 0,
                     'max': 1024,
+                    'type': 'text'
+                },
+                "resizable": True
+            })
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
+    if new_group['span'] > 0:
+        groups.append(new_group)
+
+    # Add Bias
+    new_group = {
+        'caption': 'Bias(component)',
+        'columns': [],
+        'span': 0,
+        'master': False,
+        'hideable': True
+    }
+    for column_name in column_names:
+        parts = str(column_name).split('_')
+        if re.match('B_(.*)', column_name):
+            columns.append({
+                'field': column_name,
+                'caption': re.sub('B_(.*)', '\\1', column_name),
+                'size': str(len(column_name) * 8) + 'px',
+                'editable': {
+                    'min': 0,
+                    'max': 1,
+                    'type': 'text'
+                },
+                "resizable": True
+            })
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
+    if new_group['span'] > 0:
+        groups.append(new_group)
+
+    # Add impact
+    new_group = {
+        'caption': 'Impact(edge)',
+        'columns': [],
+        'span': 0,
+        'master': False,
+        'hideable': True
+    }
+    for column_name in column_names:
+        parts = str(column_name).split('_')
+        if re.match('L_(.*)', column_name):
+            columns.append({
+                'field': column_name,
+                'caption': re.sub('L_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
+                'size': str(len(column_name) * 8) + 'px',
+                'editable': {
+                    'min': 0,
+                    'max': 1,
                     'type': 'text'
                 },
                 "resizable": True

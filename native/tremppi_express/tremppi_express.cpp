@@ -1,4 +1,6 @@
 #include <tremppi_common/general/system.hpp>
+#include <tremppi_common/python/python_functions.hpp>
+
 #include "compute/MVQMC.hpp"
 #include "io/express_options.hpp"
 #include "io/output.hpp"
@@ -80,6 +82,13 @@ int tremppi_express(int argc, char ** argv) {
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
+	}
+
+	try {
+		PythonFunctions::configure("select");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 4);
 	}
 
 	return 0;

@@ -2,6 +2,7 @@
 #include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/database/database_reader.hpp>
+#include <tremppi_common/python/python_functions.hpp>
 
 void addColumns(const RegInfos & reg_infos, sqlite3pp::database & db) {
 	for (const RegInfo & reg_info : reg_infos) {
@@ -159,6 +160,13 @@ int tremppi_label(int argc, char ** argv) {
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 3);
+	}
+
+	try {
+		PythonFunctions::configure("select");
+	}
+	catch (exception & e) {
+		logging.exceptionMessage(e, 4);
 	}
 
 	return 0;	
