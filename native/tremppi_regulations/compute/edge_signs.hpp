@@ -29,7 +29,7 @@ namespace EdgeSigns {
 		map<Regulation, size_t> column_of_regulation;
 		for (const auto & regulator : reg_infos[ID].regulators) {
 			for (ActLevel threshold : regulator.second) {
-				string column_name = "L_" + reg_infos[regulator.first].name + "_" + to_string(threshold) + "_" + reg_infos[ID].name;
+				string column_name = "S_" + reg_infos[regulator.first].name + "_" + to_string(threshold) + "_" + reg_infos[ID].name;
 				Regulation regulation = Regulation{ reg_infos[regulator.first].ID, threshold, reg_infos[ID].ID };
 				for (const size_t column_i : crange(qry.column_count())) {
 					string database_column = qry.column_name(column_i);

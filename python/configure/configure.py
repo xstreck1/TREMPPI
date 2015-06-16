@@ -78,7 +78,7 @@ def make_selection(conn):
 
     # Add sign
     new_group = {
-        'caption': 'Label(edge)',
+        'caption': 'Sign(edge)',
         'columns': [],
         'span': 0,
         'master': False,
@@ -86,10 +86,10 @@ def make_selection(conn):
     }
     for column_name in column_names:
         parts = str(column_name).split('_')
-        if re.match('L_(.*)', column_name):
+        if re.match('S_(.*)', column_name):
             columns.append({
                 'field': column_name,
-                'caption': re.sub('L_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
+                'caption': re.sub('S_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'type': 'select',
@@ -166,10 +166,10 @@ def make_selection(conn):
     }
     for column_name in column_names:
         parts = str(column_name).split('_')
-        if re.match('L_(.*)', column_name):
+        if re.match('I_(.*)', column_name):
             columns.append({
                 'field': column_name,
-                'caption': re.sub('L_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
+                'caption': re.sub('I_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
                 'size': str(len(column_name) * 8) + 'px',
                 'editable': {
                     'min': 0,

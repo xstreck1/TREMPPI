@@ -7,7 +7,7 @@
 #include "validate_tests.hpp"
 #include "regulations_tests.hpp"
 #include "bias_tests.hpp"
-#include "label_tests.hpp"
+#include "sign_tests.hpp"
 #include "wintess_tests.hpp"
 #include "quantitative_tests.hpp"
 #include "qualitative_tests.hpp"
@@ -17,7 +17,7 @@ TEST(CoreTest, AllPrograms) {
 	ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";
 	ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
 	ASSERT_EQ(0, basic_express_test()) << "Basic content test express failed.";
-	ASSERT_EQ(0, basic_label_test()) << "Basic content test label failed.";
+	ASSERT_EQ(0, basic_sign_test()) << "Basic content test label failed.";
 	ASSERT_EQ(0, basic_bias_test()) << "Basic content test bias failed.";
 	ASSERT_EQ(0, basic_impact_test()) << "Basic content test impact failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";

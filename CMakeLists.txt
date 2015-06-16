@@ -118,7 +118,7 @@ endfunction()
 # MODULES
 module("bias")
 module("express")
-module("label")
+module("sign")
 module("regulations")
 module("quantitative")
 module("qualitative")

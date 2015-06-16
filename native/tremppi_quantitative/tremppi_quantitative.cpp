@@ -28,7 +28,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	map<size_t, string> columns;
-	const vector<string> prefixes = { "K", "C", "R", "E" };
+	const vector<string> prefixes = { "K", "C", "R", "E", "B", "I" };
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
 

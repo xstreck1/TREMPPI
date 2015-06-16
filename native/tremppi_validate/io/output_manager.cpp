@@ -21,7 +21,7 @@ void OutputManager::outputForm() {
 
 void OutputManager::outputRound(const size_t cost, const double robustness_val, const string & witness_path, const Levels & parametrization, const ParamNo & rowid) {
 	string command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET ";
-	command += "C_" + name + "=" + (cost == INF ? "NULL" : to_string(cost));
+	command += "C_" + name + "=" + (cost == INF ? "0" : to_string(cost));
 	if (robustness)
 		command += ", R_" + name + "=" + to_string(robustness_val);
 	if (witness)

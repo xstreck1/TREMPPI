@@ -150,9 +150,9 @@ int tremppi_regulations(int argc, char ** argv) {
 
 			EdgeSigns::computeExpectedFreq(reg_info, reg_data.expected_freq);
 
-			map<size_t, string> label_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("L_.*" + reg_info.name), db);
-			if (!label_columns.empty()) {
-				sqlite3pp::query label_qry = DatabaseReader::selectionFilter(label_columns, out["setup"]["select"].asString(), db);
+			map<size_t, string> sign_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("S_.*" + reg_info.name), db);
+			if (!sign_columns.empty()) {
+				sqlite3pp::query label_qry = DatabaseReader::selectionFilter(sign_columns, out["setup"]["select"].asString(), db);
 				EdgeSigns::compute(reg_infos, reg_info.ID, out["setup"]["size"].asInt(), label_qry, reg_data.reg_freq, reg_data.reg_sign);
 			}
 

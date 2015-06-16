@@ -34,8 +34,8 @@ string Report::reformName(string name) {
 			return regex_replace(name, regex("I_(.*)_(\\d)_(.*)"), "Impact($1,$2,$3)");
 		case 'K':
 			return regex_replace(name, regex("K_(.*)_(\\d*)"), "K<sub>$1</sub>($2)");
-		case 'L':
-			return regex_replace(name, regex("L_(.*)_(\\d)_(.*)"), "Label($1,$2,$3)");
+		case 'S':
+			return regex_replace(name, regex("S_(.*)_(\\d)_(.*)"), "Sign($1,$2,$3)");
 		case 'R':
 			return regex_replace(name, regex("R_(.*)"), "Robustness($1)");
 	}
