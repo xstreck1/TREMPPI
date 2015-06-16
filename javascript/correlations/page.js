@@ -6,9 +6,9 @@
 
 /* global tremppi */
 
-tremppi.bias.page = function () {
-    if (typeof tremppi.bias.setup === 'undefined') {
-        $("#widget").html("No bias report has been created yet.");
+tremppi.correlations.page = function () {
+    if (typeof tremppi.correlations.setup === 'undefined') {
+        $("#widget").html("No correlations report has been created yet.");
     } else {
         tremppi.report.createPanels();
         for (var i = 0; i < tremppi.report.panels.length; i++) {
@@ -26,7 +26,7 @@ tremppi.bias.page = function () {
         };
         setCheck("relative");
 
-        tremppi.bias.bounds = {
+        tremppi.correlations.bounds = {
             Pearson: {
                 min: -1, max: 1
             },
@@ -37,17 +37,17 @@ tremppi.bias.page = function () {
     }
 };
 
-tremppi.bias.setData = function (data) {
-    tremppi.toolbar.onClick = tremppi.bias.toolbarClick;
+tremppi.correlations.setData = function (data) {
+    tremppi.toolbar.onClick = tremppi.correlations.toolbarClick;
 };
 
-tremppi.bias.layout = function () {    
+tremppi.correlations.layout = function () {    
     for (var i = 0; i < tremppi.report.panels.length; i++) {
-        tremppi.bias.loadLabels(tremppi.report.panels[i]);
+        tremppi.correlations.loadLabels(tremppi.report.panels[i]);
     }
 };
 
-tremppi.bias.toolbarClass = function () {
+tremppi.correlations.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [

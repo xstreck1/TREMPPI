@@ -330,7 +330,7 @@ def configure(data_path, widget):
                 properties_js.write("tremppi.properties.setup = ")
                 json.dump(configured, properties_js)
                 properties_js.write(";")
-    elif widget in ["qualitative", "quantitative", "regulations", "bias"]:
+    elif widget in ["qualitative", "quantitative", "regulations", "correlations"]:
         files = []
         widget_dir = join(data_path, widget)
         if not exists(widget_dir):

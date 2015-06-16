@@ -206,7 +206,7 @@ tremppi.regulations.addEdgeWidth = function (relative, weighted, type, my_paper,
     bar.add(new paper.Point(bar_right, bar_height));
     // Add the label
     var F_pad = max_width / 2 - 4;
-    tremppi.regulations.makeText('O: ', new paper.Point(10, tremppi.regulations.F_height + F_pad));
+    tremppi.regulations.makeText('F: ', new paper.Point(10, tremppi.regulations.F_height + F_pad));
     tremppi.regulations.makeText(
             range.min.toFixed(tremppi.regulations.num_of_decimals),
             new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.F_height + F_pad)

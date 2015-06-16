@@ -10,7 +10,7 @@ from tremppi.file_manipulation import copyanything, replace_regex, normal_paths
 from tremppi.header import folders, widgets, source_folder, data_folder
 
 # make sure all the data are present
-def generateData(data_path):
+def generate_data(data_path):
     if not exists(data_path):
         os.makedirs(data_path)
     for widget in widgets:
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         shutil.copy(join(HOME_PATH, source_folder, file + ".html"), DEST_CONTENT)
 
     # make the data directory
-    generateData(join(DEST_CONTENT, data_folder))
+    generate_data(join(DEST_CONTENT, data_folder))
 
     # create the configure data
     with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:

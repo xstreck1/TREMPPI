@@ -135,7 +135,7 @@ int tremppi_correlations(int argc, char ** argv) {
 
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "bias" / (out["setup"]["s_name"].asString() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "correlations" / (out["setup"]["s_name"].asString() + ".json"), out);
 
 	}
 	catch (exception & e) {
@@ -144,7 +144,7 @@ int tremppi_correlations(int argc, char ** argv) {
 
 
 	try {
-		PythonFunctions::configure("bias");
+		PythonFunctions::configure("correlations");
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 6);
