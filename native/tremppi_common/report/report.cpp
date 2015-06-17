@@ -23,7 +23,7 @@ Json::Value Report::createSetup() {
 string Report::reformName(string name) {
 	switch (name[0]) {
 		case 'B':
-			return regex_replace(name, regex("C_(.*)"), "Bias($1)");
+			return regex_replace(name, regex("B_(.*)"), "Bias($1)");
 		case 'C':
 			return regex_replace(name, regex("C_(.*)"), "Cost($1)");
 		case 'E':

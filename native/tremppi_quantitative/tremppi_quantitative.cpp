@@ -10,7 +10,6 @@
 struct ComputedData {
 	string name;
 	size_t count;
-	double portion;
 	double min;
 	double max;
 	double mean;
@@ -34,7 +33,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 
 		// Read filter conditions
 		out = Report::createSetup();
-		
+
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read regulatory information
@@ -54,7 +53,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.push_back(ComputedData{ column.second, 0, 0, numeric_limits<double>::max(), -1 * numeric_limits<double>::max(), 0 });
+			results.push_back(ComputedData{ column.second, 0, numeric_limits<double>::max(), -1 * numeric_limits<double>::max(), 0 });
 		}
 	}
 	catch (exception & e) {
@@ -73,27 +72,30 @@ int tremppi_quantitative(int argc, char ** argv) {
 		// Read the data
 		for (auto row : group_qry) {
 			for (int i = 0; i < group_qry.column_count(); i++) {
-				if (row.column_type(i) != SQLITE_NULL) {
-					double val;
-					if (row.column_type(i) == SQLITE_INTEGER) {
-						val = row.get<int>(i);
-					} else if (row.column_type(i) == SQLITE_FLOAT) {
-						val = row.get<double>(i);
-					}
-					results[i].count++;
-					results[i].min = min(results[i].min, val);
-					results[i].max = max(results[i].max, val);
-					results[i].mean += val;
+				if (row.column_type(i) == SQLITE_NULL) {
+					throw runtime_error(string("A null valued entry in the column ") + group_qry.column_name(i));
 				}
-			}
-			logging.step();
-		}
 
-		// Compute remaning values
-		for (ComputedData & result : results) {
-			result.portion = static_cast<double>(result.count) / row_count;
-			if (result.count > 0) {
-				result.mean = result.mean / result.count;
+				double val;
+				if (row.column_type(i) == SQLITE_INTEGER) {
+					val = row.get<int>(i);
+				}
+				else if (row.column_type(i) == SQLITE_FLOAT) {
+					val = row.get<double>(i);
+				}
+				if (val != 0) {
+					results[i].count++;
+				}
+				results[i].min = min(results[i].min, val);
+				results[i].max = max(results[i].max, val);
+				results[i].mean += val;
+
+				logging.step();
+			}
+
+			// Compute mean
+			for (ComputedData & result : results) {
+				result.mean = result.mean / row_count;
 			}
 		}
 	}
@@ -108,18 +110,10 @@ int tremppi_quantitative(int argc, char ** argv) {
 		for (ComputedData & result : results) {
 			Json::Value result_node;
 			result_node["name"] = Report::reformName(result.name);
-            result_node["count"] = static_cast<Json::Value::UInt>(result.count);
-			result_node["portion"] = result.portion;
-			if (result.count == 0) {
-				result_node["min"] = "NaN";
-				result_node["max"] = "NaN";
-				result_node["mean"] = "NaN";
-			}
-			else {
-				result_node["min"] = result.min;
-				result_node["max"] = result.max;
-				result_node["mean"] = result.mean;
-			}
+			result_node["count"] = static_cast<Json::Value::UInt>(result.count);
+			result_node["min"] = result.min;
+			result_node["max"] = result.max;
+			result_node["mean"] = result.mean;
 			out["records"].append(result_node);
 		}
 	}
@@ -130,7 +124,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Writing output.";
 
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH/ "quantitative" / (out["setup"]["s_name"].asString() + ".json"), out);
+		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "quantitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
 	catch (exception & e) {
 		logging.exceptionMessage(e, 5);

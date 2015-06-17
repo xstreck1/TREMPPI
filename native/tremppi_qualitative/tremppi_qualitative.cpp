@@ -60,7 +60,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 	try {
 		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
-			results.emplace_back(ComputedQual{ column.second, { {"null", 0} } });
+			results.emplace_back(ComputedQual{ column.second, { } });
 		}
 	}
 	catch (exception & e) {
@@ -81,8 +81,9 @@ int tremppi_qualitative(int argc, char ** argv) {
 		for (auto row : group_qry) {
 			for (int i = 0; i < group_qry.column_count(); i++) {
 				if (row.column_type(i) == SQLITE_NULL) {
-					results[i].values["null"]++;
-				} else if (row.column_type(i) == SQLITE_INTEGER) {
+					throw runtime_error(string("A null valued entry in the column ") + group_qry.column_name(i));
+				}
+				else if (row.column_type(i) == SQLITE_INTEGER) {
 					incrementOccurence(to_string(row.get<int>(i)), results[i].values);
 				} else if (row.column_type(i) == SQLITE_FLOAT) {
 					incrementOccurence(to_string(row.get<double>(i)), results[i].values);
