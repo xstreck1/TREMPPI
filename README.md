@@ -3,15 +3,17 @@ TREMPPI
 
 Toolkit for Reverse Engineering of Molecular Pathways through Parameter Identification
 
-THIS IS A DEVELOPMENT VERSION. To use the release version, visit: http://esther.fi.muni.cz .
+*FOR USERS: SEE WIKI*
 
-3rd party C++ libraries included (see the directory for the specific licence): 
+3rd party content
+-----------------
+C++ libraries included (see the directory for the specific licence): 
 
 * sqlite3: http://www.sqlite.org/ 
 * sqlite3pp: https://github.com/iwongu/sqlite3pp/
 * json (JsonCPP): http://sourceforge.net/projects/jsoncpp/ 
 
-3rd party JS libraries included (open-source)
+JS libraries included (open-source):
 
 * jQuery: http://jqueryui.com/
 * jQueryUI: http://jqueryui.com/
@@ -35,6 +37,3 @@ Optional:
 
 * Qt5 libraries (or higher) 
 * GTest 1.7.0 (or higher) - only for testing
-
-USAGE
-=====
