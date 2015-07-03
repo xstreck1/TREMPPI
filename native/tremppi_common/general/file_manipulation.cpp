@@ -27,7 +27,7 @@ void FileManipulation::copyDir(bfs::path const & source, bfs::path const & desti
 		{
 			// Found directory: Recursion
 			copyDir(current, destination / current.filename());
-		}
+		}
 		else 
 		{
 			// Found file: Copy
