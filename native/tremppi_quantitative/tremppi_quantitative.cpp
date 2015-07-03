@@ -29,7 +29,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	map<size_t, string> columns;
 	const vector<string> prefixes = { "K", "C", "R", "E", "B", "I" };
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
+		DEBUG_LOG << "Parsing data.";
 
 		// Read filter conditions
 		out = Report::createSetup();
@@ -51,7 +51,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 
 	vector<ComputedData> results;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
+		DEBUG_LOG << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
 			results.push_back(ComputedData{ column.second, 0, numeric_limits<double>::max(), -1 * numeric_limits<double>::max(), 0 });
 		}
@@ -63,9 +63,9 @@ int tremppi_quantitative(int argc, char ** argv) {
 	const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);
 	try {
 
-		BOOST_LOG_TRIVIAL(info) << "Reading the values, computing the statistics.";
+		DEBUG_LOG << "Reading the values, computing the statistics.";
 
-		logging.newPhase("Harvesting component", row_count);
+		logging.newPhase("Reading row", row_count);
 
 		sqlite3pp::query group_qry = DatabaseReader::selectionFilter(columns, out["setup"]["select"].asString(), db);
 
@@ -90,8 +90,8 @@ int tremppi_quantitative(int argc, char ** argv) {
 				results[i].max = max(results[i].max, val);
 				results[i].mean += val;
 
-				logging.step();
 			}
+			logging.step();
 
 			// Compute mean
 			for (ComputedData & result : results) {
@@ -104,7 +104,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Building the JSON file.";
+		DEBUG_LOG << "Building the JSON file.";
 		// For each graph create the graph data and add configuration details
 
 		for (ComputedData & result : results) {
@@ -122,7 +122,7 @@ int tremppi_quantitative(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Writing output.";
+		DEBUG_LOG << "Writing output.";
 
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "quantitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
