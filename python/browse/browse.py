@@ -29,7 +29,7 @@ if args.port is not None:
     port = args.port
 else:
     port = default_port
-replace_regex(join(DEST_PATH, "configure.js"), "server_port: \\d*", "server_port: " + port)
+replace_regex("configure.js", "server_port: \\d*", "server_port: " + port)
 server = HTTPServer(('', int(port)), TremppiServer)
 webbrowser.open("http://localhost:" + port + "/index.html")
 

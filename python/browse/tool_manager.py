@@ -2,7 +2,6 @@ __author__ = 'adams_000'
 
 import subprocess
 
-
 class ToolManager:
     _commands = []
     _subprocess = {}
