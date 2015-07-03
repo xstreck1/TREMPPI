@@ -10,7 +10,9 @@
 
 #include "model.hpp"
 
-namespace ModelTranslators {
+
+namespace ModelTranslators 
+{
 	/**
 	 * @brief findID  obtain ID of the component.
 	 */

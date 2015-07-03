@@ -5,18 +5,24 @@
 
 #include "run_script.hpp"
 
-int run_script(const string command, int argc, char ** argv) {
+
+int run_script(const string command, int argc, char ** argv) 
+{
 	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_python", argc, argv);
 
 	// Check if the script exists
 	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
-	if (!bfs::exists(file_path)) {
+
+	if (!bfs::exists(file_path)) 
+	{
 		cerr << file_path.string() << " is called, but does not exist.";
 		return 1;
 	}
 
 	wchar_t ** wargv = new wchar_t*[argc];
-	for (int i : crange(argc)) {
+
+	for (int i : crange(argc)) 
+	{
 		wargv[i] = new wchar_t[strlen(argv[i]) + 1];
 		mbstowcs(wargv[i], argv[i], strlen(argv[i]) + 1);
 	}
@@ -45,18 +51,26 @@ int run_script(const string command, int argc, char ** argv) {
 	return 0;
 }
 
-int tremppi_init(int argc, char ** argv) {
+
+int tremppi_init(int argc, char ** argv) 
+{
 	return run_script("init", argc, argv);
 }
 
-int tremppi_browse(int argc, char ** argv) {
+
+int tremppi_browse(int argc, char ** argv) 
+{
 	return run_script("browse", argc, argv);
 }
 
-int tremppi_configure(int argc, char ** argv) {
+
+int tremppi_configure(int argc, char ** argv) 
+{
 	return run_script("configure", argc, argv);
 }
 
-int tremppi_update(int argc, char ** argv) {
+
+int tremppi_update(int argc, char ** argv) 
+{
 	return run_script("update", argc, argv);
 }

@@ -9,21 +9,24 @@
 /// Model stores model data in the raw form, almost the same as in the model file itself.
 /// Model data can be set only form the ModelParser object.
 /// Rest of the code can access the data only via constant getters - once the data are parse, model remains constant.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-struct Model {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+struct Model 
+{
 	NO_COPY(Model);
 
 	struct ModelComp;
-
-	struct Regulation {
+
+	struct Regulation 
+	{
 		CompID s_ID; ///< A reference to the source component.
 		ActLevel threshold; ///< Level of the regulator required for the regulation to be active.
 		string label; ///< An edge semantics label, if provided.
 	};
 	typedef vector<Regulation> Regulations;
 
-	/// Structure that holds data about a single component. Most of the data is equal to that in the model file.
-	struct ModelComp {
+	/// Structure that holds data about a single component. Most of the data is equal to that in the model file.
+	struct ModelComp 
+	{
 		CompID ID; ///< Numerical id, lexicographically ordered.
 		string name; ///< Actuall name of the specie.
 		ActLevel max_activity; ///< Maximal activation level of the specie.

@@ -15,27 +15,31 @@
 /// - Checks for correctness of a model.
 /// - Produces a database of parametrizations based on the model.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_spawn(int argc, char ** argv) {
+int tremppi_spawn(int argc, char ** argv)
+{
 	bpo::variables_map po = TremppiSystem::initiate<SpawnOptions>("tremppi_spawn", argc, argv);
 	Logging logging;
 	bfs::path database_file = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
 
 	// Check the file
 	Json::Value root; // root of the network
-	try {
+	try
+	{
 		DEBUG_LOG << "Checking the JSON correctness.";
 
 		root = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / NETWORK_FILENAME);
 
 		SyntaxChecker::controlSemantics(root);
 	}
-	catch (exception & e) {
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 2);
 	}
 
 	// Parse the model 
 	Model model;
-	try {
+	try
+	{
 		DEBUG_LOG << "Parsing the network.";
 
 		model = ModelReader::jsonToModel(root);
@@ -44,41 +48,49 @@ int tremppi_spawn(int argc, char ** argv) {
 		if (model.components.empty())
 			throw runtime_error("No components found in the model.");
 	}
-	catch (exception & e) {
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 3);
 	}
 
 	// Obtain the kinetics
 	Kinetics kinetics;
-	try {
+	try
+	{
 		DEBUG_LOG << "Obtaining kinetics.";
 
 		kinetics.components = ParameterBuilder::build(model);
 		// First build-check
 		ParametrizationsBuilder::build(true, model, kinetics);
 	}
-	catch (exception & e) {
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 4);
 	}
 
 	// Skip further execution if only conducting a check
-	if (po.count("check-only") > 0) {
+	if (po.count("check-only") > 0)
+	{
 		DEBUG_LOG << "Check-only specified, skipping the enumeration.";
 		return 0;
 	}
 
 	// Build parametrizations (in full this time)
-	try {
+	try
+	{
 		ParametrizationsBuilder::build(false, model, kinetics);
 	}
-	catch (exception & e) {
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 5);
 	}
 
 	// Output the database
-	try {
+	try
+	{
 		DEBUG_LOG << "Creating the database file.";
-		if (bfs::exists(database_file)) {
+		if (bfs::exists(database_file))
+		{
 			WARNING_LOG << "Database file " << database_file.string() << " already exists, erasing.";
 		}
 		bfs::remove(database_file);
@@ -89,7 +101,8 @@ int tremppi_spawn(int argc, char ** argv) {
 
 		DEBUG_LOG << "Writing the database file, in total " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
 		logging.newPhase("writing parametrization", KineticsTranslators::getSpaceSize(kinetics));
-		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++) {
+		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++)
+		{
 			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);
 			database_filler.addParametrization(parametrization);
 			logging.step();
@@ -97,15 +110,18 @@ int tremppi_spawn(int argc, char ** argv) {
 
 		database_filler.finishOutpout();
 	}
-	catch (exception & e) {
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 6);
 	}
 
-	try {
+	try
+	{
 		PythonFunctions::configure("select");
 		PythonFunctions::configure("properties");
 	}
-	catch (exception & e) {
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 7);
 	}
 

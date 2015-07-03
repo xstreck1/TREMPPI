@@ -5,7 +5,9 @@
 #include "property_info.hpp"
 
 /// Single labelled transition from one state to another.
-struct AutTransitionion : public TransitionProperty {
+
+struct AutTransitionion : public TransitionProperty 
+{
 	Configurations _state_constr; //< Boundary on the state values in the current configuraion
 	bool _inclusive; //< If true, only the states that match the condition are allows, if false, only those that do not
 	vector<PathCons> _path_constr; //< Contraints on trainsitions from this state (ordered by components)
@@ -21,7 +23,9 @@ using AutState = AutomatonStateProperty<AutTransitionion>;
 /// AutomatonStructure stores Buchi automaton with edges labelled by values the KS can be in for the transition to be allowed.
 /// AutomatonStructure data can be set only from the AutomatonStructureBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-struct AutomatonStructure : public AutomatonInterface<AutState> {
+
+struct AutomatonStructure : public AutomatonInterface<AutState> 
+{
 	Configurations _init_constr;
 	Configurations _acc_constr;
 

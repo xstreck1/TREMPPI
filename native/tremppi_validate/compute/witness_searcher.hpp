@@ -12,7 +12,9 @@
 /// Class executes a search through the synthetized space in order to find transitions included in shortest paths for every parametrization.
 /// Procedure is supposed to be first executed and then it can provide results.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class WitnessSearcher {
+
+class WitnessSearcher 
+{
 	const ProductStructure & product; ///< Product reference for state properties.
 
 	CheckerSetting settings;

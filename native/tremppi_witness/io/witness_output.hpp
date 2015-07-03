@@ -3,22 +3,30 @@
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
 
-namespace WitnessOutput {
+
+namespace WitnessOutput 
+{
 	inline string remStep(const string & state) {
 		return state.substr(0, state.find("-"));
 	}
 
-	inline string getStep(const string & state) {
+
+	inline string getStep(const string & state) 
+	{
 		return state.substr(state.find("-") + 1);
 	}
 
-	Json::Value convert(const set<pair<string, string>> & transitions) {
+
+	Json::Value convert(const set<pair<string, string>> & transitions) 
+	{
 		Json::Value elements;
 
 		// Add transitions
 		Json::Value & edges = elements["edges"];
 		set<string> states;
-		for (const pair<string, string> & transition : transitions) {
+
+		for (const pair<string, string> & transition : transitions) 
+		{
 			Json::Value edge;
 			edge["data"]["id"] = to_string(elements["edges"].size());
 			edge["data"]["source"] = remStep(transition.first);
@@ -31,7 +39,9 @@ namespace WitnessOutput {
 
 		// Add nodes
 		Json::Value & nodes = elements["nodes"];
-		for (const string & state : states) {
+
+		for (const string & state : states) 
+		{
 			Json::Value node;
 			node["data"]["id"] = state;
 			nodes.append(node);

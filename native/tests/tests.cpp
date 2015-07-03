@@ -12,7 +12,8 @@
 #include "quantitative_tests.hpp"
 #include "qualitative_tests.hpp"
 
-TEST(CoreTest, AllPrograms) {
+TEST(CoreTest, AllPrograms)
+{
 	bfs::remove_all(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT);
 	ASSERT_EQ(0, basic_init_test()) << "Basic content test initiation failed.";
 	ASSERT_EQ(0, basic_spawn_test()) << "Basic content test spawn failed.";
@@ -30,7 +31,8 @@ TEST(CoreTest, AllPrograms) {
 	cout << endl;
 }
 
-int tremppi_test(int argc, char** argv) {
+int tremppi_test(int argc, char** argv)
+{
 	TremppiSystem::initiate<ProgramOptions>("tremppi_test", argc, argv);
 
 	::testing::InitGoogleTest(&argc, argv);

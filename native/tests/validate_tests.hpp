@@ -7,7 +7,8 @@
 int tremppi_validate(int, char**);
 
 // Print the basic model
-void createProperties(const bfs::path & example_model_path) {
+void createProperties(const bfs::path & example_model_path)
+{
 	Json::Value root;
 	Json::Value & records = root["records"];
 	records.resize(2);
@@ -42,7 +43,8 @@ void createProperties(const bfs::path & example_model_path) {
 	data_file << data;
 }
 
-int basic_validate_test() {
+int basic_validate_test() 
+{
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	createProperties(arguments[1]);
@@ -52,7 +54,8 @@ int basic_validate_test() {
 	return res;
 }
 
-TEST_F(ValidateTest, Construction) {
+TEST_F(ValidateTest, Construction)
+{
 	auto bounds = ConstructionManager::getBounds(r_negative_loop, a_spike_on_A);
 	ASSERT_EQ(1, get<0>(bounds).size());
 	EXPECT_EQ(0, get<0>(bounds)[0]) << "Min is 0";
@@ -101,7 +104,8 @@ TEST_F(ValidateTest, Construction) {
 	EXPECT_EQ(2, p._states[1]._transitions[0]._t_ID);
 }
 
-TEST_F(ValidateTest, SteadyStates) {
+TEST_F(ValidateTest, SteadyStates)
+{
 	ProductStructure p_unreagulated_is_steady;
 	ConstructionManager::construct(r_unregulated, a_is_steady, p_unreagulated_is_steady);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);
@@ -111,7 +115,8 @@ TEST_F(ValidateTest, SteadyStates) {
 	EXPECT_DOUBLE_EQ(1, get<2>(results)) << "Robustnes should be 1";
 }
 
-TEST_F(ValidateTest, BasicValidation) {
+TEST_F(ValidateTest, BasicValidation)
+{
 	ProductStructure p_two_circuit_spike_on_A;
 	ConstructionManager::construct(r_two_circuit, a_spike_on_A, p_two_circuit_spike_on_A);
 	AnalysisManager a_two_circuit_spike_on_A(p_two_circuit_spike_on_A, INF, true, true);
@@ -122,7 +127,8 @@ TEST_F(ValidateTest, BasicValidation) {
 	EXPECT_DOUBLE_EQ(0.5, get<2>(results)) << "Robustnes 1---deterministic path from one of two initials.";
 }
 
-TEST_F(ValidateTest, CycleProperty) {
+TEST_F(ValidateTest, CycleProperty)
+{
 	ProductStructure p_unreagulated_is_steady;
 	ConstructionManager::construct(r_negative_loop, a_cycle_on_A, p_unreagulated_is_steady);
 	AnalysisManager a_unreagulated_is_steady(p_unreagulated_is_steady, INF, true, true);

@@ -7,9 +7,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Functions that read a JSON file into a model.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace ModelReader {
+
+namespace ModelReader 
+{
 	// Konvert model in JSON to Model object
-	Model jsonToModel(const Json::Value & elements) {
+
+	Model jsonToModel(const Json::Value & elements) 
+	{
 		Model model;
 
 		CompID ID = 0;
@@ -20,7 +24,9 @@ namespace ModelReader {
 
 		string last_name = "";
 		map<string, string> id_to_name;
-		for (const Json::Value node : elements["nodes"]) {
+
+		for (const Json::Value node : elements["nodes"]) 
+		{
 			Model::ModelComp specie;
 			
 			specie.name = node["data"]["Name"].asString();
@@ -35,15 +41,21 @@ namespace ModelReader {
 
 			model.components.emplace_back(move(specie));
 		}
-		sort(WHOLE(model.components), [](const Model::ModelComp & A, const Model::ModelComp & B) {
+
+		sort(WHOLE(model.components), [](const Model::ModelComp & A, const Model::ModelComp & B) 
+		{
 			return A.ID < B.ID;
 		});
 
-		for (const Json::Value edge : elements["edges"]) {
+
+		for (const Json::Value edge : elements["edges"]) 
+		{
 			const CompID source_id = ModelTranslators::findID(model, id_to_name[edge["data"]["source"].asString()]);
 			const CompID target_id = ModelTranslators::findID(model, id_to_name[edge["data"]["target"].asString()]);
 
-			Model::Regulation regulation{
+
+			Model::Regulation regulation
+			{
 				source_id,
 				static_cast<ActLevel>(edge["data"]["Threshold"].asInt()),
 				label_list.at(edge["data"]["Label"].asString())

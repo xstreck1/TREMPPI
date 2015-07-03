@@ -3,8 +3,9 @@
 #include "../header.h"
 #include "../network/definitions.hpp"
 #include "common_functions.hpp"
-
-namespace DataConv {
+
+namespace DataConv 
+{
 	//
 	pair<size_t, size_t> indices2range(const map<size_t, string> & columns);
 

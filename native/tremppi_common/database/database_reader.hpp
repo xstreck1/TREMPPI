@@ -5,8 +5,9 @@
 #include "../general/data_conv.hpp"
 #include "sqlite3pp_func.hpp"
 
-/// Reads parametrizations form given file
-class DatabaseReader {
+/// Reads parametrizations form given file
+class DatabaseReader 
+{
 	const string NAMES_COLUMN = "Name";
 	const string MAX_LEVEL_COLUMN = "MaxActivity";
 	const string REGULATOR_COLUMN = "Source";

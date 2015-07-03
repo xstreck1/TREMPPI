@@ -11,8 +11,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_witness.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_witness(int argc, char ** argv) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int tremppi_witness(int argc, char ** argv) 
+{
 	bpo::variables_map po = TremppiSystem::initiate<WitnessOptions>("tremppi_witness", argc, argv);
 	Logging logging;
 
@@ -20,8 +21,9 @@ int tremppi_witness(int argc, char ** argv) {
 	Json::Value properties;
 	RegInfos reg_infos;
 	sqlite3pp::database db;
-	// Obtain data
-	try {
+	// Obtain data
+	try 
+	{
 		DEBUG_LOG << "Parsing data.";
 
 		// Create setup
@@ -39,54 +41,64 @@ int tremppi_witness(int argc, char ** argv) {
 		for (const string & comp_name : DataInfo::getAllNames(reg_infos))
 			out["setup"]["components"].append(comp_name);
 
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 2);
 	}
 
 
 	// Obtain the nodes and write to the the set
 	set<pair<string, string>> transitions;
-	WitnessReader wit_reader;
-	try {
+	WitnessReader wit_reader;
+	try 
+	{
 		DEBUG_LOG << "Loading witnesses.";
 		logging.newPhase("computing witness", properties.size());
-
-		for (const auto & property : properties["records"]) {
-			// If selected
-			if (property["validate"].asBool()) {
+
+		for (const auto & property : properties["records"]) 
+		{
+			// If selected
+			if (property["validate"].asBool()) 
+			{
 				const string name = property["name"].asString();
 				out["setup"]["properties"] = out["setup"]["properties"].asString() + name + ",";
 
 				wit_reader.select(name, out["setup"]["select"].asString(), db);
-				// Read transitions
-				while (wit_reader.next()) {
+				// Read transitions
+				while (wit_reader.next()) 
+				{
 					set<pair<string, string>> new_transitions = wit_reader.getWitness();
 					transitions.insert(WHOLE(new_transitions));
 				}
 			}
 			logging.step();
 		}
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 3);
 	}
-
-	try {
+
+	try 
+	{
 		DEBUG_LOG << "Converting to JSON";
 
 		out["elements"] = WitnessOutput::convert(transitions);
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 4);
 	}
 
-	// Output 
-	try {
+	// Output 
+	try 
+	{
 		DEBUG_LOG << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "witness" / (TimeManager::getTimeStamp() + ".json"), out);
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 5);
 	}
 

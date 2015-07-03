@@ -2,8 +2,9 @@
 
 #include "common_tests_data.hpp"
 
-// Print the basic model
-void createModel(const bfs::path & example_model_path) {
+// Print the basic model
+void createModel(const bfs::path & example_model_path) 
+{
 	Json::Value root;
 	root["nodes"].resize(2);
 	root["nodes"][0]["data"]["Name"] = "A";
@@ -27,8 +28,9 @@ void createModel(const bfs::path & example_model_path) {
 	string data = writer.write(root);
 	data_file << data;
 }
-
-void createSelect(const bfs::path & example_model_path) {
+
+void createSelect(const bfs::path & example_model_path) 
+{
 	Json::Value all;
 	all["recid"] = 0;
 	all["name"] = "all";
@@ -41,8 +43,9 @@ void createSelect(const bfs::path & example_model_path) {
 	string data = writer.write(root);
 	data_file << data;
 }
-
-int basic_spawn_test() {
+
+int basic_spawn_test() 
+{
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	createModel(arguments[1]);

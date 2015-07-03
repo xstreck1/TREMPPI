@@ -1,22 +1,32 @@
 #include "construction_manager.hpp"
 
-tuple<Levels, Levels, Levels> ConstructionManager::getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info) {
+
+tuple<Levels, Levels, Levels> ConstructionManager::getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info) 
+{
 	tuple<Levels, Levels, Levels> result(tuple<Levels, Levels, Levels>{ Levels(reg_infos.size()), Levels(reg_infos.size()), Levels(reg_infos.size()) });
 	// Lower bound (min 0)
-	transform(WHOLE(reg_infos), begin(get<0>(result)), [&property_info](const RegInfo & reg_info) {
+
+	transform(WHOLE(reg_infos), begin(get<0>(result)), [&property_info](const RegInfo & reg_info) 
+	{
 		if (property_info.bounds.count(reg_info.name) > 0) {
 			return property_info.bounds.at(reg_info.name).first;
 		}
-		else {
+
+		else 
+		{
 			return static_cast<ActLevel>(0);
 		}
 	});
 	// Upper bound (max max_activity)
-	transform(WHOLE(reg_infos), begin(get<1>(result)), [&property_info](const RegInfo & reg_info) {
+
+	transform(WHOLE(reg_infos), begin(get<1>(result)), [&property_info](const RegInfo & reg_info) 
+	{
 		if (property_info.bounds.count(reg_info.name) > 0) {
 			return property_info.bounds.at(reg_info.name).second;
 		}
-		else {
+
+		else 
+		{
 			return reg_info.max_activity;
 		}
 	});
@@ -25,7 +35,9 @@ tuple<Levels, Levels, Levels> ConstructionManager::getBounds(const RegInfos & re
 	return result;
 }
 
-void ConstructionManager::construct(const RegInfos & reg_infos, const PropertyInfo & property_info, ProductStructure & product) {
+
+void ConstructionManager::construct(const RegInfos & reg_infos, const PropertyInfo & property_info, ProductStructure & product) 
+{
 	UnparametrizedStructure unparametrized_structure;
 	AutomatonStructure automaton;
 

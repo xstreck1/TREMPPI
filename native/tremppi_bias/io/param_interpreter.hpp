@@ -2,9 +2,11 @@
 
 #include <tremppi_common/network/definitions.hpp>
 
-namespace PInterpreter {
+namespace PInterpreter
+{
 	// Obtain maximal activity levels in each of the functions
-	Levels getMaxes(const Configurations & params) {
+	Levels getMaxes(const Configurations & params)
+	{
 		Levels maxes;
 
 		if (params.empty())
@@ -12,7 +14,8 @@ namespace PInterpreter {
 
 		// Obtain maxes
 		maxes = Levels(params[0].size(), 0);
-		rng::for_each(params, [&maxes](const Levels & param) {
+		rng::for_each(params, [&maxes](const Levels & param)
+		{
 			for (int i : cscope(param)) {
 				maxes[i] = max(maxes[i], param[i]);
 			}

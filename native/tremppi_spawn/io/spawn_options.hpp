@@ -7,10 +7,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief User options interpretation. Parses the options, terminates on --version and --help.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class SpawnOptions : public ProgramOptions {
+
+class SpawnOptions : public ProgramOptions 
+{
 public:
 	/* Parse the program options - if help or version is required, terminate the program immediatelly. */
-	bpo::variables_map parseProgramOptions(int argc, char ** argv) {
+
+	bpo::variables_map parseProgramOptions(int argc, char ** argv) 
+	{
 		visible.add_options()
 			("check-only,c", "do not create a database and only verify the file syntax");
 

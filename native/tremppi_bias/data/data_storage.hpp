@@ -2,8 +2,9 @@
 
 #include <tremppi_common/network/definitions.hpp>
 
-// The information for the regulatory network
-struct FunData {
+// The information for the regulatory network
+struct FunData 
+{
 	// Info about this component
 	const RegInfo & info;
 	// Statistical data

@@ -4,13 +4,17 @@
 
 #include "common_tests_data.hpp"
 
-class ValidateTest : public CommonTest {
+
+class ValidateTest : public CommonTest 
+{
 protected:
 	PropertyInfo a_spike_on_A;
 	PropertyInfo a_is_steady;
 	PropertyInfo a_cycle_on_A;
 
-	void SetUp() override {
+
+	void SetUp() override 
+	{
 		CommonTest::SetUp();
 
 		a_spike_on_A.name = "spike_on_A";

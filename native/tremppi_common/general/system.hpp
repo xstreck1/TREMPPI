@@ -4,7 +4,9 @@
 #include "time_manager.hpp"
 
 // The global setup for Tremppi apps - mainly sets paths to the executables and data
-namespace TremppiSystem {
+
+namespace TremppiSystem 
+{
 	//
 	void set(const char * name, const char * arg, const string & _WORK_PATH);
 
@@ -18,12 +20,16 @@ namespace TremppiSystem {
 
 	//
 	template<typename OptionsT>
-	bpo::variables_map initiate(const string & name, int argc, char **argv) {
+
+	bpo::variables_map initiate(const string & name, int argc, char **argv) 
+	{
 		bpo::variables_map po;
 
 		TimeManager::setStartTime();
 
-		try {
+
+		try 
+		{
 			if (argc < 1)
 				throw runtime_error("No parameters.");
 			OptionsT options;
@@ -31,7 +37,9 @@ namespace TremppiSystem {
 
 			TremppiSystem::set(name.c_str(), argv[0], po["path"].as<string>());
 		}
-		catch (exception & e) {
+
+		catch (exception & e) 
+		{
 			cerr << e.what() << endl;
 			exit(1);
 		}

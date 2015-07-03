@@ -12,19 +12,27 @@
 ///
 /// This construction may be optimized by including the warm-start constraint satisfaction.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ParametrizationsBuilder {
+
+class ParametrizationsBuilder 
+{
 	/**
 	* @brief isSubordinate returns true if the current context is the same as the compared context only with a higher activity value in specificed regulator.
 	*/
-	static bool isSubordinate(const vector<Model::Regulation> &reguls, const Kinetics::Param &current, const Kinetics::Param &compare, const CompID source_ID) {
+
+	static bool isSubordinate(const vector<Model::Regulation> &reguls, const Kinetics::Param &current, const Kinetics::Param &compare, const CompID source_ID) 
+	{
 		for (const Model::Regulation & regul : reguls) {
 			// All the regulations must have the same requirements, except for the one with the specified source, which must connect on the value.
-			if (regul.s_ID != source_ID) {
+
+			if (regul.s_ID != source_ID) 
+			{
 				if (current.requirements.find(regul.s_ID)->second.back() != compare.requirements.find(regul.s_ID)->second.back()) {
 					return false;
 				}
 			}
-			else if (current.requirements.find(regul.s_ID)->second.front() != compare.requirements.find(regul.s_ID)->second.back() + 1) {
+
+			else if (current.requirements.find(regul.s_ID)->second.front() != compare.requirements.find(regul.s_ID)->second.back() + 1) 
+			{
 				return false;
 			}
 
@@ -35,12 +43,16 @@ class ParametrizationsBuilder {
 	/**
 	* Return true if the given parameter's context is dependent on the given regulation.
 	*/
-	static bool containsRegulation(const Kinetics::Param &param_data, const Model::Regulation &regul) {
+
+	static bool containsRegulation(const Kinetics::Param &param_data, const Model::Regulation &regul) 
+	{
 		return param_data.requirements.find(regul.s_ID)->second.front() == regul.threshold;
 	}
 
 	/* initial constraining of the values to the predefined ones */
-	static string addAllowed(const Levels &targets, const string & context) {
+
+	static string addAllowed(const Levels &targets, const string & context) 
+	{
 		string result = "ff ";
 
 		// Add only present values
@@ -51,12 +63,18 @@ class ParametrizationsBuilder {
 	}
 
 	/* Create an expression based on the conditions obtained from the edge label */
-	static string replaceInLabel(const string & label, const string & plus, const string & minus) {
+
+	static string replaceInLabel(const string & label, const string & plus, const string & minus) 
+	{
 		string result = label;
 
-		auto replace = [&result](const char symbol, const string & formula) -> void {
+
+		auto replace = [&result](const char symbol, const string & formula) -> void 
+		{
 			size_t pos = result.find(symbol);
-			while (pos != result.npos) {
+
+			while (pos != result.npos) 
+			{
 				result.replace(pos, 1, formula);
 				pos = result.find(symbol);
 			}
@@ -69,11 +87,17 @@ class ParametrizationsBuilder {
 	}
 
 	/* For each regulation create a constraint corresponding to its label */
-	static void createEdgeCons(const vector<Model::Regulation> & reguls, const Kinetics::Params & params, const Model::Regulation & regul, string & plus, string & minus) {
+
+	static void createEdgeCons(const vector<Model::Regulation> & reguls, const Kinetics::Params & params, const Model::Regulation & regul, string & plus, string & minus) 
+	{
 		plus = minus = "ff ";
-		for (const auto & param : params) {
+
+		for (const auto & param : params) 
+		{
 			if (containsRegulation(param, regul)) {
-				for (const auto & compare : params) {
+
+				for (const auto & compare : params) 
+				{
 					if (isSubordinate(reguls, param, compare, regul.s_ID)) {
 						plus += " | " + param.context + " > " + compare.context;
 						minus += " | " + param.context + " < " + compare.context;
@@ -83,15 +107,21 @@ class ParametrizationsBuilder {
 		}
 	}
 
-	static void addBrackets(string & formula) {
+
+	static void addBrackets(string & formula) 
+	{
 		formula = "(" + formula + ")";
 	}
 
-	static string createFormula(const vector<Model::Regulation> & reguls, const Kinetics::Params & params) {
+
+	static string createFormula(const vector<Model::Regulation> & reguls, const Kinetics::Params & params) 
+	{
 		string result = "tt ";
 
 		// Add constraints for all the regulations
-		for (auto & regul : reguls) {
+
+		for (auto & regul : reguls) 
+		{
 			string plus, minus, label;
 			createEdgeCons(reguls, params, regul, plus, minus);
 			addBrackets(plus);
@@ -102,7 +132,9 @@ class ParametrizationsBuilder {
 		}
 
 		// List all the possible target values for a parameter
-		for (auto & param : params) {
+
+		for (auto & param : params) 
+		{
 			string allowed;
 			allowed = addAllowed(param.targets, param.context);
 			addBrackets(allowed);
@@ -113,7 +145,9 @@ class ParametrizationsBuilder {
 	}
 
 	/* Create constraint space on parametrizations for the given specie and enumerate and store all the solutions. */
-	static Configurations  createPartCol(const bool check_only, const Kinetics::Params & params, const string formula, const size_t max_value) {
+
+	static Configurations  createPartCol(const bool check_only, const Kinetics::Params & params, const string formula, const size_t max_value) 
+	{
 		Configurations result;
 
 		// Build the space
@@ -127,11 +161,15 @@ class ParametrizationsBuilder {
 		cons_pars->applyFormula(names, formula);
 
 		// Enumerate if not check only
-		if (!check_only) {
+
+		if (!check_only) 
+		{
 			// Conduct search
 			Gecode::DFS<ConstraintParser> search(cons_pars);
 			delete cons_pars;
-			while (ConstraintParser *match = search.next()) {
+
+			while (ConstraintParser *match = search.next()) 
+			{
 				Levels solution = match->getSolution();
 				Levels shortened;
 				result.push_back(solution);
@@ -146,10 +184,13 @@ public:
 	/**
 	* Entry function of parsing, tests and stores subcolors for all the components.
 	*/
-	static void build(const bool check_only, const Model &model, Kinetics & kinetics) {
-		// Cycle through components
-		for (CompID ind = model.components.size(); ind > 0; --ind) {
 
+	static void build(const bool check_only, const Model &model, Kinetics & kinetics) 
+	{
+		// Cycle through components
+
+		for (CompID ind = model.components.size(); ind > 0; --ind) 
+		{
 			CompID ID = ind - 1;
 
 			// Solve the parametrizations

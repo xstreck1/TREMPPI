@@ -3,7 +3,9 @@
 #include "../data/product_structure.hpp"
 #include "../data/property_info.hpp"
 
-class CheckerSetting {
+
+class CheckerSetting 
+{
 public:
    vector<StateID> initial_states;
    vector<StateID> final_states;

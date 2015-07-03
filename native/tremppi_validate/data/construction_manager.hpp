@@ -11,7 +11,9 @@
 /// ConstructionManager overviews the whole process of construction of structures from information contained within a model file.
 /// All the objects constructed are stored within a provided CostructionHolder and further acessible only via constant getters.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace ConstructionManager {
+
+namespace ConstructionManager 
+{
 	// @return (Mins, Maxes, Range)
 	tuple<Levels, Levels, Levels> getBounds(const RegInfos & reg_infos, const PropertyInfo & property_info);
 	

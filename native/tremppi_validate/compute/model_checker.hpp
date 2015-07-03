@@ -9,7 +9,9 @@
 /// ModelChecker class solves the parameter analysis problem by iterative transfer of feasible parametrizations from initial states to final ones.
 /// Functions in model checker use many supporting variables and therefore are quite long, it would not make sense to split them, though.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace ModelChecker {
+
+namespace ModelChecker 
+{
 	/**
 	* @return true if this transition is open for given parametrization
 	*/
@@ -28,16 +30,22 @@ namespace ModelChecker {
 };
 
 template <class State>
-pair<vector<StateID>, bool> ModelChecker::broadcastParameters(const Levels & parametrization, const TSInterface<State> & ts, const StateID ID) {
+
+pair<vector<StateID>, bool> ModelChecker::broadcastParameters(const Levels & parametrization, const TSInterface<State> & ts, const StateID ID) 
+{
 	vector<StateID> targets;
 	bool hell = false; ///< A transition to hell is available
 
 					   // Cycle through all the transition
-	for (const size_t trans_no : cscope(ts._states[ID])) {
+
+	for (const size_t trans_no : cscope(ts._states[ID])) 
+	{
 		StateID target_ID = ts._states[ID]._transitions[trans_no]._t_ID;
 
 		// From an update strip all the parameters that can not pass through the transition - color intersection on the transition
-		if (isOpen(parametrization, ts._states[ID]._transitions[trans_no]._trans_const)) {
+
+		if (isOpen(parametrization, ts._states[ID]._transitions[trans_no]._trans_const)) 
+		{
 			if (target_ID == INF)
 				hell = true;
 			else

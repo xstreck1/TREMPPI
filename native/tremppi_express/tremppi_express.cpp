@@ -5,8 +5,9 @@
 #include "io/express_options.hpp"
 #include "io/output.hpp"
 
-//
-int tremppi_express(int argc, char ** argv) {
+//
+int tremppi_express(int argc, char ** argv) 
+{
 	bpo::variables_map po = TremppiSystem::initiate<ExpressOptions>("tremppi_express", argc, argv);
 	Logging logging;
 
@@ -14,8 +15,9 @@ int tremppi_express(int argc, char ** argv) {
 	string select;
 	map<string, ActLevel> maxes;
 	RegFuncs functions;
-	sqlite3pp::database db;
-	try {
+	sqlite3pp::database db;
+	try 
+	{
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str() ));
 
@@ -24,25 +26,29 @@ int tremppi_express(int argc, char ** argv) {
 		DatabaseReader reader;
 		RegInfos infos = reader.readRegInfos(db);
 
-		// Obtain the components data
-		for (auto & info : infos) {
+		// Obtain the components data
+		for (auto & info : infos) 
+		{
 			Configurations minterms;
 			for (const pair<size_t, string> column : info.columns)
 				minterms.emplace_back(DataConv::getThrsFromContext(column.second));
 			functions.emplace_back(RegFunc{ move(info), move(minterms) });
 		}
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	// Convert and output
-	try {
+	// Convert and output
+	try 
+	{
 		Output::addColumns(functions, db);
 
 		logging.newPhase("Expressing component", functions.size());
-
-		for (const RegFunc & reg_func : functions) {
+
+		for (const RegFunc & reg_func : functions) 
+		{
 			// Select parametrizations and IDs
 			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
 			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
@@ -50,21 +56,24 @@ int tremppi_express(int argc, char ** argv) {
 
 			db.execute("BEGIN TRANSACTION");
 
-			// Go through parametrizations
-            for (auto sel_ID : sel_IDs) {
+			// Go through parametrizations
+            for (auto sel_ID : sel_IDs) 
+            {
 				vector<vector<PMin>> config_values(reg_func.info.max_activity + 1);
 				Levels params = sqlite3pp::func::getRow<ActLevel>(*sel_it, 0, sel_qry.column_count());
 				
-				// Convert the contexts 
-				for (const size_t context_id : cscope(params)) {
+				// Convert the contexts 
+				for (const size_t context_id : cscope(params)) 
+				{
 					PMin minterm(reg_func.minterms[context_id].size());
 					transform(WHOLE(reg_func.minterms[context_id]), begin(minterm), [](ActLevel act_level){return PLit{ act_level }; });
 					config_values[params[context_id]].emplace_back(minterm);
 				}
 
 				// Minimize for all values
-				vector<PDNF> pdnfs(1);
-				for (ActLevel target_val = 1; target_val < (reg_func.info.max_activity + 1); target_val++) {
+				vector<PDNF> pdnfs(1);
+				for (ActLevel target_val = 1; target_val < (reg_func.info.max_activity + 1); target_val++) 
+				{
 					pdnfs.emplace_back(MVQMC::compactize(config_values[target_val]));
 				}
 				
@@ -79,15 +88,18 @@ int tremppi_express(int argc, char ** argv) {
 
 			logging.step();
 		}
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 3);
-	}
-
-	try {
+	}
+
+	try
+	{
 		PythonFunctions::configure("select");
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 4);
 	}
 

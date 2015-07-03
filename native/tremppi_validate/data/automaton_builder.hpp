@@ -16,7 +16,9 @@
  /// This builder creates a basic automaton controlling property - this automaton is based on the AutomatonInterface.
  /// Automaton is provided with string labels on the edges that are parsed and resolved for the graph.
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace AutomatonBuilder {
+
+namespace AutomatonBuilder 
+{
 	// Compute allowed values from string of constrains
 	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names);
 

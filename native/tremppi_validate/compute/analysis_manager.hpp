@@ -17,7 +17,9 @@
 ///   -# analysis: computes the coloring, stored in the storage object and adds data to coloring analyzer if needed.
 ///   -# conclusion: stores additional data and outputs
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class AnalysisManager {
+
+class AnalysisManager 
+{
 	const ProductStructure & product;
 	WitnessSearcher searcher; ///< Class to build wintesses.
 	RobustnessCompute computer; ///< Class to compute robustness.

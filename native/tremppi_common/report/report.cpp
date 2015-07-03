@@ -4,8 +4,9 @@
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
-
-Json::Value Report::createSetup() {
+
+Json::Value Report::createSetup() 
+{
 	Json::Value out;
 
 	out["setup"]["date"] = TimeManager::getTime();
@@ -19,8 +20,9 @@ Json::Value Report::createSetup() {
 	return out;
 }
 
-
-string Report::reformName(string name) {
+
+string Report::reformName(string name) 
+{
 	switch (name[0]) {
 		case 'B':
 			return regex_replace(name, regex("B_(.*)"), "Bias($1)");

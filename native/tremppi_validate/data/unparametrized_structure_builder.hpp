@@ -12,7 +12,9 @@
 /// States are read from the basic structure and passed to the unparametrized structure, then the transitions are added.
 /// Each transition is supplemented with a label - mask of transitive values and the its function ID.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace UnparametrizedStructureBuilder {
+
+namespace UnparametrizedStructureBuilder 
+{
 	// Test wheather the current state corresponds to the requirements put on values of the specified species.
 	bool testRegulators(const vector<Levels> & requirements, const Levels & state_levels);
 

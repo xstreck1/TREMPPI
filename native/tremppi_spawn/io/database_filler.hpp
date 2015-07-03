@@ -7,43 +7,51 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief A class that creates and fills a database with parametrizations.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class DatabaseFiller {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class DatabaseFiller 
+{
 	const Model & model;
 	const Kinetics & kinetics;
 	sqlite3pp::database db;
 
 	bool in_output; ///< True if there is currently transaction ongoing.
-
-	void prepareTable(const string & name, const string & columns) {
+
+	void prepareTable(const string & name, const string & columns) 
+	{
 		// Drop old tables if any.
 		string drop_cmd = "DROP TABLE IF EXISTS " + name + "; ";
 		string create_cmd = "CREATE TABLE " + name + " " + columns + ";\n";
 		db.execute((drop_cmd + create_cmd).c_str());
 	}
-
-	inline string makeInsert(const string & table) {
+
+	inline string makeInsert(const string & table) 
+	{
 		return "INSERT INTO " + table + " VALUES ";
 	}
-
-	void fillComponents() {
+
+	void fillComponents() 
+	{
 		prepareTable(COMPONENTS_TABLE, "(Name TEXT, MaxActivity INTEGER)");
 
-		string update = "";
-		for (CompID t_ID : crange(model.components.size())) {
+		string update = "";
+		for (CompID t_ID : crange(model.components.size())) 
+		{
 			string values = "(\"" + model.components[t_ID].name + "\", " + to_string(model.components[t_ID].max_activity) + "); \n";
 			update += makeInsert(COMPONENTS_TABLE) + values;
 		}
 		db.execute(update.c_str());
 
 	}
-
-	void fillRegulations() {
+
+	void fillRegulations() 
+	{
 		prepareTable(REGULATIONS_TABLE, "(Source TEXT, Target TEXT, Threshold INTEGER)");
-		vector<string> updates;
-		for (CompID t_ID : crange(model.components.size())) {
-			for (auto regul : ModelTranslators::getThresholds(model, t_ID)) {
-				for (ActLevel threshold : regul.second) {
+		vector<string> updates;
+		for (CompID t_ID : crange(model.components.size())) 
+		{
+			for (auto regul : ModelTranslators::getThresholds(model, t_ID)) {
+				for (ActLevel threshold : regul.second) 
+				{
 					string values = "(";
 					values += quote(model.components[regul.first].name) + ", ";
 					values += quote(model.components[t_ID].name) + ", ";
@@ -54,13 +62,15 @@ class DatabaseFiller {
 			}
 		}
 		// Sort so the values in the db are also sorted
-		sort(WHOLE(updates));
-		for (const string & update : updates) {
+		sort(WHOLE(updates));
+		for (const string & update : updates) 
+		{
 			db.execute(update.c_str());
 		}
 	}
-
-	string getContexts() const {
+
+	string getContexts() const 
+	{
 		string contexts = "";
 		for (CompID t_ID : crange(model.components.size()))
 			for (auto & param : kinetics.components[t_ID].params)
@@ -68,45 +78,52 @@ class DatabaseFiller {
 		contexts.resize(contexts.size() - 2); // Remove ", " at the end
 		return contexts;
 	}
-
-	void fillParametrizations() {
+
+	void fillParametrizations() 
+	{
 		string columns = "(" + getContexts() + ")";
 
 		prepareTable(PARAMETRIZATIONS_TABLE, columns);
 	}
 
-public:
-	DatabaseFiller(const Model & _model, const Kinetics & _kinetics, const string & datafile_name) : model(_model), kinetics(_kinetics) {
+public:
+	DatabaseFiller(const Model & _model, const Kinetics & _kinetics, const string & datafile_name) : model(_model), kinetics(_kinetics) 
+	{
 		db = sqlite3pp::database(datafile_name.c_str());
 		in_output = false;
 	}
-
-	void creteTables() {
+
+	void creteTables() 
+	{
 		db.execute("BEGIN TRANSACTION;");
 		fillComponents();
 		fillRegulations();
 		fillParametrizations();
 		db.execute("END;");
 	}
-
-	void dropTables() {
+
+	void dropTables() 
+	{
 		const string DROP_CMD("DROP TABLE ");
 		db.execute((DROP_CMD + COMPONENTS_TABLE + ";").c_str());
 		db.execute((DROP_CMD + REGULATIONS_TABLE + ";").c_str());
 		db.execute((DROP_CMD + PARAMETRIZATIONS_TABLE + ";").c_str());
 	}
-
-	void addParametrization(const string & parametrization) {
+
+	void addParametrization(const string & parametrization) 
+	{
 		auto insert = makeInsert(PARAMETRIZATIONS_TABLE);
 		db.execute((insert + parametrization).c_str());
 	}
-
-	void startOutput() {
+
+	void startOutput() 
+	{
 		db.execute("BEGIN TRANSACTION;");
 		in_output = true;
 	}
-
-	void finishOutpout() {
+
+	void finishOutpout() 
+	{
 		if (in_output)
 			db.execute("END;");
 		in_output = false;

@@ -10,15 +10,17 @@
 
 #include "compute/compute.hpp"
 #include "io/output.hpp"
-
-int tremppi_bias(int argc, char ** argv) {
+
+int tremppi_bias(int argc, char ** argv) 
+{
 	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_bias", argc, argv);
 	Logging logging;
 
 	string select;
 	sqlite3pp::database db;
-	RegInfos reg_infos;
-	try {
+	RegInfos reg_infos;
+	try 
+	{
 		// Get database
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
 
@@ -26,24 +28,28 @@ int tremppi_bias(int argc, char ** argv) {
 
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 2);
 	}
 
 	// Label per parametrization
-	FunsData funs_data;
-	try {
+	FunsData funs_data;
+	try 
+	{
 		DEBUG_LOG << "Computing function graph data.";
-		// Add columns
-		for (const RegInfo & reg_info : reg_infos) {
+		// Add columns
+		for (const RegInfo & reg_info : reg_infos) 
+		{
 			const string column_name = "B_" + reg_info.name;
 			sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, column_name, "REAL", db);
 		}
 
 		logging.newPhase("Bias of a component", reg_infos.size());
-
-		for (const RegInfo & reg_info : reg_infos) {
+
+		for (const RegInfo & reg_info : reg_infos) 
+		{
 			// Select parametrizations and IDs
 			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, select, db);
 			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
@@ -51,8 +57,9 @@ int tremppi_bias(int argc, char ** argv) {
 
 			db.execute("BEGIN TRANSACTION");
 
-			// Go through parametrizations
-			for (auto sel_ID : sel_IDs) {
+			// Go through parametrizations
+			for (auto sel_ID : sel_IDs) 
+			{
 				Levels params = sqlite3pp::func::getRow<ActLevel>(*sel_it, 0, sel_qry.column_count());
 				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET";
 				double bias = Statistics::expected_val(params) / reg_info.max_activity;
@@ -68,30 +75,35 @@ int tremppi_bias(int argc, char ** argv) {
 
 			logging.step();
 		}
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 3);
-	}
-
-	try {
+	}
+
+	try
+	{
 		PythonFunctions::configure("select");
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 4);
 	}
 
 	return 0;
 }
-
-int tremppi_correlations(int argc, char ** argv) {
+
+int tremppi_correlations(int argc, char ** argv) 
+{
 	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_correlations", argc, argv);
 	Logging logging;
 
 	Json::Value out;
 	RegInfos reg_infos;
 	sqlite3pp::database db;
-	vector<sqlite3pp::query> queries;
-	try {
+	vector<sqlite3pp::query> queries;
+	try 
+	{
 		DEBUG_LOG << "Parsing data file.";
 		// Read filter conditions
 		out = Report::createSetup();
@@ -100,53 +112,64 @@ int tremppi_correlations(int argc, char ** argv) {
 
 		// Read regulatory information
 		DatabaseReader reader;
-		reg_infos = reader.readRegInfos(db);
-		for (const RegInfo & reg_info : reg_infos) {
-			map<size_t, string> columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("B_" + reg_info.name), db);
-			if (columns.empty()) {
+		reg_infos = reader.readRegInfos(db);
+		for (const RegInfo & reg_info : reg_infos) 
+		{
+			map<size_t, string> columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("B_" + reg_info.name), db);
+			if (columns.empty()) 
+			{
 				throw runtime_error("did not find the column B_" + reg_info.name);
 			}
 			queries.emplace_back(DatabaseReader::selectionFilter(columns, out["setup"]["select"].asString(), db));
 		}
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	FunsData funs_data;
-	try {
+	FunsData funs_data;
+	try 
+	{
 		DEBUG_LOG << "Computing function graph data.";
 
 		Compute::deviation(reg_infos, out["setup"]["size"].asInt(), queries, logging, funs_data);
 
 		Compute::correlation(reg_infos, out["setup"]["size"].asInt(), queries, logging, funs_data);
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 3);
 	}
-
-	try {
+
+	try 
+	{
 		DEBUG_LOG << "Building the JSON.";
 		out["elements"] = Output::functionalData(funs_data);
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 4);
 	}
-
-	try {
+
+	try 
+	{
 		DEBUG_LOG << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "correlations" / (out["setup"]["s_name"].asString() + ".json"), out);
 
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e) 
+	{
 		logging.exceptionMessage(e, 5);
-	}
+	}
 
-
-	try {
+
+	try
+	{
 		PythonFunctions::configure("correlations");
-	}
-	catch (exception & e) {
+	}
+	catch (exception & e)
+	{
 		logging.exceptionMessage(e, 6);
 	}
 

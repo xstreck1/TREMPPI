@@ -3,7 +3,8 @@
 #include <tremppi_common/header.h>
 using namespace std;
 
-map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
+map<string, pair<int(*)(int, char**), string> > tremppi_functions =
+{
 		{ "browse", { tremppi_browse, "open the IDE" } },
 		{ "configure", { tremppi_configure, "call to explicitly recreate data configuration files" } },
 		{ "bias", { tremppi_bias, "label parametrizations with their bias" } },
@@ -22,35 +23,42 @@ map<string, pair<int(*)(int, char**), string> > tremppi_functions = {
 };
 
 
-void printHelp() {
+void printHelp()
+{
 	cout << "tremppi command [options]" << endl;
-	for (const auto option : tremppi_functions) {
+	for (const auto option : tremppi_functions)
+	{
 		cout << "\t" << option.first << ": " << option.second.second << endl;
 	}
 	cout << "\t--help,-h: display help for the specified command or display this dialog if no command is given\n";
 }
 
 //
-int main(int argc, char ** argv) {
+int main(int argc, char ** argv)
+{
 	TremppiSystem::standalone = false;
 
-	if (argc < 2) {
+	if (argc < 2)
+	{
 		cerr << "Fatal error: No program given on the input. Usage:\n";
 		printHelp();
 		return 1;
 	}
 	string command = argv[1];
-	if (command == "--help" || command == "-h") {
+	if (command == "--help" || command == "-h")
+	{
 		printHelp();
 		return 0;
 	}
-	else if (tremppi_functions.count(command) == 0) {
+	else if (tremppi_functions.count(command) == 0)
+	{
 		cerr << "Fatal error: " << quote(command) << " is not a known program. Options are:\n";
 		printHelp();
 		return 1;
 	}
 	// Finally run the program
-	else {
+	else
+	{
 		// Move the program name to the second position instead of the command, which is forgotten 
 		argv[1] = argv[0];
 		return tremppi_functions.at(command).first(argc - 1, argv + 1);

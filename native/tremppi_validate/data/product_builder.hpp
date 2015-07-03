@@ -8,7 +8,9 @@
 /// ProductBuilder creates the an automaton corresponding to the synchronous product of BA and KS.
 /// @attention States of product are indexed as (BA_state_ID * KS_state_count + KS_state_ID) - e.g. if 4-state KS, state ((1,0)x(1)) would be at position 4*1 + 1 = 2.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace ProductBuilder {
+
+namespace ProductBuilder 
+{
 	/*
 	 * Create the copy of Unparametrized structure with the states of product with the given BA_ID. 
 	 */

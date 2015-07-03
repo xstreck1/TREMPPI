@@ -9,14 +9,16 @@
 const string TEST_FOLDER = "projects";
 const string TEST_PROJECT = "test_project";
 
-
-class CommonTest : public ::testing::Test {
+
+class CommonTest : public ::testing::Test 
+{
 protected:
 	RegInfos r_negative_loop; // A single loop on A
 	RegInfos r_unregulated; // A unregulated
 	RegInfos r_two_circuit; // A-B circuit
-
-	void SetUp() override {
+
+	void SetUp() override 
+	{
 		r_negative_loop.emplace_back(RegInfo{0,	"A", 1});
 		r_negative_loop[0].columns = map<size_t, string>{ { 0, string("K_neg_loop_A_0") }, { 1, string("K_neg_loop_A_1") } };
 		r_negative_loop[0].regulators = map<size_t, Levels>{ { 0, { 1 } } };
@@ -37,13 +39,15 @@ protected:
 		r_two_circuit[1].requirements = map<size_t, vector<Levels> >{ { 2, { { 0 }, { 0, 1 } } }, { 3, { { 1 }, { 0, 1 } } } };
 	}
 };
-
-class ArgPtr {
+
+class ArgPtr 
+{
 	int argc;
 	char ** argv;
 
-public:
-	ArgPtr(const vector<string> & values) {
+public:
+	ArgPtr(const vector<string> & values) 
+	{
 		argv = new char*[values.size() + 1];
 
 		// Add binary name
@@ -51,15 +55,17 @@ public:
 		strcpy(argv[0], TremppiSystem::BIN_PATH.string().c_str());
 
 		// Copy new arguments
-		argc = 1;
-		for (const string & val : values) {
+		argc = 1;
+		for (const string & val : values) 
+		{
 			argv[argc] = new char[val.size() + 1];
 			strcpy(argv[argc], val.c_str());
 			argc++;
 		}
 	}
-
-	~ArgPtr() {
+
+	~ArgPtr() 
+	{
 		for (int i = 0; i < argc; i++) {
 			delete[] argv[i];
 		}

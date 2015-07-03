@@ -4,7 +4,9 @@
 #include <tremppi_common/database/database_reader.hpp>
 
 // Common to all the sets of regulatory functions
-struct RegFunc {
+
+struct RegFunc 
+{
 	const RegInfo info;
 	Configurations minterms;
 };

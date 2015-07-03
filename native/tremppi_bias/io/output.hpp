@@ -1,14 +1,16 @@
 #pragma once
 #include "../data/data_storage.hpp"
-
-namespace Output {
+
+namespace Output 
+{
 	Json::Value functionalData(const FunsData & funs_data) {
 		Json::Value elements;
 
 		// Write the nodes
 		string nodes;
-		elements["nodes"].resize(0);
-		for (const FunData & fun : funs_data) {
+		elements["nodes"].resize(0);
+		for (const FunData & fun : funs_data) 
+		{
 			Json::Value node, data;
 			data["id"] = fun.info.name;
 			data["name"] = fun.info.name;
@@ -22,10 +24,12 @@ namespace Output {
 		}
 
 		// Write the edges
-		elements["edges"].resize(0);
-		for (const FunData & fun : funs_data) {
-			size_t reg_i = 0;
-			for (const int i : cscope(fun.corrs)) {
+		elements["edges"].resize(0);
+		for (const FunData & fun : funs_data) 
+		{
+			size_t reg_i = 0;
+			for (const int i : cscope(fun.corrs)) 
+			{
 				Json::Value edge, data;
 
 				data["source"] = fun.info.name;

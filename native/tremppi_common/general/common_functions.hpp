@@ -37,16 +37,18 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file A handful of handy functions.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace Common {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace Common 
+{
 	/**
 	* @brief renaming for boost::counting_range
 	* @param[in] begin  first number in the range
 	* @param[in] end    first number not in the range
 	* @return  a counting range for [begin,end[
 	*/
-	template<typename IntegralType>
-	inline auto crange(const IntegralType begin, const IntegralType end) -> decltype(boost::counting_range(begin, end)) {
+	template<typename IntegralType>
+	inline auto crange(const IntegralType begin, const IntegralType end) -> decltype(boost::counting_range(begin, end)) 
+	{
 		return boost::counting_range(begin, end);
 	}
 
@@ -55,8 +57,9 @@ namespace Common {
 	* @param[in] end    first number not in the range
 	* @return  a counting range for [0,end[
 	*/
-	template<typename IntegralType>
-	inline auto crange(const IntegralType end) -> decltype(boost::counting_range(end, end)) {
+	template<typename IntegralType>
+	inline auto crange(const IntegralType end) -> decltype(boost::counting_range(end, end)) 
+	{
 		return boost::counting_range(static_cast<IntegralType>(0), end);
 	}
 
@@ -65,8 +68,9 @@ namespace Common {
 	* @param[in] container   container whose size is in question.
 	* @return  a counting range for [0,container.size()[
 	*/
-	template<typename SeqType>
-	inline auto cscope(const SeqType & container) -> decltype(crange(container.size())) {
+	template<typename SeqType>
+	inline auto cscope(const SeqType & container) -> decltype(crange(container.size())) 
+	{
 		typedef decltype(container.size()) ContSizeT;
 		return crange(static_cast<ContSizeT>(0), container.size());
 	}
@@ -77,8 +81,9 @@ namespace Common {
 	* @param[in] end    first number not in the range
 	* @return  a vector for [begin,end[
 	*/
-	template<typename IntegralType>
-	inline std::vector<IntegralType> vrange(const IntegralType begin, const IntegralType end) {
+	template<typename IntegralType>
+	inline std::vector<IntegralType> vrange(const IntegralType begin, const IntegralType end) 
+	{
 		std::vector<IntegralType> values(end - begin);
 
 		size_t val = begin;
@@ -92,8 +97,9 @@ namespace Common {
 	* @param[in] end    first number not in the range
 	* @return  a vector for [0,end[
 	*/
-	template<typename IntegralType>
-	inline std::vector<IntegralType> vrange(const IntegralType end) {
+	template<typename IntegralType>
+	inline std::vector<IntegralType> vrange(const IntegralType end) 
+	{
 		return vrange(static_cast<IntegralType>(0), end);
 	}
 
@@ -102,8 +108,9 @@ namespace Common {
 	* @brief Increases integral value by 1.
 	* @param[in,out] val  reference to value that will be increased
 	*/
-	template<typename IntegralType>
-	void increase(typename std::vector<IntegralType>::reference val) {
+	template<typename IntegralType>
+	void increase(typename std::vector<IntegralType>::reference val) 
+	{
 		val++;
 	}
 
@@ -118,17 +125,21 @@ namespace Common {
 	* @param[in,out] iterated    vector of values to iterate
 	* @return  true if the iteration was valid, false if it caused overflow (iterated > bottom)
 	*/
-	template<typename IntegralType>
-	bool iterate(const std::vector<IntegralType> & top, const std::vector<IntegralType> & bottom, std::vector<IntegralType> & iterated) {
+	template<typename IntegralType>
+	bool iterate(const std::vector<IntegralType> & top, const std::vector<IntegralType> & bottom, std::vector<IntegralType> & iterated) 
+	{
 		if (iterated.empty())
-			return false;
-		for (size_t val_num = 0; val_num <= iterated.size(); val_num++) {
+			return false;
+		for (size_t val_num = 0; val_num <= iterated.size(); val_num++) 
+		{
 			if (val_num == iterated.size())
-				return false;
-			if (iterated[val_num] == top[val_num]) {
+				return false;
+			if (iterated[val_num] == top[val_num]) 
+			{
 				iterated[val_num] = bottom[val_num];
-			}
-			else {
+			}
+			else 
+			{
 				increase<IntegralType>(iterated[val_num]);
 				break;
 			}
@@ -142,17 +153,21 @@ namespace Common {
 	* @param[in,out] iterated    vector of values to iterate
 	* @return  true if the iteration was valid, false if it caused overflow (iterated > bottom)
 	*/
-	template<typename IntegralType>
-	bool iterate(const std::vector<std::vector<IntegralType>>  & values, std::vector<IntegralType> & iterated) {
+	template<typename IntegralType>
+	bool iterate(const std::vector<std::vector<IntegralType>>  & values, std::vector<IntegralType> & iterated) 
+	{
 		if (iterated.empty())
-			return false;
-		for (size_t val_num = 0; val_num <= iterated.size(); val_num++) {
+			return false;
+		for (size_t val_num = 0; val_num <= iterated.size(); val_num++) 
+		{
 			if (val_num == iterated.size())
-				return false;
-			if (iterated[val_num] == values[val_num].back()) {
+				return false;
+			if (iterated[val_num] == values[val_num].back()) 
+			{
 				iterated[val_num] = values[val_num].front();
-			}
-			else {
+			}
+			else 
+			{
 				iterated[val_num] = *(++find(WHOLE(values[val_num]), iterated[val_num]));
 				break;
 			}
@@ -160,14 +175,17 @@ namespace Common {
 		return true;
 	}
 
-	template<typename IntegralType>
-	bool belongsToProduct(const std::vector<IntegralType> & element, const std::vector<std::vector<IntegralType>> & sets) {
-		for (size_t set_no = 0; set_no < sets.size(); set_no++) {
-			for (size_t val_no = 0; val_no <= sets[set_no].size(); val_no++) {
+	template<typename IntegralType>
+	bool belongsToProduct(const std::vector<IntegralType> & element, const std::vector<std::vector<IntegralType>> & sets) 
+	{
+		for (size_t set_no = 0; set_no < sets.size(); set_no++) {
+			for (size_t val_no = 0; val_no <= sets[set_no].size(); val_no++) 
+			{
 				if (val_no == sets[set_no].size()) {
 					return false;
-				}
-				else if (element[set_no] == sets[set_no][val_no]) {
+				}
+				else if (element[set_no] == sets[set_no][val_no]) 
+				{
 					break;
 				}
 			}
@@ -175,11 +193,13 @@ namespace Common {
 		return true;
 	}
 
-	template<typename IntegralType>
-	std::vector<IntegralType> min(const std::vector<std::vector<IntegralType>> & values) {
+	template<typename IntegralType>
+	std::vector<IntegralType> min(const std::vector<std::vector<IntegralType>> & values) 
+	{
 		std::vector<IntegralType>  result(values.size());
-
-		for (size_t val_num = 0; val_num < values.size(); val_num++) {
+
+		for (size_t val_num = 0; val_num < values.size(); val_num++) 
+		{
 			if (values[val_num].empty()) {
 				throw std::runtime_error("Trying to obtain a lower bound of an empty product.");
 			}
@@ -189,11 +209,13 @@ namespace Common {
 		return result;
 	}
 
-	template<typename IntegralType>
-	std::vector<IntegralType> max(const std::vector<std::vector<IntegralType>> & values) {
+	template<typename IntegralType>
+	std::vector<IntegralType> max(const std::vector<std::vector<IntegralType>> & values) 
+	{
 		std::vector<IntegralType> result(values.size());
-
-		for (size_t val_num = 0; val_num < values.size(); val_num++) {
+
+		for (size_t val_num = 0; val_num < values.size(); val_num++) 
+		{
 			if (values[val_num].empty()) {
 				throw std::runtime_error("Trying to obtain an upper bound of an empty product.");
 			}
@@ -209,8 +231,9 @@ namespace Common {
 	* @param[in, out] A   extended vector
 	* @return	ref to A
 	*/
-	template<typename T>
-	std::vector<T> operator+(const std::vector<T> & A, const std::vector<T> & B) {
+	template<typename T>
+	std::vector<T> operator+(const std::vector<T> & A, const std::vector<T> & B) 
+	{
 		std::vector<T> result = A;
 		result.insert(result.end(), WHOLE(B));
 		return result;
@@ -221,8 +244,9 @@ namespace Common {
 	* @param[in] original	the source vector
 	* @return	a new vector that contains only the unique elements of the original
 	*/
-	template<typename T>
-	std::vector<T> makeUnique(std::vector<T> original) {
+	template<typename T>
+	std::vector<T> makeUnique(std::vector<T> original) 
+	{
 		auto end_it = std::unique(WHOLE(original));
 		original.resize(std::distance(begin(original), end_it));
 		return original;
@@ -250,8 +274,9 @@ namespace Common {
 	* @param[in] content	value to quote
 	* @return	string with the quoted data
 	*/
-	template<typename T>
-	std::string quote(const T & content) {
+	template<typename T>
+	std::string quote(const T & content) 
+	{
 		return "\"" + boost::lexical_cast<std::string, T>(content) + "\"";
 	}
 
@@ -261,8 +286,9 @@ namespace Common {
 	* @param[in] key	the key to find
 	* @return	true if the key is present
 	*/
-	template <typename KeyT, typename ValT>
-	inline bool hasKey(const std::map<KeyT, ValT> & dictionary, const KeyT & key) {
+	template <typename KeyT, typename ValT>
+	inline bool hasKey(const std::map<KeyT, ValT> & dictionary, const KeyT & key) 
+	{
 		return (dictionary.find(key) != dictionary.end());
 	}
 
@@ -272,8 +298,9 @@ namespace Common {
 	* @param[in] val	the value that is searched for
 	* @return	a zero-initiated index of "val" in "data" or maximal size_t value if not found
 	*/
-	template <typename T>
-	inline std::size_t getIndex(const std::vector <T> & data, const T & val) {
+	template <typename T>
+	inline std::size_t getIndex(const std::vector <T> & data, const T & val) 
+	{
 		auto it = std::find(WHOLE(data), val);
 		if (it != std::end(data))
 			return std::distance(std::begin(data), it);

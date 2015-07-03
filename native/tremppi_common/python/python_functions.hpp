@@ -2,7 +2,9 @@
 
 #include "../header.h"
 
-class PythonFunctions {
+
+class PythonFunctions 
+{
 	bpy::object main_module;
 	bpy::object main_namespace;
 
@@ -26,11 +28,14 @@ public:
 };
 
 template<typename ResultType>
-void PythonFunctions::eval(const string & command, ResultType & result) {
+
+void PythonFunctions::eval(const string & command, ResultType & result) 
+{
 	try {
 		bpy::object value = bpy::eval(command.c_str(), main_namespace);
 		result = bpy::extract<ResultType>(value);
 	}
+
 	catch (bpy::error_already_set const &)
 	{
 		PyErr_Print();

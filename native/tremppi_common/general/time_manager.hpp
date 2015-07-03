@@ -6,7 +6,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief Class that allows to multiple clock for run-time measurement.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace TimeManager {
+
+namespace TimeManager 
+{
 	using Clock = pair<string, chrono::steady_clock::time_point>; ///< Clock - contain a start time referenced by a name of the clock.
 	extern map<string, chrono::steady_clock::time_point> clocks; ///< Vector of clocks, private for each cpp file
 	extern chrono::system_clock::time_point start_time;
@@ -62,7 +64,9 @@ namespace TimeManager {
 	* @param name
 	*/
 	template<class Function>
-	void measureFunction(Function f, const string & name) {
+
+	void measureFunction(Function f, const string & name) 
+	{
 		startClock(name);
 		f();
 		writeClock(name);

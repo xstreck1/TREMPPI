@@ -3,15 +3,17 @@
 #include <tremppi_common/header.h>
 
 #include "../data/data_storage.hpp"
-
-namespace Output {
+
+namespace Output 
+{
 	Json::Value regulatoryGraph(const RegInfos & reg_infos, const RegsData & regs_data) {
 		Json::Value elements;
 
 		// Write the nodes
 		string nodes;
-		elements["nodes"].resize(0);
-		for (const RegData & reg : regs_data) {
+		elements["nodes"].resize(0);
+		for (const RegData & reg : regs_data) 
+		{
 			Json::Value node, data;
 			data["id"] = reg._info.name;
 			data["name"] = reg._info.name;
@@ -20,13 +22,16 @@ namespace Output {
 		}
 
 		// Write the edges
-		elements["edges"].resize(0);
-		for (const RegData & reg : regs_data) {
-			size_t reg_i = 0;
-			for (auto & regul : reg._info.regulators) {
+		elements["edges"].resize(0);
+		for (const RegData & reg : regs_data) 
+		{
+			size_t reg_i = 0;
+			for (auto & regul : reg._info.regulators) 
+			{
 				for (const size_t trh_i : cscope(regul.second)) {
-					// Skip those with no occurence
-					if (abs(reg.reg_freq.at(regul.first)[trh_i]) != 0) {
+					// Skip those with no occurence
+					if (abs(reg.reg_freq.at(regul.first)[trh_i]) != 0) 
+					{
 						Json::Value edge, data;
 
 						data["source"] = reg_infos[regul.first].name;

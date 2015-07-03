@@ -1,6 +1,8 @@
 #include "witness_searcher.hpp"
 
-size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, const size_t depth, size_t branch) {
+
+size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, const size_t depth, size_t branch) 
+{
 	// If this path is no use
 	if (storage.getVisit(ID) < depth)
 		return branch;
@@ -8,7 +10,9 @@ size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, cons
 	path[depth] = ID;
 
 	// Store if the state is final or part of another path.
-	if ((found[ID] <= depth) || (settings.isFinal(ID, product) && !(settings.circ && depth == 0))) {
+
+	if ((found[ID] <= depth) || (settings.isFinal(ID, product) && !(settings.circ && depth == 0))) 
+	{
 		for (size_t step = branch; step < depth; step++) {
 			transitions.insert({ path[step], path[step + 1] });
 			found[path[step]] = step; // Mark found for given parametrizations
@@ -17,10 +21,14 @@ size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, cons
 	}
 
 	// Continue with the DFS otherwise.
-	else if ((depth < max_depth - 1) && !used[ID]) {
+
+	else if ((depth < max_depth - 1) && !used[ID]) 
+	{
 		vector<StateID> transports = ModelChecker::broadcastParameters(parametrization, product, ID).first;
 
-		for (const StateID & succ : transports) {
+
+		for (const StateID & succ : transports) 
+		{
 			branch = std::min(DFS(storage, succ, depth + 1, branch), depth); // Recursive descent with parametrizations passed from the predecessor.
 		}
 	}
@@ -29,7 +37,9 @@ size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, cons
 	return branch;
 }
 
-WitnessSearcher::WitnessSearcher(const ProductStructure & _product) : product(_product) {
+
+WitnessSearcher::WitnessSearcher(const ProductStructure & _product) : product(_product) 
+{
 	found = vector<size_t>(product.size(), INF);
 	used = vector<bool>(product.size(), false);
 }
@@ -38,7 +48,9 @@ WitnessSearcher::WitnessSearcher(const ProductStructure & _product) : product(_p
 * Function that executes the whole searching process
 */
 
-multimap<StateID, StateID> WitnessSearcher::findWitnesses(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & storage) {
+
+multimap<StateID, StateID> WitnessSearcher::findWitnesses(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & storage) 
+{
 	// Preparation
 	settings = _settings;
 	parametrization = _parametrization;
@@ -60,18 +72,26 @@ multimap<StateID, StateID> WitnessSearcher::findWitnesses(const CheckerSetting &
 * @return  strings with all transitions for each acceptable parametrization
 */
 
-const string WitnessSearcher::getOutput(const ProductStructure & product, const size_t max_cost, const multimap<StateID, StateID>& transitions) {
+
+const string WitnessSearcher::getOutput(const ProductStructure & product, const size_t max_cost, const multimap<StateID, StateID>& transitions) 
+{
 	string acceptable_paths; // Vector fo actuall data
 
 	vector<StateID> current_depth = product.getInitialStates();
 	size_t cost = 1;
 
-	while (max_cost != INF && cost < max_cost) {
+
+	while (max_cost != INF && cost < max_cost) 
+	{
 		vector<StateID> next_depth;
-		for (StateID ID : current_depth) {
+
+		for (StateID ID : current_depth) 
+		{
 			auto range = transitions.equal_range(ID);
 
-			for (auto it = range.first; it != range.second; it++) {
+
+			for (auto it = range.first; it != range.second; it++) 
+			{
 				acceptable_paths.append(product.getString(ID) + "-" + to_string(cost))
 					.append(">")
 					.append(product.getString(it->second) + "-" + to_string(cost+1))

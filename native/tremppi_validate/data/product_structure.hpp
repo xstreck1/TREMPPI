@@ -5,7 +5,9 @@
 #include "transition_system_interface.hpp"
 
 /// State of the product - same as the state of UKS but put together with a BA state.
-struct ProdState : public AutomatonStateProperty<TSTransitionProperty>, public TSStateProperty<TSTransitionProperty> {
+
+struct ProdState : public AutomatonStateProperty<TSTransitionProperty>, public TSStateProperty<TSTransitionProperty> 
+{
 	const StateID _KS_ID; ///< ID of an original KS state this one is built from
 	const StateID _BA_ID; ///< ID of an original BA state this one is built from
 
@@ -21,7 +23,9 @@ struct ProdState : public AutomatonStateProperty<TSTransitionProperty>, public T
 ///
 /// ProductStructure data can be set only from the ProductBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-struct ProductStructure : public AutomatonInterface<ProdState>, public TSInterface<ProdState> {
+
+struct ProductStructure : public AutomatonInterface<ProdState>, public TSInterface<ProdState> 
+{
 	pair<size_t, size_t> _sizes;
 
 	GROUNDED(ProductStructure);

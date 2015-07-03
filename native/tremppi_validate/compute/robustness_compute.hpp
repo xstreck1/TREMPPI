@@ -10,7 +10,9 @@
 /// @attention The robustness actually counts one state after the last measurement in the time series.
 /// This is however in order since the penultimate state can undergo all the transitions and therefore the robustness just gets split in between the final states.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class RobustnessCompute {
+
+class RobustnessCompute 
+{
 	const ProductStructure & product; ///< Product reference for state properties.
 	vector<double> prob; ///< Probability storage for the whole computation
 

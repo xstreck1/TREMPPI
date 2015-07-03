@@ -2,8 +2,9 @@
 
 #include <tremppi_common/report/report.hpp>
 #include "statistical_analysis.hpp"
-
-namespace Compute {
+
+namespace Compute 
+{
 	FunData build(const RegInfo & info, const int step_count, sqlite3pp::query & qry) {
 		FunData result = { info };
 		result.mean = StatisticalAnalysis::mean_val(step_count, qry);
@@ -12,20 +13,25 @@ namespace Compute {
 
 		return result;
 	}
-
-	void deviation(const RegInfos & reg_infos, const size_t step_count, vector<sqlite3pp::query> & queries, Logging & logging, FunsData & funs_data) {
-		logging.newPhase("Deviation of function", reg_infos.size());
-		for (const RegInfo & reg_info : reg_infos) {
+
+	void deviation(const RegInfos & reg_infos, const size_t step_count, vector<sqlite3pp::query> & queries, Logging & logging, FunsData & funs_data) 
+	{
+		logging.newPhase("Deviation of function", reg_infos.size());
+		for (const RegInfo & reg_info : reg_infos) 
+		{
 			funs_data.emplace_back(build(reg_info, step_count, queries[reg_info.ID]));
 			logging.step();
 		}
 	}
-
-	void correlation(const RegInfos & reg_infos, const size_t step_count, vector<sqlite3pp::query> & queries, Logging & logging, FunsData & funs_data) {
-		logging.newPhase("Correlating function", reg_infos.size());
-		for (FunData & m_fun : funs_data) {
-			for (const FunData & o_fun : funs_data) {
-				if (m_fun.info.ID <= o_fun.info.ID) {
+
+	void correlation(const RegInfos & reg_infos, const size_t step_count, vector<sqlite3pp::query> & queries, Logging & logging, FunsData & funs_data) 
+	{
+		logging.newPhase("Correlating function", reg_infos.size());
+		for (FunData & m_fun : funs_data) 
+		{
+			for (const FunData & o_fun : funs_data) {
+				if (m_fun.info.ID <= o_fun.info.ID) 
+				{
 					continue;
 				}
 

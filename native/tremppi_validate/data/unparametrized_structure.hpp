@@ -17,7 +17,9 @@
 using USTransition = TSTransitionProperty;
 using USState = TSStateProperty<TSTransitionProperty>;
 
-struct UnparametrizedStructure : public TSInterface<USState> {
+
+struct UnparametrizedStructure : public TSInterface<USState> 
+{
 	tuple<Levels, Levels, Levels> _bounds;
 
 	//

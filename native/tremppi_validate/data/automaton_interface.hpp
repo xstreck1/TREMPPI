@@ -11,7 +11,9 @@
 /// \brief A state structure enhanced with information whether the state is final and/or initial.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename Transition>
-struct AutomatonStateProperty : public virtual StateProperty<Transition> {
+
+struct AutomatonStateProperty : public virtual StateProperty<Transition> 
+{
    bool _initial; ///< True if the state is initial.
    bool _final; ///< True if this state is final.
 
@@ -26,7 +28,9 @@ struct AutomatonStateProperty : public virtual StateProperty<Transition> {
 ///  \brief Interface for all the classes that represent a Buchi automaton. Buchi automaton is based on a GraphInterface.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename StateT>
-struct AutomatonInterface : public virtual GraphInterface<StateT> {
+
+struct AutomatonInterface : public virtual GraphInterface<StateT> 
+{
    AutType _aut_type; ///< Type of this automaton (influences verification procedure).
 
 	/**
@@ -34,9 +38,13 @@ struct AutomatonInterface : public virtual GraphInterface<StateT> {
 	 *
 	 * @return vector of final states' IDs
 	 */
-	virtual inline vector<StateID> getFinalStates() const {
+
+	virtual inline vector<StateID> getFinalStates() const 
+	{
 		vector<StateID> result;
-		for (const StateT & state : this->_states) {
+
+		for (const StateT & state : this->_states) 
+		{
 			if (state._final) {
 				result.push_back(state._ID);
 			}
@@ -49,9 +57,13 @@ struct AutomatonInterface : public virtual GraphInterface<StateT> {
 	 *
 	 * @return vector of initial states' IDs
 	 */
-	virtual inline vector<StateID> getInitialStates() const {
+
+	virtual inline vector<StateID> getInitialStates() const 
+	{
 		vector<StateID> result;
-		for (const StateT & state : this->_states) {
+
+		for (const StateT & state : this->_states) 
+		{
 			if (state._initial) {
 				result.push_back(state._ID);
 			}

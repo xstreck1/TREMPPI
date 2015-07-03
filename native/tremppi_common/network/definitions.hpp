@@ -15,8 +15,9 @@ const std::string COMPONENTS_TABLE = "Components";
 const std::string REGULATIONS_TABLE = "Regulations";
 const std::string PARAMETRIZATIONS_TABLE = "Parametrizations";
 const std::vector<std::string> SOURCE_TYPES = { "select", "differ", "compare" };
-
-const std::map<std::string, std::string> label_list = {
+
+const std::map<std::string, std::string> label_list = 
+{
 	{ "Activating", "+" },
 	{ "Activating Only", "+&!-" },
 	{ "Not Inhibiting", "!-" },

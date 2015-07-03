@@ -5,8 +5,9 @@
 #include "../general/common_functions.hpp"
 #include <json/json.h>
 
-// Regulatory graph info, stored by a component
-struct RegInfo {
+// Regulatory graph info, stored by a component
+struct RegInfo 
+{
 	CompID ID;
 	string name;
 	ActLevel max_activity;
@@ -16,8 +17,9 @@ struct RegInfo {
 	map<size_t, Configurations > requirements; // To each column assign the values of the reugulators that fall into the context
 };
 using RegInfos = vector<RegInfo>;
-
-namespace DataInfo {
+
+namespace DataInfo 
+{
 	// Controls if the names is formed as [a-zA-Z][a-zA-Z0-9_]*
 	bool isValidName(const string & spec_name);
 

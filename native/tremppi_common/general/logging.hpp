@@ -4,15 +4,17 @@
 #include "common_functions.hpp"
 
 using PhaseNo = uint64_t;
-
-struct LogPhase {
+
+struct LogPhase 
+{
 	PhaseNo step_count;
 	PhaseNo step_no;
 	string description;
 	size_t depth;
 };
-
-class Logging {
+
+class Logging 
+{
 	static ofstream file;
 	static vector<LogPhase> phases;
 	static int last_progress_val;
