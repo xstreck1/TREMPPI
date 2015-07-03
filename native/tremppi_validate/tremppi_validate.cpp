@@ -22,7 +22,7 @@ int tremppi_validate(int argc, char ** argv) {
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing database.";
+		DEBUG_LOG << "Parsing database.";
 
 		// Get selection		
 		select = DatabaseReader::getSelectionTerm();
@@ -41,7 +41,7 @@ int tremppi_validate(int argc, char ** argv) {
 	// Check the file
 	Json::Value properties; // root of the properties
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
+		DEBUG_LOG << "Checking the JSON correctness.";
 
 		Json::Value root = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
 		properties = root["records"];
@@ -53,7 +53,7 @@ int tremppi_validate(int argc, char ** argv) {
 	// Parse the properties
 	vector<PropertyInfo> automata;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing the properties.";
+		DEBUG_LOG << "Parsing the properties.";
 
 		automata = PropertiesReader::jsonToProperties(properties);
 	}
@@ -68,7 +68,7 @@ int tremppi_validate(int argc, char ** argv) {
 		ProductStructure product;
 		// Construction of data structures
 		try {
-			BOOST_LOG_TRIVIAL(info) << "Building a product with the automaton: " << automaton.name;
+			DEBUG_LOG << "Building a product with the automaton: " << automaton.name;
 			ConstructionManager::construct(reg_infos, automaton, product);
 		}
 		catch (std::exception & e) {
@@ -79,7 +79,7 @@ int tremppi_validate(int argc, char ** argv) {
 		ParametrizationReader par_reader;
 		par_reader.select(reg_infos, select, db);
 		try {
-			BOOST_LOG_TRIVIAL(info) << "Validating for an automaton: " << automaton.name;
+			DEBUG_LOG << "Validating for an automaton: " << automaton.name;
 
 			AnalysisManager analysis_manager(product, automaton.bound, automaton.witness, automaton.robustness);
 			OutputManager output(automaton.witness, automaton.robustness, reg_infos, automaton.name, db);

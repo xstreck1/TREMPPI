@@ -15,7 +15,7 @@ class OutputManager {
 	map<string, string> new_columns; ///< (column name, column type)
 
 public:
-	NO_COPY(OutputManager)
+	NO_COPY(OutputManager);
 
 	// Store the names of the columns to be used
 	OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db);

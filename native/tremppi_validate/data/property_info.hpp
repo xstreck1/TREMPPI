@@ -6,7 +6,7 @@ enum BoundType { bt_inf, bt_min, bt_step }; //< What sort of bound the user plac
 enum PathCons { pc_none, pc_up, pc_down, pc_stay }; ///< What are the requirements on the transitions between measurements? (none, monotonicity, stability)
 
 struct PropertyInfo {
-	NO_COPY(PropertyInfo)
+	NO_COPY(PropertyInfo);
 
 	struct Measurement {
 		size_t ID; ///< Numerical constant used to distinguish the state. Starts from 0!

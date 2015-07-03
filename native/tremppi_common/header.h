@@ -33,21 +33,12 @@
 #undef BOOST_NO_CXX11_SCOPED_ENUMS
 #define BOOST_PYTHON_STATIC_LIB 
 #include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sinks/text_file_backend.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
 #include <boost/python.hpp>
 
 #include "configure.h"
 
-// POST-CMSB 2015
-const std::string VERSION("0.3.0.0");
+// POST-HSB 2015
+const std::string VERSION("0.4.0");
 
 using namespace std;
 
@@ -61,10 +52,6 @@ namespace bpo = boost::program_options;
 namespace rng = boost::range;
 namespace bfs = boost::filesystem;
 namespace alg = boost::algorithm;
-namespace blg = boost::log;
-namespace src = boost::log::sources;
-namespace snk = boost::log::sinks;
-namespace kwd = boost::log::keywords;
 namespace bpy = boost::python;
 
 const string DATA_FOLDER = "data";

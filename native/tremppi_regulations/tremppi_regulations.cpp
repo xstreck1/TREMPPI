@@ -119,7 +119,7 @@ int tremppi_regulations(int argc, char ** argv) {
 	RegInfos reg_infos;
 	sqlite3pp::database db;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
+		DEBUG_LOG << "Parsing data file.";
 		// Read filter conditions
 		out = Report::createSetup();
 
@@ -135,7 +135,7 @@ int tremppi_regulations(int argc, char ** argv) {
 
 	RegsData regs_data;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Computing regulationsion graph data.";
+		DEBUG_LOG << "Computing regulationsion graph data.";
 
 		logging.newPhase("Harvesting component", reg_infos.size());
 		for (const RegInfo & reg_info : reg_infos) {
@@ -164,7 +164,7 @@ int tremppi_regulations(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Building the JSON files.";
+		DEBUG_LOG << "Building the JSON files.";
 		// For each graph create the graph data and add configuration details
 		out["elements"] = Output::regulatoryGraph(reg_infos, regs_data);
 	}
@@ -173,7 +173,7 @@ int tremppi_regulations(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Writing output.";
+		DEBUG_LOG << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "regulations" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
 	catch (exception & e) {

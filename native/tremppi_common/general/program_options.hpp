@@ -11,7 +11,7 @@ protected:
 	bpo::options_description visible, invisible, all;
 	bpo::positional_options_description pos_decr;
 public:
-	GROUNDED(ProgramOptions)
+	GROUNDED(ProgramOptions);
 	//
 	virtual bpo::variables_map parseProgramOptions(int argc, char ** argv);
 };

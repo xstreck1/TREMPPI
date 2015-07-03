@@ -36,7 +36,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 	map<size_t, string> columns;
 	const vector<string> prefixes = { "K", "F", "S", "E" };
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
+		DEBUG_LOG << "Parsing data.";
 
 		// Read filter conditions
 		out = Report::createSetup();
@@ -58,7 +58,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 
 	vector<ComputedQual> results;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Preparing the data.";
+		DEBUG_LOG << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) {
 			results.emplace_back(ComputedQual{ column.second, { } });
 		}
@@ -71,9 +71,9 @@ int tremppi_qualitative(int argc, char ** argv) {
 	const double row_count_d = row_count;
 	try {
 
-		BOOST_LOG_TRIVIAL(info) << "Reading the values, computing the statistics.";
+		DEBUG_LOG << "Reading the values, computing the statistics.";
 
-		logging.newPhase("Harvesting component", row_count);
+		logging.newPhase("Reading row", row_count);
 
 		sqlite3pp::query group_qry = DatabaseReader::selectionFilter(columns, out["setup"]["select"].asString(), db);
 
@@ -101,7 +101,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Building the JSON file.";
+		DEBUG_LOG << "Building the JSON file.";
 		// For each graph create the graph data and add configuration details
 
 		for (ComputedQual & result : results) {
@@ -121,7 +121,7 @@ int tremppi_qualitative(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Writing output.";
+		DEBUG_LOG << "Writing output.";
 		
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "qualitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}

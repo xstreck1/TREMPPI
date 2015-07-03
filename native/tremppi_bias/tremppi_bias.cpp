@@ -34,7 +34,7 @@ int tremppi_bias(int argc, char ** argv) {
 	// Label per parametrization
 	FunsData funs_data;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Computing function graph data.";
+		DEBUG_LOG << "Computing function graph data.";
 		// Add columns
 		for (const RegInfo & reg_info : reg_infos) {
 			const string column_name = "B_" + reg_info.name;
@@ -92,7 +92,7 @@ int tremppi_correlations(int argc, char ** argv) {
 	sqlite3pp::database db;
 	vector<sqlite3pp::query> queries;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing data file.";
+		DEBUG_LOG << "Parsing data file.";
 		// Read filter conditions
 		out = Report::createSetup();
 
@@ -115,7 +115,7 @@ int tremppi_correlations(int argc, char ** argv) {
 
 	FunsData funs_data;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Computing function graph data.";
+		DEBUG_LOG << "Computing function graph data.";
 
 		Compute::deviation(reg_infos, out["setup"]["size"].asInt(), queries, logging, funs_data);
 
@@ -126,7 +126,7 @@ int tremppi_correlations(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Building the JSON.";
+		DEBUG_LOG << "Building the JSON.";
 		out["elements"] = Output::functionalData(funs_data);
 	}
 	catch (exception & e) {
@@ -134,7 +134,7 @@ int tremppi_correlations(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Writing output.";
+		DEBUG_LOG << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "correlations" / (out["setup"]["s_name"].asString() + ".json"), out);
 
 	}

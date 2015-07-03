@@ -7,7 +7,7 @@
 /// \brief Kinetic parameters and the corresponding parametrizations are stored in this structure.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct Kinetics {
-	NO_COPY(Kinetics)
+	NO_COPY(Kinetics);
 
     struct Param {
 		string context; ///< String representation of the context.

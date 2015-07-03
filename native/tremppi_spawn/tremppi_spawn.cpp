@@ -23,7 +23,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	// Check the file
 	Json::Value root; // root of the network
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Checking the JSON correctness.";
+		DEBUG_LOG << "Checking the JSON correctness.";
 
 		root = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / NETWORK_FILENAME);
 
@@ -36,7 +36,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	// Parse the model 
 	Model model;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing the network.";
+		DEBUG_LOG << "Parsing the network.";
 
 		model = ModelReader::jsonToModel(root);
 		for (CompID ID : cscope(model.components))
@@ -51,7 +51,7 @@ int tremppi_spawn(int argc, char ** argv) {
 	// Obtain the kinetics
 	Kinetics kinetics;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Obtaining kinetics.";
+		DEBUG_LOG << "Obtaining kinetics.";
 
 		kinetics.components = ParameterBuilder::build(model);
 		// First build-check
@@ -63,7 +63,7 @@ int tremppi_spawn(int argc, char ** argv) {
 
 	// Skip further execution if only conducting a check
 	if (po.count("check-only") > 0) {
-		BOOST_LOG_TRIVIAL(info) << "Check-only specified, skipping the enumeration.";
+		DEBUG_LOG << "Check-only specified, skipping the enumeration.";
 		return 0;
 	}
 
@@ -77,16 +77,17 @@ int tremppi_spawn(int argc, char ** argv) {
 
 	// Output the database
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Creating the database file.";
-		if (bfs::exists(database_file))
-			BOOST_LOG_TRIVIAL(warning) << "Database file " << database_file.string() << " already exists, erasing.";
+		DEBUG_LOG << "Creating the database file.";
+		if (bfs::exists(database_file)) {
+			WARNING_LOG << "Database file " << database_file.string() << " already exists, erasing.";
+		}
 		bfs::remove(database_file);
 
 		DatabaseFiller database_filler(model, kinetics, database_file.string());
 		database_filler.creteTables();
 		database_filler.startOutput();
 
-		BOOST_LOG_TRIVIAL(info) << "Writing the database file, in total " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
+		DEBUG_LOG << "Writing the database file, in total " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
 		logging.newPhase("writing parametrization", KineticsTranslators::getSpaceSize(kinetics));
 		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++) {
 			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);

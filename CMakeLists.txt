@@ -22,7 +22,7 @@ if(UNIX)
 else(UNIX)
 	set(Boost_USE_STATIC_LIBS ON)
 endif(UNIX)
-find_package(Boost 1.55.0 COMPONENTS program_options system log log_setup filesystem thread python REQUIRED)
+find_package(Boost 1.55.0 COMPONENTS program_options filesystem python REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 

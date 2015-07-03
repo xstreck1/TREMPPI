@@ -22,7 +22,7 @@ int tremppi_witness(int argc, char ** argv) {
 	sqlite3pp::database db;
 	// Obtain data
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Parsing data.";
+		DEBUG_LOG << "Parsing data.";
 
 		// Create setup
 		out = Report::createSetup();
@@ -49,7 +49,7 @@ int tremppi_witness(int argc, char ** argv) {
 	set<pair<string, string>> transitions;
 	WitnessReader wit_reader;
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Loading witnesses.";
+		DEBUG_LOG << "Loading witnesses.";
 		logging.newPhase("computing witness", properties.size());
 
 		for (const auto & property : properties["records"]) {
@@ -73,7 +73,7 @@ int tremppi_witness(int argc, char ** argv) {
 	}
 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Converting to JSON";
+		DEBUG_LOG << "Converting to JSON";
 
 		out["elements"] = WitnessOutput::convert(transitions);
 	}
@@ -83,7 +83,7 @@ int tremppi_witness(int argc, char ** argv) {
 
 	// Output 
 	try {
-		BOOST_LOG_TRIVIAL(info) << "Writing output.";
+		DEBUG_LOG << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "witness" / (TimeManager::getTimeStamp() + ".json"), out);
 	}
 	catch (exception & e) {

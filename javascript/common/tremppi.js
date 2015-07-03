@@ -146,7 +146,8 @@ tremppi = {
                         {id: 'quantitative', text: 'quantitative'},
                         {id: 'qualitative', text: 'qualitative'},
                         {id: 'regulations', text: 'regulations'},
-                        {id: 'correlations', text: 'correlations'}
+                        {id: 'correlations', text: 'correlations'},
+                        {id: 'tools', text: 'tools'}
                     ]
                 }
             ]

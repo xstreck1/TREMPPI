@@ -24,7 +24,6 @@ struct ProdState : public AutomatonStateProperty<TSTransitionProperty>, public T
 struct ProductStructure : public AutomatonInterface<ProdState>, public TSInterface<ProdState> {
 	pair<size_t, size_t> _sizes;
 
-	//
 	GROUNDED(ProductStructure);
 
 	//
