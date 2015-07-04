@@ -11,7 +11,25 @@ tremppi.tools.controls = function () {
 };
 
 tremppi.tools.toolbarClick = function (event) {
-    if (event.target === 'save') {
-        tremppi.tools.save();
+    if (event.target === 'spawn') {
+        tremppi.tools.addToQueue(event.target);
     }
+};
+
+tremppi.tools.getProgress = function () {
+    
+};
+
+tremppi.tools.addToQueue = function (command) {
+    var url = tremppi.getServerAddress() + "?tremppi+" + command;
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: function (res) {
+            tremppi.log(command + " executed successfully.");
+        },
+        fail: function (res) {
+            tremppi.log(command + " failed.");
+        }
+    });
 };

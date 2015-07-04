@@ -1,8 +1,1 @@
-[2015-May-27 14:49:16.202574] (1) <info>: ------------------------------
-[2015-May-27 14:49:16.204577] (2) <info>: tremppi_qualitative started.
-[2015-May-27 14:49:16.204577] (3) <info>: Parsing data.
-[2015-May-27 14:49:16.260614] (4) <info>: Preparing the data.
-[2015-May-27 14:49:16.261615] (5) <info>: Reading the values, computing the statistics.
-[2015-May-27 14:49:16.264616] (6) <info>: Building the JSON file.
-[2015-May-27 14:49:16.265616] (7) <info>: Writing output.
-[2015-May-27 14:49:16.271620] (8) <info>: tremppi_qualitative finished successfully.
+D:Checking the JSON correctness.D:Parsing the network.D:Obtaining kinetics.D:Creating the database file.W:Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.D:Writing the database file, in total 26 parametrizations.E:Top level exception: Python exception encountered.

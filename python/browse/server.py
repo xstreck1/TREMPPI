@@ -1,13 +1,16 @@
 __author__ = 'adams_000'
 
 from os import curdir
-from os.path import join, exists
+from os.path import join, exists, abspath
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
 from file_manager import save_file
+from tool_manager import ToolManager
 
 # TREMPPI server that communicates between HTML reports and the filesystem
 class TremppiServer(SimpleHTTPRequestHandler):
+    _tool_manager = ToolManager()
+
     def success_response(self, content_type, data):
         self.send_response(200)
         self.send_header('Content-type', content_type)
@@ -34,11 +37,18 @@ class TremppiServer(SimpleHTTPRequestHandler):
                     self.success_response('text/plain', "database is present".encode())
 
     # respond to the post request
-    # writes the content of the message to the file specified by the URL
     def do_POST(self):
-        parsed_path = urlparse(self.path)
-        length = self.headers['content-length']
-        store_path = join(curdir, parsed_path.query)
-        data = self.rfile.read(int(length))
-        save_file(store_path, data)
-        self.success_response('text', ("".encode()))
+        parsed_url = urlparse(self.path)
+        if parsed_url.query == "save":
+            # writes the content of the message to the file specified by the URL
+            length = self.headers['content-length']
+            url_path = "." + parsed_url.path # The path starts with / so the dot must be prepended
+            store_path = join(abspath(curdir), url_path)
+            data = self.rfile.read(int(length))
+            save_file(store_path, data)
+            self.success_response('text', ("".encode()))
+        if parsed_url.query[0:7] == "tremppi":
+            print(parsed_url.query[8:])
+            self._tool_manager.add_to_queue(parsed_url.query[8:])
+            progress = self._tool_manager.get_progress()
+            self.success_response('text', (str(progress).encode()))

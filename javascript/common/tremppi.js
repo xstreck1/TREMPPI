@@ -32,9 +32,9 @@ tremppi = {
     },
     makeDataFilepath: function (filename) {
         if (typeof filename === 'undefined') {
-            return "./data/" + tremppi.widget_name + ".json";
+            return "data/" + tremppi.widget_name + ".json";
         } else {
-            return "./data/" + tremppi.widget_name + "/" + filename + ".json";
+            return "data/" + tremppi.widget_name + "/" + filename + ".json";
         }
     },
     saveData: function (data, filename) {
@@ -42,7 +42,7 @@ tremppi = {
             tremppi.log("no data specified in saveData", "error");
         }
         var content = JSON.stringify(data, null, '\t');
-        var url = tremppi.getServerAddress() + "?" + tremppi.makeDataFilepath(filename);
+        var url = tremppi.getServerAddress() + tremppi.makeDataFilepath(filename) + "?save";
         $.ajax({
             type: "POST",
             url: url,
