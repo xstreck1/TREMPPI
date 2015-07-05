@@ -19,22 +19,16 @@ class TremppiServer(SimpleHTTPRequestHandler):
 
     # respond to the GET request
     def do_GET(self):
-        parsed_path = urlparse(self.path)
+        parsed_url = urlparse(self.path)
         # print(parsed_path.path)
-        if parsed_path.query == "" or parsed_path.query[0] == "_":
-            if parsed_path.path == "/":
+        if parsed_url.query == "" or parsed_url.query[0] == "_":
+            if parsed_url.path == "/":
                 self.success_response('text/plain', "tremmpi browse is running".encode())
             else:
                 return SimpleHTTPRequestHandler.do_GET(self)
-        else:
-            query = parse_qs(parsed_path.query)
-            command = query["command"][0]
-
-            if command == "database":
-                if not exists('database.sqlite'): # send no content if the database is missing
-                    self.send_response(204)
-                else:
-                    self.success_response('text/plain', "database is present".encode())
+        elif parsed_url.query == "getProgress":
+            progress = self._tool_manager.get_progress()
+            self.success_response('text', (str(progress).encode()))
 
     # respond to the post request
     def do_POST(self):
@@ -47,8 +41,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
             data = self.rfile.read(int(length))
             save_file(store_path, data)
             self.success_response('text', ("".encode()))
-        if parsed_url.query[0:7] == "tremppi":
-            print(parsed_url.query[8:])
+        elif parsed_url.query[0:7] == "tremppi":
             self._tool_manager.add_to_queue(parsed_url.query[8:])
             progress = self._tool_manager.get_progress()
             self.success_response('text', (str(progress).encode()))

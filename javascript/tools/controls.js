@@ -11,13 +11,16 @@ tremppi.tools.controls = function () {
 };
 
 tremppi.tools.toolbarClick = function (event) {
-    if (event.target === 'spawn') {
-        tremppi.tools.addToQueue(event.target);
-    }
 };
 
 tremppi.tools.getProgress = function () {
-    
+    var url = tremppi.getServerAddress() + "?getProgress";
+    $.get(url, function (data) {
+        $("progress").html("Progress: " + data);
+        if (data !== -1) {
+            tremppi.tools.getProgress();
+        }
+    });
 };
 
 tremppi.tools.addToQueue = function (command) {
@@ -27,6 +30,7 @@ tremppi.tools.addToQueue = function (command) {
         url: url,
         success: function (res) {
             tremppi.log(command + " executed successfully.");
+            tremppi.tools.getProgress();
         },
         fail: function (res) {
             tremppi.log(command + " failed.");

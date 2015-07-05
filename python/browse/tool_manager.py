@@ -13,10 +13,10 @@ class ToolManager:
     # If it is done, start a new one from the queue.
     # If all is done, return -1.
     def get_progress(self):
-        if "poll" not in self._subprocess or self._subprocess.poll() is not None:
+        if self._subprocess is not {} or self._subprocess.poll() is not None:
             if len(self._commands) > 0:
                 new_process = self._commands.pop()
-                _subprocess = subprocess.Popen("tremppi " + new_process)
+                self._subprocess = subprocess.Popen("tremppi " + new_process)
                 return 0
             else:
                 return -1
@@ -29,4 +29,4 @@ class ToolManager:
 
     def kill_all(self):
         self._subprocess.kill()
-        _commands = []
+        self._commands = []

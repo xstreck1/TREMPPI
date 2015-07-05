@@ -6,15 +6,36 @@
 
 /* global tremppi */
 
-tremppi.tools.tool_list = ['spawn', 'validate'];
+tremppi.tools.tool_list = [
+    {name: "configure", description: "call to explicitly recreate data configuration files"},
+    {name: "bias", description: "label parametrizations with their bias"},
+    {name: "correlations", description: "create a correlations graph report"},
+    {name: "express", description: "create the logical expressions for all the parametrizations"},
+    {name: "impact", description: "label with the impact of a regulator on its target"},
+    {name: "qualitative", description: "get qualitative analysis of the known data"},
+    {name: "quantitative", description: "get summary of up till now known data"},
+    {name: "regulations", description: "create an regulationsion graph based on a statistical analysis"},
+    {name: "sign", description: "label the edges of individual with their signs"},
+    {name: "spawn", description: "read a model and create a database of parametrizations based on the model"},
+    {name: "update", description: "update the javascript and html files in the project directory"},
+    {name: "validate", description: "conduct a model checking to validate parametrizations agaings LTL properties"},
+    {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"}
+];
 
 tremppi.tools.page = function () {
-    $('#widget').append('<div id="commands"></div>');
-//    for (var i = 0; i < tremppi.tools.tool_list.length; i++) {
-//        var tool_name = tremppi.tools.tool_list[i];
-//        $('#commands').append('<button id"' + tool_name + '">' + tool_name + '</button>');
-//    }
-    $('#widget').append('<table id="running_process"></table>');
+    var commands_table = $('<table id="commands"></table>').appendTo($('#widget'));
+    $('<tr><td>EXECUTE TOOL</td><td>DESCRIPTION</td></tr>').appendTo(commands_table);
+    for (var i = 0; i < tremppi.tools.tool_list.length; i++) {
+        var tool_name = tremppi.tools.tool_list[i].name;
+        var row = $('<tr id="' + tool_name + '"></tr>').appendTo(commands_table);
+        var button_cell = $('<td></td>').appendTo(row);
+        var button = $('<button class="btn">' + tool_name + '</button>').appendTo(button_cell);
+        button.click(function(_tool_name) { return function() {tremppi.tools.addToQueue(_tool_name);};}(tool_name));
+        var desc_cell = $('<td>'+ tremppi.tools.tool_list[i].description + '</td>').appendTo(row);
+    }
+    var reports_div = $('<div id="reports"></div>').appendTo($('#widget'));
+    var progress_list = $('<div id="progress"></div>').appendTo(reports_div);
+    var log_file = $('<div id="log_file"></div>').appendTo(reports_div);
 };
 
 tremppi.tools.layout = function () {
@@ -29,9 +50,6 @@ tremppi.tools.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [
-            {type: 'button', id: 'spawn', caption: 'Enumerate', img: 'icon-page', hint: 'Enumerate the parametrizations based on the network.'},
-            {type: 'button', id: 'bias', caption: 'Bias', img: 'icon-page', hint: 'Enumerate the parametrizations based on the network.'},
-            {type: 'button', id: 'sign', caption: 'Sign', img: 'icon-page', hint: 'Add edge signs to all known regulations.'}
         ]
     };
 };
