@@ -23,7 +23,8 @@ tremppi.tools.tool_list = [
 ];
 
 tremppi.tools.page = function () {
-    var commands_table = $('<table id="commands"></table>').appendTo($('#widget'));
+    tremppi.layout.hideToolbar('main');
+    var commands_table = $('<table id="commands"></table>').appendTo($('<div id="commands_holder"></div>').appendTo($('#widget')));
     $('<tr><td>EXECUTE TOOL</td><td>DESCRIPTION</td></tr>').appendTo(commands_table);
     for (var i = 0; i < tremppi.tools.tool_list.length; i++) {
         var tool_name = tremppi.tools.tool_list[i].name;
@@ -43,15 +44,12 @@ tremppi.tools.layout = function () {
 
 tremppi.tools.setData = function (data) {
     // Enable controls
+    tremppi.tools.getLog();
     tremppi.tools.controls();
 };
 
 tremppi.tools.toolbarClass = function () {
-    return {
-        name: 'toolbar',
-        items: [
-        ]
-    };
+    return {};
 };
 
 tremppi.tools.save = function () {

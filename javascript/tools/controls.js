@@ -13,20 +13,6 @@ tremppi.tools.controls = function () {
 tremppi.tools.toolbarClick = function (event) {
 };
 
-tremppi.tools.getProgress = function () {
-    var url = tremppi.getServerAddress() + "?getProgress";
-    $.ajax({
-        type: "GET",
-        url: url,
-        success: function (data) {
-            $("progress").html("Progress: " + data);
-            var result = parseInt(data);
-            if (result !== -1) {
-                tremppi.tools.getProgress();
-            }
-        }
-    });
-};
 
 tremppi.tools.addToQueue = function (command) {
     var url = tremppi.getServerAddress() + "?tremppi+" + command;
@@ -41,4 +27,33 @@ tremppi.tools.addToQueue = function (command) {
             tremppi.log(command + " failed.");
         }
     });
+};
+
+tremppi.tools.getProgress = function () {
+    var url = tremppi.getServerAddress() + "?getProgress";
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (data) {
+            $("progress").html("Progress: " + data);
+            var result = parseInt(data);
+            if (result !== -1) {
+                tremppi.tools.getProgress();
+            }
+            else {
+                tremppi.tools.getLog();
+            }
+        }
+    });
+};
+
+tremppi.tools.getLog = function() {
+    var url = tremppi.getServerAddress() + "?getLog";
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (data) {
+            $("#log_file").val(data);
+        }
+    });    
 };

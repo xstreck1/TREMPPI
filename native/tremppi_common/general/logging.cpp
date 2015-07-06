@@ -9,6 +9,7 @@ int Logging::last_progress_val;
 
 Logging::Logging() 
 {
+	Logging::getFile() << " --- " << TremppiSystem::PROGRAM_NAME << " has started." << " --- ";
 	last_progress_val = 0;
 	cout << 0 << "\r";
 	cout << fixed << setprecision(PRECISION);
@@ -17,13 +18,14 @@ Logging::Logging()
 
 Logging::~Logging() 
 {
-	DEBUG_LOG << TremppiSystem::PROGRAM_NAME << " finished successfully.";
+	DEBUG_LOG << TremppiSystem::PROGRAM_NAME << " finished successfully." << endl;
 }
 
 
 ofstream & Logging::getFile()
 {
-	if (!file.is_open()) {
+	if (!file.is_open()) 
+	{
 		acquireFile();
 	}
 	return file;
@@ -32,7 +34,7 @@ ofstream & Logging::getFile()
 
 void Logging::acquireFile()
 {
-	file = ofstream((TremppiSystem::WORK_PATH / "log.txt").string());
+	file = ofstream((TremppiSystem::WORK_PATH / "log.txt").string(), ios::app);
 
 	if (!file) 
 	{
@@ -66,9 +68,9 @@ void Logging::step()
 	while (Logging::phases.back().step_count <= Logging::phases.back().step_no) 
 	{
 		Logging::phases.pop_back();
-		if (!Logging::phases.empty())
+		if (!Logging::phases.empty()) {
 			Logging::phases.back().step_no += 1;
-
+		}
 		else 
 		{
 			break;
@@ -88,10 +90,12 @@ void Logging::step()
 
 	if (progress_i > Logging::last_progress_val) 
 	{
-		if (progress_i < 1000)
+		if (progress_i < 1000) {
 			cout << "0";
-		if (progress_i < 100)
+		}
+		if (progress_i < 100) {
 			cout << "0";
+		}
 		cout <<  progress_i / SHIFT_FACTOR << "\r";
 		Logging::last_progress_val = progress_i;
 	}

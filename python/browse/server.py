@@ -4,7 +4,7 @@ from os import curdir
 from os.path import join, exists, abspath
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
-from file_manager import save_file
+from file_manager import save_file, get_log
 from tool_manager import ToolManager
 
 # TREMPPI server that communicates between HTML reports and the filesystem
@@ -29,6 +29,9 @@ class TremppiServer(SimpleHTTPRequestHandler):
         elif parsed_url.query[0:11] == "getProgress":
             progress = self._tool_manager.get_progress()
             self.success_response('text', (str(progress).encode()))
+        elif parsed_url.query[0:6] == "getLog":
+            data = get_log("./log.txt")
+            self.success_response('text', (str(data).encode()))
 
     # respond to the post request
     def do_POST(self):

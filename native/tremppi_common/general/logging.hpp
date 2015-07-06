@@ -41,6 +41,6 @@ public:
 	static void exceptionMessage(const exception & e, const int err_no);
 };
 
-#define DEBUG_LOG Logging::getFile() << "\nD:"
-#define WARNING_LOG Logging::getFile() << "\nW:"
-#define ERROR_LOG Logging::getFile() << "\nE:"
+#define DEBUG_LOG Logging::getFile() << std::endl << TimeManager::getTime() << " D: "
+#define WARNING_LOG Logging::getFile() << std::endl << TimeManager::getTime() << " W: "
+#define ERROR_LOG Logging::getFile() << std::endl << TimeManager::getTime() << " E: "
