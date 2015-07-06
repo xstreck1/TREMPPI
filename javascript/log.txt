@@ -9,4 +9,191 @@ Mon Jul  6 13:53:05 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\
 Mon Jul  6 13:53:05 2015 D: Writing the database file, in total 26 parametrizations.
 Mon Jul  6 13:53:05 2015 D: tremppi_spawn finished successfully. --- tremppi_bias has started. --- 
 Mon Jul  6 13:53:09 2015 D: Computing function graph data.
-Mon Jul  6 13:53:09 2015 D: tremppi_bias finished successfully.
+Mon Jul  6 13:53:09 2015 D: tremppi_bias finished successfully. --- tremppi_spawn has started. --- 
+Mon Jul  6 15:33:41 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:33:41 2015 D: Parsing the network.
+Mon Jul  6 15:33:41 2015 D: Obtaining kinetics.
+Mon Jul  6 15:33:41 2015 D: Creating the database file.
+Mon Jul  6 15:33:41 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 15:33:41 2015 D: Writing the database file, in total 26 parametrizations.
+Mon Jul  6 15:33:41 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:35:38 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:35:38 2015 D: Parsing the network.
+Mon Jul  6 15:35:38 2015 D: Obtaining kinetics.
+Mon Jul  6 15:35:38 2015 D: Creating the database file.
+Mon Jul  6 15:35:38 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 15:35:38 2015 D: Writing the database file, in total 26 parametrizations.
+Mon Jul  6 15:35:38 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:36:58 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:36:58 2015 D: Parsing the network.
+Mon Jul  6 15:36:58 2015 D: Obtaining kinetics.
+Mon Jul  6 15:36:58 2015 D: Creating the database file.
+Mon Jul  6 15:36:58 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 15:36:58 2015 D: Writing the database file, in total 447552 parametrizations.
+Mon Jul  6 15:36:58 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:42:13 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:42:13 2015 D: Parsing the network.
+Mon Jul  6 15:42:13 2015 D: Obtaining kinetics.
+Mon Jul  6 15:42:13 2015 D: Creating the database file.
+Mon Jul  6 15:42:13 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 15:42:13 2015 D: Writing the database file, in total 447552 parametrizations.
+Mon Jul  6 15:42:13 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:47:52 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:47:52 2015 D: Parsing the network.
+Mon Jul  6 15:47:52 2015 D: Obtaining kinetics.
+Mon Jul  6 15:47:52 2015 D: Creating the database file.
+Mon Jul  6 15:47:52 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:51:35 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:51:35 2015 D: Parsing the network.
+Mon Jul  6 15:51:35 2015 D: Obtaining kinetics.
+Mon Jul  6 15:51:35 2015 D: Creating the database file.
+Mon Jul  6 15:51:35 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:56:01 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:56:01 2015 D: Parsing the network.
+Mon Jul  6 15:56:01 2015 D: Obtaining kinetics.
+Mon Jul  6 15:56:01 2015 D: Creating the database file.
+Mon Jul  6 15:56:01 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 15:59:19 2015 D: Checking the JSON correctness.
+Mon Jul  6 15:59:19 2015 D: Parsing the network.
+Mon Jul  6 15:59:19 2015 D: Obtaining kinetics.
+Mon Jul  6 15:59:19 2015 D: Creating the database file.
+Mon Jul  6 15:59:19 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:00:23 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:00:23 2015 D: Parsing the network.
+Mon Jul  6 16:00:23 2015 D: Obtaining kinetics.
+Mon Jul  6 16:00:23 2015 D: Creating the database file.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:02:32 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:02:32 2015 D: Parsing the network.
+Mon Jul  6 16:02:32 2015 D: Obtaining kinetics.
+Mon Jul  6 16:02:32 2015 D: Creating the database file.
+Mon Jul  6 16:02:32 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:03:10 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:03:10 2015 D: Parsing the network.
+Mon Jul  6 16:03:10 2015 D: Obtaining kinetics.
+Mon Jul  6 16:03:10 2015 D: Creating the database file.
+Mon Jul  6 16:03:10 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:03:10 2015 E: Top level exception: boost::filesystem::remove: The process cannot access the file because it is being used by another process: "C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite" --- tremppi_spawn has started. --- 
+Mon Jul  6 16:03:17 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:03:17 2015 D: Parsing the network.
+Mon Jul  6 16:03:17 2015 D: Obtaining kinetics.
+Mon Jul  6 16:03:17 2015 D: Creating the database file.
+Mon Jul  6 16:03:17 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:03:17 2015 D: Writing the database file, in total 447552 parametrizations. --- tremppi_spawn has started. --- 
+Mon Jul  6 16:03:55 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:03:55 2015 D: Parsing the network.
+Mon Jul  6 16:03:55 2015 D: Obtaining kinetics.
+Mon Jul  6 16:03:55 2015 D: Creating the database file.
+Mon Jul  6 16:03:55 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:04:32 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:04:32 2015 D: Parsing the network.
+Mon Jul  6 16:04:32 2015 D: Obtaining kinetics.
+Mon Jul  6 16:04:32 2015 D: Creating the database file.
+Mon Jul  6 16:04:32 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:04:32 2015 D: Writing the database file, in total 447552 parametrizations. --- tremppi_spawn has started. --- 
+Mon Jul  6 16:05:42 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:05:42 2015 D: Parsing the network.
+Mon Jul  6 16:05:42 2015 D: Obtaining kinetics.
+Mon Jul  6 16:05:42 2015 D: Creating the database file.
+Mon Jul  6 16:05:42 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:08:15 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:08:15 2015 D: Parsing the network.
+Mon Jul  6 16:08:15 2015 D: Obtaining kinetics.
+Mon Jul  6 16:08:15 2015 D: Creating the database file.
+Mon Jul  6 16:08:15 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:08:15 2015 E: Top level exception: boost::filesystem::remove: The process cannot access the file because it is being used by another process: "C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite" --- tremppi_spawn has started. --- 
+Mon Jul  6 16:12:03 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:12:03 2015 D: Parsing the network.
+Mon Jul  6 16:12:03 2015 D: Obtaining kinetics.
+Mon Jul  6 16:12:03 2015 D: Creating the database file.
+Mon Jul  6 16:12:03 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:13:08 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:13:08 2015 D: Parsing the network.
+Mon Jul  6 16:13:08 2015 D: Obtaining kinetics.
+Mon Jul  6 16:13:08 2015 D: Creating the database file.
+Mon Jul  6 16:13:08 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:14:16 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:14:16 2015 D: Parsing the network.
+Mon Jul  6 16:14:16 2015 D: Obtaining kinetics.
+Mon Jul  6 16:14:16 2015 D: Creating the database file.
+Mon Jul  6 16:14:16 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:15:08 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:15:08 2015 D: Parsing the network.
+Mon Jul  6 16:15:08 2015 D: Obtaining kinetics.
+Mon Jul  6 16:15:08 2015 D: Creating the database file.
+Mon Jul  6 16:15:08 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:16:04 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:16:04 2015 D: Parsing the network.
+Mon Jul  6 16:16:04 2015 D: Obtaining kinetics.
+Mon Jul  6 16:16:04 2015 D: Creating the database file.
+Mon Jul  6 16:16:04 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:16:42 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:16:42 2015 D: Parsing the network.
+Mon Jul  6 16:16:42 2015 D: Obtaining kinetics.
+Mon Jul  6 16:16:42 2015 D: Creating the database file.
+Mon Jul  6 16:16:42 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:19:07 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:19:07 2015 D: Parsing the network.
+Mon Jul  6 16:19:07 2015 D: Obtaining kinetics.
+Mon Jul  6 16:19:07 2015 D: Creating the database file.
+Mon Jul  6 16:19:07 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:20:27 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:20:27 2015 D: Parsing the network.
+Mon Jul  6 16:20:27 2015 D: Obtaining kinetics.
+Mon Jul  6 16:20:27 2015 D: Creating the database file.
+Mon Jul  6 16:20:27 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:20:27 2015 D: Writing the database file, in total 447552 parametrizations.
+Mon Jul  6 16:20:27 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_bias has started. --- 
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:24:13 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:24:13 2015 D: Parsing the network.
+Mon Jul  6 16:24:13 2015 D: Obtaining kinetics.
+Mon Jul  6 16:24:13 2015 D: Creating the database file.
+Mon Jul  6 16:24:13 2015 D: Writing the database file, in total 26 parametrizations.
+Mon Jul  6 16:24:13 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:24:14 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:24:14 2015 D: Parsing the network.
+Mon Jul  6 16:24:14 2015 D: Obtaining kinetics.
+Mon Jul  6 16:24:14 2015 D: Creating the database file.
+Mon Jul  6 16:24:14 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:24:14 2015 D: Writing the database file, in total 26 parametrizations.
+Mon Jul  6 16:24:14 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:24:14 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:24:14 2015 D: Parsing the network.
+Mon Jul  6 16:24:14 2015 D: Obtaining kinetics.
+Mon Jul  6 16:24:14 2015 D: Creating the database file.
+Mon Jul  6 16:24:14 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:24:14 2015 D: Writing the database file, in total 26 parametrizations.
+Mon Jul  6 16:24:14 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_spawn has started. --- 
+Mon Jul  6 16:24:20 2015 D: Checking the JSON correctness.
+Mon Jul  6 16:24:20 2015 D: Parsing the network.
+Mon Jul  6 16:24:20 2015 D: Obtaining kinetics.
+Mon Jul  6 16:24:20 2015 D: Creating the database file.
+Mon Jul  6 16:24:20 2015 W: Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+Mon Jul  6 16:24:20 2015 D: Writing the database file, in total 26 parametrizations.
+Mon Jul  6 16:24:20 2015 D: tremppi_spawn finished successfully.
+ --- tremppi_bias has started. --- 
+Mon Jul  6 16:24:21 2015 D: Computing function graph data.
+Mon Jul  6 16:24:21 2015 D: tremppi_bias finished successfully.

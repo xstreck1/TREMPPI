@@ -13,6 +13,28 @@ tremppi.tools.controls = function () {
 tremppi.tools.toolbarClick = function (event) {
 };
 
+tremppi.tools.getCommands = function () {
+    var url = tremppi.getServerAddress() + "?getCommands";
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (data) {
+            $('#progress').html('');
+            if (data === "") {
+                $('<div>NO COMMAND RUNNING</div>').appendTo($("#progress"));
+            }
+            else {
+                var commands = data.split(" ");
+                var current_command = $('<div><span>' + commands[0] + ': </span><span id="progress_no">0</span></div>');
+                current_command.appendTo($("#progress"));
+                for (var i = 1; i < commands.length; i++) {
+                    $('<div>' + commands[i] + '</div>').appendTo($("#progress"));
+                }
+                tremppi.tools.getProgress();
+            }
+        }
+    });
+};
 
 tremppi.tools.addToQueue = function (command) {
     var url = tremppi.getServerAddress() + "?tremppi+" + command;
@@ -21,7 +43,7 @@ tremppi.tools.addToQueue = function (command) {
         url: url,
         success: function (res) {
             tremppi.log(command + " executed successfully.");
-            tremppi.tools.getProgress();
+            tremppi.tools.getCommands();
         },
         fail: function (res) {
             tremppi.log(command + " failed.");
@@ -35,19 +57,20 @@ tremppi.tools.getProgress = function () {
         type: "GET",
         url: url,
         success: function (data) {
-            $("progress").html("Progress: " + data);
             var result = parseInt(data);
             if (result !== -1) {
-                tremppi.tools.getProgress();
+                $("#progress_no").html(data);
+                setTimeout(tremppi.tools.getProgress, 1000);
             }
             else {
+                tremppi.tools.getCommands();
                 tremppi.tools.getLog();
             }
         }
     });
 };
 
-tremppi.tools.getLog = function() {
+tremppi.tools.getLog = function () {
     var url = tremppi.getServerAddress() + "?getLog";
     $.ajax({
         type: "GET",
@@ -55,5 +78,5 @@ tremppi.tools.getLog = function() {
         success: function (data) {
             $("#log_file").val(data);
         }
-    });    
+    });
 };

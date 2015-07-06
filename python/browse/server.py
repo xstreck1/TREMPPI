@@ -21,17 +21,19 @@ class TremppiServer(SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urlparse(self.path)
         # print(parsed_path.path)
+        data = ""
         if parsed_url.query == "" or parsed_url.query[0] == "_":
             if parsed_url.path == "/":
-                self.success_response('text/plain', "tremmpi browse is running".encode())
+                data = "tremmpi browse is running"
             else:
                 return SimpleHTTPRequestHandler.do_GET(self)
-        elif parsed_url.query[0:11] == "getProgress":
-            progress = self._tool_manager.get_progress()
-            self.success_response('text', (str(progress).encode()))
-        elif parsed_url.query[0:6] == "getLog":
+        elif parsed_url.query[0:len("getProgress")] == "getProgress":
+            data = self._tool_manager.get_progress()
+        elif parsed_url.query[0:len("getLog")] == "getLog":
             data = get_log("./log.txt")
-            self.success_response('text', (str(data).encode()))
+        elif parsed_url.query[0:len("getCommands")] == "getCommands":
+            data = self._tool_manager.get_commands()
+        self.success_response('text', (str(data).encode()))
 
     # respond to the post request
     def do_POST(self):

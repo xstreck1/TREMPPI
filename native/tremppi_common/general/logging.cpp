@@ -90,9 +90,6 @@ void Logging::step()
 
 	if (progress_i > Logging::last_progress_val) 
 	{
-		if (progress_i < 1000) {
-			cout << "0";
-		}
 		if (progress_i < 100) {
 			cout << "0";
 		}

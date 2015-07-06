@@ -35,7 +35,8 @@ tremppi.tools.page = function () {
         var desc_cell = $('<td>'+ tremppi.tools.tool_list[i].description + '</td>').appendTo(row);
     }
     var reports_div = $('<div id="reports"></div>').appendTo($('#widget'));
-    var progress_list = $('<div id="progress">Progress: -1</div>').appendTo(reports_div);
+    var progress_list = $('<div id="progress"></div>').appendTo(reports_div);
+    var kill_all = $('<button class="btn" id="kill_all">KILL ALL PROCESSES</button>').appendTo(reports_div);
     var log_file = $('<textarea id="log_file" placeholder="Contents of the log.txt file."></textarea>').appendTo(reports_div);
 };
 
@@ -44,6 +45,7 @@ tremppi.tools.layout = function () {
 
 tremppi.tools.setData = function (data) {
     // Enable controls
+    tremppi.tools.getCommands();
     tremppi.tools.getLog();
     tremppi.tools.controls();
 };
