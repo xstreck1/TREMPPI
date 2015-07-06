@@ -1,1 +1,8 @@
-D:Checking the JSON correctness.D:Parsing the network.D:Obtaining kinetics.D:Creating the database file.W:Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.D:Writing the database file, in total 26 parametrizations.E:Top level exception: Python exception encountered.
+
+D:Checking the JSON correctness.
+D:Parsing the network.
+D:Obtaining kinetics.
+D:Creating the database file.
+W:Database file C:\Users\adams_000\TREMPPI\javascript\data\database.sqlite already exists, erasing.
+D:Writing the database file, in total 26 parametrizations.
+D:tremppi_spawn finished successfully.

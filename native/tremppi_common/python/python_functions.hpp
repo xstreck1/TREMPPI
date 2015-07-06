@@ -25,6 +25,8 @@ public:
 
 	//
 	static void configure(string widget);
+
+	static void throw_python_exception();
 };
 
 template<typename ResultType>
@@ -38,7 +40,6 @@ void PythonFunctions::eval(const string & command, ResultType & result)
 
 	catch (bpy::error_already_set const &)
 	{
-		PyErr_Print();
-		throw std::runtime_error("Python exception encountered.");
+		throw_python_exception();
 	}
 }

@@ -26,7 +26,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
                 self.success_response('text/plain', "tremmpi browse is running".encode())
             else:
                 return SimpleHTTPRequestHandler.do_GET(self)
-        elif parsed_url.query == "getProgress":
+        elif parsed_url.query[0:11] == "getProgress":
             progress = self._tool_manager.get_progress()
             self.success_response('text', (str(progress).encode()))
 
@@ -41,6 +41,8 @@ class TremppiServer(SimpleHTTPRequestHandler):
             data = self.rfile.read(int(length))
             save_file(store_path, data)
             self.success_response('text', ("".encode()))
+        if parsed_url.query == "killAll":
+            self._tool_manager.kill_all()
         elif parsed_url.query[0:7] == "tremppi":
             self._tool_manager.add_to_queue(parsed_url.query[8:])
             progress = self._tool_manager.get_progress()

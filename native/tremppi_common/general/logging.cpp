@@ -10,7 +10,7 @@ int Logging::last_progress_val;
 Logging::Logging() 
 {
 	last_progress_val = 0;
-	cout << "\r0";
+	cout << 0 << "\r";
 	cout << fixed << setprecision(PRECISION);
 }
 
@@ -88,7 +88,11 @@ void Logging::step()
 
 	if (progress_i > Logging::last_progress_val) 
 	{
-		cout << "\r" << to_string(progress_i / SHIFT_FACTOR);
+		if (progress_i < 1000)
+			cout << "0";
+		if (progress_i < 100)
+			cout << "0";
+		cout <<  progress_i / SHIFT_FACTOR << "\r";
 		Logging::last_progress_val = progress_i;
 	}
 }
@@ -97,7 +101,8 @@ void Logging::step()
 
 void Logging::exceptionMessage(const exception & e, const int err_no) 
 {
-	ERROR_LOG << "Top level exception: " << e.what();
-	cerr << "\nERROR: " << e.what();
+	cerr << "\nERROR: " << e.what() << flush;
+	ERROR_LOG << "Top level exception: " << e.what() << flush;
+	releaseFile();
 	exit(err_no);
 }

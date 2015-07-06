@@ -15,10 +15,15 @@ tremppi.tools.toolbarClick = function (event) {
 
 tremppi.tools.getProgress = function () {
     var url = tremppi.getServerAddress() + "?getProgress";
-    $.get(url, function (data) {
-        $("progress").html("Progress: " + data);
-        if (data !== -1) {
-            tremppi.tools.getProgress();
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (data) {
+            $("progress").html("Progress: " + data);
+            var result = parseInt(data);
+            if (result !== -1) {
+                tremppi.tools.getProgress();
+            }
         }
     });
 };
