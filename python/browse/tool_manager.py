@@ -10,7 +10,7 @@ class ToolManager:
     _current = ""
     _last_progress = 0.0
 
-    def isRunning(self):
+    def is_running(self):
         if self._subprocess is None:
             return False
         elif self._subprocess.poll() is None:
@@ -25,7 +25,7 @@ class ToolManager:
     # If it is done, start a new one from the queue.
     # If all is done, return -1.
     def get_progress(self):
-        if not self.isRunning():
+        if not self.is_running():
             if len(self._commands) > 0:
                 self._current = self._commands.pop()
                 self._last_progress = 0.0

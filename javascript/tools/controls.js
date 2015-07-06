@@ -36,6 +36,22 @@ tremppi.tools.getCommands = function () {
     });
 };
 
+tremppi.tools.killAll = function (command) {
+    var url = tremppi.getServerAddress() + "?killAll";
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: function (res) {
+            tremppi.log("Kill all executed successfully.");
+            tremppi.tools.getCommands();
+        },
+        fail: function (res) {
+            tremppi.log("Kill all failed.", 'error');
+        }
+    });
+};
+
+
 tremppi.tools.addToQueue = function (command) {
     var url = tremppi.getServerAddress() + "?tremppi+" + command;
     $.ajax({
@@ -46,7 +62,7 @@ tremppi.tools.addToQueue = function (command) {
             tremppi.tools.getCommands();
         },
         fail: function (res) {
-            tremppi.log(command + " failed.");
+            tremppi.log(command + " failed.", 'error');
         }
     });
 };

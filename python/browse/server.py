@@ -46,7 +46,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
             data = self.rfile.read(int(length))
             save_file(store_path, data)
             self.success_response('text', ("".encode()))
-        if parsed_url.query == "killAll":
+        elif parsed_url.query == "killAll":
             self._tool_manager.kill_all()
         elif parsed_url.query[0:7] == "tremppi":
             self._tool_manager.add_to_queue(parsed_url.query[8:])
