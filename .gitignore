@@ -1,6 +1,9 @@
 # configuration files
 tremppi_common/configure.h
 
+#possible GECODE
+./gecode-*
+
 # build files
 /bin*
 /lib*
