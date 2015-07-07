@@ -30,8 +30,15 @@ SET(BUILD_STANDALONE OFF CACHE BOOL "Build also stand-alones")
 SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
 
 # Gecode
-FIND_PACKAGE(Gecode)
-include_directories(${Gecode_INCLUDE_DIRS})
+if(GECODE_LOCAL) # GECODE is inserted into the project
+	add_subdirectory (${GECODE_LOCAL})
+	include_directories(${TREMPPI_SOURCE_DIR}/${GECODE_LOCAL})
+	set(Gecode_LIBRARIES} gecodekernel gecodeint gecodesearch gecodeminimodel)
+	set(Gecode_LIBRARIES_D} gecodekernel gecodeint gecodesearch gecodeminimodel)
+else # GECODE is to be found outside
+	FIND_PACKAGE(Gecode)
+	include_directories(${Gecode_INCLUDE_DIRS})
+endif
 
 # configure a header file 
 configure_file (
