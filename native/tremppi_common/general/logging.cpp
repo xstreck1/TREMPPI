@@ -34,7 +34,7 @@ ofstream & Logging::getFile()
 
 void Logging::acquireFile()
 {
-	file = ofstream((TremppiSystem::WORK_PATH / "log.txt").string(), ios::app);
+	file.open((TremppiSystem::WORK_PATH / "log.txt").string(), ios::app);
 
 	if (!file) 
 	{
