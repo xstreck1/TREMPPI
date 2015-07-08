@@ -2,19 +2,10 @@ cmake_minimum_required (VERSION 3.0)
 PROJECT(TREMPPI)
 
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++14")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 endif(UNIX)
-if(TREMPPI_STATIC)
-	MESSAGE("BUILDING STATIC")
-	set(Boost_USE_STATIC_LIBS ON)
-	if(UNIX)
-		set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
-	endif(UNIX)
-endif(TREMPPI_STATIC)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-
 
 set(NATIVE_SOURCE_DIR ${TREMPPI_SOURCE_DIR}/native)
 
@@ -50,14 +41,6 @@ configure_file (
   "${NATIVE_SOURCE_DIR}/tremppi_common/configure.h.in"
   "${NATIVE_SOURCE_DIR}/tremppi_common/configure.h"
 )
-  
-if (UNIX)
-	if(TREMPPI_STATIC)
-		set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-		set(CMAKE_EXE_LINKER_FLAGS "-static")
-		set(Boost_LIBRARIES ${Boost_LIBRARIES} pthread dl util)
-	endif(TREMPPI_STATIC)
-endif(UNIX)
 
 # Python
 FIND_PACKAGE(PythonLibs 3.2 REQUIRED)
@@ -92,6 +75,9 @@ SOURCE_GROUP("Source Files\\python" ${COMMON_FOLDER}/python/.*cpp)
 ADD_LIBRARY(tremppi_common ${NATIVE_SOURCE_DIR}/tremppi_common/header.h ${NATIVE_SOURCE_DIR}/tremppi_common/configure.h ${COMMON_FILES})
 
 target_link_libraries(tremppi_common ${Boost_LIBRARIES} ${Gecode_LIBRARIES} ${Gecode_LIBRARIES_D} ${PYTHON_LIBRARIES} sqlite3 sqlite3pp jsonccp)
+if (UNIX)
+	target_link_libraries(tremppi_common dl util)
+endif(UNIX)
 
 
 # tremppi_test

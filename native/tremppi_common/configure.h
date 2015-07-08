@@ -1,2 +1,2 @@
-#define TREMPPI_BUILD_PATH "/home/mi/xstreck1/TREMPPI"
+#define TREMPPI_BUILD_PATH "/home/adam/TREMPPI"
 
