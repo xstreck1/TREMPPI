@@ -3,6 +3,11 @@ PROJECT(TREMPPI)
 
 if(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+	if (TREMPPI_STATIC)
+		MESSAGE("STATIC BUILD")
+		set(Boost_USE_STATIC_LIBS ON)
+		set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+	endif(TREMPPI_STATIC)
 endif(UNIX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -11,7 +16,6 @@ set(NATIVE_SOURCE_DIR ${TREMPPI_SOURCE_DIR}/native)
 
 # build to bin and lib
 file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/lib)
-file(MAKE_DIRECTORY ${TREMPPI_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/bin)
 set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
@@ -20,6 +24,7 @@ set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 find_package(Boost 1.54.0 COMPONENTS system program_options filesystem python REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
+
 
 SET(BUILD_STANDALONE OFF CACHE BOOL "Build also stand-alones")
 SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
