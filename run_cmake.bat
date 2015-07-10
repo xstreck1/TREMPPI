@@ -1,1 +1,0 @@
-cmake CMakeLists.txt -DBUILD_TEST:BOOL=ON -DGECODE_DIR=C:\Libs\gecode-4.3.0 -DBOOST_INCLUDEDIR=C:\Libs\boost_1_57_0 -DBOOST_LIBRARYDIR=C:\Libs\boost_1_57_0\stage\lib -DGTEST_ROOT=C:\Libs\gtest-1.7.0

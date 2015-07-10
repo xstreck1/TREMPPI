@@ -1,12 +1,16 @@
 # configuration files
-tremppi_common/configure.h
+native/tremppi_common/configure.h
+run_cmake.bat
+run_cmake.sh
 
 #possible GECODE
-./gecode-*
+/gecode-*
 
 # build files
 /bin*
 /lib*
+/Release*
+/Debug
 
 # CMake files
 CMakeFiles*
