@@ -3,7 +3,8 @@ PROJECT(TREMPPI)
 
 if (TREMPPI_STATIC)
 	MESSAGE("STATIC BUILD")
-	set(Boost_USE_STATIC_LIBS ON)
+	SET(Boost_USE_STATIC_LIBS ON)
+	set(Boost_USE_STATIC_RUNTIME ON)
 endif (TREMPPI_STATIC)
 if(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
@@ -22,7 +23,8 @@ set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 
 # Boost
-find_package(Boost 1.54.0 COMPONENTS system program_options filesystem python REQUIRED)
+add_definitions( -DBOOST_ALL_NO_LIB )
+find_package(Boost 1.54.0 COMPONENTS system filesystem python REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 
