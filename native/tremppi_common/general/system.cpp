@@ -7,8 +7,7 @@ bfs::path TremppiSystem::WORK_PATH;
 bfs::path TremppiSystem::EXEC_PATH;
 bfs::path TremppiSystem::BIN_PATH;
 bfs::path TremppiSystem::DATA_PATH;
-bool TremppiSystem::standalone;
-
+bool TremppiSystem::standalone;
 void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) 
 {
 	TremppiSystem::PROGRAM_NAME = name;
@@ -33,5 +32,25 @@ void TremppiSystem::set(const char * name, const char * arg, const string & _WOR
 	else 
 	{
 		throw runtime_error("Binary " + TremppiSystem::BIN_PATH.string() + "is not homed and TREMPPI_HOME not found. Either set up the system variable of the same name pointing to the TREMMPI folder, or put the binary in the TREMPPI/bin folder.");
+	}
+}
+
+void TremppiSystem::initiate(const string & name, int argc, char **argv) {
+	TimeManager::setStartTime();
+	try
+	{
+		string path = ".";
+		for (const size_t arg_no : crange(argc)) {
+			if (string(argv[arg_no]) == "--path") {
+				path = argv[arg_no + 1];
+			}
+		}
+		TremppiSystem::set(name.c_str(), argv[0], path);
+	}
+
+	catch (exception & e)
+	{
+		cerr << e.what() << endl;
+		exit(1);
 	}
 }

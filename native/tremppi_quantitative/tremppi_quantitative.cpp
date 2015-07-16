@@ -3,7 +3,6 @@
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/time_manager.hpp>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
 #include <tremppi_common/python/python_functions.hpp>
 
@@ -21,7 +20,7 @@ struct ComputedData
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_quantitative(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_quantitative", argc, argv);
+	TremppiSystem::initiate("tremppi_quantitative", argc, argv);
 	Logging logging;
 
 	Json::Value out;

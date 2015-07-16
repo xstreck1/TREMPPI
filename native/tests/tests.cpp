@@ -1,5 +1,3 @@
-#include <tremppi_common/general/program_options.hpp>
-
 #include "python_tests.hpp"
 #include "common_tests.hpp"
 #include "spawn_tests.hpp"
@@ -33,7 +31,7 @@ TEST(CoreTest, AllPrograms)
 
 int tremppi_test(int argc, char** argv)
 {
-	TremppiSystem::initiate<ProgramOptions>("tremppi_test", argc, argv);
+	TremppiSystem::initiate("tremppi_test", argc, argv);
 
 	::testing::InitGoogleTest(&argc, argv);
 	int result = RUN_ALL_TESTS();

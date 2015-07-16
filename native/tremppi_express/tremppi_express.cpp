@@ -2,13 +2,12 @@
 #include <tremppi_common/python/python_functions.hpp>
 
 #include "compute/MVQMC.hpp"
-#include "io/express_options.hpp"
 #include "io/output.hpp"
 
 //
 int tremppi_express(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ExpressOptions>("tremppi_express", argc, argv);
+	TremppiSystem::initiate("tremppi_express", argc, argv);
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;

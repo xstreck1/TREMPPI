@@ -5,7 +5,6 @@
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
 
-#include "io/witness_options.hpp"
 #include "io/witness_reader.hpp"
 #include "io/witness_output.hpp"
 
@@ -14,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_witness(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<WitnessOptions>("tremppi_witness", argc, argv);
+	TremppiSystem::initiate("tremppi_witness", argc, argv);
 	Logging logging;
 
 	Json::Value out;

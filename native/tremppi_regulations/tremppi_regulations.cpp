@@ -2,7 +2,6 @@
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
 #include <tremppi_common/python/python_functions.hpp>
 
@@ -13,7 +12,7 @@
 // TODO: disable regulatory if not -r
 int tremppi_impact(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_impact", argc, argv);
+	TremppiSystem::initiate("tremppi_impact", argc, argv);
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
@@ -112,8 +111,8 @@ int tremppi_impact(int argc, char ** argv)
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
-	}
-
+	}
+
 	try
 	{
 		PythonFunctions::configure("select");
@@ -128,7 +127,7 @@ int tremppi_impact(int argc, char ** argv)
 
 int tremppi_regulations(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_regulations", argc, argv);
+	TremppiSystem::initiate("tremppi_regulations", argc, argv);
 	Logging logging;
 
 	Json::Value out;

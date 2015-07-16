@@ -1,5 +1,4 @@
 #include <tremppi_common/general/system.hpp>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/python/python_functions.hpp>
@@ -85,7 +84,7 @@ string getSign(const vector<Levels> & contexts, const vector<vector<size_t> > & 
 //
 int tremppi_sign(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_sign", argc, argv);
+	 TremppiSystem::initiate("tremppi_sign", argc, argv);
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;

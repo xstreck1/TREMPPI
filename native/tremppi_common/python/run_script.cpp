@@ -1,6 +1,5 @@
 #include <boost/python/detail/wrap_python.hpp>
 #include <tremppi_common/header.h>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/general/system.hpp>
 
 #include "run_script.hpp"
@@ -8,7 +7,7 @@
 
 int run_script(const string command, int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_python", argc, argv);
+	TremppiSystem::initiate("tremppi_python", argc, argv);
 
 	// Check if the script exists
 	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };

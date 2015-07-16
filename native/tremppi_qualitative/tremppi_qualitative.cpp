@@ -3,7 +3,6 @@
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/time_manager.hpp>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/report/report.hpp>
 #include <tremppi_common/python/python_functions.hpp>
 
@@ -31,7 +30,7 @@ inline void incrementOccurence(const string & value, map<string, size_t> & value
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_qualitative(int argc, char ** argv) 
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_qualitative", argc, argv);
+	TremppiSystem::initiate("tremppi_qualitative", argc, argv);
 	Logging logging;
 
 	Json::Value out;

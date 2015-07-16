@@ -1,6 +1,5 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
-#include <tremppi_common/general/program_options.hpp>
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/python/python_functions.hpp>
@@ -16,7 +15,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_validate(int argc, char ** argv)
 {
-	bpo::variables_map po = TremppiSystem::initiate<ProgramOptions>("tremppi_validate", argc, argv);
+	TremppiSystem::initiate("tremppi_validate", argc, argv);
 	Logging logging;
 	string select;
 

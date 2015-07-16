@@ -7,7 +7,6 @@
 #include "compute/parametrizations_builder.hpp"
 #include "io/model_reader.hpp"
 #include "io/database_filler.hpp"
-#include "io/spawn_options.hpp"
 #include "io/syntax_checker.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +16,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_spawn(int argc, char ** argv)
 {
-	bpo::variables_map po = TremppiSystem::initiate<SpawnOptions>("tremppi_spawn", argc, argv);
+	TremppiSystem::initiate("tremppi_spawn", argc, argv);
 	Logging logging;
 	bfs::path database_file = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
 
@@ -66,13 +65,6 @@ int tremppi_spawn(int argc, char ** argv)
 	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 4);
-	}
-
-	// Skip further execution if only conducting a check
-	if (po.count("check-only") > 0)
-	{
-		DEBUG_LOG << "Check-only specified, skipping the enumeration.";
-		return 0;
 	}
 
 	// Build parametrizations (in full this time)

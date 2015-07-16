@@ -26,19 +26,17 @@
 
 #include <boost/range/algorithm.hpp>
 #include <boost/range/counting_range.hpp>
-#include <boost/program_options.hpp>
 // Boost c++11 problem fix
 #define BOOST_NO_CXX11_SCOPED_ENUMS
 #include <boost/filesystem.hpp>
 #undef BOOST_NO_CXX11_SCOPED_ENUMS
-#define BOOST_PYTHON_STATIC_LIB 
 #include <boost/algorithm/string.hpp>
 #include <boost/python.hpp>
 
 #include "configure.h"
 
-// POST-HSB 2015
-const std::string VERSION("0.4.0");
+// POST-ISMB 2015
+const std::string VERSION("0.4.1");
 
 using namespace std;
 
@@ -48,7 +46,6 @@ using boost::is_any_of;
 using boost::split;
 using boost::trim;
 
-namespace bpo = boost::program_options;
 namespace rng = boost::range;
 namespace bfs = boost::filesystem;
 namespace alg = boost::algorithm;
