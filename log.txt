@@ -1,4 +1,0 @@
-[2015-May-27 14:49:11.273941] (1) <info>: ------------------------------
-[2015-May-27 14:49:11.275942] (2) <info>: tremppi_qualitative started.
-[2015-May-27 14:49:11.275942] (3) <info>: Parsing data.
-[2015-May-27 14:49:11.275942] (4) <error>: Top level exception: can't connect database

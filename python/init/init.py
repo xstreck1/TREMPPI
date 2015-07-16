@@ -7,7 +7,7 @@ from os.path import join, dirname, abspath, isfile, exists
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything, replace_regex, normal_paths
-from tremppi.header import folders, widgets, source_folder, data_folder
+from tremppi.header import folders, widgets, source_folder, data_folder,configure_filename
 
 # make sure all the data are present
 def generate_data(data_path):
@@ -25,6 +25,15 @@ def generate_data(data_path):
             open(js_filename, 'w+').close()
         if not exists(join(data_path, widget)):
             os.makedirs(join(data_path, widget))
+
+# return subdirectories that contain configure.js
+def list_projects(data_path):
+    result = []
+    subdirs = [name for name in os.listdir(data_path) if os.path.isdir(os.path.join(data_path, name))]
+    for subdir in subdirs:
+        if exists(join(data_path, subdir, configure_filename)):
+            result.append(subdir)
+    return result
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')

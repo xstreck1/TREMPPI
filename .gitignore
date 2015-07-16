@@ -1,6 +1,7 @@
 # configuration files
 native/tremppi_common/configure.h
 run_cmake.bat
+run_cmake_static.bat
 run_cmake.sh
 
 #possible GECODE
@@ -10,7 +11,9 @@ run_cmake.sh
 /bin*
 /lib*
 /Release*
-/Debug
+/Debug*
+tremppi
+tremppi.exe
 
 # CMake files
 CMakeFiles*
@@ -41,4 +44,4 @@ javascript/data*
 
 # created files
 *.sqlite
-*.log
+*log.txt
