@@ -40,9 +40,10 @@ int main(int argc, char ** argv)
 
 	if (argc < 2)
 	{
-		cerr << "Fatal error: No program given on the input. Usage:\n";
-		printHelp();
-		return 1;
+		TremppiSystem::set("browse", argv[0], ".");
+		vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / PROJECTS_FOLDER).string() };
+		ArgPtr arg_ptr(arguments);
+		return (tremppi_browse(arg_ptr.getArgc(), arg_ptr.getArgv()));
 	}
 	string command = argv[1];
 	if (command == "--help" || command == "-h")

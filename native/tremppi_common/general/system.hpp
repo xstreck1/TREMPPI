@@ -21,3 +21,17 @@ namespace TremppiSystem
 	extern bfs::path DATA_PATH; // The path to the data failes
 	extern bool standalone; // True if executing the standalone application instead of the main launcher
 }
+
+class ArgPtr
+{
+	int argc;
+	char ** argv;
+
+public:
+	ArgPtr(const vector<string> & values);
+	~ArgPtr();
+
+	char ** getArgv();
+
+	int getArgc();
+};

@@ -43,7 +43,7 @@ else:
             raise "Level not specified in the configure.js file."
         elif int(configuration['level']) == 1:
             configuration['projects_name'] = list_projects(".")
-            project_path = configuration['projects_name'][0]
+            project_path = configuration['projects_name'][0] + "/"
         else: # make sure data exist
             generate_data(join(DEST_PATH, data_folder))
         configuration['server_port'] = port
@@ -54,8 +54,8 @@ else:
 
     server = HTTPServer(('', int(port)), TremppiServer)
 
-    if args.nopen is None:
-        webbrowser.open("http://localhost/" + project_path + "index.html" + ":" + port)
+    if args.nopen is False:
+        webbrowser.open("http://localhost:" + port + "/" + project_path + "index.html")
 
     # Execute the server itself.
     server.serve_forever()

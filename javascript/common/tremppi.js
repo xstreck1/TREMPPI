@@ -18,7 +18,7 @@ tremppi = {
             setData: function (data) {
                 tremppi.log("setData not implemented", "warning");
             },
-            controls: function() {
+            controls: function () {
                 tremppi.log("controls not implemented", "warning");
             },
             toolbarClass: function () {
@@ -115,12 +115,13 @@ tremppi = {
         element.href = href;
         return element;
     },
-    makeHead: function () {
+    makeHead: function (level) {
         var head = document.getElementsByTagName('head')[0];
 
         // common 
         head.appendChild(tremppi.makeLink('icon', 'image/x-icon', './favicon.ico'));
-        head.appendChild(tremppi.makeScript('./configure.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
+        var configure_str = level === 0 ? "./configure.js" : "../configure.js";
+        head.appendChild(tremppi.makeScript(configure_str + '?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
         head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './common/css.css'));
         head.appendChild(tremppi.makeScript('./common/common.js'));
 
@@ -134,25 +135,43 @@ tremppi = {
         document.title = tremppi.widget_name;
     },
     makeBody: function () {
+        if (tremppi.setup.level === 0) {
+            tremppi.project_name = tremppi.setup.project_name;
+            tremppi.projects_name = [tremppi.setup.project_name];
+            tremppi.project_folder = "";
+        }
+        else if (tremppi.setup.level === 1) {
+            tremppi.project_name = window.location.pathname.split("/")[1];
+            tremppi.project_folder = tremppi.project_name + "/";
+            tremppi.projects_name = tremppi.setup.projects_name;
+            console.log(tremppi.project_folder);
+        }
+        else {
+            tremppi.log("unknown project level " + tremppi.setup.level, "error");
+        }
+
         var sidebar = {
             name: 'sidebar',
-            nodes: [
-                {id: 'widget_list', text: 'widgets', expanded: true, group: true,
-                    nodes: [
-                        {id: 'index', text: 'index'},
-                        {id: 'editor', text: 'editor'},
-                        {id: 'select', text: 'select'},
-                        {id: 'properties', text: 'properties'},
-                        {id: 'quantitative', text: 'quantitative'},
-                        {id: 'qualitative', text: 'qualitative'},
-                        {id: 'regulations', text: 'regulations'},
-                        {id: 'correlations', text: 'correlations'},
-                        {id: 'witness', text: 'witness'},
-                        {id: 'tools', text: 'tools'}
-                    ]
-                }
-            ]
+            nodes: []
         };
+
+        for (var i = 0; i < tremppi.projects_name.length; i++) {
+            sidebar.nodes.push({
+                id: tremppi.projects_name[i] + '_list', text: tremppi.projects_name[i], expanded: true, group: true,
+                nodes: [
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'index', text: 'index'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'editor', text: 'editor'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'select', text: 'select'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'properties', text: 'properties'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'quantitative', text: 'quantitative'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'qualitative', text: 'qualitative'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'regulations', text: 'regulations'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'correlations', text: 'correlations'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'witness', text: 'witness'},
+                    {id: '/' + tremppi.projects_name[i] + '/' + 'tools', text: 'tools'}
+                ]
+            });
+        }
 
         // Set basic layout
         var layout_style = 'border: 0px solid #dfdfdf;';
@@ -173,7 +192,7 @@ tremppi = {
         var sidebar = w2ui.layout.get('left').content.sidebar;
         sidebar.select(tremppi.widget_name);
         sidebar.on('click', function (event) {
-            window.open("./" + event.target + ".html", "_self");
+            window.open(event.target + ".html", "_self");
         });
 
         // Set the widget
@@ -190,9 +209,12 @@ var url = window.location.pathname;
 if (url.slice(-1) === '/') {
     url += "index.html";
 }
-tremppi.widget_name = url.substring(url.lastIndexOf('/') + 1).slice(0, -5);
+
+var url_split = url.split("/");
+console.log(url_split);
+tremppi.widget_name = url_split[url_split.length - 1].slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
-tremppi.makeHead();
+tremppi.makeHead(url_split.length - 2);
 window.onload = tremppi.makeBody;
 
 

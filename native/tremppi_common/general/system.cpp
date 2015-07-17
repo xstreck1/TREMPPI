@@ -54,3 +54,39 @@ void TremppiSystem::initiate(const string & name, int argc, char **argv) {
 		exit(1);
 	}
 }
+
+ArgPtr::ArgPtr(const vector<string>& values)
+{
+	argv = new char*[values.size() + 1];
+
+	// Add binary name
+	argv[0] = new char[TremppiSystem::BIN_PATH.string().size() + 1];
+	strcpy(argv[0], TremppiSystem::BIN_PATH.string().c_str());
+
+	// Copy new arguments
+	argc = 1;
+	for (const string & val : values)
+	{
+		argv[argc] = new char[val.size() + 1];
+		strcpy(argv[argc], val.c_str());
+		argc++;
+	}
+}
+
+ArgPtr::~ArgPtr()
+{
+	for (int i = 0; i < argc; i++) {
+		delete[] argv[i];
+	}
+	delete[] argv;
+}
+
+char ** ArgPtr::getArgv() 
+{ 
+	return argv; 
+}
+
+int ArgPtr::getArgc() 
+{ 
+	return argc; 
+}

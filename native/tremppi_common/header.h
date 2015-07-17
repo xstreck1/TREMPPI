@@ -52,6 +52,7 @@ namespace alg = boost::algorithm;
 namespace bpy = boost::python;
 
 const string DATA_FOLDER = "data";
+const string PROJECTS_FOLDER = "projects";
 const string NETWORK_FILENAME = "editor.json";
 const string DATABASE_FILENAME = "database.sqlite";
 const string PROPERTIES_FILENAME = "properties.json";
