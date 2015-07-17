@@ -53,7 +53,7 @@ int tremppi_witness(int argc, char ** argv)
 	try 
 	{
 		DEBUG_LOG << "Loading witnesses.";
-		logging.newPhase("computing witness", properties.size());
+		logging.newPhase("computing witness", properties["records"].size());
 
 		for (const auto & property : properties["records"]) 
 		{

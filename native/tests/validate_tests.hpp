@@ -20,7 +20,7 @@ void createProperties(const bfs::path & example_model_path)
 	records[0]["E_B"] = "";
 	records[0]["validate"] = true;
 	records[0]["robustness"] = true;
-	records[0]["witness"] = false;
+	records[0]["witness"] = true;
 	records[0]["records"].resize(2);
 	records[0]["records"][0]["V_B"] = "[0,1)";
 	records[0]["records"][1]["V_B"] = "(1,2]";

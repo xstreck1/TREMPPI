@@ -17,7 +17,7 @@ from server import TremppiServer
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--path', help='specify the browsing location.')
 parser.add_argument('--port', help='number of the port to run the browser on')
-parser.add_argument('--nopen', help='if set, do not open the browser')
+parser.add_argument('--nopen', help='if set, do not open the browser', action='store_true')
 
 args = parser.parse_args()
 
@@ -34,8 +34,11 @@ if not exists(configure_filename):
     raise configure_filename + "  does not exist in " + configure_filename + ". Are you sure it's a correct path?"
 else:
     project_path = ""
-    with open(configure_filename, "rw") as configure_file:
-        configuration = json.load(configure_file)
+    with open(configure_filename, "r+") as configure_file:
+        data = configure_file.read().replace('\n', '')
+        header = data[0:data.find("{")]
+        data = data[data.find("{"):-1]
+        configuration = json.loads(data)
         if "level" not in configuration:
             raise "Level not specified in the configure.js file."
         elif int(configuration['level']) == 1:
@@ -44,7 +47,10 @@ else:
         else: # make sure data exist
             generate_data(join(DEST_PATH, data_folder))
         configuration['server_port'] = port
+        configure_file.seek(0)
+        configure_file.write(header)
         configure_file.write(json.dumps(configuration))
+        configure_file.write(';')
 
     server = HTTPServer(('', int(port)), TremppiServer)
 

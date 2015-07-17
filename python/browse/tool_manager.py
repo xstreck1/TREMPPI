@@ -29,6 +29,7 @@ class ToolManager:
             if len(self._commands) > 0:
                 self._current = self._commands.pop()
                 self._last_progress = 0.0
+                print("call tremppi " + self._current)
                 self._subprocess = subprocess.Popen("tremppi " + self._current, stdout=subprocess.PIPE)
                 return -1
             else:

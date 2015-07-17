@@ -1,4 +1,1 @@
-tremppi.setup = { 	server_port: 8080, 
-	server_location: "localhost", 
-	project_name: "test_project"
-};
+tremppi.setup = {"level": 0, "project_name": "test_project", "server_location": "localhost", "server_port": "8080"};
