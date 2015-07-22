@@ -152,24 +152,27 @@ tremppi = {
 
         var sidebar = {
             name: 'sidebar',
-            nodes: []
+            nodes: [],
+            topHTML: '<img id="logo" src="logo.png" />'
         };
 
         for (var i = 0; i < tremppi.projects_name.length; i++) {
+            var project_location = tremppi.setup.level === 0 ? '/' :  '/' + tremppi.projects_name[i] + '/';
             sidebar.nodes.push({
-                id: tremppi.projects_name[i] + '_list', text: tremppi.projects_name[i], expanded: true, group: true,
+                id: tremppi.projects_name[i], text: tremppi.projects_name[i], expanded: true, group: true,
                 nodes: [
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'index', text: 'index'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'editor', text: 'editor'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'select', text: 'select'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'properties', text: 'properties'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'quantitative', text: 'quantitative'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'qualitative', text: 'qualitative'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'regulations', text: 'regulations'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'correlations', text: 'correlations'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'witness', text: 'witness'},
-                    {id: '/' + tremppi.projects_name[i] + '/' + 'tools', text: 'tools'}
-                ]
+                    {id: project_location + 'index', text: 'index'},
+                    {id: project_location + 'editor', text: 'editor'},
+                    {id: project_location + 'select', text: 'select'},
+                    {id: project_location + 'properties', text: 'properties'},
+                    {id: project_location + 'quantitative', text: 'quantitative'},
+                    {id: project_location + 'qualitative', text: 'qualitative'},
+                    {id: project_location + 'regulations', text: 'regulations'},
+                    {id: project_location + 'correlations', text: 'correlations'},
+                    {id: project_location + 'witness', text: 'witness'},
+                    {id: project_location + 'tools', text: 'tools'}
+                ],
+                hidden: tremppi.projects_name[i] !== tremppi.project_name 
             });
         }
 
@@ -211,7 +214,6 @@ if (url.slice(-1) === '/') {
 }
 
 var url_split = url.split("/");
-console.log(url_split);
 tremppi.widget_name = url_split[url_split.length - 1].slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
 tremppi.makeHead(url_split.length - 2);

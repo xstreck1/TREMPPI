@@ -17,6 +17,12 @@ html {
     background-color: #DDDDDD;
 }
 
+#logo {
+    width: 200px;
+    padding: 10px;
+    background-color: #888888;
+}
+
 a.page_content {
     display: block;
     background:#BBBBBB; 
