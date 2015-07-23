@@ -10,6 +10,12 @@ class ToolManager:
     _current = ""
     _last_progress = 0.0
 
+    def cmd_to_string(self, cmd):
+        if (cmd[0] is not ""):
+            return cmd[1] + ' --path ' + cmd[0]
+        else:
+            return cmd[1]
+
     def is_running(self):
         if self._subprocess is None:
             return False
@@ -18,8 +24,8 @@ class ToolManager:
         else:
             return False
 
-    def add_to_queue(self, command):
-        self._commands.append(command)
+    def add_to_queue(self, path, command):
+        self._commands.append((path, command))
 
     # Return progress of currently executed process in percents.
     # If it is done, start a new one from the queue.
@@ -27,7 +33,7 @@ class ToolManager:
     def get_progress(self):
         if not self.is_running():
             if len(self._commands) > 0:
-                self._current = self._commands.pop()
+                self._current = self.cmd_to_string(self._commands.pop())
                 self._last_progress = 0.0
                 print("call tremppi " + self._current)
                 self._subprocess = subprocess.Popen("tremppi " + self._current, stdout=subprocess.PIPE)
@@ -51,8 +57,14 @@ class ToolManager:
         if len(self._commands) == 0:
             return self._current
         else:
-            return self._current + " " + " ".join(self._commands)
+            return self._current + " " + " ".join(map(self.cmd_to_string, self._commands))
 
     def kill_all(self):
         self._subprocess.kill()
         self._commands = []
+
+    def call_init(self, name):
+        subprocess.Popen("tremppi init " + name)
+
+    def is_free(self, name): #return true iff name has no scheduled or running commands
+        [x for x in self._commands if x[0] != name]

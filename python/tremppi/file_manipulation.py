@@ -2,10 +2,12 @@ import shutil
 import errno
 
 from tempfile import mkstemp
-from shutil import move
+from shutil import move, rmtree
 from os import remove, close, getcwd
-from os.path import dirname, abspath, normpath, join
+from os.path import dirname, abspath, normpath, join, isfile
+from tremppi.header import configure_filename
 import re
+import json
 
 
 def normal_paths(exec_path, args):
@@ -63,3 +65,34 @@ def copyanything(src, dst):
         else:
             raise
 
+
+def save_file(store_path, data):
+    with open(store_path, 'w') as file:
+        file.write(data.decode())
+
+def get_log(log_path):
+    with open(log_path, 'r') as file:
+        return file.read()
+
+def delete_project(name):
+    if not isfile(join(name, configure_filename)):
+        raise name + " seems not to be a TREMPPI project"
+    else:
+        rmtree(name)
+
+def get_path_level(path): #data files have level -1, project files 0, projects 1
+    return 1 - path.count("/")
+
+def read_jsonp(filename):
+    with open(filename, "r") as file:
+        data = file.read().replace('\n', '')
+        header = data[0:data.find("{")]
+        data = data[data.find("{"):-1]
+        return header, json.loads(data)
+
+def write_jsonp(filename, header, data):
+    with open(filename, "w") as file:
+        file.seek(0)
+        file.write(header)
+        file.write(json.dumps(data))
+        file.write(';')

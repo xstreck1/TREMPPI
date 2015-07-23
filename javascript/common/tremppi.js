@@ -28,7 +28,7 @@ tremppi = {
         };
     },
     getServerAddress: function () {
-        return "http://" + tremppi.setup.server_location + ":" + tremppi.setup.server_port + "/";
+        return "http://" + tremppi.setup.server_location + ":" + tremppi.setup.server_port + "/" + tremppi.project_folder;
     },
     makeDataFilepath: function (filename) {
         if (typeof filename === 'undefined') {
@@ -134,47 +134,24 @@ tremppi = {
 
         document.title = tremppi.widget_name;
     },
-    makeBody: function () {
-        if (tremppi.setup.level === 0) {
+    configure: function() {
+        tremppi.level = tremppi.setup.level;
+        if (tremppi.level === 0) {
             tremppi.project_name = tremppi.setup.project_name;
             tremppi.projects_name = [tremppi.setup.project_name];
             tremppi.project_folder = "";
         }
-        else if (tremppi.setup.level === 1) {
+        else if (tremppi.level === 1) {
             tremppi.project_name = window.location.pathname.split("/")[1];
-            tremppi.project_folder = tremppi.project_name + "/";
             tremppi.projects_name = tremppi.setup.projects_name;
-            console.log(tremppi.project_folder);
+            tremppi.project_folder = tremppi.project_name + "/";
         }
         else {
             tremppi.log("unknown project level " + tremppi.setup.level, "error");
         }
-
-        var sidebar = {
-            name: 'sidebar',
-            nodes: [],
-            topHTML: '<img id="logo" src="logo.png" />'
-        };
-
-        for (var i = 0; i < tremppi.projects_name.length; i++) {
-            var project_location = tremppi.setup.level === 0 ? '/' :  '/' + tremppi.projects_name[i] + '/';
-            sidebar.nodes.push({
-                id: tremppi.projects_name[i], text: tremppi.projects_name[i], expanded: true, group: true,
-                nodes: [
-                    {id: project_location + 'index', text: 'index'},
-                    {id: project_location + 'editor', text: 'editor'},
-                    {id: project_location + 'select', text: 'select'},
-                    {id: project_location + 'properties', text: 'properties'},
-                    {id: project_location + 'quantitative', text: 'quantitative'},
-                    {id: project_location + 'qualitative', text: 'qualitative'},
-                    {id: project_location + 'regulations', text: 'regulations'},
-                    {id: project_location + 'correlations', text: 'correlations'},
-                    {id: project_location + 'witness', text: 'witness'},
-                    {id: project_location + 'tools', text: 'tools'}
-                ],
-                hidden: tremppi.projects_name[i] !== tremppi.project_name 
-            });
-        }
+    },
+    makeBody: function () {
+        tremppi.configure();
 
         // Set basic layout
         var layout_style = 'border: 0px solid #dfdfdf;';
@@ -191,6 +168,39 @@ tremppi = {
         tremppi.toolbar = w2ui.layout.get("main").toolbar;
 
         // Set left side bar
+        var sidebar = {
+            name: 'sidebar',
+            nodes: [],
+            topHTML: '<img id="logo" src="logo.png" />',
+            bottomHTML: tremppi.level === 0 ? "" :
+                    '<div id="sidebar_bottom">' +
+                    '<input id="project_name" type="text" name="Fill to create or rename" value="new name">' +
+                    '<button id="rename_project" class="btn">RENAME CURRENT</button>' +
+                    '<button id="create_project" onclick="tremppi.create()" class="btn">CREATE NEW</button>' +
+                    '<button id="delete_project" class="btn">DELETE CURRENT</button>' +
+                    '</div>'
+        };
+
+        // Add the individual projects
+        for (var i = 0; i < tremppi.projects_name.length; i++) {
+            sidebar.nodes.push({
+                id: tremppi.projects_name[i], text: tremppi.projects_name[i], expanded: true, group: true,
+                nodes: [
+                    {id: tremppi.project_folder + 'index', text: 'index'},
+                    {id: tremppi.project_folder + 'editor', text: 'editor'},
+                    {id: tremppi.project_folder + 'select', text: 'select'},
+                    {id: tremppi.project_folder + 'properties', text: 'properties'},
+                    {id: tremppi.project_folder + 'quantitative', text: 'quantitative'},
+                    {id: tremppi.project_folder + 'qualitative', text: 'qualitative'},
+                    {id: tremppi.project_folder + 'regulations', text: 'regulations'},
+                    {id: tremppi.project_folder + 'correlations', text: 'correlations'},
+                    {id: tremppi.project_folder + 'witness', text: 'witness'},
+                    {id: tremppi.project_folder + 'tools', text: 'tools'}
+                ],
+                hidden: tremppi.projects_name[i] !== tremppi.project_name
+            });
+        }
+        
         w2ui.layout.content('left', $().w2sidebar(sidebar));
         var sidebar = w2ui.layout.get('left').content.sidebar;
         sidebar.select(tremppi.widget_name);
@@ -205,6 +215,26 @@ tremppi = {
         // Load the specific data
         $.ajaxSetup({cache: false});
         tremppi.getData(tremppi.widget.setData);
+    },
+    create: function () {
+        var name = $("#project_name").val();
+        var url = tremppi.getServerAddress() + name + "?create";
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (res) {
+                tremppi.log("the project " + name + " created successfully.");
+            },
+            fail: function (res) {
+                tremppi.log("creation of the project " + name + " failed.", 'error');
+            }
+        });
+    },
+    delete: function () {
+
+    },
+    rename: function () {
+
     }
 };
 // Initial content execution, 

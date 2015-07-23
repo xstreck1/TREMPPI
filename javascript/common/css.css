@@ -19,8 +19,21 @@ html {
 
 #logo {
     width: 200px;
-    padding: 10px;
-    background-color: #888888;
+    height: 85px;
+    padding: 5px;
+    background-color: #FAFAFA;
+}
+
+ 
+
+#project_name, #rename_project, #delete_project, #create_project {
+    width: 100%;
+    margin: 0px;
+}
+
+#sidebar_bottom {
+    background-color: #FAFAFA;
+    padding: 5px;
 }
 
 a.page_content {

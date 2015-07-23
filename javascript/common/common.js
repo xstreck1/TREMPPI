@@ -325,7 +325,7 @@ tremppi.report = {
             }
         }
         if (!positive) {
-            return {min: -1 * range.max, max: -1 * range.min}
+            return {min: -1 * range.max, max: -1 * range.min};
         } else {
             return range;
         }
