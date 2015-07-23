@@ -7,6 +7,7 @@
 /* global w2ui */
 
 tremppi = {
+    widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'tools'],
     widgetInterface: function () {
         return {
             page: function () {
@@ -32,9 +33,9 @@ tremppi = {
     },
     makeDataFilepath: function (filename) {
         if (typeof filename === 'undefined') {
-            return "data/" + tremppi.widget_name + ".json";
+            return "./data/" + tremppi.widget_name + ".json";
         } else {
-            return "data/" + tremppi.widget_name + "/" + filename + ".json";
+            return "./data/" + tremppi.widget_name + "/" + filename + ".json";
         }
     },
     saveData: function (data, filename) {
@@ -115,13 +116,13 @@ tremppi = {
         element.href = href;
         return element;
     },
-    makeHead: function (level) {
+    makeHead: function () {
         var head = document.getElementsByTagName('head')[0];
 
         // common 
         head.appendChild(tremppi.makeLink('icon', 'image/x-icon', './favicon.ico'));
-        var configure_str = level === 0 ? "./configure.js" : "../configure.js";
-        head.appendChild(tremppi.makeScript(configure_str + '?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
+        head.appendChild(tremppi.makeScript('./configure.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
+        head.appendChild(tremppi.makeScript('../projects.js?_=' + Math.random().toString().slice(2))); // load the setup with cache busing
         head.appendChild(tremppi.makeLink('stylesheet', 'text/css', './common/css.css'));
         head.appendChild(tremppi.makeScript('./common/common.js'));
 
@@ -134,20 +135,17 @@ tremppi = {
 
         document.title = tremppi.widget_name;
     },
-    configure: function() {
-        tremppi.level = tremppi.setup.level;
-        if (tremppi.level === 0) {
+    configure: function () {
+        if (typeof tremppi.projects === 'undefined') {
             tremppi.project_name = tremppi.setup.project_name;
-            tremppi.projects_name = [tremppi.setup.project_name];
+            tremppi.projects = [tremppi.setup.project_name];
             tremppi.project_folder = "";
-        }
-        else if (tremppi.level === 1) {
-            tremppi.project_name = window.location.pathname.split("/")[1];
-            tremppi.projects_name = tremppi.setup.projects_name;
-            tremppi.project_folder = tremppi.project_name + "/";
+            tremppi.level = 0;
         }
         else {
-            tremppi.log("unknown project level " + tremppi.setup.level, "error");
+            tremppi.project_name = window.location.pathname.split("/")[1];
+            tremppi.project_folder = tremppi.project_name + "/";
+            tremppi.level = 1;
         }
     },
     makeBody: function () {
@@ -171,42 +169,49 @@ tremppi = {
         var sidebar = {
             name: 'sidebar',
             nodes: [],
-            topHTML: '<img id="logo" src="logo.png" />',
-            bottomHTML: tremppi.level === 0 ? "" :
-                    '<div id="sidebar_bottom">' +
-                    '<input id="project_name" type="text" name="Fill to create or rename" value="new name">' +
-                    '<button id="rename_project" class="btn">RENAME CURRENT</button>' +
-                    '<button id="create_project" onclick="tremppi.create()" class="btn">CREATE NEW</button>' +
-                    '<button id="delete_project" class="btn">DELETE CURRENT</button>' +
+            topHTML: 
+                    '<div class="sidebar_field">' + 
+                    '</div>',
+            bottomHTML: 
+                    '<div class="sidebar_field">' +
+                    '<input id="select_name" type="text" name="Fill to create or rename" value="' + (tremppi.level === 1 ? tremppi.project_name : "") + '">' +
+                    '<button id="rename_btn" onclick="tremppi.rename()" class="btn">RENAME</button>' +
+                    '<button id="delete_btn" onclick="tremppi.delete()" class="btn">DELETE</button>' +
                     '</div>'
         };
 
-        // Add the individual projects
-        for (var i = 0; i < tremppi.projects_name.length; i++) {
+        // Add the projects
+        if (tremppi.level === 1) {
             sidebar.nodes.push({
-                id: tremppi.projects_name[i], text: tremppi.projects_name[i], expanded: true, group: true,
-                nodes: [
-                    {id: tremppi.project_folder + 'index', text: 'index'},
-                    {id: tremppi.project_folder + 'editor', text: 'editor'},
-                    {id: tremppi.project_folder + 'select', text: 'select'},
-                    {id: tremppi.project_folder + 'properties', text: 'properties'},
-                    {id: tremppi.project_folder + 'quantitative', text: 'quantitative'},
-                    {id: tremppi.project_folder + 'qualitative', text: 'qualitative'},
-                    {id: tremppi.project_folder + 'regulations', text: 'regulations'},
-                    {id: tremppi.project_folder + 'correlations', text: 'correlations'},
-                    {id: tremppi.project_folder + 'witness', text: 'witness'},
-                    {id: tremppi.project_folder + 'tools', text: 'tools'}
-                ],
-                hidden: tremppi.projects_name[i] !== tremppi.project_name
+                id: 'projects', text: 'projects', expanded: true, group: true,
+                nodes: tremppi.projects.map(function (name) {
+                    return {id: 'project+' + name, text: name, selected: (name === tremppi.project_name)};
+                })
             });
         }
-        
+
+        // Add the individual widgets
+        sidebar.nodes.push({
+            id: 'widgets', text: 'widgets', expanded: true, group: true,
+            nodes: tremppi.widgets.map(function (name) {
+                return {id: 'widget+' + name, text: name, selected: (name === tremppi.widget_name)};
+            })
+        });
+
+        // Add the files in the reporter
+        if (typeof tremppi.widget.setup !== 'undefined' && typeof tremppi.widget.setup.files !== 'undefined') {
+            sidebar.nodes.push({
+                id: 'files', text: 'projects', expanded: true, group: true,
+                nodes: tremppi.widget.setup.files.map(function (name) {
+                    return {id: 'file+' + name, text: name};
+                })
+            });
+        }
+
         w2ui.layout.content('left', $().w2sidebar(sidebar));
         var sidebar = w2ui.layout.get('left').content.sidebar;
         sidebar.select(tremppi.widget_name);
-        sidebar.on('click', function (event) {
-            window.open(event.target + ".html", "_self");
-        });
+        sidebar.on('*', tremppi.sidebarEvent);
 
         // Set the widget
         tremppi.widget.page();
@@ -216,25 +221,61 @@ tremppi = {
         $.ajaxSetup({cache: false});
         tremppi.getData(tremppi.widget.setData);
     },
-    create: function () {
-        var name = $("#project_name").val();
-        var url = tremppi.getServerAddress() + name + "?create";
+    sidebarEvent: function (event) {
+        var details = event.target.split("+");
+        if (event.type === 'click') {
+            switch (details[0]) {
+                case 'project': // Change project
+                    window.open(details[1] + "/" + tremppi.widget_name + ".html", "_self");
+                    break;
+
+                    // Change widget
+                case 'widget':
+                    window.open(tremppi.project_folder + details[1] + ".html", "_self");
+                    break;
+
+                case 'file':
+                    tremppi.report.pickData(details[1], 'left');
+                    break;
+            }
+            $("#select_name").val(details[1]);
+        } else if (event.type === 'contextMenu') {
+            switch (details[0]) {
+                case 'file':
+                    tremppi.report.pickData(details[1], 'right');
+                    break;
+            }
+            $("#select_name").val(details[1]);
+        }
+    },
+    delete: function () {
+        var name = tremppi.project_name;
+        var url = tremppi.getServerAddress() + name + "?delete";
         $.ajax({
             type: "POST",
             url: url,
             success: function (res) {
-                tremppi.log("the project " + name + " created successfully.");
+                tremppi.log("the project " + name + " deleted successfully.");
             },
             fail: function (res) {
-                tremppi.log("creation of the project " + name + " failed.", 'error');
+                tremppi.log("the deletion of the project " + name + " failed.", 'error');
             }
         });
     },
-    delete: function () {
-
-    },
     rename: function () {
-
+        var old_name = tremppi.project_name;
+        var new_name = $("#select_name").val();
+        var url = tremppi.getServerAddress() + old_name + "?rename+" + new_name;
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (res) {
+                tremppi.log("the project " + old_name + " rename successfully.");
+            },
+            fail: function (res) {
+                tremppi.log("the renaming of the project " + old_name + " failed.", 'error');
+            }
+        });
     }
 };
 // Initial content execution, 
@@ -246,7 +287,7 @@ if (url.slice(-1) === '/') {
 var url_split = url.split("/");
 tremppi.widget_name = url_split[url_split.length - 1].slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
-tremppi.makeHead(url_split.length - 2);
+tremppi.makeHead();
 window.onload = tremppi.makeBody;
 
 

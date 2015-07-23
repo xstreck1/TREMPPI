@@ -18,20 +18,17 @@ html {
 }
 
 #logo {
-    width: 200px;
-    height: 85px;
-    padding: 5px;
+    width: 100%;
+    padding-bottom: 10px;
     background-color: #FAFAFA;
 }
 
- 
-
-#project_name, #rename_project, #delete_project, #create_project {
+#select_name, #rename_btn, #delete_btn, #save_btn {
     width: 100%;
     margin: 0px;
 }
 
-#sidebar_bottom {
+div.sidebar_field {
     background-color: #FAFAFA;
     padding: 5px;
 }

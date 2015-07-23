@@ -17,14 +17,6 @@ tremppi.regulations.toolbarClick = function (event) {
         tremppi.setItem('panel', event.target);
         tremppi.report.showPanel(event.target);
         tremppi.regulations.loadLabels(event.target);
-    } else if (event.target.slice(0, 7) === 'select:') {
-        var selected = event.target.slice(7);
-        tremppi.setItem('selected', selected);
-        tremppi.report.pickData(selected, 'left');
-    } else if (event.target.slice(0, 8) === 'compare:') {
-        var compared = event.target.slice(8);
-        tremppi.setItem('compared', compared);
-        tremppi.report.pickData(compared, 'right');
     } else if (event.target === 'relative') {
         var checked = !event.item.checked;
         tremppi.setItem('relative', checked);

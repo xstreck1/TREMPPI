@@ -248,8 +248,6 @@ tremppi.report = {
         tremppi.getData(tremppi.widget.valuesSetter(source, panel), source);
     },
     createPanels: function () {
-        tremppi.toolbar.get('select').items = tremppi.widget.setup.files;
-        tremppi.toolbar.get('compare').items = tremppi.widget.setup.files;
         $("#widget").append('<div class="container" id="container_left">left</div>');
         $("#widget").append('<div class="container" id="container_mid">mid</div>');
         $("#widget").append('<div class="container" id="container_right">right</div>');
