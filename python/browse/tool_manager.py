@@ -2,7 +2,8 @@ __author__ = 'adams_000'
 
 import subprocess
 import os
-import sys
+from os.path import join
+from tremppi.header import system
 
 class ToolManager:
     _commands = []
@@ -36,7 +37,7 @@ class ToolManager:
                 self._current = self.cmd_to_string(self._commands.pop())
                 self._last_progress = 0.0
                 print("call tremppi " + self._current)
-                self._subprocess = subprocess.Popen("tremppi " + self._current, stdout=subprocess.PIPE)
+                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self._current, stdout=subprocess.PIPE)
                 return -1
             else:
                 self._current = ""
@@ -64,7 +65,7 @@ class ToolManager:
         self._commands = []
 
     def call_init(self, name):
-        subprocess.Popen("tremppi init " + name)
+        subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)
 
     def is_free(self, name): #return true iff name has no scheduled or running commands
         [x for x in self._commands if x[0] != name]

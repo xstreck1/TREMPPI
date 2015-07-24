@@ -6,8 +6,8 @@ import json
 from os.path import join, dirname, abspath, isfile, exists
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.file_manipulation import copyanything, replace_regex, normal_paths
-from tremppi.header import folders, widgets, source_folder, data_folder,configure_filename
+from tremppi.file_manipulation import copyanything
+from tremppi.header import folders, widgets, source_folder, data_folder,configure_filename, system_init, system
 
 # make sure all the data are present
 def generate_data(data_path):
@@ -41,19 +41,19 @@ if __name__ == "__main__":
     parser.add_argument('name', help='name of the newly created model')
     args = parser.parse_args()
 
-    EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
-    DEST_CONTENT = join(DEST_PATH, args.name)
+    system_init(sys.argv[0], args)
+    DEST_CONTENT = join(system.DEST_PATH, args.name)
     if os.path.exists(DEST_CONTENT):
         raise Exception('The destination folder ' + DEST_CONTENT + ' already exists, aborting.')
 
     # copy the data
     for folder in folders:
-        source = join(join(HOME_PATH, source_folder), folder)
+        source = join(join(system.HOME_PATH, source_folder), folder)
         destination = join(DEST_CONTENT, folder)
         copyanything(source, destination)
 
     for file in widgets:
-        shutil.copy(join(HOME_PATH, source_folder, file + ".html"), DEST_CONTENT)
+        shutil.copy(join(system.HOME_PATH, source_folder, file + ".html"), DEST_CONTENT)
 
     # make the data directory
     generate_data(join(DEST_CONTENT, data_folder))

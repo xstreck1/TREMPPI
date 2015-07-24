@@ -9,8 +9,7 @@ from os.path import join, dirname, abspath, exists
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.database_reader import component_regulators_list, read_components, read_regulations
-from tremppi.header import data_folder, widgets, database_file
-from tremppi.file_manipulation import normal_paths
+from tremppi.header import data_folder, widgets, database_file, system, system_init
 
 def make_selection(conn):
     columns = []
@@ -355,8 +354,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create configurations for the HTML project browser.')
     parser.add_argument('--path', help='specify the location to update.')
     args = parser.parse_args()
-    EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH = normal_paths(sys.argv[0], args)
-    DATA_PATH = join(DEST_PATH, data_folder)
+    system_init(sys.argv[0], args)
+    DATA_PATH = join(system.DEST_PATH, data_folder)
     # generate files
     for widget in widgets:
         configure(DATA_PATH, widget)

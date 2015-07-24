@@ -3,23 +3,11 @@ import errno
 
 from tempfile import mkstemp
 from shutil import move, rmtree
-from os import remove, close, getcwd
-from os.path import dirname, abspath, normpath, join, isfile
+from os import remove, close
+from os.path import join, isfile
 from tremppi.header import configure_filename
 import re
 import json
-
-
-def normal_paths(exec_path, args):
-    EXEC_PATH = dirname(abspath(exec_path))
-    BIN_PATH = abspath(join(EXEC_PATH, normpath("./../../bin")))
-    HOME_PATH = abspath(join(EXEC_PATH, normpath("./../../")))
-    if args.path is not None:
-        DEST_PATH = normpath(args.path)
-    else:
-        DEST_PATH = getcwd()
-    return EXEC_PATH, BIN_PATH, HOME_PATH, DEST_PATH
-
 
 def replace(file_path, pattern, subst):
     # Create temp file
