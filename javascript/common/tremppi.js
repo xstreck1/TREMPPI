@@ -147,6 +147,7 @@ tremppi = {
             tremppi.project_folder = tremppi.project_name + "/";
             tremppi.level = 1;
         }
+        tremppi.current_file = tremppi.widget_name;
     },
     makeBody: function () {
         tremppi.configure();
@@ -169,7 +170,7 @@ tremppi = {
         }
 
         var select_name = '"' + (tremppi.widget_name === 'index' ? tremppi.project_name : tremppi.widget_name) + '"';
-        var file_manip_dis = tremppi.widget_name === 'index' ? '' : 'disabled';
+        var file_manip_dis = tremppi.widget_name === 'index' && tremppi.level === 1? '' : 'disabled';
         // Set left side bar
         var sidebar = {
             name: 'sidebar',
@@ -218,9 +219,9 @@ tremppi = {
         }
 
         w2ui.layout.content('left', $().w2sidebar(sidebar));
-        var sidebar = w2ui.layout.get('left').content.sidebar;
-        sidebar.select(tremppi.widget_name);
-        sidebar.on('*', tremppi.sidebarEvent);
+        tremppi.sidebar = w2ui.layout.get('left').content.sidebar;
+        tremppi.sidebar.select(tremppi.widget_name);
+        tremppi.sidebar.on('*', tremppi.sidebarEvent);
 
         // Set the widget
         tremppi.widget.page();
@@ -234,7 +235,7 @@ tremppi = {
         $("#select_name").removeAttr('disabled').val(filename);
         $("#rename_btn").removeAttr('disabled');
         $("#delete_btn").removeAttr('disabled');
-        tremppi.current_file = tremppi.widget_name + '/' + filename;
+        tremppi.current_file = tremppi.makeDataFilepath(filename);
     },
     sidebarEvent: function (event) {
         var details = event.target.split("+");
@@ -242,13 +243,11 @@ tremppi = {
             switch (details[0]) {
                 case 'project': // Change project
                     window.open(details[1] + "/" + tremppi.widget_name + ".html", "_self");
-                    tremppi.current_file = tremppi.widget_name;
                     break;
 
                     // Change widget
                 case 'widget':
                     window.open(tremppi.project_folder + details[1] + ".html", "_self");
-                    tremppi.current_file = tremppi.widget_name;
                     break;
 
                 case 'file':
@@ -270,34 +269,39 @@ tremppi = {
     save: function () {
         var data = tremppi.widget.getData();
         var content = JSON.stringify(data, null, '\t');
-        tremppiPost('save',content);
+        tremppi.tremppiPost('save', tremppi.makeDataFilepath(), content);
     },
     clone: function () {
-        tremppiPost('clone'); 
+        tremppi.tremppiPost(tremppi.current_file, 'clone'); 
     },
     delete: function () {
-        tremppiPost('delete'); 
+        tremppi.tremppiPost(tremppi.current_file, 'delete');
     },
     rename: function () {
         var new_name = $("#select_name").val();
-        tremppiPost('rename+' + new_name);
+        tremppi.tremppiPost(tremppi.current_file, 'rename+' + new_name);
     },
     postSucces: function(res) {
         tremppi.log(res);
+        // Reload on project changes
+        // if (tremppi.widget === 'index') {
+            window.open(tremppi.project_folder + tremppi.widget_name + ".html", "_self");            
+        // }
     },
     postFail: function(res) {
         tremppi.log(res, 'error');
     },
-    tremppiPost: function(command, data) {
+    tremppiPost: function(path, command, data) {
         var request = {
             type: "POST",
-            url: tremppi.getServerAddress() + '?' + command,
-            success: postSucces,
-            fail: postFail
+            url: tremppi.getServerAddress() + path + '?' + command,
+            success: tremppi.postSucces,
+            fail: tremppi.postFail
         };
         if (typeof data !== 'undefined') {
             request.data = data;
         }
+        $.ajax(request);
     }
 };
 // Initial content execution, 

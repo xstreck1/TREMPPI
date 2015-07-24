@@ -1,12 +1,13 @@
 __author__ = 'adams_000'
 
 from os import replace, remove
-from os.path import dirname, join
+from os.path import dirname, join, basename
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
 from tremppi.header import configure_filename
-from tremppi.file_manipulation import save_file, get_log, delete_project, get_path_level, read_jsonp, write_jsonp
+from tremppi.file_manipulation import save_file, get_log, delete_project, get_path_level, read_jsonp, write_jsonp, copyanything
 from tool_manager import ToolManager
+from configure.configure import configure
 import subprocess
 
 # TREMPPI server that communicates between HTML reports and the filesystem
@@ -47,6 +48,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
     def do_POST(self):
         parsed_url = urlparse(self.path)
         parsed_path = parsed_url.path[1:] # remove the leading /
+        print(parsed_url)
         if parsed_url.query == 'save':
             # writes the content of the message to the file specified by the URL
             length = self.headers['content-length']
@@ -60,9 +62,9 @@ class TremppiServer(SimpleHTTPRequestHandler):
             self._tool_manager.add_to_queue(parsed_path, parsed_url.query[len('tremppi+'):])
             progress = self._tool_manager.get_progress()
             self.success_response('text', (str(progress).encode()))
-        elif parsed_url.query[0:len('create')] == 'create':
-            self._tool_manager.call_init(parsed_path)
-            self.success_response('text', ("create success".encode()))
+        elif parsed_url.query[0:len('clone')] == 'clone':
+            copyanything(parsed_path, parsed_path + '(clone)')
+            self.success_response('text', ("clone success".encode()))
         elif parsed_url.query[0:len('delete')] == 'delete':
             if get_path_level(parsed_path) == 1:
                 if self._tool_manager.is_free(parsed_url.path):
@@ -71,7 +73,8 @@ class TremppiServer(SimpleHTTPRequestHandler):
                 else:
                     self.error_response('text', ("the project " + parsed_path + " has running jobs, can't remove".encode()))
             else:
-                remove(parsed_url)
+                remove(parsed_path)
+                configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
                 self.success_response('text', ("delete success".encode()))
         elif parsed_url.query[0:len('rename+')] == 'rename+':
             new_name = parsed_url.query[len('rename+'):]
@@ -85,5 +88,6 @@ class TremppiServer(SimpleHTTPRequestHandler):
                 else:
                     self.error_response('text', ("the project " + parsed_path + " has running jobs, can't rename".encode()))
             else:
-                replace(parsed_path, join(dirname(parsed_path), new_name))
+                replace(parsed_path, join(dirname(parsed_path), new_name + '.json'))
+                configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
                 self.success_response('text', ("rename success".encode()))
