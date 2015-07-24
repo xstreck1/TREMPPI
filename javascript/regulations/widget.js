@@ -15,10 +15,12 @@ tremppi.regulations.createPanelContent = function (elements, panel) {
 
 tremppi.regulations.valuesSetter = function (source, panel) {
     return function (data) {
+        $('#header_' + panel).html(source);
         tremppi.regulations.createPanelContent(data.elements, panel);
         tremppi.log(source + ' loaded successfully.');
 
         if (tremppi.regulations.left.edges().length > 0 && tremppi.regulations.right.edges().length > 0) {
+            $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
             var to_synchronize = tremppi.regulations.mid.nodes().length === 0;
 
             var mid = {};

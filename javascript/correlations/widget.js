@@ -15,10 +15,12 @@ tremppi.correlations.createPanelContent = function (elements, panel) {
 
 tremppi.correlations.valuesSetter = function (source, panel) {
     return function (data) {
+        $('#header_' + panel).html(source);
         tremppi.correlations.createPanelContent(data.elements, panel);
         tremppi.log(source + ' loaded successfully.');
 
         if (tremppi.correlations.left.nodes().length > 0 && tremppi.correlations.right.nodes().length > 0) {
+            $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
             var to_synchronize = tremppi.correlations.mid.nodes().length === 0;
 
             var mid = {};

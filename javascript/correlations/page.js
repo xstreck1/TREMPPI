@@ -13,6 +13,7 @@ tremppi.correlations.page = function () {
         tremppi.report.createPanels();
         for (var i = 0; i < tremppi.report.panels.length; i++) {
             $('#container_' + tremppi.report.panels[i]).html("");
+            $("#container_" + tremppi.report.panels[i]).append('<div id="header_' + tremppi.report.panels[i] + '" class="header" >' + tremppi.report.panels[i] + '</div>');
             $("#container_" + tremppi.report.panels[i]).append('<div class="graph" id="graph_'+ tremppi.report.panels[i] + '"></div>');
             $("#container_" + tremppi.report.panels[i]).append('<canvas class="legend" id="legend_'+ tremppi.report.panels[i] + '"></canvas>');
         }

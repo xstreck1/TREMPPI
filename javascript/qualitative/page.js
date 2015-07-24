@@ -19,6 +19,10 @@ tremppi.qualitative.page = function () {
 tremppi.qualitative.setData = function (data) {
 };
 
+tremppi.qualitative.getData = function () {
+    return {};
+};
+
 tremppi.qualitative.layout = function () {
 };
 

@@ -8,11 +8,13 @@
 
 tremppi.witness.valuesSetter = function (source, panel) {
     return function (data) {
+        $('#header_' + panel).html(source);
         tremppi.witness[panel].load(data.elements);
         tremppi.log(source + ' loaded successfully.');
 
         if (tremppi.witness.left.edges().length > 0 && tremppi.witness.right.edges().length > 0)
         {
+            $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
             var to_synchronize = tremppi.witness.mid.nodes().length === 0;
 
             var mid = {nodes: [], edges: []};
@@ -70,11 +72,8 @@ tremppi.witness.valuesSetter = function (source, panel) {
 
             tremppi.witness['mid'].load(mid);
 
-
-
             if (to_synchronize) {
-                tremppi.cytoscape.synchronize(function () {
-                });
+                tremppi.cytoscape.synchronize(function () {});
             }
         }
     };

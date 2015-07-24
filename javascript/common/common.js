@@ -248,9 +248,9 @@ tremppi.report = {
         tremppi.getData(tremppi.widget.valuesSetter(source, panel), source);
     },
     createPanels: function () {
-        $("#widget").append('<div class="container" id="container_left">left</div>');
-        $("#widget").append('<div class="container" id="container_mid">mid</div>');
-        $("#widget").append('<div class="container" id="container_right">right</div>');
+        $("#widget").append('<div class="report_container" id="container_left">left</div>');
+        $("#widget").append('<div class="report_container" id="container_mid">mid</div>');
+        $("#widget").append('<div class="report_container" id="container_right">right</div>');
     },
     initialPanel: function () {
         tremppi.widget.setPanel('left');

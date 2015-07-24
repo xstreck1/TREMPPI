@@ -6,12 +6,6 @@
 
 /* global tremppi */
 
-
-tremppi.select.save = function () {
-    tremppi.select.grid.mergeChanges();
-    tremppi.saveData({records: tremppi.select.grid.records});
-};
-
 tremppi.select.controls = function () {
     tremppi.select.grid.toolbar.onClick = tremppi.select.gridbarClick;
     tremppi.toolbar.onClick = tremppi.select.toolbarClick;
