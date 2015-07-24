@@ -45,16 +45,17 @@ tremppi.select.setData = function (data) {
     tremppi.select.controls();
 };
 
+
+tremppi.select.getData = function () {
+    tremppi.select.grid.mergeChanges();
+    return {records: tremppi.select.grid.records};
+};
+
 tremppi.select.setDefaultData = function (data) {
     if (typeof data.records === 'undefined')
         data.records = [];
 };
 
 tremppi.select.toolbarClass = function () {
-    return {
-        name: 'toolbar',
-        items: [
-            {type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'}
-        ]
-    };
+    return {};
 };

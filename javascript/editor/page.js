@@ -26,6 +26,11 @@ tremppi.editor.page = function () {
     tremppi.editor.setStyle(tremppi.editor.graph);
 };
 
+
+tremppi.editor.getData = function () {
+    return tremppi.editor.graph.json().elements;
+};
+
 tremppi.editor.setData = function (data) {
     tremppi.editor.setDefaultData(data);
     var glyphAll = function (elements, glyphFunction) {
@@ -37,7 +42,7 @@ tremppi.editor.setData = function (data) {
     glyphAll(data.edges, tremppi.editor.glyphEdge);
     tremppi.editor.graph.load(data);
     tremppi.editor.graph.elements().unselect();
-    
+
     // Enable controls
     tremppi.editor.controls();
 };
@@ -53,11 +58,12 @@ tremppi.editor.setDefaultData = function (data) {
         data.edges = [];
 };
 
-tremppi.editor.toolbarClass = function() {
+tremppi.editor.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [
-            {type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'}
+            {type: 'button', id: 'create', icon: 'w2ui-icon-plus', caption: 'Add', hint: 'click on an empty space to create a node, click on a node to start an edge'},
+            {type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'}
         ]
     };
 };

@@ -47,6 +47,10 @@ tremppi.regulations.setData = function (data) {
     tremppi.toolbar.onClick = tremppi.regulations.toolbarClick;
 };
 
+tremppi.regulations.getData = function () {
+    return {};
+};
+
 tremppi.regulations.layout = function () {
     for (var i = 0; i < tremppi.report.panels.length; i++) {
         tremppi.regulations.loadLabels(tremppi.report.panels[i]);

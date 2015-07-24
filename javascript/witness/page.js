@@ -23,6 +23,10 @@ tremppi.witness.page = function () {
 tremppi.witness.setData = function (data) {
 };
 
+tremppi.witness.getData = function () {
+    return {};
+};
+
 tremppi.witness.layout = function () {
 };
 

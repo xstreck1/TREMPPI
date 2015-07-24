@@ -23,18 +23,13 @@ tremppi.index.setData = function (data) {
 };
 
 tremppi.index.toolbarClass = function () {
-    return {
-        name: 'toolbar',
-        items: [
-            {type: 'button', id: 'save', caption: 'Save', img: 'icon-page', hint: 'Save the data'}
-        ]
-    };
+    return {};
 };
 
-tremppi.index.save = function () {
+tremppi.index.getData = function () {
     var text_field = $("#text_field");
     var text_string = text_field.val();
     // console.log(text_string);
     text_string.replace(/\r?\n/g, '<br />');
-    tremppi.saveData({text: text_string});
+    return {text: text_string};
 };

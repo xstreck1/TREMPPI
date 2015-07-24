@@ -41,6 +41,10 @@ tremppi.correlations.setData = function (data) {
     tremppi.toolbar.onClick = tremppi.correlations.toolbarClick;
 };
 
+tremppi.correlations.getData = function () {
+    return {};
+};
+
 tremppi.correlations.layout = function () {    
     for (var i = 0; i < tremppi.report.panels.length; i++) {
         tremppi.correlations.loadLabels(tremppi.report.panels[i]);
