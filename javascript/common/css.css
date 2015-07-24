@@ -74,15 +74,15 @@ button {
 }
 
 #log_line.info {
-    color: green;
+    color: #00a23f;
 }
 
 #log_line.warning {
-    color: yellow;
+    color: #F1D031;
 }
 
 #log_line.error {
-    color: red;
+    color: #ff2222;
 }
 
 #analysis_setup {

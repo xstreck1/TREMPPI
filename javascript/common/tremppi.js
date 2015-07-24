@@ -269,7 +269,7 @@ tremppi = {
     save: function () {
         var data = tremppi.widget.getData();
         var content = JSON.stringify(data, null, '\t');
-        tremppi.tremppiPost('save', tremppi.makeDataFilepath(), content);
+        tremppi.tremppiPost(tremppi.makeDataFilepath(), 'save', content);
     },
     clone: function () {
         tremppi.tremppiPost(tremppi.current_file, 'clone'); 
@@ -282,11 +282,7 @@ tremppi = {
         tremppi.tremppiPost(tremppi.current_file, 'rename+' + new_name);
     },
     postSucces: function(res) {
-        tremppi.log(res);
-        // Reload on project changes
-        // if (tremppi.widget === 'index') {
-            window.open(tremppi.project_folder + tremppi.widget_name + ".html", "_self");            
-        // }
+        window.open(tremppi.project_folder + tremppi.widget_name + ".html", "_self");
     },
     postFail: function(res) {
         tremppi.log(res, 'error');
@@ -295,11 +291,14 @@ tremppi = {
         var request = {
             type: "POST",
             url: tremppi.getServerAddress() + path + '?' + command,
-            success: tremppi.postSucces,
             fail: tremppi.postFail
         };
         if (typeof data !== 'undefined') {
             request.data = data;
+            request.success = tremppi.log;
+        }
+        else {
+            request.success = tremppi.postSuccess;
         }
         $.ajax(request);
     }
