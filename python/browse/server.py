@@ -39,7 +39,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
         elif parsed_url.query[0:len('getProgress')] == 'getProgress':
             data = self._tool_manager.get_progress()
         elif parsed_url.query[0:len('getLog')] == 'getLog':
-            data = get_log("./log.txt")
+            data = get_log("./" + parsed_url.path[1:] + "log.txt")
         elif parsed_url.query[0:len("getCommands")] == "getCommands":
             data = self._tool_manager.get_commands()
         self.success_response('text', (str(data).encode()))
@@ -48,7 +48,6 @@ class TremppiServer(SimpleHTTPRequestHandler):
     def do_POST(self):
         parsed_url = urlparse(self.path)
         parsed_path = parsed_url.path[1:] # remove the leading /
-        print(parsed_url)
         if parsed_url.query == 'save':
             # writes the content of the message to the file specified by the URL
             length = self.headers['content-length']

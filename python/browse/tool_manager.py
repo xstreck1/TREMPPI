@@ -34,10 +34,11 @@ class ToolManager:
     def get_progress(self):
         if not self.is_running():
             if len(self._commands) > 0:
-                self._current = self.cmd_to_string(self._commands.pop())
+                command = self._commands.pop()
+                self._current = command[1]
                 self._last_progress = 0.0
-                print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self._current)
-                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self._current, stdout=subprocess.PIPE)
+                print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
+                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command), stdout=subprocess.PIPE)
                 return -1
             else:
                 self._current = ""
@@ -58,7 +59,7 @@ class ToolManager:
         if len(self._commands) == 0:
             return self._current
         else:
-            return self._current + " " + " ".join(map(self.cmd_to_string, self._commands))
+            return self._current + " " + " ".join(self._commands)
 
     def kill_all(self):
         self._subprocess.kill()

@@ -242,12 +242,12 @@ tremppi = {
         if (event.type === 'click') {
             switch (details[0]) {
                 case 'project': // Change project
-                    window.open(details[1] + "/" + tremppi.widget_name + ".html", "_self");
+                    window.open("/" + details[1] + "/" + tremppi.widget_name + ".html", "_self");
                     break;
 
                     // Change widget
                 case 'widget':
-                    window.open(tremppi.project_folder + details[1] + ".html", "_self");
+                    window.open("/" + tremppi.project_folder + details[1] + ".html", "_self");
                     break;
 
                 case 'file':
