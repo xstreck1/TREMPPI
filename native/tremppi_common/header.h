@@ -30,6 +30,7 @@
 #define BOOST_NO_CXX11_SCOPED_ENUMS
 #include <boost/filesystem.hpp>
 #undef BOOST_NO_CXX11_SCOPED_ENUMS
+#define boost_python_static_lib
 #include <boost/algorithm/string.hpp>
 #include <boost/python.hpp>
 

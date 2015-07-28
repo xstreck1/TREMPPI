@@ -2,7 +2,7 @@ import webbrowser
 import sys
 import argparse
 import subprocess
-from os import chdir
+from os import chdir, listdir
 from os.path import dirname, join, abspath, exists
 from http.server import HTTPServer
 
@@ -38,18 +38,18 @@ else:
 project_path = ''
 if exists(configure_filename):
     set_port('.')
-elif exists(projects_filename):
+elif exists(projects_filename) or listdir('.') == []:
     projects = list_projects(".")
     # create a new project if empty
     if len(projects) is 0:
-        subprocess.Popen(join(system.BIN_PATH,"tremppi") + " init project_0")
+        subprocess.Popen(join(system.BIN_PATH,"tremppi") + " init project_0", shell=True).wait()
         projects = ["project_0"]
     project_path = projects[0] + "/"
     # set ports on all the projects
     for project_folder in projects:
         set_port(project_folder)
 else:
-    raise configure_filename + " or " +  projects_filename + " does not exist in " + system.DEST_PATH + ". Are you sure it's a correct path?"
+    raise Exception(configure_filename + " or " +  projects_filename + " does not exist in " + system.DEST_PATH + ". Are you sure it's a correct path?")
 
 if args.nopen is False:
     webbrowser.open("http://localhost:" + port + "/" + project_path + "index.html")

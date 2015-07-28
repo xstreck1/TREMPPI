@@ -18,7 +18,6 @@ set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 
 # Boost
-add_definitions( -DBOOST_ALL_NO_LIB )
 find_package(Boost 1.54.0 COMPONENTS system filesystem python REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -35,7 +34,7 @@ if(GECODE_LOCAL) # GECODE is inserted into the project
 	include_directories(${TREMPPI_SOURCE_DIR}/${GECODE_LOCAL})
 	link_directories(${TREMPPI_SOURCE_DIR}/${GECODE_LOCAL})
 	set(Gecode_LIBRARIES gecodekernel gecodeint gecodesearch gecodeminimodel)
-	set(Gecode_LIBRARIES_D)
+	set(Gecode_LIBRARIES_D gecodekernel gecodeint gecodesearch gecodeminimodel)
 else(GECODE_LOCAL) # GECODE is to be found outside
 	FIND_PACKAGE(Gecode)
 	include_directories(${Gecode_INCLUDE_DIRS})
