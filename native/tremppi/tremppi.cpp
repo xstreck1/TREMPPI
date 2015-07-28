@@ -42,6 +42,9 @@ int main(int argc, char ** argv)
 	if (argc < 2)
 	{
 		TremppiSystem::set("browse", argv[0], ".");
+		if (!bfs::exists(TremppiSystem::HOME_PATH / PROJECTS_FOLDER)) {
+			boost::filesystem::create_directory(TremppiSystem::HOME_PATH / PROJECTS_FOLDER);
+		}
 		vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / PROJECTS_FOLDER).string() };
 		ArgPtr arg_ptr(arguments);
 		return (tremppi_browse(arg_ptr.getArgc(), arg_ptr.getArgv()));

@@ -144,14 +144,14 @@ int tremppi_cost(int argc, char ** argv) {
 	return tremppi_validate();
 }
 
-int tremppi_robustness(int argc, char ** argv) {
+int tremppi_trace(int argc, char ** argv) {
 	validate_setup = ValidateSetup{ false, true, false };
-	TremppiSystem::initiate("tremppi_robustness", argc, argv);
+	TremppiSystem::initiate("tremppi_trace", argc, argv);
 	return tremppi_validate();
 }
 
-int tremppi_trace(int argc, char ** argv) {
-	validate_setup = ValidateSetup{ true, false, false };
-	TremppiSystem::initiate("tremppi_trace", argc, argv);
+int tremppi_robustness(int argc, char ** argv) {
+	validate_setup = ValidateSetup{ false, false, true };
+	TremppiSystem::initiate("tremppi_robustness", argc, argv);
 	return tremppi_validate();
 }

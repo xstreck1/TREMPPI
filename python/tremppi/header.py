@@ -34,7 +34,7 @@ def system_init(exec_path, args):
         system.BIN_PATH = abspath(join(dirname(dirname(dirname(exec_path))), 'Release'))
         system.HOME_PATH = dirname(system.BIN_PATH)
     else:
-        raise 'TREMPPI binary not found'
+        raise Exception('TREMPPI binary not found')
     if args.path is not None:
         system.DEST_PATH = normpath(args.path)
     else:

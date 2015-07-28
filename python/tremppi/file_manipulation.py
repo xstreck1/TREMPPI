@@ -51,7 +51,7 @@ def copyanything(src, dst):
         if exc.errno == errno.ENOTDIR:
             shutil.copy(src, dst)
         else:
-            raise
+            raise Exception("copyanything failed")
 
 def read_jsonp(filename):
     with open(filename, "r") as file:

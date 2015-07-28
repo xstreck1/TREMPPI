@@ -6,16 +6,15 @@
 
 namespace WitnessOutput 
 {
-	inline string remStep(const string & state) {
+	inline string remStep(const string & state) 
+	{
 		return state.substr(0, state.find("-"));
 	}
-
 
 	inline string getStep(const string & state) 
 	{
 		return state.substr(state.find("-") + 1);
 	}
-
 
 	Json::Value convert(const set<pair<string, string>> & transitions) 
 	{
@@ -23,6 +22,7 @@ namespace WitnessOutput
 
 		// Add transitions
 		Json::Value & edges = elements["edges"];
+		edges.resize(0); // Make sure it's not null
 		set<string> states;
 
 		for (const pair<string, string> & transition : transitions) 
@@ -39,7 +39,7 @@ namespace WitnessOutput
 
 		// Add nodes
 		Json::Value & nodes = elements["nodes"];
-
+		nodes.resize(0);
 		for (const string & state : states) 
 		{
 			Json::Value node;

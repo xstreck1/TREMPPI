@@ -18,6 +18,7 @@ set(LIBRARY_OUTPUT_PATH ${TREMPPI_SOURCE_DIR}/lib)
 set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 
 # Boost
+add_definitions( -DBOOST_ALL_NO_LIB ) #disable autolink
 find_package(Boost 1.54.0 COMPONENTS system filesystem python REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})

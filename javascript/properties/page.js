@@ -30,6 +30,8 @@ tremppi.properties.setData = function (data) {
 };
 
 tremppi.properties.getData = function () {
+    tremppi.properties.detail.mergeChanges();
+    tremppi.properties.list.mergeChanges();
     return {records: tremppi.properties.list.records};
 };
 

@@ -15,7 +15,7 @@ def generate_data(data_path):
         json_filename = join(data_path, widget + '.json')
         if not isfile(json_filename):
             with open(json_filename, 'w+') as json_file:
-                if (widget == 'select'):
+                if widget != 'select':
                     json.dump({}, json_file)
                 else:
                     json.dump({

@@ -84,5 +84,5 @@ tremppi.tools.toolbarClass = function () {
     return {};
 };
 
-tremppi.tools.save = function () {
+tremppi.tools.getData = function () {
 };

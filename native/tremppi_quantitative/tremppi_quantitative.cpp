@@ -31,7 +31,6 @@ int tremppi_quantitative(int argc, char ** argv)
 	try 
 	{
 		DEBUG_LOG << "Parsing data.";
-
 		// Read filter conditions
 		out = Report::createSetup();
 
@@ -46,28 +45,23 @@ int tremppi_quantitative(int argc, char ** argv)
 			const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
 			columns.insert(WHOLE(new_columns));
 		}
-	}
-	catch (exception & e) 
+	}	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	vector<ComputedData> results;
-	try 
+	vector<ComputedData> results;	try 
 	{
-		DEBUG_LOG << "Preparing the data.";
-		for (const pair<size_t, string> column : columns) 
+		DEBUG_LOG << "Preparing the data.";		for (const pair<size_t, string> column : columns) 
 		{
 			results.push_back(ComputedData{ column.second, 0, numeric_limits<double>::max(), -1 * numeric_limits<double>::max(), 0 });
 		}
-	}
-	catch (exception & e) 
+	}	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
 	}
 
-	const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);
-	try 
+	const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);	try 
 	{
 		DEBUG_LOG << "Reading the values, computing the statistics.";
 
@@ -83,17 +77,13 @@ int tremppi_quantitative(int argc, char ** argv)
 				{
 					throw runtime_error(string("A null valued entry in the column ") + group_qry.column_name(i));
 				}
-
-				double val;
-				if (row.column_type(i) == SQLITE_INTEGER) 
+				double val;				if (row.column_type(i) == SQLITE_INTEGER) 
 				{
 					val = row.get<int>(i);
-				}
-				else if (row.column_type(i) == SQLITE_FLOAT) 
+				}				else if (row.column_type(i) == SQLITE_FLOAT) 
 				{
 					val = row.get<double>(i);
-				}
-				if (val != 0) 
+				}				if (val != 0) 
 				{
 					results[i].count++;
 				}
@@ -104,13 +94,13 @@ int tremppi_quantitative(int argc, char ** argv)
 			}
 			logging.step();
 
-			// Compute mean
+			// Compute mean
 			for (ComputedData & result : results) 
 			{
 				result.mean = result.mean / row_count;
 			}
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
@@ -120,7 +110,6 @@ int tremppi_quantitative(int argc, char ** argv)
 	{
 		DEBUG_LOG << "Building the JSON file.";
 		// For each graph create the graph data and add configuration details
-
 		for (ComputedData & result : results) 
 		{
 			Json::Value result_node;
@@ -131,27 +120,25 @@ int tremppi_quantitative(int argc, char ** argv)
 			result_node["mean"] = result.mean;
 			out["records"].append(result_node);
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 4);
 	}
-
+
 	try 
 	{
 		DEBUG_LOG << "Writing output.";
-
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "quantitative" / (out["setup"]["s_name"].asString() + ".json"), out);
 	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 5);
 	}
-
 	try
 	{
 		PythonFunctions::configure("quantitative");
-	}
+	}
 	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 6);
