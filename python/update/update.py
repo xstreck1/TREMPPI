@@ -6,7 +6,8 @@ import shutil
 from os.path import join, dirname, abspath
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp, generate_data
+from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
+from tremppi.project_files import generate_data
 from tremppi.header import folders, widgets, source_folder, system, system_init, data_folder, version, configure_filename
 
 # define options

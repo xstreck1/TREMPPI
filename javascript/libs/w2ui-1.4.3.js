@@ -10202,7 +10202,7 @@ var w2confirm = function (msg, title, callBack) {
         contextMenu: function (id, event) {
             var obj = this;
             var nd  = obj.get(id);
-            if (id != obj.selected) obj.click(id);
+            // if (id != obj.selected) obj.click(id);
             // need timeout to allow click to finish first
             setTimeout(function () {
                 // event before

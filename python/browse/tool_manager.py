@@ -69,4 +69,4 @@ class ToolManager:
         subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)
 
     def is_free(self, name): #return true iff name has no scheduled or running commands
-        [x for x in self._commands if x[0] != name]
+        return len([x for x in self._commands if x[0] != name]) == 0
