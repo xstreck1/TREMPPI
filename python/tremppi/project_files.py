@@ -44,6 +44,9 @@ def list_projects(projects_path):
 
 
 def write_projects(projects_path):
+    if not isfile(join(projects_path, projects_filename)):
+        with open(join(projects_path, projects_filename), 'w+') as file:
+            file.write('tremppi.projects = [];')	
     header, data = read_jsonp(join(projects_path, projects_filename))
     data = list_projects(projects_path)
     write_jsonp(join(projects_path, projects_filename), header, data)

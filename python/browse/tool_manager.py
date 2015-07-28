@@ -38,7 +38,7 @@ class ToolManager:
                 self._current = command[1]
                 self._last_progress = 0.0
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
-                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command), stdout=subprocess.PIPE)
+                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command), stdout=subprocess.PIPE, shell=True)
                 return -1
             else:
                 self._current = ""

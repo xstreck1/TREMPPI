@@ -37,7 +37,7 @@ else:
 
 project_path = ''
 if exists(configure_filename):
-    set_port('.')
+    set_port('.') 
 elif exists(projects_filename) or listdir('.') == []:
     projects = list_projects(".")
     # create a new project if empty

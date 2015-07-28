@@ -29,6 +29,9 @@ if __name__ == "__main__":
     for file in widgets:
         shutil.copy(join(system.HOME_PATH, source_folder, file + ".html"), DEST_CONTENT)
 
+    shutil.copy(join(system.HOME_PATH, source_folder, "logo.png"), DEST_CONTENT)
+    shutil.copy(join(system.HOME_PATH, source_folder, "favicon.ico"), DEST_CONTENT)
+
     # make the data directory
     generate_data(join(DEST_CONTENT, data_folder))
 
