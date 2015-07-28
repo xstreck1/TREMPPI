@@ -5,10 +5,10 @@ from os.path import dirname, join, basename
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
 from tremppi.header import configure_filename
-from tremppi.file_manipulation import save_file, get_log, get_path_level, read_jsonp, write_jsonp, copyanything
+from tremppi.file_manipulation import copyanything
 from tool_manager import ToolManager
 from configure.configure import configure
-from tremppi.project_files import write_projects, delete_project
+from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
 # TREMPPI server that communicates between HTML reports and the filesystem
 class TremppiServer(SimpleHTTPRequestHandler):

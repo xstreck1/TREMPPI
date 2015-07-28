@@ -53,18 +53,6 @@ def copyanything(src, dst):
         else:
             raise
 
-
-def save_file(store_path, data):
-    with open(store_path, 'w') as file:
-        file.write(data.decode())
-
-def get_log(log_path):
-    with open(log_path, 'r') as file:
-        return file.read()
-
-def get_path_level(path): #data files have level -1, project files 0, projects 1
-    return 1 - path.count("/")
-
 def read_jsonp(filename):
     with open(filename, "r") as file:
         data = file.read().replace('\n', '')

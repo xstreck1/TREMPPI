@@ -147,7 +147,8 @@ tremppi = {
             tremppi.project_folder = tremppi.project_name + "/";
             tremppi.level = 1;
         }
-        tremppi.current_file = tremppi.widget_name;
+        tremppi.current_file = '/data/' + tremppi.widget_name + '.json';
+        tremppi.current_object = tremppi.widget_name;
     },
     makeBody: function () {
         tremppi.configure();
@@ -289,7 +290,7 @@ tremppi = {
             type: "POST",
             url: tremppi.getServerAddress() + tremppi.current_file + '?delete',
             fail: tremppi.postFail,
-            success: function() { 
+            success: function(res) { 
                 tremppi.sidebar.remove('file+' + old_name); 
             }
         });
@@ -301,16 +302,25 @@ tremppi = {
             type: "POST",
             url: tremppi.getServerAddress() + tremppi.current_file+ '?rename+' + new_name,
             fail: tremppi.postFail,
-            success: function() { 
+            success: function(res) { 
                 tremppi.sidebar.insert('files', 'file+' + old_name, {id: 'file+' + new_name, text: new_name}); 
                 tremppi.sidebar.remove('file+' + old_name); 
             }
         });
     },
     save: function () {
+        var old_name = tremppi.current_object;
         var data = tremppi.widget.getData();
         var content = JSON.stringify(data, null, '\t');
-        tremppi.tremppiPost(tremppi.makeDataFilepath(), 'save', content);
+        $.ajax({
+            type: "POST",
+            url: tremppi.getServerAddress() + tremppi.current_file+ '?save',
+            fail: tremppi.postFail,
+            data: content,
+            success: function(res) { 
+                tremppi.log(old_name + ' saved successfully.');
+            }
+        });
     },
     cloneProject: function () {
         location.replace('/' + tremppi.project_name + '(clone)/index.html?clone+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
