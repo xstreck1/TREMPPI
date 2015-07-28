@@ -313,15 +313,15 @@ tremppi = {
         tremppi.tremppiPost(tremppi.makeDataFilepath(), 'save', content);
     },
     cloneProject: function () {
-        window.open('/' + tremppi.project_name + '(clone)/index.html?clone+' + tremppi.project_name, "_self");
+        location.replace('/' + tremppi.project_name + '(clone)/index.html?clone+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
     },
     deleteProject: function () {
         tremppi.projects.splice(tremppi.projects.indexOf(tremppi.project_name), 1);
-        window.open('/' + tremppi.projects[0] + '/index.html?delete+' + tremppi.project_name, "_self");
+        location.replace('/' + tremppi.projects[0] + '/index.html?delete+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
     },
     renameProject: function () {
         var new_name = $("#select_name").val();
-        window.open('/' + new_name + '/index.html?rename+' + tremppi.project_name + '+' + new_name, "_self");
+        location.replace('/' + new_name + '/index.html?rename+' + tremppi.project_name + '+' + new_name + '+' + Math.random().toString(), "_self");
     },
     postFail: function (res) {
         tremppi.log(res, 'error');
@@ -331,6 +331,9 @@ tremppi = {
 var url = window.location.pathname;
 if (url.slice(-1) === '/') {
     url += "index.html";
+}
+if (location.search !== '') { 
+    location.replace(window.location.pathname);
 }
 
 var url_split = url.split("/");

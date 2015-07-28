@@ -37,24 +37,24 @@ class TremppiServer(SimpleHTTPRequestHandler):
             else:
                 return SimpleHTTPRequestHandler.do_GET(self)
         elif parsed_url.query[0:len("delete+")] == "delete+":
-            proj_name = parsed_url.query[len("delete+"):]
-            if self._tool_manager.is_free(proj_name):
-                delete_project(proj_name)
+            names = parsed_url.query.split("+")
+            if self._tool_manager.is_free(names[1]):
+                delete_project(names[1])
                 write_projects('.')
                 return SimpleHTTPRequestHandler.do_GET(self)
             else:
                 self.error_response('text', ('jobs running on ' + proj_name + ', can not delete').encode())
         elif parsed_url.query[0:len("rename+")] == "rename+":
-            names = parsed_url.query[len("rename+"):].split("+")
-            if self._tool_manager.is_free(names[0]):
-                replace(names[0], names[1])
+            names = parsed_url.query.split("+")
+            if self._tool_manager.is_free(names[1]):
+                replace(names[1], names[2])
                 write_projects('.')
                 return SimpleHTTPRequestHandler.do_GET(self)
             else:
                 self.error_response('text', ('jobs running on ' + names[0] + ', can not rename').encode())
         elif parsed_url.query[0:len("clone+")] == "clone+":
-            proj_name = parsed_url.query[len("clone+"):]
-            copyanything(proj_name, proj_name + '(clone)')
+            names = parsed_url.query.split("+")
+            copyanything(names[1], names[1] + '(clone)')
             write_projects('.')
             return SimpleHTTPRequestHandler.do_GET(self)
         elif parsed_url.query[0:len('getProgress')] == 'getProgress':
