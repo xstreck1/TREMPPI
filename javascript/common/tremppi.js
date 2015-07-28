@@ -172,6 +172,11 @@ tremppi = {
         var select_name = '"' + (tremppi.widget_name === 'index' ? tremppi.project_name : tremppi.widget_name) + '"';
         var file_manip_dis = tremppi.widget_name === 'index' && tremppi.level === 1? '' : 'disabled';
         // Set left side bar
+        var project_controls = tremppi.level === 0 ? '' : 
+                    '<input id="select_name" type="text" name="Fill to create or rename" value=' + select_name + file_manip_dis + '>' +
+                    '<button id="rename_btn" onclick="tremppi.rename()" class="btn" ' + file_manip_dis + '>RENAME</button>' +
+                    '<button id="clone_btn" onclick="tremppi.clone()" class="btn"' + file_manip_dis + '>CLONE</button>' +
+                    '<button id="delete_btn" onclick="tremppi.delete()" class="btn" ' + file_manip_dis + '>DELETE</button>';
         var sidebar = {
             name: 'sidebar',
             nodes: [],
@@ -179,13 +184,10 @@ tremppi = {
                     '<div class="sidebar_field">' +
                     '<img id="logo" src="logo.png" />' +
                     '</div>',
-            bottomHTML: tremppi.level === 0 ? '' :
+            bottomHTML: 
                     '<div class="sidebar_field">' +                
                     '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>' +
-                    '<input id="select_name" type="text" name="Fill to create or rename" value=' + select_name + file_manip_dis + '>' +
-                    '<button id="rename_btn" onclick="tremppi.rename()" class="btn" ' + file_manip_dis + '>RENAME</button>' +
-                    '<button id="clone_btn" onclick="tremppi.clone()" class="btn"' + file_manip_dis + '>CLONE</button>' +
-                    '<button id="delete_btn" onclick="tremppi.delete()" class="btn" ' + file_manip_dis + '>DELETE</button>' +
+                    project_controls + 
                     '</div>'
         };
 

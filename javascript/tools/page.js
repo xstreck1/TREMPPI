@@ -7,32 +7,61 @@
 /* global tremppi */
 
 tremppi.tools.tool_list = [
-    {name: "configure", description: "call to explicitly recreate data configuration files"},
-    {name: "bias", description: "label parametrizations with their bias"},
-    {name: "correlations", description: "create a correlations graph report"},
-    {name: "express", description: "create the logical expressions for all the parametrizations"},
-    {name: "impact", description: "label with the impact of a regulator on its target"},
-    {name: "qualitative", description: "get qualitative analysis of the known data"},
-    {name: "quantitative", description: "get summary of up till now known data"},
-    {name: "regulations", description: "create an regulationsion graph based on a statistical analysis"},
-    {name: "sign", description: "label the edges of individual with their signs"},
-    {name: "spawn", description: "read a model and create a database of parametrizations based on the model"},
-    {name: "update", description: "update the javascript and html files in the project directory"},
-    {name: "validate", description: "conduct a model checking to validate parametrizations agaings LTL properties"},
-    {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"}
+    {
+        category: "MODEL",
+        tools: [
+            {name: "spawn", description: "read a model and create a database of parametrizations based on the model"}
+        ]
+    },
+    {
+        category: "LABELS",
+        tools: [
+            {name: "bias", description: "label parametrizations with their bias"},
+            {name: "cost", description: "conduct a model check validate parametrizations agaings selected LTL properties"},
+            {name: "express", description: "create the logical expressions for all the parametrizations"},
+            {name: "impact", description: "label with the impact of a regulator on its target"},
+            {name: "sign", description: "label the edges of individual with their signs"},
+            {name: "trace", description: "conduct a model check and obtain traces for satisfiable properties"},
+            {name: "robustness", description: "conduct a model check and obtain robustness for selected properties"}
+        ]
+    },
+    {
+        category: "REPORTS",
+        tools: [
+            {name: "correlations", description: "create a correlations graph report"},
+            {name: "qualitative", description: "get qualitative analysis of the known data"},
+            {name: "quantitative", description: "get summary of up till now known data"},
+            {name: "regulations", description: "create an regulationsion graph based on a statistical analysis"},
+            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"}
+        ]
+    },
+    {
+        category: "UTILITY",
+        tools: [
+            {name: "configure", description: "call to explicitly recreate data configuration files"},
+            {name: "update", description: "update the javascript and html files in the project directory"}
+        ]
+    }
 ];
 
 tremppi.tools.page = function () {
     tremppi.layout.hideToolbar('main');
-    var commands_table = $('<table id="commands"></table>').appendTo($('<div id="commands_holder"></div>').appendTo($('#widget')));
-    $('<tr><td>EXECUTE TOOL</td><td>DESCRIPTION</td></tr>').appendTo(commands_table);
+    var commands = $('<div id="commands_holder"></div>').appendTo($('#widget'));
     for (var i = 0; i < tremppi.tools.tool_list.length; i++) {
-        var tool_name = tremppi.tools.tool_list[i].name;
-        var row = $('<tr id="' + tool_name + '"></tr>').appendTo(commands_table);
-        var button_cell = $('<td></td>').appendTo(row);
-        var button = $('<button class="btn">' + tool_name + '</button>').appendTo(button_cell);
-        button.click(function(_tool_name) { return function() {tremppi.tools.addToQueue(_tool_name);};}(tool_name));
-        var desc_cell = $('<td>'+ tremppi.tools.tool_list[i].description + '</td>').appendTo(row);
+        var title = $('<div id="' + tremppi.tools.tool_list[i].category + '_category" class="category">' + tremppi.tools.tool_list[i].category + '</div>').appendTo(commands);
+        var tool_set = tremppi.tools.tool_list[i].tools;
+        for (var tool_no = 0; tool_no < tool_set.length; tool_no++) {
+            var tool_name = tool_set[tool_no].name;
+            var button = $('<button id=' + tool_name + ' class="btn">' + tool_name + '</button>').appendTo(commands);
+            button.click(function (_tool_name) {
+                return function () {
+                    tremppi.tools.addToQueue(_tool_name);
+                };
+            }(tool_name));
+            $('#' + tool_name).qtip({
+                content: tool_set[tool_no].description
+            });
+        }
     }
     var reports_div = $('<div id="reports"></div>').appendTo($('#widget'));
     var progress_list = $('<div id="progress"></div>').appendTo(reports_div);

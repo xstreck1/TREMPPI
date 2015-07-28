@@ -25,7 +25,7 @@ tremppi.properties.listControls = function () {
     listbar.add({type: 'button', id: 'up', caption: '&#8593;'});
     listbar.add({type: 'button', id: 'down', caption: '&#8595;'});
     listbar.add({type: 'break', id: 'break1'});
-    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'select', caption: 'All', checked: false});
+    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'select_all', caption: 'All', checked: false});
     listbar.add({type: 'break', id: 'break3'});
     listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
@@ -70,7 +70,7 @@ tremppi.properties.listbarClick = function (event) {
     else if (event.target === 'down') {
         tremppi.w2ui.down(grid);
     }
-    else if (event.target === 'validate' || event.target === 'witness' || event.target === 'robustness' || event.target === 'simulate') {
+    else if (event.target === 'select_all') {
         tremppi.w2ui.checkAll(event, grid);
     }
     else if (event.target === 'add') {
