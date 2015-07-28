@@ -2,29 +2,12 @@ import sys
 import os
 import argparse
 import shutil
-import json
-from os.path import join, dirname, abspath, isfile, exists
+from os.path import join, dirname, abspath, exists
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.file_manipulation import copyanything
-from tremppi.header import folders, widgets, source_folder, data_folder,configure_filename, system_init, system
+from tremppi.file_manipulation import copyanything, generate_data
+from tremppi.header import folders, widgets, source_folder, data_folder, configure_filename, system_init, system, version
 
-# make sure all the data are present
-def generate_data(data_path):
-    if not exists(data_path):
-        os.makedirs(data_path)
-    for widget in widgets:
-        # main json
-        json_filename = join(data_path, widget + '.json')
-        if not isfile(json_filename):
-            with open(json_filename, 'w+') as json_file:
-                json.dump({}, json_file)
-        # config js
-        js_filename = join(data_path, widget + '.js')
-        if not isfile(js_filename):
-            open(js_filename, 'w+').close()
-        if not exists(join(data_path, widget)):
-            os.makedirs(join(data_path, widget))
 
 # return subdirectories that contain configure.js
 def list_projects(data_path):
@@ -63,6 +46,7 @@ if __name__ == "__main__":
         setup.write('tremppi.setup = { ' +
                     '\t"server_port": 8080, \n' +
                     '\t"server_location": "localhost", \n' +
-                    '\t"project_name": "' + args.name + '"\n' +
+                    '\t"project_name": "' + args.name + '",\n' +
+                    '\t"version": "' + version + '"\n' +
                     '};'
                     )

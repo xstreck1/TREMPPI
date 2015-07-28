@@ -4,11 +4,30 @@ import errno
 
 from tempfile import mkstemp
 from shutil import move, rmtree
-from os import remove, close
-from os.path import join, isfile
-from tremppi.header import configure_filename
+from os import remove, close, makedirs
+from os.path import join, isfile, exists
+from tremppi.header import configure_filename, widgets
 import re
 import json
+
+
+# make sure all the data are present
+def generate_data(data_path):
+    if not exists(data_path):
+        makedirs(data_path)
+    for widget in widgets:
+        # main json
+        json_filename = join(data_path, widget + '.json')
+        if not isfile(json_filename):
+            with open(json_filename, 'w+') as json_file:
+                json.dump({}, json_file)
+        # config js
+        js_filename = join(data_path, widget + '.js')
+        if not isfile(js_filename):
+            open(js_filename, 'w+').close()
+        if not exists(join(data_path, widget)):
+            makedirs(join(data_path, widget))
+
 
 def replace(file_path, pattern, subst):
     # Create temp file

@@ -18,9 +18,7 @@ void createProperties(const bfs::path & example_model_path)
 	records[0]["ending"] = "any";
 	records[0]["E_A"] = "";
 	records[0]["E_B"] = "";
-	records[0]["validate"] = true;
-	records[0]["robustness"] = true;
-	records[0]["witness"] = true;
+	records[0]["select"] = true;
 	records[0]["records"].resize(2);
 	records[0]["records"][0]["V_B"] = "[0,1)";
 	records[0]["records"][1]["V_B"] = "(1,2]";
@@ -30,9 +28,7 @@ void createProperties(const bfs::path & example_model_path)
 	records[1]["ending"] = "goto A";
 	records[1]["E_A"] = "";
 	records[1]["E_B"] = "";
-	records[1]["validate"] = true;
-	records[1]["robustness"] = false;
-	records[1]["witness"] = true;
+	records[1]["select"] = true;
 	records[1]["records"].resize(2);
 	records[1]["records"][0]["V_B"] = "[0,1)";
 	records[1]["records"][1]["V_B"] = "[1,1]";
@@ -48,7 +44,9 @@ int basic_validate_test()
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	createProperties(arguments[1]);
-	int res = tremppi_validate(arg_ptr.getArgc(), arg_ptr.getArgv());
+	int res = tremppi_cost(arg_ptr.getArgc(), arg_ptr.getArgv());
+	res += tremppi_trace(arg_ptr.getArgc(), arg_ptr.getArgv());
+	res += tremppi_robustness(arg_ptr.getArgc(), arg_ptr.getArgv());
 	/* fstream fout(bfs::absolute(bfs::path{ TremppiSystem::HOME_PATH } / "test" / "test_proj" / "select.json").string(), ios::out);
 	fout << "[{\"id\": 0, \"values\" : {\"Selection\": \"C_test_ts\", \"Select\" : true, \"Compare\" : false}}]";*/
 	return res;

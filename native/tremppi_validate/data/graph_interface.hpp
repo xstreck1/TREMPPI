@@ -11,12 +11,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief This is just a very simple basis for a transition in a graph.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 struct TransitionProperty 
 {
 	/// Unique ID of the state.
 	const StateID _t_ID;
-
 	inline TransitionProperty(const StateID t_ID)
 		: _t_ID(t_ID) {}
 };
@@ -25,7 +23,6 @@ struct TransitionProperty
 /// \brief This is just a very simple basis for a state of any graph.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename Transition>
-
 struct StateProperty 
 {
 	/// Unique ID of the state.
@@ -33,9 +30,7 @@ struct StateProperty
 	/// Graph or automaton transitions, basically it is an edge with a label.
 	vector<Transition> _transitions;
 
-	inline StateProperty(const StateID ID)
-		: _ID(ID) {}
-
+	inline StateProperty(const StateID ID) : _ID(ID) {}
 
 	inline size_t size() const 
 	{
@@ -47,7 +42,6 @@ struct StateProperty
 /// \brief Interface for all the classes that represent a directed graph. Transitions are expected to be stored within their source state structure.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename StateT, typename TransitionT = decltype(declval<StateT>()._transitions.front())>
-
 struct GraphInterface 
 {
 	vector<StateT> _states; ///< Vector holding states of the graph.
@@ -56,18 +50,15 @@ struct GraphInterface
 	 * Obtains number of states of the graph.
 	 * @return integer with size of the graph
 	 */
-
 	inline size_t size() const 
 	{
 		return _states.size();
 	}
-
 	/**
 	 * Returns given state as a string.
 	 * @param ID	ID of the state to turn into the string
 	 * @return	given state as a string
 	 */
-
 	inline string getString(const StateID ID) const 
 	{
 		return to_string(ID);

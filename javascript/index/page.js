@@ -10,6 +10,7 @@ tremppi.index.page = function () {
     $("#widget").append('<div id="project_title">'+ tremppi.project_name + '</div>');
     $("#widget").append('<div id="text_box"></div>');
     $("#text_box").append('<textarea id="text_field" placeholder="Use this form to provide details about your project."></textarea>');
+    $("#widget").append('<div id="version_div">' + "TREMPPI " + tremppi.setup.version + '</div>');
 };
 
 tremppi.index.layout = function () {

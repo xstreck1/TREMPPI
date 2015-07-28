@@ -8,7 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class OutputManager 
 {
-	const bool witness; ///< Write the witness?
+	const bool cost; ///< Write the cost?
+	const bool trace; ///< Write the trace?
 	const bool robustness; ///< Write the robustness?
 	const RegInfos & reg_infos; ///< Reference to the model itself.
 	const string & name; ///< Name of the property
@@ -19,7 +20,7 @@ public:
 	NO_COPY(OutputManager);
 
 	// Store the names of the columns to be used
-	OutputManager(const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db);
+	OutputManager(const bool _cost, const bool _witness, const bool _robustness, const RegInfos & _reg_infos, const string & _name, sqlite3pp::database & _db);
 
 	// Write the new columns to the database
 	void outputForm();

@@ -21,10 +21,8 @@ using USState = TSStateProperty<TSTransitionProperty>;
 struct UnparametrizedStructure : public TSInterface<USState> 
 {
 	tuple<Levels, Levels, Levels> _bounds;
-
 	//
 	GROUNDED(UnparametrizedStructure);
-	
 	// convert the levels to a state ID
 	StateID computeID(const Levels & levels) const;
 };

@@ -16,12 +16,16 @@ button.tool_button {
     height: 50%;
 }
 
+#kill_button {
+    margin: 0pt;
+}
+
 #progress {
     border: 1pt black solid;
     width: calc(100% - 4pt);
-    height: 50%;
-    margin: 2pt;
-    padding: 2pt;
+    height: calc(50% - 27px - 4px);
+    margin: 0pt;
+    padding: 0pt;
 }
 
 #log_file {

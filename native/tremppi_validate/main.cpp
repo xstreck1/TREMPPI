@@ -5,5 +5,5 @@
 int main(int argc, char ** argv) 
 {
 	TremppiSystem::standalone = true;
-	return tremppi_validate(argc, argv);
+	return tremppi_cost(argc, argv);
 }

@@ -5,13 +5,11 @@ Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & st
 {
 	Configurations result(names.size());
 
-
 	for (const CompID ID : cscope(names)) 
 	{
 		if (state_constraint.count(names[ID]) == 0) {
 			result[ID] = vrange(get<0>(bounds)[ID], static_cast<ActLevel>(get<1>(bounds)[ID] + 1));
 		}
-
 		else 
 		{
 			const ActRange constr_range = state_constraint.at(names[ID]);
@@ -34,13 +32,11 @@ vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& co
 {
 	vector<PathCons> result;
 
-
 	for (const string & name : names) 
 	{
 		if (constraints_list.count(name) > 0) {
 			result.push_back(constraints_list.at(name));
 		}
-
 		else 
 		{
 			result.push_back(PathCons::pc_none);
@@ -57,13 +53,11 @@ void AutomatonBuilder::buildTransient(const PropertyInfo & property_info, const 
 	automaton._init_constr = makeStateConst(property_info.measurements.front().state_constraints, bounds, names);
 	automaton._acc_constr = makeStateConst(property_info.measurements.back().state_constraints, bounds, names);
 
-
 	if (property_info.measurements.size() == 1) 
 	{
 		automaton._states.emplace_back(AutState(0, true, true));
 		automaton._states[0]._transitions.emplace_back(AutTransitionion(0, makeStateConst({}, bounds, names), false, makePathConst({}, names)));
 	}
-
 	else 
 	{
 		for (const StateID ID : crange(static_cast<size_t>(1), property_info.measurements.size())) {
@@ -106,15 +100,12 @@ void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tup
 {
 	const size_t target_ID = AutomatonStructure::NameToID(target);
 
-
 	if (target_ID >= property_info.measurements.size()) 
 	{
 		throw runtime_error("Goto in the property " + property_info.name + " goes beyond the measurements.");
 	}
-
 	automaton._init_constr = makeStateConst(property_info.measurements.front().state_constraints, bounds, names);
 	automaton._acc_constr = makeStateConst(property_info.measurements[target_ID].state_constraints, bounds, names);
-
 
 	for (const StateID ID : crange(static_cast<size_t>(0), property_info.measurements.size())) 
 	{
@@ -136,7 +127,6 @@ void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tup
 			makePathConst(property_info.measurements[ID].path_constraints, names)
 			));
 	}
-
 }
 
 
@@ -146,25 +136,21 @@ void AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const 
 		throw runtime_error("At least one measurement required, none found in " + property_info.name + ".");
 	}
 
-
 	if (property_info.ending == "any") 
 	{
 		automaton._aut_type = BA_finite;
 		buildTransient(property_info, bounds, names, automaton);
 	}
-
 	else if (property_info.ending == "stable") 
 	{
 		automaton._aut_type = BA_stable;
 		buildTransient(property_info, bounds, names, automaton);
 	}
-
 	else if (property_info.ending.substr(0, 4) == "goto") 
 	{
 		automaton._aut_type = BA_standard;
 		buildCyclic(property_info, bounds, names, property_info.ending[5], automaton);
 	}
-
 	else 
 	{
 		throw runtime_error("Unknown property type " + property_info.ending + " of the property " + property_info.name);

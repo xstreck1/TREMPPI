@@ -10,12 +10,17 @@
 #include "data/construction_manager.hpp"
 #include "compute/analysis_manager.hpp"
 
+struct ValidateSetup {
+	bool cost;
+	bool trace;
+	bool robustness;
+} validate_setup;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_validate(int argc, char ** argv)
+int tremppi_validate() 
 {
-	TremppiSystem::initiate("tremppi_validate", argc, argv);
 	Logging logging;
 	string select;
 
@@ -24,6 +29,7 @@ int tremppi_validate(int argc, char ** argv)
 	try
 	{
 		DEBUG_LOG << "Parsing database.";
+
 
 		// Get selection		
 		select = DatabaseReader::getSelectionTerm();
@@ -91,8 +97,8 @@ int tremppi_validate(int argc, char ** argv)
 		{
 			DEBUG_LOG << "Validating for an automaton: " << automaton.name;
 
-			AnalysisManager analysis_manager(product, automaton.bound, automaton.witness, automaton.robustness);
-			OutputManager output(automaton.witness, automaton.robustness, reg_infos, automaton.name, db);
+			AnalysisManager analysis_manager(product, automaton.bound, validate_setup.trace, validate_setup.robustness);
+			OutputManager output(validate_setup.cost, validate_setup.trace, validate_setup.robustness, reg_infos, automaton.name, db);
 			output.outputForm();
 
 			logging.newPhase("Validating parametrizations", sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, select, db));
@@ -106,7 +112,7 @@ int tremppi_validate(int argc, char ** argv)
 
 				// Parametrization was considered satisfying.
 				string witness_path;
-				if (get<0>(result) != INF && automaton.witness)
+				if (get<0>(result) != INF && validate_setup.trace)
 					witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
 
 				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
@@ -130,4 +136,22 @@ int tremppi_validate(int argc, char ** argv)
 	}
 
 	return 0;
+}
+
+int tremppi_cost(int argc, char ** argv) {
+	validate_setup = ValidateSetup{ true, false, false };
+	TremppiSystem::initiate("tremppi_cost", argc, argv);
+	return tremppi_validate();
+}
+
+int tremppi_robustness(int argc, char ** argv) {
+	validate_setup = ValidateSetup{ false, true, false };
+	TremppiSystem::initiate("tremppi_robustness", argc, argv);
+	return tremppi_validate();
+}
+
+int tremppi_trace(int argc, char ** argv) {
+	validate_setup = ValidateSetup{ true, false, false };
+	TremppiSystem::initiate("tremppi_trace", argc, argv);
+	return tremppi_validate();
 }

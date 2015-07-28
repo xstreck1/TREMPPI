@@ -9,11 +9,19 @@
 #text_box {
     width: 100%;
     height: 100%;
-    padding: 80pt 20pt 20pt 20pt;
+    padding: 80pt 20pt 30pt 20pt;
     resize:both;
 }
 
 #text_field {
     width: 100%;
     height: 100%;
+}
+
+#version_div {
+    position: absolute;
+    bottom: 0px;
+    padding: 5pt;
+    text-align: right;
+    width: 100%;
 }

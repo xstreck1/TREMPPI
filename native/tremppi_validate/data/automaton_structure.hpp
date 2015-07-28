@@ -5,7 +5,6 @@
 #include "property_info.hpp"
 
 /// Single labelled transition from one state to another.
-
 struct AutTransitionion : public TransitionProperty 
 {
 	Configurations _state_constr; //< Boundary on the state values in the current configuraion
@@ -14,7 +13,6 @@ struct AutTransitionion : public TransitionProperty
 
 	AutTransitionion(const StateID target_ID, const Configurations & state_constr, const bool inclusive, const vector<PathCons> & path_constr);
 };
-
 using AutState = AutomatonStateProperty<AutTransitionion>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +21,6 @@ using AutState = AutomatonStateProperty<AutTransitionion>;
 /// AutomatonStructure stores Buchi automaton with edges labelled by values the KS can be in for the transition to be allowed.
 /// AutomatonStructure data can be set only from the AutomatonStructureBuilder object.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 struct AutomatonStructure : public AutomatonInterface<AutState> 
 {
 	Configurations _init_constr;
@@ -31,10 +28,8 @@ struct AutomatonStructure : public AutomatonInterface<AutState>
 
 	//
 	GROUNDED(AutomatonStructure);
-
 	//
 	static char IDToName(const size_t ID);
-
 	//
 	static size_t NameToID(const char name);
 };

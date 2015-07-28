@@ -25,14 +25,12 @@ tremppi.properties.listControls = function () {
     listbar.add({type: 'button', id: 'up', caption: '&#8593;'});
     listbar.add({type: 'button', id: 'down', caption: '&#8595;'});
     listbar.add({type: 'break', id: 'break1'});
+    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'select', caption: 'All', checked: false});
+    listbar.add({type: 'break', id: 'break3'});
     listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
     listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
     listbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
     listbar.add({type: 'break', id: 'break2'});
-    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'validate', caption: 'Validate', checked: false});
-    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'witness', caption: 'Witness', checked: false});
-    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'robustness', caption: 'Robustness', checked: false});
-    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'simulate', caption: 'Simulate', checked: false});
     listbar.onClick = tremppi.properties.listbarClick;
 };
 

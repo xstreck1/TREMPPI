@@ -239,30 +239,21 @@ def make_selection(conn):
 
 def make_list(conn):
     columns = [
-        {'field': 'name', 'caption': 'Name', 'size': '200px', 'resizable': True, 'sortable': True,
-         'editable': {'type': 'text'}
-         },
-        {'field': 'ending', 'caption': 'Ending', 'size': '70px', 'resizable': True,
-         'editable': {
-             'type': 'select',
-             'items': ["any", "stable", "goto A", "goto B", "goto C", "goto D", "goto E", "goto F", "goto G", "goto H", "goto I", "goto J", "goto K", "goto L", "goto M", "goto N", "goto O", "goto P", "goto Q", "goto R", "goto S", "goto T", "goto U", "goto V", "goto W", "goto X", "goto Y", "goto Z"]
-         }
-         },
-        {'field': 'validate', 'caption': 'V', 'size': '20px', 'resizable': False,
-         'editable': {'type': 'checkbox'}
-         },
-        {'field': 'witness', 'caption': 'W', 'size': '20px', 'resizable': False,
-         'editable': {'type': 'checkbox'}
-         },
-        {'field': 'robustness', 'caption': 'R', 'size': '20px', 'resizable': False,
-         'editable': {'type': 'checkbox'}
-         },
-        {'field': 'simulate', 'caption': 'S', 'size': '20px', 'resizable': False,
-         'editable': {'type': 'checkbox'}
-         },
-        {'field': 'bound', 'caption': 'Bound', 'size': '60px', 'resizable': True,
-         'editable': {'type': 'text'}
-         }
+        {
+            'field': 'select', 'caption': '', 'size': '25px', 'resizable': False, 'editable': {'type': 'check'}
+        },
+        {
+            'field': 'name', 'caption': 'Name', 'size': '200px', 'resizable': True, 'sortable': True, 'editable': {'type': 'text'}
+        },
+        {
+            'field': 'ending', 'caption': 'Ending', 'size': '70px', 'resizable': True, 'editable':
+            {
+                'type': 'select', 'items': ["any", "stable", "goto A", "goto B", "goto C", "goto D", "goto E", "goto F", "goto G", "goto H", "goto I", "goto J", "goto K", "goto L", "goto M", "goto N", "goto O", "goto P", "goto Q", "goto R", "goto S", "goto T", "goto U", "goto V", "goto W", "goto X", "goto Y", "goto Z"]
+            }
+        },
+        #{
+        #    'field': 'bound', 'caption': 'Bound', 'size': '60px', 'resizable': True, 'editable': {'type': 'text'}
+        #}
     ]
     components = read_components(conn)
     for comp_name, comp_max in components:

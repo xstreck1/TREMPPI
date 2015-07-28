@@ -179,7 +179,7 @@ tremppi = {
                     '<div class="sidebar_field">' +
                     '<img id="logo" src="logo.png" />' +
                     '</div>',
-            bottomHTML: 
+            bottomHTML: tremppi.level === 0 ? '' :
                     '<div class="sidebar_field">' +                
                     '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>' +
                     '<input id="select_name" type="text" name="Fill to create or rename" value=' + select_name + file_manip_dis + '>' +

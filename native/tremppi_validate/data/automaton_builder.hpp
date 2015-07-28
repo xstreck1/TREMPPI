@@ -9,28 +9,22 @@
 #include <tremppi_common/network/data_info.hpp>
 #include "../data/property_info.hpp"
 #include "automaton_structure.hpp"
-
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  ///  \brief Transform graph of the automaton into a set of labeled transitions in an AutomatonStructure object.
  ///
  /// This builder creates a basic automaton controlling property - this automaton is based on the AutomatonInterface.
  /// Automaton is provided with string labels on the edges that are parsed and resolved for the graph.
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 namespace AutomatonBuilder 
 {
 	// Compute allowed values from string of constrains
 	Configurations makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names);
-
 	//
 	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);
-
 	//
 	void buildTransient(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
-
 	//
 	void buildCyclic(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, const char target, AutomatonStructure & automaton);
-
 	// Create the transitions from the model and fill the automaton with them.
 	void buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton);
-};
+}
