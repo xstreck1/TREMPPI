@@ -3,30 +3,10 @@ import shutil
 import errno
 
 from tempfile import mkstemp
-from shutil import move, rmtree
-from os import remove, close, makedirs
-from os.path import join, isfile, exists
-from tremppi.header import configure_filename, widgets
+from shutil import move
+from os import remove, close
 import re
 import json
-
-
-# make sure all the data are present
-def generate_data(data_path):
-    if not exists(data_path):
-        makedirs(data_path)
-    for widget in widgets:
-        # main json
-        json_filename = join(data_path, widget + '.json')
-        if not isfile(json_filename):
-            with open(json_filename, 'w+') as json_file:
-                json.dump({}, json_file)
-        # config js
-        js_filename = join(data_path, widget + '.js')
-        if not isfile(js_filename):
-            open(js_filename, 'w+').close()
-        if not exists(join(data_path, widget)):
-            makedirs(join(data_path, widget))
 
 
 def replace(file_path, pattern, subst):
@@ -82,20 +62,21 @@ def get_log(log_path):
     with open(log_path, 'r') as file:
         return file.read()
 
-def delete_project(name):
-    if not isfile(join(name, configure_filename)):
-        raise name + " seems not to be a TREMPPI project"
-    else:
-        rmtree(name)
-
 def get_path_level(path): #data files have level -1, project files 0, projects 1
     return 1 - path.count("/")
 
 def read_jsonp(filename):
     with open(filename, "r") as file:
         data = file.read().replace('\n', '')
-        header = data[0:data.find("{")]
-        data = data[data.find("{"):-1]
+        json_start = 0
+        if data.find("{") == -1:
+            json_start = data.find("[")
+        elif data.find("[") == -1:
+            json_start = data.find("{")
+        else:
+            json_start = min(data.find("{"), data.find("["))
+        header = data[0:json_start]
+        data = data[json_start:-1]
         return header, json.loads(data)
 
 def write_jsonp(filename, header, data):

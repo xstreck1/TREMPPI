@@ -15,7 +15,7 @@ def set_port(path):
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.header import data_folder, default_port, configure_filename, projects_filename, system_init, system
-from init.init import generate_data, list_projects
+from tremppi.project_files import list_projects, write_projects
 from server import TremppiServer
 from tremppi.file_manipulation import read_jsonp, write_jsonp
 
@@ -48,6 +48,7 @@ elif exists(projects_filename):
     # set ports on all the projects
     for project_folder in projects:
         set_port(project_folder)
+    write_projects('.')
 else:
     raise configure_filename + " or " +  projects_filename + " does not exist in " + system.DEST_PATH + ". Are you sure it's a correct path?"
 

@@ -21,7 +21,6 @@ class System:
     DEST_PATH = ''
 system = System()
 
-
 def system_init(exec_path, args):
     global system
     system.EXEC_PATH = dirname(abspath(exec_path))
