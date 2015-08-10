@@ -49,7 +49,7 @@ string TimeManager::getTime()
 {
 	string result;
 
-	time_t tt = chrono::system_clock::to_time_t(start_time);
+	time_t tt = chrono::system_clock::to_time_t(chrono::system_clock::now());
 	result = ctime(&tt);
 	result.resize(result.size() - 1); // Remove newline
 

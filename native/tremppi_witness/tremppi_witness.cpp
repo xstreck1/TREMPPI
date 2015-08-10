@@ -57,7 +57,7 @@ int tremppi_witness(int argc, char ** argv)
 		logging.newPhase("computing witness", properties["records"].size());
 		for (const auto & property : properties["records"]) 
 		{
-			// If selected
+			// If selected
 			if (property["select"].asBool()) 
 			{
 				const string name = property["name"].asString();
