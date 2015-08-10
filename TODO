@@ -1,0 +1,12 @@
+tremppi
+	-- Add a big int library (https://github.com/panks/BigInteger) to allow for checking of overflows in state/parametrization space.
+	-- Convert all to AND and OR and NOT
+editor
+summary 
+properties
+	-- careful about property naming (white space breaks the system)
+select
+	-- optimize/fix the group hiding
+
+NICE TO HAVE: 
+Boundaries are missing... (you want to adapt robustness and witness to arbitrary length)

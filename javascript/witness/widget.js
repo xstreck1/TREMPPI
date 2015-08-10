@@ -8,6 +8,11 @@
 
 tremppi.witness.valuesSetter = function (source, panel) {
     return function (data) {
+        if (typeof data.elements === 'undefined' || typeof data.elements.nodes === 'undefined' || typeof data.elements.edges === 'undefined') {
+            tremppi.log('The witness file does not contain a graph.', 'warning');
+            return;
+        } 
+        
         $('#header_' + panel).html(source);
         tremppi.witness[panel].load(data.elements);
         tremppi.log(source + ' loaded successfully.');
