@@ -43,7 +43,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
                 write_projects('.')
                 return SimpleHTTPRequestHandler.do_GET(self)
             else:
-                self.error_response('text', ('jobs running on ' + proj_name + ', can not delete').encode())
+                self.error_response('text', ('jobs running on ' + names[0] + ', can not delete').encode())
         elif parsed_url.query[0:len("rename+")] == "rename+":
             names = parsed_url.query.split("+")
             if self._tool_manager.is_free(names[1]):

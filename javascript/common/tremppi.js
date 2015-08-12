@@ -181,7 +181,7 @@ tremppi = {
                     '<button id="delete_btn" onclick="tremppi.deleteProject()" class="btn">DELETE</button>' +
                     '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>';
         } 
-        else if (["editor", "properties", "select"].indexOf(tremppi.widget_name) !== -1) {
+        else if (["index", "editor", "properties", "select"].indexOf(tremppi.widget_name) !== -1) {
             project_controls = '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>';
         } 
         else if (["qualitative", "quantitative", "regulations", "correlations", "witness"].indexOf(tremppi.widget_name) !== -1) {
@@ -309,18 +309,7 @@ tremppi = {
         });
     },
     save: function () {
-        var old_name = tremppi.current_object;
-        var data = tremppi.widget.getData();
-        var content = JSON.stringify(data, null, '\t');
-        $.ajax({
-            type: "POST",
-            url: tremppi.getServerAddress() + tremppi.current_file+ '?save',
-            fail: tremppi.postFail,
-            data: content,
-            success: function(res) { 
-                tremppi.log(old_name + ' saved successfully.');
-            }
-        });
+        tremppi.saveData(tremppi.widget.getData());
     },
     cloneProject: function () {
         location.replace('/' + tremppi.project_name + '(clone)/index.html?clone+' + tremppi.project_name + '+' + Math.random().toString(), "_self");

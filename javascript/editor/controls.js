@@ -116,6 +116,8 @@ tremppi.editor.setNode = function (node) {
     $("#Name_input").w2field('text');
     tremppi.editor.addEditField(node, "MaxActivity", "number");
     $("#MaxActivity_input").w2field('int');
+    tremppi.editor.addEditField(node, "Constraint", "text");
+    $("#Constraint_input").w2field('text');
 };
 
 tremppi.editor.setEdge = function (edge) {

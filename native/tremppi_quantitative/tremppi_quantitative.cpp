@@ -93,12 +93,11 @@ int tremppi_quantitative(int argc, char ** argv)
 
 			}
 			logging.step();
-
-			// Compute mean
-			for (ComputedData & result : results) 
-			{
-				result.mean = result.mean / row_count;
-			}
+		}			
+		// Compute mean
+		for (ComputedData & result : results)
+		{
+			result.mean = result.mean / row_count;
 		}
 	}
 	catch (exception & e) 

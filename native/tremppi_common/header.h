@@ -65,6 +65,7 @@ const string LOG_FILENAME = "log.txt";
 // MODULES
 int tremppi_bias(int argc, char ** argv);
 int tremppi_browse(int argc, char ** argv);
+int tremppi_clean(int argc, char ** argv);
 int tremppi_cost(int argc, char ** argv);
 int tremppi_configure(int argc, char ** argv);
 int tremppi_correlations(int argc, char ** argv);

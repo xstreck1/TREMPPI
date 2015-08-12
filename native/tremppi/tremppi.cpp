@@ -7,6 +7,7 @@ map<string, pair<int(*)(int, char**), string> > tremppi_functions =
 {
 		{ "browse", { tremppi_browse, "open the IDE in the default browser" } },
 		{ "configure", { tremppi_configure, "call to explicitly recreate data configuration files" } },
+		{ "clean", { tremppi_clean, "removed all the data files" } },
 		{ "bias", { tremppi_bias, "label parametrizations with their bias" } },
 		{ "correlations", { tremppi_correlations, "create a correlations graph report"} },
 		{ "cost", { tremppi_cost, "conduct a model check validate parametrizations agaings selected LTL properties" } },

@@ -4,7 +4,6 @@
 
 #include "run_script.hpp"
 
-
 int run_script(const string command, int argc, char ** argv) 
 {
 	TremppiSystem::initiate("tremppi_python", argc, argv);
@@ -50,26 +49,27 @@ int run_script(const string command, int argc, char ** argv)
 	return 0;
 }
 
-
 int tremppi_init(int argc, char ** argv) 
 {
 	return run_script("init", argc, argv);
 }
-
 
 int tremppi_browse(int argc, char ** argv) 
 {
 	return run_script("browse", argc, argv);
 }
 
-
 int tremppi_configure(int argc, char ** argv) 
 {
 	return run_script("configure", argc, argv);
 }
 
-
 int tremppi_update(int argc, char ** argv) 
 {
 	return run_script("update", argc, argv);
+}
+
+int tremppi_clean(int argc, char ** argv)
+{
+	return run_script("clean", argc, argv);
 }
