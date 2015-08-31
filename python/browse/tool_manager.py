@@ -64,7 +64,7 @@ class ToolManager:
     def kill_all(self):
         self._subprocess.kill()
         self._commands = []
-		self._current = ""
+        self._current = ""
 
     def call_init(self, name):
         subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)
