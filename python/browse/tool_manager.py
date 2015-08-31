@@ -44,7 +44,7 @@ class ToolManager:
                 self._current = ""
                 self._last_progress = 0.0
                 return -1
-        else:
+        elif self._subprocess.stdout.seekable():
             self._subprocess.stdout.seek(0, os.SEEK_END)
             current_pos = self._subprocess.stdout.tell()
             if current_pos >= 11:
@@ -54,6 +54,8 @@ class ToolManager:
                 self._last_progress = progress[(position+1):(position+6)]
                 print(self._last_progress)
             return float(self._last_progress)
+        else:
+            return 0
 
     def get_commands(self):
         if len(self._commands) == 0:
