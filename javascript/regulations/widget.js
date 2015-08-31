@@ -88,10 +88,9 @@ tremppi.regulations.applyVisuals = function (type) {
     var weighted = tremppi.getItem('weighted') === 'true';
 
     var width_param = weighted ? 'WeightedFrequency' : 'Frequency';
-    var range = tremppi.report.getRange(type, relative, 'edge[Frequency>=0]', width_param, true);
+    var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param, true);
     tremppi.cytoscape.mapRange(type, 'edge[Frequency>=0]', width_param, 'width', range.min, range.max, 1, 10);
-    range = tremppi.report.getRange(type, relative, 'edge[Frequency<0]', width_param, false);
-    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', range.min, range.max, 10, 1);
+    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', range.max * -1, range.min * -1, 10, 1);
 
     range = tremppi.report.getRange(type, relative, 'edge[Pearson>=0]', 'Pearson', true);
     tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', range.min, range.max, 'yellow', 'green');
@@ -117,8 +116,8 @@ tremppi.regulations.addQtip = function (type) {
         return 'source: ' + my_data.source + '<br />'
                 + 'target: ' + my_data.target + '<br />'
                 + 'Impact: ' + my_data.Pearson.toFixed(num_of_decimals) + '<br />'
-                + 'Ocurrence: ' + my_data.Frequency.toFixed(num_of_decimals) + '<br />'
-                + 'Weighted Occurence: ' + my_data.WeightedFrequency.toFixed(num_of_decimals) + '<br />';
+                + 'Frequency: ' + my_data.Frequency.toFixed(num_of_decimals) + '<br />'
+                + 'Weighted Frequency: ' + my_data.WeightedFrequency.toFixed(num_of_decimals) + '<br />';
     };
 
     tremppi.qtip.addOnHoverLabeller(type, edges, labeller);

@@ -59,11 +59,12 @@ class ToolManager:
         if len(self._commands) == 0:
             return self._current
         else:
-            return self._current + " " + " ".join(self._commands)
+            return self._current + " " + " ".join(map(self.cmd_to_string, self._commands))
 
     def kill_all(self):
         self._subprocess.kill()
         self._commands = []
+		self._current = ""
 
     def call_init(self, name):
         subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)
