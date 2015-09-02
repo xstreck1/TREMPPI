@@ -258,14 +258,15 @@ tremppi = {
     sidebarEvent: function (event) {
         var details = event.target.split("+");
         if (event.type === 'click') {
+            var work_dir = tremppi.level === 1 ? "../" : "./";
             switch (details[0]) {
                 case 'project': // Change project
-                    window.open("/" + details[1] + "/" + tremppi.widget_name + ".html", "_self");
+                    window.open(work_dir + details[1] + "/" + tremppi.widget_name + ".html", "_self");
                     break;
 
                     // Change widget
                 case 'widget':
-                    window.open("/" + tremppi.project_folder + details[1] + ".html", "_self");
+                    window.open(work_dir + tremppi.project_folder + details[1] + ".html", "_self");
                     break;
 
                 case 'file':

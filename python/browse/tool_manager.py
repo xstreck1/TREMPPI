@@ -63,7 +63,7 @@ class ToolManager:
         else:
             return self._current + " " + " ".join(map(self.cmd_to_string, self._commands))
 
-    def kill_all(self):
+    def kill_all(self, parsed_path):
         self._subprocess.kill()
         self._commands = []
         self._current = ""

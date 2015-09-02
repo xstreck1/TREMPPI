@@ -90,12 +90,13 @@ tremppi.regulations.applyVisuals = function (type) {
     var width_param = weighted ? 'WeightedFrequency' : 'Frequency';
     var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param, true);
     tremppi.cytoscape.mapRange(type, 'edge[Frequency>=0]', width_param, 'width', range.min, range.max, 1, 10);
-    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', range.max * -1, range.min * -1, 10, 1);
+    var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param, false);
+    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', range.min, range.max, 10, 1);
 
     range = tremppi.report.getRange(type, relative, 'edge[Pearson>=0]', 'Pearson', true);
-    tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', range.min, range.max, 'yellow', 'green');
+    tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
     range = tremppi.report.getRange(type, relative, 'edge[Pearson<0]', 'Pearson', false);
-    tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, range.max, 'red', 'yellow');
+    tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
 
     tremppi.cytoscape.mapValue(type, 'edge[Sign="0"]', 'target-arrow-shape', 'circle');
     tremppi.cytoscape.mapValue(type, 'edge[Sign="+"]', 'target-arrow-shape', 'triangle');
@@ -160,8 +161,8 @@ tremppi.regulations.makeText = function (content, position) {
 tremppi.regulations.addGradient = function (relative, type, my_paper, positive) {
     var selection = positive ? 'edge[Pearson>=0]' : 'edge[Pearson<0]';
     var range = {
-        min: tremppi.report.getRange(type, relative, selection, 'Pearson', positive).min,
-        max: tremppi.report.getRange(type, relative, selection, 'Pearson', positive).max
+        min: positive ? 0 : tremppi.report.getRange(type, relative, selection, 'Pearson', positive).min,
+        max: positive ? tremppi.report.getRange(type, relative, selection, 'Pearson', positive).max : 0
     };
     var bar_right = my_paper.view.viewSize.width - 80;
     var height = positive ? tremppi.regulations.P_height : tremppi.regulations.N_height;

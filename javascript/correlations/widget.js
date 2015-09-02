@@ -80,15 +80,16 @@ tremppi.correlations.setPanel = function (panel) {
 tremppi.correlations.applyVisuals = function (type) {
     var relative = tremppi.getItem('relative') === 'true';
 
-    var range = tremppi.report.getRange(type, relative, 'edge[Pearson>=0]', 'Pearson', true);
-    tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', range.min, range.max, 'yellow', 'green');
-    range = tremppi.report.getRange(type, relative, 'edge[Pearson<0]', 'Pearson', false);
-    tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, range.max, 'red', 'yellow');
-
-    var range = tremppi.report.getRange(type, relative, 'node[Bias>=0]', 'Bias', true);
+    var range = tremppi.report.getRange(type, relative, 'node', 'Bias', true);
     tremppi.cytoscape.mapRange(type, 'node[Bias>=0]', 'Bias', 'border-width', range.min, range.max, 1, 10);
     range = tremppi.report.getRange(type, relative, 'node[Bias<0]', 'Bias', false);
     tremppi.cytoscape.mapRange(type, 'node[Bias<0]', 'Bias', 'border-width', range.min, range.max, 10, 1);
+
+    var range = tremppi.report.getRange(type, relative, 'edge[Pearson>=0]', 'Pearson', true);
+    tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
+    range = tremppi.report.getRange(type, relative, 'edge[Pearson<0]', 'Pearson', false);
+    tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
+
 
     tremppi.cytoscape.mapValue(type, 'node[Bias>0]', 'border-style', 'solid');
     tremppi.cytoscape.mapValue(type, 'node[Bias=0]', 'border-style', 'dotted');
@@ -149,8 +150,8 @@ tremppi.correlations.makeText = function (content, position) {
 tremppi.correlations.addGradient = function (relative, type, my_paper, positive) {
     var selection = positive ? 'edge[Pearson>=0]' : 'edge[Pearson<0]';
     var range = {
-        min: tremppi.report.getRange(type, relative, selection, 'Pearson', positive).min,
-        max: tremppi.report.getRange(type, relative, selection, 'Pearson', positive).max
+        min: positive ? 0 : tremppi.report.getRange(type, relative, selection, 'Pearson', positive).min,
+        max: positive ? tremppi.report.getRange(type, relative, selection, 'Pearson', positive).max : 0
     };
     var bar_right = my_paper.view.viewSize.width - 80;
     var height = positive ? tremppi.correlations.P_height : tremppi.correlations.N_height;
