@@ -27,8 +27,8 @@ tremppi.tools.getCommands = function () {
                 var commands = data.split(" ");
                 var current_command = $('<div><span>' + commands[0] + ': </span><span id="progress_no">0</span></div>');
                 current_command.appendTo($("#progress"));
-                for (var i = 1; i < commands.length; i++) {
-                    $('<div>' + commands[i] + '</div>').appendTo($("#progress"));
+                for (var i = 1; i < commands.length; i += 3) {
+                    $('<div>' + commands[i] + ' at ' + commands[i + 2] + '</div>').appendTo($("#progress"));
                 }
                 tremppi.tools.getProgress();
             }

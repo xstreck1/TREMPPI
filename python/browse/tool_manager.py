@@ -1,15 +1,33 @@
 __author__ = 'adams_000'
 
 import subprocess
-import os
+import sys
 from os.path import join
 from tremppi.header import system
+from threading import Thread
+
+try:
+    from Queue import Queue, Empty
+except ImportError:
+    from queue import Queue, Empty  # python 3.x
+
+ON_POSIX = 'posix' in sys.builtin_module_names
 
 class ToolManager:
     _commands = []
     _subprocess = None
+    _thread = None
     _current = ""
     _last_progress = 0.0
+    _queue = Queue()
+
+    def enqueue_output(self, out, queue):
+        line = out.read(6)
+        while len(line) > 0:
+            line = out.read(6).decode("utf-8")[0:5]
+            print('the line is ' + line)
+            if len(line) is 5:
+                queue.put(line)
 
     def cmd_to_string(self, cmd):
         if (cmd[0] is not ""):
@@ -28,6 +46,7 @@ class ToolManager:
     def add_to_queue(self, path, command):
         self._commands.append((path, command))
 
+
     # Return progress of currently executed process in percents.
     # If it is done, start a new one from the queue.
     # If all is done, return -1.
@@ -36,27 +55,26 @@ class ToolManager:
             if len(self._commands) > 0:
                 command = self._commands.pop()
                 self._current = command[1]
-                self._last_progress = 0.0
+                self._last_progress = "00.00"
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
-                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command), stdout=subprocess.PIPE, shell=True)
+                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command), stdout=subprocess.PIPE)
+                self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
+                self._thread.start()
                 return -1
             else:
                 self._current = ""
-                self._last_progress = 0.0
+                self._last_progress = "00.00"
                 return -1
-        elif self._subprocess.stdout.seekable():
-            self._subprocess.stdout.seek(0, os.SEEK_END)
-            current_pos = self._subprocess.stdout.tell()
-            if current_pos >= 11:
-                self._subprocess.stdout.seek(-11,1)
-                progress = self._subprocess.stdout.read(11)
-                position = progress.find(b'\r')
-                self._last_progress = progress[(position+1):(position+6)]
-                print(self._last_progress)
-            return float(self._last_progress)
+        elif self.is_running():
+            try:
+                while not self._queue.empty():
+                    self._last_progress = self._queue.get_nowait() # or q.get(timeout=.1)
+            except Empty:
+                print('no output yet')
+            else:
+                return self._last_progress
         else:
             return 0
-
     def get_commands(self):
         if len(self._commands) == 0:
             return self._current
@@ -67,6 +85,7 @@ class ToolManager:
         self._subprocess.kill()
         self._commands = []
         self._current = ""
+        self._last_progress = "00.00"
 
     def call_init(self, name):
         subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)

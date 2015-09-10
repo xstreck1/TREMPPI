@@ -112,7 +112,7 @@ int tremppi_quantitative(int argc, char ** argv)
 		for (ComputedData & result : results) 
 		{
 			Json::Value result_node;
-			result_node["name"] = Report::reformName(result.name);
+			result_node["name"] = Report::reformName(reg_infos, result.name);
 			result_node["count"] = static_cast<Json::Value::UInt>(result.count);
 			result_node["min"] = result.min;
 			result_node["max"] = result.max;

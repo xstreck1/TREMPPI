@@ -11,7 +11,7 @@ Logging::Logging()
 {
 	Logging::getFile() << " --- " << TremppiSystem::PROGRAM_NAME << " has started." << " --- ";
 	last_progress_val = 0;
-	cout << 0 << "\r";
+	cout << "00.00\r";
 	cout << fixed << setprecision(PRECISION);
 }
 
@@ -90,7 +90,7 @@ void Logging::step()
 
 	if (progress_i > Logging::last_progress_val) 
 	{
-		if (progress_i < 100) {
+		if (progress_i < 10 * SHIFT_FACTOR) {
 			cout << "0";
 		}
 		cout <<  progress_i / SHIFT_FACTOR << "\r";

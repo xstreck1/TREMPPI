@@ -21,7 +21,7 @@ Json::Value Report::createSetup()
 }
 
 
-string Report::reformName(string name) 
+string Report::reformName(const RegInfos & reg_infos, const string & name)
 {
 	switch (name[0]) {
 		case 'B':
@@ -35,10 +35,40 @@ string Report::reformName(string name)
 		case 'I':
 			return regex_replace(name, regex("I_(.*)_(\\d)_(.*)"), "Impact($1,$2,$3)");
 		case 'K':
-			return regex_replace(name, regex("K_(.*)_(\\d*)"), "K<sub>$1</sub>($2)");
+			return contextToValues(reg_infos, name);
 		case 'S':
 			return regex_replace(name, regex("S_(.*)_(\\d)_(.*)"), "Sign($1,$2,$3)");
 		case 'R':
 			return regex_replace(name, regex("R_(.*)"), "Robustness($1)");
 	}
+}
+
+string Report::contextToValues(const RegInfos & reg_infos, const string & context) {
+	string result = "K<sub>";
+	smatch sm;
+	regex_match(context, sm, regex("K_(.*)_(\\d*)"));
+	const string component = sm[1];
+	result += component + "</sub>(";
+	const string context_vals = sm[2];
+	if (context_vals.empty()) {
+		return result + ")";
+	}
+	const CompID ID = DataInfo::getCompID(reg_infos, component);
+	const RegInfo & reg_info = reg_infos[ID];
+	for (const size_t reg_no : cscope(context_vals)) {
+		const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
+		Levels thresholds = reg_info.regulators.at(reg_ID);
+		thresholds.insert(begin(thresholds), static_cast<ActLevel>(0));
+		thresholds.push_back(reg_info.max_activity + 1);
+		const ActLevel current_trehold = static_cast<int>(context_vals[reg_no]) - static_cast<int>('0');
+		const ActLevel next_threshold = *(std::find(WHOLE(thresholds), current_trehold) + 1);
+		result += reg_infos[reg_ID].name + "{";
+		for (const ActLevel level : crange(current_trehold, next_threshold)) {
+			result += string(1, static_cast<char>(level + '0')) + ",";
+		}
+		result.back() = '}';
+		result += ',';
+	}
+	result.back() = ')';
+	return result;
 }
