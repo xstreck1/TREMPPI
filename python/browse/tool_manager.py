@@ -57,7 +57,7 @@ class ToolManager:
                 self._current = command[1]
                 self._last_progress = "00.00"
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
-                self._subprocess = subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command), stdout=subprocess.PIPE)
+                self._subprocess = subprocess.Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=subprocess.PIPE)
                 self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
                 self._thread.start()
                 return -1
