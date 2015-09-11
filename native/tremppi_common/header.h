@@ -36,8 +36,8 @@
 
 #include "configure.h"
 
-// POST-ISMB 2015
-const std::string VERSION("0.4.1");
+// POST-HSB 2015
+const std::string VERSION("0.5.0");
 
 using namespace std;
 

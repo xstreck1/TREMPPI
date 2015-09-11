@@ -25,7 +25,6 @@ class ToolManager:
         line = out.read(6)
         while len(line) > 0:
             line = out.read(6).decode("utf-8")[0:5]
-            print('the line is ' + line)
             if len(line) is 5:
                 queue.put(line)
 
@@ -59,6 +58,7 @@ class ToolManager:
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
                 self._subprocess = subprocess.Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=subprocess.PIPE)
                 self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
+                self._queue = Queue()
                 self._thread.start()
                 return -1
             else:

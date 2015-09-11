@@ -44,7 +44,7 @@ tremppi.quantitative.getGrid = function (grid_name) {
             header: true
         },
         columns: [
-            {field: 'name', caption: 'Name', size: '40%', sortable: true},
+            {field: 'name', caption: 'Label', size: '40%', sortable: true},
             {field: 'count', caption: 'Count', size: portion + '%', sortable: true},
             {field: 'min', caption: 'Min', size: portion + '%', sortable: true},
             {field: 'max', caption: 'Max', size: portion + '%', sortable: true},
