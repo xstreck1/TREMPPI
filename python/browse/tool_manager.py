@@ -45,7 +45,6 @@ class ToolManager:
     def add_to_queue(self, path, command):
         self._commands.append((path, command))
 
-
     # Return progress of currently executed process in percents.
     # If it is done, start a new one from the queue.
     # If all is done, return -1.
@@ -56,25 +55,24 @@ class ToolManager:
                 self._current = command[1]
                 self._last_progress = "00.00"
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
+
                 self._subprocess = subprocess.Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=subprocess.PIPE)
-                self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
                 self._queue = Queue()
+
+                self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
                 self._thread.start()
-                return -1
+
+                return self._last_progress
             else:
                 self._current = ""
-                self._last_progress = "00.00"
+                self._last_progress = ""
                 return -1
-        elif self.is_running():
-            try:
-                while not self._queue.empty():
-                    self._last_progress = self._queue.get_nowait() # or q.get(timeout=.1)
-            except Empty:
-                print('no output yet')
-            else:
-                return self._last_progress
         else:
-            return 0
+            while not self._queue.empty():
+                self._last_progress = self._queue.get_nowait() # or q.get(timeout=.1)
+            return self._last_progress
+
+
     def get_commands(self):
         if len(self._commands) == 0:
             return self._current
@@ -83,6 +81,7 @@ class ToolManager:
 
     def kill_all(self, parsed_path):
         self._subprocess.kill()
+        self._subprocess = None
         self._commands = []
         self._current = ""
         self._last_progress = "00.00"

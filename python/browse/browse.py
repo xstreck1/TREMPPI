@@ -14,7 +14,7 @@ def set_port(path):
 
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.header import data_folder, default_port, configure_filename, projects_filename, system_init, system
+from tremppi.header import data_folder, default_port, configure_filename, projects_filename, last_page_filename, system_init, system
 from tremppi.project_files import list_projects, write_projects, generate_data
 from server import TremppiServer
 from tremppi.file_manipulation import read_jsonp, write_jsonp
@@ -34,18 +34,37 @@ if args.port is not None:
 else:
     port = default_port
 
+# check for the last selection by the user
+last_page = ""
+if exists(last_page_filename):
+    with open(last_page_filename, "r") as last_page_file:
+        last_page = last_page_file.read()
 
 project_path = ''
+# the case that we are in a single project
 if exists(configure_filename):
     set_port('.')
-    generate_data(join('.', data_folder))
+    generate_data(data_folder)
+    # select the opening page
+    if last_page is not "" and exists(last_page):
+        project_path = last_page
+    else:
+        project_path = "index.html"
+
+# the case we have multiple projects
 elif exists(projects_filename) or listdir('.') == []:
+    # get all projects, create a new one if empty
     projects = list_projects(".")
-    # create a new project if empty
     if len(projects) is 0:
         subprocess.Popen(join(system.BIN_PATH,"tremppi") + " init project_0", shell=True).wait()
         projects = ["project_0"]
-    project_path = projects[0] + "/"
+
+    # select the opening page
+    if last_page is not "" and exists(last_page):
+        project_path = last_page
+    else:
+        project_path = projects[0] + "/index.html"
+
     # set ports on all the projects
     for project_folder in projects:
         set_port(project_folder)
@@ -55,7 +74,7 @@ else:
     raise Exception(configure_filename + " or " +  projects_filename + " does not exist in " + system.DEST_PATH + ". Are you sure it's a correct path?")
 
 if args.nopen is False:
-    webbrowser.open("http://localhost:" + port + "/" + project_path + "index.html")
+    webbrowser.open("http://localhost:" + port + "/" + project_path)
 
 # Execute the server itself.
 server = HTTPServer(('', int(port)), TremppiServer)

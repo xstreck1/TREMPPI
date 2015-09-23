@@ -1,10 +1,11 @@
 __author__ = 'adams_000'
 
-from os import replace, remove
+import sys
+from os import replace, remove, fdopen
 from os.path import dirname, join, basename
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
-from tremppi.header import configure_filename
+from tremppi.header import last_page_filename
 from tremppi.file_manipulation import copyanything
 from tool_manager import ToolManager
 from configure.configure import configure
@@ -13,6 +14,7 @@ from tremppi.project_files import write_projects, delete_project, save_file, get
 # TREMPPI server that communicates between HTML reports and the filesystem
 class TremppiServer(SimpleHTTPRequestHandler):
     _tool_manager = ToolManager()
+
 
     def success_response(self, content_type, data):
         self.send_response(200)
@@ -75,6 +77,11 @@ class TremppiServer(SimpleHTTPRequestHandler):
             data = self.rfile.read(int(length))
             save_file(parsed_path, data)
             self.success_response('text', ("save success".encode()))
+        elif parsed_url.query == 'page':
+            with open(last_page_filename, 'w+') as last_page_file:
+                last_page_file.seek(0)
+                last_page_file.write(parsed_url.path[1:])
+                last_page_file.truncate()
         elif parsed_url.query == 'killAll':
             self._tool_manager.kill_all(parsed_path)
             self.success_response('text', ("killAll success".encode()))

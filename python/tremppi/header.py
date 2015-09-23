@@ -3,6 +3,7 @@ __author__ = 'adams_000'
 default_port = "8080"
 configure_filename = "configure.js"
 projects_filename = "projects.js"
+last_page_filename = "last_page.txt"
 database_file = 'database.sqlite'
 source_folder = 'javascript'
 data_folder = 'data'

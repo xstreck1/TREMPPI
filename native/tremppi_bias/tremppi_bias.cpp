@@ -12,14 +12,14 @@ int tremppi_bias(int argc, char ** argv)
 	TremppiSystem::initiate("tremppi_bias", argc, argv);
 	Logging logging;
 
-	string select;
+	string selection;
 	sqlite3pp::database db;
 	RegInfos reg_infos;
 	try 
 	{
 		// Get database
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
-		select = DatabaseReader::getSelectionTerm();
+		selection = DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
@@ -44,10 +44,12 @@ int tremppi_bias(int argc, char ** argv)
 		for (const RegInfo & reg_info : reg_infos) 
 		{
 			// Select parametrizations and IDs
-			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, select, db);
-			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
+			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, selection, db);
+			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(selection, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
+
+			logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(selection, db));
 			db.execute("BEGIN TRANSACTION");
 			// Go through parametrizations
 			for (auto sel_ID : sel_IDs) 
@@ -61,6 +63,7 @@ int tremppi_bias(int argc, char ** argv)
 				update += " WHERE ROWID=" + to_string(rowid);
 				db.execute(update.c_str());
 
+				logging.step();
 				sel_it++;
 			}
 			db.execute("END");

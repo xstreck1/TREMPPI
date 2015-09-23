@@ -15,12 +15,10 @@ Json::Value Report::createSetup()
 	out["setup"]["select"] = DatabaseReader::getSelectionTerm();
 	out["setup"]["s_name"] = DatabaseReader::getSelectionName();
 	// Get pool sizes
-	out["setup"]["size"] = (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + DatabaseReader::getSelectionTerm()).c_str()).begin())->get<int>(0);
+	out["setup"]["size"] = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
 
 	return out;
-}
-
-
+}
 string Report::reformName(const RegInfos & reg_infos, const string & name)
 {
 	switch (name[0]) {

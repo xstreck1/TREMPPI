@@ -26,7 +26,7 @@ class DatabaseReader
 
 	//
 	vector<Levels> obtainRequirements(const string & context, const map<CompID, Levels> & regulators, sqlite3pp::database & db);
-	
+
 	// Get regulators of the given component
 	map<CompID, Levels> readRegulators(const string & name, sqlite3pp::database & db);
 
@@ -45,4 +45,7 @@ public:
 
 	// Obtain the term describing the current selection
 	static string getSelectionName();
+
+	//
+	static int getSelectionSize(const string & selection, sqlite3pp::database & db);
 };

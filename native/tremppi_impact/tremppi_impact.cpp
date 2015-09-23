@@ -13,7 +13,7 @@ int tremppi_impact(int argc, char ** argv)
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
-	string select;
+	string selection;
 	sqlite3pp::database db;
 	RegInfos reg_infos;
 	try 
@@ -21,7 +21,7 @@ int tremppi_impact(int argc, char ** argv)
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str()));
 
-		select = DatabaseReader::getSelectionTerm();
+		selection = DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
@@ -69,12 +69,12 @@ int tremppi_impact(int argc, char ** argv)
 			}
 
 			// Select parametrizations and IDs
-			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, select, db);
-			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
+			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_info.columns, selection, db);
+			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(selection, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
-
+			
+			logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(selection, db));
 			db.execute("BEGIN TRANSACTION");
-
 			// Go through parametrizations
 			for (auto sel_ID : sel_IDs) 
 			{
@@ -95,7 +95,7 @@ int tremppi_impact(int argc, char ** argv)
 				int rowid = sel_ID.get<int>(0);
 				update += "WHERE ROWID=" + to_string(rowid);
 				db.execute(update.c_str());
-
+				logging.step();
 				sel_it++;
 			}
 			db.execute("END");

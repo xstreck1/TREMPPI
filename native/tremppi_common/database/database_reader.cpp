@@ -1,4 +1,5 @@
 #include "database_reader.hpp"
+#include "database_reader.hpp"
 #include "../general/system.hpp"
 #include "../general/file_manipulation.hpp"
 #include "../python/python_functions.hpp"
@@ -111,7 +112,7 @@ vector<Levels> DatabaseReader::obtainRequirements(const string & context, const 
 	}
 	return result;
 }
-
+int DatabaseReader::getSelectionSize(const string & selection, sqlite3pp::database & db) {	return (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + DatabaseReader::getSelectionTerm()).c_str()).begin())->get<int>(0);}
 sqlite3pp::query DatabaseReader::selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db) 
 {
 	string columns_list = alg::join(DataConv::columns2list(columns), ", ");

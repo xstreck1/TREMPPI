@@ -11,7 +11,7 @@ int tremppi_express(int argc, char ** argv)
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
-	string select;
+	string selection;
 	map<string, ActLevel> maxes;
 	RegFuncs functions;
 	sqlite3pp::database db;
@@ -20,7 +20,7 @@ int tremppi_express(int argc, char ** argv)
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str() ));
 
-		select = DatabaseReader::getSelectionTerm();
+		selection = DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		RegInfos infos = reader.readRegInfos(db);
@@ -47,12 +47,12 @@ int tremppi_express(int argc, char ** argv)
 		for (const RegFunc & reg_func : functions) 
 		{
 			// Select parametrizations and IDs
-			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
-			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
+			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, selection, db);
+			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(selection, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
+			logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(selection, db));
 			db.execute("BEGIN TRANSACTION");
-
 			// Go through parametrizations
             for (auto sel_ID : sel_IDs) 
             {
@@ -78,7 +78,7 @@ int tremppi_express(int argc, char ** argv)
 				int rowid = sel_ID.get<int>(0);
 				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET F_" + reg_func.info.name + "=" + formula + " WHERE ROWID=" + to_string(rowid);
 				db.execute(update.c_str());
-
+				logging.step();
 				sel_it++;
 			}
 			db.execute("END");

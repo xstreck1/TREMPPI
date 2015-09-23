@@ -65,10 +65,12 @@ int tremppi_witness(int argc, char ** argv)
 
 				wit_reader.select(name, out["setup"]["select"].asString(), db);
 				// Read transitions
+				logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db));
 				while (wit_reader.next()) 
 				{
 					set<pair<string, string>> new_transitions = wit_reader.getWitness();
 					transitions.insert(WHOLE(new_transitions));
+					logging.step();
 				}
 			}
 			logging.step();

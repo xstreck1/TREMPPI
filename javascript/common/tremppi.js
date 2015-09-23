@@ -104,6 +104,13 @@ tremppi = {
             }
         }
     },
+    setPage: function() {
+        var url = tremppi.getServerAddress() + tremppi.widget_name + ".html?page";
+        $.ajax({
+            type: "POST",
+            url: url
+        });
+    },
     makeScript: function (src) {
         var element = document.createElement('script');
         element.src = src;
@@ -152,6 +159,7 @@ tremppi = {
     },
     makeBody: function () {
         tremppi.configure();
+        tremppi.setPage();
 
         // Set basic layout
         var layout_style = 'border: 0px solid #dfdfdf;';
