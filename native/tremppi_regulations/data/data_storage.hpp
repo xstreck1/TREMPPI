@@ -11,19 +11,7 @@ struct RegData
 	map<CompID, vector<double> > reg_corr;
 	map<CompID, vector<double> > reg_freq;
 	map<CompID, vector<char> > reg_sign;
-	map<CompID, double> expected_freq; // Expected frequency is shared for all the edges
-
-	// Normalize by the number of parametrizations
-	static void Normalize(const size_t step_count, map<CompID, vector<double>> & values) 
-	{
-		for (auto & reg_val : values) {
-			for (auto & edge_val : reg_val.second) 
-			{
-				edge_val /= step_count;
-			}
-		}
-	}
-
+	map<CompID, double> expected_freq; // Expected frequency is shared for all the edges
 	RegData(const RegInfo & info) : _info(info) 
 	{
 		for (const auto & regulator : _info.regulators) {

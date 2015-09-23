@@ -5,8 +5,6 @@
 #include <tremppi_common/general/common_functions.hpp>
 #include <tremppi_common/report/statistics.hpp>
 
-#include "../data/data_storage.hpp"
-
 namespace StatisticalAnalysis 
 {
 	namespace {

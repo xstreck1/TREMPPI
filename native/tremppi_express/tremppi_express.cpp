@@ -4,7 +4,7 @@
 #include "compute/MVQMC.hpp"
 #include "io/output.hpp"
 
-//
+//
 int tremppi_express(int argc, char ** argv) 
 {
 	TremppiSystem::initiate("tremppi_express", argc, argv);
@@ -33,19 +33,17 @@ int tremppi_express(int argc, char ** argv)
 				minterms.emplace_back(DataConv::getThrsFromContext(column.second));
 			functions.emplace_back(RegFunc{ move(info), move(minterms) });
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	// Convert and output
+	// Convert and output
 	try 
 	{
 		Output::addColumns(functions, db);
-
 		logging.newPhase("Expressing component", functions.size());
-
 		for (const RegFunc & reg_func : functions) 
 		{
 			// Select parametrizations and IDs
@@ -55,13 +53,13 @@ int tremppi_express(int argc, char ** argv)
 
 			db.execute("BEGIN TRANSACTION");
 
-			// Go through parametrizations
+			// Go through parametrizations
             for (auto sel_ID : sel_IDs) 
             {
 				vector<vector<PMin>> config_values(reg_func.info.max_activity + 1);
 				Levels params = sqlite3pp::func::getRow<ActLevel>(*sel_it, 0, sel_qry.column_count());
 				
-				// Convert the contexts 
+				// Convert the contexts 
 				for (const size_t context_id : cscope(params)) 
 				{
 					PMin minterm(reg_func.minterms[context_id].size());
@@ -70,7 +68,7 @@ int tremppi_express(int argc, char ** argv)
 				}
 
 				// Minimize for all values
-				vector<PDNF> pdnfs(1);
+				vector<PDNF> pdnfs(1);
 				for (ActLevel target_val = 1; target_val < (reg_func.info.max_activity + 1); target_val++) 
 				{
 					pdnfs.emplace_back(MVQMC::compactize(config_values[target_val]));
@@ -84,19 +82,17 @@ int tremppi_express(int argc, char ** argv)
 				sel_it++;
 			}
 			db.execute("END");
-
 			logging.step();
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
 	}
-
 	try
 	{
 		PythonFunctions::configure("select");
-	}
+	}
 	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 4);

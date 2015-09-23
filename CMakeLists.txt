@@ -25,8 +25,6 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 MESSAGE("BOOST LIB" ${Boost_LIBRARY_DIRS})
 
-
-SET(BUILD_STANDALONE OFF CACHE BOOL "Build also stand-alones")
 SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
 
 # Gecode
@@ -117,10 +115,6 @@ function(module name)
 	SOURCE_GROUP("Sources ${name}" ${FOLDER}/.*cpp)
 	ADD_LIBRARY(tremppi_${name} ${FOLDER}/tremppi_${name}.cpp ${HEADERS})
 	target_link_libraries(tremppi_${name} tremppi_common)
-	if(BUILD_STANDALONE)
-		ADD_EXECUTABLE(${name} ${FOLDER}/main.cpp ${FOLDER}/tremppi_spawn.cpp ${HEADERS})
-		target_link_libraries(${name} tremppi_common)
-	endif(BUILD_STANDALONE)
 	if (GTEST_FOUND)
 		target_link_libraries(tests tremppi_${name})
 	endif(GTEST_FOUND)
@@ -129,7 +123,9 @@ endfunction()
 
 # MODULES
 module("bias")
+module("correlations")
 module("express")
+module("impact")
 module("sign")
 module("regulations")
 module("quantitative")
@@ -137,4 +133,3 @@ module("qualitative")
 module("spawn")
 module("validate")
 module("witness")
-

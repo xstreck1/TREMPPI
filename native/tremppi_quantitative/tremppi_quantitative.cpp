@@ -4,8 +4,7 @@
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
-#include <tremppi_common/python/python_functions.hpp>
-
+#include <tremppi_common/python/python_functions.hpp>
 struct ComputedData 
 {
 	string name;
@@ -17,7 +16,7 @@ struct ComputedData
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_qualitative
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_quantitative(int argc, char ** argv) 
 {
 	TremppiSystem::initiate("tremppi_quantitative", argc, argv);
@@ -38,8 +37,7 @@ int tremppi_quantitative(int argc, char ** argv)
 
 		// Read regulatory information
 		DatabaseReader reader;
-		reg_infos = reader.readRegInfos(db);
-
+		reg_infos = reader.readRegInfos(db);
 		for (const string & prefix : prefixes) 
 		{
 			const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
@@ -64,12 +62,10 @@ int tremppi_quantitative(int argc, char ** argv)
 	const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);	try 
 	{
 		DEBUG_LOG << "Reading the values, computing the statistics.";
-
 		logging.newPhase("Reading row", row_count);
-
 		sqlite3pp::query group_qry = DatabaseReader::selectionFilter(columns, out["setup"]["select"].asString(), db);
 
-		// Read the data
+		// Read the data
 		for (auto row : group_qry) 
 		{
 			for (int i = 0; i < group_qry.column_count(); i++) {
@@ -104,7 +100,7 @@ int tremppi_quantitative(int argc, char ** argv)
 	{
 		logging.exceptionMessage(e, 3);
 	}
-
+
 	try 
 	{
 		DEBUG_LOG << "Building the JSON file.";
@@ -129,7 +125,7 @@ int tremppi_quantitative(int argc, char ** argv)
 	{
 		DEBUG_LOG << "Writing output.";
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "quantitative" / (out["setup"]["s_name"].asString() + ".json"), out);
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 5);

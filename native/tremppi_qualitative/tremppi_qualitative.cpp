@@ -44,57 +44,52 @@ int tremppi_qualitative(int argc, char ** argv)
 
 		// Read filter conditions
 		out = Report::createSetup();
-
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
 
 		// Read regulatory information
 		DatabaseReader reader;
-		reg_infos = reader.readRegInfos(db);
-
+		reg_infos = reader.readRegInfos(db);
 		for (const string & prefix : prefixes) 
 		{
 			const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
 			columns.insert(WHOLE(new_columns));
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	vector<ComputedQual> results;
+	vector<ComputedQual> results;
 	try 
 	{
-		DEBUG_LOG << "Preparing the data.";
+		DEBUG_LOG << "Preparing the data.";
 		for (const pair<size_t, string> column : columns) 
 		{
 			results.emplace_back(ComputedQual{ column.second, { } });
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
 	}
 
 	const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);
-	const double row_count_d = row_count;
+	const double row_count_d = row_count;
 	try 
 	{
 		DEBUG_LOG << "Reading the values, computing the statistics.";
-
 		logging.newPhase("Reading row", row_count);
-
 		sqlite3pp::query group_qry = DatabaseReader::selectionFilter(columns, out["setup"]["select"].asString(), db);
 
-		// Read the data
+		// Read the data
 		for (auto row : group_qry) 
 		{
-			for (int i = 0; i < group_qry.column_count(); i++) {
+			for (int i = 0; i < group_qry.column_count(); i++) 			{
 				if (row.column_type(i) == SQLITE_NULL) 
 				{
 					throw runtime_error(string("A null valued entry in the column ") + group_qry.column_name(i));
-				}
-				else if (row.column_type(i) == SQLITE_INTEGER) 
+				} else if (row.column_type(i) == SQLITE_INTEGER) 
 				{
 					incrementOccurence(to_string(row.get<int>(i)), results[i].values);
 				} else if (row.column_type(i) == SQLITE_FLOAT) 
@@ -110,17 +105,16 @@ int tremppi_qualitative(int argc, char ** argv)
 			}
 			logging.step();
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 4);
 	}
-
+
 	try 
 	{
 		DEBUG_LOG << "Building the JSON file.";
 		// For each graph create the graph data and add configuration details
-
 		for (ComputedQual & result : results) 
 		{
 			Json::Value result_node;
@@ -134,32 +128,30 @@ int tremppi_qualitative(int argc, char ** argv)
 			}
 			out["values"].append(result_node);
 		}
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 5);
 	}
-
+
 	try 
 	{
 		DEBUG_LOG << "Writing output.";
 		
 		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "qualitative" / (out["setup"]["s_name"].asString() + ".json"), out);
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 6);
 	}
-
 	try
 	{
 		PythonFunctions::configure("qualitative");
-	}
+	}
 	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 6);
 	}
-
 
 	return 0;
 }

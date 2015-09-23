@@ -6,14 +6,14 @@
 namespace Statistics 
 {
 	//
-	template<typename T>
+	template<typename T>
 	inline double expected_val(const vector<T> & data) 
 	{
 		return accumulate(WHOLE(data), static_cast<T>(0), std::plus<T>()) / static_cast<double>(data.size());
 	}
 
 	// 
-	template<typename T>
+	template<typename T>
 	inline double expected_val(const vector<T> & data, const vector<size_t> & indices, const size_t shift) 
 	{
 		double expected_val = 0;
@@ -26,7 +26,7 @@ namespace Statistics
 	}
 
 	// 
-	template<typename T>
+	template<typename T>
 	double expected_prod_val(const vector<T> & A, const vector<T> & B) 
 	{
 		vector<T> product(A.size(), 0.);
@@ -35,7 +35,7 @@ namespace Statistics
 	}
 
 	//
-	template<typename T>
+	template<typename T>
 	vector<double> deviations(const vector<T> & data, const double mean, const vector<size_t> & indices, const size_t shift) 
 	{
 		vector<double> result;
@@ -46,7 +46,7 @@ namespace Statistics
 	}
 
 	//
-	template<typename T>
+	template<typename T>
 	vector<double> deviations(const vector<T> & data, const double mean) 
 	{
 		vector<double> result = vector<double>(data.size(), 0.);
@@ -57,7 +57,7 @@ namespace Statistics
 	}
 
 	// 
-	template<typename T>
+	template<typename T>
 	double variance(const vector<T> & dev) 
 	{
 		return accumulate(WHOLE(dev), 0.0, [](double variance, const double dev) {
@@ -66,7 +66,7 @@ namespace Statistics
 	}
 
 	// 
-	template<typename T>
+	template<typename T>
 	double correlation(const vector<T> & X, const vector<T> & Y) 
 	{
 		// Compute the correlation
@@ -80,7 +80,7 @@ namespace Statistics
 	}
 
 	// 
-	template<typename T>
+	template<typename T>
 	double correlation(const vector<T> & X, const vector<T> & Y, const vector<size_t> & indices, const size_t shift) 
 	{
 		// Compute the correlation
@@ -91,5 +91,15 @@ namespace Statistics
 		double correlation = (divisor == 0.) ? 0. : (divident / divisor);
 
 		return correlation;
+	}
+
+	// Normalize by the number of parametrizations
+	template<typename T>
+	static void normalize(const size_t step_count, vector<T> & values)
+	{
+		for (auto & value : values) 
+		{
+			value /= step_count;
+		}
 	}
 }

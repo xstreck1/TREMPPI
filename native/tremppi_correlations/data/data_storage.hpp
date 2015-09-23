@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tremppi_common/network/definitions.hpp>
+#include <tremppi_common/network/data_info.hpp>
 
 // The information for the regulatory network
 struct FunData 

@@ -2,7 +2,7 @@
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/database/database_reader.hpp>
 #include <tremppi_common/python/python_functions.hpp>
-
+
 void addColumns(const RegInfos & reg_infos, sqlite3pp::database & db) 
 {
 	for (const RegInfo & reg_info : reg_infos) {
@@ -21,7 +21,7 @@ void addColumns(const RegInfos & reg_infos, sqlite3pp::database & db)
 	const string column_name = "E_SUM";
 	sqlite3pp::func::addColumn(PARAMETRIZATIONS_TABLE, column_name, "INTEGER", db);
 }
-
+
 bool compareContexts(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold, const bool activating) 
 {
 	if (threshold == 0) {
@@ -47,18 +47,17 @@ bool compareContexts(const vector<Levels> & contexts, const vector<vector<size_t
 	}
 	return false;
 }
-
+
 inline bool isActivating(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold) 
 {
 	return compareContexts(contexts, context_pairs, params, reg_no, threshold, true);
-}
-
+}
 inline bool isInhibiting(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold) 
 {
 	return compareContexts(contexts, context_pairs, params, reg_no, threshold, false);
 }
 
-// Return label for an edge (1 for ambiguous, 0 for inactive)
+// Return label for an edge (1 for ambiguous, 0 for inactive)
 string getSign(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold) 
 {
 	const bool activating = isActivating(contexts, context_pairs, params, reg_no, threshold);
@@ -66,25 +65,25 @@ string getSign(const vector<Levels> & contexts, const vector<vector<size_t> > & 
 	if (activating & inhibiting) 
 	{
 		return "1";
-	}
+	}
 	else if (activating & !inhibiting) 
 	{
 		return "+";
-	}
+	}
 	else if (!activating & inhibiting) 
 	{
 		return "-";
-	}
+	}
 	else 
 	{
 		return "0";
 	}
 }
 
-//
+//
 int tremppi_sign(int argc, char ** argv) 
 {
-	 TremppiSystem::initiate("tremppi_sign", argc, argv);
+	TremppiSystem::initiate("tremppi_sign", argc, argv);
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
@@ -95,38 +94,35 @@ int tremppi_sign(int argc, char ** argv)
 	{
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str()));
-
 		select = DatabaseReader::getSelectionTerm();
-
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	// Label per parametrization
+	// Label per parametrization
 	try 
 	{
 		addColumns(reg_infos, db);
-
 		logging.newPhase("Expressing component", reg_infos.size());
-
+
 		for (const RegInfo & reg_info : reg_infos) 
 		{
 			// For each context (indexed by ordinals, not IDs) hold the context that is obtained by removal of a specific regulator (indexed by ordinals, not IDs)
-			vector<vector<size_t> > context_pairs;
+			vector<vector<size_t> > context_pairs;
 			for (const auto & context : reg_info.contexts) 
 			{
-				vector<size_t> pairs;
+				vector<size_t> pairs;
 				for (const size_t reg_no : cscope(reg_info.regulators)) 
 				{
-					// The threshold value is 0 => no removal is possible
+					// The threshold value is 0 => no removal is possible
 					if (context.second[reg_no] == 0) 
 					{
 						pairs.emplace_back(INF);
-					}
+					}
 					else 
 					{
 						const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
@@ -145,7 +141,7 @@ int tremppi_sign(int argc, char ** argv)
 
 			db.execute("BEGIN TRANSACTION");
 
-			// Go through parametrizations
+			// Go through parametrizations
 			for (auto sel_ID : sel_IDs) 
 			{
 				Levels params = sqlite3pp::func::getRow<ActLevel>(*sel_it, 0, sel_qry.column_count());
@@ -153,7 +149,7 @@ int tremppi_sign(int argc, char ** argv)
 				size_t indegree = 0;
 				for (const size_t reg_no : cscope(reg_info.regulators)) 
 				{
-					const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
+					const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
 					for (const ActLevel threshold : reg_info.regulators.at(reg_ID)) 
 					{
 						const string sign = getSign(contexts, context_pairs, params, reg_no, threshold);
@@ -163,7 +159,6 @@ int tremppi_sign(int argc, char ** argv)
 				}
 				// Remove the last comma
 				update += " E_" + reg_info.name + " = " + to_string(indegree);
-
 				int rowid = sel_ID.get<int>(0);
 				update += " WHERE ROWID=" + to_string(rowid);
 				db.execute(update.c_str());
@@ -171,28 +166,26 @@ int tremppi_sign(int argc, char ** argv)
 				sel_it++;
 			}
 			db.execute("END");
-
 			logging.step();
 		}
 
-		// Countthe total edges
-		string sum_command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET E_SUM =";
+		// Count the total edges
+		string sum_command = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET E_SUM =";
 		for (const RegInfo & reg_info : reg_infos) 
 		{
 			sum_command += " E_" + reg_info.name + " +";
 		}
 		sum_command[sum_command.size() - 1] = ' ';
 		db.execute(sum_command.c_str());
-	}
+	}
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
 	}
-
 	try
 	{
 		PythonFunctions::configure("select");
-	}
+	}
 	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 4);

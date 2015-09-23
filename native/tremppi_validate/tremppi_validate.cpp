@@ -10,7 +10,8 @@
 #include "data/construction_manager.hpp"
 #include "compute/analysis_manager.hpp"
 
-struct ValidateSetup {
+struct ValidateSetup 
+{
 	bool cost;
 	bool trace;
 	bool robustness;
@@ -29,7 +30,6 @@ int tremppi_validate()
 	try
 	{
 		DEBUG_LOG << "Parsing database.";
-
 
 		// Get selection		
 		select = DatabaseReader::getSelectionTerm();
@@ -65,14 +65,12 @@ int tremppi_validate()
 	try
 	{
 		DEBUG_LOG << "Parsing the properties.";
-
 		automata = PropertiesReader::jsonToProperties(properties);
 	}
 	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 4);
 	}
-
 
 	// Conduct the check for each of the properties
 	logging.newPhase("Checking properties", automata.size());
@@ -113,7 +111,9 @@ int tremppi_validate()
 				// Parametrization was considered satisfying.
 				string witness_path;
 				if (get<0>(result) != INF && validate_setup.trace)
+				{
 					witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
+				}
 
 				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 				logging.step();
