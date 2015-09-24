@@ -59,6 +59,8 @@ if exists(configure_filename):
 elif exists(projects_filename):
     # get all projects, create a new one if empty
     projects = list_projects(".")
+    if not projects:
+        raise Exception('Projects missing from the project folder. Empty the folder and restart TREMPPI.')
 
     # select the opening page
     if last_page is not "" and exists(last_page):

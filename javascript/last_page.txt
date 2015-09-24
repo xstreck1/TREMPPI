@@ -1,1 +1,1 @@
-select.html
+properties.html

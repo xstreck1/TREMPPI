@@ -8,7 +8,7 @@ from http.server import SimpleHTTPRequestHandler
 from tremppi.header import last_page_filename
 from tremppi.file_manipulation import copyanything
 from tool_manager import ToolManager
-from configure.configure import configure
+from tremppi.configure import configure
 from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
 # TREMPPI server that communicates between HTML reports and the filesystem

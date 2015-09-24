@@ -41,7 +41,7 @@ void PythonFunctions::exec(const string & command)
 void PythonFunctions::configure(string widget) 
 {
 	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from configure.configure import configure");
+	python.exec("from tremppi.configure import configure");
 	python.exec("configure(" + PythonFunctions::reformPath(bfs::absolute(TremppiSystem::DATA_PATH)) + ", \"" + widget + "\")");
 }
 
