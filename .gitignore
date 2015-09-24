@@ -12,7 +12,7 @@ run_cmake.sh
 /lib*
 /Release*
 /Debug*
-tremppi
+./tremppi
 tremppi.exe
 
 # CMake files
