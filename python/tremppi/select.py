@@ -14,7 +14,7 @@ def get_atom(record):
                 atoms.append(key + " IS NOT NULL")
             elif value == 'NULL':
                 atoms.append(key + " IS NULL")
-            elif re.match('([\(\[])(\d+.\d*),(\d+.\d*)([\)\]])', value):
+            elif re.match('[^!]([\(\[])(\d+.?\d*),(\d+.?\d*)([\)\]])', value):  # full interval
                 matches = re.match('([\(\[])(\d+.\d*),(\d+.\d*)([\)\]])', value)
                 if matches.group(1) == '(':
                     atoms.append(key + " > " + matches.group(2))
@@ -24,25 +24,33 @@ def get_atom(record):
                     atoms.append(key + " < " + matches.group(3))
                 else:
                     atoms.append(key + " <= " + matches.group(3))
-            elif re.match('([\(\[])(\d+),(\d+)([\)\]])', value):
-                matches = re.match('([\(\[])(\d+),(\d+)([\)\]])', value)
+            elif re.match('[^!]([\(\[]),(\d+.?\d*)([\)\]])', value):  # left open interval
+                matches = re.match('([\(\[])(\d+.\d*),(\d+.\d*)([\)\]])', value)
+                if matches.group(3) == ')':
+                    atoms.append(key + " < " + matches.group(2))
+                else:
+                    atoms.append(key + " <= " + matches.group(2))
+            elif re.match('[^!]([\(\[])(\d+.?\d*),([\)\]])', value):  # right open interval
+                matches = re.match('([\(\[])(\d+.\d*),(\d+.\d*)([\)\]])', value)
                 if matches.group(1) == '(':
                     atoms.append(key + " > " + matches.group(2))
                 else:
                     atoms.append(key + " >= " + matches.group(2))
-                if matches.group(4) == ')':
-                    atoms.append(key + " < " + matches.group(3))
+            elif re.match('!([\(\[])(\d+.?\d*),(\d+.?\d*)([\)\]])', value):  # interval exclusion
+                matches = re.match('([\(\[])(\d+.\d*),(\d+.\d*)([\)\]])', value)
+                if matches.group(1) == '(':
+                    atoms.append(key + " <= " + matches.group(2))
                 else:
-                    atoms.append(key + " <= " + matches.group(3))
+                    atoms.append(key + " < " + matches.group(2))
+                if matches.group(4) == ')':
+                    atoms.append(key + " >= " + matches.group(3))
+                else:
+                    atoms.append(key + " > " + matches.group(3))
             elif re.match('[+-01]', value):
                 atoms.append(key + ' = "' + value + '"')
-            elif re.match('!\d+.\d*', value):
+            elif re.match('!\d+.?\d*', value):
                 atoms.append(key + " != " + value[1:])
-            elif re.match('\d+.\d*', value):
-                atoms.append(key + " = " + value)
-            elif re.match('!\d+', value):
-                atoms.append(key + " != " + value[1:])
-            elif re.match('\d+', value):
+            elif re.match('[^!]\d+.?\d*', value):
                 atoms.append(key + " = " + value)
             else:
                 raise Exception("The expression " + value + " for the key " + key + " is not interpreted.")

@@ -41,6 +41,13 @@ if exists(last_page_filename):
         last_page = last_page_file.read()
 
 project_path = ''
+# the case the folder is empty
+if not listdir('.'):
+    print('0')
+    command = join(system.BIN_PATH, "tremppi") + ' init project_0 --path ' + abspath('.')
+    process = subprocess.Popen(command)
+    process.wait()
+    write_projects('.')
 # the case that we are in a single project
 if exists(configure_filename):
     set_port('.')
@@ -50,14 +57,10 @@ if exists(configure_filename):
         project_path = last_page
     else:
         project_path = "index.html"
-
-# the case we have multiple projects
-elif exists(projects_filename) or listdir('.') == []:
+# the case we have multiple projects (or the folder was empty)
+elif exists(projects_filename):
     # get all projects, create a new one if empty
     projects = list_projects(".")
-    if len(projects) is 0:
-        subprocess.Popen(join(system.BIN_PATH,"tremppi") + " init project_0", shell=True).wait()
-        projects = ["project_0"]
 
     # select the opening page
     if last_page is not "" and exists(last_page):
@@ -71,7 +74,7 @@ elif exists(projects_filename) or listdir('.') == []:
         generate_data(join(project_folder, data_folder))
     write_projects('.')
 else:
-    raise Exception(configure_filename + " or " +  projects_filename + " does not exist in " + system.DEST_PATH + ". Are you sure it's a correct path?")
+    raise Exception(configure_filename + " or " + projects_filename + " does not exist in " + system.DEST_PATH + ", which is not empty. Are you sure it's a correct path?")
 
 if args.nopen is False:
     webbrowser.open("http://localhost:" + port + "/" + project_path)
