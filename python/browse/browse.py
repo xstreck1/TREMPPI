@@ -43,9 +43,7 @@ if exists(last_page_filename):
 project_path = ''
 # the case the folder is empty
 if not listdir('.'):
-    print('0')
-    command = join(system.BIN_PATH, "tremppi") + ' init project_0 --path ' + abspath('.')
-    process = subprocess.Popen(command)
+    process = subprocess.Popen([join(system.BIN_PATH, "tremppi")] + ['init'] + ['project_0'] + ['--path '] + [abspath('.')])
     process.wait()
     write_projects('.')
 # the case that we are in a single project
