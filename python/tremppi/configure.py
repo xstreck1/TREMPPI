@@ -6,16 +6,10 @@ import json
 import re
 import sqlite3
 from os.path import join, dirname, abspath, exists
-from tremppi.database_reader import component_regulators_list, read_components
+from tremppi.database_reader import component_regulators_list, read_components, read_regulations
 from tremppi.header import widgets, database_file
 
-def make_selection(conn):
-    columns = []
-    groups = []
-    components = read_components(conn)
-    cursor = conn.execute('select * from Parametrizations')
-    column_names = list(map(lambda x: x[0], cursor.description))
-
+def add_basics(columns, groups):
     columns.append({
         'field': 'select',
         'caption': '',
@@ -42,8 +36,26 @@ def make_selection(conn):
         'hideable': False
     })
 
-    # Add parameters
+def get_val_interval(source, current_thr, target, components,  regulations):
+    thresholds = []
+    for comp_name, comp_max in components:
+        if comp_name == source:
+            thresholds.append(comp_max + 1)
+            break
+    for r_source, r_threshold, r_target in regulations:
+        if r_source == source and r_target == target:
+            thresholds.append(int(r_threshold))
+    thresholds.sort()
+    next_threshold = 0
+    for thr in thresholds:
+        if thr > current_thr:
+            next_threshold = thr
+            break
+    return '{' + ','.join(map(str, range(current_thr,next_threshold))) + '}'
+
+def add_parameters(conn, components, columns, groups, column_names):
     component_regs_list = component_regulators_list(conn)
+    regulations = read_regulations(conn)
     for comp_name, comp_max in components:
         reg_tuple = ""
         if comp_name in component_regs_list:
@@ -59,10 +71,16 @@ def make_selection(conn):
         for column_name in column_names:
             parts = str(column_name).split('_')
             if re.match('K_' + comp_name + '_(.*)', column_name):
+                digits = re.sub('K_' + comp_name + '_(.*)', '\\1', column_name)
+                ranges = []
+                for i in range(len(digits)):
+                    source = component_regs_list[comp_name][i]
+                    ranges.append(get_val_interval(source, int(digits[i]), comp_name, components, regulations))
+                caption = ','.join(ranges)
                 columns.append({
                     'field': column_name,
-                    'caption': re.sub('(\d)', '\\1,', re.sub('K_' + comp_name + '_(.*)', '\\1', column_name))[:-1], #take only the number, put commas between
-                    'size': str(len(column_name) * 8) + 'px',
+                    'caption': caption ,
+                    'size': str(len(caption) * 8 + 6) + 'px',
                     'editable': {
                         'min': 0,
                         'max': comp_max,
@@ -73,7 +91,7 @@ def make_selection(conn):
                 groups[-1]['columns'].append(column_name)
                 groups[-1]['span'] += 1
 
-    # Add sign
+def add_sign(columns, groups, column_names):
     new_group = {
         'caption': 'Sign(edge)',
         'columns': [],
@@ -99,7 +117,7 @@ def make_selection(conn):
     if new_group['span'] > 0:
         groups.append(new_group)
 
-    # Add indegree
+def add_indegree(columns, groups, column_names):
     new_group = {
         'caption': 'Indegree(component)',
         'columns': [],
@@ -126,7 +144,7 @@ def make_selection(conn):
     if new_group['span'] > 0:
         groups.append(new_group)
 
-    # Add Bias
+def add_bias(columns, groups, column_names):
     new_group = {
         'caption': 'Bias(component)',
         'columns': [],
@@ -153,7 +171,7 @@ def make_selection(conn):
     if new_group['span'] > 0:
         groups.append(new_group)
 
-    # Add impact
+def add_impact(columns, groups, column_names):
     new_group = {
         'caption': 'Impact(edge)',
         'columns': [],
@@ -180,33 +198,7 @@ def make_selection(conn):
     if new_group['span'] > 0:
         groups.append(new_group)
 
-    # Add robustness
-    new_group = {
-        'caption': 'Robustness(property)',
-        'columns': [],
-        'span': 0,
-        'master': False,
-        'hideable': True
-    }
-    for column_name in column_names:
-        if re.match('R_(.*)', column_name):
-            columns.append({
-                'field': column_name,
-                'caption': re.sub('R_(.*)', '\\1', column_name),
-                'size': str(len(column_name) * 8) + 'px',
-                'editable': {
-                    'min': 0,
-                    'max': 1,
-                    'type': 'text'
-                },
-                "resizable": True
-            })
-            new_group['columns'].append(column_name)
-            new_group['span'] += 1
-    if new_group['span'] > 0:
-        groups.append(new_group)
-
-    # Add cost
+def add_cost(columns, groups, column_names):
     new_group = {
         'caption': 'Cost(property)',
         'columns': [],
@@ -232,6 +224,46 @@ def make_selection(conn):
     if new_group['span'] > 0:
         groups.append(new_group)
 
+def add_robustness(columns, groups, column_names):
+    new_group = {
+        'caption': 'Robustness(property)',
+        'columns': [],
+        'span': 0,
+        'master': False,
+        'hideable': True
+    }
+    for column_name in column_names:
+        if re.match('R_(.*)', column_name):
+            columns.append({
+                'field': column_name,
+                'caption': re.sub('R_(.*)', '\\1', column_name),
+                'size': str(len(column_name) * 8) + 'px',
+                'editable': {
+                    'min': 0,
+                    'max': 1,
+                    'type': 'text'
+                },
+                "resizable": True
+            })
+            new_group['columns'].append(column_name)
+            new_group['span'] += 1
+    if new_group['span'] > 0:
+        groups.append(new_group)
+
+def make_selection(conn):
+    columns = []
+    groups = []
+    components = read_components(conn)
+    cursor = conn.execute('select * from Parametrizations')
+    column_names = list(map(lambda x: x[0], cursor.description))
+    add_basics(columns, groups)
+    add_parameters(conn, components, columns, groups, column_names)
+    add_sign(columns, groups, column_names)
+    add_indegree(columns, groups, column_names)
+    add_bias(columns, groups, column_names)
+    add_impact(columns, groups, column_names)
+    add_cost(columns, groups, column_names)
+    add_robustness(columns, groups, column_names)
     return columns, groups
 
 
