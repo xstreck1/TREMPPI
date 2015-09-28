@@ -19,19 +19,20 @@ tremppi.correlations.valuesSetter = function (source, panel) {
         tremppi.correlations.createPanelContent(data.elements, panel);
         tremppi.log(source + ' loaded successfully.');
 
+        var left_elems = (panel === 'left') ? data.elements : tremppi.correlations.left.json().elements;
+        var right_elems = (panel === 'left') ? tremppi.correlations.right.json().elements : data.elements;
+
         if (tremppi.correlations.left.nodes().length > 0 && tremppi.correlations.right.nodes().length > 0) {
             $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
-            var to_synchronize = tremppi.correlations.mid.nodes().length === 0;
+            var to_synchronize = tremppi.correlations.mid.nodes().length === 0; // Synchronize once
 
             var mid = {};
-            $.extend(true, mid, tremppi.correlations.left.json().elements);
-            var right_edges = tremppi.correlations.right.json().elements.edges;
-            for (var i = 0; i < right_edges.length; i++) {
-                mid.edges[i].data['Pearson'] -= right_edges[i].data['Pearson'];
+            $.extend(true, mid, left_elems);
+            for (var i = 0; i < right_elems.edges.length; i++) {
+                mid.edges[i].data['Pearson'] -= right_elems.edges[i].data['Pearson'];
             }
-            var right_nodes = tremppi.correlations.right.json().elements.nodes;
-            for (var i = 0; i < right_nodes.length; i++) {
-                mid.nodes[i].data['Bias'] -= right_nodes[i].data['Bias'];
+            for (var i = 0; i < right_elems.nodes.length; i++) {
+                mid.nodes[i].data['Bias'] -= right_elems.nodes[i].data['Bias'];
             }
 
             tremppi.correlations.createPanelContent(mid, 'mid');
@@ -45,7 +46,7 @@ tremppi.correlations.valuesSetter = function (source, panel) {
 
 tremppi.correlations.setPanel = function (panel) {
     var selected_col = '#5555BB';
-    tremppi.widget[panel] = cytoscape({
+    tremppi.correlations[panel] = cytoscape({
         container: document.getElementById('graph_' + panel),
         style: cytoscape.stylesheet()
                 .selector('node')
@@ -74,22 +75,21 @@ tremppi.correlations.setPanel = function (panel) {
         },
         wheelSensitivity: 0.2
     });
+    tremppi.correlations[panel].on('zoom', function() { tremppi.correlations.loadLabels(panel); });
 };
 
 // Change between relative and absolute values
 tremppi.correlations.applyVisuals = function (type) {
     var relative = tremppi.getItem('relative') === 'true';
 
-    var range = tremppi.report.getRange(type, relative, 'node', 'Bias', true);
-    tremppi.cytoscape.mapRange(type, 'node[Bias>=0]', 'Bias', 'border-width', range.min, range.max, 1, 10);
-    range = tremppi.report.getRange(type, relative, 'node[Bias<0]', 'Bias', false);
-    tremppi.cytoscape.mapRange(type, 'node[Bias<0]', 'Bias', 'border-width', range.min, range.max, 10, 1);
+    var range = tremppi.report.getRange(type, relative, 'node', 'Bias');
+    var abs_max =  Math.max(Math.abs(range.min), Math.abs(range.max));
+    tremppi.cytoscape.mapRange(type, 'node[Bias>=0]', 'Bias', 'border-width', 0, abs_max, 1, 10);
+    tremppi.cytoscape.mapRange(type, 'node[Bias<0]', 'Bias', 'border-width', -1*abs_max, 0, 10, 1);
 
-    var range = tremppi.report.getRange(type, relative, 'edge[Pearson>=0]', 'Pearson', true);
+    var range = tremppi.report.getRange(type, relative, 'edge', 'Pearson');
     tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
-    range = tremppi.report.getRange(type, relative, 'edge[Pearson<0]', 'Pearson', false);
     tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
-
 
     tremppi.cytoscape.mapValue(type, 'node[Bias>0]', 'border-style', 'solid');
     tremppi.cytoscape.mapValue(type, 'node[Bias=0]', 'border-style', 'dotted');
@@ -116,9 +116,8 @@ tremppi.correlations.addQtip = function (type) {
 };
 
 tremppi.correlations.bar_left = 110;
-tremppi.correlations.F_height = 60;
-tremppi.correlations.N_height = 40;
-tremppi.correlations.P_height = 20;
+tremppi.correlations.B_height = 60;
+tremppi.correlations.C_height = 40;
 
 tremppi.correlations.loadLabels = function (type) {
     var graph = tremppi.correlations[type];
@@ -132,8 +131,7 @@ tremppi.correlations.loadLabels = function (type) {
     my_paper.setup($('#legend_' + type)[0]);
 
     my_paper.activate();
-    tremppi.correlations.addGradient(relative, type, my_paper, true);
-    tremppi.correlations.addGradient(relative, type, my_paper, false);
+    tremppi.correlations.addGradient(relative, type, my_paper);
     tremppi.correlations.addWidth(relative, type, my_paper, graph.zoom());
     my_paper.view.draw();
 };
@@ -147,41 +145,37 @@ tremppi.correlations.makeText = function (content, position) {
     return text;
 };
 
-tremppi.correlations.addGradient = function (relative, type, my_paper, positive) {
-    var selection = positive ? 'edge[Pearson>=0]' : 'edge[Pearson<0]';
-    var range = {
-        min: positive ? 0 : tremppi.report.getRange(type, relative, selection, 'Pearson', positive).min,
-        max: positive ? tremppi.report.getRange(type, relative, selection, 'Pearson', positive).max : 0
-    };
+tremppi.correlations.addGradient = function (relative, type, my_paper) {
+    var range = tremppi.report.getRange(type, relative, 'edge', 'Pearson');
     var bar_right = my_paper.view.viewSize.width - 80;
-    var height = positive ? tremppi.correlations.P_height : tremppi.correlations.N_height;
 
     // Make the bar   
     var bar = new paper.Path.Rectangle(
             new paper.Rectangle(
-                    new paper.Point(tremppi.correlations.bar_left, height - 10),
-                    new paper.Point(bar_right, height)));
+                    new paper.Point(tremppi.correlations.bar_left, tremppi.correlations.C_height - 10),
+                    new paper.Point(bar_right, tremppi.correlations.C_height)));
     bar.fillColor = {gradient: {}};
     bar.fillColor.origin = [tremppi.correlations.bar_left, 0];
     bar.fillColor.destination = [bar_right, 0];
-    bar.fillColor.gradient.stops = positive ? ['yellow', 'green'] : ['red', 'yellow'];
+    bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
-    tremppi.correlations.makeText('C: ', new paper.Point(10, height));
+    tremppi.correlations.makeText('C: ', new paper.Point(10, tremppi.correlations.C_height));
     tremppi.correlations.makeText(
             range.min.toFixed(tremppi.correlations.num_of_decimals),
-            new paper.Point(tremppi.correlations.bar_left - 75, height)
+            new paper.Point(tremppi.correlations.bar_left - 75, tremppi.correlations.C_height)
             );
     tremppi.correlations.makeText(
             range.max.toFixed(tremppi.correlations.num_of_decimals),
-            new paper.Point(bar_right + 5, height)
+            new paper.Point(bar_right + 5, tremppi.correlations.C_height)
             );
 };
 
 tremppi.correlations.addWidth = function (relative, type, my_paper, width_ratio) {
-    var range = tremppi.report.getRange(type, relative, 'node', 'Bias', true);
-    var bar_height = tremppi.correlations.F_height - 10;
+    var range = tremppi.report.getRange(type, relative, 'node', 'Bias');
+    var abs_max = Math.max(Math.abs(range.min), Math.abs(range.max));
+    var bar_height = tremppi.correlations.B_height - 10;
     var bar_right = my_paper.view.viewSize.width - 80;
 
     // Create the bar
@@ -197,13 +191,13 @@ tremppi.correlations.addWidth = function (relative, type, my_paper, width_ratio)
     bar.add(new paper.Point(bar_right, bar_height));
     // Add the label
     var F_pad = max_width / 2 - 4;
-    tremppi.correlations.makeText('B: ', new paper.Point(10, tremppi.correlations.F_height + F_pad));
+    tremppi.correlations.makeText('B: ', new paper.Point(10, tremppi.correlations.B_height + F_pad));
     tremppi.correlations.makeText(
-            range.min.toFixed(tremppi.correlations.num_of_decimals),
-            new paper.Point(tremppi.correlations.bar_left - 75, tremppi.correlations.F_height + F_pad)
+            (0.0).toFixed(tremppi.correlations.num_of_decimals),
+            new paper.Point(tremppi.correlations.bar_left - 75, tremppi.correlations.B_height + F_pad)
             );
     tremppi.correlations.makeText(
-            range.max.toFixed(tremppi.correlations.num_of_decimals),
-            new paper.Point(bar_right + 5, tremppi.correlations.F_height + F_pad)
+            abs_max.toFixed(tremppi.correlations.num_of_decimals),
+            new paper.Point(bar_right + 5, tremppi.correlations.B_height + F_pad)
             );
 };

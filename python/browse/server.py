@@ -82,6 +82,7 @@ class TremppiServer(SimpleHTTPRequestHandler):
                 last_page_file.seek(0)
                 last_page_file.write(parsed_url.path[1:])
                 last_page_file.truncate()
+                self.success_response('text', ("page store success".encode()))
         elif parsed_url.query == 'killAll':
             self._tool_manager.kill_all(parsed_path)
             self.success_response('text', ("killAll success".encode()))

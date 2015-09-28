@@ -48,7 +48,7 @@ tremppi.regulations.valuesSetter = function (source, panel) {
 
 tremppi.regulations.setPanel = function (panel) {
     var selected_col = '#5555BB';
-    tremppi.widget[panel] = cytoscape({
+    tremppi.regulations[panel] = cytoscape({
         container: document.getElementById('graph_' + panel),
         style: cytoscape.stylesheet()
                 .selector('node')
@@ -82,6 +82,7 @@ tremppi.regulations.setPanel = function (panel) {
         },
         wheelSensitivity: 0.2
     });
+    tremppi.regulations[panel].on('zoom', function() { tremppi.regulations.loadLabels(panel); });
 };
 
 // Change between relative and absolute values
@@ -93,7 +94,7 @@ tremppi.regulations.applyVisuals = function (type) {
     var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param);
     var abs_max =  Math.max(Math.abs(range.min), Math.abs(range.max));
     tremppi.cytoscape.mapRange(type, 'edge[Frequency>=0]', width_param, 'width', 0, abs_max, 1, 10);
-    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', abs_max, 0, 10, 1);
+    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', -1*abs_max, 0, 10, 1);
 
     range = tremppi.report.getRange(type, relative, 'edge[Pearson]', 'Pearson');
     tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
