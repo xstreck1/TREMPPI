@@ -4,11 +4,18 @@
  * and open the template in the editor.
  */
 
-/* global tremppi */
+/* global tremppi, paper */
 
 tremppi.common = {
     compare_numbers: function (a, b) {
         return a - b;
+    },
+    setCheck: function (id) {
+        var checked = tremppi.getItem(id, tremppi.toolbar.get(id).checked) === "true";
+        if (checked) {
+            tremppi.toolbar.check(id);
+        }
+        tremppi.setItem(id, checked);
     }
 };
 tremppi.qtip = {
@@ -149,6 +156,17 @@ tremppi.w2ui = {
         selection.forEach(function (recid) {
             grid.select(recid);
         });
+    }
+};
+
+tremppi.paper = {
+    makeText: function (content, position) {
+        var text = new paper.PointText(position);
+        text.fillColor = 'black';
+        text.fontSize = 20;
+        text.fontFamily = 'Courier New';
+        text.content = content;
+        return text;
     }
 };
 
@@ -316,23 +334,23 @@ tremppi.report = {
             if (range.min === range.max) {
                 range.min = 0;
             }
-            else if (range.min === Number.POSITIVE_INFINITY) {
+            if (range.min === Number.POSITIVE_INFINITY) {
                 range.min = tremppi.widget.bounds[param].min;
             }
-            else if (range.max === Number.NEGATIVE_INFINITY) {
+            if (range.max === Number.NEGATIVE_INFINITY) {
                 range.max = tremppi.widget.bounds[param].max;
             }
         }
         if (!relative || range.min === range.max) {
             if (type === 'mid') {
                 range = {
-                    min: tremppi.widget.bounds[param].min - tremppi.widget.bounds[param].max, 
-                    max: tremppi.widget.bounds[param].max - tremppi.widget.bounds[param].min 
-                };   
+                    min: tremppi.widget.bounds[param].min - tremppi.widget.bounds[param].max,
+                    max: tremppi.widget.bounds[param].max - tremppi.widget.bounds[param].min
+                };
             }
             else {
                 range = {
-                    min: tremppi.widget.bounds[param].min, 
+                    min: tremppi.widget.bounds[param].min,
                     max: tremppi.widget.bounds[param].max
                 };
             }

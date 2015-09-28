@@ -4,7 +4,7 @@
 
 #include "../data/data_storage.hpp"
 
-namespace Output 
+namespace Output
 {
 	Json::Value regulatoryGraph(const RegInfos & reg_infos, const RegsData & regs_data) {
 		Json::Value elements;
@@ -12,7 +12,7 @@ namespace Output
 		// Write the nodes
 		string nodes;
 		elements["nodes"].resize(0);
-		for (const RegData & reg : regs_data) 
+		for (const RegData & reg : regs_data)
 		{
 			Json::Value node, data;
 			data["id"] = reg._info.name;
@@ -23,28 +23,25 @@ namespace Output
 
 		// Write the edges
 		elements["edges"].resize(0);
-		for (const RegData & reg : regs_data) 
+		for (const RegData & reg : regs_data)
 		{
 			size_t reg_i = 0;
-			for (auto & regul : reg._info.regulators) 
+			for (auto & regul : reg._info.regulators)
 			{
 				for (const size_t trh_i : cscope(regul.second)) {
-					// Skip those with no occurence
-					if (abs(reg.reg_freq.at(regul.first)[trh_i]) != 0) 
-					{
-						Json::Value edge, data;
+					Json::Value edge, data;
 
-						data["source"] = reg_infos[regul.first].name;
-						data["target"] = reg._info.name;
-						data["Frequency"] = reg.reg_freq.at(regul.first)[trh_i];
-						data["WeightedFrequency"] = reg.reg_freq.at(regul.first)[trh_i] / (reg.expected_freq.at(regul.first) * 2);
-						data["Pearson"] = reg.reg_corr.at(regul.first)[trh_i];
-						data["Threshold"] = regul.second[trh_i];
-						data["Sign"] = string(1, reg.reg_sign.at(regul.first)[trh_i]);
+					data["source"] = reg_infos[regul.first].name;
+					data["target"] = reg._info.name;
+					data["Frequency"] = reg.reg_freq.at(regul.first)[trh_i];
+					data["WeightedFrequency"] = reg.reg_freq.at(regul.first)[trh_i] / (reg.expected_freq.at(regul.first) * 2);
+					data["Pearson"] = reg.reg_corr.at(regul.first)[trh_i];
+					data["Threshold"] = regul.second[trh_i];
+					data["Sign"] = string(1, reg.reg_sign.at(regul.first)[trh_i]);
 
-						edge["data"] = data;
-						elements["edges"].append(edge);
-					}
+					edge["data"] = data;
+					elements["edges"].append(edge);
+
 					++reg_i;
 				}
 			}

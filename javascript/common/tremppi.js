@@ -194,10 +194,11 @@ tremppi = {
         } 
         else if (["qualitative", "quantitative", "regulations", "correlations", "witness"].indexOf(tremppi.widget_name) !== -1) {
             project_controls =
-                    '<input id="select_name" type="text" name="Fill to create or rename" value=' + select_name + '>' +
-                    '<button id="rename_btn" onclick="tremppi.rename()" class="btn">RENAME</button>' +
-                    '<button id="delete_btn" onclick="tremppi.delete()" class="btn">DELETE</button>' +
-                    '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>';
+                    '<input id="select_name" type="text" name="Fill to create or rename" value=' + select_name + '>'
+                    + '<button id="rename_btn" onclick="tremppi.rename()" class="btn">RENAME</button>' 
+                    + '<button id="delete_btn" onclick="tremppi.delete()" class="btn">DELETE</button>'
+                    // + '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>'
+            ;
         }
 
         var sidebar = {

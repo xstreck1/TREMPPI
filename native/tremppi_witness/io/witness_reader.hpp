@@ -6,7 +6,7 @@ class WitnessReader
 {
 	unique_ptr<sqlite3pp::query> selection_qry;
 	sqlite3pp::query::iterator sel_it;
-	set<pair<string, string>> current_witness;
+	map<pair<string, string>, size_t> current_witness;
 public:
 
 	void select(const string & prop_name, const string & select, sqlite3pp::database & db) 
@@ -18,7 +18,7 @@ public:
 	}
 
 
-	const set<pair<string, string>> & getWitness() const 
+	const map<pair<string, string>, size_t> & getWitness() const
 	{
 		return current_witness;
 	}
@@ -42,7 +42,7 @@ public:
 			{
 				vector<string> nodes(2);
 				boost::split(nodes, transition, is_any_of(">"));
-				current_witness.insert({ nodes[0], nodes[1] });
+				current_witness[make_pair(nodes[0], nodes[1])]++;
 			}
 		}
 

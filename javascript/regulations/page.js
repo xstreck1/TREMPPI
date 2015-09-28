@@ -20,15 +20,8 @@ tremppi.regulations.page = function () {
             $("#container_" + tremppi.report.panels[i]).append('<canvas class="legend" id="legend_' + tremppi.report.panels[i] + '"></canvas>');
         }
         tremppi.report.initialPanel();
-        var setCheck = function (id) {
-            var checked = tremppi.getItem(id, tremppi.toolbar.get(id).checked) === "true";
-            if (checked) {
-                tremppi.toolbar.check(id);
-            }
-            tremppi.setItem(id, checked);
-        };
-        setCheck("relative");
-        // setCheck("weighted");
+        tremppi.common.setCheck("relative");
+        // tremppi.common.setCheck("weighted");
 
         tremppi.regulations.bounds = {
             Pearson: {

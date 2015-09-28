@@ -21,6 +21,7 @@ int tremppi_witness(int argc, char ** argv)
 	Json::Value properties;
 	RegInfos reg_infos;
 	sqlite3pp::database db;
+	ParamNo selection_size;;
 	// Obtain data
 	try 
 	{
@@ -37,11 +38,7 @@ int tremppi_witness(int argc, char ** argv)
 		// Read regulatory information
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
-		for (const string & comp_name : DataInfo::getAllNames(reg_infos))
-		{
-			out["setup"]["components"].append(comp_name);
-		}
-
+		selection_size = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
 	}
 	catch (exception & e) 
 	{
@@ -49,8 +46,9 @@ int tremppi_witness(int argc, char ** argv)
 	}
 
 	// Obtain the nodes and write to the the set
-	set<pair<string, string>> transitions;
+	map<pair<string, string>, size_t> transitions;
 	WitnessReader wit_reader;
+	size_t properties_count = size_t{};
 	try 
 	{
 		DEBUG_LOG << "Loading witnesses.";
@@ -60,20 +58,22 @@ int tremppi_witness(int argc, char ** argv)
 			// If selected
 			if (property["select"].asBool()) 
 			{
+				properties_count++;
 				const string name = property["name"].asString();
 				out["setup"]["properties"] = out["setup"]["properties"].asString() + name + ",";
 
 				wit_reader.select(name, out["setup"]["select"].asString(), db);
 				// Read transitions
-				logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db));
+				logging.newPhase("Listing parametrizations", selection_size);
 				while (wit_reader.next()) 
 				{
-					set<pair<string, string>> new_transitions = wit_reader.getWitness();
-					transitions.insert(WHOLE(new_transitions));
+					map<pair<string, string>, size_t> new_transitions = wit_reader.getWitness();
+					for (const pair<pair<string, string>, size_t> & transition : new_transitions) {
+						transitions[transition.first] += transition.second;
+					}
 					logging.step();
 				}
 			}
-			logging.step();
 		}
 	}
 	catch (exception & e) 
@@ -84,7 +84,7 @@ int tremppi_witness(int argc, char ** argv)
 	{
 		DEBUG_LOG << "Converting to JSON";
 
-		out["elements"] = WitnessOutput::convert(transitions);
+		out["elements"] = WitnessOutput::convert(transitions, selection_size * properties_count);
 	}
 	catch (exception & e) 
 	{

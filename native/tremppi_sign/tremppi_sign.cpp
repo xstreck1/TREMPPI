@@ -166,7 +166,6 @@ int tremppi_sign(int argc, char ** argv)
 				sel_it++;
 			}
 			db.execute("END");
-			logging.step();
 		}
 
 		// Count the total edges

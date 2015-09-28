@@ -79,28 +79,28 @@ tremppi.correlations.setPanel = function (panel) {
 };
 
 // Change between relative and absolute values
-tremppi.correlations.applyVisuals = function (type) {
+tremppi.correlations.applyVisuals = function (panel) {
     var relative = tremppi.getItem('relative') === 'true';
 
-    var range = tremppi.report.getRange(type, relative, 'node', 'Bias');
+    var range = tremppi.report.getRange(panel, relative, 'node', 'Bias');
     var abs_max =  Math.max(Math.abs(range.min), Math.abs(range.max));
-    tremppi.cytoscape.mapRange(type, 'node[Bias>=0]', 'Bias', 'border-width', 0, abs_max, 1, 10);
-    tremppi.cytoscape.mapRange(type, 'node[Bias<0]', 'Bias', 'border-width', -1*abs_max, 0, 10, 1);
+    tremppi.cytoscape.mapRange(panel, 'node[Bias>=0]', 'Bias', 'border-width', 0, abs_max, 1, 10);
+    tremppi.cytoscape.mapRange(panel, 'node[Bias<0]', 'Bias', 'border-width', -1*abs_max, 0, 10, 1);
 
-    var range = tremppi.report.getRange(type, relative, 'edge', 'Pearson');
-    tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
-    tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
+    var range = tremppi.report.getRange(panel, relative, 'edge', 'Pearson');
+    tremppi.cytoscape.mapRange(panel, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
+    tremppi.cytoscape.mapRange(panel, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
 
-    tremppi.cytoscape.mapValue(type, 'node[Bias>0]', 'border-style', 'solid');
-    tremppi.cytoscape.mapValue(type, 'node[Bias=0]', 'border-style', 'dotted');
-    tremppi.cytoscape.mapValue(type, 'node[Bias<0]', 'border-style', 'dashed');
+    tremppi.cytoscape.mapValue(panel, 'node[Bias>0]', 'border-style', 'solid');
+    tremppi.cytoscape.mapValue(panel, 'node[Bias=0]', 'border-style', 'dotted');
+    tremppi.cytoscape.mapValue(panel, 'node[Bias<0]', 'border-style', 'dashed');
 };
 
 tremppi.correlations.num_of_decimals = 3;
 
 // Adds reactive tip window that appears on mouseover on the edge
-tremppi.correlations.addQtip = function (type) {
-    var elements = tremppi.correlations[type].elements();
+tremppi.correlations.addQtip = function (panel) {
+    var elements = tremppi.correlations[panel].elements();
     var labeller = function (my_data) {
         if (typeof my_data.name !== 'undefined') {
             return 'name: ' + my_data.name + '<br />'
@@ -112,41 +112,32 @@ tremppi.correlations.addQtip = function (type) {
                     + 'Correlation: ' + my_data.Pearson.toFixed(tremppi.correlations.num_of_decimals) + '<br />';
         }
     };
-    tremppi.qtip.addOnHoverLabeller(type, elements, labeller);
+    tremppi.qtip.addOnHoverLabeller(panel, elements, labeller);
 };
 
 tremppi.correlations.bar_left = 110;
-tremppi.correlations.B_height = 60;
-tremppi.correlations.C_height = 40;
+tremppi.correlations.B_height = 40;
+tremppi.correlations.C_height = 20;
 
-tremppi.correlations.loadLabels = function (type) {
-    var graph = tremppi.correlations[type];
+tremppi.correlations.loadLabels = function (panel) {
+    var graph = tremppi.correlations[panel];
 
     var relative = tremppi.getItem('relative') === 'true';
 
     var my_paper = new paper.PaperScope();
 
-    var legend_height = Math.min(10 * graph.zoom() + 55, $('#container_' + type).height() / 3);
-    $('#legend_' + type).height(legend_height);
-    my_paper.setup($('#legend_' + type)[0]);
+    var legend_height = Math.min(10 * graph.zoom() + 35, $('#container_' + panel).height() / 3);
+    $('#legend_' + panel).height(legend_height);
+    my_paper.setup($('#legend_' + panel)[0]);
 
     my_paper.activate();
-    tremppi.correlations.addGradient(relative, type, my_paper);
-    tremppi.correlations.addWidth(relative, type, my_paper, graph.zoom());
+    tremppi.correlations.addGradient(relative, panel, my_paper);
+    tremppi.correlations.addWidth(relative, panel, my_paper, graph.zoom());
     my_paper.view.draw();
 };
 
-tremppi.correlations.makeText = function (content, position) {
-    var text = new paper.PointText(position);
-    text.fillColor = 'black';
-    text.fontSize = 20;
-    text.fontFamily = 'Courier New';
-    text.content = content;
-    return text;
-};
-
-tremppi.correlations.addGradient = function (relative, type, my_paper) {
-    var range = tremppi.report.getRange(type, relative, 'edge', 'Pearson');
+tremppi.correlations.addGradient = function (relative, panel, my_paper) {
+    var range = tremppi.report.getRange(panel, relative, 'edge', 'Pearson');
     var bar_right = my_paper.view.viewSize.width - 80;
 
     // Make the bar   
@@ -161,19 +152,19 @@ tremppi.correlations.addGradient = function (relative, type, my_paper) {
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
-    tremppi.correlations.makeText('C: ', new paper.Point(10, tremppi.correlations.C_height));
-    tremppi.correlations.makeText(
+    tremppi.paper.makeText('C: ', new paper.Point(10, tremppi.correlations.C_height));
+    tremppi.paper.makeText(
             range.min.toFixed(tremppi.correlations.num_of_decimals),
             new paper.Point(tremppi.correlations.bar_left - 75, tremppi.correlations.C_height)
             );
-    tremppi.correlations.makeText(
+    tremppi.paper.makeText(
             range.max.toFixed(tremppi.correlations.num_of_decimals),
             new paper.Point(bar_right + 5, tremppi.correlations.C_height)
             );
 };
 
-tremppi.correlations.addWidth = function (relative, type, my_paper, width_ratio) {
-    var range = tremppi.report.getRange(type, relative, 'node', 'Bias');
+tremppi.correlations.addWidth = function (relative, panel, my_paper, width_ratio) {
+    var range = tremppi.report.getRange(panel, relative, 'node', 'Bias');
     var abs_max = Math.max(Math.abs(range.min), Math.abs(range.max));
     var bar_height = tremppi.correlations.B_height - 10;
     var bar_right = my_paper.view.viewSize.width - 80;
@@ -191,12 +182,12 @@ tremppi.correlations.addWidth = function (relative, type, my_paper, width_ratio)
     bar.add(new paper.Point(bar_right, bar_height));
     // Add the label
     var F_pad = max_width / 2 - 4;
-    tremppi.correlations.makeText('B: ', new paper.Point(10, tremppi.correlations.B_height + F_pad));
-    tremppi.correlations.makeText(
+    tremppi.paper.makeText('B: ', new paper.Point(10, tremppi.correlations.B_height + F_pad));
+    tremppi.paper.makeText(
             (0.0).toFixed(tremppi.correlations.num_of_decimals),
             new paper.Point(tremppi.correlations.bar_left - 75, tremppi.correlations.B_height + F_pad)
             );
-    tremppi.correlations.makeText(
+    tremppi.paper.makeText(
             abs_max.toFixed(tremppi.correlations.num_of_decimals),
             new paper.Point(bar_right + 5, tremppi.correlations.B_height + F_pad)
             );

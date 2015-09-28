@@ -16,7 +16,7 @@ namespace WitnessOutput
 		return state.substr(state.find("-") + 1);
 	}
 
-	Json::Value convert(const set<pair<string, string>> & transitions) 
+	Json::Value convert(const map<pair<string, string>, size_t> & transitions, ParamNo max_count) 
 	{
 		Json::Value elements;
 
@@ -25,13 +25,14 @@ namespace WitnessOutput
 		edges.resize(0); // Make sure it's not null
 		set<string> states;
 
-		for (const pair<string, string> & transition : transitions) 
+		for (const pair<pair<string, string>, size_t> & transition : transitions)
 		{
 			Json::Value edge;
 			edge["data"]["id"] = to_string(elements["edges"].size());
-			edge["data"]["source"] = remStep(transition.first);
-			edge["data"]["target"] = remStep(transition.second);
-			edge["data"]["Step"] = getStep(transition.first);
+			edge["data"]["source"] = remStep(transition.first.first);
+			edge["data"]["target"] = remStep(transition.first.second);
+			edge["data"]["Step"] = getStep(transition.first.first);
+			edge["data"]["Frequency"] = transition.second / static_cast<double>(max_count);
 			edges.append(edge);
 			states.insert(edge["data"]["source"].asString());
 			states.insert(edge["data"]["target"].asString());

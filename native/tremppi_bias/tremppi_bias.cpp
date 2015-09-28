@@ -67,7 +67,6 @@ int tremppi_bias(int argc, char ** argv)
 				sel_it++;
 			}
 			db.execute("END");
-			logging.step();
 		}
 	}
 	catch (exception & e) 

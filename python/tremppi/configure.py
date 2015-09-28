@@ -359,10 +359,12 @@ def configure(data_path, widget):
             for file in os.listdir(widget_dir):
                 if file.endswith(".json"):
                     files.append(file[:-5])
-        with open(join(data_path, widget + '.js'), 'w+') as file_js:
-            file_js.write('tremppi.' + widget + '.setup = ')
-            json.dump({"files": files}, file_js)
-            file_js.write(';')
+
+        with sqlite3.connect(join(data_path, database_file)) as conn:
+            with open(join(data_path, widget + '.js'), 'w+') as file_js:
+                file_js.write('tremppi.' + widget + '.setup = ')
+                json.dump({"files": files, "components": [comp[0] for comp in read_components(conn)]}, file_js)
+                file_js.write(';')
     elif widget in widgets:
         js_filename = join(data_path, widget + '.js')
         open(js_filename, 'w+').close()

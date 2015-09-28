@@ -15,13 +15,23 @@ tremppi.witness.page = function () {
             $('#container_' + tremppi.report.panels[i]).html("");
             $("#container_" + tremppi.report.panels[i]).append('<div id="header_' + tremppi.report.panels[i] + '" class="header" >' + tremppi.report.panels[i] + '</div>');
             $("#container_" + tremppi.report.panels[i]).append('<div class="graph" id="graph_' + tremppi.report.panels[i] + '"></div>');
+            $("#container_" + tremppi.report.panels[i]).append('<canvas class="legend" id="legend_' + tremppi.report.panels[i] + '"></canvas>');
         }
         tremppi.report.initialPanel();
-        tremppi.toolbar.onClick = tremppi.witness.toolbarClick;
+        
+        tremppi.common.setCheck("relative");
+        
+        tremppi.witness.bounds = {
+            Frequency: {
+                min: 0, max: 1
+            }
+        };
+        
     }
 };
 
 tremppi.witness.setData = function (data) {
+    tremppi.toolbar.onClick = tremppi.witness.toolbarClick;
 };
 
 tremppi.witness.getData = function () {
@@ -29,6 +39,9 @@ tremppi.witness.getData = function () {
 };
 
 tremppi.witness.layout = function () {
+    for (var i = 0; i < tremppi.report.panels.length; i++) {
+        tremppi.witness.loadLabels(tremppi.report.panels[i]);
+    }
 };
 
 tremppi.witness.toolbarClass = function () {
@@ -38,7 +51,9 @@ tremppi.witness.toolbarClass = function () {
             {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
             {type: 'radio', id: 'left', group: '1', caption: 'Left'},
             {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
-            {type: 'radio', id: 'right', group: '1', caption: 'Right'}
+            {type: 'radio', id: 'right', group: '1', caption: 'Right'},
+            {type: 'break', id: 'break1'},
+            {type: 'check', icon: 'w2ui-icon-check', id: 'relative', caption: 'Relative', checked: false}
         ]
     };
 };

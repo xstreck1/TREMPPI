@@ -13,5 +13,12 @@ tremppi.witness.toolbarClick = function (event) {
     } else if (event.target === 'left' | event.target === 'mid' | event.target === 'right') {
         tremppi.setItem('panel', event.target);
         tremppi.report.showPanel(event.target);
+    } else if (event.target === 'relative') {
+        var checked = !event.item.checked;
+        tremppi.setItem('relative', checked);
+        for (var i = 0; i < tremppi.report.panels.length; i++) {
+            tremppi.witness.applyVisuals(tremppi.report.panels[i]);
+            tremppi.witness.loadLabels(tremppi.report.panels[i]);
+        }
     }
 };
