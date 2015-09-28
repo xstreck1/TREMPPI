@@ -298,35 +298,46 @@ tremppi.report = {
     },
     getBound: function (selected, param) {
         var min = Number.POSITIVE_INFINITY;
-        var max = 0;
+        var max = Number.NEGATIVE_INFINITY;
 
         for (var ele_no = 0; ele_no < selected.length; ele_no++) {
-            var value = Math.abs(selected[ele_no].data(param));
+            var value = selected[ele_no].data(param);
             min = Math.min(min, value);
             max = Math.max(max, value);
         }
 
         return {min: min, max: max};
     },
-    getRange: function (type, relative, selection, param, positive) {
+    getRange: function (type, relative, selection, param) {
         var range;
         if (relative) {
             var selected = tremppi.widget[type].elements(selection);
             range = tremppi.report.getBound(selected, param);
-        }
-        if (!relative || range.min === range.max || range.min === Number.POSITIVE_INFINITY) {
-            range = {
-                min: 0, max: tremppi.widget.bounds[param].max
-            };
-            if (type === 'mid') {
-                range = {min: 0, max: tremppi.widget.bounds[param].max - tremppi.widget.bounds[param].min};
+            if (range.min === range.max) {
+                range.min = 0;
+            }
+            else if (range.min === Number.POSITIVE_INFINITY) {
+                range.min = tremppi.widget.bounds[param].min;
+            }
+            else if (range.max === Number.NEGATIVE_INFINITY) {
+                range.max = tremppi.widget.bounds[param].max;
             }
         }
-        if (!positive) {
-            return {min: -1 * range.max, max: -1 * range.min};
-        } else {
-            return range;
+        if (!relative || range.min === range.max) {
+            if (type === 'mid') {
+                range = {
+                    min: tremppi.widget.bounds[param].min - tremppi.widget.bounds[param].max, 
+                    max: tremppi.widget.bounds[param].max - tremppi.widget.bounds[param].min 
+                };   
+            }
+            else {
+                range = {
+                    min: tremppi.widget.bounds[param].min, 
+                    max: tremppi.widget.bounds[param].max
+                };
+            }
         }
+        return range;
     }
 };
 

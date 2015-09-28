@@ -28,7 +28,7 @@ tremppi.regulations.page = function () {
             tremppi.setItem(id, checked);
         };
         setCheck("relative");
-        setCheck("weighted");
+        // setCheck("weighted");
 
         tremppi.regulations.bounds = {
             Pearson: {
@@ -68,7 +68,7 @@ tremppi.regulations.toolbarClass = function () {
             {type: 'radio', id: 'right', group: '1', caption: 'Right'},
             {type: 'break', id: 'break1'},
             {type: 'check', icon: 'w2ui-icon-check', id: 'relative', caption: 'Relative', checked: false},
-            {type: 'check', icon: 'w2ui-icon-check', id: 'weighted', caption: 'Weighted', checked: false}
+            // {type: 'check', icon: 'w2ui-icon-check', id: 'weighted', caption: 'Weighted', checked: false}
         ]
     };
 };

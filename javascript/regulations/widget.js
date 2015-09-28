@@ -18,18 +18,20 @@ tremppi.regulations.valuesSetter = function (source, panel) {
         $('#header_' + panel).html(source);
         tremppi.regulations.createPanelContent(data.elements, panel);
         tremppi.log(source + ' loaded successfully.');
+        
+        var left_elems = (panel === 'left') ? data.elements : tremppi.regulations.left.json().elements;
+        var right_elems = (panel === 'left') ? tremppi.regulations.right.json().elements : data.elements;
 
-        if (tremppi.regulations.left.edges().length > 0 && tremppi.regulations.right.edges().length > 0) {
+        if (typeof left_elems.nodes !== 'undefined' && typeof right_elems.nodes !== 'undefined') {
             $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
-            var to_synchronize = tremppi.regulations.mid.nodes().length === 0;
+            var to_synchronize = tremppi.regulations.mid.nodes().length === 0; // Synchronize once
 
             var mid = {};
-            $.extend(true, mid, tremppi.regulations.left.json().elements);
-            var right_edges = tremppi.regulations.right.json().elements.edges;
+            $.extend(true, mid, left_elems);
             // Only make diff if both graphs are loaded
-            for (var i = 0; i < right_edges.length; i++) {
+            for (var i = 0; i < right_elems.edges.length; i++) {
                 var substract = function (value) {
-                    mid.edges[i].data[value] -= right_edges[i].data[value];
+                    mid.edges[i].data[value] -= right_elems.edges[i].data[value];
                 };
                 substract('WeightedFrequency');
                 substract('Frequency');
@@ -88,14 +90,13 @@ tremppi.regulations.applyVisuals = function (type) {
     var weighted = tremppi.getItem('weighted') === 'true';
 
     var width_param = weighted ? 'WeightedFrequency' : 'Frequency';
-    var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param, true);
-    tremppi.cytoscape.mapRange(type, 'edge[Frequency>=0]', width_param, 'width', range.min, range.max, 1, 10);
-    var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param, false);
-    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', range.min, range.max, 10, 1);
+    var range = tremppi.report.getRange(type, relative, 'edge[Frequency]', width_param);
+    var abs_max =  Math.max(Math.abs(range.min), Math.abs(range.max));
+    tremppi.cytoscape.mapRange(type, 'edge[Frequency>=0]', width_param, 'width', 0, abs_max, 1, 10);
+    tremppi.cytoscape.mapRange(type, 'edge[Frequency<0]', width_param, 'width', abs_max, 0, 10, 1);
 
-    range = tremppi.report.getRange(type, relative, 'edge[Pearson>=0]', 'Pearson', true);
+    range = tremppi.report.getRange(type, relative, 'edge[Pearson]', 'Pearson');
     tremppi.cytoscape.mapRange(type, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
-    range = tremppi.report.getRange(type, relative, 'edge[Pearson<0]', 'Pearson', false);
     tremppi.cytoscape.mapRange(type, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
 
     tremppi.cytoscape.mapValue(type, 'edge[Sign="0"]', 'target-arrow-shape', 'circle');
@@ -115,10 +116,12 @@ tremppi.regulations.addQtip = function (type) {
     var edges = tremppi.regulations[type].edges();
     var labeller = function (my_data) {
         return 'source: ' + my_data.source + '<br />'
+                + 'threshold: ' + my_data.threshold + '<br />'
                 + 'target: ' + my_data.target + '<br />'
                 + 'Impact: ' + my_data.Pearson.toFixed(num_of_decimals) + '<br />'
                 + 'Frequency: ' + my_data.Frequency.toFixed(num_of_decimals) + '<br />'
-                + 'Weighted Frequency: ' + my_data.WeightedFrequency.toFixed(num_of_decimals) + '<br />';
+                //+ 'Weighted Frequency: ' + my_data.WeightedFrequency.toFixed(num_of_decimals) + '<br />'
+                ;
     };
 
     tremppi.qtip.addOnHoverLabeller(type, edges, labeller);
@@ -126,9 +129,8 @@ tremppi.regulations.addQtip = function (type) {
 
 tremppi.regulations.bar_left = 110;
 tremppi.regulations.num_of_decimals = 3;
+tremppi.regulations.I_height = 40;
 tremppi.regulations.F_height = 60;
-tremppi.regulations.N_height = 40;
-tremppi.regulations.P_height = 20;
 
 tremppi.regulations.loadLabels = function (type) {
     var graph = tremppi.regulations[type];
@@ -143,8 +145,7 @@ tremppi.regulations.loadLabels = function (type) {
     my_paper.setup($('#legend_' + type)[0]);
 
     my_paper.activate();
-    tremppi.regulations.addGradient(relative, type, my_paper, true);
-    tremppi.regulations.addGradient(relative, type, my_paper, false);
+    tremppi.regulations.addGradient(relative, type, my_paper);
     tremppi.regulations.addEdgeWidth(relative, weighted, type, my_paper, graph.zoom());
     my_paper.view.draw();
 };
@@ -158,40 +159,36 @@ tremppi.regulations.makeText = function (content, position) {
     return text;
 };
 
-tremppi.regulations.addGradient = function (relative, type, my_paper, positive) {
-    var selection = positive ? 'edge[Pearson>=0]' : 'edge[Pearson<0]';
-    var range = {
-        min: positive ? 0 : tremppi.report.getRange(type, relative, selection, 'Pearson', positive).min,
-        max: positive ? tremppi.report.getRange(type, relative, selection, 'Pearson', positive).max : 0
-    };
+tremppi.regulations.addGradient = function (relative, type, my_paper) {
+    var range = tremppi.report.getRange(type, relative, 'edge', 'Pearson');
     var bar_right = my_paper.view.viewSize.width - 80;
-    var height = positive ? tremppi.regulations.P_height : tremppi.regulations.N_height;
 
     // Make the bar   
     var bar = new paper.Path.Rectangle(
             new paper.Rectangle(
-                    new paper.Point(tremppi.regulations.bar_left, height - 10),
-                    new paper.Point(bar_right, height)));
+                    new paper.Point(tremppi.regulations.bar_left, tremppi.regulations.I_height - 10),
+                    new paper.Point(bar_right, tremppi.regulations.I_height)));
     bar.fillColor = {gradient: {}};
     bar.fillColor.origin = [tremppi.regulations.bar_left, 0];
     bar.fillColor.destination = [bar_right, 0];
-    bar.fillColor.gradient.stops = positive ? ['yellow', 'green'] : ['red', 'yellow'];
+    bar.fillColor.gradient.stops = ['red', 'yellow', 'green'];
     bar.strokeColor = 'black';
     bar.strokeWidth = 1;
     // Make the text
-    tremppi.regulations.makeText('I: ', new paper.Point(10, height));
+    tremppi.regulations.makeText('I: ', new paper.Point(10, tremppi.regulations.I_height));
     tremppi.regulations.makeText(
             range.min.toFixed(tremppi.regulations.num_of_decimals),
-            new paper.Point(tremppi.regulations.bar_left - 75, height)
+            new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.I_height)
             );
     tremppi.regulations.makeText(
             range.max.toFixed(tremppi.regulations.num_of_decimals),
-            new paper.Point(bar_right + 5, height)
+            new paper.Point(bar_right + 5, tremppi.regulations.I_height)
             );
 };
 
 tremppi.regulations.addEdgeWidth = function (relative, weighted, type, my_paper, width_ratio) {
-    var range = tremppi.report.getRange(type, relative, 'edge', weighted, true);
+    var range = tremppi.report.getRange(type, relative, 'edge', weighted);
+    var abs_max = Math.max(Math.abs(range.min), Math.abs(range.max));
     var bar_height = tremppi.regulations.F_height - 10;
     var bar_right = my_paper.view.viewSize.width - 80;
 
@@ -210,11 +207,9 @@ tremppi.regulations.addEdgeWidth = function (relative, weighted, type, my_paper,
     var F_pad = max_width / 2 - 4;
     tremppi.regulations.makeText('F: ', new paper.Point(10, tremppi.regulations.F_height + F_pad));
     tremppi.regulations.makeText(
-            range.min.toFixed(tremppi.regulations.num_of_decimals),
-            new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.F_height + F_pad)
-            );
+            (0.0).toFixed(tremppi.regulations.num_of_decimals),
+            new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.F_height + F_pad));
     tremppi.regulations.makeText(
-            range.max.toFixed(tremppi.regulations.num_of_decimals),
-            new paper.Point(bar_right + 5, tremppi.regulations.F_height + F_pad)
-            );
+            abs_max.toFixed(tremppi.regulations.num_of_decimals),
+            new paper.Point(bar_right + 5, tremppi.regulations.F_height + F_pad));
 };

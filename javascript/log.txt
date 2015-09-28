@@ -310,3 +310,23 @@ Thu Sep 24 11:38:14 2015 D: Reading the values, computing the statistics.
 Thu Sep 24 11:38:14 2015 D: Building the JSON file.
 Thu Sep 24 11:38:14 2015 D: Writing output.
 Thu Sep 24 11:38:14 2015 D: tremppi_quantitative finished successfully.
+ --- tremppi_regulations has started. --- 
+Mon Sep 28 10:25:19 2015 D: Parsing data file.
+Mon Sep 28 10:25:20 2015 D: Computing regulationsion graph data.
+Mon Sep 28 10:25:20 2015 D: Building the JSON files.
+Mon Sep 28 10:25:20 2015 D: Writing output.
+Mon Sep 28 10:25:20 2015 E: Top level exception: Traceback (most recent call last):
+
+  File "<frozen importlib._bootstrap>", line 2218, in _find_and_load_unlocked
+
+AttributeError: 'module' object has no attribute '__path__'
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+
+ImportError: No module named 'configure.configure'; 'configure' is not a package
