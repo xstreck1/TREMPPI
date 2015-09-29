@@ -45,6 +45,7 @@ namespace WitnessOutput
 		{
 			Json::Value node;
 			node["data"]["id"] = state;
+			node["data"]["Name"] = state.substr(0, state.size() -1);
 			nodes.append(node);
 		}
 

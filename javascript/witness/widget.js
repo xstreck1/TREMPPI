@@ -22,7 +22,7 @@ tremppi.witness.setPanel = function (panel) {
         style: cytoscape.stylesheet()
                 .selector('node')
                 .css({
-                    'content': 'data(id)',
+                    'content': 'data(Name)',
                     'text-valign': 'center',
                     'background-color': 'white',
                     'border-color': 'black',
@@ -129,7 +129,7 @@ tremppi.witness.addQtip = function(panel) {
             for (var i = 0; i < tremppi.witness.setup.components.length; i++) {
                 comps += tremppi.witness.setup.components[i] + ": " + my_data.id[i] + '<br />';
             }
-            comps += 'Measurement: ' + my_data.id[i] + '<br />';
+            comps += 'BA state: ' + my_data.id[i] + '<br />';
             return comps;
          }
     };
