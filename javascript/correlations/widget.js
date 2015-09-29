@@ -6,24 +6,25 @@
 
 /* global tremppi, cytoscape, paper */
 
-tremppi.correlations.createPanelContent = function (elements, panel) {
-    tremppi.correlations[panel].load(elements);
+tremppi.correlations.createPanelContent = function (data, panel) {
+    tremppi.correlations[panel].load(data.elements);
+    $('#header_' + panel).html(data.setup.s_name);
     tremppi.correlations.applyVisuals(panel);
     tremppi.correlations.loadLabels(panel);
     tremppi.correlations.addQtip(panel);
+    tremppi.report.setDescription(panel, data.setup);
 };
 
 tremppi.correlations.valuesSetter = function (source, panel) {
     return function (data) {
-        $('#header_' + panel).html(source);
-        tremppi.correlations.createPanelContent(data.elements, panel);
+        tremppi.correlations.createPanelContent(data, panel);
         tremppi.log(source + ' loaded successfully.');
 
         var left_elems = (panel === 'left') ? data.elements : tremppi.correlations.left.json().elements;
         var right_elems = (panel === 'left') ? tremppi.correlations.right.json().elements : data.elements;
 
         if (tremppi.correlations.left.nodes().length > 0 && tremppi.correlations.right.nodes().length > 0) {
-            $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
+            $('#header_mid').html();
             var to_synchronize = tremppi.correlations.mid.nodes().length === 0; // Synchronize once
 
             var mid = {};
@@ -35,7 +36,8 @@ tremppi.correlations.valuesSetter = function (source, panel) {
                 mid.nodes[i].data['Bias'] -= right_elems.nodes[i].data['Bias'];
             }
 
-            tremppi.correlations.createPanelContent(mid, 'mid');
+            var mid_data = {'elements': mid, 'setup': {'s_name' : $('#header_left').html() + ' - ' + $('#header_right').html()}};
+            tremppi.correlations.createPanelContent(mid_data, 'mid');
 
             if (to_synchronize) {
                 tremppi.cytoscape.synchronize(tremppi.correlations.loadLabels);

@@ -6,11 +6,13 @@
 
 /* global tremppi, cytoscape, paper */
 
-tremppi.witness.createPanelContent = function (elements, panel) {
-    tremppi.witness[panel].load(elements);
+tremppi.witness.createPanelContent = function (data, panel) {
+    tremppi.witness[panel].load(data.elements);
+    $('#header_' + panel).html(data.setup.s_name);
     tremppi.witness.applyVisuals(panel);
     tremppi.witness.loadLabels(panel);
     tremppi.witness.addQtip(panel);
+    tremppi.report.setDescription(panel, data.setup);
 };
 
 tremppi.witness.setPanel = function (panel) {
@@ -62,8 +64,7 @@ tremppi.witness.valuesSetter = function (source, panel) {
             return;
         }
 
-        $('#header_' + panel).html(source);
-        tremppi.witness.createPanelContent(data.elements, panel);
+        tremppi.witness.createPanelContent(data, panel);
         tremppi.log(source + ' loaded successfully.');
         
         var left_elems = (panel === 'left') ? data.elements : tremppi.witness.left.json().elements;
@@ -89,7 +90,8 @@ tremppi.witness.valuesSetter = function (source, panel) {
                 }
             }
 
-            tremppi.witness.createPanelContent(mid, 'mid');
+            var mid_data = {'elements': mid, 'setup': {'s_name' : $('#header_left').html() + ' - ' + $('#header_right').html()}};
+            tremppi.witness.createPanelContent(mid_data, 'mid');
 
             if (to_synchronize) {
                 tremppi.cytoscape.synchronize(function () {

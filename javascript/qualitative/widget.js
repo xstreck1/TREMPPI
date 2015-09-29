@@ -22,30 +22,20 @@ tremppi.qualitative.getGrid = function (grid_name) {
 };
 
 tremppi.qualitative.setPanel = function (panel) {
-    tremppi.widget[panel] = $('#container_' + panel).w2grid(tremppi.widget.getGrid(panel));
+    tremppi.widget[panel] = $('#table_' + panel).w2grid(tremppi.widget.getGrid(panel));
 };
 
-tremppi.qualitative.valuesToRecords = function (values) {
-    var records = [];
-    for (var i = 0; i < values.length; i++) {
-        var record = {name: values[i].name, entries: 0, value: ""};
-        for (var j = 0; j < values[i].data.length; j++) {
-            if (values[i].data[j].portion !== 0.0) {
-                record.value += "<b>" + values[i].data[j].name + "</b>:" + (Math.round(values[i].data[j].portion * 10000) / 100) + ", ";
-                record.entries++;
-            }
-        }
-        records.push(record);
-    }
-    return records;
+tremppi.qualitative.createPanelContent = function (data, panel) {
+    tremppi.qualitative[panel].values = data.values;
+    tremppi.qualitative[panel].records = tremppi.qualitative.valuesToRecords(data.values);
+    tremppi.qualitative[panel].header = data.setup.s_name;
+    tremppi.qualitative[panel].refresh();    
+    tremppi.report.setDescription(panel, data.setup);
 };
 
 tremppi.qualitative.valuesSetter = function (source, panel) {
     return function (data) {
-        tremppi.qualitative[panel].values = data.values;
-        tremppi.qualitative[panel].records = tremppi.qualitative.valuesToRecords(data.values);
-        tremppi.qualitative[panel].header = source;
-        tremppi.qualitative[panel].refresh();
+        tremppi.qualitative.createPanelContent(data, panel);
         tremppi.log(source + " loaded successfully.");
 
         var sel_vals = tremppi.qualitative['left'].values;
@@ -86,10 +76,28 @@ tremppi.qualitative.valuesSetter = function (source, panel) {
                     dif_vals.push(dif_val);
                 }
             }
-
-            tremppi.qualitative.mid.records = tremppi.qualitative.valuesToRecords(dif_vals);
-            tremppi.qualitative.mid.header = tremppi.qualitative.left.header + " - " + tremppi.qualitative.right.header;
-            tremppi.qualitative.mid.refresh();
+            var mid = { 
+                "values" : dif_vals, 
+                "setup" : { 
+                    "s_name" : tremppi.qualitative.left.header + " - " + tremppi.qualitative.right.header                   
+                }
+            };
+            tremppi.qualitative.createPanelContent(mid, 'mid');
         }
     };
+};
+
+tremppi.qualitative.valuesToRecords = function (values) {
+    var records = [];
+    for (var i = 0; i < values.length; i++) {
+        var record = {name: values[i].name, entries: 0, value: ""};
+        for (var j = 0; j < values[i].data.length; j++) {
+            if (values[i].data[j].portion !== 0.0) {
+                record.value += "<b>" + values[i].data[j].name + "</b>:" + (Math.round(values[i].data[j].portion * 10000) / 100) + ", ";
+                record.entries++;
+            }
+        }
+        records.push(record);
+    }
+    return records;
 };

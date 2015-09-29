@@ -288,6 +288,15 @@ tremppi.report = {
             tremppi.report.pickData(tremppi.getItem('compared'), 'right');
         }
     },
+    setDescription: function (panel, setup) {
+        if (typeof setup.select !== 'undefined') {
+            $('#desc_' + panel).html('<p class="report_text">' + 
+                    'Date: ' + setup.date + '<br />' +
+                    'Size: ' + setup.size + '<br />' +
+                    'Condition: ' + setup.select + '<br />' +
+                    '</p>');
+        }
+    },
     findByName: function (list, name) {
         for (var i = 0; i < list.length; i++) {
             if (list[i].name === name) {

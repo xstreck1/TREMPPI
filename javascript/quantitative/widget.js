@@ -6,15 +6,24 @@
 
 /* global tremppi */
 
+tremppi.quantitative.setPanel = function (panel) {
+    tremppi.widget[panel] = $('#table_' + panel).w2grid(tremppi.widget.getGrid(panel));
+};
+
+tremppi.quantitative.createPanelContent = function (data, panel) {
+    tremppi.quantitative[panel].records = data.records;
+    tremppi.quantitative[panel].header = data.setup.s_name;
+    tremppi.quantitative[panel].refresh();    
+    tremppi.report.setDescription(panel, data.setup);
+};
+
 tremppi.quantitative.valuesSetter = function (source, panel) {
     return function (data) {
-        tremppi.quantitative[panel].records = data.records;
-        tremppi.quantitative[panel].header = source;
-        tremppi.quantitative[panel].refresh();
+        tremppi.quantitative.createPanelContent(data, panel);
         tremppi.log(source + " loaded successfully.");
 
         var sel_recs = tremppi.quantitative['left'].records;
-        var dif_recs = tremppi.quantitative['mid'].records = [];
+        var dif_recs = [];
         var cmp_recs = tremppi.quantitative['right'].records;
         for (var i = 0; i < sel_recs.length; i++) {
             var sel_rec = sel_recs[i];
@@ -29,9 +38,8 @@ tremppi.quantitative.valuesSetter = function (source, panel) {
                 dif_recs.push(dif_rec);
             }
         }
-
-        tremppi.quantitative.mid.header = tremppi.quantitative.left.header + " - " + tremppi.quantitative.right.header;
-        tremppi.quantitative.mid.refresh();
+        
+        tremppi.quantitative.createPanelContent(dif_recs, 'mid');
     };
 };
 
@@ -51,9 +59,4 @@ tremppi.quantitative.getGrid = function (grid_name) {
             {field: 'mean', caption: 'Mean', size: portion + '%', sortable: true}
         ]
     };
-};
-
-
-tremppi.quantitative.setPanel = function (panel) {
-    tremppi.widget[panel] = $('#container_' + panel).w2grid(tremppi.widget.getGrid(panel));
 };

@@ -11,12 +11,17 @@ tremppi.qualitative.page = function () {
         $("#widget").html("No qualitative report has been created yet.");
     } else {
         tremppi.report.createPanels();
+        for (var i = 0; i < tremppi.report.panels.length; i++) {
+            $('#container_' + tremppi.report.panels[i]).html("");
+            $("#container_" + tremppi.report.panels[i]).append('<div id="table_' + tremppi.report.panels[i] + '" class="report_content" ></div>');
+            $("#container_" + tremppi.report.panels[i]).append('<div id="desc_' + tremppi.report.panels[i] + '" class="description" ></div>');
+        }
         tremppi.report.initialPanel();
-        tremppi.toolbar.onClick = tremppi.qualitative.toolbarClick;
     }
 };
 
 tremppi.qualitative.setData = function (data) {
+    tremppi.toolbar.onClick = tremppi.qualitative.toolbarClick;
 };
 
 tremppi.qualitative.getData = function () {

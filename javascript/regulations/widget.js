@@ -6,17 +6,19 @@
 
 /* global tremppi, cytoscape, paper */
 
-tremppi.regulations.createPanelContent = function (elements, panel) {
-    tremppi.regulations[panel].load(elements);
+tremppi.regulations.createPanelContent = function (data, panel) {
+    tremppi.regulations[panel].load(data.elements);
+    $('#header_' + panel).html(data.setup.s_name);
     tremppi.regulations.applyVisuals(panel);
     tremppi.regulations.loadLabels(panel);
     tremppi.regulations.addQtip(panel);
+    tremppi.report.setDescription(panel, data.setup);
 };
 
 tremppi.regulations.valuesSetter = function (source, panel) {
     return function (data) {
         $('#header_' + panel).html(source);
-        tremppi.regulations.createPanelContent(data.elements, panel);
+        tremppi.regulations.createPanelContent(data, panel);
         tremppi.log(source + ' loaded successfully.');
         
         var left_elems = (panel === 'left') ? data.elements : tremppi.regulations.left.json().elements;
@@ -37,7 +39,8 @@ tremppi.regulations.valuesSetter = function (source, panel) {
                 substract('Frequency');
                 substract('Pearson');
             }
-            tremppi.regulations.createPanelContent(mid, 'mid');
+            var mid_data = {'elements': mid, 'setup': {'s_name' : $('#header_left').html() + ' - ' + $('#header_right').html()}};
+            tremppi.regulations.createPanelContent(mid_data, 'mid');
 
             if (to_synchronize) {
                 tremppi.cytoscape.synchronize(tremppi.regulations.loadLabels);
