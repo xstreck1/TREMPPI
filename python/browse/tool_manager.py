@@ -22,17 +22,17 @@ class ToolManager:
     _queue = Queue()
 
     def enqueue_output(self, out, queue):
-        line = out.read(6)
+        line = out.read(7)
         while len(line) > 0:
-            line = out.read(6).decode("utf-8")[0:5]
-            if len(line) is 5:
+            line = out.read(7).decode("utf-8")[0:6]
+            if len(line) is 6:
                 queue.put(line)
 
     def cmd_to_string(self, cmd):
         if (cmd[0] is not ""):
             return cmd[1] + ' --path ' + cmd[0]
         else:
-            return cmd[1]
+            return cmd[1] + ' --path ' + "."
 
     def is_running(self):
         if self._subprocess is None:
@@ -53,7 +53,7 @@ class ToolManager:
             if len(self._commands) > 0:
                 command = self._commands.pop()
                 self._current = command[1]
-                self._last_progress = "00.00"
+                self._last_progress = "00.000"
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
 
                 self._subprocess = subprocess.Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=subprocess.PIPE)
@@ -84,7 +84,7 @@ class ToolManager:
         self._subprocess = None
         self._commands = []
         self._current = ""
-        self._last_progress = "00.00"
+        self._last_progress = "00.000"
 
     def call_init(self, name):
         subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)

@@ -36,8 +36,8 @@
 
 #include "configure.h"
 
-// POST-HSB 2015
-const std::string VERSION("0.5.0");
+// POST-CMSB 2015
+const std::string VERSION("0.6.0");
 
 using namespace std;
 

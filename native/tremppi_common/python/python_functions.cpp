@@ -1,7 +1,6 @@
 #include "python_functions.hpp"
 #include "../general/system.hpp"
 
-
 PythonFunctions::PythonFunctions() 
 {
 	Py_Initialize();
@@ -12,19 +11,16 @@ PythonFunctions::PythonFunctions()
 	exec(append_cmd);
 }
 
-
 string PythonFunctions::reformPath(const bfs::path & path) 
 {
 	return "'" + std::regex_replace(path.string(), std::regex("\\\\"), "/") + "'";
 }
-
 
 PythonFunctions & PythonFunctions::getInstance()
 {
 	static PythonFunctions instance; 
 	return instance;
 }
-
 
 void PythonFunctions::exec(const string & command) 
 {
@@ -36,7 +32,6 @@ void PythonFunctions::exec(const string & command)
 		throw_python_exception();
 	}
 }
-
 
 void PythonFunctions::configure(string widget) 
 {

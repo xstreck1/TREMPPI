@@ -19,7 +19,7 @@ class Logging
 	static vector<LogPhase> phases;
 	static int last_progress_val;
 	static constexpr int PRECISION = 2;
-	static constexpr float SHIFT_FACTOR = 100;
+	static constexpr float SHIFT_FACTOR = 1000;
 
 public:
 	Logging();
