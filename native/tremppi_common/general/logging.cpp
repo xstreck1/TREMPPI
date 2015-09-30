@@ -9,7 +9,7 @@ int Logging::last_progress_val;
 
 Logging::Logging()
 {
-	Logging::getFile() << " --- " << TremppiSystem::PROGRAM_NAME << " has started." << " --- ";
+	Logging::getFile() << " --- " << TremppiSystem::PROGRAM_NAME << " has started." << " --- " << std::flush;
 	last_progress_val = 0;
 	cout << "00.000\r";
 	cout << fixed << setprecision(PRECISION);
@@ -98,8 +98,8 @@ void Logging::step()
 
 void Logging::exceptionMessage(const exception & e, const int err_no)
 {
-	cerr << "\nERROR: " << e.what() << flush;
-	ERROR_LOG << "Top level exception: " << e.what() << flush;
+	cerr << "\nERROR: " << e.what() << std::endl << flush;
+	ERROR_LOG << "Top level exception: " << e.what() << std::endl << flush;
 	releaseFile();
 	exit(err_no);
 }

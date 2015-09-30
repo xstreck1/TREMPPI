@@ -42,6 +42,8 @@ Win32*
 # projects
 projects/*
 javascript/data*
+javascript/log.txt
+javascript/last_page.txt
 
 # created files
 *.sqlite
