@@ -8,7 +8,6 @@ if (TREMPPI_STATIC)
 	endif(UNIX)
 endif (TREMPPI_STATIC)
 if(UNIX)
-if(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 endif(UNIX)
 
