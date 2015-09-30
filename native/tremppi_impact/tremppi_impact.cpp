@@ -99,8 +99,6 @@ int tremppi_impact(int argc, char ** argv)
 				sel_it++;
 			}
 			db.execute("END");
-
-			logging.step();
 		}
 	}
 	catch (exception & e) 

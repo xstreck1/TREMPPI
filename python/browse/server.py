@@ -15,7 +15,6 @@ from tremppi.project_files import write_projects, delete_project, save_file, get
 class TremppiServer(SimpleHTTPRequestHandler):
     _tool_manager = ToolManager()
 
-
     def success_response(self, content_type, data):
         self.send_response(200)
         self.send_header('Content-type', content_type)

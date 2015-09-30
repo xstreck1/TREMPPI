@@ -15,7 +15,12 @@ Json::Value Report::createSetup()
 	out["setup"]["select"] = DatabaseReader::getSelectionTerm();
 	out["setup"]["s_name"] = DatabaseReader::getSelectionName();
 	// Get pool sizes
-	out["setup"]["size"] = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
+	int size = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
+	if (size == 0) {
+		throw runtime_error("No models in the selection.");
+	}
+
+	out["setup"]["size"] = size;
 
 	return out;
 }
