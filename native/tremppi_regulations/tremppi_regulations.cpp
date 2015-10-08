@@ -39,6 +39,14 @@ int tremppi_regulations(int argc, char ** argv)
 	{
 		DEBUG_LOG << "Computing regulationsion graph data.";
 		logging.newPhase("Harvesting component", reg_infos.size());
+
+		if (sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("I_.*"), db).empty()) {
+			throw runtime_error("Impact columns not available in the database.");
+		}
+		if (sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("S_.*"), db).empty()) {
+			throw runtime_error("Sign columns not available in the database.");
+		}
+
 		for (const RegInfo & reg_info : reg_infos)
 		{
 			regs_data.emplace_back(RegData(reg_info));
@@ -49,19 +57,14 @@ int tremppi_regulations(int argc, char ** argv)
 				sqlite3pp::query impact_qry = DatabaseReader::selectionFilter(impact_columns, out["setup"]["select"].asString(), db);
 				RegulatoryGraph::compute(reg_infos, reg_info.ID, out["setup"]["size"].asInt(), impact_qry, reg_data.reg_corr);
 			}
-			else {
-				throw runtime_error("Impact columns not available in the database");
-			}
+
 
 			EdgeSigns::computeExpectedFreq(reg_info, reg_data.expected_freq);
 			map<size_t, string> sign_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("S_.*" + reg_info.name), db);
-			if (!sign_columns.empty())
+			if (!sign_columns.empty()) 
 			{
 				sqlite3pp::query label_qry = DatabaseReader::selectionFilter(sign_columns, out["setup"]["select"].asString(), db);
 				EdgeSigns::compute(reg_infos, reg_info.ID, out["setup"]["size"].asInt(), label_qry, reg_data.reg_freq, reg_data.reg_sign);
-			}
-			else {
-				throw runtime_error("Sign columns not available in the database");
 			}
 			logging.step();
 		}

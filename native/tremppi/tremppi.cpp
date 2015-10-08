@@ -36,6 +36,11 @@ void printHelp()
 	cout << "\t--help,-h: display help for the specified command or display this dialog if no command is given\n";
 }
 
+void printVer()
+{
+	cout << "TREMPPI version " << VERSION << endl;
+}
+
 //
 int main(int argc, char ** argv)
 {
@@ -54,6 +59,11 @@ int main(int argc, char ** argv)
 	if (command == "--help" || command == "-h")
 	{
 		printHelp();
+		return 0;
+	}
+	if (command == "--ver" || command == "-v")
+	{
+		printVer();
 		return 0;
 	}
 	else if (tremppi_functions.count(command) == 0)

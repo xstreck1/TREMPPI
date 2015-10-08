@@ -11,8 +11,8 @@ Logging::Logging()
 {
 	Logging::getFile() << " --- " << TremppiSystem::PROGRAM_NAME << " has started." << " --- " << std::flush;
 	last_progress_val = 0;
-	cout << "00.000\r";
 	cout << fixed << setprecision(PRECISION);
+	cout << "00.000\r";
 }
 
 

@@ -18,7 +18,7 @@ class Logging
 	static ofstream file;
 	static vector<LogPhase> phases;
 	static int last_progress_val;
-	static constexpr int PRECISION = 2;
+	static constexpr int PRECISION = 3;
 	static constexpr float SHIFT_FACTOR = 1000;
 
 public:

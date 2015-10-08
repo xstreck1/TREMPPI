@@ -24,7 +24,7 @@ class ToolManager:
     def enqueue_output(self, out, queue):
         line = out.read(7)
         while len(line) > 0:
-            line = out.read(7).decode("utf-8")[0:6]
+            line = (out.read(7)[0:6]).decode("UTF-8")
             if len(line) is 6:
                 queue.put(line)
 
@@ -62,7 +62,7 @@ class ToolManager:
                 self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
                 self._thread.start()
 
-                return self._last_progress
+                return -1
             else:
                 self._current = ""
                 self._last_progress = ""
