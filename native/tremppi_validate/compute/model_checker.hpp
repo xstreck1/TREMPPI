@@ -13,9 +13,14 @@
 namespace ModelChecker 
 {
 	/**
-	* @return true if this transition is open for given parametrization
-	*/
-	bool isOpen(const Levels & parametrization, const TransConst & trans_cost);
+	 * @return true if this transition is open for given parametrization
+	 */
+	bool isOpen(const Levels & parametrization, const TransConst & trans_const);
+
+	/**
+	 * @return true if the state is stable in the current parametrization
+	 */
+	bool isStable(const Levels & parametrization, const std::vector<StayConst> & stay_consts);
 
 	/**
 	* @return (vector of reachable targets from ID for this parametrization, is the state stable?)
@@ -30,31 +35,22 @@ namespace ModelChecker
 };
 
 template <class State>
-
 pair<vector<StateID>, bool> ModelChecker::broadcastParameters(const Levels & parametrization, const TSInterface<State> & ts, const StateID ID) 
 {
 	vector<StateID> targets;
-	bool hell = false; ///< A transition to hell is available
 
-					   // Cycle through all the transition
-
+	// Cycle through all the transition
 	for (const size_t trans_no : cscope(ts._states[ID])) 
 	{
-		StateID target_ID = ts._states[ID]._transitions[trans_no]._t_ID;
-
 		// From an update strip all the parameters that can not pass through the transition - color intersection on the transition
-
 		if (isOpen(parametrization, ts._states[ID]._transitions[trans_no]._trans_const)) 
 		{
-			if (target_ID == INF)
-				hell = true;
-			else
-				targets.push_back(target_ID);
+			targets.push_back(ts._states[ID]._transitions[trans_no]._t_ID);
 		}
 	}
 
 	// Add loops only if there is no transition (even a hell transition) available.
-	if (!hell && targets.empty())
+	if (targets.empty() && isStable(parametrization, ts._states[ID]._stay_const))
 		return make_pair(ts._states[ID]._loops, true);
 	else
 		return make_pair(targets, false);

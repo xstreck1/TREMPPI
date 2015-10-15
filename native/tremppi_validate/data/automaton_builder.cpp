@@ -20,10 +20,8 @@ Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & st
 					result[ID].emplace_back(act_level);
 				}
 			}
-
 		}
 	}
-
 	return result;
 }
 
@@ -56,7 +54,11 @@ void AutomatonBuilder::buildTransient(const PropertyInfo & property_info, const 
 	if (property_info.measurements.size() == 1)
 	{
 		automaton._states.emplace_back(AutState(0, true, true));
-		automaton._states[0]._transitions.emplace_back(AutTransitionion(0, makeStateConst({}, bounds, names), true, makePathConst({}, names)));
+		automaton._states[0]._transitions.emplace_back(
+			AutTransitionion(
+				0, 
+				{ {makeStateConst({}, bounds, names), true} }, 
+				makePathConst({}, names)));
 	}
 	else
 	{
@@ -70,21 +72,23 @@ void AutomatonBuilder::buildTransient(const PropertyInfo & property_info, const 
 				automaton._states[ID - 1]._transitions.emplace_back(
 					AutTransitionion(
 						ID - 1,
-						makeStateConst(property_info.measurements[ID].state_constraints, bounds, names),
-						false,
+						{ { makeStateConst(property_info.measurements[ID].state_constraints, bounds, names), false } },
 						makePathConst(property_info.measurements[ID - 1].path_constraints, names)
 						));
 				// Add a step to the next state under the current measurement and path condition
 				automaton._states[ID - 1]._transitions.emplace_back(
 					AutTransitionion(
 						ID,
-						makeStateConst(property_info.measurements[ID].state_constraints, bounds, names),
-						true,
+						{ { makeStateConst(property_info.measurements[ID].state_constraints, bounds, names), true } },
 						makePathConst(property_info.measurements[ID].path_constraints, names)
 						));
 			}
 			else {
-				automaton._states[ID - 1]._transitions.emplace_back(AutTransitionion(ID - 1, makeStateConst({}, bounds, names), true, makePathConst({}, names)));
+				automaton._states[ID - 1]._transitions.emplace_back(
+					AutTransitionion(
+						ID - 1, 
+						{ { makeStateConst({}, bounds, names), true } },
+						makePathConst({}, names)));
 			}
 		}
 	}
@@ -97,7 +101,6 @@ RULES:
 	if goto X + 1 and X is the last measurement, all is accepting
 	if goto A, then accepting=initial and it's placed on the check for B
 */
-
 void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, const char target, AutomatonStructure & automaton)
 {
 	const size_t target_ID = AutomatonStructure::NameToID(target);
@@ -115,22 +118,21 @@ void AutomatonBuilder::buildCyclic(const PropertyInfo & property_info, const tup
 		const bool final = ID == target_ID;
 		automaton._states.emplace_back(AutState(ID, initial, final));
 		// Add a loop with path contraints from the already satisfied measurement
-		automaton._states[ID]._transitions.emplace_back(AutTransitionion(
-			ID,
-			makeStateConst(property_info.measurements[ID].state_constraints, bounds, names),
-			false,
-			initial ? makePathConst({}, names) : makePathConst(property_info.measurements[ID - 1].path_constraints, names)
-			));
+		automaton._states[ID]._transitions.emplace_back(
+				AutTransitionion(
+				ID,
+				{ { makeStateConst(property_info.measurements[ID].state_constraints, bounds, names), false } },
+				initial ? makePathConst({}, names) : makePathConst(property_info.measurements[ID - 1].path_constraints, names)
+				));
 		// Add a step to the next state under the current measurement and path condition, if this is last, then goto is the next
-		automaton._states[ID]._transitions.emplace_back(AutTransitionion(
+		automaton._states[ID]._transitions.emplace_back(
+			AutTransitionion(
 			property_info.measurements.size() == ID + 1 ? target_ID : ID + 1,
-			makeStateConst(property_info.measurements[ID].state_constraints, bounds, names),
-			true,
+			{ { makeStateConst(property_info.measurements[ID].state_constraints, bounds, names), true } },
 			makePathConst(property_info.measurements[ID].path_constraints, names)
 			));
 	}
 }
-
 
 void AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton)
 {

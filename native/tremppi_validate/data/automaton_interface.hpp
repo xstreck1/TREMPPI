@@ -11,7 +11,6 @@
 /// \brief A state structure enhanced with information whether the state is final and/or initial.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename Transition>
-
 struct AutomatonStateProperty : public virtual StateProperty<Transition> 
 {
    bool _initial; ///< True if the state is initial.

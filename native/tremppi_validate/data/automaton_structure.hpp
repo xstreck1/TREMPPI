@@ -7,11 +7,10 @@
 /// Single labelled transition from one state to another.
 struct AutTransitionion : public TransitionProperty 
 {
-	Configurations _state_constr; //< Boundary on the state values in the current configuraion
-	bool _inclusive; //< If true, only the states that match the condition are allows, if false, only those that do not
+	const std::vector<std::pair<Configurations, bool> > _state_constr; // List of reuqirements for state values. Or that are true must be matched, all that are false must not
 	vector<PathCons> _path_constr; //< Contraints on trainsitions from this state (ordered by components)
 
-	AutTransitionion(const StateID target_ID, const Configurations & state_constr, const bool inclusive, const vector<PathCons> & path_constr);
+	AutTransitionion(const StateID target_ID, const std::vector<std::pair<Configurations, bool> > state_constr, const vector<PathCons> path_constr);
 };
 using AutState = AutomatonStateProperty<AutTransitionion>;
 

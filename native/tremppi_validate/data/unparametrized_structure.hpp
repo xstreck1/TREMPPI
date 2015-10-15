@@ -15,7 +15,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using USTransition = TSTransitionProperty;
-using USState = TSStateProperty<TSTransitionProperty>;
+using USState = TSStateProperty<USTransition>;
 
 
 struct UnparametrizedStructure : public TSInterface<USState> 

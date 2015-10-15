@@ -1,20 +1,24 @@
 #include "model_checker.hpp"
 
-/**
-* @return true if this transition is open for given parametrization
-*/
-
-bool ModelChecker::isOpen(const Levels & parametrization, const TransConst & trans_cost) 
+bool ModelChecker::isOpen(const Levels & parametrization, const TransConst & trans_const) 
 {
-	if (trans_cost._req_dir)
-		return parametrization[trans_cost._param_no] > trans_cost._req_value;
+	if (trans_const._req_dir)
+		return parametrization[trans_const._param_no] > trans_const._req_value;
 	else
-		return parametrization[trans_cost._param_no] < trans_cost._req_value;
+		return parametrization[trans_const._param_no] < trans_const._req_value;
 }
 
-/**
-*
-*/
+
+bool ModelChecker::isStable(const Levels & parametrization, const std::vector<StayConst> & stay_consts)
+{
+	for (const StayConst & stay_const : stay_consts) {
+		if (parametrization[stay_const._param_no] != stay_const._req_value)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 VisitStorage ModelChecker::conductCheck(const ProductStructure & product, const CheckerSetting & _settings, const Levels & _parametrization, VisitStorage storage) 
 {
@@ -44,7 +48,6 @@ VisitStorage ModelChecker::conductCheck(const ProductStructure & product, const 
 			tie(transports, stable) = broadcastParameters(_parametrization, product, ID);
 			auto trans_end = remove_if(WHOLE(transports), [&storage](const StateID t_ID) {return storage.isFound(t_ID); });
 
-
 			for (auto next_it = begin(transports); next_it != trans_end; next_it++) 
 			{
 				storage.update(*next_it);
@@ -53,7 +56,6 @@ VisitStorage ModelChecker::conductCheck(const ProductStructure & product, const 
 			next_updates.insert(end(next_updates), begin(transports), trans_end);
 
 			// Don't update when looking for a loop
-
 			if (!(_settings.circ && storage.getCost() == 1)) 
 			{
 				if (_settings.isFinal(ID, product) && (stable || !_settings.stable))

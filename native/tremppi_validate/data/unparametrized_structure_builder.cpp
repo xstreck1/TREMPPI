@@ -58,18 +58,23 @@ void UnparametrizedStructureBuilder::buildStructure(const RegInfos & reg_infos, 
 		for (const CompID c_ID : cscope(jumps)) 
 		{
 			const ParamNo fun_no = getActiveFunction(reg_infos[c_ID].requirements, levels);
-			// If this value is not the lowest one, add neighbour with lower
+
+			// If this value is not the lowest one, add neighbour with lower
 			if (levels[c_ID] > get<0>(structure._bounds)[c_ID]) 
 			{
 				const StateID t_ID = s_ID - jumps[c_ID];
 				structure._states[s_ID]._transitions.emplace_back(USTransition(t_ID, TransConst{ fun_no, false, levels[c_ID] }));
 			}
-			// If this value is not the highest one, add neighbour with higher
+
+			// If this value is not the highest one, add neighbour with higher
 			if (levels[c_ID] < get<1>(structure._bounds)[c_ID]) 
 			{
 				const StateID t_ID = s_ID + jumps[c_ID];
 				structure._states[s_ID]._transitions.emplace_back(USTransition(t_ID, TransConst{ fun_no, true, levels[c_ID] }));
 			}
+
+			// Add the stability constraint
+			structure._states[s_ID]._stay_const[c_ID] = StayConst{ fun_no, levels[c_ID] };
 		}
 		s_ID++;
 	} while (iterate(get<1>(structure._bounds), get<0>(structure._bounds), levels));
