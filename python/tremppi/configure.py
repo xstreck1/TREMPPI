@@ -278,7 +278,7 @@ def make_list(conn):
         {
             'field': 'ending', 'caption': 'Ending', 'size': '70px', 'resizable': True, 'editable':
             {
-                'type': 'select', 'items': ["any", "stable", "goto A", "goto B", "goto C", "goto D", "goto E", "goto F", "goto G", "goto H", "goto I", "goto J", "goto K", "goto L", "goto M", "goto N", "goto O", "goto P", "goto Q", "goto R", "goto S", "goto T", "goto U", "goto V", "goto W", "goto X", "goto Y", "goto Z"]
+                'type': 'select', 'items': ["open", "stable", "cyclic"]
             }
         },
         #{

@@ -19,9 +19,14 @@ void createProperties(const bfs::path & example_model_path)
 	records[0]["E_A"] = "";
 	records[0]["E_B"] = "";
 	records[0]["select"] = true;
+	records[0]["recid"] = 0;
 	records[0]["records"].resize(2);
 	records[0]["records"][0]["V_B"] = "[0,1)";
+	records[0]["records"][0]["recid"] = 0;
+	records[0]["records"][0]["id"] = "A";
 	records[0]["records"][1]["V_B"] = "(1,2]";
+	records[0]["records"][1]["recid"] = 1;
+	records[0]["records"][1]["id"] = "B";
 
 	// Add a cycle
 	records[1]["name"] = "test_cycle";
@@ -29,10 +34,17 @@ void createProperties(const bfs::path & example_model_path)
 	records[1]["E_A"] = "";
 	records[1]["E_B"] = "";
 	records[1]["select"] = true;
+	records[1]["recid"] = 1;
 	records[1]["records"].resize(3);
 	records[1]["records"][0]["V_B"] = "[0,1)";
+	records[1]["records"][0]["recid"] = 0;
+	records[1]["records"][0]["id"] = "A";
 	records[1]["records"][1]["V_B"] = "[0,1)";
+	records[1]["records"][1]["recid"] = 1;
+	records[1]["records"][1]["id"] = "B";
 	records[1]["records"][2]["V_B"] = "[1,1]";
+	records[1]["records"][2]["recid"] = 2;
+	records[1]["records"][2]["id"] = "C";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / DATA_FOLDER / PROPERTIES_FILENAME).string(), ios::out);
