@@ -97,6 +97,10 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 
 		// Parse records
 		map<string, PathCons> last_trans;
+		if (property_node["records"].size() < 2) 
+		{
+			throw runtime_error("There must be at least 2 measurements per a property. Error at the property " + property_info.name);
+		}
         for (const Json::Value & record : property_node["records"]) 
         {
 			map<string, ActRange> state_consts;

@@ -22,9 +22,9 @@ namespace AutomatonBuilder
 	//
 	vector<PathCons> makePathConst(const map<string, PathCons>& constraints_list, const vector<string> & names);
 	//
-	void buildTransient(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
+	void buildSequence(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton, const size_t N, const size_t M);
 	//
-	void buildCyclic(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, const char target, AutomatonStructure & automaton);
+	void buildCyclic(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels>& bounds, const vector<string>& names, AutomatonStructure & automaton);
 	// Create the transitions from the model and fill the automaton with them.
 	void buildAutomaton(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton);
 }

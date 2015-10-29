@@ -14,18 +14,17 @@ namespace ProductBuilder
 	/*
 	 * Create the copy of Unparametrized structure with the states of product with the given BA_ID. 
 	 */
-	void createSubspace(const UnparametrizedStructure & structure, const StateID BA_ID, ProductStructure & product);
-
-	/**
-	 * Label, as initial, only those states that have any outgoing transition (from all possible initials).
-	 * In the same way, label, as accepting, under the condition that it's not a terminal automaton, the accepting states.
-	 */
-	void relabel(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, ProductStructure & product);
+	void createSubspace(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, ProductStructure & product);
 
 	/**
 	 * Add transitions to a single state matching the BA transition.
 	 */
 	void addStateTransitions(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID s_BA_ID, const StateID s_KS_ID, const AutTransitionion & BA_transition, ProductStructure & product);
+
+	/**
+	 *
+	 */
+	bool satisfiesMeasurements(const Levels & levels, const MeasurementsCons & measurements_cons);
 
 
 	/**
@@ -36,7 +35,7 @@ namespace ProductBuilder
 	/*
 	 * @return true	iff the the constrains are met for all the components
 	 */ 
-	bool matchesConstraints(const UnparametrizedStructure & structure, const CompID s_ID, const CompID t_ID, const vector<PathCons>& path_cons) ;
+	bool satisfiesDeltas(const UnparametrizedStructure & structure, const CompID s_ID, const CompID t_ID, const DeltasCons & deltas_cons) ;
 
 	/**
 	 * Create the the synchronous product of the provided BA and UKS.

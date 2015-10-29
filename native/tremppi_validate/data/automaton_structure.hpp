@@ -4,15 +4,26 @@
 #include "automaton_interface.hpp"
 #include "property_info.hpp"
 
+using MeasurementCons = pair<Configurations, bool>;
+using MeasurementsCons = vector<MeasurementCons>;
+
+using DeltasCons = vector<PathCons>;
+
 /// Single labelled transition from one state to another.
 struct AutTransitionion : public TransitionProperty 
 {
-	const std::vector<std::pair<Configurations, bool> > _state_constr; // List of reuqirements for state values. Or that are true must be matched, all that are false must not
-	vector<PathCons> _path_constr; //< Contraints on trainsitions from this state (ordered by components)
+	MeasurementsCons _measurements_cons; // List of reuqirements for state values. Or that are true must be matched, all that are false must not
+	DeltasCons _deltas_cons; //< Contraints on trainsitions from this state (ordered by components)
 
-	AutTransitionion(const StateID target_ID, const std::vector<std::pair<Configurations, bool> > state_constr, const vector<PathCons> path_constr);
+	AutTransitionion(const StateID target_ID, const MeasurementsCons measurements_cons, const DeltasCons deltas_cons);
 };
-using AutState = AutomatonStateProperty<AutTransitionion>;
+struct AutState : public AutomatonStateProperty<AutTransitionion>
+{
+	MeasurementsCons _initial_cons;
+	MeasurementsCons _accepting_cons;
+
+	AutState(const StateID ID, MeasurementsCons initial_cons, MeasurementsCons accepting_cons);
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief A Buchi automaton designed to control some \f$\omega\f$-regular property.
@@ -22,9 +33,6 @@ using AutState = AutomatonStateProperty<AutTransitionion>;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct AutomatonStructure : public AutomatonInterface<AutState> 
 {
-	Configurations _init_constr;
-	Configurations _acc_constr;
-
 	//
 	GROUNDED(AutomatonStructure);
 	//

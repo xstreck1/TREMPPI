@@ -18,7 +18,7 @@ protected:
 		CommonTest::SetUp();
 
 		a_spike_on_A.name = "spike_on_A";
-		a_spike_on_A.ending = "any";
+		a_spike_on_A.ending = "open";
 		a_spike_on_A.measurements.emplace_back(PropertyInfo::Measurement{0, {{"A", {0, 0}}}, {}});
 		a_spike_on_A.measurements.emplace_back(PropertyInfo::Measurement{1, {{"A", {1, 1}}}, {}});
 		a_spike_on_A.measurements.emplace_back(PropertyInfo::Measurement{2, {{"A", {0, 0}}}, {}});
@@ -30,9 +30,9 @@ protected:
 		a_is_steady.bound = INF;
 
 		a_cycle_on_A.name = "cycle_on_A";
-		a_cycle_on_A.ending = "goto A";
-		a_cycle_on_A.measurements.emplace_back(PropertyInfo::Measurement{ 0,{ { "A",{ 1,1 } } },{} });
-		a_cycle_on_A.measurements.emplace_back(PropertyInfo::Measurement{ 1,{ { "A",{ 0,0 } } },{} });
+		a_cycle_on_A.ending = "cyclic";
+		a_cycle_on_A.measurements.emplace_back(PropertyInfo::Measurement{ 1,{ { "A",{ 1,1 } } },{} });
+		a_cycle_on_A.measurements.emplace_back(PropertyInfo::Measurement{ 2,{ { "A",{ 0,0 } } },{} });
 		a_cycle_on_A.bound = INF;
 	}
 };

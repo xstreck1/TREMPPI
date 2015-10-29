@@ -15,7 +15,7 @@ void createProperties(const bfs::path & example_model_path)
 
 	// Add time series
 	records[0]["name"] = "test_ts";
-	records[0]["ending"] = "any";
+	records[0]["ending"] = "open";
 	records[0]["E_A"] = "";
 	records[0]["E_B"] = "";
 	records[0]["select"] = true;
@@ -25,13 +25,14 @@ void createProperties(const bfs::path & example_model_path)
 
 	// Add a cycle
 	records[1]["name"] = "test_cycle";
-	records[1]["ending"] = "goto A";
+	records[1]["ending"] = "cyclic";
 	records[1]["E_A"] = "";
 	records[1]["E_B"] = "";
 	records[1]["select"] = true;
-	records[1]["records"].resize(2);
+	records[1]["records"].resize(3);
 	records[1]["records"][0]["V_B"] = "[0,1)";
-	records[1]["records"][1]["V_B"] = "[1,1]";
+	records[1]["records"][1]["V_B"] = "[0,1)";
+	records[1]["records"][2]["V_B"] = "[1,1]";
 
 	Json::StyledWriter writer;
 	ofstream data_file((example_model_path / DATA_FOLDER / PROPERTIES_FILENAME).string(), ios::out);
@@ -86,8 +87,8 @@ TEST_F(ValidateTest, Construction)
 	AutomatonStructure a;
 	AutomatonBuilder::buildAutomaton(a_spike_on_A, bounds, { "A" }, a);
 	ASSERT_EQ(2, a.size());
-	EXPECT_EQ(vector < StateID > {0}, a.getInitialStates());
-	EXPECT_EQ(vector < StateID > {1}, a.getFinalStates());
+	EXPECT_EQ(2, a.getInitialStates().size());
+	EXPECT_EQ(2, a.getFinalStates().size());
 	EXPECT_EQ(BA_finite, a._aut_type);
 	ASSERT_EQ(2, a._states[0].size());
 	EXPECT_EQ(0, a._states[0]._transitions[0]._t_ID);
@@ -98,7 +99,7 @@ TEST_F(ValidateTest, Construction)
 	ASSERT_EQ(4, p.size());
 	ASSERT_EQ(1, p._states[0].size());
 	EXPECT_EQ(1, p._states[0]._transitions[0]._t_ID);
-	ASSERT_EQ(1, p._states[0].size());
+	ASSERT_EQ(1, p._states[1].size());
 	EXPECT_EQ(2, p._states[1]._transitions[0]._t_ID);
 }
 
