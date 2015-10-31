@@ -8,7 +8,7 @@ void ParametrizationReader::select(const RegInfos & reg_infos, const string & se
 		throw runtime_error("No parameter columns found in the database.");
 	}
 
-	const string qry_string = "SELECT ROWID, " + boost::algorithm::join(contexts, ", ") + " FROM " + PARAMETRIZATIONS_TABLE + selection;
+	const string qry_string = "SELECT ROWID, " + boost::algorithm::join(contexts, ", ") + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + selection;
 	selection_qry.reset(new sqlite3pp::query(db, (qry_string).c_str()));
 	sel_it = selection_qry->begin();
 }

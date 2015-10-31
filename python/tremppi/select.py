@@ -65,9 +65,11 @@ def select_query(records):
     for record in records:
         atoms = get_atom(record)
         if len(atoms) > 0:
-            clauses.append("(" + " AND ".join(atoms) + ")")
+            clauses.append(" AND ".join(atoms))
+        else:
+            clauses.append("1")
 
-    return " OR ".join(clauses)
+    return "\n".join(clauses)
 
 def select_name(records):
     names = []
@@ -80,7 +82,7 @@ def select_name(records):
                 raise Exception("One of the selections does not have a name.")
 
 
-    return "|".join(names)
+    return "\n".join(names)
 
 
 def select(filename, term):
@@ -90,13 +92,11 @@ def select(filename, term):
             raise Exception("No selection is present.")
         if term:
             result = select_query(grid["records"])
-            if result != '':
-                return ' WHERE ' + result
-            else:
-                raise Exception("No selection has been made.")
+            return result
+
         else:
             result = select_name(grid["records"])
-            if result != '':
+            if result:
                 return result
             else:
                 raise Exception("No selection has been made.")

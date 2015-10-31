@@ -12,7 +12,7 @@ public:
 	void select(const string & prop_name, const string & select, sqlite3pp::database & db) 
 	{
 		const string column_name = "W_" + prop_name;
-		const string qry_string = "SELECT " + column_name + " FROM " + PARAMETRIZATIONS_TABLE + select;
+		const string qry_string = "SELECT " + column_name + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + select;
 		selection_qry.reset(new sqlite3pp::query(db, (qry_string).c_str()));
 		sel_it = selection_qry->begin();
 	}

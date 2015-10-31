@@ -48,7 +48,6 @@ int tremppi_bias(int argc, char ** argv)
 			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(selection, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
-
 			logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(selection, db));
 			db.execute("BEGIN TRANSACTION");
 			// Go through parametrizations

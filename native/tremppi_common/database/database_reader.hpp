@@ -40,11 +40,14 @@ public:
 	//
 	static sqlite3pp::query selectionIDs(const string & selection, sqlite3pp::database & db);
 
-	// Obtain the sqlite3 WHERE clause from the selections file
+	// Obtain the lines of the sqlite3 selection terms for each selected line in select
 	static string getSelectionTerm();
 
-	// Obtain the term describing the current selection
-	static string getSelectionName();
+	//
+	static vector<string> getSelectionList();
+
+	// Obtain the the names of the current selection lines 
+	static vector<string> getSelectionNames();
 
 	//
 	static int getSelectionSize(const string & selection, sqlite3pp::database & db);

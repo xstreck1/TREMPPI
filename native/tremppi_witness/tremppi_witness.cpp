@@ -12,94 +12,100 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_witness.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_witness(int argc, char ** argv) 
+int tremppi_witness(int argc, char ** argv)
 {
 	TremppiSystem::initiate("tremppi_witness", argc, argv);
 	Logging logging;
 
-	Json::Value out;
-	Json::Value properties;
 	RegInfos reg_infos;
 	sqlite3pp::database db;
-	ParamNo selection_size;;
-	// Obtain data
-	try 
+	vector<string> selections;
+	vector<string> sels_name;
+	DatabaseReader reader;
+	try
 	{
-		DEBUG_LOG << "Parsing data.";
-
-		// Create setup
-		out = Report::createSetup();
-
-		// Get properties 
-		properties = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
-
-		// Get database
+		DEBUG_LOG << "Reading data.";
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
-		// Read regulatory information
-		DatabaseReader reader;
+		selections = reader.getSelectionList();
+		sels_name = reader.getSelectionNames();
 		reg_infos = reader.readRegInfos(db);
-		selection_size = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
 	}
-	catch (exception & e) 
+	catch (exception & e)
 	{
 		logging.exceptionMessage(e, 2);
 	}
 
-	// Obtain the nodes and write to the the set
-	map<pair<string, string>, size_t> transitions;
-	WitnessReader wit_reader;
-	size_t properties_count = size_t{};
-	try 
-	{
-		DEBUG_LOG << "Loading witnesses.";
-		logging.newPhase("computing witness", properties["records"].size());
-		for (const auto & property : properties["records"]) 
-		{
-			// If selected
-			if (property["select"].asBool()) 
-			{
-				properties_count++;
-				const string name = property["name"].asString();
-				out["setup"]["properties"] = out["setup"]["properties"].asString() + name + ",";
 
-				wit_reader.select(name, out["setup"]["select"].asString(), db);
-				// Read transitions
-				logging.newPhase("Listing parametrizations", selection_size);
-				while (wit_reader.next()) 
+	// Create a report for each selection
+	for (const size_t sel_no : cscope(selections))
+	{
+		Json::Value out;
+		Json::Value properties;
+		ParamNo selection_size;;
+		// Obtain data
+		try
+		{
+			DEBUG_LOG << "Selection " + sels_name[sel_no];
+			out = Report::createSetup(selections[sel_no], sels_name[sel_no]);
+
+			// Get properties 
+			properties = FileManipulation::parseJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
+
+			// Read regulatory information
+			selection_size = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
+		}
+		catch (exception & e)
+		{
+			logging.exceptionMessage(e, 3);
+		}
+
+		// Obtain the nodes and write to the the set
+		map<pair<string, string>, size_t> transitions;
+		WitnessReader wit_reader;
+		size_t properties_count = size_t{};
+		try
+		{
+			DEBUG_LOG << "Reading data.";
+			logging.newPhase("computing witness", properties["records"].size());
+			for (const auto & property : properties["records"])
+			{
+				// If selected
+				if (property["select"].asBool())
 				{
-					map<pair<string, string>, size_t> new_transitions = wit_reader.getWitness();
-					for (const pair<pair<string, string>, size_t> & transition : new_transitions) {
-						transitions[transition.first] += transition.second;
+					properties_count++;
+					const string name = property["name"].asString();
+					out["setup"]["properties"] = out["setup"]["properties"].asString() + name + ",";
+
+					wit_reader.select(name, out["setup"]["select"].asString(), db);
+					// Read transitions
+					logging.newPhase("Listing parametrizations", selection_size);
+					while (wit_reader.next())
+					{
+						map<pair<string, string>, size_t> new_transitions = wit_reader.getWitness();
+						for (const pair<pair<string, string>, size_t> & transition : new_transitions) {
+							transitions[transition.first] += transition.second;
+						}
+						logging.step();
 					}
-					logging.step();
 				}
 			}
 		}
-	}
-	catch (exception & e) 
-	{
-		logging.exceptionMessage(e, 3);
-	}
-	try 
-	{
-		DEBUG_LOG << "Converting to JSON";
+		catch (exception & e)
+		{
+			logging.exceptionMessage(e, 4);
+		}
+		try
+		{
+			DEBUG_LOG << "Writing data.";
 
-		out["elements"] = WitnessOutput::convert(transitions, selection_size * properties_count);
-	}
-	catch (exception & e) 
-	{
-		logging.exceptionMessage(e, 4);
-	}
+			out["elements"] = WitnessOutput::convert(transitions, selection_size * properties_count);
 
-	// Output 
-	try 
-	{
-		DEBUG_LOG << "Writing output.";
-		FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "witness" / (out["setup"]["s_name"].asString() + ".json"), out);
-	}
-	catch (exception & e) 
-	{
-		logging.exceptionMessage(e, 5);
+			FileManipulation::writeJSON(TremppiSystem::DATA_PATH / "witness" / (out["setup"]["s_name"].asString() + ".json"), out);
+		}
+		catch (exception & e)
+		{
+			logging.exceptionMessage(e, 5);
+		}
 	}
 
 	try

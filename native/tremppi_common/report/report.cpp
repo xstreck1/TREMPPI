@@ -5,17 +5,17 @@
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/time_manager.hpp>
 
-Json::Value Report::createSetup() 
+Json::Value Report::createSetup(const string & selection, const string & name) 
 {
 	Json::Value out;
 
 	out["setup"]["date"] = TimeManager::getTime();
 	sqlite3pp::database db((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str());
 
-	out["setup"]["select"] = DatabaseReader::getSelectionTerm();
-	out["setup"]["s_name"] = DatabaseReader::getSelectionName();
+	out["setup"]["select"] = selection;
+	out["setup"]["s_name"] = name;
 	// Get pool sizes
-	int size = DatabaseReader::getSelectionSize(out["setup"]["select"].asString(), db);
+	int size = DatabaseReader::getSelectionSize(selection, db);
 	if (size == 0) {
 		throw runtime_error("No models in the selection.");
 	}

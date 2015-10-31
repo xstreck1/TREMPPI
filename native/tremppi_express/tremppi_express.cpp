@@ -22,6 +22,8 @@ int tremppi_express(int argc, char ** argv)
 
 		selection = DatabaseReader::getSelectionTerm();
 
+		auto res = DatabaseReader::getSelectionList();
+
 		DatabaseReader reader;
 		RegInfos infos = reader.readRegInfos(db);
 

@@ -34,7 +34,7 @@ void sqlite3pp::func::addColumn(const string & table_name, const string & column
 
 size_t sqlite3pp::func::rowCount(const string & table_name, const string & selection, sqlite3pp::database & db)
 {
-	sqlite3pp::query qry(db, ("SELECT COUNT(*) FROM " + table_name + selection).c_str());
+	sqlite3pp::query qry(db, ("SELECT COUNT(*) FROM " + table_name + " WHERE " + selection).c_str());
 	return qry.begin()->get<size_t>(0);
 }
 

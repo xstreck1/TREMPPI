@@ -32,6 +32,7 @@
 #undef BOOST_NO_CXX11_SCOPED_ENUMS
 #define BOOST_PYTHON_STATIC_LIB 
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <boost/python.hpp>
 
 #include "configure.h"
@@ -46,6 +47,7 @@ using boost::bad_lexical_cast;
 using boost::is_any_of;
 using boost::split;
 using boost::trim;
+using boost::algorithm::join;
 
 namespace rng = boost::range;
 namespace bfs = boost::filesystem;

@@ -5,7 +5,7 @@
 #include "../network/data_info.hpp"
 namespace Report 
 {
-	Json::Value createSetup();
+	Json::Value createSetup(const string & selection, const string & name);
 	string reformName(const RegInfos & reg_infos, const string & name);
 	string contextToValues(const RegInfos & reg_infos, const string & context);
 }

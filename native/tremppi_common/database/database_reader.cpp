@@ -1,5 +1,6 @@
 #include "database_reader.hpp"
 #include "database_reader.hpp"
+#include "database_reader.hpp"
 #include "../general/system.hpp"
 #include "../general/file_manipulation.hpp"
 #include "../python/python_functions.hpp"
@@ -112,36 +113,52 @@ vector<Levels> DatabaseReader::obtainRequirements(const string & context, const 
 	}
 	return result;
 }
-int DatabaseReader::getSelectionSize(const string & selection, sqlite3pp::database & db) {	return (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + DatabaseReader::getSelectionTerm()).c_str()).begin())->get<int>(0);}
+int DatabaseReader::getSelectionSize(const string & selection, sqlite3pp::database & db) {	return (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + selection).c_str()).begin())->get<int>(0);}
 sqlite3pp::query DatabaseReader::selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db) 
 {
 	string columns_list = alg::join(DataConv::columns2list(columns), ", ");
-	return sqlite3pp::query(db, ("SELECT " + columns_list + " FROM " + PARAMETRIZATIONS_TABLE + selection).c_str());
+	return sqlite3pp::query(db, ("SELECT " + columns_list + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + selection).c_str());
 }
 
 sqlite3pp::query DatabaseReader::selectionIDs(const string & selection, sqlite3pp::database & db) 
 {
-	return sqlite3pp::query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + selection).c_str());
+	return sqlite3pp::query(db, ("SELECT ROWID FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + selection).c_str());
 }
 
 string DatabaseReader::getSelectionTerm() 
 {
 	string result;
 
-	PythonFunctions & python = PythonFunctions::getInstance();
-	python.exec("from tremppi.select import select");
-	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(TremppiSystem::DATA_PATH  / SELECTION_FILENAME)) + ", True)", result);
+	vector<string> list = getSelectionList();
+	for (string & term : list)
+	{
+		term = "(" + term + ")";
+	}
+	result = join(list, " | ");
 
 	return result;
 }
-
-string DatabaseReader::getSelectionName() 
+vector<string> DatabaseReader::getSelectionList()
 {
-	string result;
+	vector<string> result;
 
+	string line;
 	PythonFunctions & python = PythonFunctions::getInstance();
 	python.exec("from tremppi.select import select");
-	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute( TremppiSystem::DATA_PATH  / SELECTION_FILENAME)) + ", False)", result);
+	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute(TremppiSystem::DATA_PATH / SELECTION_FILENAME)) + ", True)", line);
+	split(result, line, is_any_of("\n"));
+
+	return result;
+}
+vector<string> DatabaseReader::getSelectionNames() 
+{
+	vector<string> result;
+
+	string line;
+	PythonFunctions & python = PythonFunctions::getInstance();
+	python.exec("from tremppi.select import select");
+	python.eval<string>("select(" + PythonFunctions::reformPath(bfs::absolute( TremppiSystem::DATA_PATH  / SELECTION_FILENAME)) + ", False)", line);
+	split(result, line, is_any_of("\n"));
 
 	return result;
 }
