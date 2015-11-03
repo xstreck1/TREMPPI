@@ -29,7 +29,7 @@ class ToolManager:
                 queue.put(line)
 
     def cmd_to_string(self, cmd):
-        if (cmd[0] is not ""):
+        if cmd[0]:
             return cmd[1] + ' --path ' + cmd[0]
         else:
             return cmd[1] + ' --path ' + "."
