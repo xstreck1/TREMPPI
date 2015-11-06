@@ -20,22 +20,22 @@ void TremppiSystem::set(const char * name, const char * arg, const string & _WOR
 	char* home_path = getenv("TREMPPI_HOME");
 	bfs::path test_path = BIN_PATH;
 
-	auto executable_present = [](bfs::path & path) { return bfs::exists(path) && bfs::is_directory(path); };
+	auto sources_present = [&test_path]() { 
+		test_path = test_path.parent_path();
+		return bfs::is_directory(test_path / "python") && bfs::is_directory(test_path / "javascript");
+	};
 	if (home_path != NULL)
 		TremppiSystem::HOME_PATH = bfs::path{ home_path };
-	// Descend four steps
-	if (executable_present((test_path = test_path.parent_path()) / bfs::path{ "tremppi" }))
-		TremppiSystem::HOME_PATH = test_path / bfs::path{ "tremppi" };
-	else if (executable_present((test_path = test_path.parent_path()) / bfs::path{ "tremppi" }))
-		TremppiSystem::HOME_PATH = test_path / bfs::path{ "tremppi" };
-	else if (executable_present((test_path = test_path.parent_path()) / bfs::path{ "tremppi" }))
-		TremppiSystem::HOME_PATH = test_path / bfs::path{ "tremppi" };
-	else if (executable_present((test_path = test_path.parent_path()) / bfs::path{ "tremppi" }))
-		TremppiSystem::HOME_PATH = test_path / bfs::path{ "tremppi" };
-	else 
+	// Descend three steps, test for tremppi directory
+	for (auto i : crange(3))
 	{
-		throw runtime_error("Binary " + TremppiSystem::BIN_PATH.string() + "is not homed and TREMPPI_HOME not found. Either set up the system variable of the same name pointing to the TREMMPI folder, or put the binary in the TREMPPI/bin folder.");
-	}
+		if (sources_present())
+		{
+			TremppiSystem::HOME_PATH = test_path;
+			return;
+		}
+	}
+	throw runtime_error("Binary " + TremppiSystem::BIN_PATH.string() + "is not homed and TREMPPI_HOME not found. Either set up the system variable of the same name pointing to the TREMMPI folder, or put the binary in the TREMPPI/bin folder.");
 }
 
 void TremppiSystem::initiate(const string & name, int argc, char **argv) {
