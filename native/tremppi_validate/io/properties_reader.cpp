@@ -117,7 +117,7 @@ vector<PropertyInfo> PropertiesReader::jsonToProperties(Json::Value & properties
 				else if (member.substr(0, 2) == "D_") 
 				{
 					const string component = member.substr(2);
-					const string path_str = record[component + "_delta"].asString();
+					const string path_str = record[member].asString();
 					path_consts.insert(make_pair(component, PropertiesReader::getTransitionConstraint(path_str, component)));
 				}
 			}

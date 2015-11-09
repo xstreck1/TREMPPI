@@ -74,7 +74,7 @@ void ProductBuilder::addSubspaceTransitions(const UnparametrizedStructure & stru
 	// List through the states that are allowed by the constraint
 	const auto & BA_transition = automaton._states[s_BA_ID]._transitions[BA_trans_no];
 
-	// Enumerate all states, for each go forward only if it does NOT meat the conditions
+	// Enumerate all states, for each go forward only if it does meet the conditions
 	for (const StateID s_KS_ID : cscope(structure._states)) 
 	{
 		if (satisfiesMeasurements(structure._states[s_KS_ID]._levels, BA_transition._measurements_cons))

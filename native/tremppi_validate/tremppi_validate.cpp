@@ -105,8 +105,9 @@ int tremppi_validate()
 			while (par_reader.next())
 			{
 				tuple<size_t, multimap<StateID, StateID>, double> result;
-
-				result = analysis_manager.check(par_reader.getParametrization());
+				Levels parametrization = par_reader.getParametrization();
+				ConstructionManager::restrictProperties(reg_infos, automaton, parametrization);
+				result = analysis_manager.check(parametrization);
 
 				// Parametrization was considered satisfying.
 				string witness_path;

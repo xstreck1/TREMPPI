@@ -54,3 +54,24 @@ void ConstructionManager::construct(const RegInfos & reg_infos, const PropertyIn
 	// Create the product
 	ProductBuilder::buildProduct(unparametrized_structure, automaton, product);
 }
+
+void ConstructionManager::restrictProperties(const RegInfos & reg_infos, const PropertyInfo & property_info, Levels & parametrization) 
+{
+	for (const RegInfo & reg_info : reg_infos)
+	{
+		if (property_info.bounds.count(reg_info.name) > 0)
+		{
+			for (const pair<size_t, Configurations > & requirement : reg_info.requirements)
+			{
+				if (parametrization[requirement.first] < property_info.bounds.at(reg_info.name).first)
+				{
+					parametrization[requirement.first] = property_info.bounds.at(reg_info.name).first;
+				}
+				if (parametrization[requirement.first] > property_info.bounds.at(reg_info.name).second)
+				{
+					parametrization[requirement.first] = property_info.bounds.at(reg_info.name).second;
+				}
+			}
+		}
+	}
+}

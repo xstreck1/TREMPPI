@@ -63,11 +63,12 @@ def select_query(records):
     clauses = []
 
     for record in records:
-        atoms = get_atom(record)
-        if len(atoms) > 0:
-            clauses.append(" AND ".join(atoms))
-        else:
-            clauses.append("1")
+        if ("select" in record) and record["select"]:
+            atoms = get_atom(record)
+            if len(atoms) > 0:
+                clauses.append(" AND ".join(atoms))
+            else:
+                clauses.append("1")
 
     return "\n".join(clauses)
 
