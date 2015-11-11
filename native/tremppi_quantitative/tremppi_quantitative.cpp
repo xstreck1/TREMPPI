@@ -42,6 +42,7 @@ int tremppi_quantitative(int argc, char ** argv)
 	}
 
 	// Create a report for each selection
+	logging.newPhase("making report", selections.size());
 	for (const size_t sel_no : cscope(selections))
 	{
 		Json::Value out;

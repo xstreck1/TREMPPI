@@ -37,8 +37,8 @@
 
 #include "configure.h"
 
-// POST-CMSB 2015
-const std::string VERSION("0.6.1");
+// For BioSystems
+const std::string VERSION("0.7.0");
 
 using namespace std;
 

@@ -3,6 +3,7 @@ __author__ = 'adams_000'
 import sys
 from os import replace, remove, fdopen
 from os.path import dirname, join, basename
+from threading import Thread
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
 from tremppi.header import last_page_filename
@@ -14,6 +15,7 @@ from tremppi.project_files import write_projects, delete_project, save_file, get
 # TREMPPI server that communicates between HTML reports and the filesystem
 class TremppiServer(SimpleHTTPRequestHandler):
     _tool_manager = ToolManager()
+    _server = None
 
     def success_response(self, content_type, data):
         self.send_response(200)
@@ -70,7 +72,13 @@ class TremppiServer(SimpleHTTPRequestHandler):
     def do_POST(self):
         parsed_url = urlparse(self.path)
         parsed_path = parsed_url.path[1:] # remove the leading /
-        if parsed_url.query == 'save':
+        if parsed_url.query == 'exit':
+            def kill_me(server):
+                print("shutdown")
+                server.shutdown()
+            Thread(target=kill_me, args=(self._server,)).start()
+            self.success_response('text', ("exit success".encode()))
+        elif parsed_url.query == 'save':
             # writes the content of the message to the file specified by the URL
             length = self.headers['content-length']
             data = self.rfile.read(int(length))

@@ -207,6 +207,7 @@ tremppi = {
             topHTML:
                     '<div class="sidebar_field">' +
                     '<img id="logo" src="logo.png" />' +
+                    '<button id="rename_btn" onclick="tremppi.exit()" class="btn">EXIT</button>' +
                     '</div>',
             bottomHTML:
                     '<div class="sidebar_field">' +
@@ -293,6 +294,16 @@ tremppi = {
             }
             $("#select_name").val(details[1]);
         }
+    },
+    exit: function () {
+        $.ajax({
+            type: "POST",
+            url: tremppi.getServerAddress() + '?exit',
+            fail: tremppi.postFail,
+            success: function(res) { 
+                $('body').html('TREMPPI HAS FINISHED');
+            }
+        });
     },
     delete: function () {
         var old_name = tremppi.current_object;

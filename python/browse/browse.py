@@ -81,4 +81,5 @@ if args.nopen is False:
 
 # Execute the server itself.
 server = HTTPServer(('', int(port)), TremppiServer)
+TremppiServer._server = server
 server.serve_forever()

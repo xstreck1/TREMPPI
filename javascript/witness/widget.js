@@ -94,8 +94,7 @@ tremppi.witness.valuesSetter = function (source, panel) {
             tremppi.witness.createPanelContent(mid_data, 'mid');
 
             if (to_synchronize) {
-                tremppi.cytoscape.synchronize(function () {
-                });
+                tremppi.cytoscape.synchronize(tremppi.witness.loadLabels);
             }
         }
     };
