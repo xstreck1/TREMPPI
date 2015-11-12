@@ -94,6 +94,11 @@ tremppi.properties.listSelect = function (recid) {
         return;
     } else {
         var selected = tremppi.w2ui.findByRecID(tremppi.properties.list.records, recid);
+        if (typeof tremppi.properties.detailed !== 'undefined' )
+        {
+            tremppi.properties.detail.mergeChanges();
+        }
+        
         if (typeof selected === 'undefined') {
             tremppi.setItem("detailed", -1);
         } else {
