@@ -17,3 +17,4 @@ if __name__ == "__main__":
     # generate files
     for widget in widgets:
         configure(DATA_PATH, widget)
+

@@ -5,13 +5,18 @@ size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, cons
 {
 	// If this path is no use
 	if (storage.getVisit(ID) < depth)
+	{
 		return branch;
-
+	}
 	path[depth] = ID;
 
 	// Store if the state is final or part of another path.
-
-	if ((found[ID] <= depth) || (settings.isFinal(ID, product) && !(settings.circ && depth == 0))) 
+	if ((found[ID] <= depth) || 
+		(
+			settings.isFinal(ID, product) && 
+			(!settings.stable || ModelChecker::isStable(parametrization, product._states[ID]._stay_const)) &&  // check if the state is stable if that is required 
+			!(settings.circ && depth == 0))
+		)
 	{
 		for (size_t step = branch; step < depth; step++) {
 			transitions.insert({ path[step], path[step + 1] });
@@ -21,11 +26,9 @@ size_t WitnessSearcher::DFS(const VisitStorage & storage, const StateID ID, cons
 	}
 
 	// Continue with the DFS otherwise.
-
 	else if ((depth < max_depth - 1) && !used[ID]) 
 	{
 		vector<StateID> transports = ModelChecker::broadcastParameters(parametrization, product, ID).first;
-
 
 		for (const StateID & succ : transports) 
 		{
@@ -45,10 +48,8 @@ WitnessSearcher::WitnessSearcher(const ProductStructure & _product) : product(_p
 }
 
 /**
-* Function that executes the whole searching process
-*/
-
-
+ * Function that executes the whole searching process
+ */
 multimap<StateID, StateID> WitnessSearcher::findWitnesses(const CheckerSetting & _settings, const Levels & _parametrization, const VisitStorage & storage) 
 {
 	// Preparation
@@ -68,18 +69,15 @@ multimap<StateID, StateID> WitnessSearcher::findWitnesses(const CheckerSetting &
 }
 
 /**
-* Re-formes the transitions computed during the round into strings.
-* @return  strings with all transitions for each acceptable parametrization
-*/
-
-
+ * Re-formes the transitions computed during the round into strings.
+ * @return  strings with all transitions for each acceptable parametrization
+ */
 const string WitnessSearcher::getOutput(const ProductStructure & product, const size_t max_cost, const multimap<StateID, StateID>& transitions) 
 {
 	string acceptable_paths; // Vector fo actuall data
 
 	vector<StateID> current_depth = product.getInitialStates();
 	size_t cost = 1;
-
 
 	while (max_cost != INF && cost < max_cost) 
 	{
@@ -88,7 +86,6 @@ const string WitnessSearcher::getOutput(const ProductStructure & product, const 
 		for (StateID ID : current_depth) 
 		{
 			auto range = transitions.equal_range(ID);
-
 
 			for (auto it = range.first; it != range.second; it++) 
 			{
@@ -105,8 +102,10 @@ const string WitnessSearcher::getOutput(const ProductStructure & product, const 
 	}
 
 	// remove last semi-colon
-	if (!acceptable_paths.empty())
+	if (!acceptable_paths.empty()) 
+	{
 		acceptable_paths.resize(acceptable_paths.size() - 1);
+	}
 
 	return acceptable_paths;
 }

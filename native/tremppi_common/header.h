@@ -38,7 +38,7 @@
 #include "configure.h"
 
 // For BioSystems
-const std::string VERSION("0.7.0");
+const std::string VERSION("0.7.1");
 
 using namespace std;
 
