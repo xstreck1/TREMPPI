@@ -120,7 +120,7 @@ tremppi.regulations.addQtip = function (panel) {
     var edges = tremppi.regulations[panel].edges();
     var labeller = function (my_data) {
         return 'source: ' + my_data.source + '<br />'
-                + 'threshold: ' + my_data.threshold + '<br />'
+                + 'Threshold: ' + my_data.Threshold + '<br />'
                 + 'target: ' + my_data.target + '<br />'
                 + 'Impact: ' + my_data.Pearson.toFixed(num_of_decimals) + '<br />'
                 + 'Frequency: ' + my_data.Frequency.toFixed(num_of_decimals) + '<br />'
@@ -174,6 +174,10 @@ tremppi.regulations.addGradient = function (relative, panel, my_paper) {
     tremppi.paper.makeText(
             range.min.toFixed(tremppi.regulations.num_of_decimals),
             new paper.Point(tremppi.regulations.bar_left - 75, tremppi.regulations.I_height)
+            );
+    tremppi.paper.makeText(
+            '0',
+            new paper.Point(my_paper.view.viewSize.width/2, tremppi.regulations.I_height)
             );
     tremppi.paper.makeText(
             range.max.toFixed(tremppi.regulations.num_of_decimals),

@@ -13,7 +13,7 @@ tremppi.quantitative.setPanel = function (panel) {
 tremppi.quantitative.createPanelContent = function (data, panel) {
     tremppi.quantitative[panel].records = data.records;
     tremppi.quantitative[panel].header = data.setup.s_name;
-    tremppi.quantitative[panel].refresh();    
+    tremppi.quantitative[panel].refresh();
     tremppi.report.setDescription(panel, data.setup);
 };
 
@@ -38,8 +38,14 @@ tremppi.quantitative.valuesSetter = function (source, panel) {
                 dif_recs.push(dif_rec);
             }
         }
-        
-        tremppi.quantitative.createPanelContent(dif_recs, 'mid');
+
+        var mid = {
+            "records": dif_recs,
+            "setup": {
+                "s_name": tremppi.quantitative.left.header + " - " + tremppi.quantitative.right.header
+            }
+        };
+        tremppi.quantitative.createPanelContent(mid, 'mid');
     };
 };
 

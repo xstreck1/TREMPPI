@@ -160,6 +160,10 @@ tremppi.correlations.addGradient = function (relative, panel, my_paper) {
             new paper.Point(tremppi.correlations.bar_left - 75, tremppi.correlations.C_height)
             );
     tremppi.paper.makeText(
+            '0',
+            new paper.Point(my_paper.view.viewSize.width/2, tremppi.correlations.C_height)
+            );
+    tremppi.paper.makeText(
             range.max.toFixed(tremppi.correlations.num_of_decimals),
             new paper.Point(bar_right + 5, tremppi.correlations.C_height)
             );

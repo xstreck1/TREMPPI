@@ -343,10 +343,10 @@ tremppi.report = {
             if (range.min === range.max) {
                 range.min = 0;
             }
-            if (range.min === Number.POSITIVE_INFINITY) {
+            if (range.min === Number.POSITIVE_INFINITY || range.min === 0) {
                 range.min = tremppi.widget.bounds[param].min;
             }
-            if (range.max === Number.NEGATIVE_INFINITY) {
+            if (range.max === Number.NEGATIVE_INFINITY || range.max === 0) {
                 range.max = tremppi.widget.bounds[param].max;
             }
         }
