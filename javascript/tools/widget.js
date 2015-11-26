@@ -7,7 +7,7 @@
 /* global tremppi */
 
 tremppi.tools.getCommands = function () {
-    var url = tremppi.getServerAddress() + "?getCommands";
+    var url = tremppi.getProjectAddress() + "?getCommands";
     $.ajax({
         type: "GET",
         url: url,
@@ -30,7 +30,7 @@ tremppi.tools.getCommands = function () {
 };
 
 tremppi.tools.getProgress = function () {
-    var url = tremppi.getServerAddress() + "?getProgress";
+    var url = tremppi.getProjectAddress() + "?getProgress";
     $.ajax({
         type: "GET",
         url: url,
@@ -49,7 +49,7 @@ tremppi.tools.getProgress = function () {
 };
 
 tremppi.tools.getLog = function () {
-    var url = tremppi.getServerAddress() + "?getLog";
+    var url = tremppi.getProjectAddress() + "?getLog";
     $.ajax({
         type: "GET",
         url: url,

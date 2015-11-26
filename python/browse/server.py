@@ -2,10 +2,11 @@ __author__ = 'adams_000'
 
 import sys
 from os import replace, remove, fdopen
-from os.path import dirname, join, basename
+from os.path import dirname, join, basename, exists
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
+from init.init import init
 from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
 from tool_manager import ToolManager
@@ -47,6 +48,11 @@ class TremppiServer(SimpleHTTPRequestHandler):
                 return SimpleHTTPRequestHandler.do_GET(self)
             else:
                 self.error_response('text', ('jobs running on ' + names[0] + ', can not delete').encode())
+        elif parsed_url.query[0:len("init+")] == "init+":
+            names = parsed_url.query.split("+")
+            init(names[1])
+            write_projects('.')
+            return SimpleHTTPRequestHandler.do_GET(self)
         elif parsed_url.query[0:len("rename+")] == "rename+":
             names = parsed_url.query.split("+")
             if self._tool_manager.is_free(names[1]):
@@ -62,7 +68,8 @@ class TremppiServer(SimpleHTTPRequestHandler):
             return SimpleHTTPRequestHandler.do_GET(self)
         elif parsed_url.query[0:len("finalize+")] == "finalize+":
             names = parsed_url.query.split("+")
-            remove(join(names[1], data_folder, database_file))
+            if exists(join(names[1], data_folder, database_file)):
+                remove(join(names[1], data_folder, database_file))
             file_path = join(names[1], configure_filename)
             header, data = read_jsonp(file_path)
             data['final'] = True

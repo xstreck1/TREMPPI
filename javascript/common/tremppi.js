@@ -28,16 +28,11 @@ tremppi = {
             }
         };
     },
-    getServerAddress: function () {
-        return "http://" + tremppi.setup.server_location + ":" + tremppi.setup.server_port + "/" + tremppi.project_folder;
+    getRootAddress: function () {
+        return "http://" + tremppi.setup.server_location + ":" + tremppi.setup.server_port + "/";
     },
-    getLocation: function() {
-        if (tremppi.level === 1) {
-            return '/' + tremppi.project_name;
-        }
-        else {
-            return '';
-        }
+    getProjectAddress: function () {
+        return tremppi.getRootAddress() + tremppi.project_folder;
     },
     makeDataFilepath: function (filename) {
         if (typeof filename === 'undefined') {
@@ -51,7 +46,7 @@ tremppi = {
             tremppi.log("no data specified in saveData", "error");
         }
         var content = JSON.stringify(data, null, '\t');
-        var url = tremppi.getServerAddress() + tremppi.makeDataFilepath(filename) + "?save";
+        var url = tremppi.getProjectAddress() + tremppi.makeDataFilepath(filename) + "?save";
         $.ajax({
             type: "POST",
             url: url,
@@ -113,7 +108,7 @@ tremppi = {
         }
     },
     setPage: function () {
-        var url = tremppi.getServerAddress() + tremppi.widget_name + ".html?page";
+        var url = tremppi.getProjectAddress() + tremppi.widget_name + ".html?page";
         $.ajax({
             type: "POST",
             url: url
@@ -197,7 +192,7 @@ tremppi = {
             if (tremppi.widget_name === 'tools') {
                 if (tremppi.level === 1) {
                     var project_controls =
-                            '<button class="btn" id="new_project_btn" onclick="tremppi.cloneProject()" >NEW PROJECT</button>' +
+                            '<button class="btn" id="new_project_btn" onclick="tremppi.newProject()" >NEW PROJECT</button>' +
                             '<button class="btn" id="clone_btn" onclick="tremppi.cloneProject()" >CLONE</button>' +
                             '<input  id="select_name" type="text" name="Fill to create or rename" value=' + select_name + '>' +
                             '<button class="btn" id="rename_btn" onclick="tremppi.renameProject()" >RENAME</button>' +
@@ -205,7 +200,7 @@ tremppi = {
                             '<button class="btn" id="finalize_btn" onclick="tremppi.finalizeProject()" >FINALIZE</button>';
                 }
                 else {
-                    var project_controls = 
+                    var project_controls =
                             '<button class="btn" id="finalize_btn" onclick="tremppi.finalizeProject()" >FINALIZE</button>';
                 }
             }
@@ -326,7 +321,7 @@ tremppi = {
         };
         $.ajax({
             type: "GET",
-            url: tremppi.getServerAddress(),
+            url: tremppi.getRootAddress(),
             fail: function (res) {
                 make_static();
             },
@@ -343,7 +338,7 @@ tremppi = {
     exit: function () {
         $.ajax({
             type: "POST",
-            url: tremppi.getServerAddress() + '?exit',
+            url: tremppi.getProjectAddress() + '?exit',
             fail: tremppi.postFail,
             success: function (res) {
                 $('body').html('TREMPPI HAS FINISHED');
@@ -354,7 +349,7 @@ tremppi = {
         var old_name = tremppi.current_object;
         $.ajax({
             type: "POST",
-            url: tremppi.getServerAddress() + tremppi.current_file + '?delete',
+            url: tremppi.getProjectAddress() + tremppi.current_file + '?delete',
             fail: tremppi.postFail,
             success: function (res) {
                 tremppi.sidebar.remove('file+' + old_name);
@@ -366,7 +361,7 @@ tremppi = {
         var new_name = $("#select_name").val();
         $.ajax({
             type: "POST",
-            url: tremppi.getServerAddress() + tremppi.current_file + '?rename+' + new_name,
+            url: tremppi.getProjectAddress() + tremppi.current_file + '?rename+' + new_name,
             fail: tremppi.postFail,
             success: function (res) {
                 tremppi.sidebar.insert('files', 'file+' + old_name, {id: 'file+' + new_name, text: new_name});
@@ -376,6 +371,25 @@ tremppi = {
     },
     save: function () {
         tremppi.saveData(tremppi.widget.getData());
+    },
+    nameValid: function (new_name) {
+        if (new_name === '') {
+            tremppi.log('No name specified', 'error');
+            return false;
+        }
+        else if (tremppi.projects.indexOf(new_name) !== -1) {
+            tremppi.log('The name ' + new_name + ' is already taken', 'error');
+            return false;
+        }
+        else {
+            return true;
+        }
+    },
+    newProject: function () {
+        var new_name = $("#select_name").val();
+        if (tremppi.nameValid(new_name)) {
+            location.replace('/' + new_name + '/index.html?init+' + new_name + '+' + Math.random().toString(), "_self");
+        }
     },
     cloneProject: function () {
         if (confirm('Do you really want to clone the project ' + tremppi.project_name + '?')) {
@@ -392,12 +406,14 @@ tremppi = {
         if (confirm('Do you really want to finalize the project ' + tremppi.project_name + '?')) {
             tremppi.projects.splice(tremppi.projects.indexOf(tremppi.project_name), 1);
             var project = tremppi.level === 1 ? tremppi.project_name : '.';
-            location.replace(tremppi.getLocation() + '/index.html?finalize+' + project + '+' + Math.random().toString(), "_self");
+            location.replace(tremppi.project_folder + '/index.html?finalize+' + project + '+' + Math.random().toString(), "_self");
         }
     },
     renameProject: function () {
         var new_name = $("#select_name").val();
-        location.replace('/' + new_name + '/index.html?rename+' + tremppi.project_name + '+' + new_name + '+' + Math.random().toString(), "_self");
+        if (tremppi.nameValid(new_name)) {
+            location.replace('/' + new_name + '/index.html?rename+' + tremppi.project_name + '+' + new_name + '+' + Math.random().toString(), "_self");
+        }
     },
     postFail: function (res) {
         tremppi.log(res, 'error');

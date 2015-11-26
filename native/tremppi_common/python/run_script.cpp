@@ -7,6 +7,7 @@
 int run_script(const string command, int argc, char ** argv) 
 {
 	TremppiSystem::initiate("tremppi_" + command, argc, argv);
+	Logging logging;
 
 	// Check if the script exists
 	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };

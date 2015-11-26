@@ -9,14 +9,9 @@ from tremppi.file_manipulation import copyanything
 from tremppi.project_files import generate_data
 from tremppi.header import folders, widgets, source_folder, data_folder, configure_filename, system_init, system, version
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
-    parser.add_argument('--path', help='specify the location where the file gets created.')
-    parser.add_argument('name', help='name of the newly created model')
-    args = parser.parse_args()
 
-    system_init(sys.argv[0], args)
-    DEST_CONTENT = join(system.DEST_PATH, args.name)
+def init(name):
+    DEST_CONTENT = join(system.DEST_PATH, name)
     if os.path.exists(DEST_CONTENT):
         raise Exception('The destination folder ' + DEST_CONTENT + ' already exists, aborting.')
 
@@ -40,7 +35,18 @@ if __name__ == "__main__":
         setup.write('tremppi.setup = { ' +
                     '\t"server_port": 8080, \n' +
                     '\t"server_location": "localhost", \n' +
-                    '\t"project_name": "' + args.name + '",\n' +
+                    '\t"project_name": "' + name + '",\n' +
                     '\t"version": "' + version + '"\n' +
                     '};'
                     )
+
+    open(join(DEST_CONTENT, 'log.txt'), 'w+')
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
+    parser.add_argument('--path', help='specify the location where the file gets created.')
+    parser.add_argument('name', help='name of the newly created model')
+    args = parser.parse_args()
+
+    system_init(sys.argv[0], args)
+    init(args.name)
