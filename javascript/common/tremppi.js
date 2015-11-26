@@ -52,28 +52,21 @@ tremppi = {
             url: url,
             data: content,
             success: function (res) {
-                if (typeof filename === 'undefined') {
-                    tremppi.log(tremppi.widget_name + " saved successfully.");
-                } else {
-                    tremppi.log(filename + " saved successfully.");
-                }
+                tremppi.log(url + " saved successfully.");
             },
-            fail: function (res) {
-                tremppi.log("Load of the file " + filename + " failed! Data were not saved!");
+            error: function (res) {
+                tremppi.log("Save of " + url + " failed! Data were not saved!", 'error');
             }
         });
     },
     getData: function (callback, filename) {
-        $.getJSON(tremppi.makeDataFilepath(filename), callback)
+        var to_load = tremppi.makeDataFilepath(filename);
+        $.getJSON(to_load, callback)
                 .done(function () {
-                    if (typeof filename === 'undefined') {
-                        tremppi.log(tremppi.widget_name + " loaded successfully.");
-                    } else {
-                        tremppi.log(filename + " loaded successfully.");
-                    }
+                    tremppi.log(to_load + " loaded successfully.");
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                    tremppi.log("Load of the file " + filename + " failed!");
+                    tremppi.log("Load of the file " + to_load + " failed!", 'error');
                 });
     },
     makeStorageKey: function (key) {
@@ -322,7 +315,7 @@ tremppi = {
         $.ajax({
             type: "GET",
             url: tremppi.getRootAddress(),
-            fail: function (res) {
+            error: function (res) {
                 make_static();
             },
             success: function (res) {
@@ -339,7 +332,7 @@ tremppi = {
         $.ajax({
             type: "POST",
             url: tremppi.getProjectAddress() + '?exit',
-            fail: tremppi.postFail,
+            error: tremppi.postFail,
             success: function (res) {
                 $('body').html('TREMPPI HAS FINISHED');
             }
@@ -350,7 +343,7 @@ tremppi = {
         $.ajax({
             type: "POST",
             url: tremppi.getProjectAddress() + tremppi.current_file + '?delete',
-            fail: tremppi.postFail,
+            error: tremppi.postFail,
             success: function (res) {
                 tremppi.sidebar.remove('file+' + old_name);
             }
@@ -362,7 +355,7 @@ tremppi = {
         $.ajax({
             type: "POST",
             url: tremppi.getProjectAddress() + tremppi.current_file + '?rename+' + new_name,
-            fail: tremppi.postFail,
+            error: tremppi.postFail,
             success: function (res) {
                 tremppi.sidebar.insert('files', 'file+' + old_name, {id: 'file+' + new_name, text: new_name});
                 tremppi.sidebar.remove('file+' + old_name);
