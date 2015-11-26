@@ -30,6 +30,11 @@ tremppi.tools.killAll = function (command) {
 
 tremppi.tools.addToQueue = function (command) {
     var url = tremppi.getServerAddress() + "?tremppi+" + command;
+    if (command === 'clean'){
+        if (!confirm('Do you really want to call ' + command + '? This operation is irreversible.')) {
+            return;
+        }
+    }
     $.ajax({
         type: "POST",
         url: url,

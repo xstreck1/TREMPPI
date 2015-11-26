@@ -8,7 +8,7 @@
 
 tremppi.properties.page = function () {
     if (typeof tremppi.properties.setup === 'undefined') {
-        $("#widget").html("The preperty description has not been configured yet. The Tremppi Spawn command needs to be called.");
+        $("#widget").html("The property description has not been configured yet. The Tremppi Spawn command needs to be called.");
     }
     else {
         $("#widget").append('<div id="property_list"></div>');

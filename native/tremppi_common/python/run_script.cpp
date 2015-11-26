@@ -6,7 +6,7 @@
 
 int run_script(const string command, int argc, char ** argv) 
 {
-	TremppiSystem::initiate("tremppi_python", argc, argv);
+	TremppiSystem::initiate("tremppi_" + command, argc, argv);
 
 	// Check if the script exists
 	bfs::path file_path = TremppiSystem::HOME_PATH / bfs::path{ "python" } / bfs::path{ command } / bfs::path{ command + ".py" };
@@ -72,4 +72,9 @@ int tremppi_update(int argc, char ** argv)
 int tremppi_clean(int argc, char ** argv)
 {
 	return run_script("clean", argc, argv);
+}
+
+int tremppi_finalize(int argc, char ** argv)
+{
+	return run_script("finalize", argc, argv);
 }

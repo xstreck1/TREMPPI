@@ -72,6 +72,7 @@ int tremppi_cost(int argc, char ** argv);
 int tremppi_configure(int argc, char ** argv);
 int tremppi_correlations(int argc, char ** argv);
 int tremppi_express(int argc, char ** argv);
+int tremppi_finalize(int argc, char ** argv);
 int tremppi_init(int argc, char ** argv);
 int tremppi_impact(int argc, char ** argv);
 int tremppi_sign(int argc, char ** argv);

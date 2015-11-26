@@ -11,7 +11,7 @@ tremppi.properties.makeList = function () {
         name: 'list',
         columns: tremppi.properties.setup.list_columns,
         show : {
-            toolbar: true, selectColumn: false, toolbarSave: false,
+            toolbar: !tremppi.final, selectColumn: false, toolbarSave: false,
             toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
             toolbarAdd: false, toolbarDelete: false
         }
@@ -25,7 +25,7 @@ tremppi.properties.makeDetail = function () {
         columns: tremppi.properties.setup.detail_columns,
         columnGroups: tremppi.properties.setup.detail_groups,
         show : {
-            toolbar: true, header: true, selectColumn: false, toolbarSave: false,
+            toolbar: !tremppi.final, header: true, selectColumn: false, toolbarSave: false,
             toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
             toolbarAdd: false, toolbarDelete: false
         }

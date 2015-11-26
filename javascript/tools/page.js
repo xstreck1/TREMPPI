@@ -39,7 +39,9 @@ tremppi.tools.tool_list = [
         category: "UTILITY",
         tools: [
             {name: "configure", description: "call to explicitly recreate data configuration files"},
-            {name: "update", description: "update the javascript and html files in the project directory"}
+            {name: "update", description: "update the javascript and html files in the project directory"},
+            {name: "clean", description: "call to remove all the data files"},
+            {name: "finalize", description: "call to data for computation and finalize the project"}
         ]
     }
 ];

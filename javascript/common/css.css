@@ -24,7 +24,7 @@ html {
     background-color: #FAFAFA;
 }
 
-#select_name, #rename_btn, #delete_btn, #clone_btn, #save_btn {
+#select_name, #rename_btn, #delete_btn, #clone_btn, #save_btn, #new_project_btn, #finalize_btn, #clean_btn {
     width: 100%;
     margin: 0px;
 }
@@ -58,6 +58,12 @@ a.page_content:link {
     overflow: auto;
     white-space: nowrap;
     background-color: #EEEEEE;
+}
+
+#static_text {
+    font-family: monospace;
+    font-size: 20px; 
+    text-align: center;
 }
 
 button {

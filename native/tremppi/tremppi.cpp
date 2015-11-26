@@ -11,6 +11,8 @@ map<string, pair<int(*)(int, char**), string> > tremppi_functions =
 		{ "bias", { tremppi_bias, "label parametrizations with their bias" } },
 		{ "correlations", { tremppi_correlations, "create a correlations graph report"} },
 		{ "cost", { tremppi_cost, "conduct a model check validate parametrizations agaings selected LTL properties" } },
+		{ "configure",{ tremppi_configure, "call to explicitly recreate data configuration files" } },
+		{ "finalize",{ tremppi_clean, "remove the database and disable all the controls" } },
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
 		{ "impact", { tremppi_impact, "label with the impact of a regulator on its target" } },
 		{ "init", { tremppi_init, "create a new model with a model viewer" } },

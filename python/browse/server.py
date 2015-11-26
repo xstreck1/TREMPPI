@@ -6,8 +6,8 @@ from os.path import dirname, join, basename
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler
-from tremppi.header import last_page_filename
-from tremppi.file_manipulation import copyanything
+from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
+from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
 from tool_manager import ToolManager
 from tremppi.configure import configure
 from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
@@ -59,6 +59,14 @@ class TremppiServer(SimpleHTTPRequestHandler):
             names = parsed_url.query.split("+")
             copyanything(names[1], names[1] + '(clone)')
             write_projects('.')
+            return SimpleHTTPRequestHandler.do_GET(self)
+        elif parsed_url.query[0:len("finalize+")] == "finalize+":
+            names = parsed_url.query.split("+")
+            remove(join(names[1], data_folder, database_file))
+            file_path = join(names[1], configure_filename)
+            header, data = read_jsonp(file_path)
+            data['final'] = True
+            write_jsonp(file_path, header, data)
             return SimpleHTTPRequestHandler.do_GET(self)
         elif parsed_url.query[0:len('getProgress')] == 'getProgress':
             data = self._tool_manager.get_progress()
