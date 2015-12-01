@@ -257,7 +257,6 @@ tremppi = {
         tremppi.sidebar = w2ui.layout.get('left').content.sidebar;
         tremppi.sidebar.select(tremppi.widget_name);
         tremppi.sidebar.on('*', tremppi.sidebarEvent);
-        tremppi.setExit();
 
         // Set the widget
         tremppi.widget.page();
@@ -266,8 +265,8 @@ tremppi = {
         // Load the specific data
         $.ajaxSetup({cache: false});
         tremppi.getData(tremppi.widget.setData);
-    }
-    ,
+        tremppi.setExit();
+    },
     pickFile: function (filename) {
         $("#select_name").removeAttr('disabled').val(filename);
         $("#rename_btn").removeAttr('disabled');
@@ -412,7 +411,11 @@ tremppi = {
         }
     },
     finalizeProject: function () {
-        if (confirm('Do you really want to finalize the project ' + tremppi.project_name + '?')) {
+        if (tremppi.projects.length <= 1)
+        {
+            tremppi.log('Trying to delete the only project. At least one TREMPPI project must exists at any time.', 'error');
+        }
+        else if (confirm('Do you really want to finalize the project ' + tremppi.project_name + '?')) {
             tremppi.projects.splice(tremppi.projects.indexOf(tremppi.project_name), 1);
             var project = tremppi.level === 1 ? tremppi.project_name : '.';
             location.replace(tremppi.project_folder + '/index.html?finalize+' + project + '+' + Math.random().toString(), "_self");
