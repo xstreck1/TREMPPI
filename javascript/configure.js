@@ -1,1 +1,1 @@
-tremppi.setup = {"version": "0.7.2", "server_location": "localhost", "server_port": "8080", "project_name": "javascript", "final": false};
+tremppi.setup = {"server_location": "localhost", "server_port": "8080", "final": false, "version": "0.8.0", "project_name": "javascript"};

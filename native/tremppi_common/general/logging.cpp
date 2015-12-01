@@ -85,7 +85,7 @@ void Logging::step()
 		progress += Logging::phases[i].step_no / (Logging::phases[i].step_count * frac);
 		frac *= Logging::phases[i].step_count;
 	}
-	int progress_i = 100 * progress * SHIFT_FACTOR;
+	int progress_i = static_cast<int>(100 * progress * SHIFT_FACTOR);
 	// print only if enough of the change accumulates
 
 	if (progress_i < 10 * SHIFT_FACTOR) {

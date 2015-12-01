@@ -8,7 +8,7 @@ div.category {
 
 #commands_holder {
     width: 100%;
-    height: 220pt;
+    height: 265pt;
 }
 
 button.tool_button {
@@ -16,7 +16,7 @@ button.tool_button {
 }
 
 #reports {
-    height: calc(100% - 225pt);
+    height: calc(100% - 270pt);
 }
 
 #kill_button {

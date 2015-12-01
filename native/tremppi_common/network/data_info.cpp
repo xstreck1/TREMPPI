@@ -63,7 +63,7 @@ CompID DataInfo::getCompID(const RegInfos & reg_infos, const string & name)
 
 CompID DataInfo::getCompID(const map<string, CompID> & components, const string & name) 
 {
-	if (components.count(name) < 1)
+	if (components.count(name) < 1u)
 		throw runtime_error("Component " + name + " not found");
 	else
 		return components.at(name);
@@ -77,7 +77,7 @@ size_t DataInfo::RegIDToRegNo(const RegInfo & reg_info, const CompID reg_ID)
 CompID DataInfo::RegNoToRegID(const RegInfo & reg_info, const size_t reg_no) 
 {
 	auto it = begin(reg_info.regulators);
-	for (int i = 0; i < reg_no; i++) 
+	for (size_t i = 0; i < reg_no; i++) 
 	{
 		it++;
 	}

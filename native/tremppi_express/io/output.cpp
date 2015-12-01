@@ -90,7 +90,7 @@ string Output::pdnfToFormula(const RegFuncs & funcs, const RegFunc & reg_func, c
 {
 	string result;
 
-	for (const ActLevel target_val : cscope(pdnfs))
+	for (const size_t target_val : cscope(pdnfs))
 	{
 		for (const PMin & pmin : pdnfs[target_val]) 
 		{

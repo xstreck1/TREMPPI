@@ -98,7 +98,7 @@ ActLevel ModelTranslators::getThreshold(const Model & model, const string & cont
 		number++;
 	}
 	// Check if the threshold is valid
-	size_t thrs = boost::lexical_cast<size_t>(to_return);
+	ActLevel thrs = boost::lexical_cast<ActLevel>(to_return);
 	if (thrs != 0 && find(thresholds.begin(), thresholds.end(), thrs) == thresholds.end())
 		throw runtime_error("The threshold value \"" + to_return + "\" is not valid for the context " + quote(context) + ".");
 
