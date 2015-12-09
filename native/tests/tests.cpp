@@ -1,14 +1,4 @@
-#include "python_tests.hpp"
-#include "common_tests.hpp"
-#include "spawn_tests.hpp"
-#include "express_tests.hpp"
-#include "validate_tests.hpp"
-#include "regulations_tests.hpp"
-#include "bias_tests.hpp"
-#include "sign_tests.hpp"
-#include "wintess_tests.hpp"
-#include "quantitative_tests.hpp"
-#include "qualitative_tests.hpp"
+#include "tests.hpp"
 
 TEST(CoreTest, AllPrograms)
 {

@@ -1,11 +1,6 @@
 #pragma once
 
-#include <tremppi_validate/compute/analysis_manager.hpp>
-
-#include "witness_tests_data.hpp"
-
-int tremppi_witness(int, char**);
-
+#include "tests.hpp"
 
 int basic_witness_test() 
 {

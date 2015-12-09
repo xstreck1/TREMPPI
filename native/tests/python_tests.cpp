@@ -1,11 +1,9 @@
 #pragma once
 
 #include <boost/python/detail/wrap_python.hpp>
-
 #include <tremppi_common/python/python_functions.hpp>
 
-#include "common_tests_data.hpp"
-
+#include "tests.hpp"
 
 int basic_init_test() 
 {
@@ -13,7 +11,6 @@ int basic_init_test()
 	ArgPtr arg_ptr(arguments);
 	return (tremppi_init(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
-
 
 int basic_update_test() 
 {

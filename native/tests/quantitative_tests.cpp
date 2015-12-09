@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common_tests_data.hpp"
+#include "tests.hpp"
 
 int basic_quantitative_test()
 {

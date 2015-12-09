@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common_tests_data.hpp"
+#include "tests.hpp"
 
-// Print the basic model
+// Print the basic model
 void createModel(const bfs::path & example_model_path) 
 {
 	Json::Value root;
@@ -27,8 +27,7 @@ void createModel(const bfs::path & example_model_path)
 	ofstream data_file((example_model_path / DATA_FOLDER / bfs::path{ NETWORK_FILENAME }).string(), ios::out);
 	string data = writer.write(root);
 	data_file << data;
-}
-
+}
 void createSelect(const bfs::path & example_model_path) 
 {
 	Json::Value all;
@@ -42,8 +41,7 @@ void createSelect(const bfs::path & example_model_path)
 	ofstream data_file((example_model_path / DATA_FOLDER / bfs::path{ SELECTION_FILENAME }).string(), ios::out);
 	string data = writer.write(root);
 	data_file << data;
-}
-
+}
 int basic_spawn_test() 
 {
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };

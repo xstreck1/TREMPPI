@@ -2,9 +2,8 @@
 
 #include <tremppi_validate/compute/analysis_manager.hpp>
 
+#include "tests.hpp"
 #include "validate_tests_data.hpp"
-
-int tremppi_validate(int, char**);
 
 // Print the basic model
 void createProperties(const bfs::path & example_model_path)

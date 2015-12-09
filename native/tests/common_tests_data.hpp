@@ -9,7 +9,6 @@
 const string TEST_FOLDER = "projects";
 const string TEST_PROJECT = "test_project";
 
-
 class CommonTest : public ::testing::Test 
 {
 protected:
