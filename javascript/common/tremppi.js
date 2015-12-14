@@ -28,8 +28,16 @@ tremppi = {
             }
         };
     },
+    getHostAddress: function() {
+        return window.location.protocol + "//"+ window.location.host + ":" + window.location.port + "/";
+    },
     getRootAddress: function () {
-        return "http://" + tremppi.setup.server_location + ":" + tremppi.setup.server_port + "/";
+        var path = window.location.pathname;
+        var directory = path.substring(0, path.lastIndexOf('/'));
+        if (tremppi.level === 1) {
+            directory += "../";
+        }
+        return tremppi.getHostAddress() + directory;
     },
     getProjectAddress: function () {
         return tremppi.getRootAddress() + tremppi.project_folder;
@@ -146,7 +154,7 @@ tremppi = {
             tremppi.level = 0;
         }
         else {
-            tremppi.project_name = window.location.pathname.split("/")[1];
+            tremppi.project_name = tremppi.setup.project_name;
             tremppi.project_folder = tremppi.project_name + "/";
             tremppi.level = 1;
         }
@@ -375,7 +383,7 @@ tremppi = {
     newProject: function () {
         var new_name = prompt("Please enter the name for the new project.", "");
         if (new_name !== null && tremppi.projectNameValid(new_name)) {
-            location.replace('/' + new_name + '/index.html?init+' + new_name + '+' + Math.random().toString(), "_self");
+            location.replace(tremppi.getRootAddress() + new_name + '/index.html?init+' + new_name + '+' + Math.random().toString(), "_self");
         }
     },
     save: function () {
@@ -396,13 +404,13 @@ tremppi = {
     },
     cloneProject: function () {
         if (confirm('Do you really want to clone the project ' + tremppi.project_name + '?')) {
-            location.replace('/' + tremppi.project_name + '(clone)/tools.html?clone+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
+            location.replace(tremppi.getRootAddress() + tremppi.project_name + '(clone)/tools.html?clone+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
         }
     },
     deleteProject: function () {
         if (confirm('Do you really want to delete the project ' + tremppi.project_name + '?')) {
             tremppi.projects.splice(tremppi.projects.indexOf(tremppi.project_name), 1);
-            location.replace('/' + tremppi.projects[0] + '/tools.html?delete+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
+            location.replace(tremppi.getRootAddress() + tremppi.projects[0] + '/tools.html?delete+' + tremppi.project_name + '+' + Math.random().toString(), "_self");
         }
     },
     finalizeProject: function () {
@@ -413,13 +421,13 @@ tremppi = {
         else if (confirm('Do you really want to finalize the project ' + tremppi.project_name + '?')) {
             tremppi.projects.splice(tremppi.projects.indexOf(tremppi.project_name), 1);
             var project = tremppi.level === 1 ? tremppi.project_name : '.';
-            location.replace('/' + tremppi.project_name + '/tools.html?finalize+' + project + '+' + Math.random().toString(), "_self");
+            location.replace(tremppi.getRootAddress() + tremppi.project_name + '/tools.html?finalize+' + project + '+' + Math.random().toString(), "_self");
         }
     },
     renameProject: function () {
         var new_name = prompt("Please enter the new name for the project.", tremppi.project_name);
         if (new_name !== null && tremppi.projectNameValid(new_name)) {
-            location.replace('/' + new_name + '/tools.html?rename+' + tremppi.project_name + '+' + new_name + '+' + Math.random().toString(), "_self");
+            location.replace(tremppi.getRootAddress() + new_name + '/tools.html?rename+' + tremppi.project_name + '+' + new_name + '+' + Math.random().toString(), "_self");
         }
     },
     postFail: function (res) {

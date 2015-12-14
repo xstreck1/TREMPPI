@@ -89,7 +89,7 @@ int tremppi_validate()
 		}
 
 		// Analysis of parametrizations
-		ParametrizationReader par_reader;
+		ParametrizationReader par_reader(reg_infos);
 		par_reader.select(reg_infos, select, db);
 		try
 		{
@@ -104,19 +104,22 @@ int tremppi_validate()
 			sqlite3pp::transaction xct(db);
 			while (par_reader.next())
 			{
-				tuple<size_t, multimap<StateID, StateID>, double> result;
 				Levels parametrization = par_reader.getParametrization();
-				ConstructionManager::restrictProperties(reg_infos, automaton, parametrization);
-				result = analysis_manager.check(parametrization);
+				// Skip not normalized
+				if (par_reader.isNormalized(parametrization, reg_infos)) {
+					tuple<size_t, multimap<StateID, StateID>, double> result;
+					ConstructionManager::restrictProperties(reg_infos, automaton, parametrization);
+					result = analysis_manager.check(parametrization);
 
-				// Parametrization was considered satisfying.
-				string witness_path;
-				if (get<0>(result) != INF && validate_setup.trace)
-				{
-					witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
+					// Parametrization was considered satisfying.
+					string witness_path;
+					if (get<0>(result) != INF && validate_setup.trace)
+					{
+						witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
+					}
+
+					output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 				}
-
-				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
 				logging.step();
 			}
 			xct.commit();

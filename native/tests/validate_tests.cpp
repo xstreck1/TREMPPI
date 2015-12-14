@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tremppi_validate/compute/analysis_manager.hpp>
+#include <tremppi_validate/io/parametrization_reader.hpp>
 
 #include "tests.hpp"
 #include "validate_tests_data.hpp"
@@ -146,4 +147,11 @@ TEST_F(ValidateTest, CycleProperty)
 	EXPECT_EQ(3, get<0>(results)) << "Two-step loop.";
 	ASSERT_EQ(2, get<1>(results).size()) << "Two-step loop.";
 	EXPECT_DOUBLE_EQ(1.0 , get<2>(results)) << "Robustnes 1---deterministic path.";
+}
+
+TEST_F(ValidateTest, Normaliaztion)
+{
+	ParametrizationReader reader(r_multi_val);
+	EXPECT_FALSE(reader.isNormalized({ 0 , 1 ,2 , 1, 2, 0 }, r_multi_val));
+	EXPECT_TRUE(reader.isNormalized({ 0 , 1 ,2 , 1, 2, 1 }, r_multi_val));
 }
