@@ -30,7 +30,7 @@ Win32*
 *.sdf
 *.sln
 *.suo
-*.vs/
+*.vs/*
 
 # NetBeans
 *nbproject*
