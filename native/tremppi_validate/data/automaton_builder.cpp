@@ -155,7 +155,7 @@ void AutomatonBuilder::buildAutomaton(const PropertyInfo & property_info, const 
 	{
 		automaton._aut_type = BA_finite;
 		// For 1 measurement only the open optimization is not possible
-		const size_t N = max(1u, static_cast<size_t>(property_info.measurements.size() - 1u));
+		const size_t N = max(1, static_cast<int>(property_info.measurements.size() - 1));
 		buildSequence(property_info, bounds, names, automaton, N, property_info.measurements.size());
 	}
 	else if (property_info.ending == "stable")
