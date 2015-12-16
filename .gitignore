@@ -44,6 +44,7 @@ projects/*
 javascript/data*
 javascript/log.txt
 javascript/last_page.txt
+projects - Copy
 
 # created files
 *.sqlite

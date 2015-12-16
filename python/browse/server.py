@@ -71,14 +71,32 @@ class TremppiServer(SimpleHTTPRequestHandler):
         elif parsed_url.query[0:len("rename+")] == "rename+":
             names = parsed_url.query.split("+")
             if self._tool_manager.is_free(names[1]):
+                file_path = join(names[1], configure_filename)
+                header, data = read_jsonp(file_path)
+                data['project_name'] = names[2]
+                write_jsonp(file_path, header, data)
+
                 replace(names[1], names[2])
+
                 write_projects('.')
                 return SimpleHTTPRequestHandler.do_GET(self)
             else:
                 self.error_response('text', ('jobs running on ' + names[0] + ', can not rename').encode())
         elif parsed_url.query[0:len("clone+")] == "clone+":
             names = parsed_url.query.split("+")
+
+            file_path = join(names[1], configure_filename)
+            header, data = read_jsonp(file_path)
+            data['project_name'] = names[1] + '(clone)'
+            write_jsonp(file_path, header, data)
+
             copyanything(names[1], names[1] + '(clone)')
+
+            file_path = join(names[1], configure_filename)
+            header, data = read_jsonp(file_path)
+            data['project_name'] = names[1]
+            write_jsonp(file_path, header, data)
+
             write_projects('.')
             return SimpleHTTPRequestHandler.do_GET(self)
         elif parsed_url.query[0:len("finalize+")] == "finalize+":

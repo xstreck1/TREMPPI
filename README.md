@@ -3,7 +3,7 @@ TREMPPI
 
 Toolkit for Reverse Engineering of Molecular Pathways via Parameter Identification
 
-* USER GUIDE: http://dibimath.github.io/TREMPPI/ *
+USER GUIDE: http://dibimath.github.io/TREMPPI/ 
 
 Licenced under GNU GPL v3: http://www.gnu.org/licenses/gpl-3.0.en.html
 

@@ -42,11 +42,11 @@ tremppi = {
         };
     },
     getHostAddress: function() {
-        return window.location.protocol + "//"+ window.location.host + ":" + window.location.port + "/";
+        return window.location.protocol + "//"+ window.location.host;
     },
     getRootAddress: function () {
         var path = window.location.pathname;
-        var directory = path.substring(0, path.lastIndexOf('/'));
+        var directory = path.substring(0, path.lastIndexOf('/') + 1);
         if (tremppi.level === 1) {
             directory += "../";
         }
@@ -326,7 +326,7 @@ tremppi = {
         };
         $.ajax({
             type: "GET",
-            url: tremppi.getRootAddress(),
+            url: tremppi.getRootAddress() + '/',
             error: function (res) {
                 make_static();
             },
@@ -373,6 +373,10 @@ tremppi = {
             tremppi.log('The name ' + new_name + ' is already taken', 'error');
             return false;
         }
+        else if (new_name.indexOf(' ') >= 0) {
+            tremppi.log('No whitespace allowed', 'error');
+            return false;
+        }
         else {
             return true;
         }
@@ -409,6 +413,10 @@ tremppi = {
         }
         else if (tremppi.projects.indexOf(new_name) !== -1) {
             tremppi.log('The name ' + new_name + ' is already taken', 'error');
+            return false;
+        }
+        else if (new_name.indexOf(' ') >= 0) {
+            tremppi.log('No whitespace allowed', 'error');
             return false;
         }
         else {
