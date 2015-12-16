@@ -1,7 +1,25 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #pragma once
 
 #include <tremppi_validate/compute/analysis_manager.hpp>
-#include <tremppi_validate/io/parametrization_reader.hpp>
 
 #include "tests.hpp"
 #include "validate_tests_data.hpp"
@@ -147,11 +165,4 @@ TEST_F(ValidateTest, CycleProperty)
 	EXPECT_EQ(3, get<0>(results)) << "Two-step loop.";
 	ASSERT_EQ(2, get<1>(results).size()) << "Two-step loop.";
 	EXPECT_DOUBLE_EQ(1.0 , get<2>(results)) << "Robustnes 1---deterministic path.";
-}
-
-TEST_F(ValidateTest, Normaliaztion)
-{
-	ParametrizationReader reader(r_multi_val);
-	EXPECT_FALSE(reader.isNormalized({ 0 , 1 ,2 , 1, 2, 0 }, r_multi_val));
-	EXPECT_TRUE(reader.isNormalized({ 0 , 1 ,2 , 1, 2, 1 }, r_multi_val));
 }

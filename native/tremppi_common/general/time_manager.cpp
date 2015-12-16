@@ -8,7 +8,7 @@ void TimeManager::setStartTime()
 {
 	TimeManager::start_time = chrono::system_clock::now();
 }
-
+
 void TimeManager::startClock(const string clock_name) 
 {
 	if (clocks.find(clock_name) != clocks.end())
@@ -16,8 +16,7 @@ void TimeManager::startClock(const string clock_name)
 	clocks.insert(make_pair(clock_name, chrono::steady_clock::now()));
 
 	DEBUG_LOG << "Clock " << quote(clock_name) << " started.";
-}
-
+}
 void TimeManager::writeClock(const string clock_name) 
 {
 	// Find the clock and output time difference
@@ -29,22 +28,25 @@ void TimeManager::writeClock(const string clock_name)
 		DEBUG_LOG << "Clock " << quote(clock_name) << " counted " << time_span.count() << "s.";
 	}
 	else  // If you do not find them, fail
+	{
 		throw runtime_error(clock_name + " have not been started until now. Error requesting the clock.");
+	}
 }
-
+
 void TimeManager::killClock(const string clock_name) 
 {
 	if (clocks.find(clock_name) == clocks.end())
+	{
 		throw runtime_error(clock_name + " clock are not present. Error when trying to kill.");
+	}
 	clocks.erase(clock_name);
 }
-
+
 void TimeManager::resetClock(const string clock_name) 
 {
 	killClock(clock_name);
 	startClock(clock_name);
-}
-
+}
 string TimeManager::getTime() 
 {
 	string result;
@@ -55,7 +57,7 @@ string TimeManager::getTime()
 
 	return result;
 }
-
+
 string TimeManager::getTimeStamp() 
 {
 	string result;
@@ -64,11 +66,17 @@ string TimeManager::getTimeStamp()
 	{
 		string result = to_string(val);
 		if (result.size() > 2)
+		{
 			return result.substr(2, 2);
+		}
 		else if (result.size() < 2)
+		{
 			return "0" + result;
+		}
 		else
+		{
 			return result;
+		}
 	};
 
 	time_t tt = chrono::system_clock::to_time_t(start_time);

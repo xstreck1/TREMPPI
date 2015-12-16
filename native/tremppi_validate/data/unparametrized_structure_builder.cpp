@@ -1,5 +1,24 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include "unparametrized_structure_builder.hpp"
-
+
 bool UnparametrizedStructureBuilder::testRegulators(const vector<Levels> & requirements, const Levels & state_levels) 
 {
 	// Const function
@@ -13,8 +32,7 @@ bool UnparametrizedStructureBuilder::testRegulators(const vector<Levels> & requi
 
 	// Return true if all species passed.
 	return true;
-}
-
+}
 ParamNo UnparametrizedStructureBuilder::getActiveFunction(const map<size_t, vector<Levels> > & requirements,  const Levels & state_levels) 
 {
 	// Cycle until the function is found
@@ -26,8 +44,7 @@ ParamNo UnparametrizedStructureBuilder::getActiveFunction(const map<size_t, vect
 			return req.first;
 	}
 	throw runtime_error("Active function in some state not found.");
-}
-
+}
 vector<size_t> UnparametrizedStructureBuilder::computeJumps(const Levels & comp_range) 
 {
 	vector<size_t> result(comp_range.size());
@@ -41,8 +58,7 @@ vector<size_t> UnparametrizedStructureBuilder::computeJumps(const Levels & comp_
 	}
 
 	return result;
-}
-
+}
 void UnparametrizedStructureBuilder::buildStructure(const RegInfos & reg_infos, UnparametrizedStructure & structure) 
 {
 	const size_t state_count = accumulate(WHOLE(get<2>(structure._bounds)), static_cast<ActLevel>(1), multiplies<ActLevel>());

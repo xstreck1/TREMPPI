@@ -1,3 +1,22 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include "system.hpp"
 
 // Define variables
@@ -25,7 +44,9 @@ void TremppiSystem::set(const char * name, const char * arg, const string & _WOR
 		return bfs::is_directory(test_path / "python") && bfs::is_directory(test_path / "javascript");
 	};
 	if (home_path != NULL)
+	{
 		TremppiSystem::HOME_PATH = bfs::path{ home_path };
+	}
 	// Descend three steps, test for tremppi directory
 	for (auto i : crange(3))
 	{
@@ -43,8 +64,10 @@ void TremppiSystem::initiate(const string & name, int argc, char **argv) {
 	try
 	{
 		string path = ".";
-		for (const size_t arg_no : crange(argc)) {
-			if (string(argv[arg_no]) == "--path") {
+		for (const size_t arg_no : crange(argc)) 
+		{
+			if (string(argv[arg_no]) == "--path") 
+			{
 				path = argv[arg_no + 1];
 			}
 		}
@@ -67,7 +90,7 @@ ArgPtr::ArgPtr(const vector<string>& values)
 	strcpy(argv[0], TremppiSystem::BIN_PATH.string().c_str());
 
 	// Copy new arguments
-	argc = 1;
+	argc = 1;
 	for (const string & val : values)
 	{
 		argv[argc] = new char[val.size() + 1];

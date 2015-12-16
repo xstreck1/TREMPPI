@@ -1,3 +1,22 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/database/database_reader.hpp>
@@ -5,13 +24,13 @@
 #include <tremppi_common/general/time_manager.hpp>
 #include <tremppi_common/report/report.hpp>
 #include <tremppi_common/python/python_functions.hpp>
-
+
 struct ComputedQual 
 {
 	string name;
 	map<string, size_t> values;
 };
-
+
 inline void incrementOccurence(const string & value, map<string, size_t> & values) 
 {
 	if (values.count(value) == 0) {
@@ -23,11 +42,6 @@ inline void incrementOccurence(const string & value, map<string, size_t> & value
 	}
 }
 
-
-// TODO: duplicated (as many other things here)
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \file Entry point of tremppi_qualitative
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int tremppi_qualitative(int argc, char ** argv) 
 {
 	TremppiSystem::initiate("tremppi_qualitative", argc, argv);
@@ -62,7 +76,6 @@ int tremppi_qualitative(int argc, char ** argv)
 		{
 			DEBUG_LOG << "Selection " + sels_name[sel_no];
 			out = Report::createSetup(selections[sel_no], sels_name[sel_no]);
-
 			// Read filter conditions
 			out = Report::createSetup(selections[sel_no], sels_name[sel_no]);
 
@@ -71,7 +84,6 @@ int tremppi_qualitative(int argc, char ** argv)
 				const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
 				columns.insert(WHOLE(new_columns));
 			}
-
 			for (const pair<size_t, string> column : columns)
 			{
 				results.emplace_back(ComputedQual{ column.second, { } });

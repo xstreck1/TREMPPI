@@ -1,11 +1,28 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include "logging.hpp"
 #include "system.hpp"
-
 
 ofstream Logging::file;
 vector<LogPhase> Logging::phases;
 int Logging::last_progress_val;
-
 
 Logging::Logging()
 {
@@ -15,12 +32,10 @@ Logging::Logging()
 	cout << "00.000\r";
 }
 
-
 Logging::~Logging()
 {
 	DEBUG_LOG << TremppiSystem::PROGRAM_NAME << " finished successfully." << endl;
 }
-
 
 ofstream & Logging::getFile()
 {
@@ -30,7 +45,6 @@ ofstream & Logging::getFile()
 	}
 	return file;
 }
-
 
 void Logging::acquireFile()
 {
@@ -42,24 +56,20 @@ void Logging::acquireFile()
 	}
 }
 
-
 void Logging::releaseFile()
 {
 	file.close();
 }
-
 
 void Logging::newPhase(const string & _desc, const PhaseNo _step_count)
 {
 	Logging::phases.push_back({ _step_count, 0, _desc, phases.size() });
 }
 
-
 void Logging::killPhase()
 {
 	Logging::phases.pop_back();
 }
-
 
 void Logging::step()
 {
@@ -68,7 +78,8 @@ void Logging::step()
 	while (Logging::phases.back().step_count <= Logging::phases.back().step_no)
 	{
 		Logging::phases.pop_back();
-		if (!Logging::phases.empty()) {
+		if (!Logging::phases.empty()) 
+		{
 			Logging::phases.back().step_no += 1;
 		}
 		else
@@ -93,8 +104,6 @@ void Logging::step()
 	}
 	cout << progress_i / SHIFT_FACTOR << "\r";
 }
-
-
 
 void Logging::exceptionMessage(const exception & e, const int err_no)
 {

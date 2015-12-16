@@ -1,6 +1,24 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include <tremppi_common/database/sqlite3pp_func.hpp>
 #include <tremppi_common/network/data_info.hpp>
-
 
 class ParametrizationReader 
 {
@@ -8,16 +26,7 @@ class ParametrizationReader
 	sqlite3pp::query::iterator sel_it;
 	Levels current_parametrization;
 	ParamNo current_rowid;
-	vector<CompID> components_to_check;
-	map<pair<size_t, bool>, int> neighbour_contexts; // For the purposes of normalization check, 
-
-
-	// For the original regulatory context find a negibour context with the self regulation either higher (direction == true) or lower (direction == false)
-	int find_neighbour(const Configurations & original, const bool direction, const RegInfo & reg_info);
-
-	ActLevel normalize(const Levels & original, const RegInfo & reg_info, const size_t column, Levels & normalized);
 public:
-	ParametrizationReader(const RegInfos & reg_infos);
 
 	void select(const RegInfos & reg_infos, const string & selection, sqlite3pp::database & db);
 
@@ -27,6 +36,4 @@ public:
 	bool next();
 
 	ParamNo getRowID() const;
-
-	bool isNormalized(const Levels & parametrization, const RegInfos & reg_infos);
 };

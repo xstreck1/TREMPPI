@@ -1,3 +1,22 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include <tremppi_common/general/system.hpp>
 #include <tremppi_common/general/file_manipulation.hpp>
 #include <tremppi_common/database/database_reader.hpp>
@@ -10,7 +29,7 @@
 #include "data/construction_manager.hpp"
 #include "compute/analysis_manager.hpp"
 
-struct ValidateSetup 
+struct ValidateSetup
 {
 	bool cost;
 	bool trace;
@@ -20,7 +39,7 @@ struct ValidateSetup
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_validate.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_validate() 
+int tremppi_validate()
 {
 	Logging logging;
 	string select;
@@ -89,7 +108,7 @@ int tremppi_validate()
 		}
 
 		// Analysis of parametrizations
-		ParametrizationReader par_reader(reg_infos);
+		ParametrizationReader par_reader;
 		par_reader.select(reg_infos, select, db);
 		try
 		{
@@ -105,21 +124,20 @@ int tremppi_validate()
 			while (par_reader.next())
 			{
 				Levels parametrization = par_reader.getParametrization();
-				// Skip not normalized
-				if (par_reader.isNormalized(parametrization, reg_infos)) {
-					tuple<size_t, multimap<StateID, StateID>, double> result;
-					ConstructionManager::restrictProperties(reg_infos, automaton, parametrization);
-					result = analysis_manager.check(parametrization);
 
-					// Parametrization was considered satisfying.
-					string witness_path;
-					if (get<0>(result) != INF && validate_setup.trace)
-					{
-						witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
-					}
+				tuple<size_t, multimap<StateID, StateID>, double> result;
+				ConstructionManager::restrictProperties(reg_infos, automaton, parametrization);
+				result = analysis_manager.check(parametrization);
 
-					output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
+				// Parametrization was considered satisfying.
+				string witness_path;
+				if (get<0>(result) != INF && validate_setup.trace)
+				{
+					witness_path = WitnessSearcher::getOutput(product, get<0>(result), get<1>(result));
 				}
+
+				output.outputRound(get<0>(result), get<2>(result), witness_path, par_reader.getParametrization(), par_reader.getRowID());
+
 				logging.step();
 			}
 			xct.commit();

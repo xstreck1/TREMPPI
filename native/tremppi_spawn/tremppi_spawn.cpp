@@ -5,6 +5,7 @@
 #include <tremppi_common/database/database_reader.hpp>
 #include "compute/parameter_builder.hpp"
 #include "compute/parametrizations_builder.hpp"
+#include "compute/normalizer.hpp"
 #include "io/model_reader.hpp"
 #include "io/database_filler.hpp"
 #include "io/syntax_checker.hpp"
@@ -88,7 +89,8 @@ int tremppi_spawn(int argc, char ** argv)
 		bfs::remove(database_file);
 
 		DatabaseFiller database_filler(model, kinetics, database_file.string());
-		database_filler.creteTables();
+		RegInfos reg_infos = database_filler.creteTables();
+		Normalizer normalizer(reg_infos);
 		database_filler.startOutput();
 
 		DEBUG_LOG << "Writing the database file, in total " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
@@ -96,7 +98,9 @@ int tremppi_spawn(int argc, char ** argv)
 		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++)
 		{
 			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);
-			database_filler.addParametrization(parametrization);
+			if (normalizer.isNormalized(KineticsTranslators::createParamVector(kinetics, param_no), reg_infos)) {
+				database_filler.addParametrization(parametrization);
+			}
 			logging.step();
 		}
 

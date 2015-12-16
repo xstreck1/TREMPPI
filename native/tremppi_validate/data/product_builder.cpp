@@ -1,5 +1,23 @@
-#include "product_builder.hpp"
-
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
+#include "product_builder.hpp"
 void ProductBuilder::createSubspace(const UnparametrizedStructure & structure, const AutomatonStructure & automaton, const StateID BA_ID, ProductStructure & product)
 {
 	for (const StateID KS_ID : cscope(structure)) 
@@ -20,7 +38,8 @@ bool ProductBuilder::satisfiesDeltas(const UnparametrizedStructure & structure, 
 
 	for (const CompID ID : cscope(deltas_cons))
 	{
-		switch (deltas_cons[ID]) {
+		switch (deltas_cons[ID]) 
+		{
 		case PathCons::pc_up:
 			result &= t_levels[ID] >= s_levels[ID];
 			break;
@@ -43,7 +62,8 @@ void ProductBuilder::addStateTransitions(const UnparametrizedStructure & structu
 	for (const size_t KS_trans_no : cscope(structure._states[s_KS_ID]))
 	{
 		const StateID t_KS_ID = structure._states[s_KS_ID]._transitions[KS_trans_no]._t_ID;
-		if (satisfiesDeltas(structure, s_KS_ID, t_KS_ID, BA_transition._deltas_cons)) {
+		if (satisfiesDeltas(structure, s_KS_ID, t_KS_ID, BA_transition._deltas_cons)) 
+		{
 			const TransConst & trans_const = structure._states[s_KS_ID]._transitions[KS_trans_no]._trans_const;
 			const StateID t_ID = product.computeID(t_KS_ID, BA_transition._t_ID);
 			product._states[s_ID]._transitions.emplace_back(TSTransitionProperty(t_ID, trans_const));

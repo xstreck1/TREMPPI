@@ -1,3 +1,22 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include "model_checker.hpp"
 
 bool ModelChecker::isOpen(const Levels & parametrization, const TransConst & trans_const) 
@@ -7,7 +26,6 @@ bool ModelChecker::isOpen(const Levels & parametrization, const TransConst & tra
 	else
 		return parametrization[trans_const._param_no] < trans_const._req_value;
 }
-
 
 bool ModelChecker::isStable(const Levels & parametrization, const std::vector<StayConst> & stay_consts)
 {
@@ -36,7 +54,6 @@ VisitStorage ModelChecker::conductCheck(const ProductStructure & product, const 
 	bool sat = false;
 
 	// While there are updates, pass them to succesing vertices
-
 	while (!updates.empty()) 
 	{
 		storage.incCost();
@@ -52,7 +69,6 @@ VisitStorage ModelChecker::conductCheck(const ProductStructure & product, const 
 			{
 				storage.update(*next_it);
 			}
-
 			next_updates.insert(end(next_updates), begin(transports), trans_end);
 
 			// Don't update when looking for a loop

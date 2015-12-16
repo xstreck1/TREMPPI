@@ -1,3 +1,20 @@
+# Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+#
+# This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+# via Parameter Identification (TREMPPI)
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import webbrowser
 import sys
 import argparse
@@ -12,12 +29,6 @@ from tremppi.header import data_folder, default_port, configure_filename, projec
 from tremppi.project_files import list_projects, write_projects, generate_data
 from server import TremppiServer
 from tremppi.file_manipulation import read_jsonp, write_jsonp
-
-def set_port(path):
-    file_path = join(path, configure_filename)
-    header, data = read_jsonp(file_path)
-    data['server_port'] = port
-    write_jsonp(file_path, header, data)
 
 # options and system configure
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
@@ -48,7 +59,6 @@ if not listdir('.'):
     write_projects('.')
 # the case that we are in a single project
 if exists(configure_filename):
-    set_port('.')
     generate_data(data_folder)
     # select the opening page
     if last_page is not "" and exists(last_page):
@@ -68,9 +78,8 @@ elif exists(projects_filename):
     else:
         project_path = projects[0] + "/index.html"
 
-    # set ports on all the projects
+    # generate data on all the projects
     for project_folder in projects:
-        set_port(project_folder)
         generate_data(join(project_folder, data_folder))
     write_projects('.')
 else:

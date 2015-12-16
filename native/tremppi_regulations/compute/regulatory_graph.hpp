@@ -1,3 +1,22 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #pragma once
 
 #include <tremppi_common/database/database_reader.hpp>
@@ -34,7 +53,7 @@ namespace RegulatoryGraph
 		// Compute relation to each regulation of this component, step by database rows
 		for (const auto & row : qry) 
 		{
-			for (const auto & regulator : reg_infos[ID].regulators) {
+			for (const auto & regulator : reg_infos[ID].regulators) 			{
 				for (size_t threshold_i : cscope(regulator.second)) 
 				{
 					const ActLevel threshold = regulator.second[threshold_i];

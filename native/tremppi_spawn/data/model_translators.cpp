@@ -1,6 +1,5 @@
 #include "model_translators.hpp"
 
-
 CompID ModelTranslators::findID(const Model & model, const string & name) 
 {
 	auto comp_it = find_if(WHOLE(model.components), [&name](const Model::ModelComp & component){
@@ -8,7 +7,6 @@ CompID ModelTranslators::findID(const Model & model, const string & name)
 	});
 	return (comp_it != end(model.components)) ? comp_it->ID : INF;
 }
-
 
 vector<CompID> ModelTranslators::getRegulatorsIDs(const Model & model, const CompID ID) 
 {
@@ -21,7 +19,6 @@ vector<CompID> ModelTranslators::getRegulatorsIDs(const Model & model, const Com
 	return vector<CompID>(IDs.begin(), IDs.end());
 }
 
-
 vector<string> ModelTranslators::getRegulatorsNames(const Model & model, const CompID ID) 
 {
 	auto regulators = getRegulatorsIDs(model, ID);
@@ -33,7 +30,6 @@ vector<string> ModelTranslators::getRegulatorsNames(const Model & model, const C
 	}
 	return names;
 }
-
 
 map<CompID, Levels > ModelTranslators::getThresholds(const Model & model, const CompID ID) 
 {
@@ -62,7 +58,6 @@ map<CompID, Levels > ModelTranslators::getThresholds(const Model & model, const 
 
 	return thresholds;
 }
-
 
 ActLevel ModelTranslators::getThreshold(const Model & model, const string & context, const CompID t_ID, const string & name, const size_t pos) 
 {

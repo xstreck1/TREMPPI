@@ -1,5 +1,23 @@
-#include "automaton_builder.hpp"
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
 
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
+#include "automaton_builder.hpp"
 
 Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & state_constraint, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names)
 {
@@ -7,7 +25,8 @@ Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & st
 
 	for (const CompID ID : cscope(names))
 	{
-		if (state_constraint.count(names[ID]) == 0) {
+		if (state_constraint.count(names[ID]) == 0) 
+		{
 			result[ID] = vrange(get<0>(bounds)[ID], static_cast<ActLevel>(get<1>(bounds)[ID] + 1));
 		}
 		else
@@ -16,7 +35,8 @@ Configurations AutomatonBuilder::makeStateConst(const map<string, ActRange> & st
 
 			for (const ActLevel act_level : crange(get<0>(bounds)[ID], static_cast<ActLevel>(get<1>(bounds)[ID] + 1)))
 			{
-				if (act_level >= constr_range.first && act_level <= constr_range.second) {
+				if (act_level >= constr_range.first && act_level <= constr_range.second) 
+				{
 					result[ID].emplace_back(act_level);
 				}
 			}
@@ -31,7 +51,8 @@ vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& co
 
 	for (const string & name : names)
 	{
-		if (constraints_list.count(name) > 0) {
+		if (constraints_list.count(name) > 0) 
+		{
 			result.push_back(constraints_list.at(name));
 		}
 		else
@@ -45,7 +66,8 @@ vector<PathCons> AutomatonBuilder::makePathConst(const map<string, PathCons>& co
 
 void AutomatonBuilder::buildSequence(const PropertyInfo & property_info, const tuple<Levels, Levels, Levels> & bounds, const vector<string> & names, AutomatonStructure & automaton, const size_t N, const size_t M)
 {
-	for (const StateID s_ID : crange(N)) {
+	for (const StateID s_ID : crange(N)) 
+	{
 		{
 			MeasurementsCons initial_cons;
 			for (const size_t m_i : crange(s_ID + 1u))
@@ -57,7 +79,8 @@ void AutomatonBuilder::buildSequence(const PropertyInfo & property_info, const t
 				initial_cons.emplace_back(make_pair(makeStateConst(property_info.measurements[s_ID + 1].state_constraints, bounds, names), false));
 			}
 			MeasurementsCons accepting_cons;
-			for (const size_t m_i : crange(s_ID + 1u, M)) {
+			for (const size_t m_i : crange(s_ID + 1u, M)) 
+			{
 				accepting_cons.emplace_back(make_pair(makeStateConst(property_info.measurements[m_i].state_constraints, bounds, names), true));
 			}
 			automaton._states.emplace_back(AutState(s_ID, initial_cons, accepting_cons));

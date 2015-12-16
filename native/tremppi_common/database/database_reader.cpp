@@ -1,10 +1,28 @@
+/******************************************************************************
+Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+
+This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+via Parameter Identification (TREMPPI)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
 #include "database_reader.hpp"
 #include "database_reader.hpp"
 #include "database_reader.hpp"
 #include "../general/system.hpp"
 #include "../general/file_manipulation.hpp"
-#include "../python/python_functions.hpp"
-
+#include "../python/python_functions.hpp"
 map<CompID, Levels> DatabaseReader::readRegulators(const string & component, sqlite3pp::database & db) 
 {
 	map<CompID, Levels>  result;
@@ -25,8 +43,7 @@ map<CompID, Levels> DatabaseReader::readRegulators(const string & component, sql
 		sort(WHOLE(regulator.second));
 
 	return result;
-}
-
+}
 void DatabaseReader::readMaxes(sqlite3pp::database & db) 
 {
 	sqlite3pp::query qry(db, ("SELECT " + NAMES_COLUMN + ", " + MAX_LEVEL_COLUMN + " FROM " + COMPONENTS_TABLE).c_str());
@@ -40,7 +57,7 @@ void DatabaseReader::readMaxes(sqlite3pp::database & db)
 		maxes[components_dict[component]] = max_activity;
 	}
 }
-
+
 void DatabaseReader::readComponents(sqlite3pp::database & db) 
 {
 	// Read regulatory information
@@ -52,8 +69,7 @@ void DatabaseReader::readComponents(sqlite3pp::database & db)
 
 	for (CompID ID = 0; ID < components.size(); ID++)
 		components_dict.insert({ components[ID], ID });
-}
-
+}
 RegInfos DatabaseReader::readRegInfos(sqlite3pp::database & db) 
 {
 	RegInfos result;
@@ -63,7 +79,6 @@ RegInfos DatabaseReader::readRegInfos(sqlite3pp::database & db)
 	for (const string & component : components) 
 	{
 		map<CompID, Levels> requlators = readRegulators(component, db);
-
 		// read requirements for each context
 		map<size_t, vector<Levels> > requirements;
 		auto columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex("K_" + component + "_.*"), db);
@@ -73,7 +88,7 @@ RegInfos DatabaseReader::readRegInfos(sqlite3pp::database & db)
 			return make_pair(column.first, DataConv::getThrsFromContext(column.second));
 		});
 
-		size_t prev_index = 0;
+		size_t prev_index = 0;
 		for (const auto & column : columns) 
 		{
 			if (column.first < prev_index) {
@@ -83,7 +98,6 @@ RegInfos DatabaseReader::readRegInfos(sqlite3pp::database & db)
 
 			requirements.insert({ column.first, obtainRequirements(column.second, requlators, db) });
 		}
-
 		result.push_back(RegInfo{ components_dict[component], component, maxes_dict[component], move(columns), move(contexts), move(requlators), requirements });
 	}
 	return result;
@@ -94,13 +108,13 @@ vector<Levels> DatabaseReader::obtainRequirements(const string & context, const 
 	vector<Levels> result(components.size(), Levels());
 
 	const Levels thresholds = DataConv::getThrsFromContext(context);
-	size_t reg_i = 0;
+	size_t reg_i = 0;
 	for (const CompID ID : cscope(components)) 
 	{
 		// If the component is not a regulator, all values are possible
 		if (regulators.count(ID) < 1) 
 		{
-			result[ID] = vrange<ActLevel>(0, maxes[ID] + 1);
+			result[ID] = vrange<ActLevel>(0, maxes[ID] + 1);
 		} else 
 		{
 			ActLevel low = thresholds[reg_i];
@@ -113,6 +127,7 @@ vector<Levels> DatabaseReader::obtainRequirements(const string & context, const 
 	}
 	return result;
 }
+
 int DatabaseReader::getSelectionSize(const string & selection, sqlite3pp::database & db) {	return (sqlite3pp::query(db, ("SELECT COUNT(*) FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + selection).c_str()).begin())->get<int>(0);}
 sqlite3pp::query DatabaseReader::selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db) 
 {
