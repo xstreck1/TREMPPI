@@ -28,6 +28,14 @@ BUILDING
 --------
 Run cmake and then compile with your compiler.
 
+Defines:
+* BUILD_TEST: use to build testing binary (default off)
+* BOOST_ROOT: use to specify boost location (the folder that holds both libraries and headers)
+* GTEST_ROOT: use to specify gtest location, only if building gtest
+* GECODE_DIR: use to specify gecode constraint solver binary location, do not mix with GECODE_LOCAL
+* GECODE_LOCAL: use to specify gecode constraint solver source location, do not mix with GECODE_DIR 
+* TREMPPI_STATIC: use to build with static version of existing libraries (boost, gecode, etc...), will still depend on the runtime libraries and pythonlib
+
 Requirements:
 
 * CMake 2.8 (or higher)
