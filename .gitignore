@@ -3,6 +3,7 @@ native/tremppi_common/configure.h
 run_cmake.bat
 run_cmake_static.bat
 run_cmake.sh
+cmake_install.cmake
 
 #possible GECODE
 /gecode-*
