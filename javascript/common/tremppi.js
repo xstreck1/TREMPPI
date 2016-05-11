@@ -20,7 +20,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 /* global w2ui */
 
 tremppi = {
-    widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'tools'],
+    widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'list', 'tools'],
     widgetInterface: function () {
         return {
             page: function () {

@@ -16,6 +16,7 @@ cmake_install.cmake
 ./tremppi
 tremppi.exe
 tremppi
+TREMPPI.cbp
 
 # CMake files
 CMakeFiles*

@@ -28,6 +28,7 @@ TEST(CoreTest, AllPrograms)
 	ASSERT_EQ(0, basic_sign_test()) << "Basic content test label failed.";
 	ASSERT_EQ(0, basic_bias_test()) << "Basic content test bias failed.";
 	ASSERT_EQ(0, basic_impact_test()) << "Basic content test impact failed.";
+	ASSERT_EQ(0, basic_list_test()) << "Basic content test list failed.";
 	ASSERT_EQ(0, basic_validate_test()) << "Basic content test validate failed.";
 	ASSERT_EQ(0, basic_regulations_test()) << "Basic content test regulations failed.";
 	ASSERT_EQ(0, basic_correlations_test()) << "Basic content test correlations test failed.";

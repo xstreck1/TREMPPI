@@ -24,8 +24,8 @@ last_page_filename = "last_page.txt"
 database_file = 'database.sqlite'
 source_folder = 'javascript'
 data_folder = 'data'
-widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'tools']
-folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'tools']
+widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'list', 'tools']
+folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'list', 'tools']
 
 from os.path import dirname, abspath, join, normpath, basename, isfile
 from os import getcwd
