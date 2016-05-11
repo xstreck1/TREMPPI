@@ -19,8 +19,8 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* global tremppi */
 
-tremppi.quantitative.page = function () {
-    if (typeof tremppi.quantitative.setup === 'undefined') {
+tremppi.list.page = function () {
+    if (typeof tremppi.list.setup === 'undefined') {
         $("#widget").html("No quantitative report has been created yet.");
     } else {
         tremppi.report.createPanels();        
@@ -33,18 +33,21 @@ tremppi.quantitative.page = function () {
     }
 };
 
-tremppi.quantitative.setData = function (data) {
-    tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
+tremppi.list.setData = function (data) {
 };
 
-tremppi.quantitative.getData = function () {
+tremppi.list.controls = function() {
+    tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
+}
+
+tremppi.list.getData = function () {
     return {};
 };
 
-tremppi.quantitative.layout = function () {
+tremppi.list.layout = function () {
 };
 
-tremppi.quantitative.toolbarClass = function () {
+tremppi.list.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [

@@ -19,7 +19,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* global tremppi */
 
-tremppi.quantitative.toolbarClick = function (event) {
+tremppi.list.toolbarClick = function (event) {
     if (event.target === 'all') {
         tremppi.report.showAll();
         tremppi.setItem('panel', 'all');

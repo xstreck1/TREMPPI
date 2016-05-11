@@ -19,18 +19,18 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* global tremppi */
 
-tremppi.quantitative.setPanel = function (panel) {
+tremppi.list.setPanel = function (panel) {
     tremppi.widget[panel] = $('#table_' + panel).w2grid(tremppi.widget.getGrid(panel));
 };
 
-tremppi.quantitative.createPanelContent = function (data, panel) {
+tremppi.list.createPanelContent = function (data, panel) {
     tremppi.quantitative[panel].records = data.records;
     tremppi.quantitative[panel].header = data.setup.s_name;
     tremppi.quantitative[panel].refresh();
     tremppi.report.setDescription(panel, data.setup);
 };
 
-tremppi.quantitative.valuesSetter = function (source, panel) {
+tremppi.list.valuesSetter = function (source, panel) {
     return function (data) {
         tremppi.quantitative.createPanelContent(data, panel);
         tremppi.log(source + " loaded successfully.");
@@ -62,7 +62,7 @@ tremppi.quantitative.valuesSetter = function (source, panel) {
     };
 };
 
-tremppi.quantitative.getGrid = function (grid_name) {
+tremppi.list.getGrid = function (grid_name) {
     var portion = (100 - 40) / 4;
     return {
         name: grid_name,
