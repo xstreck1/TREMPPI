@@ -26,6 +26,17 @@ from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
 from webconfig import ConfigClass
 from urllib.parse import urlparse
+import re
+import sys
+from os import replace, remove, fdopen
+from os.path import dirname, join, basename, exists
+from threading import Thread
+from init.init import init
+from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
+from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
+from tool_manager import ToolManager
+from tremppi.configure import configure
+from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
 
 
@@ -66,6 +77,8 @@ def create_app():       # Setup Flask app and app.config
     db_adapter = SQLAlchemyAdapter(db, User)
     user_manager = UserManager(db_adapter, app, register_form=MyRegisterForm)
 
+    _tool_manager = ToolManager()
+
 
 
 
@@ -76,12 +89,85 @@ def create_app():       # Setup Flask app and app.config
         return 'tremppi browse is running'
 
     @app.route('/<path:path>', methods=['GET'])
+    #@login_required
     def do_get(path):
         parsed_url = urlparse(path)
-        print(parsed_url)
-        return path
+        print(parsed_url.path)
+        pt,fl=os.path.split(parsed_url.path)
+        print(pt)
+        print(fl)
+        data = ""
+        if parsed_url.query == "" or parsed_url.query[0] == "_":
+            if parsed_url.path == "/":
+                data = "tremmpi browse is running"
+            else:   #THIS PART SEEMS TO MALFUNCTION
+                return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
+                #return '_ needs handling'
+        elif parsed_url.query[0:len("delete+")] == "delete+":
+            names = parsed_url.query.split("+")
+            if _tool_manager.is_free(names[1]):
+                delete_project(names[1])
+                write_projects('.')
+                return 'delete+ needs handling'
+            else:
+                return 'jobs running on ' + names[0] + ', can not delete'
+        elif parsed_url.query[0:len("init+")] == "init+":
+            names = parsed_url.query.split("+")
+            init(names[1])
+            write_projects('.')
+            return 'init+ needs handling'
+        elif parsed_url.query[0:len("rename+")] == "rename+":
+            names = parsed_url.query.split("+")
+            if _tool_manager.is_free(names[1]):
+                file_path = join(names[1], configure_filename)
+                header, data = read_jsonp(file_path)
+                data['project_name'] = names[2]
+                write_jsonp(file_path, header, data)
+                replace(names[1], names[2])
+                write_projects('.')
+                return 'rename+ needs handling'
+            else:
+                return 'jobs running on ' + names[0] + ', can not rename'
+        elif parsed_url.query[0:len("clone+")] == "clone+":
+            names = parsed_url.query.split("+")
+            file_path = join(names[1], configure_filename)
+            header, data = read_jsonp(file_path)
+            data['project_name'] = names[1] + '(clone)'
+            write_jsonp(file_path, header, data)
+            copyanything(names[1], names[1] + '(clone)')
+            file_path = join(names[1], configure_filename)
+            header, data = read_jsonp(file_path)
+            data['project_name'] = names[1]
+            write_jsonp(file_path, header, data)
+            write_projects('.')
+            return 'clone+ needs handling'
+        elif parsed_url.query[0:len("finalize+")] == "finalize+":
+            names = parsed_url.query.split("+")
+            if exists(join(names[1], data_folder, database_file)):
+                remove(join(names[1], data_folder, database_file))
+            file_path = join(names[1], configure_filename)
+            header, data = read_jsonp(file_path)
+            data['final'] = True
+            write_jsonp(file_path, header, data)
+            return 'finalize+ needs handling'
+        elif parsed_url.query[0:len('getProgress')] == 'getProgress':
+            data = _tool_manager.get_progress()
+        elif parsed_url.query[0:len('getLog')] == 'getLog':
+            data = get_log("./" + parsed_url.path[1:] + "log.txt")
+        elif parsed_url.query[0:len("getCommands")] == "getCommands":
+            data = _tool_manager.get_commands()
+        return data     #str(data).encode()
+
+
+
+
+
+
+
+
 
     @app.route('/<path:path>', methods=['POST'])
+    #@login_required
     def do_post(path):
         parsed_url = urlparse(path)
         print(parsed_url)
