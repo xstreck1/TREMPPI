@@ -15,142 +15,79 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-from os import replace, remove, fdopen
-from os.path import dirname, join, basename, exists
-from threading import Thread
-from urllib.parse import urlparse, parse_qs
-from http.server import SimpleHTTPRequestHandler
-from init.init import init
-from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
-from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
-from tool_manager import ToolManager
-from tremppi.configure import configure
-from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
-# TREMPPI server that communicates between HTML reports and the filesystem
-class TremppiServer(SimpleHTTPRequestHandler):
-    _tool_manager = ToolManager()
-    _server = None
+__author__ = 'Voydwalker'
+import os, os.path, json
+from flask import Flask, render_template, render_template_string, request, send_from_directory
+from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
+from flask_user.forms import RegisterForm
+from flask_wtf import RecaptchaField
+from webconfig import ConfigClass
+from urllib.parse import urlparse
 
-    def success_response(self, content_type, data):
-        self.send_response(200)
-        self.send_header('Content-type', content_type)
-        self.end_headers()
-        self.wfile.write(data)
 
-    def error_response(self, content_type, data):
-        self.send_response(400)
-        self.send_header('Content-type', content_type)
-        self.end_headers()
-        self.wfile.write(data)
 
-    # respond to the GET request
-    def do_GET(self):
-        parsed_url = urlparse(self.path)
-        # print(parsed_path.path)
-        data = ""
-        if parsed_url.query == "" or parsed_url.query[0] == "_":
-            if parsed_url.path == "/":
-                data = "tremmpi browse is running"
-            else:
-                return SimpleHTTPRequestHandler.do_GET(self)
-        elif parsed_url.query[0:len("delete+")] == "delete+":
-            names = parsed_url.query.split("+")
-            if self._tool_manager.is_free(names[1]):
-                delete_project(names[1])
-                write_projects('.')
-                return SimpleHTTPRequestHandler.do_GET(self)
-            else:
-                self.error_response('text', ('jobs running on ' + names[0] + ', can not delete').encode())
-        elif parsed_url.query[0:len("init+")] == "init+":
-            names = parsed_url.query.split("+")
-            init(names[1])
-            write_projects('.')
-            return SimpleHTTPRequestHandler.do_GET(self)
-        elif parsed_url.query[0:len("rename+")] == "rename+":
-            names = parsed_url.query.split("+")
-            if self._tool_manager.is_free(names[1]):
-                file_path = join(names[1], configure_filename)
-                header, data = read_jsonp(file_path)
-                data['project_name'] = names[2]
-                write_jsonp(file_path, header, data)
+def create_app():       # Setup Flask app and app.config
+    app = Flask(__name__)
+    app.config.from_object(ConfigClass)
 
-                replace(names[1], names[2])
+    # Initialize Flask extensions
+    db = SQLAlchemy(app)
+    mail = Mail(app)
 
-                write_projects('.')
-                return SimpleHTTPRequestHandler.do_GET(self)
-            else:
-                self.error_response('text', ('jobs running on ' + names[0] + ', can not rename').encode())
-        elif parsed_url.query[0:len("clone+")] == "clone+":
-            names = parsed_url.query.split("+")
+    # Define the User data model for SQLAlchemy
+    class User(db.Model, UserMixin):
+        id = db.Column(db.Integer, primary_key=True)
 
-            file_path = join(names[1], configure_filename)
-            header, data = read_jsonp(file_path)
-            data['project_name'] = names[1] + '(clone)'
-            write_jsonp(file_path, header, data)
+        # User authentication information
+        username = db.Column(db.String(50), nullable=False, unique=True)
+        password = db.Column(db.String(255), nullable=False, server_default='')
+        reset_password_token = db.Column(db.String(100), nullable=False, server_default='')
 
-            copyanything(names[1], names[1] + '(clone)')
+        # User email information
+        email = db.Column(db.String(255), nullable=False, unique=True)
+        confirmed_at = db.Column(db.DateTime())
 
-            file_path = join(names[1], configure_filename)
-            header, data = read_jsonp(file_path)
-            data['project_name'] = names[1]
-            write_jsonp(file_path, header, data)
+        # User information
+        active = db.Column('is_active', db.Boolean(), nullable=False, server_default='0')
+        first_name = db.Column(db.String(100), nullable=False, server_default='')
+        last_name = db.Column(db.String(100), nullable=False, server_default='')
 
-            write_projects('.')
-            return SimpleHTTPRequestHandler.do_GET(self)
-        elif parsed_url.query[0:len("finalize+")] == "finalize+":
-            names = parsed_url.query.split("+")
-            if exists(join(names[1], data_folder, database_file)):
-                remove(join(names[1], data_folder, database_file))
-            file_path = join(names[1], configure_filename)
-            header, data = read_jsonp(file_path)
-            data['final'] = True
-            write_jsonp(file_path, header, data)
-            return SimpleHTTPRequestHandler.do_GET(self)
-        elif parsed_url.query[0:len('getProgress')] == 'getProgress':
-            data = self._tool_manager.get_progress()
-        elif parsed_url.query[0:len('getLog')] == 'getLog':
-            data = get_log("./" + parsed_url.path[1:] + "log.txt")
-        elif parsed_url.query[0:len("getCommands")] == "getCommands":
-            data = self._tool_manager.get_commands()
-        self.success_response('text', (str(data).encode()))
+    # Extend the basic registration with a recaptcha field in a custom class
+    class MyRegisterForm(RegisterForm):
+        recaptcha = RecaptchaField()
 
-    # respond to the post request
-    def do_POST(self):
-        parsed_url = urlparse(self.path)
-        parsed_path = parsed_url.path[1:] # remove the leading /
-        if parsed_url.query == 'exit':
-            def kill_me(server):
-                print("shutdown")
-                server.shutdown()
-            Thread(target=kill_me, args=(self._server,)).start()
-            self.success_response('text', ("exit success".encode()))
-        elif parsed_url.query == 'save':
-            # writes the content of the message to the file specified by the URL
-            length = self.headers['content-length']
-            data = self.rfile.read(int(length))
-            save_file(parsed_path, data)
-            self.success_response('text', ("save success".encode()))
-        elif parsed_url.query == 'page':
-            with open(last_page_filename, 'w+') as last_page_file:
-                last_page_file.seek(0)
-                last_page_file.write(parsed_url.path[1:])
-                last_page_file.truncate()
-                self.success_response('text', ("page store success".encode()))
-        elif parsed_url.query == 'killAll':
-            self._tool_manager.kill_all(parsed_path)
-            self.success_response('text', ("killAll success".encode()))
-        elif parsed_url.query[0:len('tremppi+')] == 'tremppi+':
-            self._tool_manager.add_to_queue(parsed_path, parsed_url.query[len('tremppi+'):])
-            progress = self._tool_manager.get_progress()
-            self.success_response('text', (str(progress).encode()))
-        elif parsed_url.query[0:len('delete')] == 'delete':
-            remove(parsed_path)
-            configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
-            self.success_response('text', ("delete success".encode()))
-        elif parsed_url.query[0:len('rename+')] == 'rename+':
-            new_name = parsed_url.query[len('rename+'):]
-            replace(parsed_path, join(dirname(parsed_path), new_name + '.json'))
-            configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
-            self.success_response('text', ("rename success".encode()))
+    # Create all database tables
+    db.create_all()
+
+    # Setup Flask-User
+    db_adapter = SQLAlchemyAdapter(db, User)
+    user_manager = UserManager(db_adapter, app, register_form=MyRegisterForm)
+
+
+
+
+
+    # ROUTES
+    @app.route('/')
+    def home_page():
+        return 'tremppi browse is running'
+
+    @app.route('/<path:path>', methods=['GET'])
+    def do_get(path):
+        parsed_url = urlparse(path)
+        print(parsed_url)
+        return path
+
+    @app.route('/<path:path>', methods=['POST'])
+    def do_post(path):
+        parsed_url = urlparse(path)
+        print(parsed_url)
+        return path
+
+
+
+
+    return app

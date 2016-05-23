@@ -21,14 +21,15 @@ import argparse
 import subprocess
 from os import chdir, listdir
 from os.path import dirname, join, abspath, exists
-from http.server import HTTPServer
 
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.header import data_folder, default_port, configure_filename, projects_filename, last_page_filename, system_init, system
 from tremppi.project_files import list_projects, write_projects, generate_data
-from server import TremppiServer
 from tremppi.file_manipulation import read_jsonp, write_jsonp
+from server import create_app
+
+
 
 # options and system configure
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
@@ -89,6 +90,7 @@ if args.nopen is False:
     webbrowser.open("http://localhost:" + port + "/" + project_path)
 
 # Execute the server itself.
-server = HTTPServer(('', int(port)), TremppiServer)
-TremppiServer._server = server
-server.serve_forever()
+
+# Start web server
+app = create_app()
+app.run(port=int(port), debug=False)
