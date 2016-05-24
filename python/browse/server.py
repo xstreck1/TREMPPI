@@ -18,19 +18,20 @@
 
 __author__ = 'Voydwalker'
 import os, os.path, json
-from flask import Flask, render_template, render_template_string, request, send_from_directory
+from os.path import join, abspath
+from flask import Flask, render_template, render_template_string, request, send_from_directory, Config
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
 from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
 from webconfig import ConfigClass
-from urllib.parse import urlparse
-import re
+
 import sys
 from os import replace, remove, fdopen
 from os.path import dirname, join, basename, exists
 from threading import Thread
+from urllib.parse import urlparse, parse_qs
 from init.init import init
 from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
@@ -94,15 +95,15 @@ def create_app():       # Setup Flask app and app.config
         parsed_url = urlparse(path)
         print(parsed_url.path)
         pt,fl=os.path.split(parsed_url.path)
+        pt = join(abspath("."), pt)
         print(pt)
         print(fl)
         data = ""
         if parsed_url.query == "" or parsed_url.query[0] == "_":
             if parsed_url.path == "/":
                 data = "tremmpi browse is running"
-            else:   #THIS PART SEEMS TO MALFUNCTION
+            else:
                 return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
-                #return '_ needs handling'
         elif parsed_url.query[0:len("delete+")] == "delete+":
             names = parsed_url.query.split("+")
             if _tool_manager.is_free(names[1]):
@@ -160,19 +161,47 @@ def create_app():       # Setup Flask app and app.config
 
 
 
-
-
-
-
-
-
     @app.route('/<path:path>', methods=['POST'])
     #@login_required
     def do_post(path):
         parsed_url = urlparse(path)
         print(parsed_url)
-        return path
-
+        parsed_path = parsed_url.path[1:] # remove the leading /
+        if parsed_url.query == 'exit':
+            def kill_me():
+                print("shutdown")
+            kill_me()
+            #    server.shutdown()
+            #Thread(target=kill_me, args=(self._server,)).start()
+            return 'exit needs handling'
+        elif parsed_url.query == 'save':
+            # writes the content of the message to the file specified by the URL
+            #length = self.headers['content-length']
+            #data = self.rfile.read(int(length))
+            #save_file(parsed_path, data)
+            return 'save needs handling'
+        elif parsed_url.query == 'page':
+            with open(last_page_filename, 'w+') as last_page_file:
+                last_page_file.seek(0)
+                last_page_file.write(parsed_url.path[1:])
+                last_page_file.truncate()
+                return 'page needs handling'
+        elif parsed_url.query == 'killAll':
+            _tool_manager.kill_all(parsed_path)
+            return 'killall needs handling'
+        elif parsed_url.query[0:len('tremppi+')] == 'tremppi+':
+            _tool_manager.add_to_queue(parsed_path, parsed_url.query[len('tremppi+'):])
+            progress = _tool_manager.get_progress()
+            return 'trmppi needs handling'
+        elif parsed_url.query[0:len('delete')] == 'delete':
+            remove(parsed_path)
+            configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
+            return 'delete needs handling'
+        elif parsed_url.query[0:len('rename+')] == 'rename+':
+            new_name = parsed_url.query[len('rename+'):]
+            replace(parsed_path, join(dirname(parsed_path), new_name + '.json'))
+            configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
+            return 'rename needs handling'
 
 
 
