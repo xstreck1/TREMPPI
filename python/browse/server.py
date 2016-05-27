@@ -90,7 +90,6 @@ def create_app():       # Setup Flask app and app.config
     @app.route('/<path:path>', methods=['GET', 'POST'])
     #@login_required
     def serve(path):
-        print(request.args)
         if request.method=='GET':
             return do_get(request.path[1:])
         elif request.method=='POST':
@@ -103,15 +102,15 @@ def create_app():       # Setup Flask app and app.config
 
     def do_get(path):
         print(request)
+        print(request.args)
         parsed_url = urlparse(path)
         pt,fl=os.path.split(parsed_url.path)
         pt = join(abspath("."), pt)
         data = ""
-        if parsed_url.query == "" or parsed_url.query[0] == "_":
-            if parsed_url.path == "/":
+        if not request.args or '_' in request.args:     #works
+            if request.path == "/":
                 data = "tremmpi browse is running"
             else:
-                print('sending file: '+pt+'/'+fl)
                 return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
         elif parsed_url.query[0:len("delete+")] == "delete+":
             names = parsed_url.query.split("+")
@@ -170,29 +169,26 @@ def create_app():       # Setup Flask app and app.config
 
 
 
-    def do_post(path):
-        print('path: '+path)
-        print(request.json)
-        parsed_url = urlparse(path)
-        print('parsed url: '+parsed_url)
-        parsed_path = parsed_url.path[1:] # remove the leading /
-        print('query: '+parsed_url.query)
-        if parsed_url.query == 'exit':
+    def do_post(req):
+        print(request)
+        print(request.args)     #holds the query key-values
+        print(request.json)     #holds the data
+        parsed_url=''
+        parsed_path=''
+        if request.args.get('exit'):
             def kill_me():
                 print("shutdown")
             kill_me()
             #    server.shutdown()
             #Thread(target=kill_me, args=(self._server,)).start()
             return 'exit needs handling'
-        elif parsed_url.query == 'save':
-            print('trying to save '+request.json)
-            data = request.json
-            save_file(parsed_path, data)
+        elif 'save' in request.args:    #works
+            save_file(req, request.json)
             return 'save needs handling'
-        elif parsed_url.query == 'page':
+        elif 'page' in request.args:    #works
             with open(last_page_filename, 'w+') as last_page_file:
                 last_page_file.seek(0)
-                last_page_file.write(parsed_url.path[1:])
+                last_page_file.write(req)
                 last_page_file.truncate()
                 return 'Error getting page'
         elif parsed_url.query == 'killAll':
@@ -211,9 +207,6 @@ def create_app():       # Setup Flask app and app.config
             replace(parsed_path, join(dirname(parsed_path), new_name + '.json'))
             configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
             return 'rename needs handling'
-
-    #@app.route('/<path:path>', methods=['POST'])
-    #@login_required
 
 
 

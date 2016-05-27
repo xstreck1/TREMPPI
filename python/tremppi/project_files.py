@@ -78,7 +78,7 @@ def delete_project(name):
 
 def save_file(store_path, data):
     with open(store_path, 'w') as file:
-        file.write(data.decode())
+        json.dump(data, file)
 
 def get_log(log_path):
     with open(log_path, 'r') as file:
