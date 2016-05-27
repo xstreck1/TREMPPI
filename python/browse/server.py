@@ -82,27 +82,36 @@ def create_app():       # Setup Flask app and app.config
 
 
 
-
-
     # ROUTES
     @app.route('/')
     def home_page():
         return 'tremppi browse is running'
 
-    @app.route('/<path:path>', methods=['GET'])
+    @app.route('/<path:path>', methods=['GET', 'POST'])
     #@login_required
+    def serve(path):
+        print(request.args)
+        if request.method=='GET':
+            return do_get(request.path[1:])
+        elif request.method=='POST':
+            return do_post(request.path[1:])
+        else:
+            return 'unhandled request type'
+
+
+
+
     def do_get(path):
+        print(request)
         parsed_url = urlparse(path)
-        print(parsed_url.path)
         pt,fl=os.path.split(parsed_url.path)
         pt = join(abspath("."), pt)
-        print(pt)
-        print(fl)
         data = ""
         if parsed_url.query == "" or parsed_url.query[0] == "_":
             if parsed_url.path == "/":
                 data = "tremmpi browse is running"
             else:
+                print('sending file: '+pt+'/'+fl)
                 return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
         elif parsed_url.query[0:len("delete+")] == "delete+":
             names = parsed_url.query.split("+")
@@ -161,12 +170,13 @@ def create_app():       # Setup Flask app and app.config
 
 
 
-    @app.route('/<path:path>', methods=['POST'])
-    #@login_required
     def do_post(path):
+        print('path: '+path)
+        print(request.json)
         parsed_url = urlparse(path)
-        print(parsed_url)
+        print('parsed url: '+parsed_url)
         parsed_path = parsed_url.path[1:] # remove the leading /
+        print('query: '+parsed_url.query)
         if parsed_url.query == 'exit':
             def kill_me():
                 print("shutdown")
@@ -175,17 +185,16 @@ def create_app():       # Setup Flask app and app.config
             #Thread(target=kill_me, args=(self._server,)).start()
             return 'exit needs handling'
         elif parsed_url.query == 'save':
-            # writes the content of the message to the file specified by the URL
-            #length = self.headers['content-length']
-            #data = self.rfile.read(int(length))
-            #save_file(parsed_path, data)
+            print('trying to save '+request.json)
+            data = request.json
+            save_file(parsed_path, data)
             return 'save needs handling'
         elif parsed_url.query == 'page':
             with open(last_page_filename, 'w+') as last_page_file:
                 last_page_file.seek(0)
                 last_page_file.write(parsed_url.path[1:])
                 last_page_file.truncate()
-                return 'page needs handling'
+                return 'Error getting page'
         elif parsed_url.query == 'killAll':
             _tool_manager.kill_all(parsed_path)
             return 'killall needs handling'
@@ -202,6 +211,10 @@ def create_app():       # Setup Flask app and app.config
             replace(parsed_path, join(dirname(parsed_path), new_name + '.json'))
             configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
             return 'rename needs handling'
+
+    #@app.route('/<path:path>', methods=['POST'])
+    #@login_required
+
 
 
 

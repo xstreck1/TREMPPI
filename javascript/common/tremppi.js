@@ -72,6 +72,7 @@ tremppi = {
             type: "POST",
             url: url,
             data: content,
+  	    contentType: 'application/json',
             success: function (res) {
                 tremppi.log(url + " saved successfully.");
             },
