@@ -42,7 +42,8 @@ from tremppi.project_files import write_projects, delete_project, save_file, get
 
 
 def create_app():       # Setup Flask app and app.config
-    app = Flask(__name__)
+    print("Template path " + ConfigClass.TEMPLATE_PATH)
+    app = Flask(__name__, template_folder=ConfigClass.TEMPLATE_PATH)
     app.config.from_object(ConfigClass)
 
     # Initialize Flask extensions
@@ -85,7 +86,12 @@ def create_app():       # Setup Flask app and app.config
     # ROUTES
     @app.route('/')
     def home_page():
-        return 'tremppi browse is running'
+        return render_template('index.html')
+
+    @app.route('/members')
+    @login_required
+    def members_page():
+        return 'members page'
 
     @app.route('/<path:path>', methods=['GET', 'POST'])
     #@login_required
