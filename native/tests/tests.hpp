@@ -30,6 +30,7 @@ int basic_qualitative_test();
 int basic_quantitative_test();
 int basic_regulations_test();
 int basic_impact_test();
+int basic_list_test();
 int basic_sign_test();
 int basic_spawn_test();
 int basic_validate_test();

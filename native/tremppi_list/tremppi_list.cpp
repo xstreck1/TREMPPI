@@ -88,28 +88,29 @@ int tremppi_list(int argc, char ** argv)
             out = Report::createSetup(selections[sel_no], sels_name[sel_no]);
 
             // Filter for all S and C prefixes
-            for (const string & prefix : prefixes)
-            {
-//               if(prefix == "S" )
-//                {
-                const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
+			for (const string & prefix : prefixes)
+			{
+				//               if(prefix == "S" )
+				//                {
+				const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
 
-                columns.insert(WHOLE(new_columns));
-//                // use column names to iterate through columns, ask if exists 0 in column
-//                    for (int i = 0; i < columns.size(); i++)
-//                    {
-//                       const size_t optional= sqlite3pp::query(db, ("SELECT CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT)" + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + column.second(i) "=0").c_str());
-//                       // SELECT CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT) FROM Parametrizations WHERE = 0;
-//                       // returns 1 if there exists a 0 in column
+				columns.insert(WHOLE(new_columns));
+				//                // use column names to iterate through columns, ask if exists 0 in column
+				//                    for (int i = 0; i < columns.size(); i++)
+				//                    {
+				//                       const size_t optional= sqlite3pp::query(db, ("SELECT CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT)" + " FROM " + PARAMETRIZATIONS_TABLE + " WHERE " + column.second(i) "=0").c_str());
+				//                       // SELECT CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS BIT) FROM Parametrizations WHERE = 0;
+				//                       // returns 1 if there exists a 0 in column
 
-//                    }
-//                }
-//                else
-//                {
-//                const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
-//                columns.insert(WHOLE(new_columns));
-//                }
-//            }
+				//                    }
+				//                }
+				//                else
+				//                {
+				//                const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
+				//                columns.insert(WHOLE(new_columns));
+				//                }
+				//            }
+			}
             for (const pair<size_t, string> column : columns)
             {
                 results.emplace_back(ComputedQual{ column.second, { } });
@@ -137,7 +138,7 @@ int tremppi_list(int argc, char ** argv)
 
             // go through table columnwise build vector for each column
 
-            for (auto col : group_qry.column_count())
+           /* for (auto col : group_qry.column_count())
             {
                 int i=0;
                 for (auto row : group_qry)
@@ -165,7 +166,7 @@ int tremppi_list(int argc, char ** argv)
                     }
                 }
                 logging.step();
-            }
+            }*/
         }
         catch (exception & e)
         {
