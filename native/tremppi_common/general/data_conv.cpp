@@ -55,7 +55,7 @@ Levels DataConv::getThrsFromContext(const string & column_name)
 
 	string digits = getAllMatches("_(\\d*)\\b", column_name, 1).front();
 	result.resize(digits.size());
-	transform(WHOLE(digits), begin(result), lexical_cast<ActLevel, char>);
+	transform(WHOLE(digits), begin(result), [](char digit ) { return lexical_cast<ActLevel>(digit);} );
 
 	return result;
 }

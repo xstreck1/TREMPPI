@@ -3,9 +3,10 @@ native/tremppi_common/configure.h
 run_cmake.bat
 run_cmake_static.bat
 run_cmake.sh
+cmake_install.cmake
 
 #possible GECODE
-/gecode-*
+*gecode-*
 
 # build files
 /bin*
@@ -14,6 +15,8 @@ run_cmake.sh
 /Debug*
 ./tremppi
 tremppi.exe
+tremppi
+TREMPPI.cbp
 
 # CMake files
 CMakeFiles*
@@ -31,6 +34,7 @@ Win32*
 *.sln
 *.suo
 *.vs/*
+TREMPPI.VC.*
 
 # NetBeans
 *nbproject*
