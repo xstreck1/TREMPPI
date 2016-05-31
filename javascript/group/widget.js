@@ -30,6 +30,27 @@ tremppi.group.createPanelContent = function (data, panel) {
     tremppi.report.setDescription(panel, data.setup);
 };
 
+tremppi.group.findByVector = function (cmp_recs, sel_rec) {
+    for (var i = 0; i < cmp_recs.length; i++) {
+        var cmp_rec = cmp_recs[i];
+        // Skip if different
+        if (Object.keys(cmp_rec).length == Object.keys(sel_rec).length) {
+
+            var found = true;
+            for (val in cmp_rec) {
+               if (val != "count" && cmp_rec[val] != sel_rec[val]) {
+                   found = false;
+                   break;
+               }
+            }
+            if (found) {
+                return cmp_rec;
+            }
+        }
+    }
+    return null;
+}
+
 tremppi.group.valuesSetter = function (source, panel) {
     return function (data) {
         tremppi.group.createPanelContent(data, panel);
@@ -40,14 +61,11 @@ tremppi.group.valuesSetter = function (source, panel) {
         var cmp_recs = tremppi.group['right'].records;
         for (var i = 0; i < sel_recs.length; i++) {
             var sel_rec = sel_recs[i];
-            var cmp_rec = tremppi.report.findByName(cmp_recs, sel_rec.name);
-            if (typeof cmp_rec.name !== 'undefined') {
-                var dif_rec = {name: sel_rec.name};
-                ['count', 'portion', 'min', 'max', 'mean'].forEach(function (val) {
-                    if ((typeof sel_rec[val] !== 'undefined') && (typeof cmp_rec[val] !== 'undefined')) {
-                        dif_rec[val] = sel_rec[val] - cmp_rec[val];
-                    }
-                });
+            var cmp_rec = tremppi.group.findByVector(cmp_recs, sel_rec);
+            if (cmp_rec !== null) {
+                var dif_rec = {};
+                $.extend(dif_rec, cmp_rec);
+                dif_rec["count"] = sel_rec["count"] - cmp_rec["count"];
                 dif_recs.push(dif_rec);
             }
         }
