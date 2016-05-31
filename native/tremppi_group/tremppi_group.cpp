@@ -87,18 +87,21 @@ int tremppi_group(int argc, char ** argv)
 		try
 		{
 			DEBUG_LOG << "Selection " + sels_name[sel_no];
-			out = Report::createSetup(selections[sel_no], sels_name[sel_no]);
+			out = Report::createSetup(selections[sel_no], sels_name[sel_no]);
+
 			for (const string & prefix : prefixes)
 			{
 				const auto new_columns = sqlite3pp::func::matchingColumns(PARAMETRIZATIONS_TABLE, regex{ prefix + "_.*" }, db);
 				columns.insert(WHOLE(new_columns));
 			}
-		}		catch (exception & e)
+		}
+		catch (exception & e)
 		{
 			logging.exceptionMessage(e, 3);
 		}
 
-		const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);		try
+		const size_t row_count = sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, out["setup"]["select"].asString(), db);
+		try
 		{
 			DEBUG_LOG << "Reading the values, computing the statistics.";
 			logging.newPhase("Reading row", row_count);
@@ -108,15 +111,18 @@ int tremppi_group(int argc, char ** argv)
 			// Read the data
 			for (auto row : group_qry)
 			{
-				for (int i = 0; i < group_qry.column_count(); i++) {
+				for (int i = 0; i < group_qry.column_count(); i++) {
+
 					if (row.column_type(i) == SQLITE_NULL)
 					{
 						throw runtime_error(string("A null valued entry in the column ") + group_qry.column_name(i));
 					}
-					bool val;					if (row.column_type(i) == SQLITE_INTEGER)
+					bool val;
+					if (row.column_type(i) == SQLITE_INTEGER)
 					{
 						val = row.get<int>(i) != 0;
-					}					else if (row.column_type(i) == SQLITE3_TEXT)
+					}
+					else if (row.column_type(i) == SQLITE3_TEXT)
 					{
 						val = row.get<const char *>(i)[0] != '0';
 					}
@@ -139,7 +145,7 @@ int tremppi_group(int argc, char ** argv)
 			for (const pair<vector<bool>, size_t> & result : counts)
 			{
 				Json::Value result_node;
-				result_node["count"] = result.second;
+				result_node["count"] = static_cast<int>(result.second);
 				int i = 0;
 				for (const pair<size_t, string> column : columns)
 				{
