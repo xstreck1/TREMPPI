@@ -19,11 +19,11 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* global tremppi */
 
-tremppi.list.page = function () {
-    if (typeof tremppi.list.setup === 'undefined') {
-        $("#widget").html("No quantitative report has been created yet.");
+tremppi.group.page = function () {
+    if (typeof tremppi.group.setup === 'undefined') {
+        $("#widget").html("No qualitative report has been created yet.");
     } else {
-        tremppi.report.createPanels();        
+        tremppi.report.createPanels();
         for (var i = 0; i < tremppi.report.panels.length; i++) {
             $('#container_' + tremppi.report.panels[i]).html("");
             $("#container_" + tremppi.report.panels[i]).append('<div id="table_' + tremppi.report.panels[i] + '" class="report_content" ></div>');
@@ -33,28 +33,24 @@ tremppi.list.page = function () {
     }
 };
 
-tremppi.list.setData = function (data) {
+tremppi.group.setData = function (data) {
+    tremppi.toolbar.onClick = tremppi.group.toolbarClick;
 };
 
-tremppi.list.controls = function() {
-    tremppi.toolbar.onClick = tremppi.quantitative.toolbarClick;
-}
-
-tremppi.list.getData = function () {
+tremppi.group.getData = function () {
     return {};
 };
 
-tremppi.list.layout = function () {
+tremppi.group.layout = function () {
 };
 
-tremppi.list.toolbarClass = function () {
+tremppi.group.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [
             {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
             {type: 'radio', id: 'left', group: '1', caption: 'Left'},
             {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
-            {type: 'radio', id: 'right', group: '1', caption: 'Right'}
-        ]
+            {type: 'radio', id: 'right', group: '1', caption: 'Right'}]
     };
 };

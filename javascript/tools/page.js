@@ -49,7 +49,8 @@ tremppi.tools.tool_list = [
             {name: "qualitative", description: "get qualitative analysis of the known data"},
             {name: "quantitative", description: "get summary of up till now known data"},
             {name: "regulations", description: "create an regulationsion graph based on a statistical analysis"},
-            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"}
+            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"},
+            {name: "group", description: "make groups of same qualitatve features"}
         ]
     },
     {

@@ -35,7 +35,7 @@ map<string, pair<int(*)(int, char**), string> > tremppi_functions =
 		{ "express", { tremppi_express, "create the logical expressions for all the parametrizations" } },
 		{ "impact", { tremppi_impact, "label with the impact of a regulator on its target" } },
 		{ "init", { tremppi_init, "create a new model with a model viewer" } },
-        { "list", { tremppi_list, "obtain data from the database" } },
+        { "group", { tremppi_group, "make groups of same qualitatve features" } },
 		{ "qualitative", { tremppi_qualitative, "get qualitative analysis of the known data" } },
 		{ "quantitative", { tremppi_quantitative, "get summary of up till now known data" } },
 		{ "regulations", { tremppi_regulations, "create an regulationsion graph based on a statistical analysis" } },

@@ -19,25 +19,25 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* global tremppi */
 
-tremppi.list.setPanel = function (panel) {
+tremppi.group.setPanel = function (panel) {
     tremppi.widget[panel] = $('#table_' + panel).w2grid(tremppi.widget.getGrid(panel));
 };
 
-tremppi.list.createPanelContent = function (data, panel) {
-    tremppi.quantitative[panel].records = data.records;
-    tremppi.quantitative[panel].header = data.setup.s_name;
-    tremppi.quantitative[panel].refresh();
+tremppi.group.createPanelContent = function (data, panel) {
+    tremppi.group[panel].records = data.records;
+    tremppi.group[panel].header = data.setup.s_name;
+    tremppi.group[panel].refresh();
     tremppi.report.setDescription(panel, data.setup);
 };
 
-tremppi.list.valuesSetter = function (source, panel) {
+tremppi.group.valuesSetter = function (source, panel) {
     return function (data) {
-        tremppi.quantitative.createPanelContent(data, panel);
+        tremppi.group.createPanelContent(data, panel);
         tremppi.log(source + " loaded successfully.");
 
-        var sel_recs = tremppi.quantitative['left'].records;
+        var sel_recs = tremppi.group['left'].records;
         var dif_recs = [];
-        var cmp_recs = tremppi.quantitative['right'].records;
+        var cmp_recs = tremppi.group['right'].records;
         for (var i = 0; i < sel_recs.length; i++) {
             var sel_rec = sel_recs[i];
             var cmp_rec = tremppi.report.findByName(cmp_recs, sel_rec.name);
@@ -55,14 +55,14 @@ tremppi.list.valuesSetter = function (source, panel) {
         var mid = {
             "records": dif_recs,
             "setup": {
-                "s_name": tremppi.quantitative.left.header + " - " + tremppi.quantitative.right.header
+                "s_name": tremppi.group.left.header + " - " + tremppi.group.right.header
             }
         };
-        tremppi.quantitative.createPanelContent(mid, 'mid');
+        tremppi.group.createPanelContent(mid, 'mid');
     };
 };
 
-tremppi.list.getGrid = function (grid_name) {
+tremppi.group.getGrid = function (grid_name) {
     var portion = (100 - 40) / 4;
     return {
         name: grid_name,
@@ -70,12 +70,6 @@ tremppi.list.getGrid = function (grid_name) {
         show: {
             header: true
         },
-        columns: [
-            {field: 'name', caption: 'Label', size: '40%', sortable: true},
-            {field: 'count', caption: 'Count', size: portion + '%', sortable: true},
-            {field: 'min', caption: 'Min', size: portion + '%', sortable: true},
-            {field: 'max', caption: 'Max', size: portion + '%', sortable: true},
-            {field: 'mean', caption: 'Mean', size: portion + '%', sortable: true}
-        ]
+        columns: tremppi.group.setup.columns
     };
 };
