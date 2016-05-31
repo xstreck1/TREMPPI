@@ -191,7 +191,7 @@ tremppi = {
             ]
         };
 
-        tremppi.layout = $('body').w2layout(layout);
+        tremppi.layout = $('#my_body').w2layout(layout);
         tremppi.toolbar = w2ui.layout.get("main").toolbar;
         // Distable toolbar for final projects
         if (tremppi.final || tremppi.toolbar.items.length === 0) {

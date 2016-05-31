@@ -30,7 +30,7 @@ from tremppi.file_manipulation import read_jsonp, write_jsonp
 
 import os, os.path, json
 from os.path import join, abspath
-from flask import Flask, render_template, render_template_string, request, send_from_directory, Config
+from flask import Flask, render_template, render_template_string, request, send_from_directory, redirect, Config
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
@@ -105,8 +105,8 @@ def mk_usr_proj():
     else:
         raise Exception(configure_filename + " or " + projects_filename + " does not exist in " + system.DEST_PATH + ", which is not empty. Are you sure it's a correct path?")
 
-    if args.nopen is False:
-        webbrowser.open("http://localhost:" + port + "/" + project_path)
+    #if args.nopen is False:
+    #    webbrowser.open("http://localhost:" + port + "/" + project_path)
 
 
 
@@ -163,8 +163,10 @@ def create_app():       # Setup Flask app and app.config
     def members_page():
         if not os.path.isdir(ConfigClass.PROJECTS_PATH+str(current_user.username)):     #works
             os.makedirs(ConfigClass.PROJECTS_PATH+str(current_user.username))
-        a=mk_usr_proj()
-        return a
+        mk_usr_proj()
+        with open('last_page.txt',"r") as foo:
+            last=foo.read()
+        return redirect(last)
 
     @app.route('/<path:path>', methods=['GET', 'POST'])
     @login_required
@@ -197,8 +199,13 @@ def create_app():       # Setup Flask app and app.config
                     conts=''
                     with open(pt+'/'+fl,"r") as foo:
                         conts+=foo.read()
-                    conts=conts.replace('<head>','<head>{% extends "base.html" %}{% block content %}')
-                    conts=conts.replace('</body>','{% endblock %}</body>')
+                        print(conts)
+                    conts=conts.replace('<!DOCTYPE html>', '{% extends "base.html" %}<!DOCTYPE html>')
+                    conts=conts.replace('<title>',' {% block header %}<title>')
+                    conts=conts.replace('<!--    </head>','{% endblock %}<!--    </head>')
+                    conts='{% extends "base.html" %}{% block header %}   <script src="./libs/jquery-2.1.3.js"></script>      <link rel="stylesheet" type="text/css" href="./libs/w2ui-1.4.3.css">        <script src="./libs/w2ui-1.4.3.js"></script>        <link rel="stylesheet" type="text/css" href="./libs/jquery.qtip.min.css">        <script src="./libs/jquery.qtip.min.js"></script>        <script src="./libs/paper-full.min.js"></script>        <script src="./common/tremppi.js"></script> <script src="./libs/cytoscape-2.3.9.js"></script>{% endblock %}' \
+                     '{% block content %}<div id="my_body"></div>{% endblock %}'
+                    print(conts)
                     return render_template_string(conts)
                 else:
                     return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
