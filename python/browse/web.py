@@ -15,34 +15,32 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 __author__ = 'Voydwalker'
-import os
-import os.path
-import sys
-from flask import Flask, render_template, render_template_string, request, send_from_directory, Config
+
+from os import replace, remove, fdopen, makedirs
+from os.path import dirname, join, basename, exists, abspath, split, isdir
+from threading import Thread
+from urllib.parse import urlparse, parse_qs
+
+from flask import Flask, render_template, render_template_string, request, send_from_directory, Config, redirect
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
 from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
-from os import replace, remove, fdopen
-from os.path import dirname, join, basename, exists, abspath
-from threading import Thread
-from urllib.parse import urlparse, parse_qs
-from webconfig import ConfigClass
 
 from init.init import init
-from browse.tool_manager import ToolManager
+from tool_manager import ToolManager
+from initiate_projects import mk_usr_proj
+from webconfig import ConfigClass
 from tremppi.configure import configure
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
-from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
+from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system
 from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
-
-def create_app():       # Setup Flask app and app.config
-    print("Template path " + ConfigClass.TEMPLATE_PATH)
-    app = Flask(__name__, template_folder=ConfigClass.TEMPLATE_PATH)
+# Setup Flask app and app.config
+def create_app():
+    app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder))
     app.config.from_object(ConfigClass)
 
     # Initialize Flask extensions
@@ -88,10 +86,14 @@ def create_app():       # Setup Flask app and app.config
     @app.route('/members')
     @login_required
     def members_page():
-        return 'members page'
+        target = join(system.DEST_PATH, current_user.username)
+        if not isdir(target):
+            makedirs(target)
+        last_page = mk_usr_proj(target)
+        return redirect(last_page)
 
     @app.route('/<path:path>', methods=['GET', 'POST'])
-    #@login_required
+    @login_required
     def serve(path):
         if request.method=='GET':
             return do_get(request.path[1:])
@@ -104,14 +106,30 @@ def create_app():       # Setup Flask app and app.config
         print(request)
         print(request.args)
         parsed_url = urlparse(path)
-        pt,fl=os.path.split(parsed_url.path)
-        pt = join(abspath("."), pt)
+        pt,fl=split(parsed_url.path)
+        pt = join(abspath(system.DEST_PATH), current_user.username, pt)
+        print(pt)
+        print(fl)
         data = ""
         if not request.args or '_' in request.args:     #works
             if request.path == "/":
                 data = "tremmpi browse is running"
             else:
-                return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
+                if fl.endswith('.html'):
+                    print('need html')
+                    conts=''
+                    with open(pt+'/'+fl,"r") as foo:
+                        conts+=foo.read()
+                        print(conts)
+                    conts=conts.replace('<!DOCTYPE html>', '{% extends "base.html" %}<!DOCTYPE html>')
+                    conts=conts.replace('<title>',' {% block header %}<title>')
+                    conts=conts.replace('<!--    </head>','{% endblock %}<!--    </head>')
+                    conts='{% extends "base.html" %}{% block header %}   <script src="./libs/jquery-2.1.3.js"></script>      <link rel="stylesheet" type="text/css" href="./libs/w2ui-1.4.3.css">        <script src="./libs/w2ui-1.4.3.js"></script>        <link rel="stylesheet" type="text/css" href="./libs/jquery.qtip.min.css">        <script src="./libs/jquery.qtip.min.js"></script>        <script src="./libs/paper-full.min.js"></script>        <script src="./common/tremppi.js"></script> <script src="./libs/cytoscape-2.3.9.js"></script>{% endblock %}' \
+                     '{% block content %}<div id="my_body"></div>{% endblock %}'
+                    print(conts)
+                    return render_template_string(conts)
+                else:
+                    return send_from_directory(pt, fl)  #VULNERABILITY, disable  ../ etc.
         elif parsed_url.query[0:len("delete+")] == "delete+":
             names = parsed_url.query.split("+")
             if _tool_manager.is_free(names[1]):
@@ -166,7 +184,6 @@ def create_app():       # Setup Flask app and app.config
         elif parsed_url.query[0:len("getCommands")] == "getCommands":
             data = _tool_manager.get_commands()
         return data     #str(data).encode()
-
 
 
     def do_post(req):

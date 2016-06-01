@@ -32,9 +32,9 @@ from urllib.parse import urlparse, parse_qs
 if __name__ == "__main__":
     path.append(dirname(dirname(abspath(argv[0]))))
 
-from web import create_app
+from browse.web import create_app
 from webconfig import ConfigClass
-from tool_manager import ToolManager
+from browse.tool_manager import ToolManager
 from init.init import init
 from tremppi.header import data_folder, default_port, configure_filename, projects_filename, last_page_filename, system_init, system,  database_file
 from tremppi.project_files import list_projects, write_projects, generate_data,  delete_project, save_file, get_log, get_path_level
@@ -50,16 +50,16 @@ parser.add_argument('--nopen', help='if set, do not open the browser', action='s
 args = parser.parse_args()
 system_init(argv[0], args)
 
+if __name__ == "__main__":
+    # Execute the server itself.
+    if args.port is not None:
+        port = args.port
+    else:
+        port = default_port
 
-# Execute the server itself.
-if args.port is not None:
-    port = args.port
-else:
-    port = default_port
+    # Start the web server
+    app = create_app()
+    app.run(port=int(port), debug=True)
 
-# Start web server
-app = create_app()
-app.run(port=int(port), debug=False)
-
-if args.nopen is False:
-    webbrowser.open("http://localhost:" + port + "/" + project_path)
+    if args.nopen is False:
+        webbrowser.open("http://localhost:" + port + "/" + project_path)

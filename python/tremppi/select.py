@@ -18,7 +18,6 @@
 import json
 import re
 
-
 def get_atom(record):
     atoms = []
 
