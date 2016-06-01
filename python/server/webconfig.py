@@ -1,4 +1,3 @@
-__author__ = 'soulcry'
 import os
 
 class ConfigClass(object):

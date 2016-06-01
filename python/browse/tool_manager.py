@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import subprocess
-import sys
+from sys import builtin_module_names
+from subprocess import Popen, PIPE
 from os.path import join
 from tremppi.header import system
 from threading import Thread
@@ -26,7 +26,7 @@ try:
 except ImportError:
     from queue import Queue, Empty  # python 3.x
 
-ON_POSIX = 'posix' in sys.builtin_module_names
+ON_POSIX = 'posix' in builtin_module_names
 
 class ToolManager:
     _commands = []
@@ -71,7 +71,7 @@ class ToolManager:
                 self._last_progress = "00.000"
                 print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
 
-                self._subprocess = subprocess.Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=subprocess.PIPE)
+                self._subprocess = Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=PIPE)
                 self._queue = Queue()
 
                 self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))
@@ -102,7 +102,7 @@ class ToolManager:
         self._last_progress = "00.000"
 
     def call_init(self, name):
-        subprocess.Popen(join(system.BIN_PATH, "tremppi") + " " + name)
+        Popen(join(system.BIN_PATH, "tremppi") + " " + name)
 
     def is_free(self, name): #return true iff name has no scheduled or running commands
         return len([x for x in self._commands if x[0] != name]) == 0

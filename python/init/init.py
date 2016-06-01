@@ -16,10 +16,10 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import os
 import argparse
 import shutil
 from os.path import join, dirname, abspath, exists
+
 if __name__ == "__main__":
     sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
 from tremppi.file_manipulation import copyanything
@@ -29,7 +29,7 @@ from tremppi.header import folders, widgets, source_folder, data_folder, configu
 
 def init(name):
     DEST_CONTENT = join(system.DEST_PATH, name)
-    if os.path.exists(DEST_CONTENT):
+    if exists(DEST_CONTENT):
         raise Exception('The destination folder ' + DEST_CONTENT + ' already exists, aborting.')
 
     # copy the data
