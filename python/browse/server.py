@@ -17,28 +17,27 @@
 
 
 __author__ = 'Voydwalker'
-import os, os.path, json
-from os.path import join, abspath
+import os
+import os.path
+import sys
 from flask import Flask, render_template, render_template_string, request, send_from_directory, Config
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
 from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
-from webconfig import ConfigClass
-
-import sys
 from os import replace, remove, fdopen
-from os.path import dirname, join, basename, exists
+from os.path import dirname, join, basename, exists, abspath
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
-from init.init import init
-from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
-from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
-from tool_manager import ToolManager
-from tremppi.configure import configure
-from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
+from webconfig import ConfigClass
 
+from init.init import init
+from browse.tool_manager import ToolManager
+from tremppi.configure import configure
+from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
+from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
+from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
 
 def create_app():       # Setup Flask app and app.config
@@ -81,8 +80,6 @@ def create_app():       # Setup Flask app and app.config
 
     _tool_manager = ToolManager()
 
-
-
     # ROUTES
     @app.route('/')
     def home_page():
@@ -102,9 +99,6 @@ def create_app():       # Setup Flask app and app.config
             return do_post(request.path[1:])
         else:
             return 'unhandled request type'
-
-
-
 
     def do_get(path):
         print(request)
@@ -213,8 +207,5 @@ def create_app():       # Setup Flask app and app.config
             replace(parsed_path, join(dirname(parsed_path), new_name + '.json'))
             configure(dirname(dirname(parsed_path)), basename(dirname(parsed_path)))
             return 'rename needs handling'
-
-
-
 
     return app

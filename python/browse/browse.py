@@ -15,42 +15,37 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import webbrowser
-import sys
 import argparse
+import json
+import os
+import os.path
 import subprocess
-from os import chdir, listdir
-from os.path import dirname, join, abspath, exists
-
-if __name__ == "__main__":
-    sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.header import data_folder, default_port, configure_filename, projects_filename, last_page_filename, system_init, system
-from tremppi.project_files import list_projects, write_projects, generate_data
-from tremppi.file_manipulation import read_jsonp, write_jsonp
-
-import os, os.path, json
-from os.path import join, abspath
+import sys
+import webbrowser
 from flask import Flask, render_template, render_template_string, request, send_from_directory, redirect, Config
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
 from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
-from webconfig import ConfigClass
-
-import sys
-from os import replace, remove, fdopen
-from os.path import dirname, join, basename, exists
+from os import replace, remove, fdopen, chdir, listdir
+from os.path import dirname, join, basename, exists, abspath
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
+from webconfig import ConfigClass
+
+if __name__ == "__main__":
+    sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
+
 from init.init import init
-from tremppi.header import last_page_filename, data_folder, database_file, configure_filename
+from tremppi.header import data_folder, default_port, configure_filename, projects_filename, last_page_filename, system_init, system,  database_file
+from tremppi.project_files import list_projects, write_projects, generate_data
+from tremppi.file_manipulation import read_jsonp, write_jsonp
+
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
-from tool_manager import ToolManager
+from browse.tool_manager import ToolManager
 from tremppi.configure import configure
 from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
-
-
 
 # options and system configure
 parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
@@ -107,8 +102,6 @@ def mk_usr_proj():
 
     #if args.nopen is False:
     #    webbrowser.open("http://localhost:" + port + "/" + project_path)
-
-
 
 
 def create_app():       # Setup Flask app and app.config
@@ -177,9 +170,6 @@ def create_app():       # Setup Flask app and app.config
             return do_post(request.path[1:])
         else:
             return 'unhandled request type'
-
-
-
 
     def do_get(path):
         print(request)
