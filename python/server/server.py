@@ -15,23 +15,23 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from argparse import ArgumentParser
-from sys import path, argv
-from os.path import dirname, abspath
+import argparse
+import sys
+import os
 
 if __name__ == "__main__":
-    path.append(dirname(dirname(abspath(argv[0]))))
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0]))))
 
 from server_app import create_app
 from tremppi.header import system_init, default_port
 
 # options and system configure
-parser = ArgumentParser(description='Initiate a TREMPPI project.')
+parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
 parser.add_argument('--path', help='specify the browsing location.')
 parser.add_argument('--port', help='number of the port to run the browser on')
 
 args = parser.parse_args()
-system_init(argv[0], args)
+system_init(sys.argv[0], args)
 
 if __name__ == "__main__":
     # Execute the server itself.

@@ -21,6 +21,7 @@ default_port = "8080"
 configure_filename = "configure.js"
 projects_filename = "projects.js"
 last_page_filename = "last_page.txt"
+server_config_filename = 'tremppi_server.ini'
 database_file = 'database.sqlite'
 source_folder = 'javascript'
 template_folder = 'templates'

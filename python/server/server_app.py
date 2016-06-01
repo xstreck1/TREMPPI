@@ -31,10 +31,9 @@ from init.init import init
 from browse.tool_manager import ToolManager
 from browse.initiate_projects import mk_usr_proj
 from browse.query_responses import do_get, do_post
-from webconfig import ConfigClass
 from tremppi.configure import configure
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
-from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system
+from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system, server_config_filename
 from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
 
@@ -58,7 +57,6 @@ def make_tremppi_user(db):
         last_name = db.Column(db.String(100), nullable=False, server_default='')
     return TremppiUser
 
-
 # Extend the basic registration with a recaptcha field in a custom class
 class TremppiRegisterForm(RegisterForm):
     recaptcha = RecaptchaField()
@@ -67,7 +65,11 @@ class TremppiRegisterForm(RegisterForm):
 # Setup Flask app and app.config
 def create_app():
     app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder))
-    app.config.from_object(ConfigClass)
+    config_file = join(system.DEST_PATH, server_config_filename)
+    if exists(config_file):
+        app.config.from_pyfile(config_file)
+    else:
+        raise Exception('The configuration file ' + config_file + 'is missing')
 
     # Initialize Flask extensions
     db = SQLAlchemy(app)
