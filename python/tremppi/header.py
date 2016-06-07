@@ -25,6 +25,7 @@ server_config_filename = 'tremppi_server.ini'
 database_file = 'database.sqlite'
 source_folder = 'javascript'
 template_folder = 'templates'
+server_folder = 'server'
 data_folder = 'data'
 widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'tools']
 folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'tools']

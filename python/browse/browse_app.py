@@ -15,31 +15,16 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from os import replace, remove, fdopen, makedirs
-from os.path import dirname, join, basename, exists, abspath, split, isdir
-from threading import Thread
-from urllib.parse import urlparse, parse_qs
+from flask import Flask, request, redirect
 
-from flask import Flask, render_template, render_template_string, request, send_from_directory, Config, redirect
-from flask_mail import Mail
-from flask_sqlalchemy import SQLAlchemy
-from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
-from flask_user.forms import RegisterForm
-from flask_wtf import RecaptchaField
+from initiate_projects import mk_usr_proj
+from query_responses import do_get, do_post, InvalidUsage
 
-from init.init import init
-from browse.tool_manager import ToolManager
-from browse.initiate_projects import mk_usr_proj
-from browse.query_responses import do_get, do_post
-from webconfig import ConfigClass
-from tremppi.configure import configure
-from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
-from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system
-from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
+from tremppi.header import system
 
 # Setup Flask app and app.config
 def create_app():
-    app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder))
+    app = Flask(__name__)
 
     # ROUTES
     @app.route('/')
@@ -48,11 +33,23 @@ def create_app():
 
     @app.route('/<path:path>', methods=['GET', 'POST'])
     def serve(path):
-        if request.method=='GET':
+        if request.method == 'GET':
             return do_get(request.path[1:])
-        elif request.method=='POST':
+        elif request.method == 'POST':
             return do_post(request.path[1:])
         else:
-            return 'unhandled request type'
+            raise MethodNotAllowed()
+
+    @app.errorhandler(InvalidUsage)
+    def handle_invalid_usage(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
+    @app.errorhandler(MethodNotAllowed)
+    def handle_not_allowed(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
 
     return app

@@ -51,3 +51,6 @@ projects - Copy
 # created files
 *.sqlite
 *log.txt
+
+#server
+server/*

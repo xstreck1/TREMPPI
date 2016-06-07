@@ -21,8 +21,7 @@ from os.path import dirname, abspath
 
 if __name__ == "__main__":
     path.append(dirname(dirname(abspath(argv[0]))))
-
-from server_app import create_app
+from browse_app import create_app
 from tremppi.header import system_init, default_port
 
 # options and system configure
@@ -42,7 +41,7 @@ else:
 
 # Start web server
 app = create_app()
-app.run(port=int(port), debug=False)
+app.run(port=int(port), debug=True)
 
 if args.nopen is False:
     webbrowser.open("http://localhost:" + port + "/" + project_path)

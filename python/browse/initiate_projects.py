@@ -16,7 +16,6 @@ def mk_usr_proj(target_folder):
         with open(join(target_folder, last_page_filename), "r") as last_page_file:
             last_page = last_page_file.read()
 
-    project_path = ''
     # the case the folder is empty
     if not listdir(target_folder):
         process = Popen([join(system.BIN_PATH, "tremppi")] + ['init'] + ['project_0'] + ['--path'] + [abspath(target_folder)])

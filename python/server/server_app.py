@@ -15,22 +15,21 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from flask import Flask, render_template, render_template_string, request, send_from_directory, Config, redirect, jsonify
+from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
+from flask_user.forms import RegisterForm
+from flask_wtf import RecaptchaField
 from os import replace, remove, fdopen, makedirs
 from os.path import dirname, join, basename, exists, abspath, split, isdir
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 
-from flask import Flask, render_template, render_template_string, request, send_from_directory, Config, redirect
-from flask_mail import Mail
-from flask_sqlalchemy import SQLAlchemy
-from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter
-from flask_user.forms import RegisterForm
-from flask_wtf import RecaptchaField
-
-from init.init import init
-from browse.tool_manager import ToolManager
 from browse.initiate_projects import mk_usr_proj
-from browse.query_responses import do_get, do_post
+from browse.query_responses import do_get, do_post, InvalidUsage, MethodNotAllowed
+from browse.tool_manager import ToolManager
+from init.init import init
 from tremppi.configure import configure
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
 from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system, server_config_filename
@@ -57,6 +56,7 @@ def make_tremppi_user(db):
         last_name = db.Column(db.String(100), nullable=False, server_default='')
     return TremppiUser
 
+
 # Extend the basic registration with a recaptcha field in a custom class
 class TremppiRegisterForm(RegisterForm):
     recaptcha = RecaptchaField()
@@ -64,7 +64,8 @@ class TremppiRegisterForm(RegisterForm):
 
 # Setup Flask app and app.config
 def create_app():
-    app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder))
+    print(system.DEST_PATH)
+    app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder), static_folder=system.DEST_PATH)
     config_file = join(system.DEST_PATH, server_config_filename)
     if exists(config_file):
         app.config.from_pyfile(config_file)
@@ -83,6 +84,7 @@ def create_app():
     user_manager = UserManager(db_adapter, app, register_form=TremppiRegisterForm)
 
     # ROUTES
+
     @app.route('/')
     def home_page():
         return render_template('index.html')
@@ -90,20 +92,38 @@ def create_app():
     @app.route('/members')
     @login_required
     def members_page():
-        target = join(system.DEST_PATH, current_user.username)
-        if not isdir(target):
-            makedirs(target)
-        last_page = mk_usr_proj(target)
+        app.static_folder = join(system.DEST_PATH, current_user.username)
+        if not isdir(system.DEST_PATH):
+            makedirs(system.DEST_PATH)
+        last_page = mk_usr_proj(system.DEST_PATH)
         return redirect(last_page)
 
     @app.route('/<path:path>', methods=['GET', 'POST'])
     @login_required
     def serve(path):
-        if request.method=='GET':
-            return do_get(request.path[1:])
-        elif request.method=='POST':
-            return do_post(request.path[1:])
+        # path = current_user.username + '/' + path
+        if request.method == 'GET':
+            return do_get(app, path)
+        elif request.method == 'POST':
+            return do_post(app, path)
         else:
-            return 'unhandled request type'
+            raise MethodNotAllowed()
+
+    @app.before_first_request
+    def _run_on_start():
+        if current_user.is_authenticated :
+            app.static_folder = join(system.DEST_PATH, current_user.username)
+
+    @app.errorhandler(InvalidUsage)
+    def handle_invalid_usage(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
+    @app.errorhandler(MethodNotAllowed)
+    def handle_not_allowed(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
 
     return app

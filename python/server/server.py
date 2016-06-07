@@ -16,30 +16,34 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
-import sys
 import os
+import sys
 
 if __name__ == "__main__":
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0]))))
 
 from server_app import create_app
-from tremppi.header import system_init, default_port
+from tremppi.header import system_init, default_port, system, server_folder
 
 # options and system configure
-parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
-parser.add_argument('--path', help='specify the browsing location.')
+parser = argparse.ArgumentParser(description='Start a tremppi server.')
+parser.add_argument('--path', help='the path argument is ignored')
 parser.add_argument('--port', help='number of the port to run the browser on')
+parser.add_argument('--debug', help='if set, run debug', action='store_false')
 
 args = parser.parse_args()
 system_init(sys.argv[0], args)
 
-if __name__ == "__main__":
-    # Execute the server itself.
-    if args.port is not None:
-        port = args.port
-    else:
-        port = default_port
+# set the server to the fixed location
+system.DEST_PATH = os.path.join(system.HOME_PATH, server_folder)
+if not os.path.isdir(system.DEST_PATH):
+    raise Exception('The server folder does not exist.')
 
-    # Start the web server
-    app = create_app()
-    app.run(port=int(port), debug=True)
+if args.port is not None:
+    port = args.port
+else:
+    port = default_port
+
+# Start the web server
+app = create_app()
+app.run(port=int(port), debug=args.debug)
