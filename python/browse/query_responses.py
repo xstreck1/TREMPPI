@@ -31,7 +31,7 @@ from server_errors import InvalidUsage, MethodNotAllowed, Conflict
 from tremppi.configure import configure
 from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_parent
 from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system
-from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
+from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level, is_project_folder
 
 _tool_manager = ToolManager()
 
@@ -57,8 +57,8 @@ def do_get(app, url):
             # else:
             #     return send_from_directory(path, file)  # VULNERABILITY, disable  ../ etc.
     elif request.args['command'] == 'getProgress':
-        return _tool_manager.get_progress()
-    elif request.args['command'] ==  'getLog':
+        return str(_tool_manager.get_progress())
+    elif request.args['command'] == 'getLog':
         return get_log(join(app.static_folder, path, "log.txt"))
     elif request.args['command'] == "getCommands":
         return _tool_manager.get_commands()
@@ -103,9 +103,9 @@ def do_post(app, url):
         if 'subcommand' not in request.args:
             raise InvalidUsage('subcommand not found in tremppi call')
         else:
-            _tool_manager.add_to_queue(url, request.args['subcommand'])
+            _tool_manager.add_to_queue(join(app.static_folder, path), request.args['subcommand'])
             progress = _tool_manager.get_progress()
-            return 'TREMPPI ' + request.args['subcommand'] + ' successful'
+            return str(progress)
     elif request.args['command'] == 'delete':
         if 'type' not in request.args:
             raise InvalidUsage('type missing in the delete command')
@@ -121,8 +121,8 @@ def do_post(app, url):
             else:
                 raise Conflict('jobs running on ' + names[0] + ', can not delete')
         elif request.args['type'] == 'file':
-            remove(parsed_path)
-            configure(dirname(dirname(url)), basename(dirname(url)))
+            remove(join(app.static_folder, path, file))
+            configure(join(app.static_folder, dirname(path)), basename(path))
             return 'delete successful'
         else:
             raise InvalidUsage('unknown delete type: ' + request.args['type'])
@@ -139,16 +139,18 @@ def do_post(app, url):
             elif _tool_manager.is_free(path):
                 file_path = join(app.static_folder, path, configure_filename)
                 header, data = read_jsonp(file_path)
+                replace(join(app.static_folder, path), join(app.static_folder, request.args['new_name']))
                 data['project_name'] = request.args['new_name']
+                file_path = join(app.static_folder, request.args['new_name'], configure_filename)
                 write_jsonp(file_path, header, data)
-                replace(path, request.args['new_name'])
                 write_projects(app.static_folder)
-                return 'rename+ needs handling'
+                return 'rename successful'
             else:
                 return 'jobs running on ' + path + ', can not rename'
         elif request.args['type'] == 'file':
-            replace(parsed_path, join(dirname(url), request.args['new_name'] + '.json'))
-            configure(dirname(dirname(url)), basename(dirname(url)))
+            # TODO rename in the file
+            replace(join(app.static_folder, path, file), join(app.static_folder, path, request.args['new_name'] + '.json'))
+            configure(join(app.static_folder, dirname(path)), basename(path))
             return 'rename successful'
         else:
             raise InvalidUsage('unknown rename type: ' + request.args['type'])
@@ -156,17 +158,13 @@ def do_post(app, url):
         if not path_is_parent(app.static_folder, join(app.static_folder, path)):
             raise InvalidUsage('invalid clone path ' + join(app.static_folder, path))
         elif not is_project_folder(join(app.static_folder, path)):
-            raise IvalidUsage(path + " seems not to be a TREMPPI project")
+            raise InvalidUsage(path + " seems not to be a TREMPPI project")
         else:
-            file_path = join(app.static_folder, path, configure_filename)
-            header, data = read_jsonp(file_path)
+            copyanything(join(app.static_folder, path), join(app.static_folder, path + '(clone)'))
+            config_filepath = join(app.static_folder, path + '(clone)', configure_filename)
+            header, data = read_jsonp(config_filepath)
             data['project_name'] = path + '(clone)'
-            write_jsonp(file_path, header, data)
-            copyanything(path, path + '(clone)')
-            file_path = join(path, configure_filename)
-            header, data = read_jsonp(file_path)
-            data['project_name'] = path
-            write_jsonp(file_path, header, data)
+            write_jsonp(config_filepath, header, data)
             write_projects(app.static_folder)
             return 'clone successful'
     elif request.args['command'] == 'finalize':

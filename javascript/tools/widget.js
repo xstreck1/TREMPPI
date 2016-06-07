@@ -44,13 +44,8 @@ tremppi.tools.getCommands = function () {
     });
 };
 
-tremppi.tools.getProgress = function () {
-    var url = tremppi.getProjectAddress() + "?command=getProgress";
-    $.ajax({
-        type: "GET",
-        url: url,
-        success: function (data) {
-            var result = parseInt(data);
+tremppi.tools.displayProgress = function (data) {
+    var result = parseInt(data);
             if (result !== -1) {
                 $("#progress_no").html(data);
                 setTimeout(tremppi.tools.getProgress, 1000);
@@ -59,7 +54,14 @@ tremppi.tools.getProgress = function () {
                 tremppi.tools.getCommands();
                 tremppi.tools.getLog();
             }
-        },
+}
+
+tremppi.tools.getProgress = function () {
+    var url = tremppi.getProjectAddress() + "?command=getProgress";
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: tremppi.tools.displayProgress,
         cache: false,
         error: tremppi.logError
     });

@@ -94,9 +94,9 @@ def create_app():
     @login_required
     def members_page():
         app.static_folder = join(system.DEST_PATH, current_user.username)
-        if not isdir(system.DEST_PATH):
-            makedirs(system.DEST_PATH)
-        last_page = mk_usr_proj(system.DEST_PATH)
+        if not isdir(app.static_folder):
+            makedirs(app.static_folder)
+        last_page = mk_usr_proj(app.static_folder)
         return redirect(last_page)
 
     @app.route('/<path:path>', methods=['GET', 'POST'])

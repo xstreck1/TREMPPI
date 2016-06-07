@@ -31,12 +31,10 @@ tremppi.tools.killAll = function (command) {
         type: "POST",
         url: url,
         success: function (res) {
-            tremppi.log("Kill all executed successfully.");
             tremppi.tools.getCommands();
+            tremppi.log(res);
         },
-        error: function (res) {
-            tremppi.log("Kill all failed.", 'error');
-        }
+        error: tremppi.logError
     });
 };
 
@@ -50,12 +48,7 @@ tremppi.tools.addToQueue = function (command) {
     $.ajax({
         type: "POST",
         url: url,
-        success: function (res) {
-            tremppi.log(res);
-            tremppi.tools.getCommands();
-        },
-        error: function (res) {
-            tremppi.log(res, 'error');
-        }
+        success: tremppi.tools.displayProgress,
+        error: tremppi.logError
     });
 };
