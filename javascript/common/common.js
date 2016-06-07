@@ -391,4 +391,9 @@ tremppi.log = function (content, level) {
     if ($('#log_line').length > 0) {
         $('#log_line')[0].className = level;
     }
+    console.log('TREMPPI ' + level + ': ' + content);
 };
+
+tremppi.logError = function( jqXHR, textStatus, errorThrown) {
+    tremppi.log(jqXHR.responseText, 'error');
+}

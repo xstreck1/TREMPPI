@@ -68,21 +68,26 @@ def write_projects(projects_path):
     write_jsonp(join(projects_path, projects_filename), header, data)
 
 
-def delete_project(name):
-    print(name)
-    if not isfile(join(name, configure_filename)):
-        raise name + " seems not to be a TREMPPI project"
+def is_project_folder(path):
+    return isfile(join(path, configure_filename))
+
+
+def delete_project(path):
+    if not is_project_folder(path):
+        raise IvalidUsage(path + " seems not to be a TREMPPI project")
     else:
-        rmtree(name)
+        rmtree(path)
 
 
 def save_file(store_path, data):
     with open(store_path, 'w') as file:
         json.dump(data, file)
 
+
 def get_log(log_path):
     with open(log_path, 'r') as file:
         return file.read()
+
 
 def get_path_level(path): #data files have level -1, project files 0, projects 1
     return 1 - path.count("/")

@@ -18,7 +18,8 @@
 from flask import Flask, request, redirect
 
 from initiate_projects import mk_usr_proj
-from query_responses import do_get, do_post, InvalidUsage
+from query_responses import do_get, do_post
+from server_errors import InvalidUsage, MethodNotAllowed, Conflict
 
 from tremppi.header import system
 
@@ -47,6 +48,12 @@ def create_app():
         return response
 
     @app.errorhandler(MethodNotAllowed)
+    def handle_not_allowed(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
+    @app.errorhandler(Conflict)
     def handle_not_allowed(error):
         response = jsonify(error.to_dict())
         response.status_code = error.status_code

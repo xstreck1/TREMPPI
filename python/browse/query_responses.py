@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Flask, render_template, render_template_string, request, send_from_directory, Config, redirect
+from flask import Flask, render_template, render_template_string, request, send_from_directory, Config, redirect,jsonify
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
@@ -27,51 +27,17 @@ from urllib.parse import urlparse, parse_qs
 
 from init.init import init
 from tool_manager import ToolManager
+from server_errors import InvalidUsage, MethodNotAllowed, Conflict
 from tremppi.configure import configure
-from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp
+from tremppi.file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_parent
 from tremppi.header import last_page_filename, data_folder, database_file, configure_filename, template_folder, system
 from tremppi.project_files import write_projects, delete_project, save_file, get_log, get_path_level
 
 _tool_manager = ToolManager()
 
-from flask import jsonify
-
-
-class InvalidUsage(Exception):
-    status_code = 400
-
-    def __init__(self, message, status_code=None, payload=None):
-        Exception.__init__(self)
-        self.message = message
-        if status_code is not None:
-            self.status_code = status_code
-        self.payload = payload
-
-    def to_dict(self):
-        rv = dict(self.payload or ())
-        rv['message'] = self.message
-        return rv
-
-class MethodNotAllowed(Exception):
-        status_code = 405
-
-        def __init__(self, message, status_code=None, payload=None):
-            Exception.__init__(self)
-            self.message = message
-            if status_code is not None:
-                self.status_code = status_code
-            self.payload = payload
-
-        def to_dict(self):
-            rv = dict(self.payload or ())
-            rv['message'] = self.message
-            return rv
-
 def do_get(app, url):
-    parsed_url = urlparse(url)
-    path, file = split(parsed_url.path)
-    data = ""
-    if not request.args or '_' in request.args:  # works
+    path, file = split(url)
+    if 'command' not in request.args:
         if request.path == "/":
             return "TREMPPI is running"
         else:
@@ -90,66 +56,27 @@ def do_get(app, url):
             #     return render_template_string(conts)
             # else:
             #     return send_from_directory(path, file)  # VULNERABILITY, disable  ../ etc.
-    elif parsed_url.query[0:len("delete+")] == "delete+":
-        names = parsed_url.query.split("+")
-        if _tool_manager.is_free(names[1]):
-            delete_project(names[1])
-            write_projects('.')
-            return 'delete+ needs handling'
-        else:
-            return 'jobs running on ' + names[0] + ', can not delete'
-    elif parsed_url.query[0:len("init+")] == "init+":
-        names = parsed_url.query.split("+")
-        init(names[1])
-        write_projects('.')
-        return 'init+ needs handling'
-    elif parsed_url.query[0:len("rename+")] == "rename+":
-        names = parsed_url.query.split("+")
-        if _tool_manager.is_free(names[1]):
-            file_path = join(names[1], configure_filename)
-            header, data = read_jsonp(file_path)
-            data['project_name'] = names[2]
-            write_jsonp(file_path, header, data)
-            replace(names[1], names[2])
-            write_projects('.')
-            return 'rename+ needs handling'
-        else:
-            return 'jobs running on ' + names[0] + ', can not rename'
-    elif parsed_url.query[0:len("clone+")] == "clone+":
-        names = parsed_url.query.split("+")
-        file_path = join(names[1], configure_filename)
-        header, data = read_jsonp(file_path)
-        data['project_name'] = names[1] + '(clone)'
-        write_jsonp(file_path, header, data)
-        copyanything(names[1], names[1] + '(clone)')
-        file_path = join(names[1], configure_filename)
-        header, data = read_jsonp(file_path)
-        data['project_name'] = names[1]
-        write_jsonp(file_path, header, data)
-        write_projects('.')
-        return 'clone+ needs handling'
-    elif parsed_url.query[0:len("finalize+")] == "finalize+":
-        names = parsed_url.query.split("+")
-        if exists(join(names[1], data_folder, database_file)):
-            remove(join(names[1], data_folder, database_file))
-        file_path = join(names[1], configure_filename)
-        header, data = read_jsonp(file_path)
-        data['final'] = True
-        write_jsonp(file_path, header, data)
-        return 'finalize+ needs handling'
-    elif parsed_url.query[0:len('getProgress')] == 'getProgress':
-        data = _tool_manager.get_progress()
-    elif parsed_url.query[0:len('getLog')] == 'getLog':
-        data = get_log("./" + parsed_url.path[1:] + "log.txt")
-    elif parsed_url.query[0:len("getCommands")] == "getCommands":
-        data = _tool_manager.get_commands()
-    return data  # str(data).encode()
+    elif request.args['command'] == 'getProgress':
+        return _tool_manager.get_progress()
+    elif request.args['command'] ==  'getLog':
+        return get_log(join(app.static_folder, path, "log.txt"))
+    elif request.args['command'] == "getCommands":
+        return _tool_manager.get_commands()
+    else:
+        raise InvalidUsage('unknown GET command ' + request.args['command'])
 
 
 def do_post(app, url):
-    raise InvalidUsage('test')
-    print(request.args)
-    if request.args['command'] == 'exit':
+    path, file = split(url)
+    if 'command' not in request.args:
+        raise InvalidUsage('command missing from the POST request')
+    elif request.args['command'] == 'init':
+        if 'new_name' not in request.args:
+            raise InvalidUsage('new_name missing from the init command')
+        else:
+            init(join(app.static_folder, request.args['new_name']))
+            write_projects(app.static_folder)
+    elif request.args['command'] == 'exit':
         def kill_me():
             print("shutdown")
         kill_me()
@@ -157,8 +84,12 @@ def do_post(app, url):
         # Thread(target=kill_me, args=(self._server,)).start()
         return 'exit needs handling'
     elif request.args['command'] == 'save':
-        save_file(join(app.static_folder, url), request.json)
-        return 'save successful'
+        # check if the path is safe to store to
+        if not path_is_parent(app.static_folder, join(app.static_folder, url)):
+            raise InvalidUsage('invalid save path ' + url)
+        else:
+            save_file(join(app.static_folder, url), request.json)
+            return 'save successful'
     elif request.args['command'] == 'page':
         with open(join(app.static_folder, last_page_filename), 'w+') as last_page_file:
             last_page_file.seek(0)
@@ -168,15 +99,27 @@ def do_post(app, url):
     elif request.args['command'] == 'killAll':
         _tool_manager.kill_all(url)
         return 'killAll successful'
-    elif request.args['command'] == 'tremmpi':
-        _tool_manager.add_to_queue(url, request['args'])
-        progress = _tool_manager.get_progress()
-        return 'TREMPPI ' + request['args'] + ' successful'
+    elif request.args['command'] == 'tremppi':
+        if 'subcommand' not in request.args:
+            raise InvalidUsage('subcommand not found in tremppi call')
+        else:
+            _tool_manager.add_to_queue(url, request.args['subcommand'])
+            progress = _tool_manager.get_progress()
+            return 'TREMPPI ' + request.args['subcommand'] + ' successful'
     elif request.args['command'] == 'delete':
         if 'type' not in request.args:
             raise InvalidUsage('type missing in the delete command')
         elif request.args['type'] == 'folder':
-            raise InvalidUsage('notimplemented')
+            if not path_is_parent(app.static_folder, join(app.static_folder, path)):
+                raise InvalidUsage('invalid delete path ' + join(app.static_folder, path))
+            elif not is_project_folder(join(app.static_folder, path)):
+                raise IvalidUsage(path + " seems not to be a TREMPPI project")
+            elif _tool_manager.is_free(path):
+                delete_project(join(app.static_folder, path))
+                write_projects(app.static_folder)
+                return 'delete successful'
+            else:
+                raise Conflict('jobs running on ' + names[0] + ', can not delete')
         elif request.args['type'] == 'file':
             remove(parsed_path)
             configure(dirname(dirname(url)), basename(dirname(url)))
@@ -187,12 +130,61 @@ def do_post(app, url):
         if 'type' not in request.args:
             raise InvalidUsage('type missing in the rename command')
         elif request.args['type'] == 'folder':
-            raise InvalidUsage('notimplemented')
+            if 'new_name' not in request.args:
+                raise InvalidUsage('new_name missing from the rename command')
+            elif not path_is_parent(app.static_folder, join(app.static_folder, path)):
+                raise InvalidUsage('invalid rename path ' + join(app.static_folder, path))
+            elif not is_project_folder(join(app.static_folder, path)):
+                raise IvalidUsage(path + " seems not to be a TREMPPI project")
+            elif _tool_manager.is_free(path):
+                file_path = join(app.static_folder, path, configure_filename)
+                header, data = read_jsonp(file_path)
+                data['project_name'] = request.args['new_name']
+                write_jsonp(file_path, header, data)
+                replace(path, request.args['new_name'])
+                write_projects(app.static_folder)
+                return 'rename+ needs handling'
+            else:
+                return 'jobs running on ' + path + ', can not rename'
         elif request.args['type'] == 'file':
             replace(parsed_path, join(dirname(url), request.args['new_name'] + '.json'))
             configure(dirname(dirname(url)), basename(dirname(url)))
             return 'rename successful'
         else:
             raise InvalidUsage('unknown rename type: ' + request.args['type'])
+    elif request.args['command'] == 'clone':
+        if not path_is_parent(app.static_folder, join(app.static_folder, path)):
+            raise InvalidUsage('invalid clone path ' + join(app.static_folder, path))
+        elif not is_project_folder(join(app.static_folder, path)):
+            raise IvalidUsage(path + " seems not to be a TREMPPI project")
+        else:
+            file_path = join(app.static_folder, path, configure_filename)
+            header, data = read_jsonp(file_path)
+            data['project_name'] = path + '(clone)'
+            write_jsonp(file_path, header, data)
+            copyanything(path, path + '(clone)')
+            file_path = join(path, configure_filename)
+            header, data = read_jsonp(file_path)
+            data['project_name'] = path
+            write_jsonp(file_path, header, data)
+            write_projects(app.static_folder)
+            return 'clone successful'
+    elif request.args['command'] == 'finalize':
+        if not path_is_parent(app.static_folder, join(app.static_folder, path)):
+            raise InvalidUsage('invalid finalize path ' + path)
+        elif not is_project_folder(join(app.static_folder, path)):
+            raise IvalidUsage(path + " seems not to be a TREMPPI project")
+        else:
+            if exists(join(app.static_folder, path, data_folder, database_file)):
+                remove(join(app.static_folder, path, data_folder, database_file))
+            config_filepath = join(app.static_folder, path, configure_filename)
+            header, data = read_jsonp(config_filepath)
+            data['final'] = True
+            write_jsonp(config_filepath, header, data)
+            return 'finalize successful'
+    else:
+        raise InvalidUsage('unknown POST command ' + request.args['command'])
+
+
 
 

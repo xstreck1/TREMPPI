@@ -20,7 +20,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 /* global tremppi */
 
 tremppi.tools.getCommands = function () {
-    var url = tremppi.getProjectAddress() + "?getCommands";
+    var url = tremppi.getProjectAddress() + "?command=getCommands";
     $.ajax({
         type: "GET",
         url: url,
@@ -38,12 +38,14 @@ tremppi.tools.getCommands = function () {
                 }
                 tremppi.tools.getProgress();
             }
-        }
+        },
+        cache: false,
+        error: tremppi.logError
     });
 };
 
 tremppi.tools.getProgress = function () {
-    var url = tremppi.getProjectAddress() + "?getProgress";
+    var url = tremppi.getProjectAddress() + "?command=getProgress";
     $.ajax({
         type: "GET",
         url: url,
@@ -57,12 +59,14 @@ tremppi.tools.getProgress = function () {
                 tremppi.tools.getCommands();
                 tremppi.tools.getLog();
             }
-        }
+        },
+        cache: false,
+        error: tremppi.logError
     });
 };
 
 tremppi.tools.getLog = function () {
-    var url = tremppi.getProjectAddress() + "?getLog";
+    var url = tremppi.getProjectAddress() + "?command=getLog";
     $.ajax({
         type: "GET",
         url: url,
@@ -70,6 +74,8 @@ tremppi.tools.getLog = function () {
             var textarea = document.getElementById('log_file');
             textarea.value = data;
             textarea.scrollTop = textarea.scrollHeight;
-        }
+        },
+        cache: false,
+        error: tremppi.logError
     });
 };

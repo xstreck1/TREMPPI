@@ -27,7 +27,8 @@ from threading import Thread
 from urllib.parse import urlparse, parse_qs
 
 from browse.initiate_projects import mk_usr_proj
-from browse.query_responses import do_get, do_post, InvalidUsage, MethodNotAllowed
+from browse.query_responses import do_get, do_post
+from server_errors import InvalidUsage, MethodNotAllowed, Conflict
 from browse.tool_manager import ToolManager
 from init.init import init
 from tremppi.configure import configure
@@ -121,6 +122,12 @@ def create_app():
         return response
 
     @app.errorhandler(MethodNotAllowed)
+    def handle_not_allowed(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
+    @app.errorhandler(Conflict)
     def handle_not_allowed(error):
         response = jsonify(error.to_dict())
         response.status_code = error.status_code
