@@ -15,22 +15,17 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import argparse
-from os.path import join
+import sys
 
-from tremppi.header import system_init, system
-from tremppi.select import select
-from tremppi.configure import configure
+from tremppi.header import system_init
+from tremppi.project_files import init
 
-# define options
-parser = argparse.ArgumentParser(description='Update a TREMPPI project.')
-parser.add_argument('--path', help='specify the location to update.')
-args = parser.parse_args()
-system_init(sys.argv[0], args)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
+    parser.add_argument('--path', help='specify the location where the file gets created.')
+    parser.add_argument('name', help='name of the newly created model')
+    args = parser.parse_args()
 
-print(select(join(system.HOME_PATH, 'python', 'test', 'select.json'), False) + " : " + select(join(system.HOME_PATH, 'python', 'test', 'select.json'), True))
-configure(system.HOME_PATH + "/javascript/data", "select")
-configure(system.HOME_PATH + "/javascript/data", "properties")
-configure(system.HOME_PATH + "/javascript/data", "quantitative")
-configure(system.HOME_PATH + "/javascript/data", "qualitative")
+    system_init(sys.argv[0], args)
+    init(args.name)

@@ -15,33 +15,31 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import webbrowser
 from argparse import ArgumentParser
-from sys import path, argv
-from os.path import dirname, abspath
-
-if __name__ == "__main__":
-    path.append(dirname(dirname(abspath(argv[0]))))
-from browse_app import create_app
+from sys import argv
+from tremppi.browse_app import create_app
 from tremppi.header import system_init, default_port
 
-# options and system configure
-parser = ArgumentParser(description='Initiate a TREMPPI project.')
-parser.add_argument('--path', help='specify the browsing location.')
-parser.add_argument('--port', help='number of the port to run the browser on')
-parser.add_argument('--nopen', help='if set, do not open the browser', action='store_true')
+if __name__ == "__main__":
+    # options and system configure
+    parser = ArgumentParser(description='Initiate a TREMPPI project.')
+    parser.add_argument('--path', help='specify the browsing location.')
+    parser.add_argument('--port', help='number of the port to run the browser on')
+    parser.add_argument('--nopen', help='if set, do not open the browser', action='store_true')
 
-args = parser.parse_args()
-system_init(argv[0], args)
+    args = parser.parse_args()
+    system_init(argv[0], args)
 
-# Execute the server itself.
-if args.port is not None:
-    port = args.port
-else:
-    port = default_port
+    # Execute the server itself.
+    if args.port is not None:
+        port = args.port
+    else:
+        port = default_port
 
-# Start web server
-app = create_app()
-app.run(port=int(port), debug=True)
+    # Start web server
+    app = create_app()
+    app.run(port=int(port), debug=True)
 
-if args.nopen is False:
-    webbrowser.open("http://localhost:" + port + "/" + project_path)
+    if args.nopen is False:
+        webbrowser.open("http://localhost:" + port + "/" + project_path)

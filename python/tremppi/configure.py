@@ -15,13 +15,15 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import json
+import os
 import re
 import sqlite3
-from os.path import join, dirname, abspath, exists
-from tremppi.database_reader import component_regulators_list, read_components, read_regulations
-from tremppi.header import widgets, database_file
+from os.path import join, exists
+
+from .database_reader import component_regulators_list, read_components, read_regulations
+from .header import widgets, database_file
+
 
 def add_basics(columns, groups):
     columns.append({

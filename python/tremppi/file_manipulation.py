@@ -15,14 +15,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import shutil
 import errno
-import os.path
-import tempfile
-import shutil
-import os
-import re
 import json
+import os
+import os.path
+import re
+import shutil
+import tempfile
 
 
 def replace(file_path, pattern, subst):

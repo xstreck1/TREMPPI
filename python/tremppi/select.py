@@ -18,6 +18,7 @@
 import json
 import re
 
+
 def get_atom(record):
     atoms = []
 
@@ -74,6 +75,7 @@ def get_atom(record):
 
     return atoms
 
+
 def select_query(records):
     clauses = []
 
@@ -87,6 +89,7 @@ def select_query(records):
 
     return "\n".join(clauses)
 
+
 def select_name(records):
     names = []
 
@@ -96,7 +99,6 @@ def select_name(records):
                 names.append(record["name"])
             else:
                 raise Exception("One of the selections does not have a name.")
-
 
     return "\n".join(names)
 

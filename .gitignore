@@ -6,7 +6,7 @@ run_cmake.sh
 cmake_install.cmake
 
 #possible GECODE
-/gecode-*
+*gecode-*
 
 # build files
 /bin*
@@ -15,6 +15,8 @@ cmake_install.cmake
 /Debug*
 ./tremppi
 tremppi.exe
+tremppi
+TREMPPI.cbp
 
 # CMake files
 CMakeFiles*
@@ -32,7 +34,7 @@ Win32*
 *.sln
 *.suo
 *.vs/*
-*.VC*
+TREMPPI.VC.*
 
 # NetBeans
 *nbproject*
@@ -52,5 +54,5 @@ projects - Copy
 *.sqlite
 *log.txt
 
-#server
-server/*
+# server
+server*
