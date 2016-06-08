@@ -196,7 +196,10 @@ tremppi = {
             var tremppi_controls = '<div id="static_text">STATIC VERSION</div>';
         } else if (tremppi.exec_type === 'browse')
         {
-            var tremppi_controls = '<button id="rename_btn" onclick="tremppi.exit()" class="btn">EXIT</button><button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
+            var tremppi_controls = '<button id="rename_btn" onclick="tremppi.exit()" class="btn">EXIT</button>'
+            if (tremppi.level === 1) {
+                tremppi_controls += '<button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
+            }
         } else if (tremppi.exec_type === 'server')
         {
             var tremppi_controls = '<button id="rename_btn" onclick="tremppi.logOut()" class="btn">LOG OUT</button><button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
@@ -232,7 +235,6 @@ tremppi = {
             }
         }
 
-
         var sidebar = {
             name: 'sidebar',
             nodes: [],
@@ -246,7 +248,6 @@ tremppi = {
                     project_controls +
                     '</div>'
         };
-
 
         // Add the projects
         if (tremppi.level === 1) {

@@ -20,7 +20,7 @@
 /* global tremppi */
 
 tremppi.tools.getCommands = function () {
-    var url = tremppi.getProjectAddress() + "?command=get_commands";
+    var url = tremppi.getProjectAddress() + "tools.html?command=get_commands";
     $.ajax({
         type: "GET",
         url: url,
@@ -51,11 +51,11 @@ tremppi.tools.displayProgress = function (data) {
     } else {
         tremppi.tools.getCommands();
         tremppi.tools.getLog();
-    }
-}
+    };
+};
 
 tremppi.tools.getProgress = function () {
-    var url = tremppi.getProjectAddress() + "?command=get_progress";
+    var url = tremppi.getProjectAddress() + "tools.html?command=get_progress";
     $.ajax({
         type: "GET",
         url: url,
@@ -66,7 +66,7 @@ tremppi.tools.getProgress = function () {
 };
 
 tremppi.tools.getLog = function () {
-    var url = tremppi.getProjectAddress() + "?command=get_log";
+    var url = tremppi.getProjectAddress() + "tools.html?command=get_log";
     $.ajax({
         type: "GET",
         url: url,

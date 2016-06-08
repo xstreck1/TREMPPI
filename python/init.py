@@ -18,8 +18,8 @@
 import argparse
 import sys
 
-from tremppi.header import system_init
-from tremppi.project_files import init
+from tremppi.header import system_init, system
+from tremppi.project_files import tremppi_init
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     system_init(sys.argv[0], args)
-    init(args.name)
+    tremppi_init(system.DEST_PATH, args.name)

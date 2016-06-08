@@ -26,7 +26,7 @@ tremppi.tools.toolbarClick = function (event) {
 };
 
 tremppi.tools.killAll = function (command) {
-    var url = tremppi.getProjectAddress() + "?command=kill_all";
+    var url = tremppi.getProjectAddress() + "tools.html?command=kill_all";
     $.ajax({
         type: "POST",
         url: url,
@@ -39,7 +39,7 @@ tremppi.tools.killAll = function (command) {
 };
 
 tremppi.tools.addToQueue = function (command) {
-    var url = tremppi.getProjectAddress() + "?command=tremppi&subcommand=" + command;
+    var url = tremppi.getProjectAddress() + "tools.html?command=tremppi&subcommand=" + command;
     if (command === 'clean'){
         if (!confirm('Do you really want to call ' + command + '? This operation is irreversible.')) {
             return;
