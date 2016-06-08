@@ -22,7 +22,7 @@
 tremppi.tools.getCommands = function () {
     var url = tremppi.getProjectAddress() + "tools.html?command=get_commands";
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: url,
         success: function (data) {
             $('#progress').html('');
@@ -57,7 +57,7 @@ tremppi.tools.displayProgress = function (data) {
 tremppi.tools.getProgress = function () {
     var url = tremppi.getProjectAddress() + "tools.html?command=get_progress";
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: url,
         success: tremppi.tools.displayProgress,
         cache: false,
@@ -68,7 +68,7 @@ tremppi.tools.getProgress = function () {
 tremppi.tools.getLog = function () {
     var url = tremppi.getProjectAddress() + "tools.html?command=get_log";
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: url,
         success: function (data) {
             var textarea = document.getElementById('log_file');
