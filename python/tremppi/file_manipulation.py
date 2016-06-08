@@ -51,10 +51,10 @@ def replace_regex(file_path, pattern, subst):
         new_file.write(regex.sub(subst, line))
     # close temp file
     new_file.close()
-    close(fh)
+    os.path.close(fh)
     old_file.close()
     # Remove original file
-    remove(file_path)
+    os.path.remove(file_path)
     # Move new file
     shutil.move(abs_path, file_path)
 

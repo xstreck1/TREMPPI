@@ -26,7 +26,7 @@ tremppi.tools.toolbarClick = function (event) {
 };
 
 tremppi.tools.killAll = function (command) {
-    var url = tremppi.getProjectAddress() + "?command=killAll";
+    var url = tremppi.getProjectAddress() + "?command=kill_all";
     $.ajax({
         type: "POST",
         url: url,

@@ -1,21 +1,21 @@
 /******************************************************************************
-Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
-
-This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
-via Parameter Identification (TREMPPI)
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+ Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+ 
+ This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+ via Parameter Identification (TREMPPI)
+ 
+ This program is free software: you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+ 
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License along with
+ this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 
 /* global w2ui */
 
@@ -41,8 +41,8 @@ tremppi = {
             }
         };
     },
-    getHostAddress: function() {
-        return window.location.protocol + "//"+ window.location.host;
+    getHostAddress: function () {
+        return window.location.protocol + "//" + window.location.host;
     },
     getRootAddress: function () {
         var path = window.location.pathname;
@@ -72,7 +72,7 @@ tremppi = {
             type: "POST",
             url: url,
             data: content,
-  	    contentType: 'application/json',
+            contentType: 'application/json',
             success: tremppi.log,
             error: tremppi.logError
         });
@@ -93,8 +93,7 @@ tremppi = {
     setItem: function (key, value) {
         if (typeof localStorage === 'undefined') {
             tremppi.log("localStorage not available, browser key " + key + " not stored", "warning");
-        }
-        else {
+        } else {
             localStorage.setItem(tremppi.makeStorageKey(key), value);
         }
     },
@@ -102,18 +101,15 @@ tremppi = {
         if (typeof localStorage === 'undefined') {
             tremppi.log("localStorage not available, browser key " + key + " not loaded", "warning");
             return null;
-        }
-        else {
+        } else {
             var value = localStorage.getItem(tremppi.makeStorageKey(key));
             if (value === null) {
                 if (typeof default_value === 'undefined') {
                     return null;
-                }
-                else {
+                } else {
                     return default_value;
                 }
-            }
-            else {
+            } else {
                 return value;
             }
         }
@@ -162,8 +158,7 @@ tremppi = {
             tremppi.projects = [tremppi.setup.project_name];
             tremppi.project_folder = "";
             tremppi.level = 0;
-        }
-        else {
+        } else {
             tremppi.project_name = tremppi.setup.project_name;
             tremppi.project_folder = tremppi.project_name + "/";
             tremppi.level = 1;
@@ -195,11 +190,26 @@ tremppi = {
         }
 
         var select_name = '"' + (tremppi.widget_name === 'index' ? tremppi.project_name : '') + '"';
+
+
+        if (typeof tremppi.exec_type === 'undefined' || tremppi.exec_type === 'static') {
+            var tremppi_controls = '<div id="static_text">STATIC VERSION</div>';
+        } else if (tremppi.exec_type === 'browse')
+        {
+            var tremppi_controls = '<button id="rename_btn" onclick="tremppi.exit()" class="btn">EXIT</button><button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
+        } else if (tremppi.exec_type === 'server')
+        {
+            var tremppi_controls = '<button id="rename_btn" onclick="tremppi.logOut()" class="btn">LOG OUT</button><button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
+        } else
+        {
+            var tremppi_controls = '<div id="static_text">UNKNOWN SERVER TYPE</div>';
+            tremppi.log('unknown exec_type ' + tremppi.exec_type, 'error');
+        }
+
         // Set left side bar
         if (tremppi.final) {
             var project_controls = '<div id="static_text">FINALIZED</div>';
-        }
-        else {
+        } else {
             if (tremppi.widget_name === 'tools') {
                 if (tremppi.level === 1) {
                     var project_controls =
@@ -207,16 +217,13 @@ tremppi = {
                             '<button class="btn" id="rename_btn" onclick="tremppi.renameProject()" >RENAME</button>' +
                             '<button class="btn" id="delete_btn" onclick="tremppi.deleteProject()" >DELETE</button>' +
                             '<button class="btn" id="finalize_btn" onclick="tremppi.finalizeProject()" >FINALIZE</button>';
-                }
-                else {
+                } else {
                     var project_controls =
                             '<button class="btn" id="finalize_btn" onclick="tremppi.finalizeProject()" >FINALIZE</button>';
                 }
-            }
-            else if (["index", "editor", "properties", "select"].indexOf(tremppi.widget_name) !== -1) {
+            } else if (["index", "editor", "properties", "select"].indexOf(tremppi.widget_name) !== -1) {
                 var project_controls = '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>';
-            }
-            else if (["qualitative", "quantitative", "regulations", "correlations", "witness"].indexOf(tremppi.widget_name) !== -1) {
+            } else if (["qualitative", "quantitative", "regulations", "correlations", "witness"].indexOf(tremppi.widget_name) !== -1) {
                 var project_controls =
                         '<button id="rename_btn" onclick="tremppi.rename()" class="btn">RENAME</button>'
                         + '<button id="delete_btn" onclick="tremppi.delete()" class="btn">DELETE</button>'
@@ -225,12 +232,14 @@ tremppi = {
             }
         }
 
+
         var sidebar = {
             name: 'sidebar',
             nodes: [],
             topHTML:
                     '<div class="sidebar_field" id="sidebar_field" style="height: 150px;" >' +
                     '<img id="logo" src="logo.png" />' +
+                    tremppi_controls +
                     '</div>',
             bottomHTML:
                     '<div class="sidebar_field">' +
@@ -278,7 +287,6 @@ tremppi = {
         // Load the specific data
         $.ajaxSetup({cache: false});
         tremppi.getData(tremppi.widget.setData);
-        tremppi.setExit();
     },
     pickFile: function (filename) {
         $("#select_name").removeAttr('disabled').val(filename);
@@ -317,38 +325,18 @@ tremppi = {
             $("#select_name").val(details[1]);
         }
     },
-    setExit: function () {
-        var make_static = function () {
-            $('<div id="static_text">STATIC VERSION</div>').appendTo("#sidebar_field");
-        };
-        $.ajax({
-            type: "GET",
-            url: tremppi.getRootAddress() + '/',
-            error: function (res) {
-                make_static();
-            },
-            success: function (res) {
-                if (res === 'tremppi browse is running') {
-                    $('<button id="rename_btn" onclick="tremppi.exit()" class="btn">EXIT</button>').appendTo("#sidebar_field");
-                    if (tremppi.level === 1) {
-                        $('<button class="btn" id="new_project_btn" onclick="tremppi.newProject()" >NEW PROJECT</button>').appendTo("#sidebar_field");
-                    }
-                }
-                else {
-                    make_static();
-                }
-            }
-        });
-    },
     exit: function () {
         $.ajax({
             type: "POST",
-            url: tremppi.getProjectAddress() + '?comman=exit',
+            url: tremppi.getProjectAddress() + '?command=exit',
             error: tremppi.logError,
             success: function (res) {
                 $('body').html('TREMPPI HAS FINISHED');
             }
         });
+    },
+    logOut: function () {
+        location.replace(tremppi.getRootAddress() + 'user/sign-out', "_self");
     },
     delete: function () {
         var old_name = tremppi.current_object;
@@ -365,16 +353,13 @@ tremppi = {
         if (new_name === '') {
             tremppi.log('No name specified', 'error');
             return false;
-        }
-        else if (tremppi.sidebar.find({text: new_name}).length !== 0) {
+        } else if (tremppi.sidebar.find({text: new_name}).length !== 0) {
             tremppi.log('The name ' + new_name + ' is already taken', 'error');
             return false;
-        }
-        else if (new_name.indexOf(' ') >= 0) {
+        } else if (new_name.indexOf(' ') >= 0) {
             tremppi.log('No whitespace allowed', 'error');
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     },
@@ -394,19 +379,19 @@ tremppi = {
             });
         }
     },
-    newProject: function () {
+    new_project: function () {
         var new_name = prompt("Please enter the name for the new project.", "");
-        if (new_name !== null && tremppi.projectNameValid(new_name)) { 
+        if (new_name !== null && tremppi.projectNameValid(new_name)) {
             $.ajax({
                 type: "POST",
-                url: tremppi.getProjectAddress() + tremppi.current_file + '?command=init&new_name=' + new_name,
+                url: tremppi.getProjectAddress() + tremppi.current_object + '?command=new_project&new_name=' + new_name,
                 success: function (res) {
-                    location.replace(tremppi.getRootAddress() + new_name + tremppi.current_file, "_self");
+                    location.replace(tremppi.getRootAddress() + new_name + '/' +  tremppi.current_object + '.html', "_self");
                     tremppi.log(res);
                 },
                 error: tremppi.logError
             });
-        }        
+        }
     },
     save: function () {
         tremppi.saveData(tremppi.widget.getData());
@@ -415,16 +400,13 @@ tremppi = {
         if (new_name === '') {
             tremppi.log('No name specified', 'error');
             return false;
-        }
-        else if (tremppi.projects.indexOf(new_name) !== -1) {
+        } else if (tremppi.projects.indexOf(new_name) !== -1) {
             tremppi.log('The name ' + new_name + ' is already taken', 'error');
             return false;
-        }
-        else if (new_name.indexOf(' ') >= 0) {
+        } else if (new_name.indexOf(' ') >= 0) {
             tremppi.log('No whitespace allowed', 'error');
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     },
@@ -444,8 +426,7 @@ tremppi = {
     deleteProject: function () {
         if (tremppi.projects.length <= 1) {
             tremppi.log('Trying to delete the only project. At least one TREMPPI project must exists at any time.', 'error');
-        }
-        else if (confirm('Do you really want to delete the project ' + tremppi.project_name + '?')) {
+        } else if (confirm('Do you really want to delete the project ' + tremppi.project_name + '?')) {
             $.ajax({
                 type: "POST",
                 url: tremppi.getProjectAddress() + tremppi.current_object + '?command=delete&type=folder',
@@ -458,7 +439,7 @@ tremppi = {
         }
     },
     finalizeProject: function () {
-         if (confirm('Do you really want to finalize the project ' + tremppi.project_name + '?')) {
+        if (confirm('Do you really want to finalize the project ' + tremppi.project_name + '?')) {
             tremppi.projects.splice(tremppi.projects.indexOf(tremppi.project_name), 1);
             var project = tremppi.level === 1 ? tremppi.project_name : '.';
             $.ajax({
@@ -475,17 +456,16 @@ tremppi = {
     renameProject: function () {
         var new_name = prompt("Please enter the new name for the project.", tremppi.project_name);
         if (new_name !== null && tremppi.projectNameValid(new_name)) {
-                $.ajax({
-                    type: "POST",
-                    url: tremppi.getProjectAddress() + tremppi.current_object + '?command=rename&type=folder&new_name=' + new_name,
-                    success: function (res) {
-                        location.replace(tremppi.getRootAddress() + new_name+ '/tools.html', "_self");
-                        tremppi.log(res);
-                    },
-                    error: tremppi.logError
-                });
-        }
-        else {
+            $.ajax({
+                type: "POST",
+                url: tremppi.getProjectAddress() + tremppi.current_object + '?command=rename&type=folder&new_name=' + new_name,
+                success: function (res) {
+                    location.replace(tremppi.getRootAddress() + new_name + '/tools.html', "_self");
+                    tremppi.log(res);
+                },
+                error: tremppi.logError
+            });
+        } else {
             tremppi.log('Invalid project name ' + new_name, 'error');
         }
     }

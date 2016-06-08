@@ -22,7 +22,6 @@ from os.path import isdir, isfile
 from os.path import join, exists
 from .file_manipulation import copyanything
 from .header import folders, widgets, source_folder, data_folder, system, version
-from .project_files import generate_data
 from .file_manipulation import read_jsonp, write_jsonp
 from .header import configure_filename, projects_filename
 from .server_errors import InvalidUsage
@@ -90,7 +89,7 @@ def save_file(store_path, data):
         json.dump(data, file)
 
 
-def get_log(log_path):
+def get_log_data(log_path):
     with open(log_path, 'r') as file:
         return file.read()
 
@@ -99,8 +98,8 @@ def get_path_level(path): #data files have level -1, project files 0, projects 1
     return 1 - path.count("/")
 
 
-def init(name):
-    DEST_CONTENT = join(system.DEST_PATH, name)
+def tremppi_init(path, name):
+    DEST_CONTENT = join(path, name)
     if exists(DEST_CONTENT):
         raise Exception('The destination folder ' + DEST_CONTENT + ' already exists, aborting.')
 

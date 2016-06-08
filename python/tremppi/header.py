@@ -18,7 +18,7 @@
 from os.path import dirname, abspath, join, normpath, basename, isfile
 from os import getcwd
 
-version = "1.0.0"
+version = "1.1.0"
 
 default_port = "8080"
 configure_filename = "configure.js"
