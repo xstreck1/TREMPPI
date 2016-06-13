@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="margins: 0px; height: 100%">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,10 +29,17 @@
 
 </head>
 
-<body>
+<body class="no-margins" style="padding: 0px; height: calc(100% - 60px)">
 {% block body %}
-<div id="header-div" class="clearfix with-margins">
-    <div class="pull-left"><a href="/"><h1 class="no-margins">TREMPPI</h1></a></div>
+<div id="header-div" class="with-margins" style="height: 50px;">
+    <div class="pull-left">
+      <a href="/"><span lass="no-margins">TREMPPI</span></a>
+
+          {% if call_or_get(current_user.is_authenticated) %}
+          <a href={{ url_for('members_page') }}>ENTER TREMPPI</a>
+          {% endif %}
+
+    </div>
     <div class="pull-right">
         {% if call_or_get(current_user.is_authenticated) %}
         <a href="{{ url_for('user.profile') }}">{{ current_user.username }}</a>
@@ -45,15 +52,11 @@
 </div>
 {% block menu %}
 <div id="menu-div" class="with-margins">
-    <a href="/">TREMPPI Home</a>
-    {% if call_or_get(current_user.is_authenticated) %}
-    &nbsp; | &nbsp; <a href="{{ url_for('user.profile') }}">User profile</a>
-    {% endif %}
 </div>
 {% endblock %}
 <hr class="no-margins"/>
 
-<div id="main-div" class="with-margins">
+<div id="main-div" class="with-margins" style="height: calc(100% - 50px)">
     {# One-time system messages called Flash messages #}
     {% block flash_messages %}
     {%- with messages = get_flashed_messages(with_categories=true) -%}
@@ -71,17 +74,11 @@
     {% block main %}{% block content %}{% endblock %}{% endblock %}
 </div>
 
-<br/>
-<hr class="no-margins"/>
-<div id="footer-div" class="clearfix with-margins">
-    <div class="pull-left">Last modified: 30.5.2016</div>
-    <div class="pull-right">&copy; 2016 FU-Berlin</div>
-</div>
 {% endblock %}
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<!--<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>  -->
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <!-- Bootstrap -->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
