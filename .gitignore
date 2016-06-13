@@ -40,7 +40,7 @@ TREMPPI.VC.*
 *nbproject*
 
 # IDEA
-*.idea*
+python/.idea/
 *__pycache__*
 
 # projects
