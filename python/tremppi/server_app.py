@@ -88,6 +88,8 @@ def create_app():
     app.tools = {}
     def get_tool_manager():
         if current_user.is_authenticated:
+            if current_user.username not in app.tools:
+                app.tools[current_user.username] = ToolManager()
             return app.tools[current_user.username]
         else:
             return MethodNotAllowed("Trying to access a tool manager without authentication.")
@@ -101,8 +103,6 @@ def create_app():
     @app.route('/members')
     @login_required
     def members_page():
-        if current_user.username not in app.tools:
-            app.tools[current_user.username] = ToolManager()
         if not isdir(projects_path()):
             makedirs(projects_path())
         last_page = mk_usr_proj(projects_path())

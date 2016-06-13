@@ -30,12 +30,13 @@ except ImportError:
 ON_POSIX = 'posix' in builtin_module_names
 
 class ToolManager:
-    _commands = []
-    _subprocess = None
-    _thread = None
-    _current = ""
-    _last_progress = 0.0
-    _queue = Queue()
+    def __init__(self):
+        self._commands = []
+        self._subprocess = None
+        self._thread = None
+        self._current = ""
+        self._last_progress = 0.0
+        self._queue = Queue()
 
     def enqueue_output(self, out, queue):
         line = out.read(7)
