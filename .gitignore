@@ -15,7 +15,6 @@ cmake_install.cmake
 /Debug*
 ./tremppi
 tremppi.exe
-tremppi
 TREMPPI.cbp
 
 # CMake files
@@ -56,4 +55,4 @@ projects - Copy
 *log.txt
 
 # server
-server*
+server/
