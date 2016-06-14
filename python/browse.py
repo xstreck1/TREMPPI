@@ -41,4 +41,4 @@ if __name__ == "__main__":
     app = create_app()
     if args.nopen is False:
         webbrowser.open("http://localhost:" + port)
-    app.run(port=int(port), debug=False)
+    app.run(port=int(port), debug=True)

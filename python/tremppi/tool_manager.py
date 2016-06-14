@@ -29,6 +29,7 @@ except ImportError:
 
 ON_POSIX = 'posix' in builtin_module_names
 
+
 class ToolManager:
     def __init__(self):
         self._commands = []
