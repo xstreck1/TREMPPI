@@ -176,6 +176,7 @@ tremppi = {
         var layout = {
             name: 'layout',
             panels: [
+                {type: 'top', style: layout_style, size: 50, content: '<div id="top_panel"></div>' },
                 {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
                 {type: 'main', style: layout_style, content: '<div id="widget" ></div>', toolbar: tremppi.widget.toolbarClass()},
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
@@ -192,26 +193,31 @@ tremppi = {
         var select_name = '"' + (tremppi.widget_name === 'index' ? tremppi.project_name : '') + '"';
 
 
+        var user_controls = "";
+        var tremppi_controls = "";
         if (typeof tremppi.exec_type === 'undefined' || tremppi.exec_type === 'static') {
-            var tremppi_controls = '<div id="static_text">STATIC VERSION</div>';
+            user_controls += '<span id="static_text">STATIC VERSION</span>';
         } else if (tremppi.exec_type === 'browse')
         {
-            var tremppi_controls = '<button id="rename_btn" onclick="tremppi.exit()" class="btn">EXIT</button>'
+            user_controls += '<button class="btn" id="exit_btn" onclick="tremppi.exit()" >EXIT</button>';
             if (tremppi.level === 1) {
                 tremppi_controls += '<button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
             }
         } else if (tremppi.exec_type === 'server')
         {
-            var tremppi_controls = '<button id="rename_btn" onclick="tremppi.logOut()" class="btn">LOG OUT</button><button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
+            user_controls += '<button id="user_btn" onclick="tremppi.userBtn()" class="btn">USER</button>';
+            user_controls += '<button id="exit_btn" onclick="tremppi.logOutBtn()" class="btn">LOG OUT</button>';
+            tremppi_controls += '<button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
         } else
         {
-            var tremppi_controls = '<div id="static_text">UNKNOWN SERVER TYPE</div>';
+            user_controls += '<div id="static_text">UNKNOWN SERVER TYPE</div>';
             tremppi.log('unknown exec_type ' + tremppi.exec_type, 'error');
         }
 
+
         // Set left side bar
         if (tremppi.final) {
-            var project_controls = '<div id="static_text">FINALIZED</div>';
+            var project_controls = '<span id="static_text">FINALIZED</span>';
         } else {
             if (tremppi.widget_name === 'tools') {
                 if (tremppi.level === 1) {
@@ -234,15 +240,20 @@ tremppi = {
                         ;
             }
         }
+        
+        $("#top_panel").html( 
+                '<img id="logo" src="logo.png" />' +
+                '<span id="tremppi_controls">' +
+                tremppi_controls + 
+                '</span>' + 
+                '<span id="user_controls">' +
+                user_controls + 
+                '</span>'
+                );
 
         var sidebar = {
             name: 'sidebar',
             nodes: [],
-            topHTML:
-                    '<div class="sidebar_field" id="sidebar_field" style="height: 150px;" >' +
-                    '<img id="logo" src="logo.png" />' +
-                    tremppi_controls +
-                    '</div>',
             bottomHTML:
                     '<div class="sidebar_field">' +
                     project_controls +
@@ -336,8 +347,11 @@ tremppi = {
             }
         });
     },
-    logOut: function () {
-        location.replace(tremppi.getRootAddress() + 'user/sign-out', "_self");
+    logOutBtn: function () {
+        window.open(tremppi.getRootAddress() + '/user/sign-out');
+    },
+    userBtn: function () {
+        window.open(tremppi.getRootAddress() + '/user/profile');
     },
     delete: function () {
         var old_name = tremppi.current_object;
