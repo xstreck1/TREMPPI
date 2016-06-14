@@ -26,7 +26,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Start a tremppi server.')
     parser.add_argument('--path', help='the path argument is ignored')
     parser.add_argument('--port', help='number of the port to run the browser on')
-    parser.add_argument('--debug', help='if set, run debug', action='store_false')
+    parser.add_argument('--debug', help='if set, run debug', default=False)
+    parser.add_argument('--host', help='set the host adderss', default="localhost")
 
     args = parser.parse_args()
     system_init(sys.argv[0], args)
@@ -43,4 +44,4 @@ if __name__ == "__main__":
 
     # Start the web server
     app = create_app()
-    app.run(port=int(port), debug=args.debug, host='192.168.1.8')
+    app.run(port=int(port), debug=args.debug, host=args.host)

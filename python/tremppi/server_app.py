@@ -48,7 +48,7 @@ def create_app():
         raise Exception('The configuration file ' + config_file + 'is missing')
 
     database_path = abspath(join(system.DEST_PATH, 'TREMPPI_users.sqlite'))
-    app.config['SQLALCHEMY_DATABASE_URI'] = pathlib.Path(database_path).as_uri().replace('file', 'sqlite',1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + database_path
 
     # Initialize Flask extensions
     db = SQLAlchemy(app)
