@@ -176,7 +176,7 @@ tremppi = {
         var layout = {
             name: 'layout',
             panels: [
-                {type: 'top', style: layout_style, size: 50, content: '<div id="top_panel"></div>' },
+                {type: 'top', style: layout_style, size: 35, content: '<div id="top_panel"></div>' },
                 {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
                 {type: 'main', style: layout_style, content: '<div id="widget" ></div>', toolbar: tremppi.widget.toolbarClass()},
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
@@ -193,7 +193,8 @@ tremppi = {
         var select_name = '"' + (tremppi.widget_name === 'index' ? tremppi.project_name : '') + '"';
 
 
-        var user_controls = "";
+        var user_controls = 
+                '<button class="btn" id="exit_btn" onclick="tremppi.docs()" >DOCS</button>';
         var tremppi_controls = "";
         if (typeof tremppi.exec_type === 'undefined' || tremppi.exec_type === 'static') {
             user_controls += '<span id="static_text">STATIC VERSION</span>';
@@ -337,10 +338,13 @@ tremppi = {
             $("#select_name").val(details[1]);
         }
     },
+    docs: function () {
+        window.open('http://dibimath.github.io/TREMPPI/');
+    },
     exit: function () {
         $.ajax({
             type: "POST",
-            url: tremppi.getProjectAddress() + '?command=exit',
+            url: tremppi.getProjectAddress() + 'tools.html?command=exit',
             error: tremppi.logError,
             success: function (res) {
                 $('body').html('TREMPPI HAS FINISHED');
@@ -348,10 +352,10 @@ tremppi = {
         });
     },
     logOutBtn: function () {
-        window.open(tremppi.getRootAddress() + '/user/sign-out');
+        location.replace(tremppi.getRootAddress() + 'user/sign-out', "_self");
     },
     userBtn: function () {
-        window.open(tremppi.getRootAddress() + '/user/profile');
+        location.replace(tremppi.getRootAddress() + 'user/profile', "_self");
     },
     delete: function () {
         var old_name = tremppi.current_object;

@@ -18,28 +18,27 @@ html {
 }
 
 #logo {
-    height: 50px;
-    padding: 5px 50px;
-    width: 200px;
+    height: 35px;
     margin: 0px;
     border: 0px;
+    width: 87.5px;
 }
 
 #top_panel {
-    height: 50px;
+    height: 35px;
     font-size: 0;
-    background-color: #FAFAFA;
+    background-color: white;
 }
 
 #tremppi_controls {
     position: absolute;
-    padding: 10px;
+    padding: 4px;
     top: 0px;
 }
 
 #user_controls {
     position: absolute;
-    padding: 10px;
+    padding: 4px;
     top: 0px;
     right: 0px;
 }

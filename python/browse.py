@@ -26,6 +26,7 @@ if __name__ == "__main__":
     parser = ArgumentParser(description='Initiate a TREMPPI project.')
     parser.add_argument('--path', help='specify the browsing location.')
     parser.add_argument('--port', help='number of the port to run the browser on')
+    parser.add_argument('--debug', help='if set, run debug', default=False)
     parser.add_argument('--nopen', help='if set, do not open the browser', action='store_true')
 
     args = parser.parse_args()
@@ -41,4 +42,4 @@ if __name__ == "__main__":
     app = create_app()
     if args.nopen is False:
         webbrowser.open("http://localhost:" + port)
-    app.run(port=int(port), debug=True)
+    app.run(port=int(port), host=args.host)
