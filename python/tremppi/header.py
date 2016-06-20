@@ -20,6 +20,8 @@ from os import getcwd
 
 version = "1.1.0"
 
+model_size_limit = 1000000
+
 default_port = "8080"
 configure_filename = "configure.js"
 projects_filename = "projects.js"

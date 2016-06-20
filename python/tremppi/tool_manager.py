@@ -19,6 +19,7 @@ from sys import builtin_module_names
 from subprocess import Popen, PIPE
 from os.path import join
 from threading import Thread
+from flask_user import current_user
 
 from .header import system
 
@@ -72,9 +73,15 @@ class ToolManager:
                 command = self._commands.pop()
                 self._current = command[1]
                 self._last_progress = "00.000"
-                print('call: ' + join(system.BIN_PATH, "tremppi") + " " + self.cmd_to_string(command))
 
-                self._subprocess = Popen([join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]], stdout=PIPE)
+
+                argv = [join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]]
+                if command[1] == "spawn" and current_user.is_authenticated:
+                    argv.append('--limit')
+                    argv.append(str(current_user.size_limit))
+
+                print('call: ' + " ".join(argv))
+                self._subprocess = Popen(argv, stdout=PIPE)
                 self._queue = Queue()
 
                 self._thread = Thread(target=self.enqueue_output, args=(self._subprocess.stdout, self._queue))

@@ -20,6 +20,15 @@ int tremppi_spawn(int argc, char ** argv)
 	TremppiSystem::initiate("tremppi_spawn", argc, argv);
 	Logging logging;
 	bfs::path database_file = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
+	// Parse the limit on the size of the model
+	int limit = -1;
+	for (const size_t arg_no : crange(argc))
+	{
+		if (string(argv[arg_no]) == "--limit")
+		{
+			limit = stoi(argv[arg_no + 1]);
+		}
+	}
 
 	// Check the file
 	Json::Value root; // root of the network
@@ -92,6 +101,16 @@ int tremppi_spawn(int argc, char ** argv)
 		RegInfos reg_infos = database_filler.creteTables();
 		Normalizer normalizer(reg_infos);
 		database_filler.startOutput();
+
+		// There is a limit in place and it's overflown
+		if (limit != -1 && limit < KineticsTranslators::getSpaceSize(kinetics)) {
+			string overflow = "The number of parametrizations " + 
+				to_string(KineticsTranslators::getSpaceSize(kinetics)) +
+				" is higher than the limit " +
+				to_string(limit);
+			throw runtime_error(overflow.c_str());
+		}
+
 
 		DEBUG_LOG << "Writing the database file, testing " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
 		logging.newPhase("writing parametrization", KineticsTranslators::getSpaceSize(kinetics));

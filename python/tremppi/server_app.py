@@ -27,7 +27,7 @@ from flask_wtf import RecaptchaField
 
 from .initiate_projects import mk_usr_proj
 from .server_errors import InvalidUsage, MethodNotAllowed, Conflict
-from .header import template_folder, system, server_config_filename
+from .header import template_folder, system, server_config_filename, model_size_limit
 from .query_responses import do_post, do_get
 from .tool_manager import ToolManager
 
@@ -70,6 +70,9 @@ def create_app():
         active = db.Column('is_active', db.Boolean(), nullable=False, server_default='0')
         first_name = db.Column(db.String(100), nullable=False, server_default='')
         last_name = db.Column(db.String(100), nullable=False, server_default='')
+
+        # User limitations
+        size_limit = db.Column('size_limit', db.Integer, nullable=False, server_default=str(model_size_limit))
 
     # Create all database tables
     db.create_all()
