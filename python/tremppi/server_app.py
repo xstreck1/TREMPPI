@@ -27,7 +27,7 @@ from flask_wtf import RecaptchaField
 
 from .initiate_projects import mk_usr_proj
 from .server_errors import InvalidUsage, MethodNotAllowed, Conflict
-from .header import template_folder, system, server_config_filename, model_size_limit
+from .header import template_folder, system, server_config_filename, model_size_limit, static_folder
 from .query_responses import do_post, do_get
 from .tool_manager import ToolManager
 
@@ -40,7 +40,7 @@ class TremppiRegisterForm(RegisterForm):
 # Setup Flask app and app.config
 def create_app():
     print(system.DEST_PATH)
-    app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder))
+    app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder), static_folder=join(system.BIN_PATH, static_folder))
     config_file = join(system.DEST_PATH, server_config_filename)
     if exists(config_file):
         app.config.from_pyfile(config_file)
@@ -118,9 +118,9 @@ def create_app():
     @app.route('/<path:path>', methods=['GET', 'POST'])
     @login_required
     def serve(path):
-        if request.method=='GET':
+        if request.method == 'GET':
             return do_get(app, path)
-        elif request.method=='POST':
+        elif request.method == 'POST':
             return do_post(app, path)
         else:
             return 'unhandled request type'

@@ -29,17 +29,19 @@
 
 </head>
 
-<body class="no-margins" style="padding: 0px; height: calc(100% - 60px)">
+    <!-- 1px for border -->
+<body class="no-margins" style="padding: 0px; margin: 0px; height: calc(100% - 55px - 1px)">
 {% block body %}
-<div id="header-div" class="with-margins" style="height: 35px;">
+<div id="header-div" class="no-margins" style="margin: 10px; height: 35px;">
     <div class="pull-left">
       <img id="logo"
-      src="https://raw.githubusercontent.com/xstreck1/TREMPPI/master/javascript/logo.png"
+      src="{{ url_for('static', filename='logo.png') }}"
       style="height: 35px;"/>
     </div>
     <div class="pull-right">
+        <a href="http://dibimath.github.io/TREMPPI/">Documentation</a>
+        &nbsp; | &nbsp;
         {% if call_or_get(current_user.is_authenticated) %}
-
         <a href={{ url_for('members_page') }}>ENTER TREMPPI</a>
         &nbsp; | &nbsp;
         <a href="{{ url_for('user.profile') }}">User</a>
@@ -51,12 +53,12 @@
     </div>
 </div>
 {% block menu %}
-<div id="menu-div" class="with-margins">
+<div id="menu-div" class="no-margins">
 </div>
 {% endblock %}
 <hr class="no-margins"/>
 
-<div id="main-div" class="with-margins" style="height: calc(100% - 35px)">
+<div id="main-div" class="no-margins" style="height: 100%">
     {# One-time system messages called Flash messages #}
     {% block flash_messages %}
     {%- with messages = get_flashed_messages(with_categories=true) -%}

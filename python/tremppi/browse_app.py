@@ -28,7 +28,7 @@ from .tool_manager import ToolManager
 
 # Setup Flask app and app.config
 def create_app():
-    app = Flask(__name__, static_folder=os.path.abspath(system.DEST_PATH), static_url_path='')
+    app = Flask(__name__)
 
     def projects_path():
         return system.DEST_PATH
@@ -50,9 +50,15 @@ def create_app():
     def exec_type():
         return 'tremppi.exec_type = "browse"'
 
-    @app.route('/<path:path>', methods=['POST'])
-    def serve_post(path):
-        return do_post(app, path)
+    @app.route('/<path:path>', methods=['GET', 'POST'])
+    def serve(path):
+        if request.method == 'GET':
+            return do_get(app, path)
+        elif request.method == 'POST':
+            return do_post(app, path)
+        else:
+            return 'unhandled request type'
+
 
     @app.errorhandler(InvalidUsage)
     def handle_invalid_usage(error):
