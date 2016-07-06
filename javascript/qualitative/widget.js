@@ -38,17 +38,17 @@ tremppi.qualitative.setPanel = function (panel) {
     tremppi.widget[panel] = $('#table_' + panel).w2grid(tremppi.widget.getGrid(panel));
 };
 
-tremppi.qualitative.createPanelContent = function (data, panel) {
+tremppi.qualitative.createPanelContent = function (data, source, panel) {
     tremppi.qualitative[panel].values = data.values;
     tremppi.qualitative[panel].records = tremppi.qualitative.valuesToRecords(data.values);
-    tremppi.qualitative[panel].header = data.setup.s_name;
+    tremppi.qualitative[panel].header = source;
     tremppi.qualitative[panel].refresh();    
     tremppi.report.setDescription(panel, data.setup);
 };
 
 tremppi.qualitative.valuesSetter = function (source, panel) {
     return function (data) {
-        tremppi.qualitative.createPanelContent(data, panel);
+        tremppi.qualitative.createPanelContent(data, source, panel);
         tremppi.log(source + " loaded successfully.");
 
         var sel_vals = tremppi.qualitative['left'].values;

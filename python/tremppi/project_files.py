@@ -16,11 +16,16 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import shutil
 from os import listdir, makedirs
-from os.path import join, exists, isdir, isfile
-from shutil import rmtree
-from tremppi.header import configure_filename, projects_filename, widgets
-from tremppi.file_manipulation import read_jsonp, write_jsonp
+from os.path import isdir, isfile
+from os.path import join, exists
+from .file_manipulation import copyanything
+from .header import folders, widgets, source_folder, data_folder, system, version
+from .file_manipulation import read_jsonp, write_jsonp
+from .header import configure_filename, projects_filename
+from .server_errors import InvalidUsage
+
 
 # make sure all the data are present
 def generate_data(data_path):
@@ -68,21 +73,57 @@ def write_projects(projects_path):
     write_jsonp(join(projects_path, projects_filename), header, data)
 
 
-def delete_project(name):
-    print(name)
-    if not isfile(join(name, configure_filename)):
-        raise name + " seems not to be a TREMPPI project"
+def is_project_folder(path):
+    return isfile(join(path, configure_filename))
+
+
+def delete_project(path):
+    if not is_project_folder(path):
+        raise InvalidUsage(path + " seems not to be a TREMPPI project")
     else:
-        rmtree(name)
+        shutil.rmtree(path)
 
 
 def save_file(store_path, data):
     with open(store_path, 'w') as file:
-        file.write(data.decode())
+        json.dump(data, file)
 
-def get_log(log_path):
+
+def get_log_data(log_path):
     with open(log_path, 'r') as file:
         return file.read()
 
+
 def get_path_level(path): #data files have level -1, project files 0, projects 1
     return 1 - path.count("/")
+
+
+def tremppi_init(path, name):
+    DEST_CONTENT = join(path, name)
+    if exists(DEST_CONTENT):
+        raise Exception('The destination folder ' + DEST_CONTENT + ' already exists, aborting.')
+
+    # copy the data
+    for folder in folders:
+        source = join(join(system.HOME_PATH, source_folder), folder)
+        destination = join(DEST_CONTENT, folder)
+        copyanything(source, destination)
+
+    for file in widgets:
+        shutil.copy(join(system.HOME_PATH, source_folder, file + ".html"), DEST_CONTENT)
+
+    shutil.copy(join(system.HOME_PATH, source_folder, "logo.png"), DEST_CONTENT)
+    shutil.copy(join(system.HOME_PATH, source_folder, "favicon.ico"), DEST_CONTENT)
+
+    # make the data directory
+    generate_data(join(DEST_CONTENT, data_folder))
+
+    # create the configure data
+    with open(join(DEST_CONTENT, 'configure.js'), 'w+') as setup:
+        setup.write('tremppi.setup = { ' +
+                    '\t"project_name": "' + name + '",\n' +
+                    '\t"version": "' + version + '"\n' +
+                    '};'
+                    )
+
+    open(join(DEST_CONTENT, 'log.txt'), 'w+')

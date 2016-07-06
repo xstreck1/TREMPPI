@@ -26,22 +26,20 @@ tremppi.tools.toolbarClick = function (event) {
 };
 
 tremppi.tools.killAll = function (command) {
-    var url = tremppi.getProjectAddress() + "?killAll";
+    var url = tremppi.getProjectAddress() + "tools.html?command=kill_all";
     $.ajax({
         type: "POST",
         url: url,
         success: function (res) {
-            tremppi.log("Kill all executed successfully.");
             tremppi.tools.getCommands();
+            tremppi.log(res);
         },
-        fail: function (res) {
-            tremppi.log("Kill all failed.", 'error');
-        }
+        error: tremppi.logError
     });
 };
 
 tremppi.tools.addToQueue = function (command) {
-    var url = tremppi.getProjectAddress() + "?tremppi+" + command;
+    var url = tremppi.getProjectAddress() + "tools.html?command=tremppi&subcommand=" + command;
     if (command === 'clean'){
         if (!confirm('Do you really want to call ' + command + '? This operation is irreversible.')) {
             return;
@@ -50,12 +48,7 @@ tremppi.tools.addToQueue = function (command) {
     $.ajax({
         type: "POST",
         url: url,
-        success: function (res) {
-            tremppi.log(command + " executed successfully.");
-            tremppi.tools.getCommands();
-        },
-        fail: function (res) {
-            tremppi.log(command + " failed.", 'error');
-        }
+        success: tremppi.tools.displayProgress,
+        error: tremppi.logError
     });
 };

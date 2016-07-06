@@ -1,21 +1,21 @@
 /******************************************************************************
-Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
-
-This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
-via Parameter Identification (TREMPPI)
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+ Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+ 
+ This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+ via Parameter Identification (TREMPPI)
+ 
+ This program is free software: you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+ 
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License along with
+ this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 
 /* global tremppi, paper */
 
@@ -303,7 +303,7 @@ tremppi.report = {
     },
     setDescription: function (panel, setup) {
         if (typeof setup.select !== 'undefined') {
-            $('#desc_' + panel).html('<p class="report_text">' + 
+            $('#desc_' + panel).html('<p class="report_text">' +
                     'Date: ' + setup.date + '<br />' +
                     'Size: ' + setup.size + '<br />' +
                     'Condition: ' + setup.select + '<br />' +
@@ -369,8 +369,7 @@ tremppi.report = {
                     min: tremppi.widget.bounds[param].min - tremppi.widget.bounds[param].max,
                     max: tremppi.widget.bounds[param].max - tremppi.widget.bounds[param].min
                 };
-            }
-            else {
+            } else {
                 range = {
                     min: tremppi.widget.bounds[param].min,
                     max: tremppi.widget.bounds[param].max
@@ -391,4 +390,9 @@ tremppi.log = function (content, level) {
     if ($('#log_line').length > 0) {
         $('#log_line')[0].className = level;
     }
+    console.log('TREMPPI ' + level + ': ' + content);
+};
+
+tremppi.logError = function (jqXHR, textStatus, errorThrown) {
+    tremppi.log(jqXHR.responseText, 'error');
 };

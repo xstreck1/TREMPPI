@@ -15,13 +15,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import json
+import os.path
 import re
 import sqlite3
-from os.path import join, dirname, abspath, exists
-from tremppi.database_reader import component_regulators_list, read_components, read_regulations
-from tremppi.header import widgets, database_file
+from .database_reader import component_regulators_list, read_components, read_regulations
+from .header import widgets, database_file
+
 
 
 def add_basics(columns, groups):
@@ -371,16 +371,16 @@ def make_detail(conn):
 # Creates the configuration files
 def configure(data_path, widget):
     if widget == "select":
-        with sqlite3.connect(join(data_path, database_file)) as conn:
-            with open(join(data_path, "select.js"), 'w+') as select_js:
+        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+            with open(os.path.join(data_path, "select.js"), 'w+') as select_js:
                 columns, groups = make_selection(conn)
                 configured = {'columns': columns, 'groups': groups}
                 select_js.write("tremppi.select.setup = ")
                 json.dump(configured, select_js)
                 select_js.write(";")
     elif widget == "properties":
-        with sqlite3.connect(join(data_path, database_file)) as conn:
-            with open(join(data_path, "properties.js"), 'w+') as properties_js:
+        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+            with open(os.path.join(data_path, "properties.js"), 'w+') as properties_js:
                 list_columns = make_list(conn)
                 detail_columns, detail_groups = make_detail(conn)
                 configured = {
@@ -393,16 +393,16 @@ def configure(data_path, widget):
                 properties_js.write(";")
     elif widget in ["qualitative", "quantitative", "regulations", "correlations", "witness", "group"]:  # generate files list
         files = []
-        widget_dir = join(data_path, widget)
-        if not exists(widget_dir):
+        widget_dir = os.path.join(data_path, widget)
+        if not os.path.exists(widget_dir):
             os.makedirs(widget_dir)
         else:
             for file in os.listdir(widget_dir):
                 if file.endswith(".json"):
                     files.append(file[:-5])
 
-        with sqlite3.connect(join(data_path, database_file)) as conn:
-            with open(join(data_path, widget + '.js'), 'w+') as file_js:
+        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+            with open(os.path.join(data_path, widget + '.js'), 'w+') as file_js:
                 file_js.write('tremppi.' + widget + '.setup = ')
                 json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
                 if widget == "group":
@@ -411,7 +411,7 @@ def configure(data_path, widget):
                 file_js.write(';')
 
     elif widget in widgets:
-        js_filename = join(data_path, widget + '.js')
+        js_filename = os.path.join(data_path, widget + '.js')
         open(js_filename, 'w+').close()
     else:
         raise Exception("Unknown widget " + widget)

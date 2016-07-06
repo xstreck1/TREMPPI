@@ -15,36 +15,35 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import shutil
 import errno
-
-from tempfile import mkstemp
-from shutil import move
-from os import remove, close
-import re
 import json
+import os
+import os.path
+import re
+import shutil
+import tempfile
 
 
 def replace(file_path, pattern, subst):
     # Create temp file
-    fh, abs_path = mkstemp()
+    fh, abs_path = tempfile.mkstemp()
     new_file = open(abs_path,'w')
     old_file = open(file_path)
     for line in old_file:
         new_file.write(line.replace(pattern, subst))
     # close temp file
     new_file.close()
-    close(fh)
+    os.close(fh)
     old_file.close()
     # Remove original file
-    remove(file_path)
+    os.remove(file_path)
     # Move new file
-    move(abs_path, file_path)
+    shutil.move(abs_path, file_path)
 
 
 def replace_regex(file_path, pattern, subst):
     # Create temp file
-    fh, abs_path = mkstemp()
+    fh, abs_path = tempfile.mkstemp()
     new_file = open(abs_path,'w')
     old_file = open(file_path)
     regex = re.compile(pattern)
@@ -52,12 +51,12 @@ def replace_regex(file_path, pattern, subst):
         new_file.write(regex.sub(subst, line))
     # close temp file
     new_file.close()
-    close(fh)
+    os.path.close(fh)
     old_file.close()
     # Remove original file
-    remove(file_path)
+    os.path.remove(file_path)
     # Move new file
-    move(abs_path, file_path)
+    shutil.move(abs_path, file_path)
 
 
 def copyanything(src, dst):
@@ -68,6 +67,7 @@ def copyanything(src, dst):
             shutil.copy(src, dst)
         else:
             raise Exception("copyanything failed")
+
 
 def read_jsonp(filename):
     with open(filename, "r") as file:
@@ -83,9 +83,18 @@ def read_jsonp(filename):
         data = data[json_start:-1]
         return header, json.loads(data)
 
+
 def write_jsonp(filename, header, data):
     with open(filename, "w") as file:
         file.seek(0)
         file.write(header)
         file.write(json.dumps(data))
         file.write(';')
+
+
+def path_is_parent(parent_path, child_path):
+    parent_path = os.path.abspath(parent_path)
+    child_path = os.path.abspath(child_path)
+
+    # Compare the common path of the parent and child path with the common path of just the parent path. Using the commonpath method on just the parent path will regularise the path name in the same way as the comparison that deals with both paths, removing any trailing path separator
+    return os.path.commonprefix([parent_path, child_path]) == parent_path

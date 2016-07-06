@@ -15,7 +15,6 @@ cmake_install.cmake
 /Debug*
 ./tremppi
 tremppi.exe
-tremppi
 TREMPPI.cbp
 
 # CMake files
@@ -40,8 +39,9 @@ TREMPPI.VC.*
 *nbproject*
 
 # IDEA
-*.idea*
+.idea/
 *__pycache__*
+*.pyc
 
 # projects
 projects/*
@@ -53,3 +53,6 @@ projects - Copy
 # created files
 *.sqlite
 *log.txt
+
+# server
+server/

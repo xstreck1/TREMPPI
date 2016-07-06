@@ -17,20 +17,20 @@
 
 import sys
 import argparse
-from os.path import join, dirname, abspath
-if __name__ == "__main__":
-    sys.path.append(dirname(dirname(abspath(sys.argv[0]))))
-from tremppi.header import data_folder, widgets, system, system_init
+from os.path import join
+from tremppi.header import system_init, system
+from tremppi.select import select
 from tremppi.configure import configure
 
 if __name__ == "__main__":
     # define options
-    parser = argparse.ArgumentParser(description='Create configurations for the HTML project browser.')
+    parser = argparse.ArgumentParser(description='Update a TREMPPI project.')
     parser.add_argument('--path', help='specify the location to update.')
     args = parser.parse_args()
     system_init(sys.argv[0], args)
-    DATA_PATH = join(system.DEST_PATH, data_folder)
-    # generate files
-    for widget in widgets:
-        configure(DATA_PATH, widget)
 
+    print(select(join(system.HOME_PATH, 'python', 'test', join('test','select.json')), False) + " : " + select(join(system.HOME_PATH, 'python', 'test', 'select.json'), True))
+    configure(system.HOME_PATH + "/javascript/data", "select")
+    configure(system.HOME_PATH + "/javascript/data", "properties")
+    configure(system.HOME_PATH + "/javascript/data", "quantitative")
+    configure(system.HOME_PATH + "/javascript/data", "qualitative")
