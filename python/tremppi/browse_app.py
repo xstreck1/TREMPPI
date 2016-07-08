@@ -35,7 +35,7 @@ def create_app():
 
     app.projects_path = projects_path
 
-    tool_manager = ToolManager()
+    tool_manager = ToolManager(True)
 
     def get_tool_manager():
         return tool_manager
