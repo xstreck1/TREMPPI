@@ -32,7 +32,8 @@ ON_POSIX = 'posix' in builtin_module_names
 
 
 class ToolManager:
-    def __init__(self):
+    def __init__(self, local):
+        self._local = local
         self._commands = []
         self._subprocess = None
         self._thread = None
@@ -74,9 +75,8 @@ class ToolManager:
                 self._current = command[1]
                 self._last_progress = "00.000"
 
-
                 argv = [join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]]
-                if command[1] == "spawn" and current_user.is_authenticated:
+                if command[1] == "spawn" and not self._local:
                     argv.append('--limit')
                     argv.append(str(current_user.size_limit))
 

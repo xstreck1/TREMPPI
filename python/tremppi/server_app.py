@@ -89,10 +89,12 @@ def create_app():
     app.projects_path = projects_path
 
     app.tools = {}
+
+
     def get_tool_manager():
         if current_user.is_authenticated:
             if current_user.username not in app.tools:
-                app.tools[current_user.username] = ToolManager()
+                app.tools[current_user.username] = ToolManager(False)
             return app.tools[current_user.username]
         else:
             return MethodNotAllowed("Trying to access a tool manager without authentication.")
