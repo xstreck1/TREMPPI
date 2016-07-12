@@ -1,0 +1,68 @@
+div.title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 50pt;
+    counter-reset: section;
+}
+
+div.subtitle {
+    text-align: center;
+    font-size: 30pt;
+    margin-bottom: 20pt;
+}
+
+div.section {
+    font-size: 26pt;
+    font-variant: small-caps;
+    counter-reset: subsection;
+    counter-increment: section;
+}
+
+#title_panel {
+  background-color: #BBBBBB;
+  text-align: center;
+  padding: 30px;
+}
+
+#logo_title {
+  width: 600px;
+  margin-bottom: 30px;
+}
+
+#features_panel {
+padding: 30px;
+}
+
+#bubbles {
+  text-align: center;
+  height: 460px;
+}
+
+div.feature {
+  display: inline-block;
+  margin: 50px;
+}
+
+div.feature_caption {
+  margin-top: 25px;
+  display: inline-block;
+  	width: 300px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.circular {
+	width: 300px;
+	height: 300px;
+	border-radius: 150px;
+	-webkit-border-radius: 150px;
+	-moz-border-radius: 150px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	}
+
+.circular img {
+	opacity: 0;
+	filter: alpha(opacity=0);
+	}

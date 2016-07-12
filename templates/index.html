@@ -1,3 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="title_panel">
+  <img id="logo_title" src="{{ url_for('static', filename='logo.png') }}" width="50%" />
+  <div class="subtitle">Toolkit for Reverse Engineering of Molecular Pathways via Parameter Identification</div>
+</div>
+<div id="features_panel">
+
+      <div class="title">FEATURES</div>
+  <div id="bubbles">
+
+    <div class="feature">
+      <div class="circular" style="background: url({{ url_for('static', filename='network.JPG') }})">
+        <img src="{{ url_for('static', filename='network.JPG') }}" alt="" />
+      </div>
+
+      <div class="feature_caption">NETWORK MODELING</div>
+    </div>
+    <div class="feature">
+      <div class="circular" style="background: url({{ url_for('static', filename='components.JPG') }})">
+        <img src="{{ url_for('static', filename='components.JPG') }}" alt="" />
+      </div>
+      <div class="feature_caption">VALIDATION OF DATA</div>
+    </div>
+      <div class="feature">
+        <div class="circular" style="background: url({{ url_for('static', filename='analysis.JPG') }})">
+          <img src="{{ url_for('static', filename='analysis.JPG') }}" alt="" />
+        </div>
+
+        <div class="feature_caption">STATISTICAL ANALYSIS</div>
+      </div>
+        <div class="feature">
+          <div class="circular" style="background: url({{ url_for('static', filename='project_management.JPG') }})">
+            <img src="{{ url_for('static', filename='project_management.JPG') }}" alt="" />
+          </div>
+
+          <div class="feature_caption">RICH TOOL SET</div>
+        </div>
+  </div>
+</div>
 {% endblock %}
