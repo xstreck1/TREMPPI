@@ -1,20 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="title_panel">
-  <img id="logo_title" src="{{ url_for('static', filename='logo.png') }}" width="50%" />
-  <div class="subtitle">Toolkit for Reverse Engineering of Molecular Pathways via Parameter Identification</div>
+  <img id="logo_title" src="{{ url_for('static', filename='logo.png') }}"  />
+  <div id="description_box">
+    <p><b>Welcome to TREMPPI: the Toolkit for Reverse Engineering of Molecular Pathways via Parameter Identification</b></p>
+   <ul>
+     <li>TREMPPI is a tool for <a href="https://www.systemsbiology.org/about/what-is-systems-biology/">systems</a> and <a href="http://www.synbioproject.org/topics/synbio101/definition/">synthetic</a> biology.
+       <br />
+       - Its goal is to help with the reverse engineering and construction of <a href="https://en.wikipedia.org/wiki/Gene_regulatory_network">gene regulatory networks</a>
+        and <a href="https://en.wikipedia.org/wiki/Cell_signaling">signalling pathways.</a></li>
+    <li>TREMPPI runs online.
+      <br />
+      - You can <a href="{{ url_for('user.register') }}">register</a> and start using it imediatelly.</li>
+    <li>TREMPPI is <i>open-source</i>. <br />
+    - You can <a href="https://github.com/xstreck1/TREMPPI">download</a> and run from you computer or <a href="https://github.com/xstreck1/TREMPPI">contribute</a>.</li>
+    </ul>
+  </div>
 </div>
 <div id="features_panel">
-
-      <div class="title">FEATURES</div>
+  <div class="title">FEATURES</div>
   <div id="bubbles">
-
     <div class="feature">
       <div class="circular" style="background: url({{ url_for('static', filename='network.JPG') }})">
         <img src="{{ url_for('static', filename='network.JPG') }}" alt="" />
       </div>
 
-      <div class="feature_caption">NETWORK MODELING</div>
+      <div class="feature_caption">NETWORK MODELLING</div>
     </div>
     <div class="feature">
       <div class="circular" style="background: url({{ url_for('static', filename='components.JPG') }})">
@@ -37,5 +48,7 @@
           <div class="feature_caption">RICH TOOL SET</div>
         </div>
   </div>
+
+
 </div>
 {% endblock %}

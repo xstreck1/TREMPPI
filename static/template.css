@@ -38,6 +38,20 @@ padding: 30px;
   height: 460px;
 }
 
+#description_box {
+  padding: 16pt;
+  text-align: left;
+  margin: 0% 10%;
+  font-size: 16pt;
+  background-color: #DDDDDD;
+  border-radius: 15px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
 div.feature {
   display: inline-block;
   margin: 50px;
