@@ -19,7 +19,7 @@
 </div>
 <div id="features_panel">
   <div class="title">FEATURES</div>
-  <div id="bubbles">
+  <div id="bubbles" >
     <div class="feature">
       <div class="circular" style="background: url({{ url_for('static', filename='network.JPG') }})">
         <img src="{{ url_for('static', filename='network.JPG') }}" alt="" />
@@ -48,7 +48,34 @@
           <div class="feature_caption">RICH TOOL SET</div>
         </div>
   </div>
-
-
 </div>
+
+  <div id="news_panel">
+    <div id="news_title" class="title">RELATED PUBLICATIONS</div>
+    <ul id="publications_list">
+
+      <li class="reference" id="streck16b"><a href="https://www.researchgate.net/publication/303976800_Data-driven_Optimizations_for_Model_Checking_of_Multi-valued_Regulatory_Networks#share">[PRE-PRINT AVAILABLE]</a> <a href="http://www.sciencedirect.com/science/article/pii/S0303264716300570">Streck, Adam, Kirsten Thobe, and Heike Siebert. "Data-driven Optimizations for Model Checking of Multi-valued Regulatory Networks." Biosystems (2016)</a></li>
+      <li class="reference" id="streck16a"><a href="http://www.diss.fu-berlin.de/diss/servlets/MCRFileNodeServlet/FUDISS_derivate_000000018988/thesis.pdf">[OPEN ACCESS, DISSERTATION] Streck, Adam. Toolkit for Reverse Engineering of Molecular Pathways via Parameter Identification. Diss. Freie Universität Berlin, 2015.</a></li>
+      <li class="reference" id="streck15e"><a href="http://link.springer.com/chapter/10.1007%2F978-3-319-26916-0_2#page-12">Streck A, Thobe K, Siebert H: Comparative Statistical Analysis of Qualitative Parametrization Set. Hybrid Systems Biology, 4th International Workshop. Volume 9271 Lecture Notes in Bioinformatics, (2015)</a></li>
+      <li class="reference" id="streck15d"> <a href="https://arxiv.org/abs/1509.06962">[PRE-PRINT AVAILABLE]</a> <a href="http://link.springer.com/article/10.1007%2Fs11047-015-9525-2">Streck A, Lorenz T, Siebert H: Minimization and equivalence in multi-valued logical models of regulatory networks. Natural Computing  (2015)</a></li>
+      <li class="reference" id="streck15c"><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/pmid/26201334/">[OPEN ACCESS] Yousef KP, Streck A, Schütte Ch, Siebert H, Hengge R, von Kleist M: Logical-continuous modelling of post-translationally regulated bistability of curli fiber expression in Escherichia coli. BMC Systems Biology (2015).</a></li>
+        <li class="reference" id="streck15b"><a href="http://link.springer.com/chapter/10.1007%2F978-3-319-23401-4_22"> A. Streck, K. Thobe, H. Siebert. Analysing Cell Line Specific EGFR Signalling via Optimized Automata Based Model Checking. In: Computational Methods in Systems Biology. Volume 9308 of Lecture Notes in Computer Science. Springer International Publishing (2015)</a></li>
+      <li class="reference" id="streck15a"><a href="https://www.academia.edu/12715502/Extensions_for_LTL_model_checking_of_Thomas_networks">A. Streck and H. Siebert. Extensions for LTL model checking of Thomas networks. In: Proceedings of The Strasbourg Spring School on Advances in Systems and Synthetic Biology. Volume 14 (2015) </a></li>
+             <li class="reference" id="thobe14a"><a href="http://link.springer.com/chapter/10.1007%2F978-3-319-12982-2_3"> K. Thobe, A. Streck, H. Klarner, H. Siebert. Model Integration and Crosstalk Analysis of Logical Regulatory Networks. In: Computational Methods in Systems Biology. Volume 8859 of Lecture Notes in Computer Science. Springer International Publishing (2014)</a></li>
+             <li class="reference" id="klarner12a"><a href="http://link.springer.com/chapter/10.1007/978-3-642-33636-2_13">H. Klarner, A. Streck, D. &#352;afr&#225;nek, J. Kol&#269;&#225;k, H. Siebert: Parameter identification and model ranking of Thomas networks. In: Computational Methods for Systems Biology. Volume 7605 of Lecture Notes in Computer Science. Springer Berlin Heidelberg (2012)</a></li>
+  </ul>
+  </div>
+
+
+  <div id="contact_panel">
+      <img src="{{ url_for('static', filename='mail.png') }}" class="contact_image" /><span class="mail_text">tremppi.server<img src="{{ url_for('static', filename='zavinac.png') }}" />gmail.com</span>
+          <img src="{{ url_for('static', filename='phone.png') }}" class="contact_image" /><span class="mail_text">+49 30 838 75864</span>
+              <img src="{{ url_for('static', filename='location.png') }}" class="contact_image" /><span class="mail_text">Arnimallee 6, 14195, Berlin </span>
+
+      <span id="icons">
+          <img src="{{ url_for('static', filename='fu_logo.png') }}" class="logo_image" />
+        </span>
+  </div>
+
+
 {% endblock %}
