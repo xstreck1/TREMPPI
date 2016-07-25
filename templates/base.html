@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TREMPPI</title>
 
+
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='template.css') }}" rel="stylesheet">
+
     <!-- Bootstrap -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 
@@ -30,7 +34,7 @@
 </head>
 
     <!-- 1px for border -->
-<body class="no-margins" style="padding: 0px; margin: 0px; height: calc(100% - 55px - 1px)">
+<body class="no-margins" style="padding: 0px; margin: 0px; ">
 {% block body %}
 <div id="header-div" class="no-margins" style="margin: 10px; height: 35px;">
     <div class="pull-left">

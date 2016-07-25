@@ -15,11 +15,9 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os.path
 from flask import Flask, request, redirect, jsonify
 
 from .initiate_projects import mk_usr_proj
-from .query_responses import do_post
 from .server_errors import InvalidUsage, MethodNotAllowed, Conflict
 from .header import system
 from .query_responses import do_post, do_get
