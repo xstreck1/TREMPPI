@@ -22,6 +22,7 @@
 tremppi.group.page = function () {
     if (typeof tremppi.group.setup === 'undefined') {
         $("#widget").html("No qualitative report has been created yet.");
+        tremppi.group.setup = {};
     } else {
         tremppi.report.createPanels();
         for (var i = 0; i < tremppi.report.panels.length; i++) {
@@ -45,10 +46,17 @@ tremppi.group.layout = function () {
 };
 
 tremppi.group.toolbarClass = function () {
-    var my_items = [];
-    for (var i = 0; i < tremppi.group.setup.menu_items.length; i++) {
-         tremppi.group.setup.menu_items[i].checked = 
-                 tremppi.getItem(tremppi.group.setup.menu_items[i].id, "true") === "true"; // The bool casting problem solution
+
+    var menu_items;
+    if (typeof tremppi.group.setup !== 'undefined' && typeof tremppi.group.setup.menu_items !== 'undefined') {
+        for (var i = 0; i < tremppi.group.setup.menu_items.length; i++) {
+            tremppi.group.setup.menu_items[i].checked =
+                    tremppi.getItem(tremppi.group.setup.menu_items[i].id, "true") === "true"; // The bool casting problem solution
+        }
+        menu_items = tremppi.group.setup.menu_items;
+    }
+    else {
+        menu_items = [];
     }
     var res = {
         name: 'toolbar',
@@ -57,7 +65,7 @@ tremppi.group.toolbarClass = function () {
             {type: 'radio', id: 'left', group: '1', caption: 'Left'},
             {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
             {type: 'radio', id: 'right', group: '1', caption: 'Right'},
-            {type: 'menu-check', id: 'features', text: 'Features', items: tremppi.group.setup.menu_items}
+            {type: 'menu-check', id: 'features', text: 'Features', items: menu_items }
         ]
     };
     return res;
