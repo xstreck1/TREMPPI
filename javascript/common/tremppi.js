@@ -20,7 +20,7 @@
 /* global w2ui */
 
 tremppi = {
-    widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'tools'],
+    widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group', 'tools'],
     widgetInterface: function () {
         return {
             page: function () {
@@ -233,7 +233,8 @@ tremppi = {
                 }
             } else if (["index", "editor", "properties", "select"].indexOf(tremppi.widget_name) !== -1) {
                 var project_controls = '<button id="save_btn" onclick="tremppi.save()" class="btn">SAVE</button>';
-            } else if (["qualitative", "quantitative", "regulations", "correlations", "witness"].indexOf(tremppi.widget_name) !== -1) {
+            }
+            else if (["qualitative", "quantitative", "regulations", "correlations", "witness", "group"].indexOf(tremppi.widget_name) !== -1) {
                 var project_controls =
                         '<button id="rename_btn" onclick="tremppi.rename()" class="btn">RENAME</button>'
                         + '<button id="delete_btn" onclick="tremppi.delete()" class="btn">DELETE</button>'

@@ -22,7 +22,6 @@ import sqlite3
 from .database_reader import component_regulators_list, read_components, read_regulations
 from .header import widgets, database_file
 
-
 def add_basics(columns, groups):
     columns.append({
         'field': 'select',
@@ -50,7 +49,8 @@ def add_basics(columns, groups):
         'hideable': False
     })
 
-def get_val_interval(source, current_thr, target, components,  regulations):
+
+def get_val_interval(source, current_thr, target, components, regulations):
     thresholds = []
     for comp_name, comp_max in components:
         if comp_name == source:
@@ -65,7 +65,8 @@ def get_val_interval(source, current_thr, target, components,  regulations):
         if thr > current_thr:
             next_threshold = thr
             break
-    return '{' + ','.join(map(str, range(current_thr,next_threshold))) + '}'
+    return '{' + ','.join(map(str, range(current_thr, next_threshold))) + '}'
+
 
 def add_parameters(conn, components, columns, groups, column_names):
     component_regs_list = component_regulators_list(conn)
@@ -93,7 +94,7 @@ def add_parameters(conn, components, columns, groups, column_names):
                 caption = ','.join(ranges)
                 columns.append({
                     'field': column_name,
-                    'caption': caption ,
+                    'caption': caption,
                     'size': str(len(caption) * 8 + 6) + 'px',
                     'editable': {
                         'min': 0,
@@ -104,6 +105,7 @@ def add_parameters(conn, components, columns, groups, column_names):
                 })
                 groups[-1]['columns'].append(column_name)
                 groups[-1]['span'] += 1
+
 
 def add_sign(columns, groups, column_names):
     new_group = {
@@ -130,6 +132,7 @@ def add_sign(columns, groups, column_names):
             new_group['span'] += 1
     if new_group['span'] > 0:
         groups.append(new_group)
+
 
 def add_indegree(columns, groups, column_names):
     new_group = {
@@ -158,6 +161,7 @@ def add_indegree(columns, groups, column_names):
     if new_group['span'] > 0:
         groups.append(new_group)
 
+
 def add_bias(columns, groups, column_names):
     new_group = {
         'caption': 'Bias(component)',
@@ -184,6 +188,7 @@ def add_bias(columns, groups, column_names):
             new_group['span'] += 1
     if new_group['span'] > 0:
         groups.append(new_group)
+
 
 def add_impact(columns, groups, column_names):
     new_group = {
@@ -212,6 +217,7 @@ def add_impact(columns, groups, column_names):
     if new_group['span'] > 0:
         groups.append(new_group)
 
+
 def add_cost(columns, groups, column_names):
     new_group = {
         'caption': 'Cost(property)',
@@ -237,6 +243,7 @@ def add_cost(columns, groups, column_names):
             new_group['span'] += 1
     if new_group['span'] > 0:
         groups.append(new_group)
+
 
 def add_robustness(columns, groups, column_names):
     new_group = {
@@ -264,6 +271,7 @@ def add_robustness(columns, groups, column_names):
     if new_group['span'] > 0:
         groups.append(new_group)
 
+
 def make_selection(conn):
     columns = []
     groups = []
@@ -281,13 +289,52 @@ def make_selection(conn):
     return columns, groups
 
 
+def make_group(conn):
+    columns = [{
+        'field': 'count',
+        'caption': 'Count',
+        'size': '50px',
+        "resizable": True
+    }]
+    groups = []
+    components = read_components(conn)
+    cursor = conn.execute('select * from Parametrizations')
+    column_names = list(map(lambda x: x[0], cursor.description))
+    add_sign(columns, groups, column_names)
+    add_cost(columns, groups, column_names)
+    return columns
+
+
+def make_group_menu(conn):
+    menu_items = []
+    components = read_components(conn)
+    cursor = conn.execute('select * from Parametrizations')
+    column_names = list(map(lambda x: x[0], cursor.description))
+
+    for column_name in column_names:
+        if re.match('C_(.*)', column_name):
+            menu_items.append({
+                'id': column_name,
+                'text': re.sub('C_(.*)', '\\1', column_name),
+                'checked': True
+            })
+        if re.match('S_(.*)', column_name):
+            menu_items.append({
+                'id' : column_name,
+                'text' : re.sub('S_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
+                'checked': True
+            })
+    return menu_items
+
+
 def make_list(conn):
     columns = [
         {
             'field': 'select', 'caption': '', 'size': '25px', 'resizable': False, 'editable': {'type': 'check'}
         },
         {
-            'field': 'name', 'caption': 'Name', 'size': '200px', 'resizable': True, 'sortable': True, 'editable': {'type': 'text'}
+            'field': 'name', 'caption': 'Name', 'size': '200px', 'resizable': True, 'sortable': True,
+            'editable': {'type': 'text'}
         },
         {
             'field': 'ending', 'caption': 'Ending', 'size': '70px', 'resizable': True, 'editable':
@@ -295,9 +342,9 @@ def make_list(conn):
                 'type': 'select', 'items': ["open", "stable", "cyclic"]
             }
         },
-        #{
+        # {
         #    'field': 'bound', 'caption': 'Bound', 'size': '60px', 'resizable': True, 'editable': {'type': 'text'}
-        #}
+        # }
     ]
     components = read_components(conn)
     for comp_name, comp_max in components:
@@ -313,7 +360,7 @@ def make_list(conn):
 
 
 def make_detail(conn):
-    columns = [{'field': 'id', 'caption': 'Id', 'size': '30px' }]
+    columns = [{'field': 'id', 'caption': 'Id', 'size': '30px'}]
     groups = [{'span': 1, 'caption': ''}]
     components = read_components(conn)
     for comp_name, comp_max in components:
@@ -364,7 +411,7 @@ def configure(data_path, widget):
                 properties_js.write("tremppi.properties.setup = ")
                 json.dump(configured, properties_js)
                 properties_js.write(";")
-    elif widget in ["qualitative", "quantitative", "regulations", "correlations", "witness"]:
+    elif widget in ["qualitative", "quantitative", "regulations", "correlations", "witness", "group"]:  # generate files list
         files = []
         widget_dir = os.path.join(data_path, widget)
         if not os.path.exists(widget_dir):
@@ -377,8 +424,13 @@ def configure(data_path, widget):
         with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
             with open(os.path.join(data_path, widget + '.js'), 'w+') as file_js:
                 file_js.write('tremppi.' + widget + '.setup = ')
-                json.dump({"files": files, "components": [comp[0] for comp in read_components(conn)]}, file_js)
+                json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
+                if widget == "group":
+                    json_data['columns'] = make_group(conn)
+                    json_data['menu_items'] = make_group_menu(conn)
+                json.dump(json_data, file_js)
                 file_js.write(';')
+
     elif widget in widgets:
         js_filename = os.path.join(data_path, widget + '.js')
         open(js_filename, 'w+').close()

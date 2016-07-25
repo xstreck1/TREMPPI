@@ -33,8 +33,8 @@ template_folder = 'templates'
 static_folder = 'static'
 server_folder = 'server'
 data_folder = 'data'
-widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'tools']
-folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'tools']
+widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'group', 'tools']
+folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'group', 'tools']
 
 
 class System:

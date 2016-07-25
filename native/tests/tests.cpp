@@ -34,6 +34,7 @@ TEST(CoreTest, AllPrograms)
 	ASSERT_EQ(0, basic_witness_test()) << "Basic content test witness failed.";
 	ASSERT_EQ(0, basic_qualitative_test()) << "Basic content test qualitative failed.";
 	ASSERT_EQ(0, basic_quantitative_test()) << "Basic content test quantitative failed.";
+	ASSERT_EQ(0, basic_group_test()) << "Basic content test list failed.";
 	ASSERT_EQ(0, basic_update_test()) << "Basic content test update failed.";
 	cout << endl;
 }

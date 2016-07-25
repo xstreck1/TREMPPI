@@ -19,23 +19,11 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "common_tests_data.hpp"
+#include "tests.hpp"
 
-int basic_express_test();
-int basic_bias_test();
-int basic_correlations_test();
-int basic_init_test();
-int basic_update_test();
-int basic_qualitative_test();
-int basic_quantitative_test();
-int basic_regulations_test();
-int basic_impact_test();
-int basic_group_test();
-int basic_sign_test();
-int basic_spawn_test();
-int basic_validate_test();
-int basic_witness_test();
-
-void createModel(const bfs::path & example_model_path);
-void createSelect(const bfs::path & example_model_path);
-void createProperties(const bfs::path & example_model_path);
+int basic_group_test() 
+{
+	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
+	ArgPtr arg_ptr(arguments);
+	return tremppi_group(arg_ptr.getArgc(), arg_ptr.getArgv());
+}

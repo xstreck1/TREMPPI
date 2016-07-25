@@ -94,6 +94,7 @@ int tremppi_express(int argc, char ** argv);
 int tremppi_finalize(int argc, char ** argv);
 int tremppi_init(int argc, char ** argv);
 int tremppi_impact(int argc, char ** argv);
+int tremppi_group(int argc, char ** argv);
 int tremppi_sign(int argc, char ** argv);
 int tremppi_qualitative(int argc, char ** argv);
 int tremppi_quantitative(int argc, char ** argv);
