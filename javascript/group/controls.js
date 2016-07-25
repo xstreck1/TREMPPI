@@ -29,17 +29,19 @@ tremppi.group.toolbarClick = function (event) {
     } else if (event.item.id === 'features' && typeof event.subItem !== 'undefined') {
         console.log(event.subItem.id);
         tremppi.setItem(event.subItem.id, event.subItem.checked);
-        for (var i = 0; i < tremppi.group.setup.menu_items.length; i++) {
-            if (tremppi.group.setup.menu_items[i].id === event.subItem.id) {
-                tremppi.group.setup.menu_items[i].checked = !tremppi.group.setup.menu_items[i].checked;
-                break;
+        if (typeof tremppi.group.setup.menu_items !== 'undefined') {
+            for (var i = 0; i < tremppi.group.setup.menu_items.length; i++) {
+                if (tremppi.group.setup.menu_items[i].id === event.subItem.id) {
+                    tremppi.group.setup.menu_items[i].checked = !tremppi.group.setup.menu_items[i].checked;
+                    break;
+                }
             }
-        }
-        if (typeof tremppi.group.left.records !== 'undefined' && tremppi.group.left.records.length !== 0) {
-            tremppi.report.pickData(tremppi.group.left.header, 'left');
-        }
-        if (typeof tremppi.group.right.records !== 'undefined' && tremppi.group.right.records.length !== 0) {
-            tremppi.report.pickData(tremppi.group.right.header, 'right');
+            if (typeof tremppi.group.left.records !== 'undefined' && tremppi.group.left.records.length !== 0) {
+                tremppi.report.pickData(tremppi.group.left.header, 'left');
+            }
+            if (typeof tremppi.group.right.records !== 'undefined' && tremppi.group.right.records.length !== 0) {
+                tremppi.report.pickData(tremppi.group.right.header, 'right');
+            }
         }
     }
 };
