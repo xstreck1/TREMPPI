@@ -22,8 +22,6 @@ import sqlite3
 from .database_reader import component_regulators_list, read_components, read_regulations
 from .header import widgets, database_file
 
-
-
 def add_basics(columns, groups):
     columns.append({
         'field': 'select',
@@ -307,6 +305,28 @@ def make_group(conn):
     return columns
 
 
+def make_group_menu(conn):
+    menu_items = []
+    components = read_components(conn)
+    cursor = conn.execute('select * from Parametrizations')
+    column_names = list(map(lambda x: x[0], cursor.description))
+
+    for column_name in column_names:
+        if re.match('C_(.*)', column_name):
+            menu_items.append({
+                'id' : column_name,
+                'text' : re.sub('C_(.*)', '\\1', column_name),
+                'checked': True
+            })
+        if re.match('S_(.*)', column_name):
+            menu_items.append({
+                'id' : column_name,
+                'text' : re.sub('S_(.*)_(\d)_(.*)', '\\1,\\2,\\3', column_name),
+                'checked': True
+            })
+    return menu_items
+
+
 def make_list(conn):
     columns = [
         {
@@ -407,6 +427,7 @@ def configure(data_path, widget):
                 json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
                 if widget == "group":
                     json_data['columns'] = make_group(conn)
+                    json_data['menu_items'] = make_group_menu(conn)
                 json.dump(json_data, file_js)
                 file_js.write(';')
 
