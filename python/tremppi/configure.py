@@ -314,8 +314,8 @@ def make_group_menu(conn):
     for column_name in column_names:
         if re.match('C_(.*)', column_name):
             menu_items.append({
-                'id' : column_name,
-                'text' : re.sub('C_(.*)', '\\1', column_name),
+                'id': column_name,
+                'text': re.sub('C_(.*)', '\\1', column_name),
                 'checked': True
             })
         if re.match('S_(.*)', column_name):

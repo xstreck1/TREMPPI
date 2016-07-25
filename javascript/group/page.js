@@ -45,14 +45,20 @@ tremppi.group.layout = function () {
 };
 
 tremppi.group.toolbarClass = function () {
-    return {
+    var my_items = [];
+    for (var i = 0; i < tremppi.group.setup.menu_items.length; i++) {
+         tremppi.group.setup.menu_items[i].checked = 
+                 tremppi.getItem(tremppi.group.setup.menu_items[i].id, "true") === "true"; // The bool casting problem solution
+    }
+    var res = {
         name: 'toolbar',
         items: [
             {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
             {type: 'radio', id: 'left', group: '1', caption: 'Left'},
             {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
             {type: 'radio', id: 'right', group: '1', caption: 'Right'},
-            {type: 'menu-check', id: 'menucheck', text: 'Menu: Check', items: tremppi.group.setup.menu_items }
+            {type: 'menu-check', id: 'features', text: 'Features', items: tremppi.group.setup.menu_items}
         ]
     };
+    return res;
 };
