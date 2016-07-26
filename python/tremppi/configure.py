@@ -23,7 +23,6 @@ from .database_reader import component_regulators_list, read_components, read_re
 from .header import widgets, database_file
 
 
-
 def add_basics(columns, groups):
     columns.append({
         'field': 'select',
@@ -307,7 +306,6 @@ def make_group(conn):
     return columns
 
 
-<<<<<<< HEAD
 def make_group_menu(conn):
     menu_items = []
     components = read_components(conn)
@@ -330,8 +328,6 @@ def make_group_menu(conn):
     return menu_items
 
 
-=======
->>>>>>> parent of 18d317a... Added the group checkbox.
 def make_list(conn):
     columns = [
         {

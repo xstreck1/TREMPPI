@@ -320,7 +320,7 @@ tremppi = {
     },
     sidebarEvent: function (event) {
         var details = event.target.split("+");
-        if (event.type === 'dblClick') {
+        if (event.type === 'click') {
             var work_dir = tremppi.level === 1 ? "../" : "./";
             switch (details[0]) {
                 case 'project': // Change project

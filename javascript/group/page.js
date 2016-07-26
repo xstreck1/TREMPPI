@@ -64,13 +64,9 @@ tremppi.group.toolbarClass = function () {
             {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
             {type: 'radio', id: 'left', group: '1', caption: 'Left'},
             {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
-<<<<<<< HEAD
             {type: 'radio', id: 'right', group: '1', caption: 'Right'},
             {type: 'menu-check', id: 'features', text: 'Features', items: menu_items }
         ]
-=======
-            {type: 'radio', id: 'right', group: '1', caption: 'Right'}]
->>>>>>> parent of 18d317a... Added the group checkbox.
     };
     return res;
 };
