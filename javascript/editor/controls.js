@@ -95,8 +95,9 @@ tremppi.editor.deletion = function (event) {
 
 tremppi.editor.removeAll = function () {
     // Destroy all the elements
-    while (tremppi.toolbar.items.length !== 0) {
-        tremppi.toolbar.remove(tremppi.toolbar.items[0].id);
+    var names = [tremppi.toolbar.items].map(function(item){return item.id; });
+    for (var i = 0; i < names.length; i++) {
+        tremppi.toolbar.remove(names[i]);
     }
 };
 
