@@ -34,7 +34,6 @@ tremppi.select.page = function () {
                 toolbarReload: false, 
                 toolbarSearch: false, 
                 toolbarColumns: false,
-                toolbarExpand: false,
                 toolbarAdd: false, 
                 toolbarDelete: false
             },

@@ -346,8 +346,6 @@ tremppi = {
                     break;
             }
             $("#select_name").val(details[1]);
-        } else if (event.type === 'contextMenu') {
-            console.log('click');
         }
     },
     docs: function () {

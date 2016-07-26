@@ -22,6 +22,8 @@ import sqlite3
 from .database_reader import component_regulators_list, read_components, read_regulations
 from .header import widgets, database_file
 
+
+
 def add_basics(columns, groups):
     columns.append({
         'field': 'select',
@@ -305,6 +307,7 @@ def make_group(conn):
     return columns
 
 
+<<<<<<< HEAD
 def make_group_menu(conn):
     menu_items = []
     components = read_components(conn)
@@ -327,6 +330,8 @@ def make_group_menu(conn):
     return menu_items
 
 
+=======
+>>>>>>> parent of 18d317a... Added the group checkbox.
 def make_list(conn):
     columns = [
         {
@@ -427,7 +432,6 @@ def configure(data_path, widget):
                 json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
                 if widget == "group":
                     json_data['columns'] = make_group(conn)
-                    json_data['menu_items'] = make_group_menu(conn)
                 json.dump(json_data, file_js)
                 file_js.write(';')
 

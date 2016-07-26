@@ -9203,7 +9203,7 @@ var w2confirm = function (msg, title, callBack) {
                 $(this.box).find('#tb_'+ this.name +'_item_'+ w2utils.escapeId(it.id)).remove();
                 // remove from array
                 var ind = this.get(it.id, true);
-                if (ind) this.items.splice(ind, 1);
+                if (ind !== null) this.items.splice(ind, 1);
             }
             return removed;
         },
@@ -10202,7 +10202,7 @@ var w2confirm = function (msg, title, callBack) {
         contextMenu: function (id, event) {
             var obj = this;
             var nd  = obj.get(id);
-            if (id != obj.selected) obj.click(id);
+            // if (id != obj.selected) obj.click(id);
             // need timeout to allow click to finish first
             setTimeout(function () {
                 // event before
