@@ -21,6 +21,7 @@
 
 tremppi = {
     widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group', 'tools'],
+    reports: ['quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group'],
     widgetInterface: function () {
         return {
             page: function () {
@@ -147,9 +148,9 @@ tremppi = {
         head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/controls.js'));
         head.appendChild(tremppi.makeScript('./' + tremppi.widget_name + '/page.js'));
         head.appendChild(tremppi.makeScript('./data/' + tremppi.widget_name + '.js?_=' + Math.random().toString().slice(2)));
-        // for (var i = 0; i < tremppi.widgets.length; i++) {
-        //    head.appendChild(tremppi.makeScript('./data/' + tremppi.widgets[i] + '.js?_=' + Math.random().toString().slice(2)));
-        //}
+        for (var i = 0; i < tremppi.widgets.length; i++) {
+            head.appendChild(tremppi.makeScript('./data/' + tremppi.widgets[i] + '.js?_=' + Math.random().toString().slice(2)));
+        }
 
         document.title = tremppi.widget_name;
     },
@@ -176,7 +177,7 @@ tremppi = {
         var layout = {
             name: 'layout',
             panels: [
-                {type: 'top', style: layout_style, size: 35, content: '<div id="top_panel"></div>'},
+                {type: 'top', style: layout_style, size: 40, content: '<div id="top_panel"></div>'},
                 {type: 'left', style: layout_style, size: 200, content: '<div id="files" ></div>'},
                 {type: 'main', style: layout_style, content: '<div id="widget" ></div>', toolbar: tremppi.widget.toolbarClass()},
                 {type: 'bottom', size: 20, content: '<div id="log_line" ></div>'}
@@ -211,7 +212,6 @@ tremppi = {
             user_controls += '<div id="static_text">UNKNOWN SERVER TYPE</div>';
             tremppi.log('unknown exec_type ' + tremppi.exec_type, 'error');
         }
-
 
         // Set left side bar
         if (tremppi.final) {
@@ -258,23 +258,40 @@ tremppi = {
         };
         // Add the projects
         sidebar.nodes.push({
-            id: 'projects', text: 'My Projects', expanded: true, group: true,
-            nodes: tremppi.projects.map(function (name) {
-                var project_node = {id: 'project+' + name, text: name, img: 'icon-folder'};
-                if (name === tremppi.project_name) {
+            id: 'projects',
+            text: 'My Projects',
+            expanded: true,
+            group: true,
+            nodes: tremppi.projects.map(function (proj_name) {
+                var project_node = {
+                    id: 'project+' + proj_name,
+                    text: proj_name,
+                    img: 'icon-folder'
+                };
+                if (proj_name === tremppi.project_name) {
                     project_node.expanded = true;
                     project_node.selected = true;
-                    project_node.nodes = tremppi.widgets.map(function (name) {
-                        var widget_node = {id: 'widget+' + name, text: name, img: 'icon-page'};
-                        if (name === tremppi.widget_name) {
+                    project_node.nodes = tremppi.widgets.map(function (widget_name) {
+                        var widget_node = {
+                            id: 'widget+' + widget_name,
+                            text: widget_name,
+                            img: tremppi.reports.indexOf(widget_name) === -1 ? 'icon-page' : 'icon-folder'
+                        };
+                        if (typeof tremppi[widget_name].setup !== 'undefined' && typeof tremppi[widget_name].setup.files !== 'undefined') {
+                            if (widget_name === tremppi.widget_name) {
+                                widget_node.nodes = tremppi.widget.setup.files.map(function (file_name) {
+                                    return {
+                                        id: 'file+' + file_name + '+' + widget_name,
+                                        text: file_name,
+                                        img: 'icon-page'
+                                    };
+                                });
+                            }
+                            widget_node.count = tremppi[widget_name].setup.files.length;
+                        }
+                        if (widget_name === tremppi.widget_name) {
                             widget_node.expanded = true;
                             widget_node.selected = true;
-                            if (typeof tremppi[name].setup !== 'undefined' && typeof tremppi[name].setup.files !== 'undefined') {
-                                widget_node.nodes = tremppi.widget.setup.files.map(function (name) {
-                                    return {id: 'file+' + name, text: name};
-                                });
-                                // widget_node.count = tremppi[name].setup.files.count;
-                            }
                         }
                         return widget_node;
                     });
@@ -303,7 +320,7 @@ tremppi = {
     },
     sidebarEvent: function (event) {
         var details = event.target.split("+");
-        if (event.type === 'click') {
+        if (event.type === 'dblClick') {
             var work_dir = tremppi.level === 1 ? "../" : "./";
             switch (details[0]) {
                 case 'project': // Change project
@@ -321,7 +338,7 @@ tremppi = {
                     break;
             }
             $("#select_name").val(details[1]);
-        } else if (event.type === 'dblClick') {
+        } else if (event.type === 'contextMenu') {
             switch (details[0]) {
                 case 'file':
                     tremppi.report.pickData(details[1], 'right');
@@ -494,6 +511,9 @@ if (location.search !== '') {
     location.replace(window.location.pathname);
 }
 
+for (var i = 0; i < tremppi.widgets.length; i++) {
+    tremppi[tremppi.widgets[i]] = {};
+}
 var url_split = url.split("/");
 tremppi.widget_name = url_split[url_split.length - 1].slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
