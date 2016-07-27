@@ -69,10 +69,11 @@ tremppi.tools.page = function () {
         var commands = $('<div id="commands_holder"></div>').appendTo('#widget');
         for (var i = 0; i < tremppi.tools.tool_list.length; i++) {
             var title = $('<div id="' + tremppi.tools.tool_list[i].category + '_category" class="category">' + tremppi.tools.tool_list[i].category + '</div>').appendTo(commands);
+            var buttons = $('<div class="buttons"></div>').appendTo(commands);
             var tool_set = tremppi.tools.tool_list[i].tools;
             for (var tool_no = 0; tool_no < tool_set.length; tool_no++) {
                 var tool_name = tool_set[tool_no].name;
-                var button = $('<button id=' + tool_name + ' class="btn">' + tool_name + '</button>').appendTo(commands);
+                var button = $('<button id=' + tool_name + ' class="btn">' + tool_name + '</button>').appendTo(buttons);
                 button.click(function (_tool_name) {
                     return function () {
                         tremppi.tools.addToQueue(_tool_name);

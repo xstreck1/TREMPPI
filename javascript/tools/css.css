@@ -3,20 +3,26 @@ div.category {
     margin: 5pt;
     width: calc(100%-10pt);
     border: black solid;
-    border-width: 1pt 0pt;
+    border-width: 1px 0pt;
+    height: 22pt;
+    background-color: #DDDDDD;
 }
 
 #commands_holder {
     width: 100%;
-    height: 265pt;
+    height: 270pt;
+}
+
+div.buttons {
+    height: 22pt;
 }
 
 button.tool_button {
-    
+    line-height: 20pt;
 }
 
 #reports {
-    height: calc(100% - 270pt);
+    height: calc(100% - 275pt);
 }
 
 #kill_button {
