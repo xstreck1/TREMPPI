@@ -22,6 +22,7 @@ import os.path
 import re
 import shutil
 import tempfile
+import zipfile
 
 
 def replace(file_path, pattern, subst):
@@ -98,3 +99,11 @@ def path_is_parent(parent_path, child_path):
 
     # Compare the common path of the parent and child path with the common path of just the parent path. Using the commonpath method on just the parent path will regularise the path name in the same way as the comparison that deals with both paths, removing any trailing path separator
     return os.path.commonprefix([parent_path, child_path]) == parent_path
+
+
+def zipdir(path, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            print(os.path.join(os.path.relpath(root, path), file))
+            ziph.write(os.path.join(root, file), arcname=os.path.join(os.path.relpath(root, path), file))

@@ -16,6 +16,7 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import zipfile
 from os import replace, remove
 from os.path import dirname, join, basename, exists, split
 
@@ -23,7 +24,7 @@ from flask import request, send_from_directory
 
 from .project_files import tremppi_init
 from .configure import configure
-from .file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_parent
+from .file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_parent, zipdir
 from .header import last_page_filename, data_folder, database_file, configure_filename, system
 from .project_files import write_projects, delete_project, save_file, get_log_data, is_project_folder
 from .server_errors import InvalidUsage, Conflict
@@ -183,6 +184,19 @@ def finalize(app, url):
         write_jsonp(config_filepath, header, data)
         return 'finalize successful'
 
+
+def download(app, url):
+    path, file = split(url)
+    if not path_is_parent(app.projects_path(), join(app.projects_path(), path)):
+        raise InvalidUsage('invalid download path ' + path)
+    elif not is_project_folder(join(app.projects_path(), path)):
+        raise InvalidUsage(path + " seems not to be a TREMPPI project")
+    else:
+        zipf = zipfile.ZipFile(join(app.projects_path(), path) + '.zip', 'w', zipfile.ZIP_DEFLATED)
+        zipdir(join(app.projects_path(), path), zipf)
+        zipf.close()
+
+        return 'zipping successful'
 
 def do_post(app, url):
     if 'command' not in request.args:

@@ -238,7 +238,8 @@ tremppi = {
                 {id: 4, text: 'rename'},
                 {id: 5, text: 'delete'},
                 {id: 6, text: 'finalize'},
-                {id: 7, text: 'save'}
+                {id: 7, text: 'save'},
+                {id: 8, text: 'download'}
             ];
         }
         // Add the projects
@@ -346,7 +347,7 @@ tremppi = {
                     break;
                 case 'project':
                     if (tremppi.level === 1) {
-                        tremppi.activateMenuItems('select', 'clone', 'rename', 'delete');
+                        tremppi.activateMenuItems('select', 'download', 'clone', 'rename', 'delete');
                     }
                     tremppi.activateMenuItems('finalize');
 
@@ -391,13 +392,16 @@ tremppi = {
                         case 'finalize':
                             tremppi.finalizeProject();
                             break;
+                        case 'download':
+                            tremppi.downloadProject();
+                            break;
                     }
                     break;
                     // Change widget
                 case 'widget':
                     switch (event.menuItem.text) {
                         case 'select':
-                            window.open(work_dir + tremppi.project_folder + details[1] + ".html", "_self");
+                            window.open(tremppi.getRootAddress() + tremppi.project_folder + details[1] + ".html", "_self");
                             break;
                         case 'save':
                             tremppi.save();
@@ -526,7 +530,7 @@ tremppi = {
                 type: "POST",
                 url: tremppi.getProjectAddress() + tremppi.current_object + '?command=clone&type=folder&name=' + tremppi.project_name,
                 success: function (res) {
-                    location.replace(tremppi.getRootAddress() + tremppi.project_name + '(clone)/tools.html', "_self");
+                    location.replace(tremppi.getRootAddress() + tremppi.project_name + '(clone)/' + tremppi.current_object, "_self");
                     tremppi.log(res);
                 },
                 error: tremppi.logError
@@ -541,8 +545,20 @@ tremppi = {
                 type: "POST",
                 url: tremppi.getProjectAddress() + tremppi.current_object + '?command=delete&type=folder',
                 success: function (res) {
-                    location.replace(tremppi.getRootAddress() + tremppi.projects[0] + '/tools.html?', "_self");
+                    location.replace(tremppi.getRootAddress() + tremppi.projects[0] + '/' + tremppi.current_object, "_self");
                     tremppi.log(res);
+                },
+                error: tremppi.logError
+            });
+        }
+    },
+    downloadProject: function () {
+        if (confirm('Do you really want to download the project ' + tremppi.project_name + '?')) {
+            $.ajax({
+                type: "POST",
+                url: tremppi.getProjectAddress() + tremppi.current_object + '?command=download&type=folder',
+                success: function (res) {
+                    window.location = tremppi.getRootAddress() +tremppi.project_name + '.zip';
                 },
                 error: tremppi.logError
             });
