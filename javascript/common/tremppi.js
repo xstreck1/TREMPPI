@@ -339,9 +339,14 @@ tremppi = {
             }
 
             switch (details[0]) {
+                case 'projects':
+                    if (tremppi.level === 1) {
+                        tremppi.activateMenuItems('new project');
+                    }
+                    break;
                 case 'project':
                     if (tremppi.level === 1) {
-                        tremppi.activateMenuItems('select', 'new project', 'clone', 'rename', 'delete');
+                        tremppi.activateMenuItems('select', 'clone', 'rename', 'delete');
                     }
                     tremppi.activateMenuItems('finalize');
 
@@ -363,15 +368,16 @@ tremppi = {
             }
         } else if (event.type === 'menuClick') {
             switch (details[0]) {
+                case 'projects':
+                    case 'new project':
+                        tremppi.new_project();
+                        break;
                 case 'project': // Change project
                     switch (event.menuItem.text) {
                         case 'select':
                             if (tremppi.level === 1) {
                                 window.open(tremppi.getRootAddress() + details[1] + "/" + tremppi.widget_name + ".html", "_self");
                             }
-                            break;
-                        case 'new project':
-                            tremppi.new_project();
                             break;
                         case 'delete':
                             tremppi.deleteProject();
