@@ -333,6 +333,8 @@ tremppi = {
                     window.open(work_dir + tremppi.project_folder + details[1] + ".html", "_self");
                     break;
                 case 'file':
+                    tremppi.widget.leftSelected = true; // We have selected something
+                    tremppi.report.showPanel('left');
                     tremppi.report.pickData(details[1], 'left');
                     tremppi.pickFile(details[1]);
                     break;
@@ -341,8 +343,11 @@ tremppi = {
         } else if (event.type === 'contextMenu') {
             switch (details[0]) {
                 case 'file':
-                    tremppi.report.pickData(details[1], 'right');
-                    tremppi.pickFile(details[1]);
+                    if (tremppi.widget.leftSelected) { // There is something to compare to
+                        tremppi.report.showAll();
+                        tremppi.report.pickData(details[1], 'right');
+                        tremppi.pickFile(details[1]);
+                    }
                     break;
             }
             $("#select_name").val(details[1]);
@@ -515,6 +520,9 @@ for (var i = 0; i < tremppi.widgets.length; i++) {
 var url_split = url.split("/");
 tremppi.widget_name = url_split[url_split.length - 1].slice(0, -5);
 tremppi[tremppi.widget_name] = tremppi.widget = tremppi.widgetInterface();
+if (tremppi.reports.indexOf(tremppi.widget_name) !== -1) {
+    tremppi.widget.leftSelected = false;
+}
 tremppi.makeHead();
 window.onload = tremppi.makeBody;
 
