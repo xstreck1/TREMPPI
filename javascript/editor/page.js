@@ -80,3 +80,6 @@ tremppi.editor.toolbarClass = function () {
         ]
     };
 };
+tremppi.editor.beforeUnload = function() {
+    tremppi.save();
+};

@@ -105,9 +105,13 @@ tremppi.tools.setData = function (data) {
     tremppi.tools.controls();
 };
 
+tremppi.tools.getData = function () {
+};
+
 tremppi.tools.toolbarClass = function () {
     return {};
 };
 
-tremppi.tools.getData = function () {
+tremppi.tools.beforeUnload = function() {
+    
 };

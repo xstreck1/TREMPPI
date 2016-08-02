@@ -74,3 +74,7 @@ tremppi.regulations.toolbarClass = function () {
         ]
     };
 };
+
+tremppi.regulations.beforeUnload = function() {
+    
+};

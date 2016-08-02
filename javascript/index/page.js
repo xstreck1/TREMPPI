@@ -46,3 +46,8 @@ tremppi.index.getData = function () {
     text_string.replace(/\r?\n/g, '<br />');
     return {text: text_string};
 };
+
+
+tremppi.index.beforeUnload = function() {
+    tremppi.save();
+};

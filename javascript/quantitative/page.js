@@ -43,3 +43,11 @@ tremppi.quantitative.getData = function () {
 
 tremppi.quantitative.layout = function () {
 };
+
+tremppi.quantitative.toolbarClass = function () {
+    return {};
+};
+
+tremppi.quantitative.beforeUnload = function() {
+    
+};

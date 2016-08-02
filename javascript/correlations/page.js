@@ -67,3 +67,6 @@ tremppi.correlations.toolbarClass = function () {
         ]
     };
 };
+
+tremppi.correlations.beforeUnload = function() {
+};

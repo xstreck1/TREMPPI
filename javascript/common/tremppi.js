@@ -22,6 +22,12 @@
 tremppi = {
     widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group', 'tools'],
     reports: ['quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group'],
+    hasControls: function () {
+        return !(typeof tremppi.exec_type === 'undefined' || tremppi.exec_type === 'static');
+    },
+    isFinal: function () {
+        return typeof tremppi.setup.final === 'undefined' ? false : tremppi.setup.final;
+    },
     widgetInterface: function () {
         return {
             page: function () {
@@ -39,6 +45,9 @@ tremppi = {
             toolbarClass: function () {
                 tremppi.log("toolbarClass not implemented", "warning");
                 return {};
+            },
+            beforeUnload: function () {
+                tremppi.log("beforeUnload not implemented", "warning");
             }
         };
     },
@@ -165,7 +174,6 @@ tremppi = {
             tremppi.project_folder = tremppi.project_name + "/";
             tremppi.level = 1;
         }
-        tremppi.final = typeof tremppi.setup.final === 'undefined' ? false : tremppi.setup.final;
         tremppi.current_file = '/data/' + tremppi.widget_name + '.json';
         tremppi.current_object = tremppi.widget_name;
     },
@@ -186,27 +194,22 @@ tremppi = {
         tremppi.layout = $('body').w2layout(layout);
         tremppi.toolbar = w2ui.layout.get("main").toolbar;
         // Distable toolbar for final projects
-        if (tremppi.final || tremppi.toolbar.items.length === 0) {
+        if (tremppi.isFinal() || tremppi.toolbar.items.length === 0) {
             w2ui.layout.hideToolbar('main');
         }
 
-        var select_name = '"' + (tremppi.widget_name === 'index' ? tremppi.project_name : '') + '"';
         var user_controls =
                 '<button class="btn" id="exit_btn" onclick="tremppi.docs()" >DOCS</button>';
         var tremppi_controls = "";
-        if (typeof tremppi.exec_type === 'undefined' || tremppi.exec_type === 'static') {
+        if (!tremppi.hasControls()) {
             user_controls += '<span id="static_text">STATIC VERSION</span>';
         } else if (tremppi.exec_type === 'browse')
         {
             user_controls += '<button class="btn" id="exit_btn" onclick="tremppi.exit()" >EXIT</button>';
-            if (tremppi.level === 1) {
-                tremppi_controls += '<button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
-            }
         } else if (tremppi.exec_type === 'server')
         {
             user_controls += '<button id="user_btn" onclick="tremppi.userBtn()" class="btn">USER</button>';
             user_controls += '<button id="exit_btn" onclick="tremppi.logOutBtn()" class="btn">LOG OUT</button>';
-            tremppi_controls += '<button class="btn" id="new_project_btn" onclick="tremppi.new_project()" >NEW PROJECT</button>';
         } else
         {
             user_controls += '<div id="static_text">UNKNOWN SERVER TYPE</div>';
@@ -224,8 +227,10 @@ tremppi = {
                 );
         var sidebar = {
             name: 'sidebar',
-            nodes: [],
-            menu: [
+            nodes: []
+        };
+        if (tremppi.hasControls()) {
+            sidebar.menu = [
                 {id: 0, text: 'new project'},
                 {id: 1, text: 'select'},
                 {id: 2, text: 'compare'},
@@ -234,8 +239,8 @@ tremppi = {
                 {id: 5, text: 'delete'},
                 {id: 6, text: 'finalize'},
                 {id: 7, text: 'save'}
-            ]
-        };
+            ];
+        }
         // Add the projects
         sidebar.nodes.push({
             id: 'projects',
@@ -290,6 +295,7 @@ tremppi = {
         // Load the specific data
         $.ajaxSetup({cache: false});
         tremppi.getData(tremppi.widget.setData);
+        window.onbeforeunload = tremppi.widget.beforeUnload;
     },
     pickFile: function (filename) {
         tremppi.current_file = tremppi.makeDataFilepath(filename);
@@ -309,16 +315,15 @@ tremppi = {
     sidebarEvent: function (event) {
         var details = event.target.split("+");
         if (event.type === 'click') {
-            var work_dir = tremppi.level === 1 ? "../" : "./";
             switch (details[0]) {
                 case 'project': // Change project
-                    if (tremppi.level !== 0) {
-                        window.open(work_dir + details[1] + "/" + tremppi.widget_name + ".html", "_self");
+                    if (tremppi.level === 1) {
+                        window.open(tremppi.getRootAddress() + details[1] + "/" + tremppi.widget_name + ".html", "_self");
                     }
                     break;
                     // Change widget
                 case 'widget':
-                    window.open(work_dir + tremppi.project_folder + details[1] + ".html", "_self");
+                    window.open(tremppi.getRootAddress() + tremppi.project_folder + details[1] + ".html", "_self");
                     break;
                 case 'file':
                     tremppi.widget.leftSelected = true; // We have selected something
@@ -336,13 +341,18 @@ tremppi = {
             switch (details[0]) {
                 case 'project':
                     if (tremppi.level === 1) {
-                        tremppi.activateMenuItems('new project', 'clone', 'rename', 'delete');
+                        tremppi.activateMenuItems('select', 'new project', 'clone', 'rename', 'delete');
                     }
                     tremppi.activateMenuItems('finalize');
 
                     break;
                 case 'widget':
-                    tremppi.activateMenuItems('save');
+                    if (details[1] === tremppi.widget_name) {
+                        tremppi.activateMenuItems('select');
+                        if (!tremppi.isFinal()) {
+                            tremppi.activateMenuItems('save');
+                        }
+                    }
                     break;
                 case 'file':
                     tremppi.activateMenuItems('select', 'rename', 'delete');
@@ -355,6 +365,11 @@ tremppi = {
             switch (details[0]) {
                 case 'project': // Change project
                     switch (event.menuItem.text) {
+                        case 'select':
+                            if (tremppi.level === 1) {
+                                window.open(tremppi.getRootAddress() + details[1] + "/" + tremppi.widget_name + ".html", "_self");
+                            }
+                            break;
                         case 'new project':
                             tremppi.new_project();
                             break;
@@ -375,6 +390,9 @@ tremppi = {
                     // Change widget
                 case 'widget':
                     switch (event.menuItem.text) {
+                        case 'select':
+                            window.open(work_dir + tremppi.project_folder + details[1] + ".html", "_self");
+                            break;
                         case 'save':
                             tremppi.save();
                             break;
