@@ -1,21 +1,21 @@
 /******************************************************************************
-Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
-
-This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
-via Parameter Identification (TREMPPI)
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+ Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+ 
+ This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+ via Parameter Identification (TREMPPI)
+ 
+ This program is free software: you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+ 
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License along with
+ this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 
 /* global tremppi */
 
@@ -46,11 +46,9 @@ tremppi.editor.delete = function () {
 tremppi.editor.selection = function (event) {
     if (event.cy === event.cyTarget) {
         tremppi.editor.setBasic();
-    }
-    else if (event.cyTarget.isNode()) {
+    } else if (event.cyTarget.isNode()) {
         tremppi.editor.setNode(event.cyTarget[0]);
-    }
-    else if (event.cyTarget.isEdge()) {
+    } else if (event.cyTarget.isEdge()) {
         tremppi.editor.setEdge(event.cyTarget[0]);
     }
 };
@@ -67,8 +65,7 @@ tremppi.editor.creation = function (event) {
     if (event.cy === event.cyTarget) {
         var node = tremppi.editor.newNode(event.cyPosition);
         tremppi.editor.addElem(node, "Node");
-    }
-    else if (event.cyTarget.isNode()) {
+    } else if (event.cyTarget.isNode()) {
         var source = event.cyTarget[0];
         tremppi.editor.removeAll();
         tremppi.editor.addHelpField("Click on a component to put a target of a REGULATION.");
@@ -95,9 +92,8 @@ tremppi.editor.deletion = function (event) {
 
 tremppi.editor.removeAll = function () {
     // Destroy all the elements
-    var names = [tremppi.toolbar.items].map(function(item){return item.id; });
-    for (var i = 0; i < names.length; i++) {
-        tremppi.toolbar.remove(names[i]);
+    while (tremppi.toolbar.items.length !== 0) {
+        tremppi.toolbar.remove(tremppi.toolbar.items[0].id);
     }
 };
 
