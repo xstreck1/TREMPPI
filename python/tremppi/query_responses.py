@@ -198,6 +198,9 @@ def download(app, url):
 
         return 'zipping successful'
 
+def upload(app, url):
+    return 'upload successful'
+
 def do_post(app, url):
     if 'command' not in request.args:
         raise InvalidUsage('command missing from the POST request')

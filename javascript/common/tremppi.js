@@ -232,14 +232,15 @@ tremppi = {
         if (tremppi.hasControls()) {
             sidebar.menu = [
                 {id: 0, text: 'new project'},
-                {id: 1, text: 'select'},
+                {id: 1, text: 'open'},
                 {id: 2, text: 'compare'},
                 {id: 3, text: 'clone'},
                 {id: 4, text: 'rename'},
                 {id: 5, text: 'delete'},
                 {id: 6, text: 'finalize'},
                 {id: 7, text: 'save'},
-                {id: 8, text: 'download'}
+                {id: 8, text: 'download'},
+                {id: 9, text: 'upload'}
             ];
         }
         // Add the projects
@@ -347,21 +348,20 @@ tremppi = {
                     break;
                 case 'project':
                     if (tremppi.level === 1) {
-                        tremppi.activateMenuItems('select', 'download', 'clone', 'rename', 'delete');
+                        tremppi.activateMenuItems('open', 'download', 'clone', 'rename', 'delete');
                     }
                     tremppi.activateMenuItems('finalize');
+                    tremppi.activateMenuItems('upload');
 
                     break;
                 case 'widget':
-                    if (details[1] === tremppi.widget_name) {
-                        tremppi.activateMenuItems('select');
-                        if (!tremppi.isFinal()) {
-                            tremppi.activateMenuItems('save');
-                        }
+                    tremppi.activateMenuItems('open');
+                    if (!tremppi.isFinal() && (details[1] === tremppi.widget_name)) {
+                        tremppi.activateMenuItems('save');
                     }
                     break;
                 case 'file':
-                    tremppi.activateMenuItems('select', 'rename', 'delete');
+                    tremppi.activateMenuItems('open', 'rename', 'delete');
                     if (tremppi.widget.leftSelected) {
                         tremppi.activateMenuItems('compare');
                     }
@@ -370,12 +370,22 @@ tremppi = {
         } else if (event.type === 'menuClick') {
             switch (details[0]) {
                 case 'projects':
-                    case 'new project':
-                        tremppi.new_project();
-                        break;
+                    switch (event.menuItem.text) {
+                        case 'new project':
+                            tremppi.new_project();
+                            break;
+                        case 'upload':
+                            w2popup.open({
+                                title: 'Popup Title HTML',
+                                body: 'Body HTML',
+                                buttons: 'Buttons HTML'
+                            });
+                            break;
+                    }
+                    break;
                 case 'project': // Change project
                     switch (event.menuItem.text) {
-                        case 'select':
+                        case 'open':
                             if (tremppi.level === 1) {
                                 window.open(tremppi.getRootAddress() + details[1] + "/" + tremppi.widget_name + ".html", "_self");
                             }
@@ -395,12 +405,42 @@ tremppi = {
                         case 'download':
                             tremppi.downloadProject();
                             break;
+                        case 'upload':
+                           var dialogPopup =  w2popup.open({
+                                body: '<div class="tremppi_popup">\n\
+                                            <div class="popup_title">UPLOAD PROJECT</div>\n\
+                                            <form enctype="multipart/form-data" method="post" name="fileinfo"> \n\
+                                                <input id="fileSelect" type="file" accept=".zip" />\n\
+                                                <div class="submit_buttons">\n\
+                                                    <input type="submit" class="btn" id="submitFile" value="SUBMIT" />\n\
+                                                </div>\n\
+                                            </form>\n\
+                                        </div>',
+                                width: 350,
+                                height: 175
+                            });
+                            form = document.forms.namedItem("fileinfo");
+                            form.addEventListener('submit', function (ev) {
+                                oData = new FormData(form);
+                                var oReq = new XMLHttpRequest();
+                                oReq.open("POST", tremppi.getProjectAddress() + tremppi.current_object + '?command=upload&type=folder', true);
+                                oReq.onload = function (oEvent) {
+                                    if (oReq.status === 200) {
+                                        tremppi.log("Project uploaded.");
+                                    } else {
+                                        tremppi.logErro("Error " + oReq.status + " occurred when trying to upload the project.");
+                                    }
+                                };
+                                oReq.send(oData);
+                                ev.preventDefault();
+                                dialogPopup.close();
+                            }, false);
                     }
                     break;
                     // Change widget
                 case 'widget':
                     switch (event.menuItem.text) {
-                        case 'select':
+                        case 'open':
                             window.open(tremppi.getRootAddress() + tremppi.project_folder + details[1] + ".html", "_self");
                             break;
                         case 'save':
@@ -410,7 +450,7 @@ tremppi = {
                     break;
                 case 'file':
                     switch (event.menuItem.text) {
-                        case 'select':
+                        case 'open':
                             tremppi.report.pickData(details[1], 'left');
                             tremppi.widget.leftSelected = true;
                             tremppi.pickFile(details[1]);
@@ -421,10 +461,10 @@ tremppi = {
                             tremppi.pickFile(details[1]);
                             break;
                         case 'delete':
-                            tremppi.delete();
+                            tremppi.delete(details[1]);
                             break;
                         case 'rename':
-                            tremppi.rename();
+                            tremppi.rename(details[1]);
                             break;
 
                     }
@@ -452,14 +492,13 @@ tremppi = {
     userBtn: function () {
         location.replace(tremppi.getRootAddress() + 'user/profile', "_self");
     },
-    delete: function () {
-        var old_name = tremppi.current_object;
+    delete: function (selectedFile) {
         $.ajax({
             type: "POST",
-            url: tremppi.getProjectAddress() + tremppi.current_file + '?command=delete&type=file',
+            url: tremppi.getProjectAddress() +  tremppi.makeDataFilepath(selectedFile) + '?command=delete&type=file',
             error: tremppi.logError,
             success: function (res) {
-                tremppi.sidebar.remove('file+' + old_name);
+                tremppi.sidebar.remove('file+' + selectedFile);
             }
         });
     },
@@ -477,17 +516,16 @@ tremppi = {
             return true;
         }
     },
-    rename: function () {
-        var old_name = tremppi.current_object;
-        var new_name = prompt("Please enter a new name for the file.", old_name);
+    rename: function (selectedFile) {
+        var new_name = prompt("Please enter a new name for the file.", selectedFile);
         if (new_name !== null && tremppi.fileNameValid(new_name)) {
             $.ajax({
                 type: "POST",
-                url: tremppi.getProjectAddress() + tremppi.current_file + '?command=rename&type=file&new_name=' + new_name,
+                url: tremppi.getProjectAddress() + tremppi.makeDataFilepath(selectedFile) + '?command=rename&type=file&new_name=' + new_name,
                 error: tremppi.logError,
                 success: function (res) {
-                    tremppi.sidebar.insert('files', 'file+' + old_name, {id: 'file+' + new_name, text: new_name});
-                    tremppi.sidebar.remove('file+' + old_name);
+                    tremppi.sidebar.insert('files', 'file+' + selectedFile, {id: 'file+' + new_name, text: new_name});
+                    tremppi.sidebar.remove('file+' + selectedFile);
                     tremppi.log(res);
                 }
             });
@@ -558,7 +596,7 @@ tremppi = {
                 type: "POST",
                 url: tremppi.getProjectAddress() + tremppi.current_object + '?command=download&type=folder',
                 success: function (res) {
-                    window.location = tremppi.getRootAddress() +tremppi.project_name + '.zip';
+                    window.location = tremppi.getRootAddress() + tremppi.project_name + '.zip';
                 },
                 error: tremppi.logError
             });
