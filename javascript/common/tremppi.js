@@ -227,7 +227,9 @@ tremppi = {
                 );
         var sidebar = {
             name: 'sidebar',
-            nodes: []
+            nodes: [],
+            topHTML: "",
+            bottomHTML: ""
         };
         if (tremppi.hasControls()) {
             sidebar.menu = [
@@ -445,7 +447,6 @@ tremppi = {
                         case 'rename':
                             tremppi.rename(details[1]);
                             break;
-
                     }
                     break;
             }
@@ -477,7 +478,7 @@ tremppi = {
             url: tremppi.getProjectAddress() + tremppi.makeDataFilepath(selectedFile) + '?command=delete&type=file',
             error: tremppi.logError,
             success: function (res) {
-                tremppi.sidebar.remove('file+' + selectedFile);
+                tremppi.sidebar.remove('file+' + selectedFile + '+' + tremppi.widget_name);
             }
         });
     },
@@ -503,8 +504,9 @@ tremppi = {
                 url: tremppi.getProjectAddress() + tremppi.makeDataFilepath(selectedFile) + '?command=rename&type=file&new_name=' + new_name,
                 error: tremppi.logError,
                 success: function (res) {
-                    tremppi.sidebar.insert('files', 'file+' + selectedFile, {id: 'file+' + new_name, text: new_name});
-                    tremppi.sidebar.remove('file+' + selectedFile);
+                    tremppi.sidebar.insert('widget+' + tremppi.widget_name, 'file+' + selectedFile + '+' + tremppi.widget_name, 
+                    {id: 'file+' + new_name + '+' + tremppi.widget_name, text: new_name, img: 'icon-page'});
+                    tremppi.sidebar.remove('file+' + selectedFile + '+' + tremppi.widget_name);
                     tremppi.log(res);
                 }
             });
