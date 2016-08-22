@@ -17,10 +17,12 @@
 
 import sys
 import zipfile
-from os import replace, remove
-from os.path import dirname, join, basename, exists, split
+import shutil
+from os import replace, remove, makedirs
+from os.path import dirname, join, basename, exists, split, commonprefix
 
 from flask import request, send_from_directory
+from werkzeug.utils import secure_filename
 
 from .project_files import tremppi_init
 from .configure import configure
@@ -198,8 +200,26 @@ def download(app, url):
 
         return 'zipping successful'
 
+
 def upload(app, url):
+    if 'file' not in request.files:
+        raise InvalidUsage('No file attached')
+    file = request.files['file']
+    if not (zipfile.is_zipfile(file.filename)):
+        raise InvalidUsage('The uploaded file is not a zipfile.')
+    target_folder = join(app.projects_path(), secure_filename(file.filename)[:-4])
+    if not commonprefix([target_folder, app.projects_path()]) == app.projects_path():
+        raise InvalidUsage('Invalid project name')
+    if not exists(target_folder):
+        makedirs(target_folder)
+    zip_ref = zipfile.ZipFile(file, 'r')
+    zip_ref.extractall(target_folder)
+    if not exists(join(target_folder, configure_filename)):
+        shutil.rmtree(target_folder)
+        raise InvalidUsage('The file does not contain a tremppi project.')
+    write_projects(app.projects_path())
     return 'upload successful'
+
 
 def do_post(app, url):
     if 'command' not in request.args:
