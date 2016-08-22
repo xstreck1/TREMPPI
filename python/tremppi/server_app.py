@@ -103,7 +103,10 @@ def create_app():
     # ROUTES
     @app.route('/')
     def home_page():
-        return render_template('index.html')
+        if current_user is None or not current_user.is_authenticated:
+            return render_template("index.html")
+        else:
+            return redirect('/members')
 
     @app.route('/members')
     @login_required
