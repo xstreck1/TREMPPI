@@ -36,10 +36,9 @@ from .tool_manager import ToolManager
 class TremppiRegisterForm(RegisterForm):
     recaptcha = RecaptchaField()
 
-
 # Setup Flask app and app.config
 def create_app():
-    print(system.DEST_PATH)
+    print("App at: " + system.DEST_PATH)
     app = Flask(__name__, template_folder=join(system.BIN_PATH, template_folder), static_folder=join(system.BIN_PATH, static_folder))
     config_file = join(system.DEST_PATH, server_config_filename)
     if exists(config_file):
@@ -147,5 +146,12 @@ def create_app():
         response = jsonify(error.to_dict())
         response.status_code = error.status_code
         return response
+
+    if not app.debug:
+        import logging
+        from logging.handlers import RotatingFileHandler
+        file_handler = RotatingFileHandler(join(system.DEST_PATH, "TREMPPI.log"), maxBytes=65536, backupCount=9)
+        file_handler.setLevel(logging.DEBUG)
+        app.logger.addHandler(file_handler)
 
     return app
