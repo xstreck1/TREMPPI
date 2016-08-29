@@ -147,6 +147,7 @@ def create_app():
         response.status_code = error.status_code
         return response
 
+    #setup the rotating logger
     if not app.debug:
         import logging
         from logging.handlers import RotatingFileHandler
