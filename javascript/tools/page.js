@@ -46,9 +46,9 @@ tremppi.tools.tool_list = [
         category: "REPORTS",
         tools: [
             {name: "correlations", description: "create a correlations graph report"},
-            {name: "qualitative", description: "get qualitative analysis of the known data"},
-            {name: "quantitative", description: "get summary of up till now known data"},
-            {name: "regulations", description: "create an regulationsion graph based on a statistical analysis"},
+            {name: "qualitative", description: "obtain a qualitative analysis of the known data"},
+            {name: "quantitative", description: "obtain a summary of up till now known data"},
+            {name: "regulations", description: "create a regulations graph based on a statistical analysis"},
             {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"},
             {name: "group", description: "make groups of same qualitatve features"}
         ]

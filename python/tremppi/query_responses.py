@@ -205,8 +205,8 @@ def upload(app, url):
     if 'file' not in request.files:
         raise InvalidUsage('No file attached')
     file = request.files['file']
-    if not (zipfile.is_zipfile(file.filename)):
-        raise InvalidUsage('The uploaded file is not a zipfile.')
+#    if not (zipfile.is_zipfile(file.filename)):
+#        raise InvalidUsage('The uploaded file is not a zipfile.')
     target_folder = join(app.projects_path(), secure_filename(file.filename)[:-4])
     if not commonprefix([target_folder, app.projects_path()]) == app.projects_path():
         raise InvalidUsage('Invalid project name')

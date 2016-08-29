@@ -19,6 +19,8 @@
 
 /* global w2ui */
 
+// TODO Project controls target (currently on selected, not clicked)
+
 tremppi = {
     widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group', 'tools'],
     reports: ['quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group'],
@@ -549,7 +551,7 @@ tremppi = {
                 type: "POST",
                 url: tremppi.getProjectAddress() + tremppi.current_object + '.html?command=clone&type=folder&name=' + tremppi.project_name,
                 success: function (res) {
-                    location.replace(tremppi.getRootAddress() + tremppi.project_name + '(clone)/' + tremppi.current_object, "_self");
+                    location.replace(tremppi.getRootAddress() + tremppi.project_name + '(clone)/' + tremppi.current_object + '.html', "_self");
                     tremppi.log(res);
                 },
                 error: tremppi.logError
@@ -564,7 +566,7 @@ tremppi = {
                 type: "POST",
                 url: tremppi.getProjectAddress() + tremppi.current_object + '.html?command=delete&type=folder',
                 success: function (res) {
-                    location.replace(tremppi.getRootAddress() + tremppi.projects[0] + '/' + tremppi.current_object, "_self");
+                    location.replace(tremppi.getRootAddress() + tremppi.projects[0] + '/' + tremppi.current_object + '.html', "_self");
                     tremppi.log(res);
                 },
                 error: tremppi.logError
