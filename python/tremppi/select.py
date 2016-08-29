@@ -24,7 +24,7 @@ def get_atom(record):
 
     if ("select" in record) and record["select"]:
         for key, value in record.items():
-            if key == 'select' or key == 'recid' or key == 'name' or key == 'changes' or value == '' or value == ' ':
+            if key == 'select' or key == 'w2ui' or key == 'recid' or key == 'name' or key == 'changes' or value == '' or value == ' ':
                 continue
             elif value == 'ANY':
                 atoms.append(key + " IS NOT NULL")
