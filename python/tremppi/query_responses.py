@@ -16,14 +16,17 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-from os import replace, remove
-from os.path import dirname, join, basename, exists, split
+import zipfile
+import shutil
+from os import replace, remove, makedirs
+from os.path import dirname, join, basename, exists, split, commonprefix
 
 from flask import request, send_from_directory
+from werkzeug.utils import secure_filename
 
 from .project_files import tremppi_init
 from .configure import configure
-from .file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_parent
+from .file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_parent, zipdir
 from .header import last_page_filename, data_folder, database_file, configure_filename, system
 from .project_files import write_projects, delete_project, save_file, get_log_data, is_project_folder
 from .server_errors import InvalidUsage, Conflict
@@ -182,6 +185,40 @@ def finalize(app, url):
         data['final'] = True
         write_jsonp(config_filepath, header, data)
         return 'finalize successful'
+
+
+def download(app, url):
+    path, file = split(url)
+    if not path_is_parent(app.projects_path(), join(app.projects_path(), path)):
+        raise InvalidUsage('invalid download path ' + path)
+    elif not is_project_folder(join(app.projects_path(), path)):
+        raise InvalidUsage(path + " seems not to be a TREMPPI project")
+    else:
+        zipf = zipfile.ZipFile(join(app.projects_path(), path) + '.zip', 'w', zipfile.ZIP_DEFLATED)
+        zipdir(join(app.projects_path(), path), zipf)
+        zipf.close()
+
+        return 'zipping successful'
+
+
+def upload(app, url):
+    if 'file' not in request.files:
+        raise InvalidUsage('No file attached')
+    file = request.files['file']
+#    if not (zipfile.is_zipfile(file.filename)):
+#        raise InvalidUsage('The uploaded file is not a zipfile.')
+    target_folder = join(app.projects_path(), secure_filename(file.filename)[:-4])
+    if not commonprefix([target_folder, app.projects_path()]) == app.projects_path():
+        raise InvalidUsage('Invalid project name')
+    if not exists(target_folder):
+        makedirs(target_folder)
+    zip_ref = zipfile.ZipFile(file, 'r')
+    zip_ref.extractall(target_folder)
+    if not exists(join(target_folder, configure_filename)):
+        shutil.rmtree(target_folder)
+        raise InvalidUsage('The file does not contain a tremppi project.')
+    write_projects(app.projects_path())
+    return 'upload successful'
 
 
 def do_post(app, url):

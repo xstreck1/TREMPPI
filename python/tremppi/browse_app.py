@@ -23,7 +23,6 @@ from .header import system
 from .query_responses import do_post, do_get
 from .tool_manager import ToolManager
 
-
 # Setup Flask app and app.config
 def create_app():
     app = Flask(__name__)

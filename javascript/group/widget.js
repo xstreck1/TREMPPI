@@ -98,27 +98,29 @@ tremppi.group.valuesSetter = function (source, panel) {
         tremppi.group.createPanelContent(data, panel);
         tremppi.log(source + " loaded successfully.");
 
-        var sel_recs = tremppi.group['left'].records;
-        var dif_recs = [];
-        var cmp_recs = tremppi.group['right'].records;
-        for (var i = 0; i < sel_recs.length; i++) {
-            var sel_rec = sel_recs[i];
-            var cmp_rec = tremppi.group.findByVector(cmp_recs, sel_rec);
-            if (cmp_rec !== null) {
-                var dif_rec = {};
-                $.extend(dif_rec, cmp_rec);
-                dif_rec["count"] = sel_rec["count"] - cmp_rec["count"];
-                dif_recs.push(dif_rec);
+        if (panel === 'right') {
+            var sel_recs = tremppi.group['left'].records;
+            var dif_recs = [];
+            var cmp_recs = tremppi.group['right'].records;
+            for (var i = 0; i < sel_recs.length; i++) {
+                var sel_rec = sel_recs[i];
+                var cmp_rec = tremppi.group.findByVector(cmp_recs, sel_rec);
+                if (cmp_rec !== null) {
+                    var dif_rec = {};
+                    $.extend(dif_rec, cmp_rec);
+                    dif_rec["count"] = sel_rec["count"] - cmp_rec["count"];
+                    dif_recs.push(dif_rec);
+                }
             }
-        }
 
-        var mid = {
-            "records": dif_recs,
-            "setup": {
-                "s_name": tremppi.group.left.header + " - " + tremppi.group.right.header
-            }
-        };
-        tremppi.group.createPanelContent(mid, 'mid');
+            var mid = {
+                "records": dif_recs,
+                "setup": {
+                    "s_name": tremppi.group.left.header + " - " + tremppi.group.right.header
+                }
+            };
+            tremppi.group.createPanelContent(mid, 'mid');
+        }
     };
 };
 

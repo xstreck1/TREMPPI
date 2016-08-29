@@ -20,13 +20,7 @@
 /* global tremppi */
 
 tremppi.group.toolbarClick = function (event) {
-    if (event.target === 'all') {
-        tremppi.report.showAll();
-        tremppi.setItem('panel', 'all');
-    } else if (event.target === 'left' | event.target === 'mid' | event.target === 'right') {
-        tremppi.setItem('panel', event.target);
-        tremppi.report.showPanel(event.target);
-    } else if (event.item.id === 'features' && typeof event.subItem !== 'undefined') {
+    if (event.item.id === 'features' && typeof event.subItem !== 'undefined') {
         console.log(event.subItem.id);
         tremppi.setItem(event.subItem.id, event.subItem.checked);
         if (typeof tremppi.group.setup.menu_items !== 'undefined') {

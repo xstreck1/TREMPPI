@@ -1,21 +1,21 @@
 /******************************************************************************
-Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
-
-This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
-via Parameter Identification (TREMPPI)
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+ Created by Adam Streck, 2013-2015, adam.streck@fu-berlin.de
+ 
+ This file is part of the Toolkit for Reverse Engineering of Molecular Pathways
+ via Parameter Identification (TREMPPI)
+ 
+ This program is free software: you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+ 
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License along with
+ this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 /* global tremppi, cytoscape, paper */
 
 tremppi.regulations.createPanelContent = function (data, panel) {
@@ -32,13 +32,12 @@ tremppi.regulations.valuesSetter = function (source, panel) {
         $('#header_' + panel).html(source);
         tremppi.regulations.createPanelContent(data, panel);
         tremppi.log(source + ' loaded successfully.');
-        
-        var left_elems = (panel === 'left') ? data.elements : tremppi.regulations.left.json().elements;
-        var right_elems = (panel === 'left') ? tremppi.regulations.right.json().elements : data.elements;
 
-        if (typeof left_elems.nodes !== 'undefined' && typeof right_elems.nodes !== 'undefined') {
+        if (panel === 'right') {
+            var left_elems = (panel === 'left') ? data.elements : tremppi.regulations.left.json().elements;
+            var right_elems = (panel === 'left') ? tremppi.regulations.right.json().elements : data.elements;
+
             $('#header_mid').html($('#header_left').html() + ' - ' + $('#header_right').html());
-            var to_synchronize = tremppi.regulations.mid.nodes().length === 0; // Synchronize once
 
             var mid = {};
             $.extend(true, mid, left_elems);
@@ -51,12 +50,10 @@ tremppi.regulations.valuesSetter = function (source, panel) {
                 substract('Frequency');
                 substract('Pearson');
             }
-            var mid_data = {'elements': mid, 'setup': {'s_name' : $('#header_left').html() + ' - ' + $('#header_right').html()}};
+            var mid_data = {'elements': mid, 'setup': {'s_name': $('#header_left').html() + ' - ' + $('#header_right').html()}};
             tremppi.regulations.createPanelContent(mid_data, 'mid');
-
-            if (to_synchronize) {
-                tremppi.cytoscape.synchronize(tremppi.regulations.loadLabels);
-            }
+            tremppi.regulations.left.nodes().layout({ name:'grid'});
+            tremppi.cytoscape.synchronize(tremppi.regulations.loadLabels);
         }
     };
 };
@@ -97,7 +94,9 @@ tremppi.regulations.setPanel = function (panel) {
         },
         wheelSensitivity: 0.2
     });
-    tremppi.regulations[panel].on('zoom', function() { tremppi.regulations.loadLabels(panel); });
+    tremppi.regulations[panel].on('zoom', function () {
+        tremppi.regulations.loadLabels(panel);
+    });
 };
 
 // Change between relative and absolute values
@@ -107,13 +106,13 @@ tremppi.regulations.applyVisuals = function (panel) {
 
     var width_param = weighted ? 'WeightedFrequency' : 'Frequency';
     var range = tremppi.report.getRange(panel, relative, 'edge[Frequency]', width_param);
-    var abs_max =  Math.max(Math.abs(range.min), Math.abs(range.max));
+    var abs_max = Math.max(Math.abs(range.min), Math.abs(range.max));
     tremppi.cytoscape.mapRange(panel, 'edge[Frequency>=0]', width_param, 'width', 0, abs_max, 1, 10);
-    tremppi.cytoscape.mapRange(panel, 'edge[Frequency<0]', width_param, 'width', -1*abs_max, 0, 10, 1);
+    tremppi.cytoscape.mapRange(panel, 'edge[Frequency<0]', width_param, 'width', -1 * abs_max, 0, 10, 1);
 
     range = tremppi.report.getRange(panel, relative, 'edge[Pearson]', 'Pearson');
     tremppi.cytoscape.mapRange(panel, 'edge[Pearson>=0]', 'Pearson', 'line-color', 0, range.max, 'yellow', 'green');
-    tremppi.cytoscape.mapRange(panel, 'edge[Pearson<0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
+    tremppi.cytoscape.mapRange(panel, 'edge[Pearson<=0]', 'Pearson', 'line-color', range.min, 0, 'red', 'yellow');
 
     tremppi.cytoscape.mapValue(panel, 'edge[Sign="0"]', 'target-arrow-shape', 'circle');
     tremppi.cytoscape.mapValue(panel, 'edge[Sign="+"]', 'target-arrow-shape', 'triangle');
@@ -189,7 +188,7 @@ tremppi.regulations.addGradient = function (relative, panel, my_paper) {
             );
     tremppi.paper.makeText(
             '0',
-            new paper.Point(my_paper.view.viewSize.width/2, tremppi.regulations.I_height)
+            new paper.Point(my_paper.view.viewSize.width / 2, tremppi.regulations.I_height)
             );
     tremppi.paper.makeText(
             range.max.toFixed(tremppi.regulations.num_of_decimals),

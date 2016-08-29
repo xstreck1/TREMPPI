@@ -287,19 +287,8 @@ tremppi.report = {
         tremppi.widget.setPanel('left');
         tremppi.widget.setPanel('mid');
         tremppi.widget.setPanel('right');
-        var panel = tremppi.getItem('panel', 'all');
-        if (panel === 'left' || panel === 'mid' || panel === 'right') {
-            tremppi.toolbar.uncheck('all');
-            tremppi.toolbar.check(panel);
-            tremppi.report.showPanel(panel);
-        }
-
-        if (tremppi.getItem('selected') !== null) {
-            tremppi.report.pickData(tremppi.getItem('selected'), 'left');
-        }
-        if (tremppi.getItem('compared') !== null) {
-            tremppi.report.pickData(tremppi.getItem('compared'), 'right');
-        }
+                
+        tremppi.report.showPanel('left');
     },
     setDescription: function (panel, setup) {
         if (typeof setup.select !== 'undefined') {
@@ -353,8 +342,8 @@ tremppi.report = {
         if (relative) {
             var selected = tremppi.widget[type].elements(selection);
             range = tremppi.report.getBound(selected, param);
-            if (range.min === range.max) {
-                range.min = 0;
+            if (Math.abs(range.min - range.max) < 0.000000001) { // To fix the -2*10^-17 problem
+                range.min = range.max = 0;
             }
             if (range.min === Number.POSITIVE_INFINITY || range.min === 0) {
                 range.min = tremppi.widget.bounds[param].min;

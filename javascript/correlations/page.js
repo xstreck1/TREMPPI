@@ -63,12 +63,10 @@ tremppi.correlations.toolbarClass = function () {
     return {
         name: 'toolbar',
         items: [
-            {type: 'radio', id: 'all', group: '1', caption: 'All', checked: true},
-            {type: 'radio', id: 'left', group: '1', caption: 'Left'},
-            {type: 'radio', id: 'mid', group: '1', caption: 'Mid'},
-            {type: 'radio', id: 'right', group: '1', caption: 'Right'},
-            {type: 'break', id: 'break1'},
             {type: 'check', icon: 'w2ui-icon-check', id: 'relative', caption: 'Relative', checked: false}
         ]
     };
+};
+
+tremppi.correlations.beforeUnload = function() {
 };

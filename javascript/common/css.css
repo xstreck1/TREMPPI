@@ -58,6 +58,23 @@ div.sidebar_field {
     padding: 5px;
 }
 
+div.tremppi_popup {
+    text-align: center;
+}
+
+div.popup_title {
+    font-size: 25px;
+    margin: 10px 0px 20px 0px;
+}
+
+#fileSelect {
+    margin: 10px;
+}
+
+div.submit_buttons {
+    margin: 10px;
+}
+
 a.page_content {
     display: block;
     background:#BBBBBB; 

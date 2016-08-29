@@ -59,3 +59,11 @@ tremppi.properties.setDefaultData = function (data) {
 tremppi.properties.toolbarClass = function () {
     return {};
 };
+
+tremppi.properties.toolbarClass = function () {
+    return {};
+};
+
+tremppi.properties.beforeUnload = function() {
+    
+};

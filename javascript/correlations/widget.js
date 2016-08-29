@@ -37,7 +37,6 @@ tremppi.correlations.valuesSetter = function (source, panel) {
 
         if (tremppi.correlations.left.nodes().length > 0 && tremppi.correlations.right.nodes().length > 0) {
             $('#header_mid').html();
-            var to_synchronize = tremppi.correlations.mid.nodes().length === 0; // Synchronize once
 
             var mid = {};
             $.extend(true, mid, left_elems);
@@ -51,9 +50,8 @@ tremppi.correlations.valuesSetter = function (source, panel) {
             var mid_data = {'elements': mid, 'setup': {'s_name' : $('#header_left').html() + ' - ' + $('#header_right').html()}};
             tremppi.correlations.createPanelContent(mid_data, 'mid');
 
-            if (to_synchronize) {
-                tremppi.cytoscape.synchronize(tremppi.correlations.loadLabels);
-            }
+            tremppi.correlations.left.nodes().layout({ name:'grid'});
+            tremppi.cytoscape.synchronize(tremppi.correlations.loadLabels);
         }
     };
 };

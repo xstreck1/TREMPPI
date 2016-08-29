@@ -18,13 +18,3 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 
 /* global tremppi */
-
-tremppi.qualitative.toolbarClick = function (event) {
-    if (event.target === 'all') {
-        tremppi.report.showAll();
-        tremppi.setItem('panel', 'all');
-    } else if (event.target === 'left' | event.target === 'mid' | event.target === 'right') {
-        tremppi.setItem('panel', event.target);
-        tremppi.report.showPanel(event.target);
-    }
-};
