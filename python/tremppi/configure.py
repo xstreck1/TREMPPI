@@ -428,6 +428,7 @@ def configure(data_path, widget):
                 json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
                 if widget == "group":
                     json_data['columns'] = make_group(conn)
+                    json_data['menu_items'] = make_group_menu(conn)
                 json.dump(json_data, file_js)
                 file_js.write(';')
 

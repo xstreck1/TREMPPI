@@ -21,7 +21,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 tremppi.group.page = function () {
     if (typeof tremppi.group.setup === 'undefined') {
-        $("#widget").html("No qualitative report has been created yet.");
+        $("#widget").html("No group report has been created yet.");
         tremppi.group.setup = {};
     } else {
         tremppi.report.createPanels();
