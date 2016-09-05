@@ -362,7 +362,7 @@ tremppi = {
                     break;
                 case 'widget':
                     tremppi.activateMenuItems('open');
-                    if (!tremppi.isFinal() && (details[1] === tremppi.widget_name)) {
+                    if (!tremppi.isFinal() && (details[1] === tremppi.widget_name) && tremppi.reports.indexOf(tremppi.widget_name) === -1 && ("tools" !== tremppi.widget_name)) {
                         tremppi.activateMenuItems('save');
                     }
                     break;

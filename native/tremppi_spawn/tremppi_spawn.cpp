@@ -133,6 +133,7 @@ int tremppi_spawn(int argc, char ** argv)
 	try
 	{
 		PythonFunctions::configure("select");
+		PythonFunctions::configure("tools");
 		PythonFunctions::configure("properties");
 	}
 	catch (exception & e)

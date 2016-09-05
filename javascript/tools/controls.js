@@ -44,6 +44,12 @@ tremppi.tools.addToQueue = function (command) {
         if (!confirm('Do you really want to call ' + command + '? This operation is irreversible.')) {
             return;
         }
+        $('#spawn').prop("disabled", false); 
+        $('#clean').prop("disabled", true); 
+    }
+    if (command === 'spawn'){
+        $('#spawn').prop("disabled", true); 
+        $('#clean').prop("disabled", false); 
     }
     $.ajax({
         type: "POST",

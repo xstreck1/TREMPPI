@@ -432,8 +432,16 @@ def configure(data_path, widget):
                 json.dump(json_data, file_js)
                 file_js.write(';')
 
+    elif widget == "tools":
+        with open(os.path.join(data_path, widget + '.js'), 'w+') as file_js:
+            file_js.write('tremppi.' + widget + '.setup = ')
+            json_data = {"created": int(os.path.exists(os.path.join(data_path, database_file))) }
+            json.dump(json_data, file_js)
+            file_js.write(';')
+
     elif widget in widgets:
         js_filename = os.path.join(data_path, widget + '.js')
         open(js_filename, 'w+').close()
+
     else:
         raise Exception("Unknown widget " + widget)

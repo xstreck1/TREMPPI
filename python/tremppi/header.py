@@ -35,6 +35,7 @@ server_folder = 'server'
 data_folder = 'data'
 widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'group', 'tools']
 folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'group', 'tools']
+model_file = 'editor.json'
 
 
 class System:

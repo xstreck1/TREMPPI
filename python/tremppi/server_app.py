@@ -36,6 +36,7 @@ from .tool_manager import ToolManager
 class TremppiRegisterForm(RegisterForm):
     recaptcha = RecaptchaField()
 
+
 # Setup Flask app and app.config
 def create_app():
     print("App at: " + system.DEST_PATH)

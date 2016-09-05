@@ -19,8 +19,9 @@ import argparse
 import shutil
 import sys
 import os.path
-from tremppi.header import data_folder, configure_filename, system_init, system
+from tremppi.header import data_folder, configure_filename, system_init, system, model_file
 from tremppi.project_files import generate_data
+from tremppi.configure import configure
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Clean data from a TREMPPI project')
@@ -30,5 +31,8 @@ if __name__ == "__main__":
     if not os.path.exists(os.path.join(system.DEST_PATH, configure_filename)):
         raise Exception('The target folder ' + system.DEST_PATH + ' does not seem to be a TREMPPI project folder. The ' + configure_filename + ' is missing.')
     else:
+        os.rename(os.path.join(system.DEST_PATH, data_folder, model_file), os.path.join(system.DEST_PATH, model_file))
         shutil.rmtree(os.path.join(system.DEST_PATH, data_folder))
         generate_data(os.path.join(system.DEST_PATH, data_folder))
+        os.rename(os.path.join(system.DEST_PATH, model_file), os.path.join(system.DEST_PATH, data_folder, model_file))
+        configure(system.DEST_PATH, 'tools')
