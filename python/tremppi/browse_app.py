@@ -47,6 +47,15 @@ def create_app():
     def exec_type():
         return 'tremppi.exec_type = "browse"'
 
+
+    @app.route('/exit', methods=['POST'])
+    def exit_tremppi():
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()
+        return 'exit successful'
+
     @app.route('/<path:path>', methods=['GET', 'POST'])
     def serve(path):
         if request.method == 'GET':

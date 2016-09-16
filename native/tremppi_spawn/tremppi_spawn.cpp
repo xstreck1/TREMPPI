@@ -10,7 +10,9 @@
 #include "io/database_filler.hpp"
 #include "io/syntax_checker.hpp"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const int SERVER_PARAMETER_LIMIT = 1048576;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file Entry point of tremppi_spawn.
 /// - Checks for correctness of a model.
 /// - Produces a database of parametrizations based on the model.
@@ -20,15 +22,6 @@ int tremppi_spawn(int argc, char ** argv)
 	TremppiSystem::initiate("tremppi_spawn", argc, argv);
 	Logging logging;
 	bfs::path database_file = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
-	// Parse the limit on the size of the model
-	int limit = -1;
-	for (const size_t arg_no : crange(argc))
-	{
-		if (string(argv[arg_no]) == "--limit")
-		{
-			limit = stoi(argv[arg_no + 1]);
-		}
-	}
 
 	// Check the file
 	Json::Value root; // root of the network
@@ -102,6 +95,9 @@ int tremppi_spawn(int argc, char ** argv)
 		Normalizer normalizer(reg_infos);
 		database_filler.startOutput();
 
+
+		// Parse the limit on the size of the model
+		int limit = TremppiSystem::called_from_server ? SERVER_PARAMETER_LIMIT : -1;
 		// There is a limit in place and it's overflown
 		if (limit != -1 && limit < KineticsTranslators::getSpaceSize(kinetics)) {
 			string overflow = "The number of parametrizations " + 

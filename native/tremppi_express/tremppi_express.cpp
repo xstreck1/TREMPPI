@@ -30,23 +30,26 @@ int tremppi_express(int argc, char ** argv)
 	Logging logging;
 
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
-	string selection;
+	string select;
 	map<string, ActLevel> maxes;
 	RegFuncs functions;
-	sqlite3pp::database db;
+	sqlite3pp::database db;
+
 	try 
 	{
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str() ));
 
-		selection = DatabaseReader::getSelectionTerm();
+		// Get selection (use empty on server to prevent errors by insufficient data on the server)
+		select = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
 
 		auto res = DatabaseReader::getSelectionList();
 
 		DatabaseReader reader;
 		RegInfos infos = reader.readRegInfos(db);
 
-		// Obtain the components data
+		// Obtain the components data
+
 		for (auto & info : infos) 
 		{
 			Configurations minterms;
@@ -68,11 +71,11 @@ int tremppi_express(int argc, char ** argv)
 		for (const RegFunc & reg_func : functions) 
 		{
 			// Select parametrizations and IDs
-			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, selection, db);
-			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(selection, db);
+			sqlite3pp::query sel_qry = DatabaseReader::selectionFilter(reg_func.info.columns, select, db);
+			sqlite3pp::query sel_IDs = DatabaseReader::selectionIDs(select, db);
 			sqlite3pp::query::iterator sel_it = sel_qry.begin();
 
-			logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(selection, db));
+			logging.newPhase("Listing parametrizations", DatabaseReader::getSelectionSize(select, db));
 			db.execute("BEGIN TRANSACTION");
 			// Go through parametrizations
             for (auto sel_ID : sel_IDs) 
@@ -108,7 +111,8 @@ int tremppi_express(int argc, char ** argv)
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
-	}
+	}
+
 	try
 	{
 		PythonFunctions::configure("select");

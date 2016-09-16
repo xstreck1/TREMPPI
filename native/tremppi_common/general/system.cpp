@@ -26,7 +26,7 @@ bfs::path TremppiSystem::WORK_PATH;
 bfs::path TremppiSystem::EXEC_PATH;
 bfs::path TremppiSystem::BIN_PATH;
 bfs::path TremppiSystem::DATA_PATH;
-bool TremppiSystem::standalone;
+bool TremppiSystem::called_from_server;
 void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) 
 {
 	TremppiSystem::PROGRAM_NAME = name;
@@ -34,6 +34,7 @@ void TremppiSystem::set(const char * name, const char * arg, const string & _WOR
 	TremppiSystem::DATA_PATH = TremppiSystem::WORK_PATH / DATA_FOLDER;
 	TremppiSystem::BIN_PATH = bfs::absolute(bfs::path{ arg });
 	TremppiSystem::EXEC_PATH = bfs::current_path();
+	TremppiSystem::called_from_server = false; // Will be true only if called with the --server parameter
 
 	// Set the home
 	char* home_path = getenv("TREMPPI_HOME");
@@ -69,6 +70,13 @@ void TremppiSystem::initiate(const string & name, int argc, char **argv) {
 			if (string(argv[arg_no]) == "--path") 
 			{
 				path = argv[arg_no + 1];
+			}
+		}
+		for (const size_t arg_no : crange(argc))
+		{
+			if (string(argv[arg_no]) == "--server")
+			{
+				TremppiSystem::called_from_server = true;
 			}
 		}
 		TremppiSystem::set(name.c_str(), argv[0], path);

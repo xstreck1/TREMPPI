@@ -66,7 +66,6 @@ void printVer()
 //
 int main(int argc, char ** argv)
 {
-	TremppiSystem::standalone = false;
 	if (argc < 2)
 	{
 		TremppiSystem::set("browse", argv[0], ".");

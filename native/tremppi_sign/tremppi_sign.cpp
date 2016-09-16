@@ -24,10 +24,12 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void addColumns(const RegInfos & reg_infos, sqlite3pp::database & db) 
 {
-	for (const RegInfo & reg_info : reg_infos) 	{
+	for (const RegInfo & reg_info : reg_infos) 
+	{
 		for (const auto & regulator : reg_info.regulators) 
 		{
-			const string reg_name = reg_infos[regulator.first].name;
+			const string reg_name = reg_infos[regulator.first].name;
+
 			for (const ActLevel & threshold : regulator.second) 
 			{
 				const string column_name = "S_" + reg_name + "_" + to_string(threshold) + "_" + reg_info.name;
@@ -46,19 +48,22 @@ bool compareContexts(const vector<Levels> & contexts, const vector<vector<size_t
 	if (threshold == 0) 
 	{
 		throw runtime_error("Trying to remove an edge that is already absent in effect testing.");
-	}
+	}
+
 	for (const size_t column_no : cscope(contexts)) 
 	{
 		if (contexts[column_no][reg_no] == threshold) 
 		{
-			const size_t remove_column_no = context_pairs[column_no][reg_no];
+			const size_t remove_column_no = context_pairs[column_no][reg_no];
+
 			if (activating) 
 			{
 				if (params[remove_column_no] < params[column_no]) 
 				{
 					return true;
 				}
-			}
+			}
+
 			else 
 			{
 				if (params[remove_column_no] > params[column_no]) 
@@ -74,7 +79,8 @@ bool compareContexts(const vector<Levels> & contexts, const vector<vector<size_t
 inline bool isActivating(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold) 
 {
 	return compareContexts(contexts, context_pairs, params, reg_no, threshold, true);
-}
+}
+
 inline bool isInhibiting(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold) 
 {
 	return compareContexts(contexts, context_pairs, params, reg_no, threshold, false);
@@ -84,7 +90,8 @@ inline bool isInhibiting(const vector<Levels> & contexts, const vector<vector<si
 string getSign(const vector<Levels> & contexts, const vector<vector<size_t> > & context_pairs, const Levels & params, const size_t reg_no, const ActLevel threshold) 
 {
 	const bool activating = isActivating(contexts, context_pairs, params, reg_no, threshold);
-	const bool inhibiting = isInhibiting(contexts, context_pairs, params, reg_no, threshold);
+	const bool inhibiting = isInhibiting(contexts, context_pairs, params, reg_no, threshold);
+
 	if (activating & inhibiting) 
 	{
 		return "1";
@@ -112,12 +119,14 @@ int tremppi_sign(int argc, char ** argv)
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
 	string selection;
 	sqlite3pp::database db;
-	RegInfos reg_infos;
+	RegInfos reg_infos;
+
 	try 
 	{
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str()));
-		selection = DatabaseReader::getSelectionTerm();
+		// Get selection (use empty on server to prevent errors by insufficient data on the server)
+		select = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
 	}
@@ -169,7 +178,8 @@ int tremppi_sign(int argc, char ** argv)
 			{
 				Levels params = sqlite3pp::func::getRow<ActLevel>(*sel_it, 0, sel_qry.column_count());
 				string update = "UPDATE " + PARAMETRIZATIONS_TABLE + " SET";
-				size_t indegree = 0;
+				size_t indegree = 0;
+
 				for (const size_t reg_no : cscope(reg_info.regulators)) 
 				{
 					const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
@@ -203,7 +213,8 @@ int tremppi_sign(int argc, char ** argv)
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
-	}
+	}
+
 	try
 	{
 		PythonFunctions::configure("select");

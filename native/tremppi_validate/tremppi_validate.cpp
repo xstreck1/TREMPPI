@@ -42,7 +42,7 @@ struct ValidateSetup
 int tremppi_validate()
 {
 	Logging logging;
-	string select;
+	string selection;
 
 	RegInfos reg_infos;
 	sqlite3pp::database db;
@@ -50,8 +50,8 @@ int tremppi_validate()
 	{
 		DEBUG_LOG << "Parsing database.";
 
-		// Get selection		
-		select = DatabaseReader::getSelectionTerm();
+		// Get selection (use empty on server to prevent errors by insufficient data on the server)
+		selection = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
 
 		// Get database
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
@@ -109,7 +109,7 @@ int tremppi_validate()
 
 		// Analysis of parametrizations
 		ParametrizationReader par_reader;
-		par_reader.select(reg_infos, select, db);
+		par_reader.select(reg_infos, selection, db);
 		try
 		{
 			DEBUG_LOG << "Validating for an automaton: " << automaton.name;
@@ -118,7 +118,7 @@ int tremppi_validate()
 			OutputManager output(validate_setup.cost, validate_setup.trace, validate_setup.robustness, reg_infos, automaton.name, db);
 			output.outputForm();
 
-			logging.newPhase("Validating parametrizations", sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, select, db));
+			logging.newPhase("Validating parametrizations", sqlite3pp::func::rowCount(PARAMETRIZATIONS_TABLE, selection, db));
 			// Do the computation for all the rounds
 			sqlite3pp::transaction xct(db);
 			while (par_reader.next())
@@ -146,6 +146,20 @@ int tremppi_validate()
 		{
 			logging.exceptionMessage(e, 6);
 		}
+		try {
+			// Find the definition of the automaton and make it unchangeable (say its used), then write the files
+			for (Json::Value & property_node : properties) {
+				if (property_node["name"].asString() == automaton.name) {
+					property_node["used"] = true;
+					break;
+				}
+			}
+			FileManipulation::writeJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
+		}
+		catch (std::exception & e)
+		{
+			logging.exceptionMessage(e, 7);
+		}
 	}
 
 	try
@@ -154,7 +168,7 @@ int tremppi_validate()
 	}
 	catch (exception & e)
 	{
-		logging.exceptionMessage(e, 7);
+		logging.exceptionMessage(e, 8);
 	}
 
 	return 0;

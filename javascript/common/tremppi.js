@@ -461,7 +461,7 @@ tremppi = {
     exit: function () {
         $.ajax({
             type: "POST",
-            url: tremppi.getProjectAddress() + 'tools.html?command=exit',
+            url: tremppi.getRootAddress() + 'exit',
             error: tremppi.logError,
             success: function (res) {
                 $('body').html('TREMPPI HAS FINISHED');

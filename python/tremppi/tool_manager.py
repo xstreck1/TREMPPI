@@ -76,9 +76,8 @@ class ToolManager:
                 self._last_progress = "00.000"
 
                 argv = [join(system.BIN_PATH, "tremppi")] + [command[1]] + ['--path'] + [command[0]]
-                if command[1] == "spawn" and not self._local:
-                    argv.append('--limit')
-                    argv.append(str(current_user.size_limit))
+                if  not self._local:
+                    argv.append('--server')
 
                 print('call: ' + " ".join(argv))
                 self._subprocess = Popen(argv, stdout=PIPE)

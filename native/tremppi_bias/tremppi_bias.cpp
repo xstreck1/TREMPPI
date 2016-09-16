@@ -33,12 +33,14 @@ int tremppi_bias(int argc, char ** argv)
 
 	string selection;
 	sqlite3pp::database db;
-	RegInfos reg_infos;
+	RegInfos reg_infos;
+
 	try 
 	{
 		// Get database
 		db = move(sqlite3pp::database((TremppiSystem::DATA_PATH / DATABASE_FILENAME).string().c_str()));
-		selection = DatabaseReader::getSelectionTerm();
+		// Get selection (use empty on server to prevent errors by insufficient data on the server)
+		selection = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
@@ -90,7 +92,8 @@ int tremppi_bias(int argc, char ** argv)
 	catch (exception & e) 
 	{
 		logging.exceptionMessage(e, 3);
-	}
+	}
+
 	try
 	{
 		PythonFunctions::configure("select");

@@ -34,13 +34,15 @@ int tremppi_impact(int argc, char ** argv)
 	bfs::path database_path = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
 	string selection;
 	sqlite3pp::database db;
-	RegInfos reg_infos;
+	RegInfos reg_infos;
+
 	try 
 	{
 		// Get database
 		db = move(sqlite3pp::database(database_path.string().c_str()));
 
-		selection = DatabaseReader::getSelectionTerm();
+		// Get selection (use empty on server to prevent errors by insufficient data on the server)
+		select = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
@@ -53,7 +55,8 @@ int tremppi_impact(int argc, char ** argv)
 	// Label per parametrization
 	try 
 	{
-		for (const RegInfo & reg_info : reg_infos) 		{
+		for (const RegInfo & reg_info : reg_infos) 
+		{
 			for (const auto & regulator : reg_info.regulators) 
 			{
 				const string reg_name = reg_infos[regulator.first].name;
@@ -64,7 +67,8 @@ int tremppi_impact(int argc, char ** argv)
 				}
 			}
 		}
-		logging.newPhase("Expressing component", reg_infos.size());
+		logging.newPhase("Expressing component", reg_infos.size());
+
 		for (const RegInfo & reg_info : reg_infos) 
 		{
 			// Skip if there are no edges
@@ -78,7 +82,8 @@ int tremppi_impact(int argc, char ** argv)
 			// For each regulator holds the values of the threshold in each column
 			vector<Levels> reg_values;
 			// For each regulator hold the columns that contain the contexts with this regulator and those exactly without is (i.e. if I have a context with this regulator and remove the regulator, what do I obtain?)
-			map<CompID, vector<vector<size_t>>> edge_dist;
+			map<CompID, vector<vector<size_t>>> edge_dist;
+
 			for (const auto & regulator : reg_info.regulators) 
 			{
 				// Obtain the id of the regulator from the order in the regulator list
@@ -102,7 +107,8 @@ int tremppi_impact(int argc, char ** argv)
 
 				for (const size_t reg_no : cscope(reg_info.regulators)) 
 				{
-					const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
+					const CompID reg_ID = DataInfo::RegNoToRegID(reg_info, reg_no);
+
 					for (const size_t threshold_no : cscope(reg_info.regulators.at(reg_ID))) 
 					{
 						const ActLevel threshold = reg_info.regulators.at(reg_ID)[threshold_no];
