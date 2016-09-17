@@ -4,6 +4,7 @@ run_cmake.bat
 run_cmake_static.bat
 run_cmake.sh
 cmake_install.cmake
+*tremppi_server.ini*
 
 #possible GECODE
 *gecode-*
