@@ -391,6 +391,12 @@ def make_detail(conn):
 
 # Creates the configuration files
 def configure(data_path, widget):
+    if widget == "editor":
+        with open(os.path.join(data_path, "editor.js"), 'w+') as editor_js:
+            editor_js.write('tremppi.tools.setup = ')
+            json_data = {"created": int(os.path.exists(os.path.join(data_path, database_file))) }
+            json.dump(json_data, editor_js)
+            editor_js.write(";")
     if widget == "select":
         with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
             with open(os.path.join(data_path, "select.js"), 'w+') as select_js:
@@ -433,11 +439,11 @@ def configure(data_path, widget):
                 file_js.write(';')
 
     elif widget == "tools":
-        with open(os.path.join(data_path, widget + '.js'), 'w+') as file_js:
-            file_js.write('tremppi.' + widget + '.setup = ')
+        with open(os.path.join(data_path, widget + '.js'), 'w+') as tools_js:
+            tools_js.write('tremppi.tools.setup = ')
             json_data = {"created": int(os.path.exists(os.path.join(data_path, database_file))) }
-            json.dump(json_data, file_js)
-            file_js.write(';')
+            json.dump(json_data, tools_js)
+            tools_js.write(';')
 
     elif widget in widgets:
         js_filename = os.path.join(data_path, widget + '.js')

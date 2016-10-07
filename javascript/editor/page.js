@@ -39,7 +39,6 @@ tremppi.editor.page = function () {
     tremppi.editor.setStyle(tremppi.editor.graph);
 };
 
-
 tremppi.editor.getData = function () {
     return tremppi.editor.graph.json().elements;
 };

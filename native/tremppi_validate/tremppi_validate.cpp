@@ -154,7 +154,7 @@ int tremppi_validate()
 					break;
 				}
 			}
-			FileManipulation::writeJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME);
+			FileManipulation::writeJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME, properties);
 		}
 		catch (std::exception & e)
 		{

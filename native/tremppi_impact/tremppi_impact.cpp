@@ -42,7 +42,7 @@ int tremppi_impact(int argc, char ** argv)
 		db = move(sqlite3pp::database(database_path.string().c_str()));
 
 		// Get selection (use empty on server to prevent errors by insufficient data on the server)
-		select = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
+		selection = TremppiSystem::called_from_server ? "" : DatabaseReader::getSelectionTerm();
 
 		DatabaseReader reader;
 		reg_infos = reader.readRegInfos(db);
