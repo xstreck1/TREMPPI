@@ -13,13 +13,13 @@
 const int SERVER_PARAMETER_LIMIT = 1048576;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \file Entry point of tremppi_spawn.
+/// \file Entry point of tremppi_enumerate.
 /// - Checks for correctness of a model.
 /// - Produces a database of parametrizations based on the model.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int tremppi_spawn(int argc, char ** argv)
+int tremppi_enumerate(int argc, char ** argv)
 {
-	TremppiSystem::initiate("tremppi_spawn", argc, argv);
+	TremppiSystem::initiate("tremppi_enumerate", argc, argv);
 	Logging logging;
 	bfs::path database_file = TremppiSystem::DATA_PATH / DATABASE_FILENAME;
 

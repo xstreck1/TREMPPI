@@ -19,7 +19,7 @@ import json
 import os.path
 import re
 import sqlite3
-from .database_reader import component_regulators_list, read_components, read_regulations
+from .database_reader import component_regulators_list, read_components, read_regulations, are_properties_defined
 from .header import widgets, database_file
 
 
@@ -394,7 +394,7 @@ def configure(data_path, widget):
     if widget == "editor":
         with open(os.path.join(data_path, "editor.js"), 'w+') as editor_js:
             editor_js.write('tremppi.tools.setup = ')
-            json_data = {"created": int(os.path.exists(os.path.join(data_path, database_file))) }
+            json_data = {"enumerated": int(os.path.exists(os.path.join(data_path, database_file))) }
             json.dump(json_data, editor_js)
             editor_js.write(";")
     if widget == "select":
@@ -413,7 +413,8 @@ def configure(data_path, widget):
                 configured = {
                     'list_columns': list_columns,
                     'detail_columns': detail_columns,
-                    'detail_groups': detail_groups
+                    'detail_groups': detail_groups,
+                    "fixed": are_properties_defined(conn)
                 }
                 properties_js.write("tremppi.properties.setup = ")
                 json.dump(configured, properties_js)
@@ -439,11 +440,15 @@ def configure(data_path, widget):
                 file_js.write(';')
 
     elif widget == "tools":
-        with open(os.path.join(data_path, widget + '.js'), 'w+') as tools_js:
-            tools_js.write('tremppi.tools.setup = ')
-            json_data = {"created": int(os.path.exists(os.path.join(data_path, database_file))) }
-            json.dump(json_data, tools_js)
-            tools_js.write(';')
+        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+            with open(os.path.join(data_path, widget + '.js'), 'w+') as tools_js:
+                tools_js.write('tremppi.tools.setup = ')
+                json_data = {
+                    "enumerated": int(os.path.exists(os.path.join(data_path, database_file))),
+                    "fixed": are_properties_defined(conn)
+                }
+                json.dump(json_data, tools_js)
+                tools_js.write(';')
 
     elif widget in widgets:
         js_filename = os.path.join(data_path, widget + '.js')

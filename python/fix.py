@@ -15,26 +15,20 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
+import shutil
+import sys
+import os.path
+from tremppi.header import data_folder, configure_filename, system_init, system, model_file
+from tremppi.clean import clean
+from tremppi.configure import configure
 
-
-def read_components(conn):
-    return conn.execute('SELECT Name, MaxActivity FROM Components ORDER BY Name').fetchall()
-
-
-def read_regulations(conn):
-    return conn.execute('SELECT DISTINCT Source, Threshold, Target FROM Regulations ORDER BY Source, Target, Threshold').fetchall()
-
-
-def component_regulators_list(conn):
-    result = {}
-    cursor = conn.execute('SELECT DISTINCT Target, Source FROM Regulations ORDER BY Target, Source')
-    for row in cursor:
-        if str(row[0]) not in result:
-            result[str(row[0])] = []
-        result[str(row[0])].append(str(row[1]))
-    return result
-
-
-def are_properties_defined(conn):
-    cursor = conn.execute('SELECT count(*) FROM sqlite_master WHERE type="table" AND name="Properties"')
-    return int(cursor[0][0]) > 0
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Erase all the data of a tremppi project except for the editor')
+    parser.add_argument('--path', help='specify the location to fix')
+    args = parser.parse_args()
+    system_init(sys.argv[0], args)
+    if not os.path.exists(os.path.join(system.DEST_PATH, configure_filename)):
+        raise Exception('The target folder ' + system.DEST_PATH + ' does not seem to be a TREMPPI project folder. The ' + configure_filename + ' is missing.')
+    else:
+        # add data to the database

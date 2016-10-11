@@ -102,3 +102,18 @@ int tremppi_finalize(int argc, char ** argv)
 {
 	return run_script("finalize", argc, argv);
 }
+
+int tremppi_erase(int argc, char ** argv)
+{
+	return run_script("erase", argc, argv);
+}
+
+int tremppi_fix(int argc, char ** argv)
+{
+	return run_script("fix", argc, argv);
+}
+
+int tremppi_release(int argc, char ** argv)
+{
+	return run_script("release", argc, argv);
+}

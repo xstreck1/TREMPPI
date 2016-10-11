@@ -28,6 +28,7 @@ projects_filename = "projects.js"
 last_page_filename = "last_page.txt"
 server_config_filename = 'tremppi_server.ini'
 database_file = 'database.sqlite'
+properties_table = "properties"
 source_folder = 'javascript'
 template_folder = 'templates'
 static_folder = 'static'

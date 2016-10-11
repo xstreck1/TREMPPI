@@ -32,7 +32,7 @@ int basic_regulations_test();
 int basic_impact_test();
 int basic_group_test();
 int basic_sign_test();
-int basic_spawn_test();
+int basic_enumerate_test();
 int basic_validate_test();
 int basic_witness_test();
 

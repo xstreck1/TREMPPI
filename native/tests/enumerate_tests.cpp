@@ -21,7 +21,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tests.hpp"
 
-#include <tremppi_spawn/compute/normalizer.hpp>
+#include <tremppi_enumerate/compute/normalizer.hpp>
 
 // Print the basic model
 void createModel(const bfs::path & example_model_path) 
@@ -63,13 +63,13 @@ void createSelect(const bfs::path & example_model_path)
 	string data = writer.write(root);
 	data_file << data;
 }
-int basic_spawn_test() 
+int basic_enumerate_test() 
 {
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	createModel(arguments[1]);
 	createSelect(arguments[1]);
-	return (tremppi_spawn(arg_ptr.getArgc(), arg_ptr.getArgv()));
+	return (tremppi_enumerate(arg_ptr.getArgc(), arg_ptr.getArgv()));
 }
 
 
