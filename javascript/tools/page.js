@@ -18,52 +18,78 @@
  ******************************************************************************/
 /* global tremppi */
 
+tremppi.tools.enumerateCondition = function (isRequired) {
+    return function () {
+        var satisfied = typeof tremppi.tools.setup !== 'undefined' && tremppi.tools.setup.enumerated === 1;
+        return isRequired ? satisfied : !satisfied;
+    };
+};
+
+// Implies the enumerateCondition
+tremppi.tools.fixCondition = function (isRequired) {
+    return function () {
+        var satisfied = typeof tremppi.tools.setup !== 'undefined' && tremppi.tools.setup.enumerated === 1 && tremppi.tools.setup.fixed === 1;
+        return isRequired ? satisfied : !satisfied;
+    };
+};
+
 tremppi.tools.tool_list = [
     {
-        category: "MODEL",
+        category: "NETWORK",
         tools: [
             {
-                name: "spawn",
-                description: "read a model and create a database of parametrizations based on the model",
-                condition: function () {
-                    return typeof tremppi.tools.setup === 'undefined' || tremppi.tools.setup.setup === 'undefined' || tremppi.tools.setup.created === 0;
-                }
+                name: "enumerate",
+                description: "read a newtork and create a database of parametrizations based on the newtork",
+                condition: tremppi.tools.enumerateCondition(false)
             },
             {
-                name: "clean",
+                name: "erase",
                 description: "clean all the data and create a new database from the model",
-                condition: function () {
-                    return !(typeof tremppi.tools.setup === 'undefined' || tremppi.tools.setup.setup === 'undefined' || tremppi.tools.setup.created === 0);
-                }
+                condition: tremppi.tools.enumerateCondition(true)
             }
         ]
     },
     {
         category: "STATIC LABELS",
         tools: [
-            {name: "bias", description: "label parametrizations with their bias"},
-            {name: "express", description: "create the logical expressions for all the parametrizations"},
-            {name: "impact", description: "label with the impact of a regulator on its target"},
-            {name: "sign", description: "label the edges of individual with their signs"}
+            {name: "bias", description: "label parametrizations with their bias", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "express", description: "create the logical expressions for all the parametrizations", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "impact", description: "label with the impact of a regulator on its target", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "sign", description: "label the edges of individual with their signs", condition: tremppi.tools.enumerateCondition(true)}
+        ]
+    },
+    {
+        category: "PROPERTIES",
+        tools: [
+            {
+                name: "fix",
+                description: "After fixing, the current properties can be used for creation of dynamic labels and selections, however they cannot be changed afterwards withouth releasing them first.",
+                condition: function() { return tremppi.tools.fixCondition(false)() && tremppi.tools.enumerateCondition(true)(); } 
+            },
+            {
+                name: "release",
+                description: "Makes the properites editable again, however it also erases all reports.",
+                condition: tremppi.tools.fixCondition(true)
+            }
         ]
     },
     {
         category: "DYNAMIC LABELS",
         tools: [
-            {name: "cost", description: "conduct a model check validate parametrizations agaings selected LTL properties"},
-            {name: "trace", description: "conduct a model check and obtain traces for satisfiable properties"},
-            {name: "robustness", description: "conduct a model check and obtain robustness for selected properties"}
+            {name: "cost", description: "conduct a model check validate parametrizations agaings selected LTL properties", condition: tremppi.tools.fixCondition(true)},
+            {name: "trace", description: "conduct a model check and obtain traces for satisfiable properties", condition: tremppi.tools.fixCondition(true)},
+            {name: "robustness", description: "conduct a model check and obtain robustness for selected properties", condition: tremppi.tools.fixCondition(true)}
         ]
     },
     {
         category: "REPORTS",
         tools: [
-            {name: "correlations", description: "create a correlations graph report"},
-            {name: "qualitative", description: "obtain a qualitative analysis of the known data"},
-            {name: "quantitative", description: "obtain a summary of up till now known data"},
-            {name: "regulations", description: "create a regulations graph based on a statistical analysis"},
-            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)"},
-            {name: "group", description: "make groups of same qualitatve features"}
+            {name: "correlations", description: "create a correlations graph report", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "qualitative", description: "obtain a qualitative analysis of the known data", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "quantitative", description: "obtain a summary of up till now known data", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "regulations", description: "create a regulations graph based on a statistical analysis", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)", condition: tremppi.tools.enumerateCondition(true)},
+            {name: "group", description: "make groups of same qualitatve features", condition: tremppi.tools.enumerateCondition(true)}
         ]
     },
     {

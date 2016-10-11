@@ -95,7 +95,6 @@ int tremppi_spawn(int argc, char ** argv)
 		Normalizer normalizer(reg_infos);
 		database_filler.startOutput();
 
-
 		// Parse the limit on the size of the model
 		int limit = TremppiSystem::called_from_server ? SERVER_PARAMETER_LIMIT : -1;
 		// There is a limit in place and it's overflown
@@ -106,7 +105,6 @@ int tremppi_spawn(int argc, char ** argv)
 				to_string(limit);
 			throw runtime_error(overflow.c_str());
 		}
-
 
 		DEBUG_LOG << "Writing the database file, testing " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
 		logging.newPhase("writing parametrization", KineticsTranslators::getSpaceSize(kinetics));

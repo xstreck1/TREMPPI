@@ -1,10 +1,11 @@
 div.category {
-    font-size: 18pt;
-    margin: 5pt;
+    font-size: 10pt;
+    font-weight: bold;
+    margin: 5pt 0pt;
     width: calc(100%-10pt);
     border: black solid;
     border-width: 1px 0pt;
-    height: 22pt;
+    height: 13pt;
     background-color: #DDDDDD;
 }
 

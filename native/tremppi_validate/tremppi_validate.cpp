@@ -146,20 +146,23 @@ int tremppi_validate()
 		{
 			logging.exceptionMessage(e, 6);
 		}
-		try {
-			// Find the definition of the automaton and make it unchangeable (say its used), then write the files
-			for (Json::Value & property_node : properties) {
-				if (property_node["name"].asString() == automaton.name) {
-					property_node["used"] = true;
-					break;
-				}
-			}
-			FileManipulation::writeJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME, properties);
-		}
-		catch (std::exception & e)
-		{
-			logging.exceptionMessage(e, 7);
-		}
+		// Experimental---fixing properties only after they have been used specifically
+		//try {
+		//	// Find the definition of the automaton and make it unchangeable (say its used), then write the files
+		//	for (Json::Value & property_node : properties) {
+		//		if (property_node["name"].asString() == automaton.name) {
+		//			property_node["used"] = true;
+		//			break;
+		//		}
+		//	}
+		//	Json::Value root;
+		//	root["properties"] = properties;
+		//	FileManipulation::writeJSON(TremppiSystem::DATA_PATH / PROPERTIES_FILENAME, root);
+		//}
+		//catch (std::exception & e)
+		//{
+		//	logging.exceptionMessage(e, 7);
+		//}
 	}
 
 	try

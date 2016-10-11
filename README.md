@@ -5,6 +5,8 @@ Toolkit for Reverse Engineering of Molecular Pathways via Parameter Identificati
 
 USER GUIDE: http://dibimath.github.io/TREMPPI/ 
 
+PLEASE DO NOT BUILD FROM THE MASTER BRANCH, IT IS DEVELOPMENT-ONLY! THE STABLE RELEASE CAN BE ACCESSED AT: https://github.com/xstreck1/TREMPPI/releases
+
 Licenced under GNU GPL v3: http://www.gnu.org/licenses/gpl-3.0.en.html
 
 3rd party content
