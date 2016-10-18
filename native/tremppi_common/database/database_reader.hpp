@@ -54,6 +54,9 @@ public:
 	RegInfos readRegInfos(sqlite3pp::database & db);
 
 	// 
+	bool arePropertiesDefined(sqlite3pp::database & db);
+
+	// 
 	static sqlite3pp::query selectionFilter(const map<size_t, string> & columns, const string & selection, sqlite3pp::database & db);
 
 	//
@@ -67,6 +70,7 @@ public:
 
 	// Obtain the the names of the current selection lines 
 	static vector<string> getSelectionNames();
+
 
 	//
 	static int getSelectionSize(const string & selection, sqlite3pp::database & db);

@@ -21,10 +21,11 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common_tests_data.hpp"
 
+int basic_init_test();
+int basic_enumerate_test();
 int basic_express_test();
 int basic_bias_test();
 int basic_correlations_test();
-int basic_init_test();
 int basic_update_test();
 int basic_qualitative_test();
 int basic_quantitative_test();
@@ -32,7 +33,6 @@ int basic_regulations_test();
 int basic_impact_test();
 int basic_group_test();
 int basic_sign_test();
-int basic_enumerate_test();
 int basic_validate_test();
 int basic_witness_test();
 

@@ -35,4 +35,4 @@ if __name__ == "__main__":
         shutil.rmtree(os.path.join(system.DEST_PATH, data_folder))
         generate_data(os.path.join(system.DEST_PATH, data_folder))
         os.rename(os.path.join(system.DEST_PATH, model_file), os.path.join(system.DEST_PATH, data_folder, model_file))
-        configure(system.DEST_PATH, 'tools')
+        configure(os.path.join(system.DEST_PATH, data_folder), 'tools')

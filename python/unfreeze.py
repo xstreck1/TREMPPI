@@ -16,7 +16,6 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
-import shutil
 import sys
 import os.path
 from tremppi.header import data_folder, configure_filename, system_init, system, model_file
@@ -24,11 +23,14 @@ from tremppi.clean import clean
 from tremppi.configure import configure
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Erase all the data of a tremppi project except for the editor')
-    parser.add_argument('--path', help='specify the location to fix')
+    parser = argparse.ArgumentParser(description='Erase the dynamic labels and the values for the properties.')
+    parser.add_argument('--path', help='specify the location to unfreeze')
     args = parser.parse_args()
     system_init(sys.argv[0], args)
+    DATA_PATH = os.path.join(system.DEST_PATH, data_folder)
     if not os.path.exists(os.path.join(system.DEST_PATH, configure_filename)):
         raise Exception('The target folder ' + system.DEST_PATH + ' does not seem to be a TREMPPI project folder. The ' + configure_filename + ' is missing.')
     else:
-        # add data to the database
+        clean(DATA_PATH, 'properties')
+        configure(DATA_PATH, 'properties')
+        configure(DATA_PATH, 'tools')

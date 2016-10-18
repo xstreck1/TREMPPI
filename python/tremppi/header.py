@@ -18,7 +18,7 @@
 from os.path import dirname, abspath, join, normpath, basename, isfile
 from os import getcwd
 
-version = "1.1.0"
+version = "1.3.0"
 
 model_size_limit = 1000000
 
@@ -28,7 +28,6 @@ projects_filename = "projects.js"
 last_page_filename = "last_page.txt"
 server_config_filename = 'tremppi_server.ini'
 database_file = 'database.sqlite'
-properties_table = "properties"
 source_folder = 'javascript'
 template_folder = 'templates'
 static_folder = 'static'
@@ -37,6 +36,7 @@ data_folder = 'data'
 widgets = ['index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations', 'quantitative', 'qualitative', 'group', 'tools']
 folders = ['common', 'libs', 'index', 'properties', 'editor', 'select', 'witness', 'regulations', 'correlations',  'quantitative', 'qualitative', 'group', 'tools']
 model_file = 'editor.json'
+properties_file = 'properties.json'
 
 
 class System:

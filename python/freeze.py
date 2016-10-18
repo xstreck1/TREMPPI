@@ -17,19 +17,34 @@
 
 import argparse
 import sys
+import json
 import os.path
-from tremppi.header import data_folder, configure_filename, system_init, system, model_file
-from tremppi.clean import clean
+import sqlite3
+from os.path import join
+from tremppi.header import data_folder, configure_filename, system_init, system, database_file, properties_file
+from tremppi.file_manipulation import read_jsonp
 from tremppi.configure import configure
 
+# TODO needs to read the properties from the JSON file and insert into columns and Properties
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Erase the dynamic labels and the properties.')
-    parser.add_argument('--path', help='specify the location to release')
+    parser = argparse.ArgumentParser(description='Erase all the data of a tremppi project except for the editor')
+    parser.add_argument('--path', help='specify the location to freeze')
     args = parser.parse_args()
     system_init(sys.argv[0], args)
+    DATA_PATH = join(system.DEST_PATH, data_folder)
     if not os.path.exists(os.path.join(system.DEST_PATH, configure_filename)):
         raise Exception('The target folder ' + system.DEST_PATH + ' does not seem to be a TREMPPI project folder. The ' + configure_filename + ' is missing.')
     else:
-        clean(system.DEST_PATH, 'properties')
-        configure(system.DEST_PATH, 'properties')
-        configure(system.DEST_PATH, 'tools')
+        with sqlite3.connect(os.path.join(DATA_PATH, database_file)) as conn:
+            conn.execute('DROP TABLE IF EXISTS Properties')
+            conn.execute('CREATE TABLE Properties (Name TEXT)')
+            properties = []
+            with open(os.path.join(DATA_PATH, properties_file), "r") as file:
+                property_holder = json.loads(file.read())
+                if "records" in property_holder:
+                    properties = property_holder["records"]
+            for property in properties:
+                conn.execute('INSERT INTO Properties (Name) VALUES (\"' + property["name"] + '\")')
+        configure(DATA_PATH, 'properties')
+        configure(DATA_PATH, 'tools')

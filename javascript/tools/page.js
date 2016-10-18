@@ -26,9 +26,9 @@ tremppi.tools.enumerateCondition = function (isRequired) {
 };
 
 // Implies the enumerateCondition
-tremppi.tools.fixCondition = function (isRequired) {
+tremppi.tools.freezeCondition = function (isRequired) {
     return function () {
-        var satisfied = typeof tremppi.tools.setup !== 'undefined' && tremppi.tools.setup.enumerated === 1 && tremppi.tools.setup.fixed === 1;
+        var satisfied = typeof tremppi.tools.setup !== 'undefined' && tremppi.tools.setup.enumerated === 1 && tremppi.tools.setup.freezed === 1;
         return isRequired ? satisfied : !satisfied;
     };
 };
@@ -62,23 +62,23 @@ tremppi.tools.tool_list = [
         category: "PROPERTIES",
         tools: [
             {
-                name: "fix",
+                name: "freeze",
                 description: "After fixing, the current properties can be used for creation of dynamic labels and selections, however they cannot be changed afterwards withouth releasing them first.",
-                condition: function() { return tremppi.tools.fixCondition(false)() && tremppi.tools.enumerateCondition(true)(); } 
+                condition: function() { return tremppi.tools.freezeCondition(false)() && tremppi.tools.enumerateCondition(true)(); } 
             },
             {
-                name: "release",
+                name: "unfreeze",
                 description: "Makes the properites editable again, however it also erases all reports.",
-                condition: tremppi.tools.fixCondition(true)
+                condition: tremppi.tools.freezeCondition(true)
             }
         ]
     },
     {
         category: "DYNAMIC LABELS",
         tools: [
-            {name: "cost", description: "conduct a model check validate parametrizations agaings selected LTL properties", condition: tremppi.tools.fixCondition(true)},
-            {name: "trace", description: "conduct a model check and obtain traces for satisfiable properties", condition: tremppi.tools.fixCondition(true)},
-            {name: "robustness", description: "conduct a model check and obtain robustness for selected properties", condition: tremppi.tools.fixCondition(true)}
+            {name: "cost", description: "conduct a model check validate parametrizations agaings selected LTL properties", condition: tremppi.tools.freezeCondition(true)},
+            {name: "trace", description: "conduct a model check and obtain traces for satisfiable properties", condition: tremppi.tools.freezeCondition(true)},
+            {name: "robustness", description: "conduct a model check and obtain robustness for selected properties", condition: tremppi.tools.freezeCondition(true)}
         ]
     },
     {

@@ -75,6 +75,7 @@ int basic_validate_test()
 	vector<string> arguments = { "--path", bfs::absolute(TremppiSystem::HOME_PATH / TEST_FOLDER / TEST_PROJECT).string() };
 	ArgPtr arg_ptr(arguments);
 	createProperties(arguments[1]);
+	tremppi_freeze(arg_ptr.getArgc(), arg_ptr.getArgv());
 	int res = tremppi_cost(arg_ptr.getArgc(), arg_ptr.getArgv());
 	res += tremppi_trace(arg_ptr.getArgc(), arg_ptr.getArgv());
 	res += tremppi_robustness(arg_ptr.getArgc(), arg_ptr.getArgv());

@@ -36,7 +36,8 @@ void DatabaseFiller::fillComponents()
 {
 	prepareTable(COMPONENTS_TABLE, "(Name TEXT, MaxActivity INTEGER)");
 
-	string update = "";
+	string update = "";
+
 	for (CompID t_ID : crange(model.components.size()))
 	{
 		string values = "(\"" + model.components[t_ID].name + "\", " + to_string(model.components[t_ID].max_activity) + "); \n";
@@ -44,14 +45,17 @@ void DatabaseFiller::fillComponents()
 	}
 	db.execute(update.c_str());
 
-}
+}
+
 void DatabaseFiller::fillRegulations()
 {
 	prepareTable(REGULATIONS_TABLE, "(Source TEXT, Target TEXT, Threshold INTEGER)");
-	vector<string> updates;
+	vector<string> updates;
+
 	for (CompID t_ID : crange(model.components.size()))
 	{
-		for (auto regul : ModelTranslators::getThresholds(model, t_ID)) {
+		for (auto regul : ModelTranslators::getThresholds(model, t_ID)) {
+
 			for (ActLevel threshold : regul.second)
 			{
 				string values = "(";
@@ -64,12 +68,14 @@ void DatabaseFiller::fillRegulations()
 		}
 	}
 	// Sort so the values in the db are also sorted
-	sort(WHOLE(updates));
+	sort(WHOLE(updates));
+
 	for (const string & update : updates)
 	{
 		db.execute(update.c_str());
 	}
-}
+}
+
 string DatabaseFiller::getContexts() const
 {
 	string contexts = "";
@@ -123,7 +129,8 @@ void DatabaseFiller::startOutput()
 {
 	db.execute("BEGIN TRANSACTION;");
 	in_output = true;
-}
+}
+
 void DatabaseFiller::finishOutpout()
 {
 	if (in_output)

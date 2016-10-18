@@ -58,6 +58,9 @@ int tremppi_validate()
 
 		// Read regulatory information
 		DatabaseReader reader;
+		if (!reader.arePropertiesDefined(db)) {
+			throw runtime_error("Properties not freezed.");
+		}
 		reg_infos = reader.readRegInfos(db);
 	}
 	catch (exception & e)

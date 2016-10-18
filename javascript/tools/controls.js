@@ -46,7 +46,7 @@ tremppi.tools.addToQueue = function (command) {
         }
     }
     var success_function = tremppi.tools.displayProgress;
-    if (command === 'enumerate' || command === 'erase' || command === 'fix' || command === 'release') {
+    if (command === 'enumerate' || command === 'erase' || command === 'freeze' || command === 'unfreeze' || command === 'update') {
         success_function = location.reload(true);
     } 
     $.ajax({

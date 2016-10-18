@@ -57,7 +57,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "configure.h"
 
 // For BioSystems
-const std::string VERSION("1.0.0");
+const std::string VERSION("1.2.0");
 
 using namespace std;
 
@@ -94,7 +94,7 @@ int tremppi_correlations(int argc, char ** argv);
 int tremppi_express(int argc, char ** argv);
 int tremppi_erase(int argc, char ** argv);
 int tremppi_finalize(int argc, char ** argv);
-int tremppi_fix(int argc, char ** argv);
+int tremppi_freeze(int argc, char ** argv);
 int tremppi_init(int argc, char ** argv);
 int tremppi_impact(int argc, char ** argv);
 int tremppi_group(int argc, char ** argv);
@@ -102,8 +102,8 @@ int tremppi_sign(int argc, char ** argv);
 int tremppi_qualitative(int argc, char ** argv);
 int tremppi_quantitative(int argc, char ** argv);
 int tremppi_regulations(int argc, char ** argv);
-int tremppi_release(int argc, char ** argv);
-int tremppi_update(int argc, char ** argv);
-int tremppi_trace(int argc, char ** argv);
 int tremppi_robustness(int argc, char ** argv);
+int tremppi_update(int argc, char ** argv);
+int tremppi_unfreeze(int argc, char ** argv);
+int tremppi_trace(int argc, char ** argv);
 int tremppi_witness(int argc, char ** argv);

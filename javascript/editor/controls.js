@@ -19,15 +19,21 @@
 
 /* global tremppi */
 
+tremppi.editor.isEnumerated = function () {
+    return typeof tremppi.editor.setup !== 'undefined' 
+            && typeof tremppi.editor.setup.enumerated !== 'undefined' 
+            && tremppi.editor.setup.enumerated === 1;
+};
+
 tremppi.editor.controls = function () {
     tremppi.editor.graph.on('tapend', tremppi.editor.selection);
     // Save after drag
 
-    tremppi.toolbar.onClick = tremppi.toolbarClick;
+    tremppi.toolbar.onClick = tremppi.editor.toolbarClick;
     tremppi.editor.setBasic();
 };
 
-tremppi.toolbarClick = function (event) {
+tremppi.editor.toolbarClick = function (event) {
     tremppi.editor[event.target]();
 };
 
@@ -99,7 +105,7 @@ tremppi.editor.removeAll = function () {
 
 tremppi.editor.addEditField = function (element, field, type) {
     tremppi.toolbar.add({type: 'html', id: field, html:
-                '<input id="' + field + '_input" type="' + type + '"placeholder="' + field + '"/>'
+                '<input id="' + field + '_input" type="' + type + '"placeholder="' + field  + '"/>'
     });
     $("#" + field + "_input").val(element.data(field)).change(function () {
         var value = this.type === "number" ? parseInt(this.value) : this.value;
@@ -115,29 +121,31 @@ tremppi.editor.addHelpField = function (help_text) {
 
 tremppi.editor.setBasic = function () {
     tremppi.editor.removeAll();
-    tremppi.toolbar.add({type: 'button', id: 'create', icon: 'w2ui-icon-plus', caption: 'Add', hint: 'click on an empty space to create a node, click on a node to start an edge'});
-    tremppi.toolbar.add({type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'});
+    if (!tremppi.editor.isEnumerated()) {
+        tremppi.toolbar.add({type: 'button', id: 'create', icon: 'w2ui-icon-plus', caption: 'Add', hint: 'click on an empty space to create a node, click on a node to start an edge'});
+        tremppi.toolbar.add({type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'});
+    }
     tremppi.editor.graph.off('tapend').on('tapend', tremppi.editor.selection);
 };
 
 tremppi.editor.setNode = function (node) {
     tremppi.editor.removeAll();
     tremppi.editor.addEditField(node, "Name", "text");
-    $("#Name_input").w2field('text');
+    $("#Name_input").w2field('text').prop('readonly', tremppi.editor.isEnumerated());
     tremppi.editor.addEditField(node, "MaxActivity", "number");
-    $("#MaxActivity_input").w2field('int');
+    $("#MaxActivity_input").w2field('int').prop('readonly', tremppi.editor.isEnumerated());
     tremppi.editor.addEditField(node, "Constraint", "text");
-    $("#Constraint_input").w2field('text');
+    $("#Constraint_input").w2field('text').prop('readonly', tremppi.editor.isEnumerated());
 };
 
 tremppi.editor.setEdge = function (edge) {
     tremppi.editor.removeAll();
     tremppi.editor.addEditField(edge, "Threshold", "number");
-    $("#Threshold_input").w2field('int');
+    $("#Threshold_input").w2field('int').prop('readonly', tremppi.editor.isEnumerated());
     tremppi.editor.addEditField(edge, "Label", "text");
     $("#Label_input").w2field('list', {
         items: tremppi.editor.lables,
         selected: edge.data("Label")
-    });
+    }).prop('readonly', tremppi.editor.isEnumerated());
     $("#Label_input").val(edge.data("Label"));
 };

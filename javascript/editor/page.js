@@ -73,7 +73,11 @@ tremppi.editor.setDefaultData = function (data) {
 tremppi.editor.toolbarClass = function () {
     return {
         name: 'toolbar',
-        items: [
+        items: tremppi.editor.isEnumerated() ? 
+        [
+            {type: 'break', id: 'break1'}
+        ] : [
+            
             {type: 'button', id: 'create', icon: 'w2ui-icon-plus', caption: 'Add', hint: 'click on an empty space to create a node, click on a node to start an edge'},
             {type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'}
         ]

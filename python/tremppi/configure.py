@@ -391,34 +391,37 @@ def make_detail(conn):
 
 # Creates the configuration files
 def configure(data_path, widget):
+    database_exists = os.path.exists(os.path.join(data_path, database_file))
     if widget == "editor":
         with open(os.path.join(data_path, "editor.js"), 'w+') as editor_js:
-            editor_js.write('tremppi.tools.setup = ')
-            json_data = {"enumerated": int(os.path.exists(os.path.join(data_path, database_file))) }
+            editor_js.write('tremppi.editor.setup = ')
+            json_data = {"enumerated": int(os.path.exists(os.path.join(data_path, database_file)))}
             json.dump(json_data, editor_js)
             editor_js.write(";")
-    if widget == "select":
-        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
-            with open(os.path.join(data_path, "select.js"), 'w+') as select_js:
-                columns, groups = make_selection(conn)
-                configured = {'columns': columns, 'groups': groups}
-                select_js.write("tremppi.select.setup = ")
-                json.dump(configured, select_js)
-                select_js.write(";")
+    elif widget == "select":
+        if database_exists:
+            with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+                with open(os.path.join(data_path, "select.js"), 'w+') as select_js:
+                    columns, groups = make_selection(conn)
+                    configured = {'columns': columns, 'groups': groups}
+                    select_js.write("tremppi.select.setup = ")
+                    json.dump(configured, select_js)
+                    select_js.write(";")
     elif widget == "properties":
-        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
-            with open(os.path.join(data_path, "properties.js"), 'w+') as properties_js:
-                list_columns = make_list(conn)
-                detail_columns, detail_groups = make_detail(conn)
-                configured = {
-                    'list_columns': list_columns,
-                    'detail_columns': detail_columns,
-                    'detail_groups': detail_groups,
-                    "fixed": are_properties_defined(conn)
-                }
-                properties_js.write("tremppi.properties.setup = ")
-                json.dump(configured, properties_js)
-                properties_js.write(";")
+        if database_exists:
+            with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+                with open(os.path.join(data_path, "properties.js"), 'w+') as properties_js:
+                    list_columns = make_list(conn)
+                    detail_columns, detail_groups = make_detail(conn)
+                    configured = {
+                        'list_columns': list_columns,
+                        'detail_columns': detail_columns,
+                        'detail_groups': detail_groups,
+                        "freezed": int(are_properties_defined(conn))
+                    }
+                    properties_js.write("tremppi.properties.setup = ")
+                    json.dump(configured, properties_js)
+                    properties_js.write(";")
     elif widget in ["qualitative", "quantitative", "regulations", "correlations", "witness", "group"]:  # generate files list
         files = []
         widget_dir = os.path.join(data_path, widget)
@@ -429,24 +432,28 @@ def configure(data_path, widget):
                 if file.endswith(".json"):
                     files.append(file[:-5])
 
-        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
-            with open(os.path.join(data_path, widget + '.js'), 'w+') as file_js:
-                file_js.write('tremppi.' + widget + '.setup = ')
-                json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
-                if widget == "group":
-                    json_data['columns'] = make_group(conn)
-                    json_data['menu_items'] = make_group_menu(conn)
-                json.dump(json_data, file_js)
-                file_js.write(';')
+        if database_exists:
+            with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+                with open(os.path.join(data_path, widget + '.js'), 'w+') as file_js:
+                    file_js.write('tremppi.' + widget + '.setup = ')
+                    json_data = {"files": files, "components": [comp[0] for comp in read_components(conn)]}
+                    if widget == "group":
+                        json_data['columns'] = make_group(conn)
+                        json_data['menu_items'] = make_group_menu(conn)
+                    json.dump(json_data, file_js)
+                    file_js.write(';')
 
     elif widget == "tools":
-        with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
             with open(os.path.join(data_path, widget + '.js'), 'w+') as tools_js:
                 tools_js.write('tremppi.tools.setup = ')
                 json_data = {
-                    "enumerated": int(os.path.exists(os.path.join(data_path, database_file))),
-                    "fixed": are_properties_defined(conn)
+                    "enumerated": int(database_exists),
+                    "freezed": 0
                 }
+                if database_exists:
+                    with sqlite3.connect(os.path.join(data_path, database_file)) as conn:
+                        json_data["freezed"] = int(are_properties_defined(conn))
+
                 json.dump(json_data, tools_js)
                 tools_js.write(';')
 

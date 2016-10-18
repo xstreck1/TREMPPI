@@ -16,10 +16,9 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
-import shutil
 import sys
 import os.path
-from tremppi.header import data_folder, configure_filename, system_init, system, model_file
+from tremppi.header import configure_filename, system_init, system, data_folder
 from tremppi.clean import clean
 from tremppi.configure import configure
 
@@ -31,6 +30,9 @@ if __name__ == "__main__":
     if not os.path.exists(os.path.join(system.DEST_PATH, configure_filename)):
         raise Exception('The target folder ' + system.DEST_PATH + ' does not seem to be a TREMPPI project folder. The ' + configure_filename + ' is missing.')
     else:
-        clean(system.DEST_PATH, 'editor')
-        configure(system.DEST_PATH, 'editor')
-        configure(system.DEST_PATH, 'tools')
+        DATA_PATH = os.path.join(system.DEST_PATH, data_folder)
+        clean(DATA_PATH, 'editor')
+        configure(DATA_PATH, 'editor')
+        configure(DATA_PATH, 'tools')
+
+    myvar = 1

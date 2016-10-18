@@ -37,4 +37,4 @@ def component_regulators_list(conn):
 
 def are_properties_defined(conn):
     cursor = conn.execute('SELECT count(*) FROM sqlite_master WHERE type="table" AND name="Properties"')
-    return int(cursor[0][0]) > 0
+    return int(cursor.fetchone()[0]) > 0
