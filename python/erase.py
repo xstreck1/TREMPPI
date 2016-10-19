@@ -34,5 +34,3 @@ if __name__ == "__main__":
         clean(DATA_PATH, 'editor')
         configure(DATA_PATH, 'editor')
         configure(DATA_PATH, 'tools')
-
-    myvar = 1

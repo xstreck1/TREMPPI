@@ -16,11 +16,11 @@ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
-/* global tremppi */
+/* global tremppi  */
 
 tremppi.properties.page = function () {
-    if (typeof tremppi.properties.setup === 'undefined') {
-        $("#widget").html("The property description has not been configured yet. The Tremppi Spawn command needs to be called.");
+    if ((typeof tremppi.properties.setup === 'undefined') || jQuery.isEmptyObject(tremppi.properties.setup)) {
+        $("#widget").html('The property description has not been configured yet. The "TREMPPI enumerate" command needs to be called.');
     }
     else {
         $("#widget").append('<div id="property_list"></div>');
@@ -65,5 +65,5 @@ tremppi.properties.toolbarClass = function () {
 };
 
 tremppi.properties.beforeUnload = function() {
-    
+    tremppi.save();
 };

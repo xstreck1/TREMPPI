@@ -22,7 +22,7 @@
 // TODO Project controls target (currently on selected, not clicked)
 
 tremppi = {
-    widgets: ['index', 'editor', 'select', 'properties', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group', 'tools'],
+    widgets: ['index', 'editor', 'properties', 'select', 'quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group', 'tools'],
     reports: ['quantitative', 'qualitative', 'regulations', 'correlations', 'witness', 'group'],
     hasControls: function () {
         return !(typeof tremppi.exec_type === 'undefined' || tremppi.exec_type === 'static');

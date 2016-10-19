@@ -20,10 +20,10 @@
 /* global tremppi */
 
 tremppi.properties.isFreezed = function () {
-    return typeof tremppi.properties.setup !== 'undefined' 
-            && typeof tremppi.properties.setup.enumerated !== 'undefined' 
+    return typeof tremppi.properties.setup !== 'undefined'
+            && typeof tremppi.properties.setup.freezed !== 'undefined'
             && tremppi.properties.setup.freezed === 1;
-}
+};
 
 tremppi.properties.controls = function () {
     tremppi.toolbar.onClick = tremppi.properties.toolbarClick;
@@ -41,30 +41,26 @@ tremppi.properties.toolbarClick = function (event) {
 
 tremppi.properties.listControls = function () {
     var listbar = tremppi.properties.list.toolbar;
-    if (!tremppi.properties.isFreezed()) {
-        listbar.add({type: 'button', id: 'up', caption: '&#8593;'});
-        listbar.add({type: 'button', id: 'down', caption: '&#8595;'});
-        listbar.add({type: 'break', id: 'break1'});
-        listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'select', caption: 'All', checked: false});
-        listbar.add({type: 'break', id: 'break3'});
-        listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
-        listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
-        listbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-        listbar.add({type: 'break', id: 'break2'});
-    }
+    listbar.add({type: 'button', id: 'up', caption: '&#8593;'});
+    listbar.add({type: 'button', id: 'down', caption: '&#8595;'});
+    listbar.add({type: 'break', id: 'break1'});
+    listbar.add({type: 'check', icon: 'w2ui-icon-check', id: 'select', caption: 'All', checked: false});
+    listbar.add({type: 'break', id: 'break3'});
+    listbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
+    listbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
+    listbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
+    listbar.add({type: 'break', id: 'break2'});
     listbar.onClick = tremppi.properties.listbarClick;
 };
 
 tremppi.properties.detailControls = function () {
     var detailbar = tremppi.properties.detail.toolbar;
-    if (!tremppi.properties.isFreezed()) {
-        detailbar.add({type: 'button', id: 'up', caption: '&#8593;'});
-        detailbar.add({type: 'button', id: 'down', caption: '&#8595;'});
-        detailbar.add({type: 'break', id: 'break1'});
-        detailbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
-        detailbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
-        detailbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
-    }
+    detailbar.add({type: 'button', id: 'up', caption: '&#8593;'});
+    detailbar.add({type: 'button', id: 'down', caption: '&#8595;'});
+    detailbar.add({type: 'break', id: 'break1'});
+    detailbar.add({type: 'button', icon: 'w2ui-icon-plus', id: 'add', caption: 'Add'});
+    detailbar.add({type: 'button', icon: 'w2ui-icon-columns', id: 'duplicate', caption: 'Duplicate'});
+    detailbar.add({type: 'button', icon: 'w2ui-icon-cross', id: 'delete', caption: 'Delete'});
     detailbar.onClick = tremppi.properties.detailbarClick;
 };
 

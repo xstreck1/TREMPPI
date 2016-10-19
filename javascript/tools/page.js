@@ -84,12 +84,12 @@ tremppi.tools.tool_list = [
     {
         category: "REPORTS",
         tools: [
-            {name: "correlations", description: "create a correlations graph report", condition: tremppi.tools.enumerateCondition(true)},
-            {name: "qualitative", description: "obtain a qualitative analysis of the known data", condition: tremppi.tools.enumerateCondition(true)},
-            {name: "quantitative", description: "obtain a summary of up till now known data", condition: tremppi.tools.enumerateCondition(true)},
-            {name: "regulations", description: "create a regulations graph based on a statistical analysis", condition: tremppi.tools.enumerateCondition(true)},
-            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)", condition: tremppi.tools.enumerateCondition(true)},
-            {name: "group", description: "make groups of same qualitatve features", condition: tremppi.tools.enumerateCondition(true)}
+            {name: "correlations", description: "create a correlations graph report", condition: tremppi.tools.freezeCondition(true)},
+            {name: "qualitative", description: "obtain a qualitative analysis of the known data", condition: tremppi.tools.freezeCondition(true)},
+            {name: "quantitative", description: "obtain a summary of up till now known data", condition: tremppi.tools.freezeCondition(true)},
+            {name: "regulations", description: "create a regulations graph based on a statistical analysis", condition: tremppi.tools.freezeCondition(true)},
+            {name: "witness", description: "produce a witness for the given LTL properties (needs valiation first)", condition: tremppi.tools.freezeCondition(true)},
+            {name: "group", description: "make groups of same qualitatve features", condition: tremppi.tools.freezeCondition(true)}
         ]
     },
     {

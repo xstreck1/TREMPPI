@@ -19,8 +19,8 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 /* global tremppi */
 
 tremppi.select.page = function () {
-    if (typeof tremppi.select.setup === 'undefined') {
-        $("#widget").html("The selection has not been configured yet. The Tremppi Spawn command needs to be called.");
+    if (typeof tremppi.select.setup === 'undefined' || jQuery.isEmptyObject(tremppi.select.setup)) {
+        $("#widget").html('The property description has not been configured yet. The "TREMPPI enumerate" command needs to be called.');
     }
     else {  
         $("#widget").append('<div id="selection_table"></div>');

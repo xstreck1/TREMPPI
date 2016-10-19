@@ -127,9 +127,8 @@ int tremppi_enumerate(int argc, char ** argv)
 	try
 	{
 		PythonFunctions::configure("editor");
-		PythonFunctions::configure("select");
-		PythonFunctions::configure("tools");
 		PythonFunctions::configure("properties");
+		PythonFunctions::configure("tools");
 	}
 	catch (exception & e)
 	{

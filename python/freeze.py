@@ -47,4 +47,5 @@ if __name__ == "__main__":
             for property in properties:
                 conn.execute('INSERT INTO Properties (Name) VALUES (\"' + property["name"] + '\")')
         configure(DATA_PATH, 'properties')
+        configure(DATA_PATH, 'select')
         configure(DATA_PATH, 'tools')
