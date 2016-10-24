@@ -20,7 +20,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 
 tremppi.select.page = function () {
     if (typeof tremppi.select.setup === 'undefined' || jQuery.isEmptyObject(tremppi.select.setup)) {
-        $("#widget").html('The property description has not been configured yet. The "TREMPPI enumerate" command needs to be called.');
+        $("#widget").html('The property description has not been configured yet. The "TREMPPI freeze" command needs to be called.');
     }
     else {  
         $("#widget").append('<div id="selection_table"></div>');
