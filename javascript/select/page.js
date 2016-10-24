@@ -33,6 +33,7 @@ tremppi.select.page = function () {
                 toolbarSave: false,
                 toolbarReload: false, 
                 toolbarSearch: false, 
+                toolbarInput: false,
                 toolbarColumns: false,
                 toolbarAdd: false, 
                 toolbarDelete: false

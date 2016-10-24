@@ -32,7 +32,7 @@ tremppi.properties.makeList = function () {
         columns: tremppi.properties.setup.list_columns,
         show: {
             toolbar: !tremppi.final && !tremppi.properties.isFreezed(), selectColumn: false, toolbarSave: false,
-            toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
+            toolbarReload: false, toolbarSearch: false, toolbarColumns: false, toolbarInput: false,
             toolbarAdd: false, toolbarDelete: false
         }
     };
@@ -52,7 +52,7 @@ tremppi.properties.makeDetail = function () {
         columnGroups: tremppi.properties.setup.detail_groups,
         show: {
             toolbar: !tremppi.final && !tremppi.properties.isFreezed(), header: true, selectColumn: false, toolbarSave: false,
-            toolbarReload: false, toolbarSearch: false, toolbarColumns: false,
+            toolbarReload: false, toolbarSearch: false, toolbarColumns: false, toolbarInput: false,
             toolbarAdd: false, toolbarDelete: false
         }
     };
