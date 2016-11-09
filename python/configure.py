@@ -25,6 +25,7 @@ if __name__ == "__main__":
     # define options
     parser = argparse.ArgumentParser(description='Create configurations for the HTML project browser.')
     parser.add_argument('--path', help='specify the location to update.')
+    parser.add_argument('--server', help='informs the script that it is called from a server.', action='store_true')
     args = parser.parse_args()
     system_init(sys.argv[0], args)
     DATA_PATH = join(system.DEST_PATH, data_folder)

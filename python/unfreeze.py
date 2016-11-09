@@ -25,6 +25,7 @@ from tremppi.configure import configure
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Erase the dynamic labels and the values for the properties.')
     parser.add_argument('--path', help='specify the location to unfreeze')
+    parser.add_argument('--server', help='informs the script that it is called from a server.', action='store_true')
     args = parser.parse_args()
     system_init(sys.argv[0], args)
     DATA_PATH = os.path.join(system.DEST_PATH, data_folder)

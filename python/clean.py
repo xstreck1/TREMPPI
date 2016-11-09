@@ -26,6 +26,7 @@ from tremppi.configure import configure
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Clean data from a TREMPPI project')
     parser.add_argument('--path', help='specify the location to clean.')
+    parser.add_argument('--server', help='informs the script that it is called from a server.', action='store_true')
     args = parser.parse_args()
     system_init(sys.argv[0], args)
     if not os.path.exists(os.path.join(system.DEST_PATH, configure_filename)):

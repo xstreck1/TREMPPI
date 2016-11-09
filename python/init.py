@@ -24,6 +24,7 @@ from tremppi.project_files import tremppi_init
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Initiate a TREMPPI project.')
     parser.add_argument('--path', help='specify the location where the file gets created.')
+    parser.add_argument('--server', help='informs the script that it is called from a server.', action='store_true')
     parser.add_argument('name', help='name of the newly created model')
     args = parser.parse_args()
 
