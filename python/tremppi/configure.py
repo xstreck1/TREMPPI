@@ -295,6 +295,17 @@ def make_group(conn):
         'field': 'count',
         'caption': 'Count',
         'size': '50px',
+        "resizable": True,
+
+    },{
+        'field': 'regulations',
+        'caption': 'Regulations',
+        'size': '50px',
+        "resizable": True
+    },{
+        'field': 'properties',
+        'caption': 'Properties',
+        'size': '50px',
         "resizable": True
     }]
     groups = []

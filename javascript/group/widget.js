@@ -73,6 +73,8 @@ tremppi.group.valuesMerger = function (records) {
                         = records[rec_i][tremppi.group.setup.menu_items[col_i].id];
             }
         }
+        new_records[rec_i].regulations = records[rec_i].regulations;
+        new_records[rec_i].properties = records[rec_i].properties;
         new_records[rec_i].count = records[rec_i].count;
         new_records[rec_i].skip = false;
     }
@@ -83,6 +85,8 @@ tremppi.group.valuesMerger = function (records) {
                 var diff = tremppi.group.findDifferentColumn(new_records[i], new_records[j]);
                 if (diff === -1) {
                     new_records[i].count += new_records[j].count;
+                    new_records[i].properties+= new_records[j].properties;
+                    new_records[i].regulations+= new_records[j].regulations;
                     new_records[j].skip = true;
                 }
             }
@@ -109,6 +113,8 @@ tremppi.group.valuesSetter = function (source, panel) {
                     var dif_rec = {};
                     $.extend(dif_rec, cmp_rec);
                     dif_rec["count"] = sel_rec["count"] - cmp_rec["count"];
+                    dif_rec["regulations"] = sel_rec["regulations"] - cmp_rec["regulations"];
+                    dif_rec["properties"] = sel_rec["properties"] - cmp_rec["properties"];
                     dif_recs.push(dif_rec);
                 }
             }
@@ -124,7 +130,7 @@ tremppi.group.valuesSetter = function (source, panel) {
     };
 };
 
-tremppi.group.getGrid = function (grid_name) {
+tremppi.group.getGrid = function (grid_name) {    
     return {
         name: grid_name,
         header: grid_name,

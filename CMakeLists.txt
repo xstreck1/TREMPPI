@@ -22,7 +22,7 @@ set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 
 # Boost
 add_definitions( -DBOOST_ALL_NO_LIB ) #disable autolink
-find_package(Boost  1.54.0 COMPONENTS python-py35)
+find_package(Boost 1.54.0 COMPONENTS python-py35)
 set(BOOST_PYTHON_LIB_NAME python-py35)
 if (NOT Boost_FOUND) 
 	find_package(Boost 1.54.0 COMPONENTS python-py34)
@@ -45,6 +45,9 @@ if (NOT Boost_FOUND)
 	set(BOOST_PYTHON_LIB_NAME python)
 	message("Found no Boost Python3 library. Linking to Boost Python, however this will cause version mis-match, if it was compiled for Python2.")
 endif(NOT Boost_FOUND)
+if (NOT Boost_FOUND)  
+	message("Found no Boost Python library.")
+endif(NOT Boost_FOUND)  
 find_package(Boost 1.54.0 COMPONENTS ${BOOST_PYTHON_LIB_NAME} system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -56,6 +59,7 @@ set(Python_ADDITIONAL_VERSIONS 3.2 3.3 3.4 3.5)
 FIND_PACKAGE(PythonLibs 3.2 REQUIRED)
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 link_directories(${PYTHON_LIBRARY_DIRS})
+message("PYTHON LIBRARIES ARE " ${PYTHON_LIBRARIES})
 
 SET(BUILD_TEST OFF CACHE BOOL "Build the test suite")
 

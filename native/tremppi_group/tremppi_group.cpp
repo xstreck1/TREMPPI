@@ -145,13 +145,23 @@ int tremppi_group(int argc, char ** argv)
 			for (const pair<vector<bool>, size_t> & result : counts)
 			{
 				Json::Value result_node;
-				result_node["count"] = static_cast<int>(result.second);
+				int regulations = 0;
+				int properties = 0;
 				int i = 0;
 				for (const pair<size_t, string> column : columns)
 				{
 					result_node[column.second] = static_cast<int>(result.first[i]);
+					if (column.second[0] == 'S' && result.first[i]) {
+						regulations++;
+					}
+					else if (column.second[0] == 'C'  && result.first[i]) {
+						properties++;
+					}
 					i++;
 				}
+				result_node["count"] = static_cast<int>(result.second);
+				result_node["regulations"] = regulations;
+				result_node["properties"] = properties;
 				out["records"].append(result_node);
 			}
 
