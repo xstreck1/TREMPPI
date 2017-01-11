@@ -20,32 +20,20 @@ import shutil
 from os import listdir, makedirs
 from os.path import isdir, isfile
 from os.path import join, exists
-from .file_manipulation import copyanything
+from .file_manipulation import copyanything, read_jsonp, write_jsonp
 from .header import folders, widgets, source_folder, data_folder, system, version
-from .file_manipulation import read_jsonp, write_jsonp
 from .header import configure_filename, projects_filename
 from .server_errors import InvalidUsage
-
+from .clean import clean_data
 
 # make sure all the data are present
 def generate_data(data_path):
     if not exists(data_path):
         makedirs(data_path)
     for widget in widgets:
-        # main json
-        json_filename = join(data_path, widget + '.json')
-        if not isfile(json_filename):
-            with open(json_filename, 'w+') as json_file:
-                if widget != 'select':
-                    json.dump({}, json_file)
-                else:
-                    json.dump({
-                        "records": [{
-                            "name": "all",
-                            "recid": 0,
-                            "select": True
-                        }]},
-                        json_file)
+        # generate datafiles
+        if not isfile(join(data_path, widget + '.json')):
+            clean_data(data_path, widget)
         # config js
         js_filename = join(data_path, widget + '.js')
         if not isfile(js_filename):

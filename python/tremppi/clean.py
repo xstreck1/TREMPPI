@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import json
 from .header import database_file, widgets, reports
 from .configure import configure
 
@@ -10,8 +11,17 @@ def clean_setup(data_path, widget):
 
 
 def clean_data(data_path, widget):
-    with open(os.path.join(data_path, widget + ".json"), 'w+') as file_json:
-        file_json.write('{}')
+    with open(os.path.join(data_path, widget + ".json"), 'w+') as json_file:
+        if widget != 'select':
+            json.dump({}, json_file)
+        else:
+            json.dump({
+                "records": [{
+                    "name": "ALL_MODELS",
+                    "recid": 0,
+                    "select": True
+                }]},
+                json_file)
 
 
 def clean_data_files(data_path, widget):

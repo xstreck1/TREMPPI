@@ -102,7 +102,8 @@ def add_parameters(conn, components, columns, groups, column_names):
                         'max': comp_max,
                         'type': 'text'
                     },
-                    "resizable": True
+                    "resizable": True,
+                    "sortable": True
                 })
                 groups[-1]['columns'].append(column_name)
                 groups[-1]['span'] += 1
@@ -127,7 +128,8 @@ def add_sign(columns, groups, column_names):
                     'type': 'select',
                     'items': ["1", "0", "+", "-", " "]
                 },
-                "resizable": True
+                "resizable": True,
+                "sortable": True
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
@@ -155,7 +157,8 @@ def add_indegree(columns, groups, column_names):
                     'max': 1024,
                     'type': 'text'
                 },
-                "resizable": True
+                "resizable": True,
+                "sortable": True
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
@@ -183,7 +186,8 @@ def add_bias(columns, groups, column_names):
                     'max': 1,
                     'type': 'text'
                 },
-                "resizable": True
+                "resizable": True,
+                "sortable": True
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
@@ -211,7 +215,8 @@ def add_impact(columns, groups, column_names):
                     'max': 1,
                     'type': 'text'
                 },
-                "resizable": True
+                "resizable": True,
+                "sortable": True
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
@@ -238,7 +243,8 @@ def add_cost(columns, groups, column_names):
                     'max': 1024,
                     'type': 'text'
                 },
-                "resizable": True
+                "resizable": True,
+                "sortable": True
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
@@ -265,7 +271,8 @@ def add_robustness(columns, groups, column_names):
                     'max': 1,
                     'type': 'text'
                 },
-                "resizable": True
+                "resizable": True,
+                "sortable": True
             })
             new_group['columns'].append(column_name)
             new_group['span'] += 1
@@ -296,17 +303,20 @@ def make_group(conn):
         'caption': 'Count',
         'size': '50px',
         "resizable": True,
+        "sortable": True
 
     },{
         'field': 'regulations',
         'caption': 'Regulations',
         'size': '50px',
-        "resizable": True
+        "resizable": True,
+        "sortable": True
     },{
         'field': 'properties',
         'caption': 'Properties',
         'size': '50px',
-        "resizable": True
+        "resizable": True,
+        "sortable": True
     }]
     groups = []
     components = read_components(conn)
