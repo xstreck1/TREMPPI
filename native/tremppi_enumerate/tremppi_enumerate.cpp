@@ -106,17 +106,21 @@ int tremppi_enumerate(int argc, char ** argv)
 			throw runtime_error(overflow.c_str());
 		}
 
-		DEBUG_LOG << "Writing the database file, testing " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " parametrizations.";
+		DEBUG_LOG << "Writing the database file, testing " + to_string(KineticsTranslators::getSpaceSize(kinetics)) + " models.";
 		logging.newPhase("writing parametrization", KineticsTranslators::getSpaceSize(kinetics));
+		ParamNo param_count = 0;
 		for (ParamNo param_no = 0ul; param_no < KineticsTranslators::getSpaceSize(kinetics); param_no++)
 		{
 			const string parametrization = KineticsTranslators::createParamString(kinetics, param_no);
-			if (normalizer.isNormalized(KineticsTranslators::createParamVector(kinetics, param_no), reg_infos)) {
+			if (!model.use_normalized || normalizer.isNormalized(KineticsTranslators::createParamVector(kinetics, param_no), reg_infos)) {
 				database_filler.addParametrization(parametrization);
+				param_count++;
 			}
 			logging.step();
 		}
 
+
+		DEBUG_LOG << "Finished enumeration, in total " << param_count << " models.";
 		database_filler.finishOutpout();
 	}
 	catch (exception & e)

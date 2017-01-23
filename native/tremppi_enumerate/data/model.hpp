@@ -57,4 +57,6 @@ struct Model
 
 	string name; ///< Model identifier.
 	vector<ModelComp> components; ///< Vector of all components of the model.
+
+	bool use_normalized; ///< Is the model to be normalized?
 };

@@ -20,8 +20,8 @@
 /* global tremppi */
 
 tremppi.editor.isEnumerated = function () {
-    return typeof tremppi.editor.setup !== 'undefined' 
-            && typeof tremppi.editor.setup.enumerated !== 'undefined' 
+    return typeof tremppi.editor.setup !== 'undefined'
+            && typeof tremppi.editor.setup.enumerated !== 'undefined'
             && tremppi.editor.setup.enumerated === 1;
 };
 
@@ -34,7 +34,7 @@ tremppi.editor.controls = function () {
 };
 
 tremppi.editor.toolbarClick = function (event) {
-    tremppi.editor[event.target]();
+    tremppi.editor[event.target](event.item);
 };
 
 tremppi.editor.create = function () {
@@ -47,6 +47,10 @@ tremppi.editor.delete = function () {
     tremppi.editor.removeAll();
     tremppi.editor.addHelpField("Click on a COMPONENT or a REGULATION to delele it.");
     tremppi.editor.graph.off('tapend').on('tapend', tremppi.editor.deletion);
+};
+
+tremppi.editor.apply_normalization = function(item) {
+    tremppi.editor.use_normalized = !item.checked;
 };
 
 tremppi.editor.selection = function (event) {
@@ -105,9 +109,9 @@ tremppi.editor.removeAll = function () {
 
 tremppi.editor.addEditField = function (element, field, type) {
     tremppi.toolbar.add({type: 'html', id: field, html:
-                '<input id="' + field + '_input" type="' + type + '"placeholder="' + field  + '"/>'
+                '<input id="' + field + '_input" type="' + type + '"placeholder="' + field + '"/>'
     });
-    $("#" + field + "_input").val(element.data(field)).change(function () {
+    $("#" + field + "_input" ).val(element.data(field)).change(function () {
         var value = this.type === "number" ? parseInt(this.value) : this.value;
         element.data(field, value);
         tremppi.editor[element[0].isNode() ? 'glyphNode' : 'glyphEdge'](element.data());
@@ -124,6 +128,7 @@ tremppi.editor.setBasic = function () {
     if (!tremppi.editor.isEnumerated()) {
         tremppi.toolbar.add({type: 'button', id: 'create', icon: 'w2ui-icon-plus', caption: 'Add', hint: 'click on an empty space to create a node, click on a node to start an edge'});
         tremppi.toolbar.add({type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'});
+        tremppi.toolbar.add({type: 'check', id: 'apply_normalization', text: 'Apply Normalization', checked: tremppi.editor.use_normalized,  hint: 'check to filter models by the normalization constraint (recommended on'});
     }
     tremppi.editor.graph.off('tapend').on('tapend', tremppi.editor.selection);
 };

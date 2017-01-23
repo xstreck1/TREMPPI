@@ -40,7 +40,9 @@ tremppi.editor.page = function () {
 };
 
 tremppi.editor.getData = function () {
-    return tremppi.editor.graph.json().elements;
+    var data = tremppi.editor.graph.json().elements;
+    data.use_normalized = tremppi.editor.use_normalized;
+    return data;
 };
 
 tremppi.editor.setData = function (data) {
@@ -52,6 +54,7 @@ tremppi.editor.setData = function (data) {
     };
     glyphAll(data.nodes, tremppi.editor.glyphNode);
     glyphAll(data.edges, tremppi.editor.glyphEdge);
+    tremppi.editor.use_normalized = data.use_normalized;
     tremppi.editor.graph.load(data);
     tremppi.editor.graph.elements().unselect();
 
@@ -68,6 +71,8 @@ tremppi.editor.setDefaultData = function (data) {
         data.nodes = [];
     if (typeof data.edges === 'undefined')
         data.edges = [];
+    if (typeof data.use_normalized === 'undefined') 
+        data.use_normalized = true;
 };
 
 tremppi.editor.toolbarClass = function () {

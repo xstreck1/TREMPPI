@@ -35,6 +35,8 @@ namespace ModelReader
 		string last_name = "";
 		map<string, string> id_to_name;
 
+		model.use_normalized = elements.get("use_normalized", true).asBool();
+
 		for (const Json::Value node : elements["nodes"]) 
 		{
 			Model::ModelComp specie;
