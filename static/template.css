@@ -72,6 +72,16 @@ div.section {
 	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 }
 
+#demo {
+	padding: 8pt 16pt;
+	margin: 32pt 0pt 16pt 0pt;
+  font-size: 16pt;
+  font-weight: bold;
+  
+  border-radius: 15px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
 div.feature {
   display: inline-block;
   margin: 50px;
