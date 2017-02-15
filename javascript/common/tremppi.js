@@ -201,7 +201,7 @@ tremppi = {
         }
 
         var user_controls =
-                '<button class="btn" id="exit_btn" onclick="tremppi.docs()" >DOCS</button>';
+                '<button class="btn" id="exit_btn" onclick="tremppi.models()" >Public Models</button><button class="btn" id="exit_btn" onclick="tremppi.docs()" >Documentation</button>';
         var tremppi_controls = "";
         if (!tremppi.hasControls()) {
             user_controls += '<span id="static_text">STATIC VERSION</span>';
@@ -457,6 +457,9 @@ tremppi = {
     ,
     docs: function () {
         window.open('http://dibimath.github.io/TREMPPI/');
+    },
+    models: function () {
+        window.open('http://dibimath.github.io/TremppiDemo/index.html');
     },
     exit: function () {
         $.ajax({
