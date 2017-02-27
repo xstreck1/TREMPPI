@@ -19,7 +19,7 @@
 /* global tremppi */
 
 tremppi.properties.makeList = function () {
-    if (tremppi.final || tremppi.properties.isFreezed()) {
+    if (tremppi.isFinal() || !tremppi.hasControls() || tremppi.properties.isFreezed()) {
         for (var i = 0; i < tremppi.properties.setup.list_columns.length; i++) {
             if (tremppi.properties.setup.list_columns[i].field !== "select") {
                 tremppi.properties.setup.list_columns[i].editable = false;
@@ -31,7 +31,7 @@ tremppi.properties.makeList = function () {
         name: 'list',
         columns: tremppi.properties.setup.list_columns,
         show: {
-            toolbar: !tremppi.final && !tremppi.properties.isFreezed(), selectColumn: false, toolbarSave: false,
+            toolbar: !tremppi.isFinal() && tremppi.hasControls() && !tremppi.properties.isFreezed(), selectColumn: false, toolbarSave: false,
             toolbarReload: false, toolbarSearch: false, toolbarColumns: false, toolbarInput: false,
             toolbarAdd: false, toolbarDelete: false
         }
@@ -39,7 +39,7 @@ tremppi.properties.makeList = function () {
 };
 
 tremppi.properties.makeDetail = function () {
-    if (tremppi.final || tremppi.properties.isFreezed()) {
+    if (tremppi.isFinal() || !tremppi.hasControls() || tremppi.properties.isFreezed()) {
         for (var i = 0; i < tremppi.properties.setup.detail_columns.length; i++) {
             tremppi.properties.setup.detail_columns[i].editable = false;
         }
@@ -51,7 +51,7 @@ tremppi.properties.makeDetail = function () {
         columns: tremppi.properties.setup.detail_columns,
         columnGroups: tremppi.properties.setup.detail_groups,
         show: {
-            toolbar: !tremppi.final && !tremppi.properties.isFreezed(), header: true, selectColumn: false, toolbarSave: false,
+            toolbar: !tremppi.isFinal() && tremppi.hasControls() && !tremppi.properties.isFreezed(), header: true, selectColumn: false, toolbarSave: false,
             toolbarReload: false, toolbarSearch: false, toolbarColumns: false, toolbarInput: false,
             toolbarAdd: false, toolbarDelete: false
         }

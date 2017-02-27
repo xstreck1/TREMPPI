@@ -45,6 +45,7 @@ def create_app():
 
     @app.route('/exec_type.js', methods=['GET'])
     def exec_type():
+        return ""
         return 'tremppi.exec_type = "browse"'
 
 

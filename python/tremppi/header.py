@@ -18,9 +18,9 @@
 from os.path import dirname, abspath, join, normpath, basename, isfile
 from os import getcwd
 
-version = "1.3.0"
+version = "1.3.1"
 
-model_size_limit = 1000000
+model_size_limit = 1048577
 
 default_port = "8080"
 configure_filename = "configure.js"

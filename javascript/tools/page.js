@@ -103,7 +103,7 @@ tremppi.tools.tool_list = [
 
 tremppi.tools.page = function () {
     tremppi.layout.hideToolbar('main');
-    if (!tremppi.isFinal()) {
+    if (!tremppi.isFinal() && tremppi.hasControls()) {
         var commands = $('<div id="commands_holder"></div>').appendTo('#widget');
         for (var i = 0; i < tremppi.tools.tool_list.length; i++) {
             var title = $('<div id="' + tremppi.tools.tool_list[i].category + '_category" class="category">' + tremppi.tools.tool_list[i].category + '</div>').appendTo(commands);

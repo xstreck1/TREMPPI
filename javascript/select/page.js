@@ -28,7 +28,7 @@ tremppi.select.page = function () {
             name: 'grid',
             header: 'the list of selections',
             show: {
-                toolbar: !tremppi.final, 
+                toolbar: !tremppi.isFinal() && tremppi.hasControls() && !tremppi.properties.isFreezed(), 
                 selectColumn: false, 
                 toolbarSave: false,
                 toolbarReload: false, 

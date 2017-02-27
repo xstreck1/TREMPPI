@@ -26,7 +26,8 @@ bfs::path TremppiSystem::WORK_PATH;
 bfs::path TremppiSystem::EXEC_PATH;
 bfs::path TremppiSystem::BIN_PATH;
 bfs::path TremppiSystem::DATA_PATH;
-bool TremppiSystem::called_from_server;
+bool TremppiSystem::called_from_server;
+
 void TremppiSystem::set(const char * name, const char * arg, const string & _WORK_PATH) 
 {
 	TremppiSystem::PROGRAM_NAME = name;
@@ -36,27 +37,30 @@ void TremppiSystem::set(const char * name, const char * arg, const string & _WOR
 	TremppiSystem::EXEC_PATH = bfs::current_path();
 	TremppiSystem::called_from_server = false; // Will be true only if called with the --server parameter
 
-	// Set the home
+	// Test the home
 	char* home_path = getenv("TREMPPI_HOME");
-	bfs::path test_path = BIN_PATH;
-
-	auto sources_present = [&test_path]() { 
-		test_path = test_path.parent_path();
-		return bfs::is_directory(test_path / "python") && bfs::is_directory(test_path / "javascript");
-	};
 	if (home_path != NULL)
 	{
-		TremppiSystem::HOME_PATH = bfs::path{ home_path };
-	}
-	// Descend three steps, test for tremppi directory
-	for (auto i : crange(3))
-	{
-		if (sources_present())
+		bfs::path test_path = bfs::path{ home_path };
+		if (bfs::is_directory(test_path / "python") && bfs::is_directory(test_path / "javascript"))
 		{
 			TremppiSystem::HOME_PATH = test_path;
 			return;
 		}
-	}
+	}
+
+	// Descend three steps, test for tremppi directory
+	bfs::path test_path = BIN_PATH;
+	for (auto i : crange(3))
+	{
+		if (bfs::is_directory(test_path / "python") && bfs::is_directory(test_path / "javascript"))
+		{
+			TremppiSystem::HOME_PATH = test_path;
+			return;
+		}
+		test_path = test_path.parent_path();
+	}
+
 	throw runtime_error("Binary " + TremppiSystem::BIN_PATH.string() + "is not homed and TREMPPI_HOME not found. Either set up the system variable of the same name pointing to the TREMMPI folder, or put the binary in the TREMPPI/bin folder.");
 }
 

@@ -57,7 +57,7 @@ this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "configure.h"
 
 // For BioSystems
-const std::string VERSION("1.2.0");
+const std::string VERSION("1.3.1");
 
 using namespace std;
 

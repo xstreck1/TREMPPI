@@ -17,7 +17,7 @@
  this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-/* global w2ui */
+/* global w2ui tremppi */
 
 // TODO Project controls target (currently on selected, not clicked)
 
@@ -196,7 +196,7 @@ tremppi = {
         tremppi.layout = $('body').w2layout(layout);
         tremppi.toolbar = w2ui.layout.get("main").toolbar;
         // Distable toolbar for final projects
-        if (tremppi.isFinal() || tremppi.toolbar.items.length === 0) {
+        if (tremppi.toolbar.items.length === 0) {
             w2ui.layout.hideToolbar('main');
         }
 
@@ -245,6 +245,12 @@ tremppi = {
                 {id: 7, text: 'save'},
                 {id: 8, text: 'download'},
                 {id: 9, text: 'upload'}
+            ];
+        }
+        else {
+            sidebar.menu = [
+                {id: 1, text: 'open'},
+                {id: 2, text: 'compare'}
             ];
         }
         // Add the projects
