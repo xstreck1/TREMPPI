@@ -28,7 +28,7 @@ tremppi.select.page = function () {
             name: 'grid',
             header: 'the list of selections',
             show: {
-                toolbar: !tremppi.isFinal() && tremppi.hasControls() && !tremppi.properties.isFreezed(), 
+                toolbar: !tremppi.isFinal() && tremppi.hasControls(), 
                 selectColumn: false, 
                 toolbarSave: false,
                 toolbarReload: false, 
@@ -71,4 +71,28 @@ tremppi.select.setDefaultData = function (data) {
 
 tremppi.select.toolbarClass = function () {
     return {};
+};
+
+tremppi.select.compareData = function (A, B) {
+    if (A.records.length !== B.records.length) {
+        return false;
+    }
+
+    for (var rec_i = 0; rec_i < A.records.length; rec_i++) {
+        var rec_A = A.records[rec_i];
+        var rec_B = B.records[rec_i];
+        var KeysA = JSON.stringify(Object.keys(rec_A).sort());
+        var KeysB = JSON.stringify(Object.keys(rec_B).sort());
+        if (KeysA!==KeysB) {
+            return false;
+        }
+        
+        for (var rec_prop in rec_A) {
+            if (rec_A[rec_prop] !== rec_B[rec_prop]) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
 };

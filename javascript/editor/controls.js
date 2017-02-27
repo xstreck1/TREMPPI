@@ -130,6 +130,10 @@ tremppi.editor.setBasic = function () {
         tremppi.toolbar.add({type: 'button', id: 'delete', icon: 'w2ui-icon-cross', caption: 'Delete', hint: 'delete an element'});
         tremppi.toolbar.add({type: 'check', id: 'apply_normalization', text: 'Apply Normalization', checked: tremppi.editor.use_normalized,  hint: 'check to filter models by the normalization constraint (recommended on'});
     }
+    else {
+        tremppi.toolbar.add({type: 'html', id: 'apply_normalization', html: '<div id="Help">' + (tremppi.editor.use_normalized ? "with Normalization" : "without Normalization") + "</div>"});
+    
+    }
     tremppi.editor.graph.off('tapend').on('tapend', tremppi.editor.selection);
 };
 
