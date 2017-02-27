@@ -67,7 +67,3 @@ tremppi.witness.toolbarClass = function () {
         ]
     };
 };
-
-tremppi.witness.beforeUnload = function() {
-    
-};

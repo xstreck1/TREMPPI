@@ -48,6 +48,6 @@ tremppi.qualitative.toolbarClass = function () {
     return {};
 };
 
-tremppi.qualitative.beforeUnload = function() {
-    
+tremppi.qualitative.compareData = function (A, B) {
+    return true;
 };

@@ -72,7 +72,3 @@ tremppi.select.setDefaultData = function (data) {
 tremppi.select.toolbarClass = function () {
     return {};
 };
-
-tremppi.select.beforeUnload = function() {
-    tremppi.save();
-};

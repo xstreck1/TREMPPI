@@ -47,7 +47,6 @@ tremppi.index.getData = function () {
     return {text: text_string};
 };
 
-
-tremppi.index.beforeUnload = function() {
-    tremppi.save();
+tremppi.index.compareData = function (A, B) {
+    return A.text === B.text;
 };

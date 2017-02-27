@@ -68,5 +68,6 @@ tremppi.correlations.toolbarClass = function () {
     };
 };
 
-tremppi.correlations.beforeUnload = function() {
+tremppi.correlations.compareData = function (A, B) {
+    return true;
 };

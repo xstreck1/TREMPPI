@@ -153,6 +153,6 @@ tremppi.tools.toolbarClass = function () {
     return {};
 };
 
-tremppi.tools.beforeUnload = function () {
-
+tremppi.tools.compareData = function (A, B) {
+    return true;
 };

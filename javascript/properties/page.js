@@ -64,6 +64,41 @@ tremppi.properties.toolbarClass = function () {
     return {};
 };
 
-tremppi.properties.beforeUnload = function() {
-    tremppi.save();
+
+// Will not work if B has some other properties than A
+tremppi.properties.compareData = function (A, B) {
+    if (A.records.length !== B.records.length) {
+        return false;
+    }
+
+    for (var rec_i = 0; rec_i < A.records.length; rec_i++) {
+        var rec_A = A.records[rec_i];
+        var rec_B = B.records[rec_i];
+        if (!Object.keys(rec_A).equals(Object.keys(rec_B)))
+            return false;
+        
+        for (var rec_prop in rec_A) {
+            if (rec_A[rec_prop] === "recods") {
+                if (rec_A[rec_prop].length !== rec_B[rec_prop].length) {
+                    return false;
+                }
+                for (var sub_i = 0; sub_i < rec_A[rec_prop].length; sub_i++) {
+                    var sub_A = rec_A[rec_prop][sub_i ];
+                    var sub_B = rec_A[rec_prop][sub_i ];
+                    if (!Object.keys(sub_A).equals(Object.keys(sub_B)))
+                        return false;
+                    
+                    for (var sub_prop in sub_A) {
+                        if (sub_A[sub_prop] !== sub_B[sub_prop]) {
+                            return false;
+                        }
+                    }
+                }
+            } else if (rec_A[rec_prop] !== rec_B[rec_prop]) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
 };

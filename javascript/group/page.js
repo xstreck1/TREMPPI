@@ -66,7 +66,3 @@ tremppi.group.toolbarClass = function () {
     };
     return res;
 };
-
-tremppi.group.beforeUnload = function() {
-    
-};

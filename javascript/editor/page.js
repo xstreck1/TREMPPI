@@ -88,6 +88,40 @@ tremppi.editor.toolbarClass = function () {
         ]
     };
 };
-tremppi.editor.beforeUnload = function() {
-    tremppi.save();
+
+
+tremppi.editor.compareData = function (A, B) {
+    if (A.use_normalized !== B.use_normalized ||
+        A.nodes.length !== B.nodes.length || 
+        A.edges.length !== B.edges.length)
+        return false;
+        
+    for (var node_i = 0; node_i < A.nodes.length; node_i++) {
+        var nodeA = A.nodes[node_i];
+        var nodeB = B.nodes[node_i];
+        if (nodeA.position.x !== nodeB.position.x ||
+            nodeA.position.y !== nodeB.position.y ||   
+            nodeA.data.id !== nodeB.data.id ||
+            nodeA.data.Label !== nodeB.data.Label || 
+            nodeA.data.Name !== nodeB.data.Name ||
+            nodeA.data.MaxActivity !== nodeB.data.MaxActivity) 
+        {
+            return false;
+        }
+    }
+    
+    for (var edge_i = 0; edge_i < A.edges.length; edge_i++) {
+        var edgeA = A.edges[edge_i];
+        var edgeB = B.edges[edge_i];
+        if (edgeA.data.id !== edgeA.data.id ||
+            edgeA.data.Label !== edgeA.data.Label ||
+            edgeA.data.target !== edgeA.data.target ||
+            edgeA.data.source !== edgeA.data.source ||
+            edgeA.data.Threshold !== edgeA.data.Threshold) 
+        {
+            return false;
+        }
+    }
+    
+    return true;
 };
