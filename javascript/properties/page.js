@@ -80,7 +80,7 @@ tremppi.properties.compareData = function (A, B) {
         }
 
         for (var rec_prop in rec_A) {
-            if (rec_A[rec_prop] === "recods") {
+            if (rec_A[rec_prop] === "records") {
                 if (rec_A[rec_prop].length !== rec_B[rec_prop].length) {
                     return false;
                 }
