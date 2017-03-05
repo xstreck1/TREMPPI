@@ -99,7 +99,11 @@ tremppi.properties.compareData = function (A, B) {
                         }
                     }
                 }
-            } else if (rec_A[rec_prop] !== rec_B[rec_prop]) {
+            } 
+            else if (typeof(rec_A[rec_prop]) === "object") {
+                continue;
+            }
+            else if (rec_A[rec_prop] !== rec_B[rec_prop]) {
                 return false;
             }
         }
