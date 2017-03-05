@@ -40,7 +40,7 @@ tremppi.tools.killAll = function (command) {
 
 tremppi.tools.addToQueue = function (command) {
     var url = tremppi.getProjectAddress() + "tools.html?command=tremppi&subcommand=" + command;
-    if (command === 'erase' || command === 'release') {
+    if (command === 'erase' || command === 'unfreeze') {
         if (!confirm('Do you really want to call ' + command + '? This operation is irreversible.')) {
             return;
         }
