@@ -88,7 +88,11 @@ tremppi.select.compareData = function (A, B) {
         }
         
         for (var rec_prop in rec_A) {
-            if (rec_A[rec_prop] !== rec_B[rec_prop]) {
+            // Ignore those that are objects
+            if (typeof(rec_A[rec_prop]) === "object") {
+                continue;
+            }
+            else if (rec_A[rec_prop] !== rec_B[rec_prop]) {
                 return false;
             }
         }
