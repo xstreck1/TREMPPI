@@ -260,7 +260,9 @@ tremppi = {
                 {id: 6, text: 'finalize'},
                 {id: 7, text: 'save'},
                 {id: 8, text: 'download'},
-                {id: 9, text: 'upload'}
+                {id: 9, text: 'upload'},
+                {id: 10, text: 'exportSBML'},
+                {id: 11, text: 'importSBML'}
             ];
         } else {
             sidebar.menu = [
@@ -281,9 +283,14 @@ tremppi = {
                     img: 'icon-folder',
                 };
                 if (proj_name === tremppi.project_name) {
+                    var widges = tremppi.widgets;
+                    if (!tremppi.hasControls()) {
+                        widges.splice(widges.indexOf("tools"), 1);
+                    }
+                    
                     project_node.expanded = true;
                     project_node.selected = true;
-                    project_node.nodes = tremppi.widgets.map(function (widget_name) {
+                    project_node.nodes = widges.map(function (widget_name) {                        
                         var widget_node = {
                             id: 'widget+' + widget_name,
                             text: widget_name,
@@ -370,11 +377,12 @@ tremppi = {
                     if (tremppi.level === 1) {
                         tremppi.activateMenuItems('new project');
                         tremppi.activateMenuItems('upload');
+                        tremppi.activateMenuItems('importSBML');
                     }
                     break;
                 case 'project':
                     if (tremppi.level === 1) {
-                        tremppi.activateMenuItems('open', 'download', 'clone', 'rename', 'delete');
+                        tremppi.activateMenuItems('open', 'download', 'exportSBML','clone', 'rename', 'delete');
                     }
                     if (!tremppi.isFinal()) {
                         tremppi.activateMenuItems('finalize');
@@ -415,6 +423,20 @@ tremppi = {
                                 showClose: true
                             });
                             break;
+                        case 'importSBML':
+                            tremppi.dialogPopup = w2popup.open({
+                                body: '<div class="tremppi_popup">\n\
+                                            <div class="popup_title">UPLOAD PROJECT</div>\n\
+                                            <form enctype="multipart/form-data" method="post" name="fileinfo"> \n\
+                                                <input id="fileSelect" type="file" accept=".sbml" required />\n\
+                                            </form>\n\
+                                           <BUTTON onClick="tremppi.importSBMLProject()" class="btn" id="submitFile">SUBMIT</BUTTON>\n\
+                                        </div>',
+                                width: 350,
+                                height: 175,
+                                showClose: true
+                            });
+                            break;
                     }
                     break;
                 case 'project': // Change project
@@ -438,6 +460,9 @@ tremppi = {
                             break;
                         case 'download':
                             tremppi.downloadProject();
+                            break;
+                        case 'exportSBML':
+                            tremppi.exportSBMLProject();
                             break;
                     }
                     break;
@@ -611,6 +636,18 @@ tremppi = {
                 error: tremppi.logError
             });
         }
+    }, 
+    exportSBMLProject: function () {
+        if (confirm('Do you really want to export the project ' + tremppi.project_name + '?')) {
+            $.ajax({
+                type: "POST",
+                url: tremppi.getProjectAddress() + tremppi.current_object + '.html?command=exportSBML&type=folder',
+                success: function (res) {
+                    window.location = tremppi.getRootAddress() + tremppi.project_name + '.sbml';
+                },
+                error: tremppi.logError
+            });
+        }
     },
     uploadProject: function () {
         data = new FormData();
@@ -628,6 +665,28 @@ tremppi = {
                     location.reload(true);
                 } else {
                     tremppi.logError("Error " + oReq.responseText + " occurred when trying to upload the project.");
+                }
+            };
+            oReq.send(data);
+        }
+        tremppi.dialogPopup.close();
+    },
+    importSBMLProject: function () {
+        data = new FormData();
+        var file = $('#fileSelect')[0].files[0];
+        if (typeof file === 'undefined')
+        {
+            tremppi.logError("No file selected");
+        } else {
+            data.append('file', file);
+            var oReq = new XMLHttpRequest();
+            oReq.open("POST", tremppi.getProjectAddress() + tremppi.current_object + '.html?command=importSBML&type=folder', true);
+            oReq.onload = function (oEvent) {
+                if (oReq.status === 200) {
+                    tremppi.log("Project imported. " + oReq.responseText);
+                    location.reload(true);
+                } else {
+                    tremppi.logError("Error " + oReq.responseText + " occurred when trying to import the project.");
                 }
             };
             oReq.send(data);

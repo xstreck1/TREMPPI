@@ -18,7 +18,7 @@
 import sys
 import zipfile
 import shutil
-from os import replace, remove, makedirs
+from os import replace, remove, makedirs, pathsep
 from os.path import dirname, join, basename, exists, split, commonprefix
 
 from flask import request, send_from_directory
@@ -30,6 +30,8 @@ from .file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_pa
 from .header import last_page_filename, data_folder, database_file, configure_filename, system
 from .project_files import write_projects, delete_project, save_file, get_log_data, is_project_folder
 from .server_errors import InvalidUsage, Conflict
+from .db2sbml import writeDBModelToSBML
+from .sbml2db import writeSBMLToDBModel
 
 def wrong_get(app, url):
     raise InvalidUsage('unknown GET command ' + request.args['command'])
@@ -205,20 +207,72 @@ def upload(app, url):
     if 'file' not in request.files:
         raise InvalidUsage('No file attached')
     file = request.files['file']
-#    if not (zipfile.is_zipfile(file.filename)):
-#        raise InvalidUsage('The uploaded file is not a zipfile.')
+    if secure_filename(file.filename)[-4:] !='.zip':
+        raise InvalidUsage('The uploaded file is not a zipfile.')
     target_folder = join(app.projects_path(), secure_filename(file.filename)[:-4])
-    if not commonprefix([target_folder, app.projects_path()]) == app.projects_path():
-        raise InvalidUsage('Invalid project name')
+    if not commonprefix([target_folder, app.projects_path()]) == app.projects_path(): # out of the server folder
+        raise InvalidUsage('Invalid filename')
     if not exists(target_folder):
         makedirs(target_folder)
-    zip_ref = zipfile.ZipFile(file, 'r')
-    zip_ref.extractall(target_folder)
+    else:
+        raise InvalidUsage('Project of the same name already exists.')
+    try:
+        zip_ref = zipfile.ZipFile(file, 'r')
+    except:
+        raise InvalidUsage('The file ' + file + ' is not recognised as a zip file.')
+    try:
+        zip_ref.extractall(target_folder)
+    except:
+        raise InvalidUsage('The extraction of the file ' + file + ' failed.')
     if not exists(join(target_folder, configure_filename)):
         shutil.rmtree(target_folder)
         raise InvalidUsage('The file does not contain a tremppi project.')
     write_projects(app.projects_path())
     return 'upload successful'
+
+
+def importSBML(app, url):
+    if 'file' not in request.files:
+        raise InvalidUsage('No file attached')
+    file = request.files['file']
+    if secure_filename(file.filename)[-5:]  != '.sbml':
+        raise InvalidUsage('The uploaded file is not an sbml file')
+    project_name = secure_filename(file.filename)[:-5]
+    target_folder = join(app.projects_path(), project_name)
+    if not commonprefix([target_folder, app.projects_path()]) == app.projects_path():
+        raise InvalidUsage('Invalid filename')
+    if not exists(target_folder):
+        tremppi_init(app.projects_path(), project_name)
+    else:
+        raise InvalidUsage('Project of the same name already exists.')
+
+    try:
+        sbml_file = join(target_folder, secure_filename(file.filename))
+        file.save(sbml_file)
+    except:
+        shutil.rmtree(target_folder)
+        raise InvalidUsage('Failed to save the file ' + file.filename)
+
+    try:
+        writeSBMLToDBModel(join(target_folder, data_folder, database_file), sbml_file)
+    except:
+        shutil.rmtree(target_folder)
+        raise InvalidUsage('Failed to convert the file ' + file.filename)
+
+    write_projects(app.projects_path())
+    return 'import successful'
+
+
+def exportSBML(app, url):
+    path, file = split(url)
+    if not path_is_parent(app.projects_path(), join(app.projects_path(), path)):
+        raise InvalidUsage('invalid download path ' + path)
+    elif not is_project_folder(join(app.projects_path(), path)):
+        raise InvalidUsage(path + " seems not to be a TREMPPI project")
+    else:
+        writeDBModelToSBML(join(app.projects_path(), path, data_folder, database_file), join(app.projects_path(), path) + '.sbml')
+
+        return 'export successful'
 
 
 def do_post(app, url):
