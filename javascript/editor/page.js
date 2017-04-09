@@ -67,12 +67,23 @@ tremppi.editor.layout = function () {
 };
 
 tremppi.editor.setDefaultData = function (data) {
-    if (typeof data.nodes === 'undefined')
+    var dataSet = false;
+    if (typeof data.nodes === 'undefined') {
         data.nodes = [];
-    if (typeof data.edges === 'undefined')
+        dataSet= true;
+    }
+    if (typeof data.edges === 'undefined') {
         data.edges = [];
-    if (typeof data.use_normalized === 'undefined') 
+        dataSet = true;
+    }
+    if (typeof data.use_normalized === 'undefined') {
         data.use_normalized = true;
+        dataSet = true;
+    }
+    
+    if (dataSet) {
+        tremppi.save(); // Save with the default data if those were missing
+    }
 };
 
 tremppi.editor.toolbarClass = function () {

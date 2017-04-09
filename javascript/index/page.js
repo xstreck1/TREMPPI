@@ -29,6 +29,10 @@ tremppi.index.layout = function () {
 };
 
 tremppi.index.setData = function (data) {
+    if (typeof(data.text) === 'undefined') {
+        data.text = "";
+        tremppi.save(); // Save with the default data if those were missing
+    }
     $("#text_field").val(data.text);
     
     // Enable controls

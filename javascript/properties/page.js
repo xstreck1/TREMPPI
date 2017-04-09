@@ -51,8 +51,10 @@ tremppi.properties.layout = function () {
 };
 
 tremppi.properties.setDefaultData = function (data) {
-    if (typeof data.records === 'undefined')
+    if (typeof data.records === 'undefined') {
         data.records = [];
+        tremppi.save();
+    }
 };
 
 tremppi.properties.toolbarClass = function () {
