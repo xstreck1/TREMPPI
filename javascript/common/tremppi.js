@@ -654,7 +654,7 @@ tremppi = {
         var file = $('#fileSelect')[0].files[0];
         if (typeof file === 'undefined')
         {
-            tremppi.logError("No file selected");
+            tremppi.log("No file selected", 'error');
         } else {
             data.append('file', file);
             var oReq = new XMLHttpRequest();
@@ -664,7 +664,7 @@ tremppi = {
                     tremppi.log("Project uploaded. " + oReq.responseText);
                     location.reload(true);
                 } else {
-                    tremppi.logError("Error " + oReq.responseText + " occurred when trying to upload the project.");
+                    tremppi.log("Error " + oReq.responseText + " occurred when trying to upload the project.", 'error');
                 }
             };
             oReq.send(data);
@@ -676,7 +676,7 @@ tremppi = {
         var file = $('#fileSelect')[0].files[0];
         if (typeof file === 'undefined')
         {
-            tremppi.logError("No file selected");
+            tremppi.log("No file selected", 'error');
         } else {
             data.append('file', file);
             var oReq = new XMLHttpRequest();
@@ -686,7 +686,7 @@ tremppi = {
                     tremppi.log("Project imported. " + oReq.responseText);
                     location.reload(true);
                 } else {
-                    tremppi.logError("Error " + oReq.responseText + " occurred when trying to import the project.");
+                    tremppi.log("Error " + oReq.responseText + " occurred when trying to import the project.", 'error');
                 }
             };
             oReq.send(data);

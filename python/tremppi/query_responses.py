@@ -18,6 +18,8 @@
 import sys
 import zipfile
 import shutil
+import sqlite3
+import json
 from os import replace, remove, makedirs, pathsep
 from os.path import dirname, join, basename, exists, split, commonprefix
 
@@ -30,8 +32,9 @@ from .file_manipulation import copyanything, read_jsonp, write_jsonp, path_is_pa
 from .header import last_page_filename, data_folder, database_file, configure_filename, system
 from .project_files import write_projects, delete_project, save_file, get_log_data, is_project_folder
 from .server_errors import InvalidUsage, Conflict
-from .db2sbml import writeDBModelToSBML
+from .db2sbml import writeDBModelToSBML, database_to_editor
 from .sbml2db import writeSBMLToDBModel
+from .database_reader import read_regulations, read_components
 
 def wrong_get(app, url):
     raise InvalidUsage('unknown GET command ' + request.args['command'])
@@ -255,9 +258,16 @@ def importSBML(app, url):
 
     try:
         writeSBMLToDBModel(join(target_folder, data_folder, database_file), sbml_file)
+        with sqlite3.connect(join(target_folder, data_folder, database_file)) as conn:
+            comps = read_components(conn)
+            regs = read_regulations(conn)
+            json_root = database_to_editor(comps, regs)
+            json_string = json.dumps(json_root)
+        with open(join(target_folder, data_folder, 'editor.json'), "w+") as editor_file:
+            editor_file.write(json_string)
     except:
         shutil.rmtree(target_folder)
-        raise InvalidUsage('Failed to convert the file ' + file.filename)
+        raise InvalidUsage('Failed to convert the file ' + file.filename + ' error: ' + sys.exc_info()[0])
 
     write_projects(app.projects_path())
     return 'import successful'

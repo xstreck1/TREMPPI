@@ -195,6 +195,48 @@ def writeDBModelToSBML(database_path, sbml_output_path, modelRow=1):
         return 1
     libsbml.writeSBML(document, sbml_output_path)
 
+    conn.close()
+
+
+def database_to_editor(comps, regs):
+
+    model_root = { 'nodes' : [], 'edges' : [] }
+
+    id = 0
+    nodeIds = {}
+    for comp_name, comp_max  in comps:
+        nodeIds[comp_name] = 'n' + str(id)
+        model_root['nodes'].append(
+            {
+                'data' :
+                {
+                    'Name' : comp_name,
+                    'MaxActivity': str(comp_max),
+                    'Label' : comp_name + ':' + str(comp_max),
+                    'id' : nodeIds[comp_name]
+                }
+            }
+        )
+        id += 1
+
+
+    id = 0
+    for source, threshold, target  in regs:
+        model_root['edges'].append(
+            {
+                'data' :
+                {
+                    'source' : nodeIds[source],
+                    'target' : nodeIds[target],
+                    'Threshold': str(threshold),
+                    'Label': 'Free',
+                    'id' : 'e' + str(id)
+                }
+            }
+        )
+        id += 1
+
+    return model_root
 
 #writeDBModelToSBML('./data/databases/bacteriophage.sqlite', './data/sbml/db2sbml_output.sbml', modelRow=3)
 #writeDBModelToSBML('./data/databases/modelDB.sqlite', './data/sbml/db2sbml_output.sbml', modelRow=1)

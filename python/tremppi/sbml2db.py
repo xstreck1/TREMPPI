@@ -347,6 +347,7 @@ def writeSBMLToDBModel(database_path, sbml_input_path, use_species_name_attribut
     c.execute('INSERT INTO Parametrizations VALUES ({0})'.format(target_value_string))
 
     conn.commit()
+    conn.close()
     return(0)
 
 #end writeSBMLToDBModel
