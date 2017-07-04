@@ -235,7 +235,6 @@ def internalWrite(conn, database_path, sbml_output_path, modelRow):
                         ast = buildASTInequality(source, 'lt', upper_t)
                     # else if this is the rightmost activity interval create inequality: source >= lower bound
                     elif rightmost:
-                        ast.addChild(threshold_ASTNode)
                         ast = buildASTInequality(source, 'geq', lower_t)
                     # otherwise create inequalities: (source >= lower bound) AND (source < upper bound)
                     else:
