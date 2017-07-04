@@ -59,13 +59,15 @@ def writeDBModelToSBML(database_path, sbml_output_path, modelRow=1):
         raise Exception("[Error] writeDBModelToSBML, {0} : Could not connect to database at this location.\n".format(database_path)) from e
 
     try:
-        internalWrite(conn, database_path, sbml_output_path, modelRow)
+        _writeDBModelToSBML(conn, database_path, sbml_output_path, modelRow)
     except Exception as e:
         conn.close()
         raise e
 
+    conn.close()
 
-def internalWrite(conn, database_path, sbml_output_path, modelRow):
+
+def _writeDBModelToSBML(conn, database_path, sbml_output_path, modelRow):
     c = conn.cursor()
 
     # check table existence
