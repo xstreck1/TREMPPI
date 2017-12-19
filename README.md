@@ -44,6 +44,7 @@ Dependencies:
 * Boost libraries 1.54.0 (or higher)
 * Gecode 4.2.1 (or higher), get here: http://www.gecode.org/
 * Python 3.x.x (or higher), compiled for the same architecture (so 32-bit if you compile 32-bit target and 64-bit if you compile 64-bit target)
+* Python packages flask-user, libSBML
 
 Optional:
 * GTest 1.7.0 (or higher) - only for testing
