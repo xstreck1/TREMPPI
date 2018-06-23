@@ -24,6 +24,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
 from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
+from wtforms import BooleanField, validators
 
 from .initiate_projects import mk_usr_proj
 from .server_errors import InvalidUsage, MethodNotAllowed, Conflict
@@ -35,6 +36,8 @@ from .tool_manager import ToolManager
 # Extend the basic registration with a recaptcha field in a custom class
 class TremppiRegisterForm(RegisterForm):
     recaptcha = RecaptchaField()
+    accept_tos = BooleanField('I agree to my e-mail address being stored on the application server. ' 
+                              'I acknowledge that all data created within the application are going to be stored on the server.', [validators.DataRequired()])
 
 
 # Setup Flask app and app.config
@@ -64,7 +67,7 @@ def create_app():
 
         # User email information
         email = db.Column(db.String(255), nullable=False, unique=True)
-        confirmed_at = db.Column(db.DateTime())
+        email_confirmed_at = db.Column('confirmed_at', db.DateTime())
 
         # User information
         active = db.Column('is_active', db.Boolean(), nullable=False, server_default='0')
@@ -78,8 +81,13 @@ def create_app():
     db.create_all()
 
     # Setup Flask-User
-    db_adapter = SQLAlchemyAdapter(db, TremppiUser)
-    user_manager = UserManager(db_adapter, app, register_form=TremppiRegisterForm)
+    # Customize Flask-User
+    class CustomUserManager(UserManager):
+        def customize(self, app):
+            # Override properties
+            self.RegisterFormClass = TremppiRegisterForm
+
+    user_manager = CustomUserManager(app, db, TremppiUser)
 
     def projects_path():
         if current_user.is_authenticated:
