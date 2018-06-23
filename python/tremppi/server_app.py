@@ -22,9 +22,11 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter, current_user
+from flask_login import logout_user
 from flask_user.forms import RegisterForm
 from flask_wtf import RecaptchaField
 from wtforms import BooleanField, validators
+from shutil import rmtree
 
 from .initiate_projects import mk_usr_proj
 from .server_errors import InvalidUsage, MethodNotAllowed, Conflict
@@ -123,6 +125,16 @@ def create_app():
             makedirs(projects_path())
         last_page = mk_usr_proj(projects_path())
         return redirect(last_page)
+
+    @app.route('/user/delete')
+    @login_required
+    def delete_user():
+        if current_user.is_authenticated:
+            current_id = current_user.id
+            logout_user()
+            TremppiUser.query.filter_by(id=current_id).delete()
+            rmtree(projects_path())
+            return redirect('/')
 
     @app.route('/user/profile')
     def redirect_to_new():
