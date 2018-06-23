@@ -124,6 +124,10 @@ def create_app():
         last_page = mk_usr_proj(projects_path())
         return redirect(last_page)
 
+    @app.route('/user/profile')
+    def redirect_to_new():
+        return redirect('user/edit_user_profile')
+
     @app.route('/exec_type.js', methods=['GET'])
     def exec_type():
         return 'tremppi.exec_type = "server"'
@@ -162,6 +166,8 @@ def create_app():
         from logging.handlers import RotatingFileHandler
         file_handler = RotatingFileHandler(join(system.DEST_PATH, "TREMPPI.log"), maxBytes=65536, backupCount=9)
         file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s'))
         app.logger.addHandler(file_handler)
+        logging.getLogger('sqlalchemy').addHandler(file_handler)
 
     return app

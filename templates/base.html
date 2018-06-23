@@ -51,7 +51,7 @@
         {% if call_or_get(current_user.is_authenticated) %}
         <a href={{ url_for('members_page') }}>ENTER TREMPPI</a>
         &nbsp; | &nbsp;
-        <a href="{{ url_for('user.profile') }}">User</a>
+        <a href="{{ url_for('user.edit_user_profile') }}">User</a>
         &nbsp; | &nbsp;
         <a href="{{ url_for('user.logout') }}">Sign out</a>
         {% else %}
