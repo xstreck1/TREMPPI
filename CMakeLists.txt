@@ -22,8 +22,12 @@ set(CMAKE_MODULE_PATH ${TREMPPI_SOURCE_DIR}/cmake)
 
 # Boost
 add_definitions( -DBOOST_ALL_NO_LIB ) #disable autolink
-find_package(Boost 1.54.0 COMPONENTS python-py35)
-set(BOOST_PYTHON_LIB_NAME python-py35)
+find_package(Boost 1.54.0 COMPONENTS python36)
+set(BOOST_PYTHON_LIB_NAME python36)
+if (NOT Boost_FOUND) 
+	find_package(Boost 1.54.0 COMPONENTS python-py35)
+	set(BOOST_PYTHON_LIB_NAME python-py34)
+endif(NOT Boost_FOUND)
 if (NOT Boost_FOUND) 
 	find_package(Boost 1.54.0 COMPONENTS python-py34)
 	set(BOOST_PYTHON_LIB_NAME python-py34)

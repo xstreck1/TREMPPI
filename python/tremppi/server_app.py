@@ -131,9 +131,12 @@ def create_app():
     def delete_user():
         if current_user.is_authenticated:
             current_id = current_user.id
+            print(current_id)
+            project_path = projects_path()
             logout_user()
             TremppiUser.query.filter_by(id=current_id).delete()
-            rmtree(projects_path())
+            db.session.commit()
+            rmtree(project_path)
             return redirect('/')
 
     @app.route('/user/profile')

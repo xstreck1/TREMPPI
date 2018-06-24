@@ -4,7 +4,7 @@
 {% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
 <h1>{%trans%}User profile{%endtrans%}</h1>
 
-<form action="" method="POST" class="form" role="form">
+<!-- <form action="" method="POST" class="form" role="form">
     {{ form.hidden_tag() }}
     {% for field in form %}
         {% if not field.flags.hidden %}
@@ -15,7 +15,7 @@
             {% endif %}
         {% endif %}
     {% endfor %}
-</form>
+</form> -->
 <br/>
 
 {% if not user_manager.USER_ENABLE_AUTH0 %}
@@ -26,7 +26,7 @@
         <p><a href="{{ url_for('user.change_password') }}">{%trans%}Change password{%endtrans%}</a></p>
     {% endif %}
 	
-	<button class="btn btn-default btn-primary" onclick='if (window.confirm("Do you really want to leave?")) { window.open("/user/delete", "Thanks for Visiting!");}' >DELETE</button>
+	<button class="btn btn-default btn-primary" onclick='if (window.confirm("Do you really want to delete your account? This operation is irreversible.")) { window.open("/user/delete", "Thanks for Visiting!");}' >DELETE</button>
 {% endif %}
 
 {% endblock %}
